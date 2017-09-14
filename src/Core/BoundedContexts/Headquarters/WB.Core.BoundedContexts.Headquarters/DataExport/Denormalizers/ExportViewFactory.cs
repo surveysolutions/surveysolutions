@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 Version = id.Version
             };
 
-            var questionnaireBrowseItem = questionnaireBrowseItemStorage.GetById(id);
+            var questionnaireBrowseItem = questionnaireBrowseItemStorage.GetById(id.ToString());
             var supportVariables = questionnaireBrowseItem != null && questionnaireBrowseItem.AllowExportVariables;
 
             var rosterScopes = this.rosterStructureService.GetRosterScopes(questionnaire);
@@ -278,7 +278,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return headerStructureForLevel;
         }
 
-        protected ExportedVariableHeaderItem CreateExportedHeaderItem(IVariable variable)
+        protected ExportedVariableHeaderItem CreateExportedVariableHeaderItem(IVariable variable)
         {
             var exportedHeaderItem = new ExportedVariableHeaderItem();
 
@@ -286,12 +286,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             exportedHeaderItem.VariableType = variable.Type;
             exportedHeaderItem.VariableName = variable.Name;
             exportedHeaderItem.Titles = new[] { variable.Label };
-            exportedHeaderItem.ColumnNames = new[] { variable.Label };
+            exportedHeaderItem.ColumnNames = new[] { variable.Name };
 
             return exportedHeaderItem;
         }
 
-        protected ExportedQuestionHeaderItem CreateExportedHeaderItem(IQuestion question, int? lengthOfRosterVectorWhichNeedToBeExported)
+        protected ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(IQuestion question, int? lengthOfRosterVectorWhichNeedToBeExported)
         {
             var exportedHeaderItem = new ExportedQuestionHeaderItem();
 
@@ -349,10 +349,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return exportedHeaderItem;
         }
 
-        protected ExportedQuestionHeaderItem CreateExportedHeaderItem(IQuestion question, int columnCount,
+        protected ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(IQuestion question, int columnCount,
             int? lengthOfRosterVectorWhichNeedToBeExported)
         {
-            var exportedHeaderItem = this.CreateExportedHeaderItem(question, lengthOfRosterVectorWhichNeedToBeExported);
+            var exportedHeaderItem = this.CreateExportedQuestionHeaderItem(question, lengthOfRosterVectorWhichNeedToBeExported);
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnNames = new string[columnCount];
@@ -573,7 +573,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         private void AddHeadersForVariable(IDictionary<Guid, IExportedHeaderItem> headerItems, IVariable variable)
         {
-            headerItems.Add(variable.PublicKey, this.CreateExportedHeaderItem(variable));
+            headerItems.Add(variable.PublicKey, this.CreateExportedVariableHeaderItem(variable));
         }
 
         private void AddHeadersForLinkedMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems, IQuestion question,
@@ -581,7 +581,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
             headerItems.Add(question.PublicKey,
-                this.CreateExportedHeaderItem(question,
+                this.CreateExportedQuestionHeaderItem(question,
                     this.GetRosterSizeForLinkedQuestion(question, questionnaire, maxValuesForRosterSizeQuestions),
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
@@ -590,7 +590,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             QuestionnaireDocument questionnaire)
         {
             headerItems.Add(question.PublicKey,
-                this.CreateExportedHeaderItem(question,
+                this.CreateExportedQuestionHeaderItem(question,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -598,7 +598,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             QuestionnaireDocument questionnaire)
         {
             headerItems.Add(question.PublicKey,
-                this.CreateExportedHeaderItem(question, question.Answers.Count,
+                this.CreateExportedQuestionHeaderItem(question, question.Answers.Count,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -608,7 +608,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var textListQuestion = question as ITextListQuestion;
             var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
             headerItems.Add(question.PublicKey,
-                this.CreateExportedHeaderItem(question, maxCount,
+                this.CreateExportedQuestionHeaderItem(question, maxCount,
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -621,7 +621,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             var maxCount = (textListQuestion == null ? null : textListQuestion.MaxAnswerCount) ?? TextListQuestion.MaxAnswerCountLimit;
 
             headerItems.Add(question.PublicKey,
-                 this.CreateExportedHeaderItem(question, maxCount,
+                 this.CreateExportedQuestionHeaderItem(question, maxCount,
                      this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
@@ -629,7 +629,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             QuestionnaireDocument questionnaire)
         {
             var gpsColumns = GeoPosition.PropertyNames;
-            var gpsQuestionExportHeader = this.CreateExportedHeaderItem(question,
+            var gpsQuestionExportHeader = this.CreateExportedQuestionHeaderItem(question,
                 this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire));
             gpsQuestionExportHeader.ColumnNames = new string[gpsColumns.Length];
             gpsQuestionExportHeader.Titles = new string[gpsColumns.Length];
