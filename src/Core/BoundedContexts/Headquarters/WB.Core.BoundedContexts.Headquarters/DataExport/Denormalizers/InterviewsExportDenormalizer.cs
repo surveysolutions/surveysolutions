@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            if (this.generateExportForStatuses.Contains(evnt.Payload.Status))
+            /*if (this.generateExportForStatuses.Contains(evnt.Payload.Status))
             {
                 var interviewId = evnt.EventSourceId;
 
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                         }
                     }
                 }
-            }
+            }*/
         }
 
         public void Handle(IPublishedEvent<InterviewDeleted> evnt)

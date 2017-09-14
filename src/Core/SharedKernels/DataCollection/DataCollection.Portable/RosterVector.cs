@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Newtonsoft.Json.Linq;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection
@@ -32,10 +31,6 @@ namespace WB.Core.SharedKernels.DataCollection
             if (answerAsIntArray != null)
                 return new RosterVector(answerAsIntArray);
 
-            var answerAsJArray = obj as JArray;
-            if (answerAsJArray != null)
-                return new RosterVector(answerAsJArray.Select(jv => (int)jv).ToArray());
-
             throw new ArgumentException(nameof(obj));
         }
 
@@ -57,10 +52,6 @@ namespace WB.Core.SharedKernels.DataCollection
             if (readOnlyCollection != null)
                 return readOnlyCollection.ToArray();
 
-            var answerAsJArray = obj as JArray[];
-            if (answerAsJArray != null)
-                return answerAsJArray.Select(intArray => (RosterVector)(intArray.Select(jv => (int)jv).ToArray())).ToArray();
-            
             throw new ArgumentException(nameof(obj));
         }
 
