@@ -257,6 +257,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
+    <Compile Include="Activities\AuthorizedUserActivity.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />
     <Compile Include="Activities\CompleteInterviewFragment.cs" />
@@ -347,6 +348,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnumeratorSetup.cs" />
     <Compile Include="Services\AndroidPathUtils.cs" />
+    <Compile Include="Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
