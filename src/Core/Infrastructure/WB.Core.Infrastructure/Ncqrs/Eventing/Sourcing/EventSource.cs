@@ -139,6 +139,10 @@ namespace Ncqrs.Eventing.Sourcing
                 HandleEvent(wrappedEvent.Payload);
                 OnEventApplied(wrappedEvent);
             }
+            catch (EventNotHandledException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
                 throw new OnEventApplyException(wrappedEvent, e.Message, e);
