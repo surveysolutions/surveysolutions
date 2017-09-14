@@ -650,17 +650,6 @@
     <value>Создано интервью: {0}</value>
     <comment>Создано интервью: {0}</comment>
   </data>
-  <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
-    <value>№ {0}: {1}</value>
-    <comment>{0} - Assignment id</comment>
-  </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown" xml:space="preserve">
-    <value>{0} интервью</value>
-    <comment>{0} - number of interviews to be created</comment>
-  </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited" xml:space="preserve">
-    <value>Не ограничено</value>
-  </data>
   <data name="Dashboard_InterviewCard_Title" xml:space="preserve">
     <value>№ {0}, интервью {1}</value>
     <comment>{0} - Assignment id, {1} - interview key</comment>
@@ -674,11 +663,22 @@
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Не удалось создать интервью. Причина: {0}</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited" xml:space="preserve">
+    <value>Не ограничено</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_TitleCountdown" xml:space="preserve">
+    <value>{0} интервью</value>
+    <comment>{0} - number of interviews to be created</comment>
+  </data>
+  <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
+    <value>№ {0}: {1}</value>
+    <comment>{0} - Assignment id</comment>
+  </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
     <value>Синхронизация {0} из {1} заданий</value>
     <comment>Синхронизация {0} из {1} заданий</comment>
-  </data>
-  <data name="FailedToCreateInterview" xml:space="preserve">
-    <value>Не удалось создать интервью. Причина: {0}</value>
   </data>
 </root>
