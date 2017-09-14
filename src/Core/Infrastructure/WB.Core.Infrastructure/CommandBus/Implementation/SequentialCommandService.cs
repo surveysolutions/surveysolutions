@@ -34,8 +34,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IAggregateSnapshotter snapshooter,
             IServiceLocator serviceLocator, 
             IPlainAggregateRootRepository plainRepository,
-            IAggregateLock aggregateLock)
-            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainRepository, aggregateLock) { }
+            IAggregateLock aggregateLock,
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
+            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner) { }
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {

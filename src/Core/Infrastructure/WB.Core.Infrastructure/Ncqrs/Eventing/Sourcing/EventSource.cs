@@ -130,12 +130,19 @@ namespace Ncqrs.Eventing.Sourcing
             var eventSequence = GetNextSequence();
             var wrappedEvent = new UncommittedEvent(Guid.NewGuid(), EventSourceId, eventSequence, _initialVersion, DateTime.UtcNow, evnt);
 
-            //Legacy stuff...
-            var sourcedEvent = evnt as ISourcedEvent;
-            sourcedEvent?.ClaimEvent(this.EventSourceId, eventSequence);
+            try
+            {
+                //Legacy stuff...
+                var sourcedEvent = evnt as ISourcedEvent;
+                sourcedEvent?.ClaimEvent(this.EventSourceId, eventSequence);
 
-            HandleEvent(wrappedEvent.Payload);
-            OnEventApplied(wrappedEvent);
+                HandleEvent(wrappedEvent.Payload);
+                OnEventApplied(wrappedEvent);
+            }
+            catch (Exception e)
+            {
+                throw new OnEventApplyException(wrappedEvent, e.Message, e);
+            }
         }
 
         private int GetNextSequence()
