@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All peroids.
+        ///   Looks up a localized string similar to All periods.
         /// </summary>
         public static string AllPeriods {
             get {
