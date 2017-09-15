@@ -56,6 +56,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             Create.UniqueConstraint("uk_interview").OnTable("interviews").Columns("interviewid", "entityid", "rostervector");
 
+            if (!Schema.Table("interviewdatas").Exists())
+                return;
+
             Execute.WithConnection((connection, transaction) =>
             {
                 var interviewIds = connection.Query<string>("SELECT id FROM \"readside\".\"interviewdatas\"", transaction).ToList();
