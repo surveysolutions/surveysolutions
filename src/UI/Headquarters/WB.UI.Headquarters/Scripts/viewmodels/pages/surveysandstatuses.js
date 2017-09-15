@@ -51,8 +51,8 @@
     self.onDataTableDataReceived = function(data) {
         if (data.data.length > 0) {
             var totalRow = data.totalRow;
-            totalRow.questionnaireVersion = $totalTitle;
-            totalRow.questionnaireTitle = "";
+            totalRow.questionnaireVersion = "";
+            totalRow.questionnaireTitle = $allQuestionnaires;
             totalRow.DT_RowClass = totalRowClass;
             data.data.unshift(totalRow);
         }

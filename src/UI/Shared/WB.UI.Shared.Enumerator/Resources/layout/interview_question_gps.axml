@@ -30,7 +30,7 @@
                           Click SaveAnswerCommand; 
                           Text Localization('Interview_Questions_Gps_SaveAnswer');
                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
-                          Tag Format('Answer_{0}', Identity)" />
+                          Tag Format('btnAnswer_{0}', Identity)" />
         </FrameLayout>
       </TableRow>
     </TableLayout>

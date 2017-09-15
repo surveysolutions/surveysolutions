@@ -506,6 +506,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_census_questionnaire_removed_on_server.cs" />
     <Compile Include="BoundedContexts\Interviewer\Services\When_Interviewer_SignIn.cs" />
     <Compile Include="BoundedContexts\Tester\Services\TesterPlainInterviewFileStorageTests.cs" />
+    <Compile Include="DataExportTests\ExportedQuestionTests\ExportQuestion_Variable_Tests.cs" />
     <Compile Include="DataExportTests\InterviewsExporterTests\When_exporting_data_for_one_interview.cs" />
     <Compile Include="GenericSubdomains\TreeTest.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\LazyNotificationServiceTests.cs" />
@@ -703,6 +704,7 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived_having_answered_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryDenormalizerTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\ExportViewFactoryTestsContext_Variables_Tests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_linked_multi_question_on_second_level_referenced_on_third.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_question_text_contains_html.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_first_created_intervew_exists.cs" />

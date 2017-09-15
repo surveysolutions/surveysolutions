@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                     RejectedBySupervisorCount = data.Sum(r => r.RejectedBySupervisorCount),
                     ApprovedByHeadquartersCount = data.Sum(r => r.ApprovedByHeadquartersCount),
                     RejectedByHeadquartersCount = data.Sum(r => r.RejectedByHeadquartersCount),
-                    RowHeader = Strings.Total
+                    RowHeader = Strings.AllPeriods
                 }
             };
         }

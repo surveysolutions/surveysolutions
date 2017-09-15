@@ -461,7 +461,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsYesNo) { ((InterviewTreeYesNoQuestion)this.InterviewQuestion).SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])answer)); return; }
             if (this.IsTextList) { ((InterviewTreeTextListQuestion)this.InterviewQuestion).SetAnswer(TextListAnswer.FromTupleArray((Tuple<decimal, string>[])answer)); return; }
             if (this.IsSingleLinkedToList) { ((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
-            if (this.IsMultiLinkedToList) { ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[])); return; }
+            if (this.IsMultiLinkedToList)
+            {
+                var answerAs = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
+                ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(answerAs);
+                return;
+            }
             if (this.IsArea) { ((InterviewTreeAreaQuestion)this.InterviewQuestion).SetAnswer(AreaAnswer.FromArea((Area)answer)); return; }
             if (this.IsAudio) { ((InterviewTreeAudioQuestion)this.InterviewQuestion).SetAnswer((AudioAnswer)answer); return; }
         }

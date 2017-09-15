@@ -45,12 +45,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_fill_multioption_question_header_title = () =>
         {
             HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
-            ExportedHeaderItem exportedHeaderItem = headerStructureForLevel.HeaderItems[multyOptionLinkedQuestionId];
+            ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[multyOptionLinkedQuestionId] as ExportedQuestionHeaderItem;
 
-            exportedHeaderItem.ColumnNames.Length.ShouldEqual(2);
-            exportedHeaderItem.ColumnNames.SequenceEqual(new[] { "mult__0", "mult__1" }).ShouldBeTrue();
-            exportedHeaderItem.QuestionSubType.ShouldEqual(QuestionSubtype.MultyOption_Linked);
-            exportedHeaderItem.QuestionType.ShouldEqual(QuestionType.MultyOption);
+            exportedQuestionHeaderItem.ColumnNames.Length.ShouldEqual(2);
+            exportedQuestionHeaderItem.ColumnNames.SequenceEqual(new[] { "mult__0", "mult__1" }).ShouldBeTrue();
+            exportedQuestionHeaderItem.QuestionSubType.ShouldEqual(QuestionSubtype.MultyOption_Linked);
+            exportedQuestionHeaderItem.QuestionType.ShouldEqual(QuestionType.MultyOption);
         };
 
         static ExportViewFactory exportViewFactory;

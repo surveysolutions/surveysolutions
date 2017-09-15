@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             });
 
             var result = row.FirstOrDefault() ?? new DeviceInterviewersReportLine();
-            result.TeamName = Strings.Total;
+            result.TeamName = Strings.AllTeams;
             return result;
         }
 

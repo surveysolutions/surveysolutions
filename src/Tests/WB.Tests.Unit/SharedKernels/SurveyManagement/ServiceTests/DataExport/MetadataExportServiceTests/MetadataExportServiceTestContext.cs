@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
                 HeaderItems =
-                    new Dictionary<Guid, ExportedHeaderItem>
+                    new Dictionary<Guid, IExportedHeaderItem>
                     {
                         { Guid.NewGuid(), CreateExportedHeaderItem() },
                         { Guid.NewGuid(), CreateExportedHeaderItem(QuestionType.Numeric, new[] { "a" }) }
@@ -62,10 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
             };
         }
 
-        protected static ExportedHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text,
+        protected static ExportedQuestionHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text,
             string[] columnNames = null, Guid? questionId = null, params LabelItem[] labels)
         {
-            return new ExportedHeaderItem()
+            return new ExportedQuestionHeaderItem()
             {
                 ColumnNames = columnNames ?? new[] {"1"},
                 Titles = columnNames ?? new[] {"1"},

@@ -11,6 +11,7 @@ using Main.Core.Events;
 using Moq;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -39,6 +40,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -215,8 +217,8 @@ namespace WB.Tests.Abc.TestFactories
                 DisabledEventHandlerTypes = new Type[] {},
             };
 
-        public ExportedHeaderItem ExportedHeaderItem(Guid? questionId = null, string variableName = "var")
-            => new ExportedHeaderItem
+        public ExportedQuestionHeaderItem ExportedQuestionHeaderItem(Guid? questionId = null, string variableName = "var")
+            => new ExportedQuestionHeaderItem
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ColumnNames = new[] { variableName },
@@ -362,6 +364,14 @@ namespace WB.Tests.Abc.TestFactories
             {
                 interviewData.Levels["#"].QuestionsSearchCache.Add(interviewQuestion.Id, interviewQuestion);
             }
+            return interviewData;
+        }
+
+        public InterviewData InterviewData(Guid variableId, object topLevelVariable)
+        {
+            var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
+            interviewData.Levels["#"].Variables.Add(variableId, topLevelVariable);
             return interviewData;
         }
 
@@ -758,18 +768,19 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
             Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
-            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false)
+            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false, bool allowExportVariables = true)
             => new QuestionnaireBrowseItem
             {
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 Version = questionnaireIdentity?.Version ?? version ?? 1,
                 Title = title,
                 Disabled = disabled,
-                IsDeleted = deleted
+                IsDeleted = deleted,
+                AllowExportVariables = allowExportVariables,
             };
 
-        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true)
-            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments);
+        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true)
+            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables);
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
@@ -1751,7 +1762,8 @@ namespace WB.Tests.Abc.TestFactories
                 fileSystemAccessor.Object,
                 Mock.Of<IExportQuestionService>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                new RosterStructureService());
+                new RosterStructureService(),
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
@@ -1805,6 +1817,11 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new CumulativeReportStatusChange(entryId, questionnaireId, questionnaireVersion, date, status,
                 changeValue, interviewId, eventSequence);
+        }
+
+        public SyncSettings SyncSettings(bool useBackgroundJobForProcessingPackages = false)
+        {
+            return new SyncSettings("hq", useBackgroundJobForProcessingPackages);
         }
     }
 }
