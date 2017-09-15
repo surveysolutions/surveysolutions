@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 interviewSummaryDenormalizer,
                 historyDenormalizerFunctional,
-                //statusTimeSpanDenormalizer
+                statusTimeSpanDenormalizer
             };
         }
 

@@ -106,24 +106,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     set.Lazy(CollectionLazy.Lazy);
                     set.Cascade(Cascade.All | Cascade.DeleteOrphans);
                 },
-                relation =>
-                {
-                    relation.Component(cmp =>
-                    {
-                        cmp.Property(x => x.Id);
-                        cmp.Property(x => x.SupervisorId);
-                        cmp.Property(x => x.SupervisorName);
-                        cmp.Property(x => x.InterviewerId);
-                        cmp.Property(x => x.InterviewerName);
-                        cmp.Property(x => x.BeginStatus);
-                        cmp.Property(x => x.EndStatus);
-                        cmp.Property(x => x.EndStatusTimestamp);
-                        cmp.Property(x => x.TimeSpanLong, clm =>
-                        {
-                            clm.Column("TimeSpan");
-                        });
-                    });
-                });
+                rel => {
+                    rel.OneToMany();
+                }
+            );
         }
     }
 
