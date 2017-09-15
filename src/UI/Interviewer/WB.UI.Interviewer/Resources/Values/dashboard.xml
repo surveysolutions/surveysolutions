@@ -73,12 +73,8 @@
   </style>
 
   <style name="Dashboard_ExpandHandle">
-    <item name="android:layout_height">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_marginTop">@dimen/button_shadow_margin</item>
-    <item name="android:paddingBottom">@dimen/dashboard_card_base_margin</item>
-    <item name="android:layout_marginLeft">@dimen/one</item>
-    <item name="android:layout_marginBottom">@dimen/textsize_10</item>
   </style>
   
   <style name="Dashboard_InterviewItem_Id">
