@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewStatusChanged> @event)
         {
-            if (@event.Payload.Status == InterviewStatus.Completed && @event.Payload.Comment.ToLower() == "throw")
+            if (@event.Payload.Status == InterviewStatus.Completed && @event.Payload.Comment?.ToLower() == "throw")
                 throw new Exception("Testing Exception to test AR rollback functionality");
 
             if (@event.Payload.Status == InterviewStatus.Deleted)
