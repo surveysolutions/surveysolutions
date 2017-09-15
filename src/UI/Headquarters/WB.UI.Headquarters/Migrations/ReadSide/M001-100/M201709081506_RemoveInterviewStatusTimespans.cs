@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                   SELECT 1 FROM readside.interviewsummaries WHERE readside.timespanbetweenstatuses.interviewid = readside.interviewsummaries.summaryid
             ); ");
 
-            Create.ForeignKey("FK_InterviewSummary_InterviewStatusTimespans")
+            Create.ForeignKey("FK_InterviewSummary_TimeSpansBetweenStatuses")
                 .FromTable("timespanbetweenstatuses").ForeignColumn("interviewid")
                 .ToTable("interviewsummaries").PrimaryColumn("summaryid")
                 .OnDelete(Rule.Cascade);
