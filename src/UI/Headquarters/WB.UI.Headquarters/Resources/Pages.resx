@@ -1041,7 +1041,7 @@
     <value>Status Duration</value>
   </data>  
   <data name="StatusDurationDescription">
-    <value>Number of days that interviews have stayed in their current status</value>
+    <value>Number of days that assignments and interviews have stayed in their current status</value>
   </data>
   <data name="ExportToExcel" xml:space="preserve">
     <value>Excel (.xlsx)</value>
