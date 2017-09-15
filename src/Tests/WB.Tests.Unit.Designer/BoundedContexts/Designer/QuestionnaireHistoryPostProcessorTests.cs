@@ -1307,6 +1307,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             historyStorage.Store(
                 Create.QuestionnaireChangeRecord(
+                    questionnaireChangeRecordId: "0",
+                    questionnaireId: Guid.NewGuid().FormatGuid(),
+                    targetId: questionId,
+                    targetType: QuestionnaireItemType.Question,
+                    action: QuestionnaireActionType.Clone,
+                    resultingQuestionnaireDocument: "not target questionnaire",
+                    sequence: 0,
+                    reference: new[] { Create.QuestionnaireChangeReference() }), "0");
+
+            historyStorage.Store(
+                Create.QuestionnaireChangeRecord(
                     questionnaireChangeRecordId: "a",
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetId: questionId,
@@ -1357,9 +1368,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             // assert
             var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
 
-            Assert.That(newHistoryItems.Length, Is.EqualTo(3));
-            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems.Length, Is.EqualTo(4));
+            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
             Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
