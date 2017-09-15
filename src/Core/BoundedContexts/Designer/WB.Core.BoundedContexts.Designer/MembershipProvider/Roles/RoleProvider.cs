@@ -84,7 +84,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
         public override bool IsUserInRole(string username, string roleName)
         {
             var transactionManager = this.TransactionProvider.GetPlainTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.IsTransactionStarted;
+            var shouldUseOwnTransaction = !transactionManager.TransactionStarted;
 
             if (shouldUseOwnTransaction)
             {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
         public override string[] GetRolesForUser(string username)
         {
             var transactionManager = this.TransactionProvider.GetPlainTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.IsTransactionStarted;
+            var shouldUseOwnTransaction = !transactionManager.TransactionStarted;
 
             if (shouldUseOwnTransaction)
             {
