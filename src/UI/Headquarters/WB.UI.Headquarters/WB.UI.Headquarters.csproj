@@ -856,6 +856,7 @@
     <EmbeddedResource Include="Resources\EnumNames.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ru.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>

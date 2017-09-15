@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved by Headquarters.
+        ///   Looks up a localized string similar to Approved by Headquarters interviews.
         /// </summary>
         public static string InterviewStatus_ApprovedByHeadquarters {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved by Supervisor.
+        ///   Looks up a localized string similar to Approved by Supervisor interviews.
         /// </summary>
         public static string InterviewStatus_ApprovedBySupervisor {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed.
+        ///   Looks up a localized string similar to Completed interviews.
         /// </summary>
         public static string InterviewStatus_Completed {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer assigned.
+        ///   Looks up a localized string similar to Interviewer assigned assignments.
         /// </summary>
         public static string InterviewStatus_InterviewerAssigned {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected by Headquarters.
+        ///   Looks up a localized string similar to Rejected by Headquarters interviews.
         /// </summary>
         public static string InterviewStatus_RejectedByHeadquarters {
             get {
@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected by Supervisor.
+        ///   Looks up a localized string similar to Rejected by Supervisor interviews.
         /// </summary>
         public static string InterviewStatus_RejectedBySupervisor {
             get {
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor assigned.
+        ///   Looks up a localized string similar to Supervisor assigned assignments.
         /// </summary>
         public static string InterviewStatus_SupervisorAssigned {
             get {
