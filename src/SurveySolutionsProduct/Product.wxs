@@ -139,6 +139,10 @@
                       Return="ignore" 
                       Impersonate="no"/>
 
+        <Property Id="ProductURL"><![CDATA[http://localhost:[SITEPORT]/]]></Property>
+        <CustomAction Id="SetOpenURL" Property="WixShellExecTarget" Value="[ProductURL]" />
+        <CustomAction Id="OpenURL" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" Return="ignore" />
+        
         <InstallExecuteSequence>
             <Custom Action="InstallIISSetProperty" After="CostFinalize">
                 <![CDATA[NOT Installed]]>
@@ -146,6 +150,14 @@
             <Custom Action="InstallIIS" Before="WriteRegistryValues">
                 <![CDATA[NOT Installed]]>
             </Custom>
+
+            <Custom Action="SetOpenURL" After="InstallFinalize">
+                <![CDATA[NOT Installed]]>
+            </Custom>
+            <Custom Action="OpenURL" After="SetOpenURL">
+                <![CDATA[NOT Installed]]>
+            </Custom>
+            
         </InstallExecuteSequence>
 
         <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." 
@@ -156,6 +168,8 @@
         <Feature Id="ProductFeature" Title="SurveySolutions" Level="1">
             <ComponentGroupRef Id="ProductComponents" />
             <ComponentGroupRef Id="SettingsUpdate"  />
+            <ComponentRef Id ="ApplicationShortcut"/>
+            
         </Feature>
         
     </Product>
@@ -166,11 +180,28 @@
             <![CDATA[(OldProductInstalled = 2)]]>
         </Condition>
     </Fragment>
-            
+
     <Fragment>
         <!--<SetDirectory Id='INSTALLFOLDER' Value='[WindowsVolume]SurveySolutions' />-->
 
         <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="DesktopFolder" Name="Desktop">
+                <Component Id="ApplicationShortcut" Guid="98257A59-3395-41E9-BD95-C8474C8736D9" >
+                    <util:InternetShortcut Id="SurveySolutionsShortcut"
+                                           Name="Survey Solutions"
+                                           Target="http://localhost:[SITEPORT]/"     
+                                           IconFile="[System32Folder]SHELL32.dll"
+                                           IconIndex="14"/>
+                    <RemoveFolder Id="DesktopFolder" On="uninstall"/>
+                    <RegistryValue
+                        Root="HKCU"
+                        Key="Software/World Bank/Survey Solutions"
+                        Name="installed"
+                        Type="integer"
+                        Value="1"
+                        KeyPath="yes"/>
+                </Component>
+            </Directory>
             <Directory Id="INSTALLFOLDER">
                 <Directory Id="INSTALLSITEFOLDER" Name="Site" ComponentGuidGenerationSeed="AA5F1DD2-13D8-442C-9978-8E8918EA789D" >
                     <Directory Id="CONFIGFOLDER" Name="Configuration">
@@ -207,10 +238,12 @@
                         <iis:MimeMap Id="MIME_WOFF" Extension=".woff" Type="application/x-font-woff" />
 
                         <iis:MimeMap Id="MIME_APK" Extension=".apk" Type="application/vnd.android.package-archive" />
+                        <iis:MimeMap Id="MIME_TPK" Extension=".tpk" Type="application/octet-stream" />
+                        
                     </iis:WebSite>
 
                 </Component>
-                
+            
                 <!--add harvested project output-->
             
                 <ComponentGroupRef Id="ProductFilesComponentGroup"></ComponentGroupRef>
@@ -354,6 +387,8 @@
                               Sequence='17'/>
             </Component>
         </ComponentGroup>
+
+        
     </Fragment>
 
     <Fragment>
