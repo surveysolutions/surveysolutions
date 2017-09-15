@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Disabled);
             Property(x => x.QuestionnaireContentVersion);
             Property(x => x.AllowAssignments);
+            Property(x => x.AllowExportVariables);
 
             List(x => x.FeaturedQuestions, listMap =>
             {

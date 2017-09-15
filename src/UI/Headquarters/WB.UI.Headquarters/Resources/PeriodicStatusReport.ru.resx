@@ -232,4 +232,7 @@
   <data name="PeriodUnit" xml:space="preserve">
     <value>Длительность</value>
   </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Все команды</value>
+  </data>
 </root>

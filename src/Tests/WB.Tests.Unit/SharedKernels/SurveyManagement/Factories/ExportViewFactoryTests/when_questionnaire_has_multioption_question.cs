@@ -38,12 +38,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         It should_fill_multioption_question_header_title = () =>
         {
             HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
-            ExportedHeaderItem exportedHeaderItem = headerStructureForLevel.HeaderItems[questionId];
+            ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[questionId] as ExportedQuestionHeaderItem;
 
-            exportedHeaderItem.ColumnNames.Length.ShouldEqual(2);
-            exportedHeaderItem.ColumnNames.SequenceEqual(new[] { "mult__28", "mult__42" }).ShouldBeTrue();
-            exportedHeaderItem.ColumnValues.Length.ShouldEqual(2);
-            exportedHeaderItem.ColumnValues.SequenceEqual(new[] {28m, 42m}).ShouldBeTrue();
+            exportedQuestionHeaderItem.ColumnNames.Length.ShouldEqual(2);
+            exportedQuestionHeaderItem.ColumnNames.SequenceEqual(new[] { "mult__28", "mult__42" }).ShouldBeTrue();
+            exportedQuestionHeaderItem.ColumnValues.Length.ShouldEqual(2);
+            exportedQuestionHeaderItem.ColumnValues.SequenceEqual(new[] {28m, 42m}).ShouldBeTrue();
         };
 
         static ExportViewFactory exportViewFactory;

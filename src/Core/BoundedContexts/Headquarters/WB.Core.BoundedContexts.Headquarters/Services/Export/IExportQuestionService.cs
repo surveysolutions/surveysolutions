@@ -5,6 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Export
 {
     public interface IExportQuestionService
     {
-        string[] GetExportedQuestion(InterviewQuestion question, ExportedHeaderItem header);
+        string[] GetExportedQuestion(InterviewQuestion question, ExportedQuestionHeaderItem header);
+        string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header);
     }
 }

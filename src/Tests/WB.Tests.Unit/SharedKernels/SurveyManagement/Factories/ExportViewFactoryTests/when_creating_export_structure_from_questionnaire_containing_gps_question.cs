@@ -33,17 +33,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         };
 
         Because of = () =>
-            gpsExportedHeaderItem = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1).HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId];
+            gpsExportedQuestionHeaderItem = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1).HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId] as ExportedQuestionHeaderItem;
 
         It should_create_header_with_5_columns_wich_corresponds_to_gps_properties = () =>
-            gpsExportedHeaderItem.ColumnNames.ShouldEqual(new[] { "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude" , "gps__Timestamp"});
+            gpsExportedQuestionHeaderItem.ColumnNames.ShouldEqual(new[] { "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude" , "gps__Timestamp"});
 
         It should_create_header_with_5_columns_with_valid_labels = () =>
-            gpsExportedHeaderItem.Titles.ShouldEqual(new[] { "gps label: Latitude", "gps label: Longitude", "gps label: Accuracy", "gps label: Altitude", "gps label: Timestamp" });
+            gpsExportedQuestionHeaderItem.Titles.ShouldEqual(new[] { "gps label: Latitude", "gps label: Longitude", "gps label: Accuracy", "gps label: Altitude", "gps label: Timestamp" });
 
         private static ExportViewFactory exportViewFactory;
         private static QuestionnaireDocument questionnaireDocument;
         private static Guid gpsQuestionId;
-        private static ExportedHeaderItem gpsExportedHeaderItem;
+        private static ExportedQuestionHeaderItem gpsExportedQuestionHeaderItem;
     }
 }

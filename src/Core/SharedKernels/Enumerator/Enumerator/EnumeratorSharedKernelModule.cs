@@ -1,6 +1,7 @@
 ﻿using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -38,6 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IFriendlyErrorMessageService, FriendlyErrorMessageService>();
             registry.Bind<IAsyncRunner, AsyncRunner>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
+
+            registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();

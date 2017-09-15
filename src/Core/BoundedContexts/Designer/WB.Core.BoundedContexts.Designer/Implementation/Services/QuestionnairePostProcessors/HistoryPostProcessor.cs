@@ -665,7 +665,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             foreach (var changeRecordIdToRemove in changeRecordIdsToRemove)
             {
-                this.questionnaireChangeItemStorage.Remove(changeRecordIdToRemove);
+                var itemdToRemoveQuestionnaire = this.questionnaireChangeItemStorage.GetById(changeRecordIdToRemove);
+                itemdToRemoveQuestionnaire.ResultingQuestionnaireDocument = null;
+                this.questionnaireChangeItemStorage.Store(itemdToRemoveQuestionnaire, changeRecordIdToRemove);
             }
         }
 

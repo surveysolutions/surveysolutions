@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                     version: questionnaireIdentity.Version);
             var headerToLevelMap = Create.Entity.HeaderStructureForLevel();
 
-            var multiMediaQuestion = Create.Entity.ExportedHeaderItem();
+            var multiMediaQuestion = Create.Entity.ExportedQuestionHeaderItem();
             multiMediaQuestion.QuestionType = QuestionType.Multimedia;
             headerToLevelMap.HeaderItems.Add(multiMediaQuestion.PublicKey, multiMediaQuestion);
 
