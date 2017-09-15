@@ -449,7 +449,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     if (!variable.Equals(new KeyValuePair<Guid, ExportedVariableHeaderItem>()))
                     {
                         newParameters["variable"] = variable.Value.VariableName;
-                        if (action == InterviewHistoricalAction.AnswerSet)
+                        if (action == InterviewHistoricalAction.VariableSet)
                         {
                             newParameters["value"] = parameters["value"];
                         }
