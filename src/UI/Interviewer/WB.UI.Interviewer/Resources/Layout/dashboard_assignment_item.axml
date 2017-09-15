@@ -119,6 +119,7 @@
           app:MvxBind="Visible And(HasGpsLocation, Or(IsExpanded, Not(HasExpandedView)));
               Text Localization('Dashboard_ShowLocation');                               
               Click NavigateToGpsLocationCommand;" 
+          
 			    app:layout_constraintBaseline_toBaselineOf="@+id/new_button"
 			    app:layout_constraintLeft_toRightOf="@+id/new_button" />
     

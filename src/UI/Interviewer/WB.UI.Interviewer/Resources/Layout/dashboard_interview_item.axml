@@ -116,13 +116,11 @@
       <Button
         android:id="@+id/new_button"
         style="@style/Dashboard_InterviewItem_CreateButton"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content" 
         app:MvxBind="Text Localization('Dashboard_Open'); 
           Click LoadDashboardItemCommand;
           Visible (IsExpanded || Not(HasExpandedView));"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/expandHandle"
+        app:layout_constraintTop_toBottomOf="@+id/prefilledQuestions"
         app:layout_constraintBottom_toBottomOf="parent" />
 
       <TextView
@@ -142,8 +140,7 @@
                 Text Localization('Dashboard_ShowLocation');                               
                 Click NavigateToGpsLocationCommand;"
 
-      app:layout_constraintBottom_toBottomOf="@+id/new_button"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toTopOf="@+id/new_button" />
+      app:layout_constraintBaseline_toBaselineOf="@+id/discard"
+      app:layout_constraintLeft_toRightOf="@+id/discard" />
   </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>
