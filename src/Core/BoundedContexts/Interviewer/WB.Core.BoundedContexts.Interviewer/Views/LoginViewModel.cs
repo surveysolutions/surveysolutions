@@ -107,6 +107,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = currentInterviewer.Name;
+            this.ErrorMessage = InterviewerUIResources.Login_WrongPassword;
         }
 
         public byte[] CustomLogo { get; private set; }
