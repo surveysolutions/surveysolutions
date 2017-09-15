@@ -1,14 +1,21 @@
 using System;
 using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public class InterviewDbEntity : AbstractInterviewDbEntity
+    public class InterviewDbEntity : IView
     {
+        public virtual int Id { get; set; }
+        public virtual Guid InterviewId { get; set; }
+        public virtual Identity Identity { get; set; }
+        public virtual EntityType EntityType { get; set; }
+
         public virtual bool HasFlag { get; set; }
         public virtual AnswerType? AnswerType { get; set; }
         public virtual bool IsEnabled { get; set; }
@@ -64,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 case bool asbool:
                     return Interview.AnswerType.Bool;
                 default:
-                    return null;
+                    throw new NotSupportedException("Unknown type of answer");
             }
         }
     }
