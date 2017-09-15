@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
             Guid? createdBy, 
             bool isPublic, 
             bool allowCensusMode,
-            bool allowAssignments)
+            bool allowAssignments,
+            bool allowExportVariables)
         {
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
@@ -34,11 +35,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
             this.IsPublic = isPublic;
             this.AllowCensusMode = allowCensusMode;
             this.AllowAssignments = allowAssignments;
+            this.AllowExportVariables = allowExportVariables;
             this.ImportDate = DateTime.UtcNow;
         }
 
-        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long questionnaireContentVersion, bool isSupportAssignments)
-            : this(doc.PublicKey, version, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode, isSupportAssignments)
+        public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long questionnaireContentVersion, bool isSupportAssignments, bool allowExportVariables)
+            : this(doc.PublicKey, version, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode, isSupportAssignments, allowExportVariables)
         {
             this.FeaturedQuestions =
                 doc.Find<IQuestion>(q => q.Featured)
@@ -77,5 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual DateTime? ImportDate { get; set; }
 
         public virtual bool AllowAssignments { get; set; }
+
+        public virtual bool AllowExportVariables { get; set; }
     }
 }

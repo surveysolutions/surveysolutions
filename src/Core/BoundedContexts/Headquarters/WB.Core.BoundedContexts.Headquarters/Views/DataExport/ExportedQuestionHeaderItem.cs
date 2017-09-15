@@ -4,7 +4,7 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
-    public class ExportedHeaderItem
+    public class ExportedQuestionHeaderItem : IExportedHeaderItem
     {
         public Guid PublicKey { get; set; }
         public QuestionType QuestionType { get; set; }

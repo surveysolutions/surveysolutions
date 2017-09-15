@@ -27,11 +27,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                     version: questionnaireIdentity.Version);
             var headerToLevelMap = Create.Entity.HeaderStructureForLevel();
 
-            var multiMediaQuestion = Create.Entity.ExportedHeaderItem();
+            var multiMediaQuestion = Create.Entity.ExportedQuestionHeaderItem();
             multiMediaQuestion.QuestionType = QuestionType.Multimedia;
             headerToLevelMap.HeaderItems.Add(multiMediaQuestion.PublicKey, multiMediaQuestion);
 
-            var audioMediaQuestion = Create.Entity.ExportedHeaderItem();
+            var audioMediaQuestion = Create.Entity.ExportedQuestionHeaderItem();
             audioMediaQuestion.QuestionType = QuestionType.Audio;
             headerToLevelMap.HeaderItems.Add(audioMediaQuestion.PublicKey, audioMediaQuestion);
 

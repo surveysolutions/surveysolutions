@@ -97,7 +97,8 @@ namespace WB.Tests.Abc.TestFactories
             IEventBus eventBus = null, 
             IAggregateSnapshotter snapshooter = null,
             IServiceLocator serviceLocator = null,
-            IAggregateLock aggregateLock = null)
+            IAggregateLock aggregateLock = null,
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner = null)
         {
             return new CommandService(
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
@@ -105,7 +106,8 @@ namespace WB.Tests.Abc.TestFactories
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
-                aggregateLock ?? Stub.Lock());
+                aggregateLock ?? Stub.Lock(),
+                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
@@ -252,7 +254,8 @@ namespace WB.Tests.Abc.TestFactories
                                       new ExportQuestionService(), 
                                       Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
                                                                           _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1, null)),
-                                      new RosterStructureService())
+                                      new RosterStructureService(),
+                                      Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
                                     .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
                 new RosterStructureService().GetRosterScopes(questionnaire), 
                 questionnaire,
@@ -483,8 +486,8 @@ namespace WB.Tests.Abc.TestFactories
             IMacrosSubstitutionService macrosSubstitutionService = null)
         {
             return new ExpressionsPlayOrderProvider(
-                expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService());
+                    new ExpressionsGraphProvider(expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                        macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService()));
         }
 
         public IMacrosSubstitutionService DefaultMacrosSubstitutionService()

@@ -195,8 +195,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
             foreach (var rosterLevel in questionnaire.HeaderToLevelMap.Values)
             {
-                ExportedHeaderItem question =
-                    rosterLevel.HeaderItems.Values.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionId);
+                ExportedQuestionHeaderItem question =
+                    rosterLevel.HeaderItems.Values.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionId) as ExportedQuestionHeaderItem;
 
                 if (question != null)
                 {
