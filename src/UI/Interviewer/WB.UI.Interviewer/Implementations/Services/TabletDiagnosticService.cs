@@ -78,8 +78,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             {
                 this.fileSystemAccessor.CreateDirectory(downloadFolder);
             }
-
-
+            
             byte[] patchOrFullApkBytes = null;
 
             try
@@ -93,19 +92,32 @@ namespace WB.UI.Interviewer.Implementations.Services
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (patchOrFullApkBytes != null)
+            async Task UpdateWithFullApk()
             {
-                this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchOrFullApkBytes);
                 cancellationToken.ThrowIfCancellationRequested();
-
-                this.archivePatcherService.ApplyPath(pathToOldApk, pathToPatch, pathToNewApk);
-            }
-            else
-            {
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 this.fileSystemAccessor.WriteAllBytes(pathToNewApk, patchOrFullApkBytes);
+            }
+
+            if (patchOrFullApkBytes != null)
+            {
+                try
+                {
+                    this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchOrFullApkBytes);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    this.archivePatcherService.ApplyPath(pathToOldApk, pathToPatch, pathToNewApk);
+                }
+                catch
+                {
+                    await UpdateWithFullApk();
+                }
+            }
+            else
+            {
+                await UpdateWithFullApk();
             }
 
             cancellationToken.ThrowIfCancellationRequested();
