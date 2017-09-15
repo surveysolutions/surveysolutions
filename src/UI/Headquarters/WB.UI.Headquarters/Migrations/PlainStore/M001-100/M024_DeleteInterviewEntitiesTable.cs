@@ -4,8 +4,8 @@ using FluentMigrator;
 namespace WB.UI.Headquarters.Migrations.PlainStore
 {
     [Localizable(false)]
-    [Migration(24)]
-    public class M024_DeleteInterviewEntitiesTable : Migration
+    [Migration(201709151330)]
+    public class M0201709151330_DeleteInterviewEntitiesTable : Migration
     {
         public override void Up()
         {

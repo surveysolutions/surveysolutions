@@ -152,7 +152,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     AsLong = question.Value.Answer as long?,
                     AsDateTime = question.Value.Answer as DateTime?,
                     AsDouble = question.Value.Answer as double? ?? (question.Value.Answer is decimal ? (double?)Convert.ToDouble(question.Value.Answer) : null),
-                    AsList = (question.Value.Answer as InterviewTextListAnswers)?.Answers,
+                    AsList = (question.Value.Answer as InterviewTextListAnswers)?.Answers ?? (question.Value.Answer as Tuple<decimal, string>[])?.Select(x=> new InterviewTextListAnswer(x.Item1, x.Item2))?.ToArray(),
                     AsYesNo = question.Value.Answer as AnsweredYesNoOption[],
                     AsGps = question.Value.Answer as GeoPosition,
                     AsAudio = question.Value.Answer as AudioAnswer,
