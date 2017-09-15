@@ -22,7 +22,7 @@ namespace WB.Core.Infrastructure.Transactions
 
         public static T ExecuteInPlainTransaction<T>(this IPlainTransactionManager transactionManager, Func<T> func)
         {
-            bool shouldStartTransaction = !transactionManager.IsTransactionStarted;
+            bool shouldStartTransaction = !transactionManager.TransactionStarted;
             try
             {
                 if (shouldStartTransaction)
@@ -37,7 +37,7 @@ namespace WB.Core.Infrastructure.Transactions
                 }
                 return result;
             }
-            catch
+            catch(Exception r)
             {
                 if (shouldStartTransaction)
                 {
@@ -70,7 +70,7 @@ namespace WB.Core.Infrastructure.Transactions
 
         public static T ExecuteInQueryTransaction<T>(this IPlainTransactionManager transactionManager, Func<T> func)
         {
-            bool shouldStartTransaction = !transactionManager.IsTransactionStarted;
+            bool shouldStartTransaction = !transactionManager.TransactionStarted;
             try
             {
 

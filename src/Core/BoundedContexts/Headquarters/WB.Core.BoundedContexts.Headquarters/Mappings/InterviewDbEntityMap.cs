@@ -22,24 +22,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             this.Component(x => x.Identity, cmp =>
             {
-                cmp.Property(y => y.Id, ptp => ptp.Column("EntityId"));
+                cmp.Property(y => y.Id, ptp => ptp.Column("entityid"));
                 cmp.Property(x => x.RosterVector, ptp =>
                 {
                     ptp.Type<PostgresRosterVector>();
                     ptp.Column(clm => clm.SqlType("int[]"));
                 });
             });
-            this.Property(x=>x.HasFlag);
+            this.Property(x => x.HasFlag);
             this.Property(x => x.IsEnabled);
             this.Property(x => x.IsReadonly);
             this.Property(x => x.EntityType);
             this.Property(x => x.AnswerType);
-            this.Property(x=>x.FailedValidationIndexes, ptp =>
+            this.Property(x => x.FailedValidationIndexes, ptp =>
             {
                 ptp.Type<PostgresSqlArrayType<int>>();
                 ptp.Column(clm => clm.SqlType("int[]"));
             });
-            this.Property(x=>x.AsArea, ptp => ptp.Type<PostgresJson<Area>>());
+            this.Property(x => x.AsArea, ptp => ptp.Type<PostgresJson<Area>>());
             this.Property(x => x.AsIntArray);
             this.Property(x => x.AsAudio, ptp => ptp.Type<PostgresJson<AudioAnswer>>());
             this.Property(x => x.AsBool);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Property(x => x.AsList, ptp => ptp.Type<PostgresJson<InterviewTextListAnswer[]>>());
             this.Property(x => x.AsLong);
             this.Property(x => x.AsString);
-            this.Property(x => x.AsYesNo, ptp=>ptp.Type<PostgresJson<AnsweredYesNoOption[]>>());
+            this.Property(x => x.AsYesNo, ptp => ptp.Type<PostgresJson<AnsweredYesNoOption[]>>());
         }
     }
 }

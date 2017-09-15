@@ -86,6 +86,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -203,7 +204,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Captcha.es.resx" />
     <EmbeddedResource Include="Resources\Captcha.ar.resx" />
-    <EmbeddedResource Include="Resources\Captcha.fr.resx" />    
+    <EmbeddedResource Include="Resources\Captcha.fr.resx" />
     <EmbeddedResource Include="Resources\Captcha.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Captcha.Designer.cs</LastGenOutput>

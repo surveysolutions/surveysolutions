@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Dapper;
 using Main.Core.Entities.SubEntities;
@@ -14,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -43,48 +43,48 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private const string AsBoolColumn = "asbool";
         private const string AsAudioColumn = "asaudio";
         private const string AsAreaColumn = "asarea";
-
-        private readonly IPlainStorageAccessor<InterviewDbEntity> entitiesRepository;
+        
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
-        private readonly IDbTransaction dbTransaction;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ISessionProvider sessionProvider;
 
-        public InterviewFactory(IPlainStorageAccessor<InterviewDbEntity> interviewEntitiesRepository, 
+        public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository,
             IQuestionnaireStorage questionnaireStorage,
-            IDbTransaction dbTransaction)
+            ISessionProvider sessionProvider)
         {
-            this.entitiesRepository = interviewEntitiesRepository;
             this.summaryRepository = interviewSummaryRepository;
-            this.dbTransaction = dbTransaction;
             this.questionnaireStorage = questionnaireStorage;
+            this.sessionProvider = sessionProvider;
         }
 
-        public Identity[] GetFlaggedQuestionIds(Guid interviewId) => this.entitiesRepository.Query(_
-            => _.Where(x => x.InterviewId == interviewId && x.HasFlag).Select(x => x.Identity).ToArray());
+        public Identity[] GetFlaggedQuestionIds(Guid interviewId)
+            => this.sessionProvider.GetSession()?.Connection?.Query(
+                    "SELECT entityid, rostervector FROM readside.interviews WHERE interviewid = @InterviewId AND hasflag = true", 
+                    new { InterviewId = interviewId}).Select(x=>Identity.Create((Guid)x.entityid, (int[])x.rostervector)).ToArray();
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged)
         {
             this.ThrowIfInterviewDeletedOrReadOnly(interviewId);
 
-            this.dbTransaction.Connection.Execute(
+            this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {FlagColumn}) " +
                 $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, {flagged}) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
                 "DO UPDATE SET " +
-                $"{FlagColumn} = true;",
+                $"{FlagColumn} = {flagged};",
                 new
                 {
                     InterviewId = interviewId,
                     EntityId = questionIdentity.Id,
                     RosterVector = questionIdentity.RosterVector.ToArray(),
                     EntityType = EntityType.Question
-                }, this.dbTransaction);
+                });
         }
 
         public void RemoveInterview(Guid interviewId)
-            => this.dbTransaction.Connection.Execute($"DELETE FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
-                new[] {new {InterviewId = interviewId}}, this.dbTransaction);
+            => this.sessionProvider.GetSession()?.Connection?.Execute($"DELETE FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
+                new[] {new {InterviewId = interviewId}});
 
         public void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer)
             => UpdateAnswer(interviewId, questionIdentity, answer, EntityType.Question);
@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => variables.ForEach(variable => this.UpdateAnswer(interviewId, variable.Identity, variable.NewValue, EntityType.Variable));
 
         private void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer, EntityType entityType)
-            => this.dbTransaction.Connection.Execute(
+            => this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AnswerTypeColumn}, {this.GetColumnNameByAnswer(answer)}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @AnswerType, @Answer) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -107,10 +107,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityType = entityType,
                     AnswerType = InterviewDbEntity.GetAnswerType(answer),
                     Answer = answer
-                }, this.dbTransaction);
+                });
 
         public void MakeEntitiesValid(Guid interviewId, Identity[] entityIds, EntityType entityType)
-            => this.dbTransaction.Connection.Execute(
+            => this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -122,10 +122,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityId = x.Id,
                     RosterVector = x.RosterVector.ToArray(),
                     EntityType = entityType
-                }), this.dbTransaction);
+                }));
 
         public void MakeEntitiesInvalid(Guid interviewId, IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> entityIds, EntityType entityType)
-            => this.dbTransaction.Connection.Execute(
+            => this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {InvalidValidationsColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @InvalidValidations) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -138,10 +138,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     RosterVector = x.Key.RosterVector.ToArray(),
                     EntityType = entityType,
                     InvalidValidations = x.Value.Select(y => y.FailedConditionIndex).ToArray()
-                }), this.dbTransaction);
+                }));
 
         public void EnableEntities(Guid interviewId, Identity[] entityIds, EntityType entityType, bool isEnabled)
-            => this.dbTransaction.Connection.Execute(
+            => this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {EnabledColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @Enabled) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -154,10 +154,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     RosterVector = x.RosterVector.ToArray(),
                     EntityType = entityType,
                     Enabled = isEnabled
-                }), this.dbTransaction);
+                }));
 
         public void MarkQuestionsAsReadOnly(Guid interviewId, Identity[] questionIds)
-            => this.dbTransaction.Connection.Execute(
+            => this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {ReadOnlyColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, true) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -169,10 +169,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityId = x.Id,
                     RosterVector = x.RosterVector.ToArray(),
                     EntityType = EntityType.Question
-                }), this.dbTransaction);
+                }));
 
         public void AddRosters(Guid interviewId, Identity[] rosterIds)
-            => this.dbTransaction.Connection.Execute(
+            => this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityIdColumn}) " +
                 $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType);",
                 rosterIds.Select(x => new
@@ -181,7 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityId = x.Id,
                     x.RosterVector,
                     EntityType = EntityType.Section
-                }), this.dbTransaction);
+                }));
 
         public void RemoveRosters(Guid interviewId, Identity[] rosterIds)
         {
@@ -222,15 +222,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 RosterVector = x.RosterVector.ToArray(),
             });
 
-            this.dbTransaction.Connection.Execute($"DELETE FROM {InterviewsTableName} " +
+            this.sessionProvider.GetSession()?.Connection?.Execute($"DELETE FROM {InterviewsTableName} " +
                                        $"WHERE {InterviewIdColumn} = @InterviewId " +
                                        $"AND {EntityIdColumn} = @EntityId " +
-                                       $"AND {RosterVectorColumn} = @RosterVector;", sqlParams, this.dbTransaction);
+                                       $"AND {RosterVectorColumn} = @RosterVector;", sqlParams);
         
         }
 
         public void RemoveAnswers(Guid interviewId, Identity[] questionIds)
-            => this.dbTransaction.Connection.Execute(
+            => this.sessionProvider.GetSession()?.Connection?.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -254,7 +254,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityId = x.Id,
                     RosterVector = x.RosterVector.ToArray(),
                     EntityType = EntityType.Question
-                }), this.dbTransaction);
+                }));
 
         private string GetColumnNameByAnswer(object answer)
         {

@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace WB.Core.Infrastructure.Transactions
+﻿namespace WB.Core.Infrastructure.Transactions
 {
     public interface ITransactionManager
     {
@@ -9,6 +7,5 @@ namespace WB.Core.Infrastructure.Transactions
         void RollbackCommandTransaction();
 
         bool TransactionStarted { get; }
-        IDbTransaction GetTransaction();
     }
 }
