@@ -1823,5 +1823,10 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new SyncSettings("hq", useBackgroundJobForProcessingPackages);
         }
+
+        public InterviewTreeVariableDiff InterviewTreeVariableDiff(InterviewTreeVariable sourceVariable, InterviewTreeVariable targetVariable)
+        {
+            return new InterviewTreeVariableDiff(sourceVariable, targetVariable);
+        }
     }
 }

@@ -575,6 +575,7 @@
     <Compile Include="Infrastructure\PlainPostgresTransactionManagerTests.cs" />
     <Compile Include="Infrastructure\ZipArchiveUtilsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\IdentityTests.cs" />
+    <Compile Include="SharedKernels\DataCollection\InterviewEntities\InterviewTreeVariableDiffTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_audio_question.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering__NO__to_YesNo_roster_size_question_with_max_answers_set_to__1.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Answers\when_answering_numeric_question_that_triggers_long_roster.cs" />
