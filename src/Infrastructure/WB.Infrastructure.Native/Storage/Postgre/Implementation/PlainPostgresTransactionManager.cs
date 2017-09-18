@@ -13,16 +13,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
         }
 
-        public void BeginTransaction()
-        {
-            base.CreateSession();
-            this.lazySession.Value.BeginTransaction(IsolationLevel.ReadCommitted);
-            this.lazySession.Value.FlushMode = FlushMode.Commit;
-        }
+        public void BeginTransaction() => base.CreateSession();
 
         public void CommitTransaction()
         {
-            if (!this.TransactionStarted)
+            if (this.lazySession == null)
                 throw new InvalidOperationException("Trying to commit transaction without beginning it");
 
             if (this.lazySession.IsValueCreated)
@@ -47,6 +42,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
 
             this.lazySession = null;
+        }
+
+        protected override void InitializeSessionSettings(ISession session)
+        {
+            session.BeginTransaction(IsolationLevel.ReadCommitted);
+            session.FlushMode = FlushMode.Commit;
         }
     }
 }
