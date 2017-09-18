@@ -123,6 +123,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         }
                     }
                 }
+
+                //connection.Execute("DROP TABLE \"readside\".\"interviewdatas\"", transaction);
             });
         }
 

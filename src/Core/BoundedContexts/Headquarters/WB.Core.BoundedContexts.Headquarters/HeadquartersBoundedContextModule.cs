@@ -260,7 +260,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IExportFactory>().To<ExportFactory>();
 
             this.Kernel.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
-            this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
+            //this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             this.Kernel.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             this.Kernel.RegisterDenormalizer<InterviewDenormalizer>();
