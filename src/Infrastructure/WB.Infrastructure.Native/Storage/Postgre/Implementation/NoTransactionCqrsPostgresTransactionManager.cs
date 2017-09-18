@@ -18,7 +18,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.triedToBeginCommandTransaction = true;
 
             base.CreateSession();
-            this.lazySession.Value.FlushMode = FlushMode.Never;
         }
 
         public void CommitCommandTransaction()
@@ -58,5 +57,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             this.Dispose();
         }
+
+        protected override void InitializeSessionSettings(ISession session)
+            => session.FlushMode = FlushMode.Never;
     }
 }

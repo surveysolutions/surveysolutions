@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.Infrastructure
         public void When_rolling_back_started_transaction_without_getting_session_Then_does_not_open_session()
         {
             // arrange
-            var sessionFactoryMock = new Mock<ISessionFactory>();
+            var sessionFactoryMock = new Mock<ISessionFactory> { DefaultValue = DefaultValue.Mock };
             var transactionManager = Create.Service.PlainPostgresTransactionManager(sessionFactory: sessionFactoryMock.Object);
 
             // act
@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.Infrastructure
         public void When_commiting_started_transaction_without_getting_session_Then_does_not_open_session()
         {
             // arrange
-            var sessionFactoryMock = new Mock<ISessionFactory>();
+            var sessionFactoryMock = new Mock<ISessionFactory> { DefaultValue = DefaultValue.Mock };
             var transactionManager = Create.Service.PlainPostgresTransactionManager(sessionFactory: sessionFactoryMock.Object);
 
             // act

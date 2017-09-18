@@ -1,5 +1,6 @@
 using System;
 using NHibernate;
+using NHibernate.Mapping.ByCode;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -31,8 +32,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             if (this.lazySession != null)
                 throw new InvalidOperationException();
 
-            this.lazySession = new Lazy<ISession>(() => this.sessionFactory.OpenSession(), true);
+            this.lazySession = new Lazy<ISession>(() =>
+            {
+                var session = this.sessionFactory.OpenSession();
+                if (session != null)
+                    this.InitializeSessionSettings(session);
+                return session;
+
+            }, true);
         }
+
+        protected abstract void InitializeSessionSettings(ISession session);
 
         public void Dispose()
         {
