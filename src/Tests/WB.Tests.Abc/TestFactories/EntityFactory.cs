@@ -1470,7 +1470,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public CategoricalFixedMultiOptionAnswer MultiOptionAnswer(params int[] selectedOptions)
         {
-            return CategoricalFixedMultiOptionAnswer.FromInts(selectedOptions);
+            return CategoricalFixedMultiOptionAnswer.Convert(selectedOptions);
         }
 
         

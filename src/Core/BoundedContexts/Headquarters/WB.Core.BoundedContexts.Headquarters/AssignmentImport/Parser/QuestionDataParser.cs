@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                 }
             }
 
-            return CategoricalFixedMultiOptionAnswer.FromInts(result.OrderBy(x => x.Item2).Select(x => x.Item1).ToArray());
+            return CategoricalFixedMultiOptionAnswer.Convert(result.OrderBy(x => x.Item2).Select(x => x.Item1).ToArray());
         }
 
         private GpsAnswer CreateGeoPositionAnswer(Tuple<string, string>[] answersWithColumnName, IQuestion question)
