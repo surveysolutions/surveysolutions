@@ -14,7 +14,7 @@ namespace WB.UI.Interviewer.Converters
             switch (status)
             {
                 case DashboardInterviewStatus.New:
-                    return Resource.Color.dashboard_new_interview_status;
+                    return Resource.Color.dashboard_interview_subtitle;
 
                 case DashboardInterviewStatus.InProgress:
                     return Resource.Color.dashboard_in_progress_tab;

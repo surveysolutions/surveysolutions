@@ -144,12 +144,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public IMvxAsyncCommand MainAction => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
         public bool MainActionEnabled { get; } = true;
 
-        public IMvxCommand OpenMenu { get; }
-        public bool HasAdditionalActions { get; } = true;
-
-
+        public bool HasAdditionalActions => Actions.Any(a => a.Enabled);
+        
         public string AssignmentIdLabel { get; set; }
         public string SubTitle { get; set; }
+
+        public MenuAction[] Actions => new []
+        {
+            new MenuAction(InterviewerUIResources.Dashboard_Discard, new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad), IsSupportedRemove)
+        };
 
         private string GetInterviewDateCommentByStatus(InterviewView interview)
         {

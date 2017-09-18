@@ -67,11 +67,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public IMvxAsyncCommand MainAction => new MvxAsyncCommand(
             () => this.interviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
-        () => this.AllowToCreateNewInterview);
-
+            () => this.AllowToCreateNewInterview);
+        
         public bool MainActionEnabled => AllowToCreateNewInterview;
-
-        public IMvxCommand OpenMenu { get; }
+        
         public bool HasAdditionalActions { get; } = false;
 
         public string Title => this.QuestionnaireName;
@@ -101,13 +100,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public bool HasGpsLocation => this.GpsLocation != null;
 
-        public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(
-            () => this.interviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
-            () => this.AllowToCreateNewInterview);
-
         public IMvxCommand NavigateToGpsLocationCommand => new MvxCommand(
             () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude),
             () => this.HasGpsLocation);
+
+        public MenuAction[] Actions { get; } = Array.Empty<MenuAction>();
         
         private PrefilledQuestion ToIdentifyingQuestion(AssignmentDocument.AssignmentAnswer identifyingAnswer)
             => new PrefilledQuestion
