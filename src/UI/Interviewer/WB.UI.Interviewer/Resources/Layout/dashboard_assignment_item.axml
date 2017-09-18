@@ -19,7 +19,7 @@
         android:id="@+id/card_status"
         style="@style/Dashboard_Card_Status"
         android:orientation="horizontal"
-        
+        app:MvxBind="BackgroundStyle InterviewStatusToDrawable(Status)"
 		    android:background="@drawable/dashboard_interview_status_new"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,7 +31,14 @@
       android:layout_height="0dp"
       android:orientation="vertical"
       app:layout_constraintGuide_begin="@dimen/dashboard_card_duo_margin" />
-    
+
+	  <android.support.constraint.Guideline
+	    android:id="@+id/right_guideline"
+	    android:layout_width="wrap_content"
+	    android:layout_height="0dp"
+	    android:orientation="vertical"
+	    app:layout_constraintGuide_end="@dimen/dashboard_card_duo_margin" />
+      
 		<android.support.constraint.Guideline
       android:id="@+id/top_guideline"
       android:layout_width="wrap_content"
@@ -43,7 +50,6 @@
 	    android:id="@+id/id"
 	    style="@style/Dashboard_InterviewItem_Id"
       app:MvxBind="Text IdLabel;"
-      
       android:maxLines="2"
       android:scrollHorizontally="false"
       
@@ -62,7 +68,7 @@
 	    android:scrollHorizontally="false"
 	    app:layout_constraintHorizontal_weight="55"
 	    app:layout_constraintLeft_toRightOf="@+id/id"
-	    app:layout_constraintRight_toRightOf="@+id/prefilledQuestions"
+	    app:layout_constraintRight_toRightOf="@+id/right_guideline"
 	    app:layout_constraintTop_toTopOf="@+id/top_guideline" />
 
 	  <TextView
@@ -76,7 +82,7 @@
 	    android:layout_height="wrap_content"
 	    app:layout_constraintLeft_toLeftOf="@+id/title"
 	    app:layout_constraintTop_toBottomOf="@+id/title"
-	    app:layout_constraintRight_toRightOf="@+id/prefilledQuestions" />
+	    app:layout_constraintRight_toRightOf="@+id/right_guideline" />
     
 		<MvxLinearLayout
         android:id="@+id/prefilledQuestions"
@@ -89,7 +95,7 @@
 		    android:orientation="vertical"
 		    android:showDividers="beginning|middle"
 		    
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/right_guideline"
         app:layout_constraintTop_toBottomOf="@+id/subtitle"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline" />
     

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="90"
+    android:toDegrees="90"
+    android:pivotX="50%"
+    android:pivotY="50%">
+    <vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="18dp"
+        android:height="4dp"
+        android:viewportWidth="18"
+        android:viewportHeight="4">
+        <path
+            android:fillColor="@color/dashboard_interview_title"
+            android:pathData="M 2 0 C 3.10456949966 0 4 0.895430500338 4 2 C 4 3.10456949966 3.10456949966 4 2 4 C 0.895430500338 4 0 3.10456949966 0 2 C 0 0.895430500338 0.895430500338 0 2 0 Z" />
+        <path
+            android:fillColor="@color/dashboard_interview_title"
+            android:pathData="M 9 0 C 10.1045694997 0 11 0.895430500338 11 2 C 11 3.10456949966 10.1045694997 4 9 4 C 7.89543050034 4 7 3.10456949966 7 2 C 7 0.895430500338 7.89543050034 0 9 0 Z" />
+        <path
+            android:fillColor="@color/dashboard_interview_title"
+            android:pathData="M 16 0 C 17.1045694997 0 18 0.895430500338 18 2 C 18 3.10456949966 17.1045694997 4 16 4 C 14.8954305003 4 14 3.10456949966 14 2 C 14 0.895430500338 14.8954305003 0 16 0 Z" />
+    </vector>
+</rotate>

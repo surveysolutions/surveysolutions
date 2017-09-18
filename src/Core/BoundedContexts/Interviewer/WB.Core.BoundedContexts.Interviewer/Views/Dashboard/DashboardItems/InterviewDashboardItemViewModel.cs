@@ -16,7 +16,7 @@ using MvvmCross.Platform.UI;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
+    public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
@@ -139,6 +139,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         public string IdLabel { get; set; }
+
+        public string MainActionLabel => InterviewerUIResources.Dashboard_Open;
+        public IMvxAsyncCommand MainAction => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
+        public bool MainActionEnabled { get; } = true;
+
+        public IMvxCommand OpenMenu { get; }
+        public bool HasAdditionalActions { get; } = true;
+
+
         public string AssignmentIdLabel { get; set; }
         public string SubTitle { get; set; }
 
