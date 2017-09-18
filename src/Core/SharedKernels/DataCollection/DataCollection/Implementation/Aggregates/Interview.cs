@@ -147,7 +147,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(TextAnswer.FromString(@event.Answer));
+            this.Tree.GetQuestion(questionIdentity)?.SetAnswer(TextAnswer.FromString(@event.Answer));
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateTextAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
@@ -310,7 +310,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswersDeclaredValid @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.Tree.GetQuestion(questionIdentity).MarkValid();
+                this.Tree.GetQuestion(questionIdentity)?.MarkValid();
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.DeclareAnswersValid(@event.Questions);

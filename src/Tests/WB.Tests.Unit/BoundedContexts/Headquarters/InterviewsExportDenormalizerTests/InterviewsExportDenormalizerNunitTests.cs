@@ -132,7 +132,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
 
         private InterviewsExportDenormalizer CreateInterviewsExportDenormalizer(
             Guid interviewId, IExportViewFactory exportViewFactory, IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null,
+            IInterviewFactory interviewFactory = null)
         {
             var interviewData = Create.Entity.InterviewData();
             var interviewReferenceStorage = new TestInMemoryWriter<InterviewSummary>();
@@ -141,9 +142,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             var interviewDataStorage = new TestInMemoryWriter<InterviewData>();
             interviewDataStorage.Store(interviewData, interviewId);
 
-            return new InterviewsExportDenormalizer(interviewDataStorage, interviewReferenceStorage,
+            return new InterviewsExportDenormalizer(interviewFactory ?? Mock.Of<IInterviewFactory>(), interviewReferenceStorage,
                 exportViewFactory, exportRecords,
-                questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>());
+                questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(), 
+                Mock.Of<IQueryableReadSideRepositoryReader<InterviewDbEntity>>());
         }
     }
 }

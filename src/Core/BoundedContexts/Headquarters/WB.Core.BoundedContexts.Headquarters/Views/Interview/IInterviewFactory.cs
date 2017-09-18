@@ -20,5 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void AddRosters(Guid interviewId, Identity[] rosterIds);
         void RemoveRosters(Guid interviewId, Identity[] rosterIds);
         void RemoveAnswers(Guid interviewId, Identity[] questionIds);
+        
+        InterviewData GetInterviewData(Guid interviewId);
     }
 }

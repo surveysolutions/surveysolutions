@@ -11,6 +11,7 @@ using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
@@ -130,7 +131,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
     {
         bool IUserType.Equals(object x, object y)
         {
-            return x.Equals(y);
+            var src = x as T[];
+            var dest = y as T[];
+
+            if (src == null && dest == null)
+                return true;
+
+            if (src == null || dest == null)
+                return false;
+
+            return src.SequenceEqual(dest);
         }
 
         public int GetHashCode(object x)
@@ -288,6 +298,84 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
                 parameter.Value = (T[]) this.convertor.Convert(value);
             }
         }
+    }
+
+    public class PostgresEntityJson<T> : IUserType where T : class
+    {
+        private IEntitySerializer<T> JsonConvert { get; } = ServiceLocator.Current.GetInstance<IEntitySerializer<T>>();
+
+        public new bool Equals(object x, object y)
+        {
+            var src = x as T;
+            var dest = y as T;
+
+            if (src == null && dest == null)
+                return true;
+
+            if (src == null || dest == null)
+                return false;
+
+            var xdocX = JsonConvert.Serialize(src);
+            var xdocY = JsonConvert.Serialize(dest);
+
+            return xdocY == xdocX;
+        }
+
+        public int GetHashCode(object x) => x == null ? 0 : x.GetHashCode();
+
+        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        {
+            if (names.Length != 1)
+                throw new InvalidOperationException("Only expecting one column...");
+
+            var val = rs[names[0]] as string;
+
+            var result = !string.IsNullOrWhiteSpace(val) ? this.JsonConvert.Deserialize(val) : null;
+            return result;
+        }
+
+        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        {
+            var expectedValue = value as T;
+
+            var parameter = (NpgsqlParameter)cmd.Parameters[index];
+            parameter.NpgsqlDbType = NpgsqlDbType.Json;
+
+            if (expectedValue == null)
+                parameter.Value = DBNull.Value;
+            else
+                parameter.Value = JsonConvert.Serialize(expectedValue);
+        }
+
+        public object DeepCopy(object value)
+        {
+            var expectedValue = value as T;
+            if (expectedValue == null)
+                return null;
+
+            var serialized = JsonConvert.Serialize(expectedValue);
+            return JsonConvert.Deserialize(serialized);
+        }
+
+        public object Replace(object original, object target, object owner) => original;
+
+        public object Assemble(object cached, object owner)
+        {
+            var str = cached as string;
+            return string.IsNullOrWhiteSpace(str) ? null : JsonConvert.Deserialize(str);
+        }
+
+        public object Disassemble(object value)
+        {
+            var expectedValue = value as T;
+            return expectedValue == null ? null : JsonConvert.Serialize(expectedValue);
+        }
+
+        public SqlType[] SqlTypes => new SqlType[] { new NpgsqlExtendedSqlType(DbType.Object, NpgsqlTypes.NpgsqlDbType.Json) };
+
+        public Type ReturnedType => typeof(T);
+
+        public bool IsMutable => true;
     }
 
     public class PostgresJson<T> : IUserType where T : class

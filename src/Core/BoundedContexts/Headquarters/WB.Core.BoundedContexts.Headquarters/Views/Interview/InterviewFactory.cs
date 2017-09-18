@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -14,7 +16,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -74,22 +78,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISessionProvider sessionProvider;
         private readonly IEntitySerializer<object> jsonSerializer;
+        private readonly IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository;
+        private readonly IRosterStructureService rosterStructureService;
 
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository,
             IQuestionnaireStorage questionnaireStorage,
             ISessionProvider sessionProvider,
-            IEntitySerializer<object> jsonSerializer)
+            IEntitySerializer<object> jsonSerializer,
+            IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository,
+            IRosterStructureService rosterStructureService)
         {
             this.summaryRepository = interviewSummaryRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.sessionProvider = sessionProvider;
             this.jsonSerializer = jsonSerializer;
+            this.interviewRepository = interviewRepository;
+            this.rosterStructureService = rosterStructureService;
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
-            => this.sessionProvider.GetSession()?.Connection?.Query(
-                    "SELECT entityid, rostervector FROM readside.interviews WHERE interviewid = @InterviewId AND hasflag = true",
+            => this.sessionProvider.GetSession().Connection.Query(
+                    $"SELECT {EntityIdColumn}, {RosterVectorColumn} FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId AND {FlagColumn} = true",
                     new {InterviewId = interviewId})
                 .Select(x => Identity.Create((Guid) x.entityid, (int[]) x.rostervector))
                 .ToArray();
@@ -98,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             this.ThrowIfInterviewDeletedOrReadOnly(interviewId);
 
-            this.sessionProvider.GetSession()?.Connection?.Execute(
+            this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {FlagColumn}) " +
                 $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, {flagged}) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -114,7 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public void RemoveInterview(Guid interviewId)
-            => this.sessionProvider.GetSession()?.Connection?.Execute(
+            => this.sessionProvider.GetSession().Connection.Execute(
                 $"DELETE FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
                 new[] {new {InterviewId = interviewId}});
 
@@ -131,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var columnNameByAnswer = AnswerColumnNameByAnswerType[answerType.Value];
             var isJsonAnswer = JsonAnswerTypes.Contains(answerType.Value);
             
-            using (var command = this.sessionProvider.GetSession()?.Connection?.CreateCommand())
+            using (var command = this.sessionProvider.GetSession().Connection.CreateCommand())
             {
                 command.CommandText =
                     $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AnswerTypeColumn}, {columnNameByAnswer}) " +
@@ -154,7 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public void MakeEntitiesValid(Guid interviewId, Identity[] entityIds, EntityType entityType)
-            => this.sessionProvider.GetSession()?.Connection?.Execute(
+            => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -170,7 +180,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public void MakeEntitiesInvalid(Guid interviewId,
             IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> entityIds, EntityType entityType)
-            => this.sessionProvider.GetSession()?.Connection?.Execute(
+            => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {InvalidValidationsColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @InvalidValidations) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -186,7 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }));
 
         public void EnableEntities(Guid interviewId, Identity[] entityIds, EntityType entityType, bool isEnabled)
-            => this.sessionProvider.GetSession()?.Connection?.Execute(
+            => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {EnabledColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @Enabled) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -202,7 +212,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }));
 
         public void MarkQuestionsAsReadOnly(Guid interviewId, Identity[] questionIds)
-            => this.sessionProvider.GetSession()?.Connection?.Execute(
+            => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {ReadOnlyColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, true) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -217,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }));
 
         public void AddRosters(Guid interviewId, Identity[] rosterIds)
-            => this.sessionProvider.GetSession()?.Connection?.Execute(
+            => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType);",
                 rosterIds.Select(x => new
@@ -269,7 +279,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 RosterVector = x.RosterVector.ToArray(),
             });
 
-            this.sessionProvider.GetSession()?.Connection?.Execute($"DELETE FROM {InterviewsTableName} " +
+            this.sessionProvider.GetSession().Connection.Execute($"DELETE FROM {InterviewsTableName} " +
                                                                    $"WHERE {InterviewIdColumn} = @InterviewId " +
                                                                    $"AND {EntityIdColumn} = @EntityId " +
                                                                    $"AND {RosterVectorColumn} = @RosterVector;",
@@ -278,7 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public void RemoveAnswers(Guid interviewId, Identity[] questionIds)
-            => this.sessionProvider.GetSession()?.Connection?.Execute(
+            => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
                 "ON CONFLICT ON CONSTRAINT uk_interview " +
@@ -303,6 +313,140 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     RosterVector = x.RosterVector.ToArray(),
                     EntityType = EntityType.Question
                 }));
+
+        public InterviewData GetInterviewData(Guid interviewId)
+        {
+            var interviewSummary = this.summaryRepository.GetById(interviewId.FormatGuid());
+            var interviewData = new InterviewData
+            {
+                InterviewId = interviewId,
+                ResponsibleId = interviewSummary.ResponsibleId,
+                Status = interviewSummary.Status,
+                AssignmentId = interviewSummary.AssignmentId,
+                CreatedOnClient = interviewSummary.WasCreatedOnClient,
+                HasErrors = interviewSummary.HasErrors,
+                InterviewKey = interviewSummary.ClientKey,
+                ReceivedByInterviewer = interviewSummary.ReceivedByInterviewer,
+                ResponsibleRole = interviewSummary.ResponsibleRole,
+                SupervisorId = interviewSummary.TeamLeadId,
+                UpdateDate = interviewSummary.UpdateDate,
+                WasCompleted = interviewSummary.WasCompleted,
+                IsMissingAssignToInterviewer = !interviewSummary.IsAssignedToInterviewer
+            };
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
+                    QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity));
+            var rosterIds = questionnaire.Find<IGroup>(x => x.IsRoster).Select(x=>x.PublicKey);
+            // :) oxo xo I'm alive :)))))
+            var rosterStructures = this.rosterStructureService.GetRosterScopes(questionnaire);
+
+            var interviewEntites = this.interviewRepository.Query(_=>_.Where(x=>x.InterviewId == interviewId).ToList());
+
+            interviewData.Levels = interviewEntites
+                .GroupBy(x => x.Identity.RosterVector)
+                .Select(x => ToInterviewLevel(x.Key, x.ToArray(), rosterStructures, rosterIds))
+                .ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
+
+            return interviewData;
+        }
+
+        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewDbEntity[] interviewDbEntities, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterStructures, IEnumerable<Guid> rosterIds)
+        {
+            Dictionary<ValueVector<Guid>, int?> scopeVectors = new Dictionary<ValueVector<Guid>, int?>();
+            if (rosterVector.Length > 0)
+            {
+                var roster = interviewDbEntities.FirstOrDefault(x => x.EntityType == EntityType.Section &&
+                                                            x.Identity.RosterVector == rosterVector &&
+                                                            rosterIds.Contains(x.Identity.Id));
+                if (roster != null)
+                {
+                    scopeVectors = new Dictionary<ValueVector<Guid>, int?>
+                    {
+                        {GetScopeOfPassedGroup(roster.Identity.Id, rosterStructures).ScopeVector, rosterVector.Last()}
+                    };
+                }
+            }
+
+            return new InterviewLevel
+            {
+                RosterVector = rosterVector,
+                DisabledGroups = interviewDbEntities.Where(x=>x.EntityType == EntityType.Section && x.IsEnabled == false).Select(x=>x.Identity.Id).ToHashSet(),
+                DisabledVariables = interviewDbEntities.Where(x=>x.EntityType == EntityType.Variable && x.IsEnabled == false).Select(x=>x.Identity.Id).ToHashSet(),
+                Variables = interviewDbEntities.Where(x=>x.EntityType == EntityType.Variable).Select(x=>new {x.Identity.Id, Answer = ToObjectAnswer(x)}).ToDictionary(x=>x.Id, x=>x.Answer),
+                StaticTexts = interviewDbEntities.Where(x=>x.EntityType == EntityType.StaticText).Select(ToStaticText).ToDictionary(x=>x.Id),
+                QuestionsSearchCache = interviewDbEntities.Where(x=>x.EntityType == EntityType.Question).Select(ToQuestion).ToDictionary(x=>x.Id),
+                ScopeVectors = scopeVectors
+            };
+        }
+
+        private RosterScopeDescription GetScopeOfPassedGroup(Guid groupId, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
+        {
+            foreach (var scopeId in rosterScopes.Keys)
+            {
+                if (rosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.ContainsKey(groupId))
+                {
+                    return rosterScopes[scopeId];
+                }
+            }
+
+            throw new ArgumentException($"group {groupId} is missing in any propagation scope of questionnaire");
+        }
+
+        private InterviewQuestion ToQuestion(InterviewDbEntity entity)
+        {
+            var objectAnswer = ToObjectAnswer(entity);
+
+            return new InterviewQuestion
+            {
+                Id = entity.Identity.Id,
+                Answer = objectAnswer,
+                FailedValidationConditions = entity.InvalidValidations?.Select(x => new FailedValidationCondition(x))?.ToReadOnlyCollection(),
+                QuestionState = ToQuestionState(entity, objectAnswer != null)
+            };
+        }
+
+        private QuestionState ToQuestionState(InterviewDbEntity entity, bool hasAnswer)
+        {
+            QuestionState state = 0;
+
+            if(entity.IsEnabled)
+                state = state.With(QuestionState.Enabled);
+
+            if (entity.IsReadonly)
+                state = state.With(QuestionState.Readonly);
+
+            if (entity.InvalidValidations == null)
+                state = state.With(QuestionState.Valid);
+
+            if (entity.HasFlag)
+                state = state.With(QuestionState.Flagged);
+
+            if (hasAnswer)
+                state = state.With(QuestionState.Answered);
+
+            return state;
+        }
+
+        private InterviewStaticText ToStaticText(InterviewDbEntity entity) => new InterviewStaticText
+        {
+            Id = entity.Identity.Id,
+            IsEnabled = entity.IsEnabled,
+            FailedValidationConditions = entity.InvalidValidations.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection()
+        };
+
+        private object ToObjectAnswer(InterviewDbEntity entity) => entity.AsString ?? entity.AsDouble ?? entity.AsInt ??
+                                                                   entity.AsDateTime ?? entity.AsLong ??
+                                                                   entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
+                                                                   entity.AsList ?? entity.AsYesNo ??
+                                                                   entity.AsIntMatrix ?? entity.AsArea ??
+                                                                   (object) entity.AsAudio;
+
+        public static string CreateLevelIdFromPropagationVector(decimal[] vector)
+        {
+            if (vector.Length == 0)
+                return "#";
+            return vector.CreateLeveKeyFromPropagationVector();
+        }
 
         private void ThrowIfInterviewDeletedOrReadOnly(Guid interviewId)
         {
