@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return vector.CreateLeveKeyFromPropagationVector();
         }
 
-        private RosterScopeDescription GetScopeOfPassedGroup(InterviewData interview, Guid groupId, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
+        private RosterScopeDescription GetScopeOfPassedGroup(Guid groupId, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
         {
             foreach (var scopeId in rosterScopes.Keys)
             {
@@ -413,7 +413,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                 foreach (var instance in @event.Payload.Instances)
                 {
-                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId,rosters);
+                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(instance.GroupId,rosters);
                     this.AddLevelToInterview(state,
                         instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex, scopeOfCurrentGroup);
                 }
@@ -431,7 +431,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                 foreach (var instance in @event.Payload.Instances)
                 {
-                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, instance.GroupId, rosters);
+                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(instance.GroupId, rosters);
 
                     var rosterVector = this.CreateNewVector(instance.OuterRosterVector, instance.RosterInstanceId);
                     var levelKey = CreateLevelIdFromPropagationVector(rosterVector);
@@ -468,7 +468,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (questionnarie != null)
             {
                 var rosters = this.rosterStructureService.GetRosterScopes(questionnarie);
-                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(state, @event.Payload.GroupId, rosters);
+                var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(@event.Payload.GroupId, rosters);
                 List<string> keysOfLevelsByScope =
                     this.GetLevelsByScopeFromInterview(interview: state, scopeVector: scopeOfCurrentGroup.ScopeVector);
 

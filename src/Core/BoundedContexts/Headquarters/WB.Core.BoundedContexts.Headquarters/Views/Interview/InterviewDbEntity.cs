@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool HasFlag { get; set; }
         public virtual AnswerType? AnswerType { get; set; }
         public virtual bool IsEnabled { get; set; }
-        public virtual int[] FailedValidationIndexes { get; set; }
+        public virtual int[] InvalidValidations { get; set; }
         public virtual bool IsReadonly { get; set; }
         public virtual int? AsInt { get; set; }
         public virtual double? AsDouble { get; set; }
@@ -71,6 +71,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     return Interview.AnswerType.Area;
                 case bool asbool:
                     return Interview.AnswerType.Bool;
+                case null:
+                    return null;
                 default:
                     throw new NotSupportedException("Unknown type of answer");
             }

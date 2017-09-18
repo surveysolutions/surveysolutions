@@ -42,19 +42,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version);
 
-            var interviewDataStorage = new TestInMemoryWriter<InterviewData>();
+            var mockOfInterviewFactory = new Mock<IInterviewFactory>();
             var interviewSummarytorage = new TestInMemoryWriter<InterviewSummary>();
 
             interviewSummarytorage.Store(interviewSummary, interviewId.FormatGuid());
-            interviewDataStorage.Store(
+            mockOfInterviewFactory.Setup(x=>x.GetInterviewData(interviewId)).Returns(
                 Create.Entity.InterviewData(
                     Create.Entity.InterviewQuestion(
                         questionId: multiMediaQuestion.PublicKey,
                         answer: "var.jpg"),
                     Create.Entity.InterviewQuestion(
                         questionId: audioMediaQuestion.PublicKey,
-                        answer: audioFileName)), 
-                interviewId.FormatGuid());
+                        answer: audioFileName)));
 
             var questionnaireStorage = new Mock<IQuestionnaireExportStructureStorage>();
 
@@ -80,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             binaryFormatDataExportHandler =
                 CreateBinaryFormatDataExportHandler(
                     interviewSummaries: interviewSummarytorage,
-                    interviewDatas: interviewDataStorage,
+                    interviewFactory: mockOfInterviewFactory.Object,
                     questionnaireExportStructureStorage: questionnaireStorage.Object,
                     imageFileRepository: plainInterviewFileStorageMock.Object,
                     fileSystemAccessor: fileSystemAccessor.Object,

@@ -34,24 +34,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Property(x => x.IsReadonly);
             this.Property(x => x.EntityType);
             this.Property(x => x.AnswerType);
-            this.Property(x => x.FailedValidationIndexes, ptp =>
+            this.Property(x => x.InvalidValidations, ptp =>
             {
                 ptp.Type<PostgresSqlArrayType<int>>();
                 ptp.Column(clm => clm.SqlType("int[]"));
             });
-            this.Property(x => x.AsArea, ptp => ptp.Type<PostgresJson<Area>>());
-            this.Property(x => x.AsIntArray);
-            this.Property(x => x.AsAudio, ptp => ptp.Type<PostgresJson<AudioAnswer>>());
+            this.Property(x => x.AsArea, ptp => ptp.Type<PostgresEntityJson<Area>>());
+            this.Property(x => x.AsIntArray, ptp =>
+            {
+                ptp.Type<PostgresSqlArrayType<int>>();
+                ptp.Column(clm => clm.SqlType("int[]"));
+            });
+            this.Property(x => x.AsAudio, ptp => ptp.Type<PostgresEntityJson<AudioAnswer>>());
             this.Property(x => x.AsBool);
             this.Property(x => x.AsDateTime);
             this.Property(x => x.AsDouble);
-            this.Property(x => x.AsGps, ptp => ptp.Type<PostgresJson<GeoPosition>>());
+            this.Property(x => x.AsGps, ptp => ptp.Type<PostgresEntityJson<GeoPosition>>());
             this.Property(x => x.AsInt);
-            this.Property(x => x.AsIntMatrix, ptp => ptp.Type<PostgresJson<int[][]>>());
-            this.Property(x => x.AsList, ptp => ptp.Type<PostgresJson<InterviewTextListAnswer[]>>());
+            this.Property(x => x.AsIntMatrix, ptp => ptp.Type<PostgresEntityJson<int[][]>>());
+            this.Property(x => x.AsList, ptp => ptp.Type<PostgresEntityJson<InterviewTextListAnswer[]>>());
             this.Property(x => x.AsLong);
             this.Property(x => x.AsString);
-            this.Property(x => x.AsYesNo, ptp => ptp.Type<PostgresJson<AnsweredYesNoOption[]>>());
+            this.Property(x => x.AsYesNo, ptp => ptp.Type<PostgresEntityJson<AnsweredYesNoOption[]>>());
         }
     }
 }

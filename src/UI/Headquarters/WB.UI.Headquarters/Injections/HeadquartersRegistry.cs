@@ -66,7 +66,6 @@ namespace WB.UI.Headquarters.Injections
             this.Kernel.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
             this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
             this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
-            this.Kernel.Bind<IInterviewEntityViewFactory>().To<InterviewEntityViewFactory>();
             this.Kernel.Bind<IUserPreloadingService>().To<UserPreloadingService>();
             this.Kernel.Bind<IAttachmentContentService>().To<AttachmentContentService>();
             this.Kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
