@@ -18,7 +18,6 @@
     <View
         android:id="@+id/card_status"
         app:MvxBind="BackgroundStyle InterviewStatusToDrawable(Status)"
-        
         style="@style/Dashboard_Card_Status"
         android:orientation="horizontal"
 		    android:background="@drawable/dashboard_interview_status_new"
