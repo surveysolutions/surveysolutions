@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
 
         Because of = () => viewModel.Init(questionnaireView);
 
-        It should_view_model_have_specified_questionnaire_message = () => viewModel.QuestionnaireName.ShouldEqual(string.Format(InterviewerUIResources.DashboardItem_Title, questionnaireView.Title, questionnaireView.GetIdentity().Version));
-        It should_view_model_have_specified_comment = () => viewModel.Comment.ShouldEqual(string.Format(InterviewerUIResources.DashboardItem_CensusModeComment, interviewsByQuestionnaireCount));
+        It should_view_model_have_specified_questionnaire_message = () => viewModel.Title.ShouldEqual(string.Format(InterviewerUIResources.DashboardItem_Title, questionnaireView.Title, questionnaireView.GetIdentity().Version));
+        It should_view_model_have_specified_comment = () => viewModel.SubTitle.ShouldEqual(string.Format(InterviewerUIResources.DashboardItem_CensusModeComment, interviewsByQuestionnaireCount));
 
         static CensusQuestionnaireDashboardItemViewModel viewModel;
         const int interviewsByQuestionnaireCount = 3;

@@ -79,7 +79,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 interview.QuestionnaireTitle = questionnaire.Title;
             }
 
-            this.IdLabel = InterviewerUIResources.Dashboard_CardIdTitleFormat.FormatString(interview.InterviewKey);
+            if (!string.IsNullOrWhiteSpace(interview.InterviewKey))
+                this.IdLabel = InterviewerUIResources.Dashboard_CardIdTitleFormat.FormatString(interview.InterviewKey);
+            else
+                this.IdLabel = InterviewerUIResources.Dashboard_No_InterviewKey;
 
             this.InterviewId = interview.InterviewId;
             this.AssignmentId = interview.Assignment;
@@ -109,10 +112,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
 
             this.SubTitle += $"\n{comment}";
-            this.AssignmentIdLabel = InterviewerUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(AssignmentId);
-            this.IsSupportedRemove = interview.CanBeDeleted;
+            if (AssignmentId.HasValue)
+            {
+                this.AssignmentIdLabel = InterviewerUIResources.Dashboard_Interview_AssignmentLabelFormat
+                    .FormatString(AssignmentId);
+            }
+            else
+            {
+                this.AssignmentIdLabel = InterviewerUIResources.Dashboard_CensusAssignment;
+            }
 
-            if (interview.Assignment != null)
+            this.IsSupportedRemove = interview.CanBeDeleted;
+            
+            if (interview.Assignment != null || interview.Census)
             {
                 this.Title = QuestionnaireName;
             }

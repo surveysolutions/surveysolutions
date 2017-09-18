@@ -683,4 +683,10 @@ your next synchronization</value>
     <value>Assignment #{0}</value>
     <comment>{0} - is an assignment id</comment>
   </data>
+  <data name="Dashboard_No_InterviewKey">
+    <value>No interview key</value>
+  </data>
+  <data name="Dashboard_CensusAssignment">
+    <value>Census</value>
+  </data>
 </root>
