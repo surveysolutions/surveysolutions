@@ -40,15 +40,6 @@
     <item name="android:background">@drawable/dashboard_item_layout_border</item>
   </style>
 
-  <style name="Dashboard_Menu_Handle">
-    <item name="android:layout_width">14dp</item>
-    <item name="android:layout_height">28dp</item>
-    <item name="android:paddingLeft">7dp</item>
-    <item name="android:paddingRight">7dp</item>
-    <item name="android:textAlignment">center</item>
-    <item name="android:layout_marginRight">7dp</item>
-  </style>
-
   <style name="Dashboard_InterviewItem_StatusPanel" parent="AppTheme">
     <item name="android:layout_width">@dimen/Dashboard_InterviewItem_StatusPanel_width</item>
     <item name="android:layout_height">fill_parent</item>
