@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     AsGps = question.Value.Answer as GeoPosition,
                     AsAudio = question.Value.Answer as AudioAnswer,
                     AsArea = question.Value.Answer as Area
-            };
+                };
             }
 
             foreach (var staticText in lvl.StaticTexts)
@@ -210,14 +210,14 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 };
             }
 
-            foreach (var disabledGroup in lvl.ScopeVectors.Keys.SelectMany(x => x).Union(lvl.DisabledGroups).Distinct())
+            foreach (var disabledGroup in lvl.DisabledGroups)
             {
                 yield return new InterviewDbEntity
                 {
                     EntityType = EntityType.Section,
                     InterviewId = interviewId,
                     Identity = Identity.Create(disabledGroup, lvl.RosterVector),
-                    IsEnabled = !lvl.DisabledGroups.Contains(disabledGroup),
+                    IsEnabled = false,
                     IsReadonly = false,
                     HasFlag = false
                 };
