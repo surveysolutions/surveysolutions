@@ -133,17 +133,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-            catch (Exception e) when (e.InnerException is MissingPermissionsException)
-            {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
-            }
-            catch (Exception e) when (e.InnerException is NotImplementedException)
+            catch (NotImplementedException)
             {
                 userInteractionService.ShowToast(UIResources.Version_Not_Supports);
             }
-            catch (Exception e) when (e.InnerException is NotSupportedException)
+            catch (NotSupportedException)
             {
                 userInteractionService.ShowToast(UIResources.Device_Does_Not_Support);
+            }
+            catch (Exception e) when (e.InnerException is MissingPermissionsException)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
             }
             finally
             {
