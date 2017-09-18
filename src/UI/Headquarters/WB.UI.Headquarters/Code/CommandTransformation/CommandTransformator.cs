@@ -133,7 +133,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                     else
                     {
                         int[] answerAsIntArray = JsonArrayToStringArray(answer.Answer).Select(x => x.Parse<int>()).ToArray();
-                        answerValue = CategoricalFixedMultiOptionAnswer.FromInts(answerAsIntArray);
+                        answerValue = CategoricalFixedMultiOptionAnswer.Convert(answerAsIntArray);
                     }
                     break;
                 case QuestionType.GpsCoordinates:

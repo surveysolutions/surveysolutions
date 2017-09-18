@@ -439,7 +439,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiFixedOption)
             {
                 RosterVector answerAsRosterVector = RosterVector.Convert(answer);
-                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector);
+                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.Convert(answerAsRosterVector.Array);
                 ((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).SetAnswer(categoricalFixedMultiOptionAnswer);
                 return;
             }
@@ -463,8 +463,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsSingleLinkedToList) { ((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsMultiLinkedToList)
             {
-                var answerAs = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
-                ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(answerAs);
+                var answerAsCategoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.Convert(answer);
+                ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(answerAsCategoricalFixedMultiOptionAnswer);
                 return;
             }
             if (this.IsArea) { ((InterviewTreeAreaQuestion)this.InterviewQuestion).SetAnswer(AreaAnswer.FromArea((Area)answer)); return; }
@@ -1122,7 +1122,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeMultiOptionQuestion(object answer) : base (InterviewQuestionType.MultiFixedOption)
         {
-            this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
+            this.answer = CategoricalFixedMultiOptionAnswer.Convert(answer);
         }
 
         public override bool IsAnswered() => this.answer != null && this.answer.CheckedValues.Count > 0;
@@ -1282,7 +1282,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeMultiOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId) : base(linkedToQuestionId, InterviewQuestionType.MultiLinkedToList)
         {
-            this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
+            this.answer = CategoricalFixedMultiOptionAnswer.Convert(answer);
             this.Options = EmptyArray<int>.Value;
         }
 
