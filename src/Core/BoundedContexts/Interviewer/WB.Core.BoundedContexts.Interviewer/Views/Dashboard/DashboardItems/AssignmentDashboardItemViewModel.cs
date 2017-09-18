@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
+    public class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
     {
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IInterviewFromAssignmentCreatorService interviewFromAssignmentCreator;
@@ -32,10 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var questionnaire = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title,
                 this.assignment.Title, questionnaire.Version);
-
-            this.ReceivedDate = assignment.ReceivedDateUtc.ToLocalTime().ToString("MMM d");
-            this.ReceivedTime = assignment.ReceivedDateUtc.ToLocalTime().ToString("HH:mm");
-
+            
             if (assignmentDocument.LocationQuestionId.HasValue && assignmentDocument.LocationLatitude.HasValue && assignmentDocument.LocationLongitude.HasValue)
                 this.GpsLocation = new InterviewGpsCoordinatesView
                 {
@@ -59,26 +56,55 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string ReceivedTime { get; private set; }
         public InterviewGpsCoordinatesView GpsLocation { get; private set; }
 
-        private int interviewsLeftByAssignmentCount => this.assignment.Quantity.GetValueOrDefault() - this.interviewsByAssignmentCount;
+        private int InterviewsLeftByAssignmentCount => 
+            this.assignment.Quantity.GetValueOrDefault() - this.interviewsByAssignmentCount;
 
         public string Comment => InterviewerUIResources.DashboardItem_AssignmentCreatedComment.FormatString(this.interviewsByAssignmentCount);
 
-        public string Title => InterviewerUIResources.Dashboard_Assignment_CardTitle.FormatString(this.assignment.Id,
-            this.assignment.Quantity.HasValue
-                ? InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown.FormatString(interviewsLeftByAssignmentCount)
-                : InterviewerUIResources.Dashboard_AssignmentCard_TitleCountdown_Unlimited);
+        public string IdLabel => InterviewerUIResources.Dashboard_CardIdTitleFormat.FormatString(this.AssignmentId);
 
-        public bool AllowToCreateNewInterview => !this.assignment.Quantity.HasValue || Math.Max(0, interviewsLeftByAssignmentCount) > 0;
+        public string MainActionLabel => InterviewerUIResources.Dashboard_Start;
 
-        public bool HasGpsLocation => this.GpsLocation != null;
-
-        public IMvxAsyncCommand CreateNewInterviewCommand => new MvxAsyncCommand(
+        public IMvxAsyncCommand MainAction => new MvxAsyncCommand(
             () => this.interviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
             () => this.AllowToCreateNewInterview);
+        
+        public bool MainActionEnabled => AllowToCreateNewInterview;
+        
+        public bool HasAdditionalActions { get; } = false;
+
+        public string Title => this.QuestionnaireName;
+
+        public string SubTitle
+        {
+            get
+            {
+                if (this.assignment.Quantity.HasValue)
+                {
+                    if (InterviewsLeftByAssignmentCount == 1)
+                    {
+                        return InterviewerUIResources.Dashboard_AssignmentCard_SubTitleSingleInterivew;
+                    }
+
+                    return InterviewerUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
+                        .FormatString(InterviewsLeftByAssignmentCount, this.assignment.Quantity);
+                }
+                else
+                {
+                    return InterviewerUIResources.Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat.FormatString(this.assignment.Quantity.GetValueOrDefault());
+                }
+            }
+        }
+          
+        public bool AllowToCreateNewInterview => !this.assignment.Quantity.HasValue || Math.Max(0, InterviewsLeftByAssignmentCount) > 0;
+
+        public bool HasGpsLocation => this.GpsLocation != null;
 
         public IMvxCommand NavigateToGpsLocationCommand => new MvxCommand(
             () => this.externalAppLauncher.LaunchMapsWithTargetLocation(this.GpsLocation.Latitude, this.GpsLocation.Longitude),
             () => this.HasGpsLocation);
+
+        public MenuAction[] Actions { get; } = Array.Empty<MenuAction>();
         
         private PrefilledQuestion ToIdentifyingQuestion(AssignmentDocument.AssignmentAnswer identifyingAnswer)
             => new PrefilledQuestion
@@ -90,7 +116,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private void UpdateTitle()
         {
             this.RaisePropertyChanged(() => this.AllowToCreateNewInterview);
-            this.RaisePropertyChanged(() => this.Title);
+            this.RaisePropertyChanged(() => this.SubTitle);
             this.RaisePropertyChanged(() => this.Comment);
         }
 

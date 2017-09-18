@@ -492,6 +492,7 @@ angular.module('designerApp')
 
                 var textExtendableMode = window.ace.require("ace/mode/text-extended").Mode;
                 editor.getSession().setMode(new textExtendableMode());
+                editor.getSession().setUseWrapMode(true);
                 setCommonAceOptions(editor);
             };
 
