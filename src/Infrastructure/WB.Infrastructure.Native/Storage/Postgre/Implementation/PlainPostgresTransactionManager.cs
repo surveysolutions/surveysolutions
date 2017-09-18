@@ -32,7 +32,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public void RollbackTransaction()
         {
-            if (!this.TransactionStarted)
+            if (this.lazySession == null)
                 throw new InvalidOperationException("Trying to rollback transaction without beginning it");
 
             if (this.lazySession.IsValueCreated)
