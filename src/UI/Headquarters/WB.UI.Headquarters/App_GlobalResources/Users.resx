@@ -205,7 +205,7 @@
     <value>Create and try login</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Account creation date</value>
+    <value>Account created on</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
