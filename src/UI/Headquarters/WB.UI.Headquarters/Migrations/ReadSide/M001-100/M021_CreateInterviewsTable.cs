@@ -101,7 +101,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                             dbCommand.Parameters.Add(new NpgsqlParameter("answertype", DbType.Int32) { Value = entity.AnswerType ?? (object)DBNull.Value });
                             dbCommand.Parameters.Add(new NpgsqlParameter("isenabled", DbType.Boolean) { Value = entity.IsEnabled });
                             dbCommand.Parameters.Add(new NpgsqlParameter("isreadonly", DbType.Boolean) { Value = entity.IsReadonly });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("invalidvalidations", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = entity.FailedValidationIndexes ?? (object)DBNull.Value });
+                            dbCommand.Parameters.Add(new NpgsqlParameter("invalidvalidations", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = entity.InvalidValidations ?? (object)DBNull.Value });
                             dbCommand.Parameters.Add(new NpgsqlParameter("hasflag", DbType.Boolean) { Value = entity.HasFlag });
 
                             dbCommand.Parameters.Add(new NpgsqlParameter("asstring", DbType.String) { Value = entity.AsString ?? (object)DBNull.Value });
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     IsReadonly = question.Value.IsReadonly(),
                     HasFlag = question.Value.IsFlagged(),
                     AnswerType = InterviewDbEntity.GetAnswerType(question.Value.Answer),
-                    FailedValidationIndexes = question.Value.FailedValidationConditions?.Select(x => x.FailedConditionIndex)?.ToArray() ?? new int[] { },
+                    InvalidValidations = question.Value.FailedValidationConditions?.Select(x => x.FailedConditionIndex)?.ToArray() ?? new int[] { },
 
                     AsIntArray = question.Value.Answer as int[] ??
                     (question.Value.Answer as double[])?.Select(Convert.ToInt32)?.ToArray() ??
@@ -173,7 +173,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     IsEnabled = staticText.Value.IsEnabled,
                     IsReadonly = true,
                     HasFlag = false,
-                    FailedValidationIndexes = staticText.Value.FailedValidationConditions
+                    InvalidValidations = staticText.Value.FailedValidationConditions
                                                   ?.Select(x => x.FailedConditionIndex)?.ToArray() ?? new int[] { }
                 };
             }
@@ -210,14 +210,14 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 };
             }
 
-            foreach (var disabledGroup in lvl.DisabledGroups)
+            foreach (var disabledGroup in lvl.ScopeVectors.Keys.SelectMany(x => x).Union(lvl.DisabledGroups).Distinct())
             {
                 yield return new InterviewDbEntity
                 {
                     EntityType = EntityType.Section,
                     InterviewId = interviewId,
                     Identity = Identity.Create(disabledGroup, lvl.RosterVector),
-                    IsEnabled = false,
+                    IsEnabled = !lvl.DisabledGroups.Contains(disabledGroup),
                     IsReadonly = false,
                     HasFlag = false
                 };

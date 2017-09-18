@@ -19,9 +19,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         IEventHandler<InterviewHardDeleted>
     {
         private readonly IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords;
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository;
+        private readonly IInterviewFactory interviewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences;
         private readonly IExportViewFactory exportViewFactory;
 
@@ -34,21 +35,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             InterviewStatus.Restored
         };
 
-        public InterviewsExportDenormalizer(IReadSideKeyValueStorage<InterviewData> interviewDatas,
+        public InterviewsExportDenormalizer(IInterviewFactory interviewFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences,
             IExportViewFactory exportViewFactory, 
             IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository)
         {
-            this.interviewDatas = interviewDatas;
+            this.interviewFactory = interviewFactory;
             this.interviewReferences = interviewReferences;
             this.exportViewFactory = exportViewFactory;
             this.exportRecords = exportRecords;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.interviewRepository = interviewRepository;
         }
 
         public override object[] Writers => new object[] { this.exportRecords };
-        public override object[] Readers => new object[] { this.interviewDatas, this.interviewReferences };
+        public override object[] Readers => new object[] { this.interviewRepository, this.interviewReferences };
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
@@ -66,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     if (questionnaireExportStructure != null)
                     {
                         InterviewDataExportView interviewDataExportView =
-                            this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewDatas.GetById(interviewId));
+                            this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewFactory.GetInterviewData(interviewId));
 
                         var records = interviewDataExportView.GetAsRecords().ToList();
 

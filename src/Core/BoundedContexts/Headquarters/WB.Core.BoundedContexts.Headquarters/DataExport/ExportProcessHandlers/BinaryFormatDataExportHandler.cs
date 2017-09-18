@@ -26,9 +26,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IImageFileStorage imageFileRepository;
         private readonly IAudioFileStorage audioFileStorage;
         
-        private readonly IReadSideKeyValueStorage<InterviewData> interviewDatas;
         private readonly ITransactionManager transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
+        private readonly IInterviewFactory interviewFactory;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             InterviewDataExportSettings interviewDataExportSettings, 
             ITransactionManager transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
-            IReadSideKeyValueStorage<InterviewData> interviewDatas, 
+            IInterviewFactory interviewFactory, 
             IDataExportProcessesService dataExportProcessesService, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
             IDataExportFileAccessor dataExportFileAccessor,
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.imageFileRepository = imageFileRepository;
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
-            this.interviewDatas = interviewDatas;
+            this.interviewFactory = interviewFactory;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.audioFileStorage = audioFileStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
                 var filesFolderForInterview = this.fileSystemAccessor.CombinePath(directoryPath, interviewId.FormatGuid());
 
-                var interviewDetails = this.transactionManager.ExecuteInQueryTransaction(() => interviewDatas.GetById(interviewId));
+                var interviewDetails = this.transactionManager.ExecuteInQueryTransaction(() => this.interviewFactory.GetInterviewData(interviewId));
                 if (interviewDetails != null)
                 {
                     var questionsWithAnswersOnMultimediaQuestions = interviewDetails.Levels.Values.SelectMany(

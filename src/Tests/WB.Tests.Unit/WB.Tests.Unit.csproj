@@ -715,13 +715,10 @@
     <Compile Include="SharedKernels\SurveyManagement\FilebasedPreloadedDataRepositoryTests\FilebasedPreloadedDataRepositoryTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_all_interviews_for_team_containing_tags_in_prefield.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_all_interviews_containing_tags_in_prefield.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\InterviewEntityViewFactoryTestsContext.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\Substitutions\when_group_title_has_substitution.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_with_substitutions_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_invalid_interview_entities_recursively.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answered_timestamp_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Single_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_Timestamp_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\InterviewPackagesServiceTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_and_some_answers_is_null.cs" />
@@ -1069,8 +1066,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_processing_package.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_invalid_packages_count.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_queue_length.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_with_multiple_failed_validation_conditions.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_supervisor_question_and_interview_approved_by_hq.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_answer_removed_from_gps_qestion.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewDeleted_event_and_interview_has_2_gps_questions.cs" />
@@ -1515,10 +1510,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_input_view_model_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_contains_history_of_statuses.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_exists_for_current_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_InterviewQuestionView_for_TextList_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_which_is_invalid_and_disabled.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_question_which_not_answered_and_parent_group_is_enabled.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewEntityViewFactoryTests\when_creating_view_for_supervisor_question_which_not_answered_and_parent_group_is_enabled.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\MapReportTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_where_is_answer_collection.cs" />
     <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_where_is_no_answer_collection.cs" />
