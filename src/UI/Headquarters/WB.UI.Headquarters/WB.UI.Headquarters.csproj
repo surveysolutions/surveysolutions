@@ -856,6 +856,7 @@
     <EmbeddedResource Include="Resources\EnumNames.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ru.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
@@ -994,7 +995,9 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.zh.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx" />
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.ru.resx">
       <DependentUpon>Strings.resx</DependentUpon>
     </EmbeddedResource>
@@ -2095,7 +2098,7 @@
     <ItemGroup>
       <FilesToDelete Include="HqApp\dist\**\*.js" />
     </ItemGroup>
-    <Delete Files="@(FilesToDelete)"  />
+    <Delete Files="@(FilesToDelete)" />
   </Target>
   <!-- HQ APP -->
   <Target Name="RestoreHqAppDeps" BeforeTargets="RunWebpackDev" Condition=" '$(NCrunch)' != '1' And '$(Configuration)' == 'Debug' ">

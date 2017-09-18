@@ -342,6 +342,7 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Bootstrap\WebBrowserPluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="Converters\InterviewStatusToDrawableConverter.cs" />
     <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
@@ -446,9 +447,6 @@
     <AndroidResource Include="Resources\layout\fragment_dashboard_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\dashboard_assignment_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\fragment_dashboard_assignments_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -479,7 +477,7 @@
     <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\drawable\infowarningstyle.xml" />
-    <AndroidResource Include="Resources\values\Colors.xml" />
+    <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -636,6 +634,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\dashboard_menu_handle.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

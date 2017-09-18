@@ -659,7 +659,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             if (minSequence < 0) return;
 
             List<string> changeRecordIdsToRemove = this.questionnaireChangeItemStorage.Query(_ => _
-                    .Where(x => x.Sequence < minSequence)
+                    .Where(x => x.QuestionnaireId == sQuestionnaireId && x.Sequence < minSequence)
                     .Select(x => x.QuestionnaireChangeRecordId)
                     .ToList());
 
