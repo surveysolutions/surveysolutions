@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.UI;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -10,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
+    public class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
     {
         private readonly IExternalAppLauncher externalAppLauncher;
         private readonly IInterviewFromAssignmentCreatorService interviewFromAssignmentCreator;
@@ -64,6 +63,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public string IdLabel => InterviewerUIResources.Dashboard_CardIdTitleFormat.FormatString(this.AssignmentId);
 
+        public string MainActionLabel => InterviewerUIResources.Dashboard_Start;
+
+        public IMvxAsyncCommand MainAction => new MvxAsyncCommand(
+            () => this.interviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
+        () => this.AllowToCreateNewInterview);
+
+        public bool MainActionEnabled => AllowToCreateNewInterview;
+
+        public IMvxCommand OpenMenu { get; }
+        public bool HasAdditionalActions { get; } = false;
+
         public string Title => this.QuestionnaireName;
 
         public string SubTitle
@@ -78,7 +88,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     }
 
                     return InterviewerUIResources.Dashboard_AssignmentCard_SubTitleCountdownFormat
-                        .FormatString(this.assignment.Quantity.GetValueOrDefault(), this.assignment.Quantity);
+                        .FormatString(InterviewsLeftByAssignmentCount, this.assignment.Quantity);
                 }
                 else
                 {

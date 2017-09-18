@@ -5,7 +5,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
-
         public bool HasExpandedView { get; protected set; }
 
         private bool isExpanded = true;
