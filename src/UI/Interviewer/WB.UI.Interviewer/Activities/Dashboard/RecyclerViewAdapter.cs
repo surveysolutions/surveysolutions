@@ -1,3 +1,4 @@
+using System.Linq;
 using Android.Content;
 using Android.Support.Transitions;
 using Android.Support.V7.Widget;
@@ -57,10 +58,26 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 viewHolder.MenuClick = (sender, context) =>
                 {
                     var popup = new PopupMenu(context, viewHolder.MenuHandle);
-                    popup.Menu.Add("Dismiss");
+                    
+                    foreach(var action in viewItem.Actions.Where(a => a.Enabled))
+                    {
+                        var menu = popup.Menu.Add(action.Label);
+                        action.MenuItemId = menu.ItemId;
+                    }
+
+                    popup.MenuItemClick += (s, e) =>
+                    {
+                        var action = viewItem.Actions.Where(a => a.MenuItemId == e.Item.ItemId).SingleOrDefault();
+                        if (action?.Action.CanExecute() ?? false)
+                        {
+                            action.Action.Execute();
+                        }
+                    };
+
                     popup.Show();
                 };
             }            
         }
+        
     }
 }

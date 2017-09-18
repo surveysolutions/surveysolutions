@@ -447,9 +447,6 @@
     <AndroidResource Include="Resources\layout\fragment_dashboard_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\dashboard_assignment_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\fragment_dashboard_assignments_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
