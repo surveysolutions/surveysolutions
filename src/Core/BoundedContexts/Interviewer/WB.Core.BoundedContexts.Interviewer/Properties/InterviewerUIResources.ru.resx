@@ -684,4 +684,10 @@
   <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
     <value>Задача #{0}</value>
   </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Без ключа</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Цензус</value>
+  </data>
 </root>
