@@ -98,29 +98,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to № {0}: {1}.
+        ///   Looks up a localized string similar to Interview {0} of  unlimited for this assignment.
         /// </summary>
-        public static string Dashboard_Assignment_CardTitle {
+        public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
             get {
-                return ResourceManager.GetString("Dashboard_Assignment_CardTitle", resourceCulture);
+                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interview(s).
+        ///   Looks up a localized string similar to Interview {0} of {1} for this assignment.
         /// </summary>
-        public static string Dashboard_AssignmentCard_TitleCountdown {
+        public static string Dashboard_AssignmentCard_SubTitleCountdownFormat {
             get {
-                return ResourceManager.GetString("Dashboard_AssignmentCard_TitleCountdown", resourceCulture);
+                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleCountdownFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlimited.
+        ///   Looks up a localized string similar to Single interview assignment.
         /// </summary>
-        public static string Dashboard_AssignmentCard_TitleCountdown_Unlimited {
+        public static string Dashboard_AssignmentCard_SubTitleSingleInterivew {
             get {
-                return ResourceManager.GetString("Dashboard_AssignmentCard_TitleCountdown_Unlimited", resourceCulture);
+                return ResourceManager.GetString("Dashboard_AssignmentCard_SubTitleSingleInterivew", resourceCulture);
             }
         }
         
@@ -130,6 +130,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_AssignmentsTabTitle {
             get {
                 return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to id {0}.
+        /// </summary>
+        public static string Dashboard_CardIdTitleFormat {
+            get {
+                return ResourceManager.GetString("Dashboard_CardIdTitleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Census.
+        /// </summary>
+        public static string Dashboard_CensusAssignment {
+            get {
+                return ResourceManager.GetString("Dashboard_CensusAssignment", resourceCulture);
             }
         }
         
@@ -181,11 +199,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to № {0}, interview {1}.
+        ///   Looks up a localized string similar to Assignment #{0}.
         /// </summary>
-        public static string Dashboard_InterviewCard_Title {
+        public static string Dashboard_Interview_AssignmentLabelFormat {
             get {
-                return ResourceManager.GetString("Dashboard_InterviewCard_Title", resourceCulture);
+                return ResourceManager.GetString("Dashboard_Interview_AssignmentLabelFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} questions answered.
+        /// </summary>
+        public static string Dashboard_Interview_QuestionsAnsweredFormat {
+            get {
+                return ResourceManager.GetString("Dashboard_Interview_QuestionsAnsweredFormat", resourceCulture);
             }
         }
         
@@ -195,6 +222,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_NewItemsLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_NewItemsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No interview key.
+        /// </summary>
+        public static string Dashboard_No_InterviewKey {
+            get {
+                return ResourceManager.GetString("Dashboard_No_InterviewKey", resourceCulture);
             }
         }
         

@@ -142,13 +142,13 @@
     <value>Manage account</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approved by Headquarters</value>
+    <value>Approved by Headquarters interviews</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approved by Supervisor</value>
+    <value>Approved by Supervisor interviews</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Completed</value>
+    <value>Completed interviews</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
     <value>Created</value>
@@ -157,16 +157,16 @@
     <value>Deleted</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Interviewer assigned</value>
+    <value>Interviewer assigned assignments</value>
   </data>
   <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
     <value>Ready for interview</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Rejected by Headquarters</value>
+    <value>Rejected by Headquarters interviews</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Rejected by Supervisor</value>
+    <value>Rejected by Supervisor interviews</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
     <value>Restarted</value>
@@ -178,7 +178,7 @@
     <value>Sent to Capi</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Supervisor assigned</value>
+    <value>Supervisor assigned assignments</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Manage account</value>
@@ -211,6 +211,6 @@
     <value>All Teams</value>
   </data>
   <data name="AllPeriods" xml:space="preserve">
-    <value>All peroids</value>
+    <value>All periods</value>
   </data>
 </root>
