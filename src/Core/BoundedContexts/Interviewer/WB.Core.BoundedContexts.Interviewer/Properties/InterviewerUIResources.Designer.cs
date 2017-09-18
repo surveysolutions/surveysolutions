@@ -143,6 +143,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Census.
+        /// </summary>
+        public static string Dashboard_CensusAssignment {
+            get {
+                return ResourceManager.GetString("Dashboard_CensusAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed ({0}).
         /// </summary>
         public static string Dashboard_CompletedLinkText {
@@ -213,6 +222,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_NewItemsLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_NewItemsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No interview key.
+        /// </summary>
+        public static string Dashboard_No_InterviewKey {
+            get {
+                return ResourceManager.GetString("Dashboard_No_InterviewKey", resourceCulture);
             }
         }
         
