@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
@@ -62,9 +61,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public DetailsViewModel GetInterviewDetails(Guid interviewId, InterviewDetailsFilter questionsTypes, Identity currentGroupIdentity)
         {
-            //var interviewSrc = ServiceLocator.Current.GetInstance<IReadSideKeyValueStorage<InterviewData>>().GetById(interviewId.FormatGuid());
-            //var interviewDest = this.interviewFactory.GetInterviewData(interviewId);
-
             var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
             InterviewSummary interviewSummary = this.interviewSummaryRepository.GetById(interviewId);
 

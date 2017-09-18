@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Dapper;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
@@ -336,7 +334,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
                     QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity));
-            var rosterIds = questionnaire.Find<IGroup>(x => x.IsRoster).Select(x=>x.PublicKey);
             // :) oxo xo I'm alive :)))))
             var rosterStructures = this.rosterStructureService.GetRosterScopes(questionnaire);
 
@@ -344,27 +341,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             interviewData.Levels = interviewEntites
                 .GroupBy(x => x.Identity.RosterVector)
-                .Select(x => ToInterviewLevel(x.Key, x.ToArray(), rosterStructures, rosterIds))
+                .Select(x => ToInterviewLevel(x.Key, x.ToArray(), rosterStructures))
                 .ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
 
             return interviewData;
         }
 
-        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewDbEntity[] interviewDbEntities, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterStructures, IEnumerable<Guid> rosterIds)
+        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewDbEntity[] interviewDbEntities, 
+            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterStructures)
         {
             Dictionary<ValueVector<Guid>, int?> scopeVectors = new Dictionary<ValueVector<Guid>, int?>();
             if (rosterVector.Length > 0)
             {
-                var roster = interviewDbEntities.FirstOrDefault(x => x.EntityType == EntityType.Section &&
-                                                            x.Identity.RosterVector == rosterVector &&
-                                                            rosterIds.Contains(x.Identity.Id));
-                if (roster != null)
-                {
-                    scopeVectors = new Dictionary<ValueVector<Guid>, int?>
-                    {
-                        {GetScopeOfPassedGroup(roster.Identity.Id, rosterStructures).ScopeVector, rosterVector.Last()}
-                    };
-                }
+                scopeVectors = rosterStructures.Where(x => x.Key.Length == rosterVector.Length).Select(x => x.Key)
+                    .ToDictionary(x => x, y => (int?)rosterVector.Last());
             }
 
             return new InterviewLevel
@@ -377,19 +367,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 QuestionsSearchCache = interviewDbEntities.Where(x=>x.EntityType == EntityType.Question).Select(ToQuestion).ToDictionary(x=>x.Id),
                 ScopeVectors = scopeVectors
             };
-        }
-
-        private RosterScopeDescription GetScopeOfPassedGroup(Guid groupId, Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes)
-        {
-            foreach (var scopeId in rosterScopes.Keys)
-            {
-                if (rosterScopes[scopeId].RosterIdToRosterTitleQuestionIdMap.ContainsKey(groupId))
-                {
-                    return rosterScopes[scopeId];
-                }
-            }
-
-            throw new ArgumentException($"group {groupId} is missing in any propagation scope of questionnaire");
         }
 
         private InterviewQuestion ToQuestion(InterviewDbEntity entity)
