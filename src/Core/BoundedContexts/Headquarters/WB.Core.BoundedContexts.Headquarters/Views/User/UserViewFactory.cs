@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool archived = false)
+        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool? archived = false)
         {
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
             {
@@ -240,11 +240,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false)
+        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false)
         {
             Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
             {
-                var responsible = ApplyFilter(users, searchBy, false, UserRoles.Supervisor, UserRoles.Interviewer)
+                bool? isArchivedShowed = showArchived ? (bool?)null : false;
+
+                var responsible = ApplyFilter(users, searchBy, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
 
                 return responsible.Select(x => new ResponsiblesViewItem

@@ -115,7 +115,7 @@ export default {
             this.isLoading = true;
             const requestParams = Object.assign({ query: filter, cache: false }, this.ajaxParams);
 
-            this.$http.get(this.fetchUrl, requestParams)
+            this.$http.get(this.fetchUrl, {params: requestParams})
                 .then(response => {
                     this.options = response.data.options || [];
                     this.isLoading = false;
