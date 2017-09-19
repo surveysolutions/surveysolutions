@@ -409,11 +409,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     state.QuestionnaireVersion));
             if (questionnarie != null)
             {
-                var rosters =  this.rosterStructureService.GetRosterScopes(questionnarie);
+                Dictionary<ValueVector<Guid>, RosterScopeDescription> rosters =  this.rosterStructureService.GetRosterScopes(questionnarie);
 
                 foreach (var instance in @event.Payload.Instances)
                 {
-                    var scopeOfCurrentGroup = this.GetScopeOfPassedGroup(instance.GroupId,rosters);
+                    RosterScopeDescription scopeOfCurrentGroup = this.GetScopeOfPassedGroup(instance.GroupId,rosters);
                     this.AddLevelToInterview(state,
                         instance.OuterRosterVector, instance.RosterInstanceId, instance.SortIndex, scopeOfCurrentGroup);
                 }
