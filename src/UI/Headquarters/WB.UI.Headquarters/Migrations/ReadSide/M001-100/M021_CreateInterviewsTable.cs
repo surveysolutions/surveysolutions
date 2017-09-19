@@ -9,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -188,7 +189,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     AnswerType = InterviewEntity.GetAnswerType(variable.Value),
                     InterviewId = interviewId,
                     Identity = Identity.Create(variable.Key, lvl.RosterVector),
-                    IsEnabled = true,
+                    IsEnabled = !lvl.DisabledVariables.Contains(variable.Key),
                     IsReadonly = true,
                     HasFlag = false,
                     AsString = variable.Value as string,
@@ -199,7 +200,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 };
             }
 
-            foreach (var variable in lvl.DisabledVariables)
+            foreach (var variable in lvl.DisabledVariables.Except(lvl.Variables?.Keys?.ToHashSet() ?? new HashSet<Guid>()))
             {
                 yield return new InterviewEntity
                 {
