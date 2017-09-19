@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
         }
 
         [Test]
-        public void when_export_duble_variable_in_decimal()
+        public void when_export_double_variable_with_decimal_type_value()
         {
             decimal variable = 789.56M;
 ;
