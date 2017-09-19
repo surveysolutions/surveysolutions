@@ -30,6 +30,24 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
         }
 
         [Test]
+        public void when_export_duble_variable_in_decimal()
+        {
+            decimal variable = 789.56M;
+;
+            ExportedVariableHeaderItem headerItem = new ExportedVariableHeaderItem()
+            {
+                VariableType = VariableType.Double
+            };
+
+            var exportService = new ExportQuestionService();
+
+            var exportedVariable = exportService.GetExportedVariable(variable, headerItem);
+
+            Assert.AreEqual(exportedVariable.Length, 1);
+            Assert.AreEqual(exportedVariable[0], "789.56");
+        }
+
+        [Test]
         public void when_export_datetime_variable()
         {
             DateTime dateTime = new DateTime(2017, 9, 12, 14, 09, 37);

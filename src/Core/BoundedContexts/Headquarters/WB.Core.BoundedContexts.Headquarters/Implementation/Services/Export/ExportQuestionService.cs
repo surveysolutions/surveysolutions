@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                 case VariableType.Boolean:
                     return new string[] { (bool?)variable == true ? "1" : (bool?)variable == false ? "0" : ExportFormatSettings.MissingNumericQuestionValue };
                 case VariableType.Double:
-                    return new string[] { ((double?)variable)?.ToString(CultureInfo.InvariantCulture) ?? ExportFormatSettings.MissingNumericQuestionValue };
+                    return new string[] { variable == null ? ExportFormatSettings.MissingNumericQuestionValue : Convert.ToDouble(variable).ToString(CultureInfo.InvariantCulture) };
                 case VariableType.DateTime:
                     return new string[] { ((DateTime?)variable)?.ToString(ExportFormatSettings.ExportDateTimeFormat) ?? ExportFormatSettings.MissingStringQuestionValue };
 
