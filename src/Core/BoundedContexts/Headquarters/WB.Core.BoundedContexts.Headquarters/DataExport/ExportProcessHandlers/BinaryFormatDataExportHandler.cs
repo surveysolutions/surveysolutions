@@ -28,8 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
-
-        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
+        
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         public BinaryFormatDataExportHandler(
