@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private const string apiVersion = "v2";
 
-#if EXCLUDEEXTENSIONS
+#if !EXCLUDEEXTENSIONS
         private readonly string checkVersionUrl = "api/interviewer/extended/";
 #else
         private readonly string checkVersionUrl = "api/interviewer/";
