@@ -347,6 +347,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return interviewData;
         }
 
+        public string[] GetMultimediaAnswers(Guid interviewId, Guid[] multimediaQuestionIds)
+            => this.interviewRepository.Query(_ => _
+                .Where(x => x.InterviewId == interviewId && multimediaQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsString != null)
+                .Select(x => x.AsString)
+                .ToArray());
+
+        public string[] GetAudioAnswers(Guid interviewId, Guid[] audioQuestionIds)
+            => this.interviewRepository.Query(_ => _
+                .Where(x => x.InterviewId == interviewId && audioQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsAudio != null)
+                .Select(x => x.AsAudio).ToArray()
+                .Select(x => x.FileName).ToArray());
+
         private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities, 
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterStructures)
         {
