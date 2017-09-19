@@ -58,7 +58,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 viewHolder.MenuClick = (sender, context) =>
                 {
                     var popup = new PopupMenu(context, viewHolder.MenuHandle);
-                    
+
                     foreach(var action in viewItem.Actions.Where(a => a.Enabled))
                     {
                         var menu = popup.Menu.Add(action.Label);
@@ -67,7 +67,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
                     popup.MenuItemClick += (s, e) =>
                     {
-                        var action = viewItem.Actions.Where(a => a.MenuItemId == e.Item.ItemId).SingleOrDefault();
+                        var action = viewItem.Actions.SingleOrDefault(a => a.MenuItemId == e.Item.ItemId);
                         if (action?.Action.CanExecute() ?? false)
                         {
                             action.Action.Execute();

@@ -54,7 +54,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.CurrentActivity.StartActivity(Intent.CreateChooser(shareIntent, title));
         }
 
-        public async Task UpdateTheApp(CancellationToken cancellationToken)
+        public async Task UpdateTheApp(CancellationToken cancellationToken, Action<Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
@@ -67,7 +67,6 @@ namespace WB.UI.Interviewer.Implementations.Services
             string pathToPatch = this.fileSystemAccessor.CombinePath(downloadFolder, "interviewer.patch");
             string pathToNewApk = this.fileSystemAccessor.CombinePath(downloadFolder, "interviewer.apk");
             string pathToOldApk = this.interviewerSettings.InstallationFilePath;
-            
 
             if (this.fileSystemAccessor.IsFileExists(pathToPatch))
             {
@@ -88,7 +87,7 @@ namespace WB.UI.Interviewer.Implementations.Services
 
             try
             {
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken, onDownloadProgressChanged);
             }
             catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
             {
@@ -100,7 +99,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             async Task UpdateWithFullApk()
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken, onDownloadProgressChanged);
                 cancellationToken.ThrowIfCancellationRequested();
 
                 this.fileSystemAccessor.WriteAllBytes(pathToNewApk, patchOrFullApkBytes);
