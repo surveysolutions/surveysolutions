@@ -371,6 +371,8 @@
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
+    <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
+    <Compile Include="Services\CheckForVersionUriProvider.cs" />
     <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
     <Compile Include="Services\SyncServiceConnection.cs" />
     <Compile Include="Services\SyncBgService.cs" />

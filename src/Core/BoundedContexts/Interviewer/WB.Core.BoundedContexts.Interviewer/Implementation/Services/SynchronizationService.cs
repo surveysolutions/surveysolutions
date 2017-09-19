@@ -20,16 +20,16 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
+    public interface ICheckVersionUriProvider
+    {
+        string CheckVersionUrl { get; }
+    }
+
     public class SynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
     {
         private const string apiVersion = "v2";
-
-#if !EXCLUDEEXTENSIONS
-        private readonly string checkVersionUrl = "api/interviewer/extended/";
-#else
-        private readonly string checkVersionUrl = "api/interviewer/";
-#endif
         private const string interviewerApiUrl = "api/interviewer/";
+         
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
@@ -46,6 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ICheckVersionUriProvider checkVersionUriProvider;
         private readonly ILogger logger;
 
         private RestCredentials restCredentials => this.principal.CurrentUserIdentity == null
@@ -60,6 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerSettings interviewerSettings, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor,
+            ICheckVersionUriProvider checkVersionUriProvider,
             ILogger logger)
         {
             this.principal = principal;
@@ -67,6 +69,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewerSettings = interviewerSettings;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.checkVersionUriProvider = checkVersionUriProvider;
             this.logger = logger;
         }
 
@@ -398,7 +401,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.TryGetRestResponseOrThrowAsync(async () =>
         {
             var restFile = await this.restService.DownloadFileAsync(
-                url: checkVersionUrl, token: token,
+                url: this.checkVersionUriProvider.CheckVersionUrl, token: token,
                 credentials: this.restCredentials, 
                 onDownloadProgressChanged: onDownloadProgressChanged);
 
@@ -409,7 +412,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var interviewerPatchApiUrl = $"{checkVersionUrl}patch/{this.interviewerSettings.GetApplicationVersionCode()}";
+                var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.interviewerSettings.GetApplicationVersionCode()}";
 
                 var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, 
                     token: token,
@@ -424,7 +427,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<int?>(
-                    url: string.Concat(checkVersionUrl, "latestversion"),
+                    url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion"),
                     credentials: this.restCredentials, token: token).ConfigureAwait(false));
         }
 
