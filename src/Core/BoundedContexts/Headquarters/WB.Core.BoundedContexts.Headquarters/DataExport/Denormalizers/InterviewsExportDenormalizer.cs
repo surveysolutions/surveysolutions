@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         private readonly IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository;
+        private readonly IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository;
         private readonly IInterviewFactory interviewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences;
         private readonly IExportViewFactory exportViewFactory;
@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             IExportViewFactory exportViewFactory, 
             IReadSideRepositoryWriter<InterviewDataExportRecord> exportRecords,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository)
+            IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository)
         {
             this.interviewFactory = interviewFactory;
             this.interviewReferences = interviewReferences;

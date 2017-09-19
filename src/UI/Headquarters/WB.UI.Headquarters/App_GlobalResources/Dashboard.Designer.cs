@@ -142,7 +142,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Creation Date.
+        ///   Looks up a localized string similar to Created on.
         /// </summary>
         internal static string CreationDate {
             get {
@@ -169,7 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import date.
+        ///   Looks up a localized string similar to Imported on.
         /// </summary>
         internal static string ImportDate {
             get {
@@ -187,7 +187,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last Entry Date.
+        ///   Looks up a localized string similar to Modified on.
         /// </summary>
         internal static string LastEntryDate {
             get {

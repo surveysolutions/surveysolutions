@@ -274,7 +274,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             yield return Report.COLUMN_TEAM_MEMBER;
 
-            foreach (var date in view.DateTimeRanges.Select(y => y.From.ToString("yyyy-MM-dd")))
+            foreach (var date in view.DateTimeRanges.Select(y => y.To.ToString("yyyy-MM-dd")))
                 yield return date;
 
             yield return Report.COLUMN_AVERAGE;

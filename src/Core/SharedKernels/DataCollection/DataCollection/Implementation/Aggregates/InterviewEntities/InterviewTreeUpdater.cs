@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (newSelectedOptions.Length != selectedOptions.Length)
             {
                 question.SetAnswer(
-                    CategoricalFixedMultiOptionAnswer.FromInts(newSelectedOptions));
+                    CategoricalFixedMultiOptionAnswer.Convert(newSelectedOptions));
                 // remove rosters, implement cheaper solutions
                 question.Tree.ActualizeTree();
             }
