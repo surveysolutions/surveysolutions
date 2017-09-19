@@ -15,6 +15,7 @@ module.exports = {
             "babel-runtime/helpers/asyncToGenerator.js",
             "bootstrap/js/dropdown.js",
             "bootstrap/js/modal.js",
+            "bootstrap/js/alert.js",
             "bootstrap-select",
             "core-js/es6/promise",
             "core-js/modules/es6.object.assign",
