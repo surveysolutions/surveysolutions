@@ -10,10 +10,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewFactory : IInterviewFactory
     {
-        private readonly IPlainStorageAccessor<InterviewDbEntity> entitiesRepository;
+        private readonly IPlainStorageAccessor<InterviewEntity> entitiesRepository;
         private readonly IReadSideRepositoryReader<InterviewSummary> summaryRepository;
 
-        public InterviewFactory(IPlainStorageAccessor<InterviewDbEntity> interviewEntitiesRepository, 
+        public InterviewFactory(IPlainStorageAccessor<InterviewEntity> interviewEntitiesRepository, 
             IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository)
         {
             this.entitiesRepository = interviewEntitiesRepository;
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.ThrowIfInterviewDeletedOrReadOnly(interviewId);
 
             var flaggedQuestion = this.entitiesRepository.Query(_ => _.FirstOrDefault(x => x.InterviewId == interviewId && x.QuestionIdentity == questionIdentity)) ??
-                                  new InterviewDbEntity {InterviewId = interviewId, QuestionIdentity = questionIdentity};
+                                  new InterviewEntity {InterviewId = interviewId, QuestionIdentity = questionIdentity};
 
             ThrowIfQuestionNotFound(flaggedQuestion);
 
@@ -80,7 +80,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 throw new InterviewException($"Interview was approved by Headquarters and cannot be edited. InterviewId: {interview.InterviewId}");
         }
 
-        private static void ThrowIfQuestionNotFound(InterviewDbEntity question)
+        private static void ThrowIfQuestionNotFound(InterviewEntity question)
         {
             if (question == null)
                 throw new InterviewException(
