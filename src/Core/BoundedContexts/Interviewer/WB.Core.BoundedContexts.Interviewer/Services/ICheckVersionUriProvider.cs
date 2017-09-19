@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface ICheckVersionUriProvider
     {
