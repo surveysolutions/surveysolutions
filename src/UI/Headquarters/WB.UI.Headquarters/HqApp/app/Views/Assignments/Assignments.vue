@@ -19,7 +19,7 @@
                 <Typeahead :placeholder="$t('Common.AllResponsible')"
                            control-id="responsibleId"
                            :value="responsibleId"
-                           :ajax-params="{ }"
+                           :ajax-params="responsibleParams"
                            v-on:selected="userSelected"
                            :fetch-url="$config.Api.Responsible"></Typeahead>
             </FilterBlock>
@@ -138,6 +138,7 @@ export default {
             responsibleId: null,
             questionnaireId: null,
             wasInitialized: false,
+            responsibleParams: { showArchived: true },
             questionnaireParams: { censusOnly: false },
             isLoading: false,
             selectedRows: [],
