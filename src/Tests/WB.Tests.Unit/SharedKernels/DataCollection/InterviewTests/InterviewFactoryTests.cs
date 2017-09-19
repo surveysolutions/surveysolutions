@@ -17,11 +17,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     internal class InterviewFactoryTests
     {
         private static InterviewFactory CreateInterviewFactory(
-            IPlainStorageAccessor<InterviewDbEntity> interviewEntitiesRepository = null,
+            IPlainStorageAccessor<InterviewEntity> interviewEntitiesRepository = null,
             IReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null)
             => new InterviewFactory(
                 interviewEntitiesRepository: interviewEntitiesRepository ??
-                                             Mock.Of<IPlainStorageAccessor<InterviewDbEntity>>(),
+                                             Mock.Of<IPlainStorageAccessor<InterviewEntity>>(),
                 interviewSummaryRepository: interviewSummaryRepository ??
                                             Mock.Of<IReadSideRepositoryReader<InterviewSummary>>());
         [Test]
@@ -94,7 +94,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 ReceivedByInterviewer = false
             }, interviewId.FormatGuid());
 
-            var mockOfInterviewEntitiesRepository = new Mock<IPlainStorageAccessor<InterviewDbEntity>>();
+            var mockOfInterviewEntitiesRepository = new Mock<IPlainStorageAccessor<InterviewEntity>>();
 
             var factory = CreateInterviewFactory(mockOfInterviewEntitiesRepository.Object, interviewSummaryRepository);
 
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             //assert
             mockOfInterviewEntitiesRepository.Verify(
-                x => x.Store(Moq.It.Is<InterviewDbEntity>(y => y.HasFlag == true), null), Times.Once);
+                x => x.Store(Moq.It.Is<InterviewEntity>(y => y.HasFlag == true), null), Times.Once);
         }
 
         [Test]
@@ -114,7 +114,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"),
                 Create.RosterVector(1));
 
-            var interviewQuestion = new InterviewDbEntity
+            var interviewQuestion = new InterviewEntity
             {
                 InterviewId = interviewId,
                 QuestionIdentity = questionIdentity,
@@ -130,9 +130,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 ReceivedByInterviewer = false
             }, interviewId.FormatGuid());
 
-            var mockOfInterviewEntitiesRepository = new Mock<IPlainStorageAccessor<InterviewDbEntity>>();
+            var mockOfInterviewEntitiesRepository = new Mock<IPlainStorageAccessor<InterviewEntity>>();
             mockOfInterviewEntitiesRepository
-                .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewDbEntity>, InterviewDbEntity>>()))
+                .Setup(x => x.Query(Moq.It.IsAny<Func<IQueryable<InterviewEntity>, InterviewEntity>>()))
                 .Returns(interviewQuestion);
 
             var factory = CreateInterviewFactory(mockOfInterviewEntitiesRepository.Object, interviewSummaryRepository);
@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             
             //assert
             mockOfInterviewEntitiesRepository.Verify(
-                x => x.Store(Moq.It.Is<InterviewDbEntity>(y => y.HasFlag == false), null), Times.Once);
+                x => x.Store(Moq.It.Is<InterviewEntity>(y => y.HasFlag == false), null), Times.Once);
         }
     }
 }
