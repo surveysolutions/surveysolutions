@@ -443,6 +443,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerSettings ?? Mock.Of<IInterviewerSettings>(),
                 syncProtocolVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICheckVersionUriProvider>(),
                 logger ?? Mock.Of<ILogger>()
             );
         }
