@@ -20,11 +20,6 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public interface ICheckVersionUriProvider
-    {
-        string CheckVersionUrl { get; }
-    }
-
     public class SynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
     {
         private const string apiVersion = "v2";
