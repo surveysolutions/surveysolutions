@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private const string AsBoolColumn = "asbool";
         private const string AsAudioColumn = "asaudio";
         private const string AsAreaColumn = "asarea";
-
+        
         private static readonly AnswerType[] JsonAnswerTypes =
         {
             AnswerType.Area, AnswerType.Audio, AnswerType.Gps, AnswerType.IntMatrix, AnswerType.TextList,
@@ -76,18 +76,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISessionProvider sessionProvider;
         private readonly IEntitySerializer<object> jsonSerializer;
-        private readonly IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository;
+        private readonly IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository;
         private readonly IRosterStructureService rosterStructureService;
 
         public InterviewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository,
+            IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
             IQuestionnaireStorage questionnaireStorage,
             ISessionProvider sessionProvider,
             IEntitySerializer<object> jsonSerializer,
-            IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository,
+            IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository,
             IRosterStructureService rosterStructureService)
         {
-            this.summaryRepository = interviewSummaryRepository;
+            this.summaryRepository = summaryRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.sessionProvider = sessionProvider;
             this.jsonSerializer = jsonSerializer;
@@ -135,7 +135,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer, EntityType entityType)
         {
-            var answerType = InterviewDbEntity.GetAnswerType(answer);
+            var answerType = InterviewEntity.GetAnswerType(answer);
             var columnNameByAnswer = AnswerColumnNameByAnswerType[answerType.Value];
             var isJsonAnswer = JsonAnswerTypes.Contains(answerType.Value);
             
@@ -347,7 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return interviewData;
         }
 
-        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewDbEntity[] interviewDbEntities, 
+        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities, 
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterStructures)
         {
             Dictionary<ValueVector<Guid>, int?> scopeVectors = new Dictionary<ValueVector<Guid>, int?>();
@@ -369,7 +369,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
         }
 
-        private InterviewQuestion ToQuestion(InterviewDbEntity entity)
+        private InterviewQuestion ToQuestion(InterviewEntity entity)
         {
             var objectAnswer = ToObjectAnswer(entity);
 
@@ -382,7 +382,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             };
         }
 
-        private QuestionState ToQuestionState(InterviewDbEntity entity, bool hasAnswer)
+        private QuestionState ToQuestionState(InterviewEntity entity, bool hasAnswer)
         {
             QuestionState state = 0;
 
@@ -404,14 +404,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return state;
         }
 
-        private InterviewStaticText ToStaticText(InterviewDbEntity entity) => new InterviewStaticText
+        private InterviewStaticText ToStaticText(InterviewEntity entity) => new InterviewStaticText
         {
             Id = entity.Identity.Id,
             IsEnabled = entity.IsEnabled,
             FailedValidationConditions = entity.InvalidValidations.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection()
         };
 
-        private object ToObjectAnswer(InterviewDbEntity entity) => entity.AsString ?? entity.AsDouble ?? entity.AsInt ??
+        private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsDouble ?? entity.AsInt ??
                                                                    entity.AsDateTime ?? entity.AsLong ??
                                                                    entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
                                                                    entity.AsList ?? entity.AsYesNo ??
