@@ -142,13 +142,13 @@
     <value>Manage account</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approved by Headquarters interviews</value>
+    <value>Approved by Headquarters</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approved by Supervisor interviews</value>
+    <value>Approved by Supervisor</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Completed interviews</value>
+    <value>Completed</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
     <value>Created</value>
@@ -157,16 +157,16 @@
     <value>Deleted</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Interviewer assigned assignments</value>
+    <value>Interviewer assigned</value>
   </data>
   <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
     <value>Ready for interview</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Rejected by Headquarters interviews</value>
+    <value>Rejected by Headquarters</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Rejected by Supervisor interviews</value>
+    <value>Rejected by Supervisor</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
     <value>Restarted</value>
@@ -178,7 +178,7 @@
     <value>Sent to Capi</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Supervisor assigned assignments</value>
+    <value>Supervisor assigned</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
     <value>Manage account</value>
@@ -206,6 +206,12 @@
   </data>
   <data name="Days" xml:space="preserve">
     <value>Days</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Assignments</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Interviews</value>
   </data>
   <data name="AllTeams" xml:space="preserve">
     <value>All Teams</value>
