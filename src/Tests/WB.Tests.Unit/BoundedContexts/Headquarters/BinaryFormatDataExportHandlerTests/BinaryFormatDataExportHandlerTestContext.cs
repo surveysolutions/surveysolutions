@@ -1,6 +1,5 @@
 ﻿using Machine.Specifications;
 using Moq;
-using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -28,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries = null,
             IProtectedArchiveUtils archiveUtils = null,
             IInterviewFactory interviewFactory = null,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null,
+            IQuestionnaireStorage questionnaireStorage = null,
             IDataExportProcessesService dataExportProcessesService = null,
             IDataExportFileAccessor dataExportFileAccessor = null,
             IAudioFileStorage audioFileStorage = null,
@@ -42,12 +41,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                 Mock.Of<ITransactionManager>(),
                 interviewSummaries ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(), 
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
-                questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(),
+                dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(), 
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 dataExportFileAccessor: dataExportFileAccessor ?? Mock.Of<IDataExportFileAccessor>(),
                 audioFileStorage: audioFileRepository ?? Mock.Of<IAudioFileStorage>(),
-                plainTransactionManagerProvider: plainTransactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>(),
-                logger: Substitute.For<ILogger>());
+                plainTransactionManagerProvider: plainTransactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>());
         }
 
         public static IDataExportFileAccessor CrerateDataExportFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
