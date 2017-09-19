@@ -275,8 +275,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/assembly/logstate"),
                 credentials: this.restCredentials));
         }
-
-#endregion
+        
+        #endregion
 
 #region [Interview Api]
 
@@ -394,23 +394,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         #endregion
 
         #region [Application Api]
-        public Task<byte[]> GetApplicationAsync(CancellationToken token) => 
+        public Task<byte[]> GetApplicationAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null) => 
             this.TryGetRestResponseOrThrowAsync(async () =>
         {
-            var restFile = await this.restService.DownloadFileAsync(url: checkVersionUrl, token: token,
-                credentials: this.restCredentials).ConfigureAwait(false);
+            var restFile = await this.restService.DownloadFileAsync(
+                url: checkVersionUrl, token: token,
+                credentials: this.restCredentials, 
+                onDownloadProgressChanged: onDownloadProgressChanged);
 
             return restFile.Content;
         });
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token)
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var interviewerPatchApiUrl = $"{checkVersionUrl}patch/{this.interviewerSettings.GetApplicationVersionCode()}";
 
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, token: token,
-                    credentials: this.restCredentials).ConfigureAwait(false);
+                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, 
+                    token: token,
+                    credentials: this.restCredentials,
+                    onDownloadProgressChanged: onDownloadProgressChanged);
 
                 return restFile.Content;
             });
@@ -582,11 +586,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private static Action<DownloadProgressChangedEventArgs> ToDownloadProgressChangedEvent(Action<decimal, long, long> onDownloadProgressChanged)
         {
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChangedInternal = (args) =>
+            void OnDownloadProgressChangedInternal(DownloadProgressChangedEventArgs args)
             {
                 onDownloadProgressChanged?.Invoke(args.ProgressPercentage, args.BytesReceived, args.TotalBytesToReceive ?? 0);
-            };
-            return onDownloadProgressChangedInternal;
+            }
+
+            return OnDownloadProgressChangedInternal;
         }
 
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
