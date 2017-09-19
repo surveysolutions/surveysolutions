@@ -23,13 +23,10 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static string ToCamelCase(this string input)
         {
-            if ((input == null || input.Length < 2))
+            if (input == null || input.Length < 2)
                 return input;
-
-            var firstLetter = input.Substring(0, 1).ToLower();
-
-
-            return firstLetter + input.Substring(1, input.Length - 1);
+            
+            return char.ToLower(input[0]) + input.Substring(1);
         }
 
         public static string ToPascalCase(this string input)
@@ -37,7 +34,7 @@ namespace WB.Core.GenericSubdomains.Portable
             if ((input == null || input.Length < 2))
                 return input;
 
-            var result = input.Substring(0, 1).ToUpper() + input.Substring(1, input.Length - 1);
+            var result = char.ToUpper(input[0]) + input.Substring(1);
             return result;
         }
 
