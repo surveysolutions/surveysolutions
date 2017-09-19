@@ -361,6 +361,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if (!questionnaire.IsPrefilled(questionId))
                 return;
 
+            interviewView.AnsweredQuestionsCount--;
+
             if (questionId == interviewView.LocationQuestionId)
             {
                 var gpsCoordinates = (GeoPosition) answer;
