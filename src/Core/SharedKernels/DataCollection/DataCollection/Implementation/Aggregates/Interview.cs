@@ -1413,7 +1413,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.QuestionnaireIdentity.QuestionnaireId, 
                 this.QuestionnaireIdentity.Version, 
                 command.AssignmentId,
-                questionnaire.IsUsingExpressionStorage()));
+                questionnaire.IsUsingExpressionStorage(),
+                command.AnswersTime));
 
             this.ApplyEvents(treeDifference, command.UserId);
 
