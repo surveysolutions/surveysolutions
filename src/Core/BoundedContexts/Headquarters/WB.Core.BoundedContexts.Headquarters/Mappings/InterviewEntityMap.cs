@@ -11,9 +11,9 @@ using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
 
-    public class InterviewDbEntityMap : ClassMapping<InterviewDbEntity>
+    public class InterviewEntityMap : ClassMapping<InterviewEntity>
     {
-        public InterviewDbEntityMap()
+        public InterviewEntityMap()
         {
             this.Table("interviews");
 

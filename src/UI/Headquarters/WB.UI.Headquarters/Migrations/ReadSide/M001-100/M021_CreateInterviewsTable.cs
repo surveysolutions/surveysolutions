@@ -128,11 +128,11 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             });
         }
 
-        private IEnumerable<InterviewDbEntity> ToEntities(Guid interviewId, InterviewLevel lvl)
+        private IEnumerable<InterviewEntity> ToEntities(Guid interviewId, InterviewLevel lvl)
         {
             foreach (var question in lvl.QuestionsSearchCache)
             {
-                yield return new InterviewDbEntity
+                yield return new InterviewEntity
                 {
                     EntityType = EntityType.Question,
                     InterviewId = interviewId,
@@ -140,7 +140,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     IsEnabled = !question.Value.IsDisabled(),
                     IsReadonly = question.Value.IsReadonly(),
                     HasFlag = question.Value.IsFlagged(),
-                    AnswerType = InterviewDbEntity.GetAnswerType(question.Value.Answer),
+                    AnswerType = InterviewEntity.GetAnswerType(question.Value.Answer),
                     InvalidValidations = question.Value.FailedValidationConditions?.Select(x => x.FailedConditionIndex)?.ToArray() ?? new int[] { },
 
                     AsIntArray = question.Value.Answer as int[] ??
@@ -167,7 +167,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             foreach (var staticText in lvl.StaticTexts)
             {
-                yield return new InterviewDbEntity
+                yield return new InterviewEntity
                 {
                     EntityType = EntityType.StaticText,
                     InterviewId = interviewId,
@@ -182,10 +182,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             foreach (var variable in lvl.Variables)
             {
-                yield return new InterviewDbEntity
+                yield return new InterviewEntity
                 {
                     EntityType = EntityType.Variable,
-                    AnswerType = InterviewDbEntity.GetAnswerType(variable.Value),
+                    AnswerType = InterviewEntity.GetAnswerType(variable.Value),
                     InterviewId = interviewId,
                     Identity = Identity.Create(variable.Key, lvl.RosterVector),
                     IsEnabled = true,
@@ -201,7 +201,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             foreach (var variable in lvl.DisabledVariables)
             {
-                yield return new InterviewDbEntity
+                yield return new InterviewEntity
                 {
                     EntityType = EntityType.Variable,
                     InterviewId = interviewId,
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             foreach (var disabledGroup in lvl.DisabledGroups)
             {
-                yield return new InterviewDbEntity
+                yield return new InterviewEntity
                 {
                     EntityType = EntityType.Section,
                     InterviewId = interviewId,

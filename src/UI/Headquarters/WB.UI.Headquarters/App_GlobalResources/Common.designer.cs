@@ -286,7 +286,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last Update.
+        ///   Looks up a localized string similar to Updated on.
         /// </summary>
         internal static string LastUpdate {
             get {

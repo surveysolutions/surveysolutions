@@ -157,7 +157,7 @@
     <value>Metadata</value>
   </data>
   <data name="BinaryDescription" xml:space="preserve">
-    <value>Archive with binary data (e.g., pictures)</value>
+    <value>Archive with binary data (e.g., pictures, audio)</value>
   </data>
   <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
     <value>You can't change the export settings because the export process is already running.</value>
@@ -193,7 +193,7 @@
     <value>Generating</value>
   </data>
   <data name="LastGeneratedTitle" xml:space="preserve">
-    <value>Last generated</value>
+    <value>Generated on</value>
   </data>
   <data name="MainSurveyDataTitle" xml:space="preserve">
     <value>Main Survey Data</value>

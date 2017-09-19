@@ -145,7 +145,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewsExportDenormalize
             return new InterviewsExportDenormalizer(interviewFactory ?? Mock.Of<IInterviewFactory>(), interviewReferenceStorage,
                 exportViewFactory, exportRecords,
                 questionnaireExportStructureStorage ?? Mock.Of<IQuestionnaireExportStructureStorage>(), 
-                Mock.Of<IQueryableReadSideRepositoryReader<InterviewDbEntity>>());
+                Mock.Of<IQueryableReadSideRepositoryReader<InterviewEntity>>());
         }
     }
 }

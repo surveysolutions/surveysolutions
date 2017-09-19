@@ -29,8 +29,8 @@
             "command": ".\\k6.exe",
             "args": [
                 "run",
-                "-u", "10",
-                "-i", "50",
+                "-u", "100",
+                "-i", "1000",
                 "interview.js"
             ],
             "presentation": {

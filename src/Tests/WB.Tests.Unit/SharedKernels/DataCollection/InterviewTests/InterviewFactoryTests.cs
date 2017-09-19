@@ -1,8 +1,5 @@
 using System;
-using System.Data;
-using System.Linq;
 using Moq;
-using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -22,18 +19,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     internal class InterviewFactoryTests
     {
         private static InterviewFactory CreateInterviewFactory(
+            IPlainStorageAccessor<InterviewEntity> interviewEntitiesRepository = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ISessionProvider sessionProvider = null,
             IEntitySerializer<object> jsonSerializer = null,
-            IQueryableReadSideRepositoryReader<InterviewDbEntity> interviewRepository = null,
+            IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository = null,
             IRosterStructureService rosterStructureService = null)
             => new InterviewFactory(
-                interviewSummaryRepository: interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                summaryRepository: interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 sessionProvider: sessionProvider ?? Mock.Of<ISessionProvider>(),
                 jsonSerializer: jsonSerializer ?? Mock.Of<IEntitySerializer<object>>(), 
-                interviewRepository: interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewDbEntity>>(),
+                interviewRepository: interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewEntity>>(),
                 rosterStructureService: rosterStructureService ?? Mock.Of<IRosterStructureService>());
         [Test]
         public void when_remove_flag_question_received_by_interviewer()

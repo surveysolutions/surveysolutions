@@ -142,7 +142,7 @@
     <value>Clone questionnaire</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Creation Date</value>
+    <value>Created on</value>
   </data>
   <data name="History" xml:space="preserve">
     <value>History</value>
@@ -151,7 +151,7 @@
     <value>Import questionnaire</value>
   </data>
   <data name="LastEntryDate" xml:space="preserve">
-    <value>Last Entry Date</value>
+    <value>Modified on</value>
   </data>
   <data name="NewAssignment" xml:space="preserve">
     <value>New assignment</value>
@@ -166,7 +166,7 @@
     <value>Version</value>
   </data>
   <data name="ImportDate" xml:space="preserve">
-    <value>Import date</value>
+    <value>Imported on</value>
   </data>
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>

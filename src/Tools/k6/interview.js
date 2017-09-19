@@ -20,7 +20,8 @@ const data = {
     interviewId: null,
     interviewKey: null,
     assignmentId: interviewer.assignment,
-    questionnaireVersion: config.questionnaireVersion
+    questionnaireVersion: config.questionnaireVersion,
+	questionnaireId: config.questionnaireId
 }
 
 // authToken will be passed here

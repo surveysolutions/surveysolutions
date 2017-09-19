@@ -140,7 +140,7 @@
     <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
-    <value>Created at</value>
+    <value>Created on</value>
   </data>
   <data name="IdentifyingQuestions" xml:space="preserve">
     <value>Identifying Questions</value>
@@ -173,7 +173,7 @@
     <value>Start new interview</value>
   </data>
   <data name="UpdatedAt" xml:space="preserve">
-    <value>Updated at</value>
+    <value>Updated on</value>
   </data>
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>Fill all or some of the identifying fields</value>
