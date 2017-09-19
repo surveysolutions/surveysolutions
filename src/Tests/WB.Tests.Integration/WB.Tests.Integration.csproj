@@ -320,6 +320,7 @@
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_cascading_question_used_in_conditions.cs" />
+    <Compile Include="InterviewTests\Substitution\when_variable_from_one_roster_using_in_another_triggered_by_the_same_question.cs" />
     <Compile Include="ReportTests\ReportContext.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\HqSurveysAndStatusesReportTests.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\SvSurveysAndStatusesReportTests.cs" />
