@@ -10,13 +10,13 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -332,51 +332,83 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 IsMissingAssignToInterviewer = !interviewSummary.IsAssignedToInterviewer
             };
 
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(
-                    QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity));
-            // :) oxo xo I'm alive :)))))
-            var rosterStructures = this.rosterStructureService.GetRosterScopes(questionnaire);
+            IQuestionnaire questionnaire =
+                this.questionnaireStorage.GetQuestionnaire(
+                    QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity), null);
 
-            var interviewEntites = this.interviewRepository.Query(_=>_.Where(x=>x.InterviewId == interviewId).ToList());
+            List<InterviewEntity> interviewEntites =
+                this.interviewRepository.Query(_ => _.Where(x => x.InterviewId == interviewId).ToList());
 
-            interviewData.Levels = interviewEntites
-                .GroupBy(x => x.Identity.RosterVector)
-                .Select(x => ToInterviewLevel(x.Key, x.ToArray(), rosterStructures))
-                .ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
+            var groupBy = interviewEntites
+                .GroupBy(x => x.Identity?.RosterVector ?? RosterVector.Empty)
+                .ToDictionary(x => x.Key, x => x.ToArray());
+
+            var interviewLevels = groupBy.Select(x => ToInterviewLevel(x.Key, x.Value, questionnaire)).ToList();
+
+            interviewData.Levels =
+                interviewLevels.ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
 
             return interviewData;
         }
 
         public string[] GetMultimediaAnswers(Guid interviewId, Guid[] multimediaQuestionIds)
             => this.interviewRepository.Query(_ => _
-                .Where(x => x.InterviewId == interviewId && multimediaQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsString != null)
+                .Where(x => x.InterviewId == interviewId && multimediaQuestionIds.Contains(x.Identity.Id) &&
+                            x.IsEnabled && x.AsString != null)
                 .Select(x => x.AsString)
                 .ToArray());
 
         public string[] GetAudioAnswers(Guid interviewId, Guid[] audioQuestionIds)
             => this.interviewRepository.Query(_ => _
-                .Where(x => x.InterviewId == interviewId && audioQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsAudio != null)
+                .Where(x => x.InterviewId == interviewId && audioQuestionIds.Contains(x.Identity.Id) && x.IsEnabled &&
+                            x.AsAudio != null)
                 .Select(x => x.AsAudio).ToArray()
                 .Select(x => x.FileName).ToArray());
 
-        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities, 
-            Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterStructures)
+        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities,
+            IQuestionnaire questionnaire)
         {
             Dictionary<ValueVector<Guid>, int?> scopeVectors = new Dictionary<ValueVector<Guid>, int?>();
             if (rosterVector.Length > 0)
             {
-                scopeVectors = rosterStructures.Where(x => x.Key.Length == rosterVector.Length).Select(x => x.Key)
-                    .ToDictionary(x => x, y => (int?)rosterVector.Last());
+                // too slow
+                scopeVectors = interviewDbEntities
+                    .Select(x => questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id))
+                    .Select(x => new ValueVector<Guid>(x))
+                    .Distinct()
+                    .ToDictionary(x => x, x => (int?) 0);
             }
+            else
+            {
+                scopeVectors.Add(new ValueVector<Guid>(), 0);
+            }
+
+            var disabledGroups = interviewDbEntities
+                .Where(x => x.EntityType == EntityType.Section && x.IsEnabled == false).Select(x => x.Identity.Id)
+                .ToHashSet();
+
+            var disabledVariables = interviewDbEntities
+                .Where(x => x.EntityType == EntityType.Variable && x.IsEnabled == false).Select(x => x.Identity.Id)
+                .ToHashSet();
+
+            var dictionary = interviewDbEntities.Where(x => x.EntityType == EntityType.Variable)
+                .Select(x => new {x.Identity.Id, Answer = ToObjectAnswer(x)})
+                .ToDictionary(x => x.Id, x => x.Answer);
+
+            var interviewStaticTexts = interviewDbEntities.Where(x => x.EntityType == EntityType.StaticText)
+                .Select(ToStaticText).ToDictionary(x => x.Id);
+
+            var questionsSearchCache = interviewDbEntities.Where(x => x.EntityType == EntityType.Question)
+                .Select(ToQuestion).ToDictionary(x => x.Id);
 
             return new InterviewLevel
             {
                 RosterVector = rosterVector,
-                DisabledGroups = interviewDbEntities.Where(x=>x.EntityType == EntityType.Section && x.IsEnabled == false).Select(x=>x.Identity.Id).ToHashSet(),
-                DisabledVariables = interviewDbEntities.Where(x=>x.EntityType == EntityType.Variable && x.IsEnabled == false).Select(x=>x.Identity.Id).ToHashSet(),
-                Variables = interviewDbEntities.Where(x=>x.EntityType == EntityType.Variable).Select(x=>new {x.Identity.Id, Answer = ToObjectAnswer(x)}).ToDictionary(x=>x.Id, x=>x.Answer),
-                StaticTexts = interviewDbEntities.Where(x=>x.EntityType == EntityType.StaticText).Select(ToStaticText).ToDictionary(x=>x.Id),
-                QuestionsSearchCache = interviewDbEntities.Where(x=>x.EntityType == EntityType.Question).Select(ToQuestion).ToDictionary(x=>x.Id),
+                DisabledGroups = disabledGroups,
+                DisabledVariables = disabledVariables,
+                Variables = dictionary,
+                StaticTexts = interviewStaticTexts,
+                QuestionsSearchCache = questionsSearchCache,
                 ScopeVectors = scopeVectors
             };
         }
@@ -389,7 +421,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 Id = entity.Identity.Id,
                 Answer = objectAnswer,
-                FailedValidationConditions = entity.InvalidValidations?.Select(x => new FailedValidationCondition(x))?.ToReadOnlyCollection(),
+                FailedValidationConditions = entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection(),
                 QuestionState = ToQuestionState(entity, objectAnswer != null)
             };
         }
@@ -420,15 +452,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             Id = entity.Identity.Id,
             IsEnabled = entity.IsEnabled,
-            FailedValidationConditions = entity.InvalidValidations.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection()
+            FailedValidationConditions = (entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)) ??
+                                          new FailedValidationCondition[0]).ToReadOnlyCollection()
         };
 
         private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsDouble ?? entity.AsInt ??
-                                                                   entity.AsDateTime ?? entity.AsLong ??
-                                                                   entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
-                                                                   entity.AsList ?? entity.AsYesNo ??
-                                                                   entity.AsIntMatrix ?? entity.AsArea ??
-                                                                   (object) entity.AsAudio;
+                                                                 entity.AsDateTime ?? entity.AsLong ??
+                                                                 entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
+                                                                 entity.AsList ?? entity.AsYesNo ??
+                                                                 entity.AsIntMatrix ?? entity.AsArea ??
+                                                                 (object) entity.AsAudio;
 
         public static string CreateLevelIdFromPropagationVector(decimal[] vector)
         {

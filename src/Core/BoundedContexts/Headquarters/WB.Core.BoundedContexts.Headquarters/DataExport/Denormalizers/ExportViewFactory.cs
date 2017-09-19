@@ -95,13 +95,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview)
         {
-            var interviewDataExportLevelViews = exportStructure.HeaderToLevelMap.Values.Select(
-                exportStructureForLevel =>
-                    new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector,
-                        exportStructureForLevel.LevelName,
-                        this.BuildRecordsForHeader(interview, exportStructureForLevel))).ToArray();
+            var interviewDataExportLevelViews = new List<InterviewDataExportLevelView>();
 
-            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews);
+            foreach (var exportStructureForLevel in exportStructure.HeaderToLevelMap.Values)
+            {
+                var interviewDataExportRecords = this.BuildRecordsForHeader(interview, exportStructureForLevel);
+
+                var interviewDataExportLevelView = new InterviewDataExportLevelView(
+                    exportStructureForLevel.LevelScopeVector, 
+                    exportStructureForLevel.LevelName,
+                    interviewDataExportRecords);
+
+                interviewDataExportLevelViews.Add(interviewDataExportLevelView);
+            }
+
+            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray());
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
