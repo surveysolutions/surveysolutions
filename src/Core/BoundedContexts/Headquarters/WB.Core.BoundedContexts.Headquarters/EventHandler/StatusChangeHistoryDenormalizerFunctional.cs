@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 null,
                 null,
                 InterviewExportedAction.Created,
-                @event.EventTimeStamp,
+                @event.Payload.CreationTime ?? @event.EventTimeStamp,
                 string.Empty);
         }
 
