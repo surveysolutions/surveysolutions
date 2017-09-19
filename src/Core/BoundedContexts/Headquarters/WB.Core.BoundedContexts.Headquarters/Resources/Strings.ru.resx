@@ -218,4 +218,12 @@
   <data name="AllPeriods" xml:space="preserve">
     <value>Все периоды</value>
   </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Интервью</value>
+    <comment>Интервью</comment>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Задания</value>
+    <comment>Задания</comment>
+  </data>
 </root>

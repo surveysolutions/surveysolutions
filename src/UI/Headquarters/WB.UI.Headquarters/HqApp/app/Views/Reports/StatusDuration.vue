@@ -17,6 +17,21 @@
                     noPaging
                     noSearch
                     exportable>
+            <tr slot="header">
+                <th rowspan="2">{{$t("Strings.Days")}}</th>
+                <th colspan="2" class="type-numeric sorting_disabled">{{$t("Strings.Assignments")}}</th>
+                <th colspan="5" class="type-numeric sorting_disabled">{{$t("Strings.Interviews")}}</th>
+                <th rowspan="2" class="type-numeric sorting_disabled">{{$t("Strings.Total")}}</th>
+            </tr>
+            <tr slot="header">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
         </DataTables>
     </Layout>
 </template>

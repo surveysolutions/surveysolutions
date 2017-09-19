@@ -2,7 +2,7 @@
     <div :class="wrapperClass">
         <table ref="table"
                class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
-            <thead></thead>
+            <thead><slot name="header"></slot></thead>
             <tbody></tbody>
         </table>
         <div class="download-report-as"
