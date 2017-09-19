@@ -99,15 +99,13 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	{
 	    Write-Host "##teamcity[message text='Building apk excluding extra']"		
 				
-		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' `
-			"/p:Configuration=$BuildConfiguration" /p:CodeContractsRunCodeAnalysis=false --% /p:p:DefineConstants="EXCLUDEEXTENSIONS" | Write-Host
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' "/p:Configuration=$BuildConfiguration" /p:CodeContractsRunCodeAnalysis=false --% /p:Constants="EXCLUDEEXTENSIONS" | Write-Host
 	}
 	else
 	{
 	    Write-Host "##teamcity[message text='Building apk with extra']"
 		
-		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false `
-			"/p:Configuration=$BuildConfiguration" | Write-Host
+		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
 	}
 	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
