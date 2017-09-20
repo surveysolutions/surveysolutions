@@ -27,8 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             return answers;
         }
 
-        public string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header)
+        public string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header, bool isDisabled)
         {
+            if (isDisabled)
+                return header.ColumnNames.Select(c => ExportFormatSettings.DisableValue).ToArray();
+
             switch (header.VariableType)
             {
                 case VariableType.String:
@@ -53,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                 return BuildMissingValueAnswer(header);
 
             if (question.IsDisabled())
-                return header.ColumnNames.Select(c => ExportFormatSettings.DisableQuestionValue).ToArray();
+                return header.ColumnNames.Select(c => ExportFormatSettings.DisableValue).ToArray();
 
             if (question.Answer == null)
                 return BuildMissingValueAnswer(header);

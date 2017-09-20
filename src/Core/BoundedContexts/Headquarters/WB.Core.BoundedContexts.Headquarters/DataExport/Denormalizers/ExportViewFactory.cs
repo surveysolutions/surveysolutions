@@ -237,7 +237,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     var variable = interviewLevel.Variables.ContainsKey(headerItem.PublicKey)
                         ? interviewLevel.Variables[headerItem.PublicKey]
                         : null;
-                    var exportedVariable = exportQuestionService.GetExportedVariable(variable, variableHeaderItem);
+                    var isDisabled = interviewLevel.DisabledVariables.Contains(headerItem.PublicKey);
+                    var exportedVariable = exportQuestionService.GetExportedVariable(variable, variableHeaderItem, isDisabled);
                     result.Add(exportedVariable);
                 }
                 else
