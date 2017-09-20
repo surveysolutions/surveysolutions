@@ -218,8 +218,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
-
-
+        
         private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector answeredOption, IStatefulInterview interview)
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel

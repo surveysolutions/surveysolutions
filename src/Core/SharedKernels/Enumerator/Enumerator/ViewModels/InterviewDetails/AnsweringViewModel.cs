@@ -44,15 +44,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 await this.ExecuteCommandAsync(answerCommand);
             }
-            catch (InterviewException)
-            {
-                throw;
-            }
             catch (Exception e)
             {
-                throw new Exception($"Failed to answer question {answerCommand.Question}. " +
-                                    $"CommandType: {answerCommand.GetType()}. " +
-                                    $"Interview Id {answerCommand.InterviewId}", e);
+                e.Data.Add("Failed to answer question", answerCommand.Question.ToString());
+                e.Data.Add("CommandType", answerCommand.GetType());
+                e.Data.Add("Interview Id", answerCommand.InterviewId);
+                throw;
             }
         }
 
