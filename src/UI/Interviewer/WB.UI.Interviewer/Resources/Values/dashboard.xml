@@ -100,7 +100,8 @@
     <item name="android:paddingEnd">14dp</item>
     <item name="android:scrollHorizontally">false</item>
     <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:textStyle">bold</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
   </style>
   <style name="Dashboard_InterviewItem_SubTitle">
@@ -108,7 +109,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:paddingEnd">@dimen/dashboard_card_base_margin</item>
     <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:textStyle">bold</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
   </style>
 
   <style name="dashboard_prefilledQuestion_container">
@@ -158,10 +160,12 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">left|center_vertical</item>
     <item name="android:layout_weight">55</item>
-    <item name="android:textSize">@dimen/textsize_14</item>
 
+    <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
-    <item name="android:textStyle">bold</item>
+
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textStyle">normal</item>
     <item name="android:singleLine">true</item>
   </style>
 
