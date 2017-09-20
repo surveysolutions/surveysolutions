@@ -134,23 +134,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                                                             toDeleteFactory.Load(questionnaireId, questionnaireVersion));
             do
             {
-                foreach (var interviewSummary in listOfInterviews)
+                var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+
+                try
                 {
-                    var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-                    
-                    try
+                    transactionManager.BeginCommandTransaction();
+
+                    foreach (var interviewSummary in listOfInterviews)
                     {
-                        transactionManager.BeginCommandTransaction();
                         this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
                             userId ?? interviewSummary.ResponsibleId));
-                        transactionManager.CommitCommandTransaction();
                     }
-                    catch (Exception e)
-                    {
-                        transactionManager.RollbackCommandTransaction();
-                        this.logger.Error(e.Message, e);
-                        exceptionsDuringDelete.Add(e);
-                    }
+
+                    transactionManager.CommitCommandTransaction();
+                }
+                catch (Exception e)
+                {
+                    transactionManager.RollbackCommandTransaction();
+                    this.logger.Error(e.Message, e);
+                    exceptionsDuringDelete.Add(e);
                 }
 
                 listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() =>
