@@ -59,6 +59,14 @@ namespace Main.DenormalizerStorage
             }
         }
 
+        public List<string> GetIdsStartWith(string beginingOfId)
+        {
+            lock (locker)
+            {
+                return this.repository.Keys.Where(k => k.StartsWith(beginingOfId)).ToList();
+            }
+        }
+
         public void Store(TView view, string id)
         {
             lock (locker)
