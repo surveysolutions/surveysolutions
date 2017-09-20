@@ -18,10 +18,10 @@
                     noSearch
                     exportable>
             <tr slot="header">
-                <th rowspan="2" class="vertical-align-middle">{{$t("Strings.Days")}}</th>
+                <th rowspan="2" class="vertical-align-middle text-center">{{$t("Strings.Days")}}</th>
                 <th colspan="2" class="type-numeric sorting_disabled text-center">{{$t("Strings.Assignments")}}</th>
                 <th colspan="5" class="type-numeric sorting_disabled text-center">{{$t("Strings.Interviews")}}</th>
-                <th rowspan="2" class="type-numeric sorting_disabled vertical-align-middle">{{$t("Strings.Total")}}</th>
+                <th rowspan="2" class="type-numeric sorting_disabled vertical-align-middle text-center">{{$t("Strings.Total")}}</th>
             </tr>
             <tr slot="header">
                 <th></th>
