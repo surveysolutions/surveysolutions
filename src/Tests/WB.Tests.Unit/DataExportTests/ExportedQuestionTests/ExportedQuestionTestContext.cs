@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
     {
         public static string MissingNumericQuestionValue { get { return ExportFormatSettings.MissingNumericQuestionValue; } }
         public static string MissingStringQuestionValue { get { return ExportFormatSettings.MissingStringQuestionValue; } }
-        public static string DisableQuestionValue { get { return ExportFormatSettings.DisableQuestionValue; } }
+        public static string DisableValue { get { return ExportFormatSettings.DisableValue; } }
 
         private static string[] CreateExportedQuestion(QuestionType questionType, 
             object value,

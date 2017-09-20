@@ -23,10 +23,30 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 
             var exportService = new ExportQuestionService();
 
-            var exportedVariable = exportService.GetExportedVariable(variable, headerItem);
+            var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
             Assert.AreEqual(exportedVariable.Length, 1);
             Assert.AreEqual(exportedVariable[0], exportResult);
+        }
+
+        [TestCase(789L, VariableType.LongInteger)]
+        [TestCase(789.56, VariableType.Double)]
+        [TestCase(true, VariableType.Boolean)]
+        [TestCase("it is string", VariableType.String)]
+        public void when_export_disable_variable(object variable, VariableType variableType)
+        {
+            ExportedVariableHeaderItem headerItem = new ExportedVariableHeaderItem()
+            {
+                ColumnNames = new []{ "column_name" },
+                VariableType = variableType,
+            };
+
+            var exportService = new ExportQuestionService();
+
+            var exportedVariable = exportService.GetExportedVariable(variable, headerItem, true);
+
+            Assert.AreEqual(exportedVariable.Length, 1);
+            Assert.AreEqual(exportedVariable[0], ExportFormatSettings.DisableValue);
         }
 
         [Test]
@@ -41,7 +61,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 
             var exportService = new ExportQuestionService();
 
-            var exportedVariable = exportService.GetExportedVariable(variable, headerItem);
+            var exportedVariable = exportService.GetExportedVariable(variable, headerItem, false);
 
             Assert.AreEqual(exportedVariable.Length, 1);
             Assert.AreEqual(exportedVariable[0], "789.56");
@@ -58,7 +78,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 
             var exportService = new ExportQuestionService();
 
-            var exportedVariable = exportService.GetExportedVariable(dateTime, headerItem);
+            var exportedVariable = exportService.GetExportedVariable(dateTime, headerItem, false);
 
             Assert.AreEqual(exportedVariable.Length, 1);
             Assert.AreEqual(exportedVariable[0], "2017-09-12T14:09:37");
