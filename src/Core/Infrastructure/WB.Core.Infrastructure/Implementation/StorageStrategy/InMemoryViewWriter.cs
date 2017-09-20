@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -51,6 +52,12 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
             if (this.viewId.FormatGuid().StartsWith(beginingOfId))
                 this.view = null;
         }
+
+        public List<string> GetIdsStartWith(string beginingOfId)
+        {
+            return this.viewId.FormatGuid().StartsWith(beginingOfId) ?  new List<string>{ this.viewId.FormatGuid() } : new List<string>();
+        }
+
 
         public Type ViewType
         {

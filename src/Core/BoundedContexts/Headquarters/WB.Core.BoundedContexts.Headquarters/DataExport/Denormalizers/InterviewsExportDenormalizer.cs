@@ -56,23 +56,32 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             {
                 var interviewId = evnt.EventSourceId;
 
-                this.exportRecords.RemoveIfStartsWith(interviewId.ToString());
-
                 var questionnaireId = this.interviewReferences.GetQuestionnaireIdentity(interviewId);
                 if (questionnaireId != null)
                 {
-                    var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireId);
+                    var questionnaireExportStructure = this.questionnaireExportStructureStorage
+                        .GetQuestionnaireExportStructure(questionnaireId);
 
                     if (questionnaireExportStructure != null)
                     {
+                        var existingRecordKeys = this.exportRecords.GetIdsStartWith(interviewId.ToString());
+
                         InterviewDataExportView interviewDataExportView =
-                            this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, this.interviewDatas.GetById(interviewId));
+                            this.exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure,
+                                this.interviewDatas.GetById(interviewId));
 
                         var records = interviewDataExportView.GetAsRecords().ToList();
 
                         foreach (var record in records)
                         {
                             this.exportRecords.Store(record, record.Id);
+                        }
+
+                        var recordKeysToDelete = existingRecordKeys.Except(records.Select(x => x.Id)).ToList();
+
+                        foreach (var recordKeyToDelete in recordKeysToDelete)
+                        {
+                            this.exportRecords.Remove(recordKeyToDelete);
                         }
                     }
                 }

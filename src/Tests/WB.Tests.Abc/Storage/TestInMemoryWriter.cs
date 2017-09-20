@@ -49,6 +49,11 @@ namespace WB.Tests.Abc.Storage
             }
         }
 
+        public List<string> GetIdsStartWith(string beginingOfId)
+        {
+            return this.storage.Keys.Where(k => k.StartsWith(beginingOfId)).ToList();
+        }
+
         public void Remove(T view)
         {
             var keyOfItemToRemove = this.storage.FirstOrDefault(item => item.Value == view).Key;
