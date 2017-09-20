@@ -136,25 +136,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             {
                 foreach (var interviewSummary in listOfInterviews)
                 {
+                    var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+                    
                     try
                     {
-                        IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-                        plainTransactionManager.ExecuteInPlainTransaction(() =>
-                                this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, userId ?? interviewSummary.ResponsibleId)));
+                        transactionManager.BeginCommandTransaction();
+                        this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
+                            userId ?? interviewSummary.ResponsibleId));
+                        transactionManager.CommitCommandTransaction();
                     }
                     catch (Exception e)
                     {
-                       this.logger.Error(e.Message, e);
-                       exceptionsDuringDelete.Add(e);
+                        transactionManager.RollbackCommandTransaction();
+                        this.logger.Error(e.Message, e);
+                        exceptionsDuringDelete.Add(e);
                     }
                 }
+
                 listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() =>
                                                             toDeleteFactory.Load(questionnaireId, questionnaireVersion));
 
-            } while (listOfInterviews.Any());
+            } while (
+                exceptionsDuringDelete.Count == 0 && 
+                listOfInterviews.Any());
 
             if(exceptionsDuringDelete.Count>0)
-                throw new AggregateException(string.Format("interview delete process failed for questionnaire {0} v. {1}", questionnaireId.FormatGuid(),questionnaireVersion), exceptionsDuringDelete);
+                throw new AggregateException(
+                    $"interview delete process failed for questionnaire {questionnaireId.FormatGuid()} v. {questionnaireVersion}", exceptionsDuringDelete);
         }
     }
 }
