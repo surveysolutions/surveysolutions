@@ -138,7 +138,7 @@ export default {
             responsibleId: null,
             questionnaireId: null,
             wasInitialized: false,
-            responsibleParams: { showArchived: true },
+            responsibleParams: { showArchived: true, showLocked: true },
             questionnaireParams: { censusOnly: false },
             isLoading: false,
             selectedRows: [],
