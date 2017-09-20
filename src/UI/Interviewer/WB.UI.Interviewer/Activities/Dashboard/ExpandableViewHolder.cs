@@ -1,7 +1,6 @@
 using System;
 using Android.Content;
 using Android.Views;
-using Android.Widget;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 
@@ -10,7 +9,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
     public class ExpandableViewHolder : MvxRecyclerViewHolder
     {
         public ViewGroup DashboardItem { get; }
-        public ImageView MenuHandle { get; }
+        public View MenuHandle { get; }
 
         public ExpandableViewHolder(View itemView, IMvxAndroidBindingContext context) : base(itemView, context)
         {
@@ -21,7 +20,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 this.DashboardItem.Click += (sender, args) => this.OnCardClick();
             }
 
-            this.MenuHandle = itemView.FindViewById<ImageView>(Resource.Id.menu);
+            this.MenuHandle = itemView.FindViewById<View>(Resource.Id.menu);
 
             if(MenuHandle != null)
             {
