@@ -17,7 +17,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate
@@ -129,13 +128,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var exceptionsDuringDelete = new List<Exception>();
 
             IInterviewsToDeleteFactory toDeleteFactory = this.interviewsToDeleteFactory.Invoke();
-            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            List<InterviewSummary> listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() => 
+            ITransactionManager transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+            List<InterviewSummary> listOfInterviews = transactionManager.ExecuteInQueryTransaction(() => 
                                                             toDeleteFactory.Load(questionnaireId, questionnaireVersion));
             do
             {
-                var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-
                 try
                 {
                     transactionManager.BeginCommandTransaction();
@@ -155,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                     exceptionsDuringDelete.Add(e);
                 }
 
-                listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                listOfInterviews = transactionManager.ExecuteInQueryTransaction(() =>
                                                             toDeleteFactory.Load(questionnaireId, questionnaireVersion));
 
             } while (
