@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
     internal class when_getting_report_with_header : QuantityReportFactoryTestContext
     {
         [Test]
-        public void should_include_data_in_last_column()
+        public void should_correctly_build_header()
         {
             var reportStartDate = new DateTime(2017, 5, 10, 9, 0, 0);
             var supervisorId = Id.g1;
