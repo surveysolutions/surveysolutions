@@ -6,6 +6,7 @@ using System.Threading;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
+using NHibernate;
 using Npgsql;
 using NpgsqlTypes;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
@@ -18,15 +19,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private static long lastUsedGlobalSequence = -1;
         private static readonly object lockObject = new object();
         private readonly IEventTypeResolver eventTypeResolver;
+        private readonly ISessionProvider sessionProvider;
         private static int BatchSize = 4096;
         private static string tableNameWithSchema;
         private readonly string tableName;
+        private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
-            IEventTypeResolver eventTypeResolver)
+            IEventTypeResolver eventTypeResolver,
+            ISessionProvider sessionProvider)
         {
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
+            this.sessionProvider = sessionProvider;
 
             this.tableName = "events";
             tableNameWithSchema = connectionSettings.SchemaName + "." + this.tableName;
@@ -68,7 +73,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         while (reader.Read())
                         {
-                            yield return this.ReadSingleEvent(reader);
+                            var singleEvent = this.ReadSingleEvent(reader);
+                            if (singleEvent != null)
+                                yield return singleEvent;
                         }
                     }
                 }
@@ -95,68 +102,73 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             if (eventStream.IsNotEmpty)
             {
-                using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-                {
-                    connection.Open();
-                    return new CommittedEventStream(eventStream.SourceId, this.Store(eventStream, connection));
-                }
+                return new CommittedEventStream(eventStream.SourceId, this.Store(eventStream, this.sessionProvider.GetSession()));
             }
 
             return new CommittedEventStream(eventStream.SourceId);
         }
 
-        private List<CommittedEvent> Store(UncommittedEventStream eventStream, NpgsqlConnection connection)
+        private List<CommittedEvent> Store(UncommittedEventStream eventStream, ISession connection)
         {
             var result = new List<CommittedEvent>();
-            using (var npgsqlTransaction = connection.BeginTransaction())
+
+            ValidateStreamVersion(eventStream, connection);
+
+            var copyFromCommand =
+                $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, globalsequence, value, eventsequence, eventtype) FROM STDIN BINARY;";
+            var npgsqlConnection = connection.Connection as NpgsqlConnection;
+
+            using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
             {
-                ValidateStreamVersion(eventStream, connection);
-
-                var copyFromCommand = $"COPY {tableNameWithSchema}(id, origin, timestamp, eventsourceid, globalsequence, value, eventsequence, eventtype) FROM STDIN BINARY;";
-                using (var writer = connection.BeginBinaryImport(copyFromCommand))
+                foreach (var @event in eventStream)
                 {
-                    foreach (var @event in eventStream)
-                    {
-                        var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
-                            EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
-                        var nextSequence = this.GetNextSequence();
+                    var eventString = JsonConvert.SerializeObject(@event.Payload, Formatting.Indented,
+                        EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+                    var nextSequence = this.GetNextSequence();
 
-                        writer.StartRow();
-                        writer.Write(@event.EventIdentifier, NpgsqlDbType.Uuid);
-                        writer.Write(@event.Origin, NpgsqlDbType.Text);
-                        writer.Write(@event.EventTimeStamp, NpgsqlDbType.Timestamp);
-                        writer.Write(@event.EventSourceId, NpgsqlDbType.Uuid);
-                        writer.Write(nextSequence, NpgsqlDbType.Integer);
-                        writer.Write(eventString, NpgsqlDbType.Json);
-                        writer.Write(@event.EventSequence, NpgsqlDbType.Integer);
-                        writer.Write(@event.Payload.GetType().Name, NpgsqlDbType.Text);
+                    writer.StartRow();
+                    writer.Write(@event.EventIdentifier, NpgsqlDbType.Uuid);
+                    writer.Write(@event.Origin, NpgsqlDbType.Text);
+                    writer.Write(@event.EventTimeStamp, NpgsqlDbType.Timestamp);
+                    writer.Write(@event.EventSourceId, NpgsqlDbType.Uuid);
+                    writer.Write(nextSequence, NpgsqlDbType.Integer);
+                    writer.Write(eventString, NpgsqlDbType.Json);
+                    writer.Write(@event.EventSequence, NpgsqlDbType.Integer);
+                    writer.Write(@event.Payload.GetType().Name, NpgsqlDbType.Text);
 
-                        var committedEvent = new CommittedEvent(eventStream.CommitId,
-                            @event.Origin,
-                            @event.EventIdentifier,
-                            @event.EventSourceId,
-                            @event.EventSequence,
-                            @event.EventTimeStamp,
-                            nextSequence,
-                            @event.Payload);
-                        result.Add(committedEvent);
-                    }
+                    var committedEvent = new CommittedEvent(eventStream.CommitId,
+                        @event.Origin,
+                        @event.EventIdentifier,
+                        @event.EventSourceId,
+                        @event.EventSequence,
+                        @event.EventTimeStamp,
+                        nextSequence,
+                        @event.Payload);
+                    result.Add(committedEvent);
                 }
-
-                npgsqlTransaction.Commit();
             }
+
             return result;
         }
 
-        private static void ValidateStreamVersion(UncommittedEventStream eventStream, NpgsqlConnection connection)
+        private static void ValidateStreamVersion(UncommittedEventStream eventStream, ISession connection)
         {
+            void AppendEventSourceParameter(IDbCommand command)
+            {
+                IDbDataParameter sourceIdParameter = command.CreateParameter();
+                sourceIdParameter.Value = eventStream.SourceId;
+                sourceIdParameter.DbType = DbType.Guid;
+                sourceIdParameter.ParameterName = "sourceId";
+                command.Parameters.Add(sourceIdParameter);
+            }
+
             if (eventStream.InitialVersion == 0)
             {
-                using (NpgsqlCommand validateVersionCommand = connection.CreateCommand())
+                using (var validateVersionCommand = connection.Connection.CreateCommand())
                 {
                     validateVersionCommand.CommandText =
                         $"SELECT EXISTS(SELECT 1 FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId)";
-                    validateVersionCommand.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, eventStream.SourceId);
+                    AppendEventSourceParameter(validateVersionCommand);
 
                     var streamExists = validateVersionCommand.ExecuteScalar() as bool?;
                     if (streamExists.GetValueOrDefault())
@@ -166,11 +178,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
             else
             {
-                using (NpgsqlCommand validateVersionCommand = connection.CreateCommand())
+                using (var validateVersionCommand = connection.Connection.CreateCommand())
                 {
                     validateVersionCommand.CommandText =
                         $"SELECT MAX(eventsequence) FROM {tableNameWithSchema} WHERE eventsourceid = :sourceId";
-                    validateVersionCommand.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, eventStream.SourceId);
+                    AppendEventSourceParameter(validateVersionCommand);
 
                     var storedLastSequence = validateVersionCommand.ExecuteScalar() as int?;
                     if (storedLastSequence != eventStream.InitialVersion)
@@ -231,7 +243,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 {
                     while (reader.Read())
                     {
-                        yield return this.ReadSingleEvent(reader);
+                        var singleEvent = this.ReadSingleEvent(reader);
+                        if (singleEvent != null)
+                            yield return singleEvent;
                     }
                 }
             }
@@ -269,7 +283,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     {
                         while (reader.Read())
                         {
-                            events.Add(this.ReadSingleEvent(reader));
+                            var singleEvent = this.ReadSingleEvent(reader);
+                            if (singleEvent != null)
+                                events.Add(singleEvent);
                         }
                     }
 
@@ -312,6 +328,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             string value = (string) npgsqlDataReader["value"];
 
             string eventType = (string) npgsqlDataReader["eventtype"];
+
+            if (obsoleteEvents.Contains(eventType.ToLower()))
+                return null;
+
             var resolvedEventType = this.eventTypeResolver.ResolveType(eventType);
             IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, EventSerializerSettings.BackwardCompatibleJsonSerializerSettings) as IEvent;
 

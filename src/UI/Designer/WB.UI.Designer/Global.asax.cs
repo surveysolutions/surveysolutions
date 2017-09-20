@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Text;
 using System.Web;
 using System.Web.Http;
@@ -10,12 +9,11 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.DataAnnotations;
-using WB.UI.Shared.Web.Elmah;
 using NConfig;
-using Elmah;
 using System.Web.Hosting;
 using System.Reflection;
 using MultipartDataMediaFormatter;
+using StackExchange.Exceptional;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
 
@@ -30,7 +28,7 @@ namespace WB.UI.Designer
 
         const int TimedOutExceptionCode = -2147467259;
 
-        private ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
+        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
         private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
 
         private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
@@ -42,6 +40,18 @@ namespace WB.UI.Designer
 
             AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
 
+            Settings.Current.GetCustomData = (exception, dictionary) =>
+            {   
+                // abusing get custom data call to clean out HTTP_AUTHORIZATION header
+                if (HttpContext.Current != null)
+                {
+                    HttpContext.Current.Request.ServerVariables["HTTP_AUTHORIZATION"] = string.Empty;
+                }
+
+                var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+                dictionary.Add("Assembly", assembly.FullName);
+            };
+            
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -97,7 +107,6 @@ namespace WB.UI.Designer
 
             if (httpEx != null)
             {
-
                 switch (httpEx.GetHttpCode())
                 {
                     case 404:
@@ -139,16 +148,6 @@ namespace WB.UI.Designer
 
         #warning TLK: delete this when NCQRS initialization moved to Global.asax
         public static void Initialize() { }
-
-        void ErrorLog_Filtering(object sender, ExceptionFilterEventArgs e)
-        {
-            var ctx = e.Context as HttpContext;
-            if (ctx == null)
-            {
-                return;
-            }
-            ElmahDataFilter.Apply(e, ctx);
-        }
 
         protected void Application_PostAuthorizeRequest()
         {

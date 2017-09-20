@@ -2,6 +2,7 @@
 using System;
 using Ninject;
 using Ninject.Modules;
+using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -57,12 +58,10 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl;
@@ -70,12 +69,10 @@ using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Views.TakeNew;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.Revalidate;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
@@ -87,7 +84,6 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly string currentFolderPath;
         private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
         private readonly int? interviewLimitCount;
-        private readonly ReadSideSettings readSideSettings;
         private readonly string syncDirectoryName;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
@@ -97,7 +93,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
         public HeadquartersBoundedContextModule(string currentFolderPath,
             SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
-            ReadSideSettings readSideSettings,
             UserPreloadingSettings userPreloadingSettings,
             ExportSettings exportSettings,
             InterviewDataExportSettings interviewDataExportSettings,
@@ -112,7 +107,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.sampleImportSettings = sampleImportSettings;
             this.currentFolderPath = currentFolderPath;
             this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
-            this.readSideSettings = readSideSettings;
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
@@ -126,9 +120,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
-
-            CommandRegistry.Setup<Tablet>()
-                .InitializesWith<RegisterTabletCommand>(command => command.DeviceId, (command, aggregate) => aggregate.CreateClientDevice(command));
 
             this.Bind<InterviewPreconditionsServiceSettings>().ToConstant(new InterviewPreconditionsServiceSettings(this.interviewLimitCount));
 
@@ -185,10 +176,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<RejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Reject(command.UserId, command.Comment, command.RejectTime))
                 .Handles<RejectInterviewToInterviewerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RejectToInterviewer(command.UserId, command.InterviewerId, command.Comment, command.RejectTime))
                 .Handles<RejectInterviewFromHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RejectInterviewFromHeadquarters(command.UserId, command.SupervisorId, command.InterviewerId, command.InterviewDto, command.SynchronizationTime))
-                .Handles<RemoveFlagFromAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RemoveFlagFromAnswer(command.UserId, command.QuestionId, command.RosterVector))
                 .Handles<RestartInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restart(command.UserId, command.Comment, command.RestartTime))
                 .Handles<RestoreInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restore(command.UserId))
-                .Handles<SetFlagToAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SetFlagToAnswer(command.UserId, command.QuestionId, command.RosterVector))
                                 //.Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview))
                 .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.CompleteTime))
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
@@ -209,7 +198,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
-            this.Bind<IInterviewSynchronizationDtoFactory>().To<InterviewSynchronizationDtoFactory>();
             this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
             this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
             this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
@@ -235,11 +223,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
             this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
             this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
-            this.Bind<IInterviewTroubleshootFactory>().To<InterviewTroubleshootFactory>();
             this.Bind<ITeamViewFactory>().To<TeamViewFactory>();
             this.Bind<IUserViewFactory>().ToMethod(context => new UserViewFactory());
             this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
             this.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
+            this.Bind<IInterviewFactory>().To<InterviewFactory>();
             this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
             this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
             this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
@@ -249,11 +237,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IOldschoolChartStatisticsDataProvider>().To<OldschoolChartStatisticsDataProvider>();
 
-            this.Bind<ISupervisorTeamsAndStatusesReport>().To<SupervisorTeamsAndStatusesReport>();
-            this.Bind<IHeadquartersTeamsAndStatusesReport>().To<HeadquartersTeamsAndStatusesReport>();
+            this.Bind<ITeamsAndStatusesReport>().To<TeamsAndStatusesReport>();
             this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
             this.Bind<IMapReport>().To<MapReport>();
-            this.Bind<ICountDaysOfInterviewInStatusReport>().To<CountDaysOfInterviewInStatusReport>();
+            this.Bind<IStatusDurationReport>().To<StatusDurationReport>();
 
             this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
             this.Bind<IRandomValuesSource>().To<RandomValuesSource>().InSingletonScope();
@@ -272,22 +259,15 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IExportFactory>().To<ExportFactory>();
 
+            this.Kernel.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewLifecycleEventHandler>();
-            this.Kernel.RegisterDenormalizer<StatusChangeHistoryDenormalizerFunctional>();
             this.Kernel.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
-            this.Kernel.RegisterDenormalizer<InterviewStatusTimeSpanDenormalizer>();
-            this.Kernel.RegisterDenormalizer<LinkedOptionsDenormalizer>();
 
             this.Kernel.Load(new QuartzNinjectModule());
 
             this.Bind<IInterviewPackagesService>().To<InterviewPackagesService>();
 
-            this.Bind<ReadSideSettings>().ToConstant(this.readSideSettings);
-            this.Bind<ReadSideService>().ToSelf().InSingletonScope();
-            this.Bind<IReadSideStatusService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
-            this.Bind<IReadSideAdministrationService>().ToMethod(context => context.Kernel.Get<ReadSideService>());
-         
             this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
             this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
             this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);

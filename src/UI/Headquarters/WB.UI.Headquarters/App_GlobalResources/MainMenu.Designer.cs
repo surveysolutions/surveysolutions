@@ -90,9 +90,9 @@ namespace Resources {
         /// <summary>
         ///   Looks up a localized string similar to Status Duration.
         /// </summary>
-        internal static string CountDaysOfInterviewInStatus {
+        internal static string StatusDuration {
             get {
-                return ResourceManager.GetString("CountDaysOfInterviewInStatus", resourceCulture);
+                return ResourceManager.GetString("StatusDuration", resourceCulture);
             }
         }
         

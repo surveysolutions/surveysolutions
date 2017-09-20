@@ -166,7 +166,7 @@
     <value>Interview Key</value>
   </data>
   <data name="LastUpdate" xml:space="preserve">
-    <value>Last Update</value>
+    <value>Updated on</value>
   </data>
   <data name="НasErrors" xml:space="preserve">
     <value>Нas Errors</value>
@@ -182,6 +182,9 @@
   </data>
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>All Questionnaires</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>All Assignments</value>
   </data>
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>

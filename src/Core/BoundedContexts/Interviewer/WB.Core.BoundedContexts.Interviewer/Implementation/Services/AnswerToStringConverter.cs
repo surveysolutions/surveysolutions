@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -26,10 +27,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             ? DateTime.Parse((string) answer)
                             : (DateTime) answer;
                         var isTimestamp = questionnaire.IsTimestampQuestion(questionId);
-                        var localTime = dateTimeAnswer.ToLocalTime();
+                        var localTime = isTimestamp ? dateTimeAnswer.ToLocalTime() : dateTimeAnswer;
                         answer = isTimestamp
-                            ? localTime.ToString(CultureInfo.CurrentCulture)
-                            : localTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+                            ? localTime.ToString(DateTimeFormat.DateWithTimeFormat)
+                            : localTime.ToString(DateTimeFormat.DateFormat);
                         break;
 
                     case QuestionType.MultyOption:

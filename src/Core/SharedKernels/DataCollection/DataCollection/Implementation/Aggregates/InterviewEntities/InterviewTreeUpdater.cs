@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 if (question == null)
                     return;
 
-                if (IsRosterSizeQuestionType(question))
+                if (!IsRosterSizeQuestionType(question))
                     return;
 
                 DisableDependingFormSourceQuestionRosters(question.Identity, question.Tree);
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private static bool IsRosterSizeQuestionType(InterviewTreeQuestion question)
         {
-            return !question.IsInteger && !question.IsMultiFixedOption && !question.IsTextList && !question.IsYesNo;
+            return question.IsInteger || question.IsMultiFixedOption || question.IsTextList || question.IsYesNo;
         }
 
         public void UpdateEnablement(InterviewTreeGroup group)
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (newSelectedOptions.Length != selectedOptions.Length)
             {
                 question.SetAnswer(
-                    CategoricalFixedMultiOptionAnswer.FromInts(newSelectedOptions));
+                    CategoricalFixedMultiOptionAnswer.Convert(newSelectedOptions));
                 // remove rosters, implement cheaper solutions
                 question.Tree.ActualizeTree();
             }

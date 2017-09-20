@@ -234,7 +234,7 @@
     <value>Enter date</value>
   </data>
   <data name="DecimalTooBig" xml:space="preserve">
-    <value>Entered value is bigger. Allow only 15 digits</value>
+    <value>Entered value is too large. Less than 15 digits allowed</value>
   </data>
   <data name="DecimalCannotParse" xml:space="preserve">
     <value>Entered value can not be parsed as decimal value</value>
@@ -257,7 +257,7 @@
   <data name="GPSPermissionDenied" xml:space="preserve">
     <value>This website does not have permission to use the Geolocation API</value>
   </data>
-  <data name="GPSPositionUnavailable" xml:space="preserve">
+  <data name="GPSPositionUnavailable" xml:space="preserve">'
     <value>The current position could not be determined.</value>
   </data>
   <data name="GPSTimeout" xml:space="preserve">
@@ -268,7 +268,7 @@
     <comment>Do not translate parts inside {{}}: {{strErrorCode}}</comment>
   </data>
   <data name="NumberEnter" xml:space="preserve">
-    <value>Enter Number</value>
+    <value>Enter number</value>
   </data>
   <data name="NumberCannotParse" xml:space="preserve">
     <value>Entered value can not be parsed as integer value</value>
@@ -286,7 +286,7 @@
     <comment>Do not translate parts inside {{}}: {{amountOfRostersToRemove}}</comment>
   </data>
   <data name="PhotoUpload" xml:space="preserve">
-    <value>Upload Photo</value>
+    <value>Upload a photo</value>
   </data>
   <data name="PhotoTooBig" xml:space="preserve">
     <value>Image is too big to upload. Please, choose an image less than 30 Mb</value>

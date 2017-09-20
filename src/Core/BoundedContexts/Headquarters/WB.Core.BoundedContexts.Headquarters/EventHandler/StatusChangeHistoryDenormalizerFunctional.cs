@@ -14,64 +14,57 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     internal class StatusChangeHistoryDenormalizerFunctional :
-        AbstractFunctionalEventHandler<InterviewStatuses, IReadSideRepositoryWriter<InterviewStatuses>>,
-        IUpdateHandler<InterviewStatuses, InterviewerAssigned>,
-        IUpdateHandler<InterviewStatuses, InterviewCompleted>,
-        IUpdateHandler<InterviewStatuses, InterviewRejected>,
-        IUpdateHandler<InterviewStatuses, InterviewApproved>,
-        IUpdateHandler<InterviewStatuses, InterviewRejectedByHQ>,
-        IUpdateHandler<InterviewStatuses, InterviewApprovedByHQ>,
-        IUpdateHandler<InterviewStatuses, InterviewOnClientCreated>,
-        IUpdateHandler<InterviewStatuses, InterviewFromPreloadedDataCreated>,
-        IUpdateHandler<InterviewStatuses, InterviewRestarted>,
-        IUpdateHandler<InterviewStatuses, SupervisorAssigned>,
-        IUpdateHandler<InterviewStatuses, InterviewDeleted>,
-        IUpdateHandler<InterviewStatuses, InterviewHardDeleted>,
-        IUpdateHandler<InterviewStatuses, InterviewRestored>,
-        IUpdateHandler<InterviewStatuses, InterviewCreated>,
-        IUpdateHandler<InterviewStatuses, TextQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, MultipleOptionsQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, SingleOptionQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, NumericRealQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, NumericIntegerQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, DateTimeQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, GeoLocationQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, MultipleOptionsLinkedQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, SingleOptionLinkedQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, TextListQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, QRBarcodeQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, PictureQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, UnapprovedByHeadquarters>,
-        IUpdateHandler<InterviewStatuses, AreaQuestionAnswered>,
-        IUpdateHandler<InterviewStatuses, AudioQuestionAnswered>
+        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+        IUpdateHandler<InterviewSummary, InterviewerAssigned>,
+        IUpdateHandler<InterviewSummary, InterviewCompleted>,
+        IUpdateHandler<InterviewSummary, InterviewRejected>,
+        IUpdateHandler<InterviewSummary, InterviewApproved>,
+        IUpdateHandler<InterviewSummary, InterviewRejectedByHQ>,
+        IUpdateHandler<InterviewSummary, InterviewApprovedByHQ>,
+        IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
+        IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
+        IUpdateHandler<InterviewSummary, InterviewRestarted>,
+        IUpdateHandler<InterviewSummary, SupervisorAssigned>,
+        IUpdateHandler<InterviewSummary, InterviewDeleted>,
+        IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
+        IUpdateHandler<InterviewSummary, InterviewRestored>,
+        IUpdateHandler<InterviewSummary, InterviewCreated>,
+        IUpdateHandler<InterviewSummary, TextQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, MultipleOptionsQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, SingleOptionQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, NumericRealQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, NumericIntegerQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, DateTimeQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, GeoLocationQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, MultipleOptionsLinkedQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, SingleOptionLinkedQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, TextListQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, PictureQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, UnapprovedByHeadquarters>,
+        IUpdateHandler<InterviewSummary, AreaQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>
     {
         private readonly IUserViewFactory users;
-        private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummares;
         private readonly string unknown = "Unknown";
         private readonly InterviewExportedAction[] listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded = new[] { InterviewExportedAction.InterviewerAssigned, InterviewExportedAction.RejectedBySupervisor, InterviewExportedAction.Restarted };
 
-        public override object[] Readers => new object[] {this.interviewSummares};
-
-        private InterviewStatuses RecordFirstAnswerIfNeeded(Guid eventIdentifier, InterviewStatuses interviewStatuses, Guid interviewId, Guid userId, DateTime answerTime)
+        private InterviewSummary RecordFirstAnswerIfNeeded(Guid eventIdentifier, InterviewSummary interviewSummary, Guid interviewId, Guid userId, DateTime answerTime)
         {
-            if(!interviewStatuses.InterviewCommentedStatuses.Any())
-                   return interviewStatuses;
+            if(!interviewSummary.InterviewCommentedStatuses.Any())
+                   return interviewSummary;
 
-            if (!this.listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewStatuses.InterviewCommentedStatuses.Last().Status))
-                return interviewStatuses;
+            if (!this.listOfActionsAfterWhichFirstAnswerSetAtionShouldBeRecorded.Contains(interviewSummary.InterviewCommentedStatuses.Last().Status))
+                return interviewSummary;
 
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
 
             if (responsible == null || !responsible.Roles.Contains(UserRoles.Interviewer))
-                return interviewStatuses;
+                return interviewSummary;
 
-            var interviewSummary = this.interviewSummares.GetById(interviewId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
-            interviewStatuses = this.AddCommentedStatus(
+            interviewSummary = this.AddCommentedStatus(
                eventIdentifier,
-               interviewStatuses,
+               interviewSummary,
                userId,
                interviewSummary.TeamLeadId,
                interviewSummary.ResponsibleId,
@@ -79,27 +72,20 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                answerTime,
                "");
 
-            return interviewStatuses;
+            return interviewSummary;
         }
 
         public StatusChangeHistoryDenormalizerFunctional(
-            IReadSideRepositoryWriter<InterviewStatuses> statuses,
-            IUserViewFactory users,
-            IReadSideRepositoryWriter<InterviewSummary> interviewSummares)
-            : base(statuses)
+            IUserViewFactory users)
         {
             this.users = users;
-            this.interviewSummares = interviewSummares;
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<InterviewOnClientCreated> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
-            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion);
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
                 null,
                 null,
@@ -108,14 +94,24 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 string.Empty);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<InterviewCreated> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
-            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion);
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
+                @event.Payload.UserId,
+                null,
+                null,
+                InterviewExportedAction.Created,
+                @event.Payload.CreationTime ?? @event.EventTimeStamp,
+                string.Empty);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
+        {
+            return this.AddCommentedStatus(
+                @event.EventIdentifier,
+                state,
                 @event.Payload.UserId,
                 null,
                 null,
@@ -124,180 +120,131 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 string.Empty);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state,
-            IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRestarted> @event)
         {
-            var interviewStatuses = this.CreateInterviewStatuses(@event.EventSourceId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion);
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                null,
-                null,
-                InterviewExportedAction.Created,
-                @event.EventTimeStamp,
-                string.Empty);
-        }
-
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRestarted> @event)
-        {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
-            return this.AddCommentedStatus(
-                @event.EventIdentifier,
-                interviewStatuses,
-                @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.Restarted,
-                 @event.Payload.RestartTime ?? @event.EventTimeStamp,
+                @event.Payload.RestartTime ?? @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<SupervisorAssigned> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SupervisorAssigned> @event)
         {
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
                 @event.Payload.SupervisorId,
                 null,
                 InterviewExportedAction.SupervisorAssigned,
-                @event.EventTimeStamp,
+                @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewCompleted> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCompleted> @event)
         {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.Completed,
                 @event.Payload.CompleteTime ?? @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRejected> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRejected> @event)
         {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.RejectedBySupervisor,
                 @event.Payload.RejectTime ?? @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewApproved> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewApproved> @event)
         {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.ApprovedBySupervisor,
                 @event.Payload.ApproveTime ?? @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRejectedByHQ> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRejectedByHQ> @event)
         {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.RejectedByHeadquarter,
                 @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewApprovedByHQ> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewApprovedByHQ> @event)
         {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.ApprovedByHeadquarter,
                 @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewerAssigned> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewerAssigned> @event)
         {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
+                state.TeamLeadId,
                 @event.Payload.InterviewerId,
                 InterviewExportedAction.InterviewerAssigned,
                 @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewDeleted> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeleted> @event)
         {
             return null;
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewHardDeleted> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewHardDeleted> @event)
         {
             return null;
         }
 
-        public InterviewStatuses Update(InterviewStatuses interviewStatuses, IPublishedEvent<InterviewRestored> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewRestored> @event)
         {
             if (@event.Origin == Constants.HeadquartersSynchronizationOrigin)
-                return interviewStatuses;
-
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return interviewStatuses;
+                return state;
 
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
-                interviewStatuses,
+                state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.Restored,
                 @event.EventTimeStamp,
                 null);
@@ -306,20 +253,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private string GetResponsibleIdName(Guid responsibleId)
             => this.users.GetUser(new UserViewInputModel(responsibleId))?.UserName ?? this.unknown;
 
-        private InterviewStatuses CreateInterviewStatuses(Guid interviewId, Guid questionnaireId, long questionnaireVersion)
-        {
-            return
-                new InterviewStatuses()
-                {
-                    InterviewId = interviewId.FormatGuid(),
-                    QuestionnaireId = questionnaireId,
-                    QuestionnaireVersion = questionnaireVersion
-                };
-        }
-
-        private InterviewStatuses AddCommentedStatus(
+        private InterviewSummary AddCommentedStatus(
             Guid eventId,
-            InterviewStatuses interviewStatuses,
+            InterviewSummary state,
             Guid userId,
             Guid? supervisorId,
             Guid? interviewerId,
@@ -329,16 +265,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             TimeSpan? timeSpanWithPreviousStatus = null;
 
-            if (interviewStatuses.InterviewCommentedStatuses.Any())
+            if (state.InterviewCommentedStatuses.Any())
             {
-                timeSpanWithPreviousStatus = timestamp - interviewStatuses.InterviewCommentedStatuses.Last().Timestamp;
+                timeSpanWithPreviousStatus = timestamp - state.InterviewCommentedStatuses.Last().Timestamp;
             }
             var supervisorName = supervisorId.HasValue ? this.GetResponsibleIdName(supervisorId.Value) : "";
             var interviewerName = interviewerId.HasValue ? this.GetResponsibleIdName(interviewerId.Value) : "";
 
             var statusOriginator = this.users.GetUser(new UserViewInputModel(userId));
 
-            interviewStatuses.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
+            state.InterviewCommentedStatuses.Add(new InterviewCommentedStatus(
                 eventId,
                 userId,
                 supervisorId,
@@ -354,92 +290,88 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 supervisorName,
                 interviewerName));
 
-            return interviewStatuses;
+            return state;
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<TextQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TextQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<NumericRealQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<DateTimeQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<TextListQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TextListQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<PictureQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<PictureQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<UnapprovedByHeadquarters> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<UnapprovedByHeadquarters> @event)
         {
-            var interviewSummary = this.interviewSummares.GetById(@event.EventSourceId);
-            if (interviewSummary == null)
-                return state;
-
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
                 state,
                 @event.Payload.UserId,
-                interviewSummary.TeamLeadId,
-                interviewSummary.ResponsibleId,
+                state.TeamLeadId,
+                state.ResponsibleId,
                 InterviewExportedAction.UnapprovedByHeadquarter,
                 @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<AreaQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }
 
-        public InterviewStatuses Update(InterviewStatuses state, IPublishedEvent<AudioQuestionAnswered> @event)
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AudioQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
         }

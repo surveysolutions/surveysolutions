@@ -16,7 +16,7 @@
     <script type="text/javascript">
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "Reports")';
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
-        var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
+        var $allTeams = '@HttpUtility.JavaScriptStringEncode(Common.AllTeams)';
         $(function () {
             var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction",
                                                            new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" })',

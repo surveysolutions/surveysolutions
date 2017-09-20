@@ -1,3 +1,5 @@
+using System.Linq;
+using Android.Content;
 using Android.Support.Transitions;
 using Android.Support.V7.Widget;
 using Android.Views;
@@ -32,9 +34,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             base.OnBindViewHolder(holder, position);
 
-            var viewModel = (IDashboardItem)this.GetItem(position);
+            var item = this.GetItem(position);
 
-            if (viewModel.HasExpandedView)
+            if(item is IDashboardItem viewModel)
             {
                 var viewHolder = (ExpandableViewHolder)holder;
                 viewHolder.CardClick = (sender) =>
@@ -48,6 +50,34 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     viewModel.IsExpanded = !viewModel.IsExpanded;
                 };
             }
+
+            if(item is IDashboardViewItem viewItem && viewItem.HasAdditionalActions)
+            {
+                var viewHolder = (ExpandableViewHolder)holder;
+
+                viewHolder.MenuClick = (sender, context) =>
+                {
+                    var popup = new PopupMenu(context, viewHolder.MenuHandle);
+
+                    foreach(var action in viewItem.Actions.Where(a => a.Enabled))
+                    {
+                        var menu = popup.Menu.Add(action.Label);
+                        action.MenuItemId = menu.ItemId;
+                    }
+
+                    popup.MenuItemClick += (s, e) =>
+                    {
+                        var action = viewItem.Actions.SingleOrDefault(a => a.MenuItemId == e.Item.ItemId);
+                        if (action?.Action.CanExecute() ?? false)
+                        {
+                            action.Action.Execute();
+                        }
+                    };
+
+                    popup.Show();
+                };
+            }            
         }
+        
     }
 }

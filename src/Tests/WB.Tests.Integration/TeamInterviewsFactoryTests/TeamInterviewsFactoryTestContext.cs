@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             out PostgreReadSideStorage<InterviewSummary> reader,
             out PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader)
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap), typeof(InterviewStatusesMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
         }
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 
         protected static PostgreReadSideStorage<QuestionAnswer> CreateQuestionAnswerRepository()
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(QuestionAnswerMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);

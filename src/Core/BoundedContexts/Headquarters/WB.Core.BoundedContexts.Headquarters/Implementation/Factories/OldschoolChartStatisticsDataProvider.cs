@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 
@@ -22,10 +23,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         public StatisticsGroupedByDateAndTemplate GetStatisticsInOldFormat(Guid questionnaireId, long questionnaireVersion)
         {
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString();
             var count =
                 this.cumulativeReportStatusChangeStorage.QueryOver( _ =>_
-                .Where(change => change.QuestionnaireId == questionnaireId)
-                .Where(change => change.QuestionnaireVersion == questionnaireVersion)
+                .Where(change => change.QuestionnaireIdentity == questionnaireIdentity)
                 .Select(Projections.Count<CumulativeReportStatusChange>(x => x.EntryId))
                 .SingleOrDefault<int>());
 
@@ -33,8 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 return null;
 
             var minMaxDate = this.cumulativeReportStatusChangeStorage.QueryOver(_ => _
-                .Where(change => change.QuestionnaireId == questionnaireId)
-                .Where(change => change.QuestionnaireVersion == questionnaireVersion)
+                .Where(change => change.QuestionnaireIdentity == questionnaireIdentity)
                 .Select(Projections.Min<CumulativeReportStatusChange>(x => x.Date), Projections.Max<CumulativeReportStatusChange>(x => x.Date))
                 .SingleOrDefault<object[]>());
 
@@ -77,9 +77,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
         private Dictionary<InterviewStatus, Dictionary<DateTime, int>> GetCountsForQuestionnaireGroupedByStatusAndDate(Guid questionnaireId, long questionnaireVersion)
         {
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString();
+
             var rawCountsByStatusAndDate = this.cumulativeReportStatusChangeStorage.Query(_ => _
-                .Where(change => change.QuestionnaireId == questionnaireId)
-                .Where(change => change.QuestionnaireVersion == questionnaireVersion)
+                .Where(change => change.QuestionnaireIdentity == questionnaireIdentity)
                 .GroupBy(change => new {change.Status, change.Date})
                 .Select(grouping => new
                 {

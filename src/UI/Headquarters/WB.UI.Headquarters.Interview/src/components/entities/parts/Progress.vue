@@ -13,7 +13,7 @@
             valuenow: { type: Number, default: 100 },
             valuemax: { type: Number, default: 100 },
             visible: { type: Boolean, default: false },
-            delay: { type: Number, default: 150 } // 100 ms default delay
+            delay: { type: Number, default: 150 }
         },
         watch: {
             visible(to, from) {

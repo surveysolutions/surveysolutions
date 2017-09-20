@@ -1,9 +1,12 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.Routing;
-using Elmah.Contrib.WebApi;
+using StackExchange.Exceptional;
 using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
@@ -39,11 +42,20 @@ namespace WB.UI.Designer
         }
     }
 
+    public class ExceptionalLogger : IExceptionLogger
+    {
+        public async Task LogAsync(ExceptionLoggerContext context, CancellationToken cancellationToken)
+        {
+            await context.Exception
+                .LogAsync(HttpContext.Current);
+        }
+    }
+
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Services.Add(typeof(IExceptionLogger), new ElmahExceptionLogger());
+            config.Services.Add(typeof(IExceptionLogger),  new ExceptionalLogger());
 
             //Temporary comment Web API auth during investigation how it works with Angular
             //config.MessageHandlers.Add(new BasicAuthMessageHandler());

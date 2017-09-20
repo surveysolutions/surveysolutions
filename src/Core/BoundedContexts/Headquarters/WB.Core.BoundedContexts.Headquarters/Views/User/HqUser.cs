@@ -45,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int Id { get; set; }
         public virtual string DeviceId { get; set; }
+        public virtual DateTime? DeviceRegistrationDate { get; set; }
         public virtual Guid? SupervisorId { get; set; }
         public virtual string DeviceAppVersion { get; set; }
         public virtual int? DeviceAppBuildVersion { get; set; }

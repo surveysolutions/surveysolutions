@@ -439,7 +439,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiFixedOption)
             {
                 RosterVector answerAsRosterVector = RosterVector.Convert(answer);
-                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answerAsRosterVector);
+                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.Convert(answerAsRosterVector.Array);
                 ((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).SetAnswer(categoricalFixedMultiOptionAnswer);
                 return;
             }
@@ -461,7 +461,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsYesNo) { ((InterviewTreeYesNoQuestion)this.InterviewQuestion).SetAnswer(YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])answer)); return; }
             if (this.IsTextList) { ((InterviewTreeTextListQuestion)this.InterviewQuestion).SetAnswer(TextListAnswer.FromTupleArray((Tuple<decimal, string>[])answer)); return; }
             if (this.IsSingleLinkedToList) { ((InterviewTreeSingleOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
-            if (this.IsMultiLinkedToList) { ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[])); return; }
+            if (this.IsMultiLinkedToList)
+            {
+                var answerAsCategoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.Convert(answer);
+                ((InterviewTreeMultiOptionLinkedToListQuestion)this.InterviewQuestion).SetAnswer(answerAsCategoricalFixedMultiOptionAnswer);
+                return;
+            }
             if (this.IsArea) { ((InterviewTreeAreaQuestion)this.InterviewQuestion).SetAnswer(AreaAnswer.FromArea((Area)answer)); return; }
             if (this.IsAudio) { ((InterviewTreeAudioQuestion)this.InterviewQuestion).SetAnswer((AudioAnswer)answer); return; }
         }
@@ -551,10 +556,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsSingleLinkedToList) return ((InterviewTreeSingleOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer().SelectedValue;
             if (question.IsMultiLinkedToList) return ((InterviewTreeMultiOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToHashSet();
             if (question.IsArea) return ((InterviewTreeAreaQuestion)question.InterviewQuestion).GetAnswer()?.Value;
-            if (question.IsAudio) return ((InterviewTreeAudioQuestion)question.InterviewQuestion).GetAnswer()?.FileName;
+            if (question.IsAudio) return ((InterviewTreeAudioQuestion)question.InterviewQuestion).GetAnswer();
 
             return null;
         }
+
+        [Obsolete("version 5.24. when all tablets have higher version.")]
+        internal static object GetAnswerAsObjectForSync(InterviewTreeQuestion question)
+        {
+            if (!question.IsAnswered()) return null;
+
+            if (question.IsText) return ((InterviewTreeTextQuestion)question.InterviewQuestion).GetAnswer()?.Value;
+            if (question.IsMultimedia) return ((InterviewTreeMultimediaQuestion)question.InterviewQuestion).GetAnswer()?.FileName;
+            if (question.IsQRBarcode) return ((InterviewTreeQRBarcodeQuestion)question.InterviewQuestion).GetAnswer()?.DecodedText;
+            if (question.IsInteger) return ((InterviewTreeIntegerQuestion)question.InterviewQuestion).GetAnswer()?.Value;
+            if (question.IsDouble) return ((InterviewTreeDoubleQuestion)question.InterviewQuestion).GetAnswer()?.Value;
+            if (question.IsDateTime) return ((InterviewTreeDateTimeQuestion)question.InterviewQuestion).GetAnswer()?.Value;
+            if (question.IsGps) return ((InterviewTreeGpsQuestion)question.InterviewQuestion).GetAnswer()?.Value;
+            if (question.IsTextList) return ((InterviewTreeTextListQuestion)question.InterviewQuestion).GetAnswer()?.ToTupleArray();
+            if (question.IsSingleLinkedOption) return ((InterviewTreeSingleLinkedToRosterQuestion)question.InterviewQuestion).GetAnswer()?.SelectedValue.CoordinatesAsDecimals;
+            if (question.IsMultiLinkedOption) return ((InterviewTreeMultiLinkedToRosterQuestion)question.InterviewQuestion).GetAnswer()?.CheckedValues;
+            if (question.IsSingleFixedOption || question.IsCascading) return ((InterviewTreeSingleOptionQuestion)question.InterviewQuestion).GetAnswer()?.SelectedValue;
+            if (question.IsMultiFixedOption) return ((InterviewTreeMultiOptionQuestion)question.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray();
+            if (question.IsYesNo) return ((InterviewTreeYesNoQuestion)question.InterviewQuestion).GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray();
+            if (question.IsSingleLinkedToList) return ((InterviewTreeSingleOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer().SelectedValue;
+            if (question.IsMultiLinkedToList) return ((InterviewTreeMultiOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray();
+            if (question.IsArea) return ((InterviewTreeAreaQuestion)question.InterviewQuestion).GetAnswer()?.Value;
+            if (question.IsAudio) return ((InterviewTreeAudioQuestion)question.InterviewQuestion).GetAnswer();
+
+            return null;
+        }
+
 
         public void UpdateLinkedOptionsAndResetAnswerIfNeeded(RosterVector[] options, bool removeAnswer = true)
         {
@@ -732,7 +764,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeDateTimeQuestion) this.MemberwiseClone();
 
-        public string UiFormatString => IsTimestamp ? "yyyy-MM-dd HH:mm:ss" : "yyyy-MM-dd";
+        public string UiFormatString => IsTimestamp ? DateTimeFormat.DateWithTimeFormat : DateTimeFormat.DateFormat;
 
         public override string ToString() => this.answer?.Value.ToString(UiFormatString) ?? "NO ANSWER";
 
@@ -1117,7 +1149,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeMultiOptionQuestion(object answer) : base (InterviewQuestionType.MultiFixedOption)
         {
-            this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
+            this.answer = CategoricalFixedMultiOptionAnswer.Convert(answer);
         }
 
         public override bool IsAnswered() => this.answer != null && this.answer.CheckedValues.Count > 0;
@@ -1277,7 +1309,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeMultiOptionLinkedToListQuestion(object answer, Guid linkedToQuestionId) : base(linkedToQuestionId, InterviewQuestionType.MultiLinkedToList)
         {
-            this.answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(answer as decimal[]);
+            this.answer = CategoricalFixedMultiOptionAnswer.Convert(answer);
             this.Options = EmptyArray<int>.Value;
         }
 

@@ -24,8 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
             questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             gpsVariableName = "gps";
 
-            var interviews = new TestInMemoryWriter<InterviewReferences>();
-            interviews.Store(Create.Entity.InterviewReferences(questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
+            var interviews = new TestInMemoryWriter<InterviewSummary>();
+            interviews.Store(Create.Entity.InterviewSummary(interviewId, questionnaireId: questionnaireId, questionnaireVersion: 1), interviewId);
 
             mapPoints = new TestInMemoryWriter<MapReportPoint>();
             var questionnaireQuestionsInfo = new QuestionnaireQuestionsInfo

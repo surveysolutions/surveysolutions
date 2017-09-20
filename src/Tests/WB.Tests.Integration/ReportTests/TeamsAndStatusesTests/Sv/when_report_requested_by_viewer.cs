@@ -33,11 +33,11 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             reportFactory = CreateSvTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel { ViewerId = viewerId }));
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel { ViewerId = viewerId }));
 
         It should_count_number_of_interviews_for_teamlead = () => report.Items.First().CompletedCount.ShouldEqual(2);
 
-        static SupervisorTeamsAndStatusesReport reportFactory;
+        static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
         static Guid viewerId;
     }

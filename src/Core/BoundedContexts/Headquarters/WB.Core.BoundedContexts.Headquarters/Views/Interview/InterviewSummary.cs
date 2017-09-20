@@ -12,6 +12,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewSummary()
         {
             this.AnswersToFeaturedQuestions = new List<QuestionAnswer>();
+            this.InterviewCommentedStatuses = new List<InterviewCommentedStatus>();
+            this.TimeSpansBetweenStatuses = new HashSet<TimeSpanBetweenStatuses>();
         }
 
         public InterviewSummary(QuestionnaireDocument questionnaire) : this()
@@ -68,7 +70,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual int? AssignmentId { get; set; }
 
+        public virtual bool WasCompleted { get; set; }
+
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
+
+        public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
 
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {

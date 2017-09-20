@@ -27,15 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
     public class SpeedReportFactory: ISpeedReportFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage;
 
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
-
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage, 
-            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
+        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;
-            this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
         }
 
         private class StatusChangeRecord
@@ -147,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             if (questionnaireId != Guid.Empty)
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewStatusesStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics =>
@@ -158,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             else
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics =>
                             ics.EndStatusTimestamp >= from &&
@@ -332,7 +328,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             yield return Report.COLUMN_TEAM_MEMBER;
 
-            foreach (var date in view.DateTimeRanges.Select(y => y.From.ToString("yyyy-MM-dd")))
+            foreach (var date in view.DateTimeRanges.Select(y => y.To.ToString("yyyy-MM-dd")))
                 yield return date;
 
             yield return Report.COLUMN_AVERAGE;

@@ -75,9 +75,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                             new HeaderStructureForLevel()
                             {
                                 HeaderItems =
-                                    new Dictionary<Guid, ExportedHeaderItem>()
+                                    new Dictionary<Guid, IExportedHeaderItem>()
                                     {
-                                        {questionId, new ExportedHeaderItem() {VariableName = variableName}}
+                                        {questionId, new ExportedQuestionHeaderItem() {VariableName = variableName}}
                                     }
                             }
                         }

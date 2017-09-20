@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
@@ -71,8 +72,6 @@ namespace WB.UI.Designer.App_Start
             }
 
             var cacheSettings = new ReadSideCacheSettings(
-                enableEsentCache: settingsProvider.AppSettings.GetBool("Esent.Cache.Enabled", @default: true),
-                esentCacheFolder: Path.Combine(appDataDirectory, settingsProvider.AppSettings.GetString("Esent.Cache.Folder", @default: @"Temp\EsentCache")),
                 cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
                 storeOperationBulkSize: settingsProvider.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
 
@@ -105,7 +104,7 @@ namespace WB.UI.Designer.App_Start
                 new NLogLoggingModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
-                new DesignerRegistry(pdfSettings, deskSettings),
+                new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),
@@ -114,6 +113,8 @@ namespace WB.UI.Designer.App_Start
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(MvcApplication).Assembly)
                 );
+
+            kernel.Bind<IAggregateRootCacheCleaner>().To<DummyAggregateRootCacheCleaner>().InSingletonScope();
 
             kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
                 .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()

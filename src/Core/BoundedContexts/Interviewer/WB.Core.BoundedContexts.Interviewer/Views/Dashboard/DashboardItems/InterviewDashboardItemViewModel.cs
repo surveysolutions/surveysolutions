@@ -12,10 +12,11 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using MvvmCross.Platform.UI;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel
+    public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
@@ -78,12 +79,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 interview.QuestionnaireTitle = questionnaire.Title;
             }
 
+            if (!string.IsNullOrWhiteSpace(interview.InterviewKey))
+                this.IdLabel = InterviewerUIResources.Dashboard_CardIdTitleFormat.FormatString(interview.InterviewKey);
+            else
+                this.IdLabel = InterviewerUIResources.Dashboard_No_InterviewKey;
+
             this.InterviewId = interview.InterviewId;
             this.AssignmentId = interview.Assignment;
+
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
             this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, interview.QuestionnaireTitle, questionnaireIdentity.Version.ToString());
-            this.DateComment = this.GetInterviewDateCommentByStatus(interview);
-            this.Comment = this.GetInterviewCommentByStatus(interview);
 
             if (interview.LocationQuestionId.HasValue && interview.LocationLatitude.HasValue && interview.LocationLongitude.HasValue)
             {
@@ -93,11 +98,35 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     Longitude = interview.LocationLongitude ?? 0
                 };
             }
-            this.IsSupportedRemove = interview.CanBeDeleted;
 
-            if (interview.Assignment != null)
+            var comment = GetInterviewCommentByStatus(interview);
+            var dateComment = GetInterviewDateCommentByStatus(interview);
+
+            this.SubTitle = dateComment;
+
+            if (interview.AnsweredQuestionsCount > 0)
             {
-                this.Title = string.Format(InterviewerUIResources.Dashboard_InterviewCard_Title, interview.Assignment.ToString(), interview.InterviewKey);
+                SubTitle += ", " +
+                    InterviewerUIResources.Dashboard_Interview_QuestionsAnsweredFormat.FormatString(interview
+                        .AnsweredQuestionsCount);
+            }
+
+            this.SubTitle += $"\n{comment}";
+            if (AssignmentId.HasValue)
+            {
+                this.AssignmentIdLabel = InterviewerUIResources.Dashboard_Interview_AssignmentLabelFormat
+                    .FormatString(AssignmentId);
+            }
+            else
+            {
+                this.AssignmentIdLabel = InterviewerUIResources.Dashboard_CensusAssignment;
+            }
+
+            this.IsSupportedRemove = interview.CanBeDeleted;
+            
+            if (interview.Assignment != null || interview.Census)
+            {
+                this.Title = QuestionnaireName;
             }
 
             this.DetailedIdentifyingData = this.GetPrefilledQuestions().ToList();
@@ -105,7 +134,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             this.HasExpandedView = this.PrefilledQuestions.Count > 0;
             this.IsExpanded = false;
+
+            this.RaiseAllPropertiesChanged();
         }
+
+        public string IdLabel { get; set; }
+
+        public string MainActionLabel => InterviewerUIResources.Dashboard_Open;
+        public IMvxAsyncCommand MainAction => new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad);
+        public bool MainActionEnabled { get; } = true;
+
+        public bool HasAdditionalActions => Actions.Any(a => a.Enabled);
+        
+        public string AssignmentIdLabel { get; set; }
+        public string SubTitle { get; set; }
+
+        public MenuAction[] Actions => new []
+        {
+            new MenuAction(InterviewerUIResources.Dashboard_Discard, new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad), IsSupportedRemove)
+        };
 
         private string GetInterviewDateCommentByStatus(InterviewView interview)
         {
@@ -128,9 +175,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             if (!utcDateTimeWithOutKind.HasValue)
                 return string.Empty;
-
+            
             var utcDateTime = DateTime.SpecifyKind(utcDateTimeWithOutKind.Value, DateTimeKind.Utc);
-            return string.Format(formatString, utcDateTime.ToLocalTime().ToString(CultureInfo.CurrentUICulture));
+            var culture = CultureInfo.CurrentUICulture;
+            return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
 
         private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
@@ -158,7 +206,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             switch (this.Status)
             {
                 case DashboardInterviewStatus.New:
-                    return InterviewerUIResources.DashboardItem_NotStarted;
+                    return string.Empty; //InterviewerUIResources.DashboardItem_NotStarted;
                 case DashboardInterviewStatus.Completed:
                 case DashboardInterviewStatus.Rejected:
                     return interview.LastInterviewerOrSupervisorComment;
@@ -170,7 +218,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private IEnumerable<PrefilledQuestion> GetPrefilledQuestions() => this.prefilledQuestions
             .Where(_ => _.InterviewId == this.InterviewId)
             .OrderBy(x => x.SortIndex)
-            .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText});
+            .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText });
 
         private async Task RemoveInterviewAsync()
         {
@@ -206,10 +254,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     {
                         return;
                     }
-                    
+
                 }
 
-                this.viewModelNavigationService.NavigateTo<LoadingViewModel>(new {interviewId = this.InterviewId});
+                this.viewModelNavigationService.NavigateTo<LoadingViewModel>(new { interviewId = this.InterviewId });
             }
             finally
             {

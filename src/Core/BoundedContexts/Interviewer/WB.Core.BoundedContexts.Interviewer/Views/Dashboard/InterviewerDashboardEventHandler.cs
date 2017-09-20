@@ -39,7 +39,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<AudioQuestionAnswered>,
 
                                          ILitePublishedEventHandler<AnswersRemoved>,
-
                                          ILitePublishedEventHandler<InterviewOnClientCreated>,
                                          ILitePublishedEventHandler<InterviewFromPreloadedDataCreated>,
                                          ILitePublishedEventHandler<AnswerRemoved>,
@@ -168,8 +167,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 RejectedDateTime = rejectedDateTime,
                 CanBeDeleted = canBeDeleted,
                 Assignment = assignmentId,
-                LastInterviewerOrSupervisorComment = comments
-        };
+                LastInterviewerOrSupervisorComment = comments,
+                AnsweredQuestionsCount = answeredQuestions.Count()
+            };
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
@@ -232,12 +232,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             if (item == null)
                 return null;
 
-            var geoPositionAnswer = item.Answer as GeoPosition;
-            if (geoPositionAnswer != null)
+            if (item.Answer is GeoPosition geoPositionAnswer)
                 return geoPositionAnswer;
 
-            var geoPositionString = item.Answer as string;
-            if (geoPositionString != null)
+            if (item.Answer is string geoPositionString)
                 return GeoPosition.FromString(geoPositionString);
 
             return null;
@@ -310,6 +308,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.AnswerOnPrefilledQuestion(interviewId, questionId, answer);
             this.SetStartedDateTimeOnFirstAnswer(interviewId, questionId, answerTimeUtc);
+            HandleAnswersCount(interviewId, answer != null);
+        }
+
+        private void HandleAnswersCount(Guid interviewId, bool addAnswer)
+        {
+            var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
+            if (interviewView == null) return;
+
+            interviewView.AnsweredQuestionsCount += addAnswer ? 1 : -1;
+
+            this.interviewViewRepository.Store(interviewView);
         }
 
         private readonly HashSet<Guid> interviewsWithExistedStartedDateTime = new HashSet<Guid>();
@@ -351,6 +360,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
             if (!questionnaire.IsPrefilled(questionId))
                 return;
+
+            interviewView.AnsweredQuestionsCount--;
 
             if (questionId == interviewView.LocationQuestionId)
             {

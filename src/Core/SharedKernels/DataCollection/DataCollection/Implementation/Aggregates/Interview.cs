@@ -228,7 +228,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var question = this.Tree.GetQuestion(questionIdentity);
 
-            question.SetAnswer(CategoricalFixedMultiOptionAnswer.FromDecimalArray(@event.SelectedValues));
+            question.SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(@event.SelectedValues));
             
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             if (this.UsesExpressionStorage) return;
@@ -1150,10 +1150,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isLinkedToList)
             {
-                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
+                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(selectedValues));
             }
             else
-                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(selectedValues));
+                changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(selectedValues));
 
             changedInterviewTree.ActualizeTree();
 
@@ -1413,11 +1413,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.QuestionnaireIdentity.QuestionnaireId, 
                 this.QuestionnaireIdentity.Version, 
                 command.AssignmentId,
-                questionnaire.IsUsingExpressionStorage()));
+                questionnaire.IsUsingExpressionStorage(),
+                command.AnswersTime));
 
             this.ApplyEvents(treeDifference, command.UserId);
 
-            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
+            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.AnswersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
 
             if (command.InterviewerId.HasValue)
@@ -1551,32 +1552,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
 
-        public void SetFlagToAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
-        {
-            new InterviewPropertiesInvariants(this.properties)
-                .RequireAnswerCanBeChanged();
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
-                .RequireQuestionExists();
-
-            this.ApplyEvent(new FlagSetToAnswer(userId, questionId, rosterVector));
-        }
-
-        public void RemoveFlagFromAnswer(Guid userId, Guid questionId, RosterVector rosterVector)
-        {
-            new InterviewPropertiesInvariants(this.properties)
-                .RequireAnswerCanBeChanged();
-
-            IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
-            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
-                .RequireQuestionExists();
-
-            this.ApplyEvent(new FlagRemovedFromAnswer(userId, questionId, rosterVector));
-        }
-
         private void AssignResponsible(Guid userId, Guid? interviewerId, Guid? supervisorId, DateTime? assignTime)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
@@ -1597,15 +1572,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             // events
             if (isNeedPerformAssignToSupervisor)
             {
-                this.FireSupervisorAssignedEvents(userId, supervisorId.Value);
+                this.FireSupervisorAssignedEvents(userId, supervisorId.Value, assignTime);
             }
 
             this.FireInterviewerAssignedEvents(userId, interviewerId, assignTime);
         }
 
-        private void FireSupervisorAssignedEvents(Guid userId, Guid supervisorId)
+        private void FireSupervisorAssignedEvents(Guid userId, Guid supervisorId, DateTime? assignTime)
         {
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, assignTime));
 
             if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
             {
@@ -2456,7 +2431,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (KeyValuePair<Identity, int[]> changedMultiQuestion in structuralChanges.ChangedMultiQuestions)
             {
-                tree.GetQuestion(changedMultiQuestion.Key).SetAnswer(CategoricalFixedMultiOptionAnswer.FromInts(changedMultiQuestion.Value));
+                tree.GetQuestion(changedMultiQuestion.Key).SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(changedMultiQuestion.Value));
             }
 
             foreach (KeyValuePair<Identity, int?> changedSingleQuestion in structuralChanges.ChangedSingleQuestions)

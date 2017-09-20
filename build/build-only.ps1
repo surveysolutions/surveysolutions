@@ -9,7 +9,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
-$ProjectWebInterview = 'src\UI\Headquarters\WB.UI.Headquarters.Interview'
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
 $MainSolution = 'src\WB.sln'
@@ -38,6 +37,8 @@ try {
         -BuildConfiguration $BuildConfiguration
     if ($buildSuccessful) { 
 
+        New-Item "$artifactsFolder\stats" -Type Directory -Force
+
         BuildStaticContent "Designer Questionnaire" "src\UI\Designer\WB.UI.Designer\questionnaire" | % { if (-not $_) { 
             Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
             Write-Host "##teamcity[buildProblem description='Failed to build static content for Designer']"
@@ -48,23 +49,27 @@ try {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ']"
                 Exit 
-            }}
+        }}
 
-        BuildStaticContent "Hq UI" "src\UI\Headquarters\WB.UI.Headquarters\HqApp" | % { if (-not $_) {
+        BuildStaticContent "Hq App" "src\UI\Headquarters\WB.UI.Headquarters\HqApp" | % { if (-not $_) {
                 Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ App']"
                 Exit 
         } else {
-            Move-Item "..\WB.UI.Headquarters\HqApp\dist\stats.html" "$artifactsFolder\HqApp.stats.html" -ErrorAction SilentlyContinue
+            Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
+            Move-Item ".\dist\stats.vendor.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
         }}
 
-        BuildStaticContent "Web Interview" $ProjectWebInterview | % { if (-not $_) { 
+        BuildStaticContent "Web Interview" 'src\UI\Headquarters\WB.UI.Headquarters.Interview' | % { if (-not $_) { 
             Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
             Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
             Exit
         } else {
-            Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\WebInterview.stats.html" -ErrorAction SilentlyContinue
+            Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\stats\WebInterview.html" -ErrorAction SilentlyContinue
         }}
+
+        Compress-Archive -Path "$artifactsFolder\stats\*.*" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal
+        Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration

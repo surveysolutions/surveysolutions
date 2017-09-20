@@ -61,11 +61,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All periods.
+        /// </summary>
+        public static string AllPeriods {
+            get {
+                return ResourceManager.GetString("AllPeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Teams.
+        /// </summary>
+        public static string AllTeams {
+            get {
+                return ResourceManager.GetString("AllTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to any headquarters.
         /// </summary>
         public static string AnyHeadquarters {
             get {
                 return ResourceManager.GetString("AnyHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        public static string Assignments {
+            get {
+                return ResourceManager.GetString("Assignments", resourceCulture);
             }
         }
         
@@ -165,6 +192,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string HQ_Views_Manage_Title {
             get {
                 return ResourceManager.GetString("HQ_Views_Manage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews.
+        /// </summary>
+        public static string Interviews {
+            get {
+                return ResourceManager.GetString("Interviews", resourceCulture);
             }
         }
         

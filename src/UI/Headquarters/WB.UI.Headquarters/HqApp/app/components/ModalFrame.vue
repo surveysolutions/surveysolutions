@@ -1,5 +1,5 @@
 <template>
-      <div class="modal fade" :id="id" tabindex="-1" role="dialog">
+      <div class="modal fade" :id="id" ref="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -25,6 +25,16 @@ export default {
         canClose: {
             type: Boolean,
             default() { return true ;}
+        }
+    },
+
+    methods:{
+        hide() {
+            $(this.$refs.modal).modal("hide");
+        },
+
+        modal(options){
+            $(this.$refs.modal).modal(options)
         }
     }
     

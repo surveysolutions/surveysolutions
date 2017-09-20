@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -82,11 +83,13 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<DashboardSubTitleViewModel>();
             registry.Bind<CompanyLogoSynchronizer>();
             registry.Bind<LoadingViewModel>();
-
+            
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
+            registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
 #else
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
+            registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
         }
