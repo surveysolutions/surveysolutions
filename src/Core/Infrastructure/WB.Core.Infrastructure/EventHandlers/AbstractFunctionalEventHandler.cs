@@ -52,10 +52,7 @@ namespace WB.Core.Infrastructure.EventHandlers
 
             TEntity currentState = GetViewById(evt.EventSourceId, storage);
 
-            var newState = (TEntity) this
-                .GetType()
-                .GetTypeInfo().GetMethod("Update", new[] { typeof(TEntity), eventType })
-                .Invoke(this, new object[] { currentState, this.CreatePublishedEvent(evt) });
+            var newState = ApplyEventOnEntity(evt, eventType, currentState);
 
             if (newState != null)
             {
@@ -67,12 +64,21 @@ namespace WB.Core.Infrastructure.EventHandlers
             }
         }
 
+        protected virtual TEntity ApplyEventOnEntity(IPublishableEvent evt, Type eventType, TEntity currentState)
+        {
+            var newState = (TEntity) this
+                .GetType()
+                .GetTypeInfo().GetMethod("Update", new[] {typeof(TEntity), eventType})
+                .Invoke(this, new object[] {currentState, this.CreatePublishedEvent(evt)});
+            return newState;
+        }
+
         private static void RemoveView(Guid id, IReadSideStorage<TEntity> storage)
         {
             storage.Remove(id);
         }
 
-        public void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
+        public virtual void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
         {
             var handlerMethodNames = new string[] { "Create", "Update", "Delete" };
 
@@ -88,7 +94,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             return eventParameter.GenericTypeArguments[0];
         }
 
-        private void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
+        protected void RegisterOldFashionHandler(InProcessEventBus oldEventBus, MethodInfo method)
         {
             var evntType = ExtractEventType(method);
             oldEventBus.RegisterHandler(eventType: evntType, eventHandlerType: this.GetType(), handle: this.Handle);
@@ -104,13 +110,13 @@ namespace WB.Core.Infrastructure.EventHandlers
             return storage.GetById(id);
         }
 
-        private PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
+        protected PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
         {
             var publishedEventClosedType = typeof(PublishedEvent<>).MakeGenericType(evt.Payload.GetType());
             return (PublishedEvent)Activator.CreateInstance(publishedEventClosedType, evt);
         }
 
-        private bool Handles(IUncommittedEvent evt)
+        protected virtual bool Handles(IUncommittedEvent evt)
         {
             Type genericUpgrader = typeof(IUpdateHandler<,>);
             return genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo().IsAssignableFrom(this.GetType());

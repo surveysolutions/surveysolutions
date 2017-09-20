@@ -13,11 +13,11 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             reportFactory = CreateSvTeamsAndStatusesReport();
         };
 
-        private Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel()));
+        private Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel()));
 
         private It should_return_0_records = () => report.TotalCount.ShouldEqual(0);
 
-        private static SupervisorTeamsAndStatusesReport reportFactory;
+        private static TeamsAndStatusesReport reportFactory;
         private static TeamsAndStatusesReportView report;
     }
 }

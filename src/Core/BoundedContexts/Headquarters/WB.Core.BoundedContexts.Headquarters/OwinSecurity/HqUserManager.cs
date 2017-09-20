@@ -153,7 +153,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public virtual void LinkDeviceToInterviewer(Guid interviewerId, string deviceId)
+        public virtual void LinkDeviceToInterviewer(Guid interviewerId, string deviceId, DateTime deviceRegistrationDate)
         {
             var currentUser = this.FindById(interviewerId);
 
@@ -166,6 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 throw new AuthenticationException(@"Only interviewer can be linked to device");
 
             currentUser.Profile.DeviceId = deviceId;
+            currentUser.Profile.DeviceRegistrationDate = deviceRegistrationDate;
             this.UpdateUser(currentUser, null);
         }
 

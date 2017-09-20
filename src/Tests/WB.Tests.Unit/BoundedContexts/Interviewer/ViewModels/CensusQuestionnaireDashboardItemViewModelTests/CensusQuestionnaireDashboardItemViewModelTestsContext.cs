@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -30,7 +31,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
                 principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                 viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                 messenger: messenger ?? Mock.Of<IMvxMessenger>(),
-                interviewViewRepository: interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
+                interviewViewRepository: interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                keyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>());
         }
     }
 }

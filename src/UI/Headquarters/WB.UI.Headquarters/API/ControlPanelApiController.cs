@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Caching;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.Implementation.ReadSide;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
@@ -11,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
@@ -24,28 +21,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         public class VersionsInfo
         {
-            public VersionsInfo(string product, int readSideApplication, int? readSideDatabase, Dictionary<DateTime, string> history)
+            public VersionsInfo(string product, Dictionary<DateTime, string> history)
             {
                 this.Product = product;
-                this.ReadSide_Application = readSideApplication;
-                this.ReadSide_Database = readSideDatabase;
                 this.History = history;
             }
 
             public string Product { get; }
-            public int ReadSide_Application { get; }
-            public int? ReadSide_Database { get; }
             public Dictionary<DateTime, string> History { get; }
         }
 
         private const string DEFAULTEMPTYQUERY = "";
         private const int DEFAULTPAGESIZE = 12;
 
-        private readonly IReadSideAdministrationService readSideAdministrationService;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
         private readonly ISynchronizationLogViewFactory synchronizationLogViewFactory;
         private readonly IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory;
-        private readonly MemoryCache cache = MemoryCache.Default;
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
@@ -54,7 +45,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
 
         public ControlPanelApiController(
-            IReadSideAdministrationService readSideAdministrationService,
             IInterviewPackagesService incomingSyncPackagesQueue,
             ISynchronizationLogViewFactory synchronizationLogViewFactory,
             IBrokenInterviewPackagesViewFactory brokenInterviewPackagesViewFactory,
@@ -64,7 +54,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IInterviewPackagesService interviewPackagesService,
             IUserViewFactory userViewFactory)
         {
-            this.readSideAdministrationService = readSideAdministrationService;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
             this.brokenInterviewPackagesViewFactory = brokenInterviewPackagesViewFactory;
@@ -78,43 +67,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [NoTransaction]
         public VersionsInfo GetVersions()
         {
-            var readSideStatus = this.readSideAdministrationService.GetRebuildStatus();
-
             return new VersionsInfo(
                 this.productVersion.ToString(),
-                readSideStatus.ReadSideApplicationVersion,
-                readSideStatus.ReadSideDatabaseVersion,
                 this.productVersionHistory.GetHistory().ToDictionary(
                     change => change.UpdateTimeUtc,
                     change => change.ProductVersion));
         }
-
-        public IEnumerable<ReadSideEventHandlerDescription> GetAllAvailableHandlers()
-            => this.readSideAdministrationService.GetAllAvailableHandlers();
-        
-        [NoTransaction]
-        public ReadSideStatus GetReadSideStatus() => this.readSideAdministrationService.GetRebuildStatus();
-
-        [HttpPost]
-        public void RebuildReadSide(RebuildReadSideInputViewModel model)
-        {
-            switch (model.RebuildType)
-            {
-                case RebuildReadSideType.All:
-                    this.readSideAdministrationService.RebuildAllViewsAsync(model.NumberOfSkipedEvents);
-                    break;
-                case RebuildReadSideType.ByHandlers:
-                    this.readSideAdministrationService.RebuildViewsAsync(model.ListOfHandlers, model.NumberOfSkipedEvents);
-                    break;
-                case RebuildReadSideType.ByHandlersAndEventSource:
-                    this.readSideAdministrationService.RebuildViewForEventSourcesAsync(model.ListOfHandlers, model.ListOfEventSources);
-                    break;
-            }
-        }
-
-        [HttpPost]
-        [NoTransaction]
-        public void StopReadSideRebuilding() => this.readSideAdministrationService.StopAllViewsRebuilding();
 
         [HttpGet]
         public int GetIncomingPackagesQueueLength() => this.incomingSyncPackagesQueue.QueueLength;

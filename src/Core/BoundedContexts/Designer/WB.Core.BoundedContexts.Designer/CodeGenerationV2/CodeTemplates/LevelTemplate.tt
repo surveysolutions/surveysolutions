@@ -141,40 +141,36 @@
 
         public int RowIndex => @rowindex;
 
-		// backward compatibility
-		
+		// backward compatibility		
 
-		private QuestionnaireRandom Quest;
-		
+		private QuestionnaireRandom Quest;		
 <#
 	foreach (var question in Model.Questions) 
     {
-#>            
-		public <#=question.TypeName#> <#=question.Variable#> => _state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, RosterVector.Take(<#=question.RosterScope.Length#>));
+#>        public <#=question.TypeName#> <#=question.Variable#> => _state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, <#=
+			question.RosterScope.Length > 0 ? "RosterVector.Take(" + question.RosterScope.Length + ")" : "RosterVector.Empty" #>);
 <# 
 	}
 #>
 <#
 	foreach (var variable in Model.Variables) 
     {
-#>            
-		public <#=variable.TypeName#> <#=variable.Variable#> => _state.GetVariable<<#=variable.TypeName#>>(IdOf.<#=variable.Variable#>, RosterVector.Take(<#=variable.RosterScope.Length#>));
+#>        public <#=variable.TypeName#> <#=variable.Variable#> => _state.GetVariable<<#=variable.TypeName#>>(IdOf.<#=variable.Variable#>, <#=
+			variable.RosterScope.Length > 0 ? "RosterVector.Take(" + variable.RosterScope.Length + ")" : "RosterVector.Empty" #>);
 <# 
 	}
 #>
 <#
 	foreach (var roster in Model.Rosters) 
     {
-#>            
-		public RostersCollection<<#=roster.ClassName#>> <#=roster.Variable#> => _storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>, <#=roster.RosterScope.Length == 1? "null" : "Identity"#>);
+#>        public RostersCollection<<#=roster.ClassName#>> <#=roster.Variable#> => _storage.GetLevels<<#=roster.ClassName#>>(IdOf.<#=roster.Variable#>, <#=roster.RosterScope.Length == 1? "null" : "Identity"#>);
 <# 
 	}
 #>
 <#
 	foreach (var table in Storage.LookupTables) 
     {
-#>
-		public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => LookupTables.<#= table.TableName #>;
+#>        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => LookupTables.<#= table.TableName #>;
 <# 
 	}
 #>

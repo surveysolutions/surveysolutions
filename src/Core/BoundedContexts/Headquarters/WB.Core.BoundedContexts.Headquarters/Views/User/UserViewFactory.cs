@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -18,15 +19,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         protected IUserRepository UserRepository => this.userRepository ?? ServiceLocator.Current.GetInstance<IUserRepository>();
 
-        public UserViewFactory(IUserRepository UserRepository)
+        public UserViewFactory(IUserRepository userRepository)
         {
-            this.userRepository = UserRepository;
+            this.userRepository = userRepository;
         }
 
         public UserViewFactory()
         {
         }
-
+        
         public UserView GetUser(UserViewInputModel input)
         {
             var repository = this.UserRepository;
@@ -44,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 RoleId = user.Roles.FirstOrDefault().RoleId,
                 DeviceId = user.Profile.DeviceId,
                 SupervisorId = user.Profile.SupervisorId,
-                SupervisorName = repository.Users.Select(x => new { Id = x.Id, Name = x.UserName })
+                SupervisorName = repository.Users.Select(x => new { x.Id, Name = x.UserName })
                     .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
                     .Name
             });
@@ -73,11 +74,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 IsLockedBySupervisor = dbUser.IsLockedBySupervisor,
                 CreationDate = dbUser.CreationDate,
                 Supervisor = dbUser.SupervisorId.HasValue
-                        ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
-                        : null,
+                    ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
+                    : null,
                 Roles = new HashSet<UserRoles>(new[] { dbUser.RoleId.ToUserRole() })
             };
-
         }
 
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
@@ -113,12 +113,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool archived = false)
+        public UsersView GetInterviewers(int pageSize, string searchBy, Guid? supervisorId, bool showLocked = false, bool? archived = false)
         {
             Func<IQueryable<HqUser>, IQueryable<HqUser>> query = users =>
             {
                 users = ApplyFilter(users, searchBy, archived, UserRoles.Interviewer)
-                    .Where(user => !user.IsLockedBySupervisor && !user.IsLockedByHeadquaters);
+                    .Where(user => showLocked || (!user.IsLockedBySupervisor && !user.IsLockedByHeadquaters));
 
                 if (supervisorId.HasValue)
                     users = users.Where(user => user.Profile.SupervisorId == supervisorId);
@@ -177,7 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                                                 (
                                                 deviceSyncInfo.DeviceDate == DateTime.MinValue ||
                                                 Math.Abs((long)DbFunctions.DiffMinutes(
-                                                    deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) > 
+                                                    deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) >
                                                     InterviewerIssuesConstants.MinutesForWrongTime
                                                     )
                                        select i;
@@ -240,11 +240,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
-        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false)
+        public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false)
         {
             Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
             {
-                var responsible = ApplyFilter(users, searchBy, false, UserRoles.Supervisor, UserRoles.Interviewer)
+                bool? isArchivedShowed = showArchived ? (bool?)null : false;
+
+                var responsible = ApplyFilter(users, searchBy, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer)
                     .Where(user => showLocked || !user.IsLockedByHeadquaters);
 
                 return responsible.Select(x => new ResponsiblesViewItem

@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITransactionManagerProvider transactionManager;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
         private readonly ILogger logger;
 
         protected InterviewActionsExporter()
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IFileSystemAccessor fileSystemAccessor, 
             ICsvWriter csvWriter, 
             ITransactionManagerProvider transactionManager, 
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses,
             ILogger logger)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
@@ -69,8 +69,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var stopwatch = Stopwatch.StartNew();
             foreach (var interviewsBatch in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
-                var interviewIdsStrings = interviewsBatch.Select(x => x.FormatGuid()).ToArray();
-                Expression<Func<InterviewStatuses, bool>> whereClauseForAction = 
+                var interviewIdsStrings = interviewsBatch.Select(x => x).ToArray();
+                Expression<Func<InterviewSummary, bool>> whereClauseForAction = 
                     x => interviewIdsStrings.Contains(x.InterviewId);
                 string[][] actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction));
 
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             progress.Report(100);
         }
 
-        private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewStatuses, bool>> queryActions)
+        private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewSummary, bool>> queryActions)
         {
             var interviews =
               this.interviewStatuses.Query(_ => _
@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             {
                 var resultRow = new List<string>
                 {
-                    interview.InterviewId,
+                    interview.InterviewId.FormatGuid(),
                     interview.Status.ToString(),
                     interview.StatusChangeOriginatorName,
                     this.GetUserRole(interview.StatusChangeOriginatorRole),

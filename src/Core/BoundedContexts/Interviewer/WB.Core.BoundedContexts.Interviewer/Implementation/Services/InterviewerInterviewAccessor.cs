@@ -171,10 +171,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());
 
-            var interviewStatus = info.IsRejected ? InterviewStatus.RejectedBySupervisor : InterviewStatus.InterviewerAssigned;
             var interviewDetails = this.synchronizationSerializer.Deserialize<InterviewSynchronizationDto>(details.Details);
+            var interviewStatus = interviewDetails.Status;
 
-           var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
+            var synchronizeInterviewCommand = new SynchronizeInterviewCommand(
                 interviewId: info.Id,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 featuredQuestionsMeta: details.AnswersOnPrefilledQuestions ?? new AnsweredQuestionSynchronizationDto[0],

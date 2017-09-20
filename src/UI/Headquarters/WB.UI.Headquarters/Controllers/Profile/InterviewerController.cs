@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
 using Resources;
-using WB.Core.BoundedContexts.Headquarters.Documents;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -31,21 +30,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
-        private readonly IReadSideRepositoryWriter<TabletDocument> tabletDocumentReader;
 
         public InterviewerController(ICommandService commandService,
                               ILogger logger,
                               IAuthorizedUser authorizedUser,
                               HqUserManager userManager,
                               IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
-                              IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader,
-                              IReadSideRepositoryWriter<TabletDocument> tabletDocumentReader)
+                              IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader)
             : base(commandService, logger, authorizedUser, userManager)
         {
             this.interviewRepository = interviewRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
-            this.tabletDocumentReader = tabletDocumentReader;
         }
 
         [Authorize(Roles = "Administrator, Headquarter")]
@@ -107,16 +103,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
             var hasUpdateForInterviewerApp = false;
-            DateTime? deviceAssignmentDate = null;
 
             if (lastSuccessDeviceInfo != null)
             {
                 int? interviewerApkVersion = interviewerVersionReader.Version;
                 hasUpdateForInterviewerApp = interviewerApkVersion.HasValue && interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
-
-                var magicDeviceId = lastSuccessDeviceInfo.DeviceId.ToGuid().FormatGuid();
-                var tabletDocument = this.tabletDocumentReader.GetById(magicDeviceId);
-                deviceAssignmentDate = tabletDocument?.RegistrationDate;
             }
 
             var interviewerProfileModel = new InterviewerProfileModel
@@ -138,7 +129,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(userId),
                 AverageSyncSpeedBytesPerSecond = this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(userId),
                 SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId, interviewer.Profile.DeviceId),
-                DeviceAssignmentDate = deviceAssignmentDate
+                DeviceAssignmentDate = interviewer.Profile.DeviceRegistrationDate
             };
             return this.View(interviewerProfileModel);
         }

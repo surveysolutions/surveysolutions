@@ -316,11 +316,11 @@
     <Compile Include="IntegrationCreate.cs" />
     <Compile Include="EventContext.cs" />
     <Compile Include="EventContextExtensions.cs" />
-    <Compile Include="EventHandler\when_event_handlers_are_created.cs" />
     <Compile Include="EventHandler\when_using_AnswerNotifier.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_cascading_question_used_in_conditions.cs" />
+    <Compile Include="InterviewTests\Substitution\when_variable_from_one_roster_using_in_another_triggered_by_the_same_question.cs" />
     <Compile Include="ReportTests\ReportContext.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\HqSurveysAndStatusesReportTests.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\SvSurveysAndStatusesReportTests.cs" />
@@ -523,6 +523,7 @@
     <Compile Include="ResourcesTranslationTests\ResourcesTranslationTestsContext.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_all_translations.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_availability_of_resources_in_Russian_comparing_to_English.cs" />
+    <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_property_names_in_format_elements_as_original.cs" />
     <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_string_format_elements_as_original.cs" />
     <Compile Include="SequentialCommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
     <Compile Include="SequentialCommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
@@ -550,7 +551,6 @@
     <Compile Include="UtilsTest\GuidExtensionsTests.cs" />
     <Compile Include="UtilsTest\UtilTests.cs" />
     <Compile Include="Versions\when_request_questionnaire_content_versions_of_designer_and_interviewer.cs" />
-    <Compile Include="Versions\when_request_versions_of_designer_hq_and_tester.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>

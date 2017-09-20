@@ -26,6 +26,8 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -51,7 +53,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                                         new ExportQuestionService(),
                                         Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) && 
                                                                             x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                                        new RosterStructureService())
+                                        new RosterStructureService(),
+                                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
                                        .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
 
             var questionnaireRosterStructure = (questionnaireDocument == null

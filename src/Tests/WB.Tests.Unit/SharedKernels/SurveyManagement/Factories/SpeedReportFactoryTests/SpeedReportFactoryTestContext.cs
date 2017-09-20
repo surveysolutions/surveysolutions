@@ -13,11 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
     internal class SpeedReportFactoryTestContext
     {
         protected static SpeedReportFactory CreateSpeedReportFactory(
-          IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null, IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpans=null)
+          IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null)
         {
-            return new SpeedReportFactory(
-                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(),
-                interviewStatusTimeSpans??Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans>>());
+            return new SpeedReportFactory(interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
         protected static SpeedByInterviewersReportInputModel CreateSpeedByInterviewersReportInputModel(

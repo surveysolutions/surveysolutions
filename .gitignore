@@ -81,10 +81,10 @@ src/UI/Headquarters/WB.UI.Headquarters.Interview/npm-debug.log*
 .designTime
 .tools/
 
-src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/snippets/*
-src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/mode-*.js
-src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/worker-*.js
-src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/theme-*.js
-src/UI/Designer/WB.UI.Designer/questionnaire/vendor/ace-builds/src*/ext-*.js
 src/*v3.ncrunchsolution
 **/HqApp/dist/*
+/src/UI/Designer/WB.UI.Designer/questionnaire/vendor
+src/UI/Designer/WB.UI.Designer/questionnaire/build/*.js
+src/UI/Designer/WB.UI.Designer/questionnaire/build/*.css
+
+src/Tools/k6/k6.exe

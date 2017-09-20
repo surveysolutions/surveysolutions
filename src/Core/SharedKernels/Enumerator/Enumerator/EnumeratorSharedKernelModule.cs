@@ -1,6 +1,7 @@
 ﻿using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -38,6 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IFriendlyErrorMessageService, FriendlyErrorMessageService>();
             registry.Bind<IAsyncRunner, AsyncRunner>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
+
+            registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
@@ -81,10 +84,8 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<RejectInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Reject(command.UserId, command.Comment, command.RejectTime))
                 .Handles<RejectInterviewToInterviewerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RejectToInterviewer(command.UserId, command.InterviewerId, command.Comment, command.RejectTime))
                 .Handles<RejectInterviewFromHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RejectInterviewFromHeadquarters(command.UserId, command.SupervisorId, command.InterviewerId, command.InterviewDto, command.SynchronizationTime))
-                .Handles<RemoveFlagFromAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RemoveFlagFromAnswer(command.UserId, command.QuestionId, command.RosterVector))
                 .Handles<RestartInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restart(command.UserId, command.Comment, command.RestartTime))
                 .Handles<RestoreInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restore(command.UserId))
-                .Handles<SetFlagToAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SetFlagToAnswer(command.UserId, command.QuestionId, command.RosterVector))
                
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
         }

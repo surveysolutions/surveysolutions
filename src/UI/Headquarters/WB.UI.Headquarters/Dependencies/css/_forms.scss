@@ -3,10 +3,15 @@
 	border-color: $gray_form;
 	box-shadow: none;
 	&:hover, &:focus, &:active, &:active:focus{
-		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		@extend %shadow;
 	}
 	&.with-clear-btn{
 		padding-right: 40px;
+	}
+}
+.input-group .form-control{
+	&:hover, &:focus, &:active, &:active:focus{
+		z-index: 3;
 	}
 }
 .has-error {
@@ -14,7 +19,7 @@
 		box-shadow: inset 0 0 3px rgba(231, 73, 36, 0.6);
 		&:hover, &:focus, &:active, &:active:focus {
 			border-color: #c33615;
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580; 
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), inset 0 0 6px #f19580; 
 		}
 	}
 }
@@ -22,7 +27,7 @@
 	box-shadow: none;
 	&:hover, &:focus, &:active, &:active:focus{
 		border-color: $gray_form;
-		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		@extend %shadow;
 	}
 }
 .field{
@@ -279,7 +284,7 @@ input.double-checkbox-white{
 			outline: none !important;
 			background-color: transparent;
 			border-color:  $gray_form;
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+			@extend %shadow;
 		}
 		.filter-option{
 			@include text-overflow();
@@ -310,7 +315,7 @@ input.double-checkbox-white{
 	} 
 	&.open{
 		.dropdown-toggle{
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+			@extend %shadow;
 		}
 		.bs-caret .caret{
 			border-top: none;
@@ -342,7 +347,7 @@ ul.typeahead.dropdown-menu {
 	    text-overflow: ellipsis;
 	    white-space: nowrap;
    		&:hover, &:focus, &:active, &:active:focus{
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+			@extend %shadow;
 		}
    		span:first-child {
 		   left: 10px;
@@ -374,7 +379,7 @@ ul.typeahead.dropdown-menu {
    }
    	&.open {
 		.dropdown-toggle{
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+			@extend %shadow;
 		}
    		.caret-large{
    			border-top: none;

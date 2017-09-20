@@ -57,6 +57,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual long? TimespanWithPreviousStatusLong { get; protected set; }
         public virtual string Comment { get; set; }
 
-        public virtual InterviewStatuses InterviewStatuses { get; set; }
+        public virtual InterviewSummary InterviewSummary { get; set; }
     }
 }

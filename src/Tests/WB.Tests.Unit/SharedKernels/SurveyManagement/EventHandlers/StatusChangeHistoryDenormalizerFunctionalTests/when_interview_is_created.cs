@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
     {
         Establish context = () =>
         {
-            interviewStatusesStorage = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
             statusEventsToPublish = new List<IPublishableEvent>();
 
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewOnClientCreated(interviewId: Guid.NewGuid()));
@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         It should_create_InterviewStatuses_for_3_interviews =
             () => statusEventsToPublish.TrueForAll(s => interviewStatusesStorage.GetById(s.EventSourceId.FormatGuid())!=null).ShouldBeTrue();
 
-        private static StatusChangeHistoryDenormalizerFunctional denormalizer;
+        private static InterviewSummaryCompositeDenormalizer denormalizer;
         private static List<IPublishableEvent> statusEventsToPublish;
-        private static TestInMemoryWriter<InterviewStatuses> interviewStatusesStorage;
+        private static TestInMemoryWriter<InterviewSummary> interviewStatusesStorage;
     }
 }

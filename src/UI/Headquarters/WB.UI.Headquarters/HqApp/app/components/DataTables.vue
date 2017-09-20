@@ -1,28 +1,44 @@
 <template>
-    <div>
-        <table ref="table" 
-            class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
-            <thead></thead>
+    <div :class="wrapperClass">
+        <table ref="table"
+               class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
+            <thead><slot name="header"></slot></thead>
             <tbody></tbody>
         </table>
-        <div class="download-report-as" v-if="exportable">
+        <div class="download-report-as"
+             v-if="exportable">
             {{$t("Pages.DownloadReport")}}
-            <a target="_blank" v-bind:href="$store.state.exportUrls.excel">XLSX</a> {{$t("Pages.Or")}}
-            <a target="_blank" v-bind:href="$store.state.exportUrls.csv">CSV</a> {{$t("Pages.Or")}}
-            <a target="_blank" v-bind:href="$store.state.exportUrls.tab">TAB</a>
+            <a target="_blank"
+               v-bind:href="$store.state.exportUrls.excel">XLSX</a> {{$t("Pages.Or")}}
+            <a target="_blank"
+               v-bind:href="$store.state.exportUrls.csv">CSV</a> {{$t("Pages.Or")}}
+            <a target="_blank"
+               v-bind:href="$store.state.exportUrls.tab">TAB</a>
         </div>
+        <slot />
     </div>
 </template>
 
 <script>
 
-export default {
+import 'datatables.net'
+import 'datatables.net-select'
+import 'jquery-contextmenu'
 
+var checkBox =
+    _.template(
+        '<input class="checkbox-filter" type="checkbox" value="<%= id %>"' +
+        ' id="<%= checkboxId %>"><label for="<%= checkboxId %>">' +
+        '<span class="tick"></span></label>');
+
+export default {
+    name: 'DataTable',
     props: {
         addParamsToRequest: {
             type: Function,
             default(d) { return d; }
         },
+        wrapperClass: Object,
         responseProcessor: {
             type: Function,
             default(r) { return r; }
@@ -35,14 +51,24 @@ export default {
             type: Function
         },
         authorizedUser: { type: Object, default() { return {} } },
-        reloadDebounce: {type: Number, default: 500},
-        noPaging: { type: Boolean },
-        noSearch: { type: Boolean },
-        exportable: { type: Boolean }
+        reloadDebounce: { type: Number, default: 500 },
+        noPaging: Boolean,
+        noSearch: Boolean,
+        exportable: Boolean,
+
+        // support for rows selection
+        selectable: Boolean,
+        selectableId: { type: String, default: 'id' }
+    },
+
+    data() {
+        return {
+            selectedRows: []
+        }
     },
 
     methods: {
-        reload: _.debounce(function (data) {
+        reload: _.debounce(function(data) {
             this.table.ajax.data = this.addParamsToRequest(data || {});
             this.table.rows().deselect();
             this.table.ajax.reload();
@@ -67,7 +93,7 @@ export default {
         },
 
         onTableInitComplete() {
-            $(this.$refs.table).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function (e) {
+            $(this.$refs.table).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function(e) {
                 if (e.target !== this)
                     return;
                 if ($(this).hasClass("active")) {
@@ -75,7 +101,7 @@ export default {
                 }
                 else {
                     $(this).addClass("active");
-                    $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
+                    $(this).children("input[type='search']").delay(200).queue(function() { $(this).focus(); $(this).dequeue(); });
                 }
             });
 
@@ -83,7 +109,7 @@ export default {
         },
 
         initContextMenu() {
-            if(this.contextMenuItems == null) return;
+            if (this.contextMenuItems == null) return;
             var contextMenuOptions = {
                 selector: "#" + this.$refs.table.attributes.id.value + " tbody tr",
                 autoHide: false,
@@ -99,13 +125,35 @@ export default {
             };
 
             $.contextMenu(contextMenuOptions);
-        }
+        },
+
+        rowsSelected(e, dt, type, ar) {
+            for (var i = 0; i < ar.length; i++) {
+                var rowId = parseInt(dt.row(ar[i]).id());
+                if (!_.includes(this.selectedRows, rowId)) {
+                    this.selectedRows.push(rowId);
+                }
+            }
+
+            this.$emit("selectedRowsChanged", this.selectedRows)
+        },
+
+        rowsDeselected(e, dt, type, ar) {
+            for (var i = 0; i < ar.length; i++) {
+                var rowId = dt.row(ar[i]).id();
+                this.selectedRows = _.without(this.selectedRows, parseInt(rowId));
+            }
+
+            this.$emit("selectedRowsChanged", this.selectedRows)
+        },
+
     },
 
     mounted() {
         var self = this;
         var options = $.extend({
             processing: true,
+            select: true,
             serverSide: true,
             language:
             {
@@ -129,10 +177,24 @@ export default {
             }
             return json.data;
         };
+        
+        if (this.selectable) {
+            options.columns.unshift({
+                orderable: false,
+                className: 'checkbox-cell',
+                render(data, type, row) {
+                    const id = row[self.selectableId];
+                    const checkboxId = 'check-' + id;
+                    return checkBox({ id, checkboxId });
+                },
+                responsivePriority: 1
+            })
+        }
+
         options.ajax.data = (d) => {
             this.addParamsToRequest(d);
 
-            d.columns.forEach(function (column){
+            d.columns.forEach((column) => {
                 delete (column.orderable);
                 delete (column.search);
                 delete (column.searchable);
@@ -148,27 +210,36 @@ export default {
         };
 
         options.ajax.complete = (response) => {
-            this.responseProcessor(response.responseJSON);
+            self.$emit("totalRows", response.responseJSON.recordsTotal)
+            self.$emit("ajaxComplete");
         };
 
         this.table = $(this.$refs.table).DataTable(options);
         this.table.on('init.dt', this.onTableInitComplete);
-        this.table.on('select', function (e, dt, type, indexes) {
-            self.$emit('select', e, dt, type, indexes);
-        });
-        this.table.on('deselect', function (e, dt, type, indexes) {
-            self.$emit('deselect', e, dt, type, indexes);
-        });
-        this.table.on('click', 'tbody td', function () {
-            var cell = self.table.cell(this);
 
-            if (cell.index() != null && cell.index().column > 0) {
-                var rowId = self.table.row(this).id();
-                var columns = self.table.settings().init().columns;
+        this.table.on('select', (e, dt, type, indexes) => {
+            self.rowsSelected(e, dt, type, indexes)
+        });
 
-                self.$emit('cell-clicked', columns[this.cellIndex].name, rowId, cell.data());
+        this.table.on('deselect', (e, dt, type, indexes) => {
+            self.rowsDeselected(e, dt, type, indexes)
+        });
+
+        this.table.on('click', 'tbody td', ($el) => {
+            const cell = self.table.cell($el.target);
+
+            if (cell != null) {
+                const index = cell.index();
+
+                if (index != null && index.column > 0) {
+                    var rowId = self.table.row($el.target).id();
+                    var columns = self.table.settings().init().columns;
+
+                    self.$emit('cell-clicked', columns[$el.target.cellIndex].name, rowId, cell.data());
+                }
             }
         });
+
         this.$emit('DataTableRef', this.table);
     }
 

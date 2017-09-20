@@ -28,7 +28,6 @@ export default {
             else {
                  return `<a href='${this.$config.interviewersBaseUrl}?supervisor=${row.teamName}'>${data}</a>`;
             }
-            return "";
         }
     },
     computed: {

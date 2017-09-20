@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             reportFactory = CreateSvTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,
@@ -43,7 +43,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
 
         It should_count_statuses_by_questionnaire = () => report.Items.First().CompletedCount.ShouldEqual(2);
 
-        static SupervisorTeamsAndStatusesReport reportFactory;
+        static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
         static Guid questionnaireId;
         static int version;

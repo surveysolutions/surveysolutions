@@ -21,13 +21,13 @@ namespace WB.UI.Headquarters.Services
         private static DateTime? ErrorOccuredAt = null;
         private static readonly int DelayOnErrorInSeconds = 3 * 60;
 
-        private readonly IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage;
+        private readonly IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage;
         private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
         private readonly IProductVersion productVersion;
 
-        public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> versionCheckInfoStorage, IProductVersion productVersion)
+        public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage, IProductVersion productVersion)
         {
-            this.versionCheckInfoStorage = versionCheckInfoStorage;
+            this.appSettingsStorage = appSettingsStorage;
             this.productVersion = productVersion;
         }
 
@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Services
             {
                 if (AvailableVersion == null)
                 {
-                    AvailableVersion = this.versionCheckInfoStorage.GetById(VersionCheckingInfo.StorageKey);
+                    AvailableVersion = this.appSettingsStorage.GetById(VersionCheckingInfo.VersionCheckingInfoKey);
                 }
 
                 var isCacheExpired = (DateTime.Now - LastLoadedAt)?.Seconds > SecondsForCacheIsValid;
@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Services
                 ErrorOccuredAt = null;
                 
                 this.plainTransactionManager.ExecuteInPlainTransaction(() 
-                    => this.versionCheckInfoStorage.Store(versionInfo, VersionCheckingInfo.StorageKey));
+                    => this.appSettingsStorage.Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey));
             }
             catch (Exception)
             {

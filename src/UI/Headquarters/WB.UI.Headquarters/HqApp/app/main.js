@@ -1,18 +1,21 @@
 import 'core-js/es6/promise'
 import 'core-js/modules/es6.object.assign'
+import 'bootstrap/js/dropdown.js'
+import 'bootstrap/js/modal.js'
+import 'bootstrap/js/alert.js'
+import 'bootstrap-select'
+import "babel-polyfill"
 
 import Vue from 'vue'
-
-import Typeahead from './components/Typeahead'
-import Layout from "./components/Layout"
-import Filters from "./components/Filters"
-import FilterBlock from "./components/FilterBlock"
-import DataTables from "./components/DataTables"
-import ModalFrame from "./components/ModalFrame"
-import Confirm from './components/Confirm'
 import Vuei18n from "./plugins/locale"
+import VueAxios from "./plugins/http"
+Vue.use(VueAxios);
+
+import VeeValidate from 'vee-validate';
+Vue.use(VeeValidate);
+
 import store from "./store"
-import App from "./App"
+
 import config from "./config"
 
 Vue.use(config)
@@ -25,21 +28,15 @@ Vue.use(Vuei18n, {
     }
 })
 
-Vue.component("Layout", Layout)
-Vue.component("Filters", Filters)
-Vue.component("FilterBlock", FilterBlock)
-Vue.component("Typeahead", Typeahead)
-Vue.component("DataTables", DataTables)
-Vue.component("ModalFrame", ModalFrame)
-Vue.component("Confirm", Confirm)
+import './components'
 
 const router = require("./router").default
 
 export default new Vue({
     el: "#vueApp",
-    render: h => h(App),
-    components: { App },
+    render: h => h('router-view'),
     store,
     router
 });
 
+import './compatibility.js'

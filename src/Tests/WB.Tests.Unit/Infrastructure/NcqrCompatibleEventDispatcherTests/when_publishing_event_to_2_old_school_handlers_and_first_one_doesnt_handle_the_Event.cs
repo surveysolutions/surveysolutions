@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Machine.Specifications;
-using Main.Core.Events.Questionnaire;
 using Moq;
-using Ncqrs.Domain;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Transactions;
@@ -25,8 +20,6 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
 
-            eventDispatcher.TransactionManager = Mock.Of<ITransactionManagerProvider>(_=>_.GetTransactionManager()== transactionManagerMock.Object);
-
             eventDispatcher.Register(Mock.Of<IEventHandler>());
 
             var questionClonedHandlerMock = new Mock<IEventHandler>();
@@ -37,15 +30,15 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
         Because of = () => eventDispatcher.Publish(publishableEvent.ToEnumerable().ToArray());
 
-        It should_open_command_transaction_only_once = () =>
-            transactionManagerMock.Verify(x=>x.BeginCommandTransaction(), Times.Once);
+        It should_not_open_command_transaction_only_once = () =>
+            transactionManagerMock.Verify(x=>x.BeginCommandTransaction(), Times.Never);
 
-        It should_commit_command_transaction_only_once = () =>
-            transactionManagerMock.Verify(x => x.CommitCommandTransaction(), Times.Once);
+        It should_not_commit_command_transaction_only_once = () =>
+            transactionManagerMock.Verify(x => x.CommitCommandTransaction(), Times.Never);
 
         private static NcqrCompatibleEventDispatcher eventDispatcher;
         private static IPublishableEvent publishableEvent;
         
-        private static Mock<ITransactionManager> transactionManagerMock = new Mock<ITransactionManager>();
+        private static readonly Mock<ITransactionManager> transactionManagerMock = new Mock<ITransactionManager>();
     }
 }

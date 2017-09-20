@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
             fileSystemAccessor.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>()))
                               .Returns<string, string>(Path.Combine);
 
-            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
 
             var commentedStatuses = new[]
             {
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
             commentedStatuses.ForEach(x => x.Timestamp = new DateTime(2017, 12, 31, 14, 45, 30));
 
             interviewStatuses.Store(
-                Create.Entity.InterviewStatuses(interviewid: interviewId, questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion, statuses: commentedStatuses),
+                Create.Entity.InterviewSummary(interviewId: interviewId, questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion, statuses: commentedStatuses),
                 interviewId.FormatGuid());
 
 

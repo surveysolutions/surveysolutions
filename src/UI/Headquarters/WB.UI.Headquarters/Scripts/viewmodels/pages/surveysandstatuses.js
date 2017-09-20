@@ -1,5 +1,5 @@
 ﻿Supervisor.VM.SurveysAndStatuses = function (listViewUrl, responsiblesUrl) {
-    Supervisor.VM.SurveysAndStatuses.superclass.constructor.apply(this, arguments);
+    Supervisor.VM.SurveysAndStatuses.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
 
     var self = this;
     self.Url = new Url(window.location.href);
@@ -51,8 +51,8 @@
     self.onDataTableDataReceived = function(data) {
         if (data.data.length > 0) {
             var totalRow = data.totalRow;
-            totalRow.questionnaireVersion = $totalTitle;
-            totalRow.questionnaireTitle = "";
+            totalRow.questionnaireVersion = "";
+            totalRow.questionnaireTitle = $allQuestionnaires;
             totalRow.DT_RowClass = totalRowClass;
             data.data.unshift(totalRow);
         }

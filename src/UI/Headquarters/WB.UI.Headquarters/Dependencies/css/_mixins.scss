@@ -415,6 +415,9 @@
         background-color: $color;
     }
 }
+%shadow{
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+}
 %field-to-fill{
     width: 100%;
     padding: 11px 12px;
@@ -426,7 +429,7 @@
     border-radius: 5px;
     &:hover, &:focus, &:active, &:active:focus{
         outline: none;
-		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		@extend %shadow;
 	}
 }
 %combobox{
