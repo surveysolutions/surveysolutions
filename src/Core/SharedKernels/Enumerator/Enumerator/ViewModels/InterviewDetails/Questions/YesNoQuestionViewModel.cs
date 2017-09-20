@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
