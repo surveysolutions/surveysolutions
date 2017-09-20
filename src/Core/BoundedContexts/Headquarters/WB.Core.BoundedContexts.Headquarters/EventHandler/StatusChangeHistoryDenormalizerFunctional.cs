@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.TeamLeadId,
                 state.ResponsibleId,
                 InterviewExportedAction.Restarted,
-                 @event.Payload.RestartTime ?? @event.EventTimeStamp,
+                @event.Payload.RestartTime ?? @event.EventTimeStamp,
                 @event.Payload.Comment);
         }
 
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 @event.Payload.SupervisorId,
                 null,
                 InterviewExportedAction.SupervisorAssigned,
-                @event.EventTimeStamp,
+                @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
 
