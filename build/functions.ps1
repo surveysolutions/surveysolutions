@@ -169,11 +169,23 @@ function BuildStaticContent($blockName, $targetLocation) {
             }
 
             &node_modules\.bin\bower install | Write-Host
+
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install --force']"
+                return $wasBuildSuccessfull
+            }
         }
 
         if (Test-Path "gulpfile.js") {
             Write-Host "Running gulp --production"
             &node_modules\.bin\gulp --production | Write-Host
+
+            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+            if (-not $wasBuildSuccessfull) {
+                Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
+                return $wasBuildSuccessfull
+            }
         }
         else {
             Write-Host "Running npm run production"
@@ -230,7 +242,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
     Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
 
-    & (GetPathToMSBuild) $Solution /t:Build /nologo /v:m /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
+    & (GetPathToMSBuild) $Solution /t:Build /nologo /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
