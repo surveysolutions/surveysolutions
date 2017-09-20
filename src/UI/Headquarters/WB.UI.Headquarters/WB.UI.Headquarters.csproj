@@ -448,6 +448,7 @@
     </Content>
     <Content Include="App_GlobalResources\DataExport.ru.resx">
       <DependentUpon>DataExport.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\DataExport.zh.resx">
       <DependentUpon>DataExport.resx</DependentUpon>

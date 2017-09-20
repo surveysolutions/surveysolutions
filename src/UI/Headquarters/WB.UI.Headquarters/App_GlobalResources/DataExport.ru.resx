@@ -157,7 +157,7 @@
     <value>Дата начала</value>
   </data>
   <data name="BinaryDescription" xml:space="preserve">
-    <value>Собранные бинарные данные (изображения)</value>
+    <value>Собранные бинарные данные (изображения, аудио файлы)</value>
   </data>
   <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
     <value>Вы не можите изменять настройки экспорта пока имеются запущенные экспорт процессы.</value>
