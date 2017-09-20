@@ -20,5 +20,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         [Display(ResourceType = typeof(FieldsAndValidations), Name = nameof(FieldsAndValidations.BatchUploadModel_FileName))]
         public HttpPostedFileBase File { get; set; }
         public List<FeaturedQuestionItem> FeaturedQuestions { get; set; }
+        public int ClientTimezoneOffset { get; set; }
     }
 }
