@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
         };
 
         It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "filled"});
-        It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableQuestionValue });
+        It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableValue });
         It should_return_correct_missing_answer = () => missingQuestion.ShouldEqual(new []{ MissingStringQuestionValue });
 
 

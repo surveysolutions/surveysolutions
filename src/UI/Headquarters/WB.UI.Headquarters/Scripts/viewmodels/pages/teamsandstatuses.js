@@ -1,5 +1,5 @@
 ﻿Supervisor.VM.TeamsAndStatuses = function (listViewUrl, $interviewsUrl) {
-    Supervisor.VM.TeamsAndStatuses.superclass.constructor.apply(this, arguments);
+    Supervisor.VM.TeamsAndStatuses.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
     
     var self = this;
     self.Url = new Url(window.location.href);
@@ -30,7 +30,7 @@
     self.onDataTableDataReceived = function (data) {
         if (data.data.length > 0) {
             var totalRow = data.totalRow;
-            totalRow.responsible = $totalTitle;
+            totalRow.responsible = $allTeams;
             totalRow.DT_RowClass = totalRowClass;
             data.data.unshift(totalRow);
         }

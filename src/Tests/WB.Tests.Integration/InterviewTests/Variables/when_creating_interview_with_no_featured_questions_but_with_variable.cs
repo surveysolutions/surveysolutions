@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Ncqrs.Spec;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -28,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                     Create.Entity.Variable(id: variableId, type: VariableType.Boolean, expression: "true"));
 
-            interview = SetupStatefullInterview(questionnaire);
+            interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(questionnaire);
 
             command = Create.Command.CreateInterview(Guid.Empty, userId, questionnaireIdentity, DateTime.Now, responsibleSupervisorId, null, null, null);
         };

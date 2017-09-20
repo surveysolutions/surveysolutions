@@ -127,7 +127,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             try
             {
-                var httpResponseMessage = await httpClient.SendAsync(request, linkedCancellationTokenSource.Token).ConfigureAwait(false);
+                var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
 
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified

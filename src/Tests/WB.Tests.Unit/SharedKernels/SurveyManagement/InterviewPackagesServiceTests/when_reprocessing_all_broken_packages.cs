@@ -4,6 +4,7 @@ using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using It = Machine.Specifications.It;
 
@@ -20,6 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 brokenPackagesStorage.Store(new BrokenInterviewPackage { Id = i }, null);
 
             interviewPackagesService = CreateInterviewPackagesService(
+                syncSettings: Create.Entity.SyncSettings(useBackgroundJobForProcessingPackages: true),
                 interviewPackageStorage: packagesStorage, 
                 brokenInterviewPackageStorage: brokenPackagesStorage);
         };

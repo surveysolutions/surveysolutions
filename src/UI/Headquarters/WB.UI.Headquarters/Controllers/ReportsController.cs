@@ -34,7 +34,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
         private readonly IUserViewFactory userViewFactory;
         private readonly ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public ReportsController(
             IMapReport mapReport, 
@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
             IAuthorizedUser authorizedUser, 
             IUserViewFactory userViewFactory, 
             ITeamUsersAndQuestionnairesFactory teamUsersAndQuestionnairesFactory, 
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.mapReport = mapReport;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
@@ -123,19 +123,18 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        [ActivePage(MenuItem.CountDaysOfInterviewInStatus)]
+        [ActivePage(MenuItem.StatusDuration)]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public ActionResult CountDaysOfInterviewInStatus()
+        public ActionResult StatusDuration()
         {
-            return this.View("CountDaysOfInterviewInStatus", new CountDaysOfInterviewInStatusModel
+            return this.View("StatusDuration", new StatusDurationModel
             {
-                BasePath = Url.Content(@"~/"),
                 DataUrl = Url.RouteUrl("DefaultApiWithAction",
                     new
                     {
                         httproute = "",
                         controller = "ReportDataApi",
-                        action = "CountDaysOfInterviewInStatus"
+                        action = "StatusDuration"
                     }),
                 InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
@@ -253,7 +252,6 @@ namespace WB.UI.Headquarters.Controllers
         {
             return this.View("InterviewersAndDevices", new DevicesInterviewersModel
             {
-                BasePath = Url.Content(@"~/"),
                 DataUrl = Url.RouteUrl("DefaultApiWithAction", 
                 new
                 {

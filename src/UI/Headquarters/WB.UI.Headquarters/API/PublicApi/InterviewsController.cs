@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -27,7 +28,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IUserViewFactory userViewFactory;
-        private readonly IReadSideKeyValueStorage<InterviewReferences> interviewReferences;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences;
 
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
@@ -39,7 +40,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferences)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences)
             : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -219,7 +220,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         private void ThrowIfInterviewDoesnotExist(Guid id)
         {
-            var interviewRefs = this.interviewReferences.GetById(id);
+            var interviewRefs = this.interviewReferences.GetQuestionnaireIdentity(id);
             if (interviewRefs == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

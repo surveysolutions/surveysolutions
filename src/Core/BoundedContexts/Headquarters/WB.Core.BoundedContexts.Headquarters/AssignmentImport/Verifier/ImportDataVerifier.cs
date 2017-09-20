@@ -469,7 +469,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<PanelImportVerificationError> ErrorsByGpsQuestions(
             HeaderStructureForLevel level,
-            ExportedHeaderItem gpsExportedQuestion,
+            ExportedQuestionHeaderItem gpsExportedQuestion,
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
@@ -532,7 +532,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<PanelImportVerificationError> ErrorsByNumericQuestions(
             HeaderStructureForLevel level,
-            ExportedHeaderItem numericExportedQuestion,
+            ExportedQuestionHeaderItem numericExportedQuestion,
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
@@ -790,7 +790,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         }
 
         private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
-            Func<HeaderStructureForLevel,ExportedHeaderItem, PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> exportedQuestionVerifier,
+            Func<HeaderStructureForLevel,ExportedQuestionHeaderItem, PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> exportedQuestionVerifier,
             QuestionType questionType)
         {
             return (datas, preloadedDataService) =>
@@ -803,8 +803,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (levelExportStructure == null)
                         continue;
 
-                    var exportedQuestions =
-                        levelExportStructure.HeaderItems.Values.Where(h => h.QuestionType == questionType);
+                    var exportedQuestions = levelExportStructure.HeaderItems.Values
+                        .OfType<ExportedQuestionHeaderItem>()
+                        .Where(h => h.QuestionType == questionType);
 
                     foreach (var exportedQuestion in exportedQuestions)
                     {

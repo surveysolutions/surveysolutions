@@ -313,13 +313,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private UserView GetUserById(Guid userId)
         {
-            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                var user = this.userViewFactory.GetUser(new UserViewInputModel(userId));
-                if (user == null || user.IsArchived)
-                    return null;
-                return user;
-            });
+            var user = this.userViewFactory.GetUser(new UserViewInputModel(userId));
+            if (user == null || user.IsArchived)
+                return null;
+            return user;
         }
     }
 }

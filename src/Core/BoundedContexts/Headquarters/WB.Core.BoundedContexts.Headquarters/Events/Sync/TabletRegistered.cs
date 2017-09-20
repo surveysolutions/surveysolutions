@@ -71,17 +71,4 @@ namespace WB.Core.Synchronization.Events.Sync
 
         public Guid UserId { get; set; }
     }
-
-    public class TabletRegistered : IEvent
-    {
-        public TabletRegistered(string androidId, string appVersion)
-        {
-            this.AndroidId = androidId;
-            this.AppVersion = appVersion;
-        }
-
-        public string AndroidId { get; set; }
-
-        public string AppVersion { get; set; }
-    }
 }

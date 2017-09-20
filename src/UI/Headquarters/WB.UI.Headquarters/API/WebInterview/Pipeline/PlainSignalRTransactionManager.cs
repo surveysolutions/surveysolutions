@@ -16,21 +16,21 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
         {
             this.transactionManager.BeginTransaction();
-            this.readTransactionManager.BeginQueryTransaction();
+            this.readTransactionManager.BeginCommandTransaction();
             return base.OnBeforeIncoming(context);
         }
 
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
             this.transactionManager.CommitTransaction();
-            this.readTransactionManager.RollbackQueryTransaction();
+            this.readTransactionManager.CommitCommandTransaction();
             return base.OnAfterIncoming(result, context);
         }
 
         protected override void OnIncomingError(ExceptionContext exceptionContext, IHubIncomingInvokerContext invokerContext)
         {
             this.transactionManager.RollbackTransaction();
-            this.readTransactionManager.RollbackQueryTransaction();
+            this.readTransactionManager.RollbackCommandTransaction();
             base.OnIncomingError(exceptionContext, invokerContext);
         }
     }

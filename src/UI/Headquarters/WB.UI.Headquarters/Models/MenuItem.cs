@@ -30,7 +30,7 @@
         Completed = 26,
         Profile = 27,
         DevicesInterviewers = 28,
-        CountDaysOfInterviewInStatus = 29,
+        StatusDuration = 29,
         SurveyAndStatuses = 30
     }
 }

@@ -6,8 +6,6 @@
         void CommitCommandTransaction();
         void RollbackCommandTransaction();
 
-        void BeginQueryTransaction();
-        void RollbackQueryTransaction();
-        bool IsQueryTransactionStarted { get; }
+        bool TransactionStarted { get; }
     }
 }

@@ -23,6 +23,9 @@
         QuestionDeclaredInvalid,
         UnapproveByHeadquarters,
         ReceivedByInterviewer,
-        ReceivedBySupervisor
+        ReceivedBySupervisor,
+        VariableSet,
+        VariableEnabled,
+        VariableDisabled
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -12,6 +11,7 @@ using Main.Core.Events;
 using Moq;
 using ReflectionMagic;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -21,7 +21,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -41,7 +40,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
@@ -218,8 +217,8 @@ namespace WB.Tests.Abc.TestFactories
                 DisabledEventHandlerTypes = new Type[] {},
             };
 
-        public ExportedHeaderItem ExportedHeaderItem(Guid? questionId = null, string variableName = "var")
-            => new ExportedHeaderItem
+        public ExportedQuestionHeaderItem ExportedQuestionHeaderItem(Guid? questionId = null, string variableName = "var")
+            => new ExportedQuestionHeaderItem
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ColumnNames = new[] { variableName },
@@ -368,6 +367,14 @@ namespace WB.Tests.Abc.TestFactories
             return interviewData;
         }
 
+        public InterviewData InterviewData(Guid variableId, object topLevelVariable)
+        {
+            var interviewData = new InterviewData { InterviewId = Guid.NewGuid() };
+            interviewData.Levels.Add("#", new InterviewLevel(new ValueVector<Guid>(), null, new decimal[0]));
+            interviewData.Levels["#"].Variables.Add(variableId, topLevelVariable);
+            return interviewData;
+        }
+
         public InterviewDataExportLevelView InterviewDataExportLevelView(Guid interviewId, params InterviewDataExportRecord[] records)
             => new InterviewDataExportLevelView(new ValueVector<Guid>(), "test", records);
 
@@ -398,18 +405,6 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewItemId InterviewItemId(Guid id, decimal[] rosterVector = null)
             => new InterviewItemId(id, rosterVector);
 
-        public InterviewLinkedQuestionOptions InterviewLinkedQuestionOptions(params ChangedLinkedOptions[] options)
-        {
-            var result = new InterviewLinkedQuestionOptions();
-
-            foreach (var changedLinkedQuestion in options)
-            {
-                result.LinkedQuestionOptions[changedLinkedQuestion.QuestionId.ToString()] = changedLinkedQuestion.Options;
-            }
-
-            return result;
-        }
-
         public InterviewQuestion InterviewQuestion(Guid? questionId = null, object answer = null)
         {
             var interviewQuestion = new InterviewQuestion(questionId ?? Guid.NewGuid()) { Answer = answer };
@@ -420,37 +415,8 @@ namespace WB.Tests.Abc.TestFactories
             return interviewQuestion;
         }
 
-        public InterviewReferences InterviewReferences(
-            Guid? questionnaireId = null,
-            long? questionnaireVersion = null)
-            => new InterviewReferences(
-                Guid.NewGuid(),
-                questionnaireId ?? Guid.NewGuid(),
-                questionnaireVersion ?? 301);
-
-        public InterviewStatuses InterviewStatuses(Guid? interviewid = null, Guid? questionnaireId = null, 
-            long? questionnaireVersion = null, params InterviewCommentedStatus[] statuses)
-            => new InterviewStatuses
-            {
-                InterviewId = (interviewid ?? Guid.NewGuid()).FormatGuid(),
-                InterviewCommentedStatuses = statuses.ToList(),
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1
-            };
-
-        public InterviewStatusTimeSpans InterviewStatusTimeSpans(Guid? questionnaireId = null,
-            long? questionnaireVersion = null, string interviewId = null, params TimeSpanBetweenStatuses[] timeSpans)
-            => new InterviewStatusTimeSpans
-            {
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = questionnaireVersion ?? 1,
-                TimeSpansBetweenStatuses = timeSpans.ToHashSet(),
-                InterviewId = interviewId
-            };
-
         public InterviewSummary InterviewSummary()
             => new InterviewSummary();
-
 
 
         public InterviewSummary InterviewSummary(
@@ -467,7 +433,10 @@ namespace WB.Tests.Abc.TestFactories
             DateTime? updateDate = null,
             bool? wasCreatedOnClient = null,
             bool receivedByInterviewer = false,
-            int? assignmentId = null)
+            int? assignmentId = null,
+            bool wasCompleted = false,
+            IEnumerable<InterviewCommentedStatus> statuses = null,
+            IEnumerable<TimeSpanBetweenStatuses> timeSpans = null)
         {
             var qId = questionnaireId ?? Guid.NewGuid();
             var qVersion = questionnaireVersion ?? 1;
@@ -488,7 +457,9 @@ namespace WB.Tests.Abc.TestFactories
                 ReceivedByInterviewer = receivedByInterviewer,
                 AssignmentId = assignmentId,
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
-                InterviewCommentedStatuses = new List<InterviewCommentedStatus>()
+                WasCompleted = wasCompleted,
+                InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
+                TimeSpansBetweenStatuses = timeSpans?.ToHashSet() ?? new HashSet<TimeSpanBetweenStatuses>()
             };
         }
 
@@ -797,18 +768,19 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
             Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
-            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false)
+            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false, bool allowExportVariables = true)
             => new QuestionnaireBrowseItem
             {
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
                 Version = questionnaireIdentity?.Version ?? version ?? 1,
                 Title = title,
                 Disabled = disabled,
-                IsDeleted = deleted
+                IsDeleted = deleted,
+                AllowExportVariables = allowExportVariables,
             };
 
-        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true)
-            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments);
+        public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true)
+            => new QuestionnaireBrowseItem(questionnaire, 1, false, 1, supportsAssignments, allowExportVariables);
 
         public QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => new QuestionnaireDocument
@@ -897,10 +869,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireLevelLabels(levelName, variableLabels);
 
         public ReadSideCacheSettings ReadSideCacheSettings(int cacheSizeInEntities = 128, int storeOperationBulkSize = 8)
-            => new ReadSideCacheSettings(true, "folder", cacheSizeInEntities, storeOperationBulkSize);
-
-        public ReadSideSettings ReadSideSettings()
-            => new ReadSideSettings(readSideVersion: 0);
+            => new ReadSideCacheSettings(cacheSizeInEntities, storeOperationBulkSize);
 
         public InterviewTreeDoubleQuestion InterviewTreeDoubleQuestion(double answer = 42.42)
             => new InterviewTreeDoubleQuestion(answer);
@@ -1476,9 +1445,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public SubstitutionText SubstitutionText(Identity identity, 
             string title,
-            SubstitutionVariables variables = null)
+            List<SubstitutionVariable> variables = null)
         {
-            return new SubstitutionText(identity, title, variables ?? new SubstitutionVariables(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
+            return new SubstitutionText(identity, title, variables ?? new List<SubstitutionVariable>(), Mock.Of<ISubstitutionService>(), Mock.Of<IVariableToUIStringService>());
         }
 
         public InterviewTree InterviewTree(Guid? interviewId = null, IQuestionnaire questionnaire = null,
@@ -1501,7 +1470,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public CategoricalFixedMultiOptionAnswer MultiOptionAnswer(params int[] selectedOptions)
         {
-            return CategoricalFixedMultiOptionAnswer.FromInts(selectedOptions);
+            return CategoricalFixedMultiOptionAnswer.Convert(selectedOptions);
         }
 
         
@@ -1665,7 +1634,8 @@ namespace WB.Tests.Abc.TestFactories
             int? quantity = null,
             Guid? assigneeSupervisorId = null,
             string responsibleName = null,
-            ISet<InterviewSummary> interviewSummary = null)
+            ISet<InterviewSummary> interviewSummary = null,
+            string questionnaireTitle = null, DateTime? updatedAt = null)
         {
             var result = new Assignment();
             var asDynamic = result.AsDynamic();
@@ -1673,7 +1643,7 @@ namespace WB.Tests.Abc.TestFactories
             asDynamic.Id = id ?? 0;
             result.QuestionnaireId = questionnaireIdentity;
 
-            var readonlyUser = new ReadonlyUser();
+            var readonlyUser = new ReadonlyUser() { RoleIds = { UserRoles.Interviewer.ToUserId() } };
             var readonlyProfile = new ReadonlyProfile();
             
             readonlyUser.AsDynamic().ReadonlyProfile = readonlyProfile;
@@ -1683,9 +1653,24 @@ namespace WB.Tests.Abc.TestFactories
             {
                 readonlyProfile.AsDynamic().SupervisorId = assigneeSupervisorId;
             }
+
             if (!string.IsNullOrEmpty(responsibleName))
             {
                 readonlyUser.AsDynamic().Name = responsibleName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(questionnaireTitle))
+            {
+                result.Questionnaire = new QuestionnaireLiteViewItem
+                {
+                    Id = questionnaireIdentity?.Id,
+                    Title = questionnaireTitle
+                };
+            }
+
+            if (updatedAt.HasValue)
+            {
+                result.AsDynamic().UpdatedAtUtc = updatedAt.Value;
             }
 
             if(interviewSummary != null)
@@ -1777,7 +1762,8 @@ namespace WB.Tests.Abc.TestFactories
                 fileSystemAccessor.Object,
                 Mock.Of<IExportQuestionService>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                new RosterStructureService());
+                new RosterStructureService(),
+                Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return exportViewFactory.CreateQuestionnaireExportStructure(questionnaire, new QuestionnaireIdentity(Guid.NewGuid(), 1));
         }
 
@@ -1823,6 +1809,24 @@ namespace WB.Tests.Abc.TestFactories
                 Quantity = 1,
                 PreloadedData = new PreloadedDataDto(levels)
             };
+        }
+
+        public CumulativeReportStatusChange CumulativeReportStatusChange(string entryId, 
+            Guid questionnaireId, long questionnaireVersion, DateTime date, InterviewStatus status, int changeValue,
+            Guid interviewId, long eventSequence)
+        {
+            return new CumulativeReportStatusChange(entryId, questionnaireId, questionnaireVersion, date, status,
+                changeValue, interviewId, eventSequence);
+        }
+
+        public SyncSettings SyncSettings(bool useBackgroundJobForProcessingPackages = false)
+        {
+            return new SyncSettings("hq", useBackgroundJobForProcessingPackages);
+        }
+
+        public InterviewTreeVariableDiff InterviewTreeVariableDiff(InterviewTreeVariable sourceVariable, InterviewTreeVariable targetVariable)
+        {
+            return new InterviewTreeVariableDiff(sourceVariable, targetVariable);
         }
     }
 }

@@ -136,6 +136,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int CountEnabledHiddenQuestions();
 
+        int CountAllEnabledUnansweredQuestions();
+
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();

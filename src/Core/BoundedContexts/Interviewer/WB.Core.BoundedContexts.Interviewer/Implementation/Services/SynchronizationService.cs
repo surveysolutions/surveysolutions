@@ -23,13 +23,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class SynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
     {
         private const string apiVersion = "v2";
-
-#if !EXCLUDEEXTENSIONS
-        private readonly string checkVersionUrl = "api/interviewer/extended/";
-#else
-        private readonly string checkVersionUrl = "api/interviewer/";
-#endif
         private const string interviewerApiUrl = "api/interviewer/";
+         
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
@@ -46,6 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ICheckVersionUriProvider checkVersionUriProvider;
         private readonly ILogger logger;
 
         private RestCredentials restCredentials => this.principal.CurrentUserIdentity == null
@@ -60,6 +56,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewerSettings interviewerSettings, 
             ISyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor,
+            ICheckVersionUriProvider checkVersionUriProvider,
             ILogger logger)
         {
             this.principal = principal;
@@ -67,6 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.interviewerSettings = interviewerSettings;
             this.syncProtocolVersionProvider = syncProtocolVersionProvider;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.checkVersionUriProvider = checkVersionUriProvider;
             this.logger = logger;
         }
 
@@ -275,8 +273,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 url: string.Concat(this.questionnairesController, "/", questionnaire.QuestionnaireId, "/", questionnaire.Version, "/assembly/logstate"),
                 credentials: this.restCredentials));
         }
-
-#endregion
+        
+        #endregion
 
 #region [Interview Api]
 
@@ -394,23 +392,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         #endregion
 
         #region [Application Api]
-        public Task<byte[]> GetApplicationAsync(CancellationToken token) => 
+        public Task<byte[]> GetApplicationAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null) => 
             this.TryGetRestResponseOrThrowAsync(async () =>
         {
-            var restFile = await this.restService.DownloadFileAsync(url: checkVersionUrl, token: token,
-                credentials: this.restCredentials).ConfigureAwait(false);
+            var restFile = await this.restService.DownloadFileAsync(
+                url: this.checkVersionUriProvider.CheckVersionUrl, token: token,
+                credentials: this.restCredentials, 
+                onDownloadProgressChanged: onDownloadProgressChanged);
 
             return restFile.Content;
         });
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token)
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var interviewerPatchApiUrl = $"{checkVersionUrl}patch/{this.interviewerSettings.GetApplicationVersionCode()}";
+                var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.interviewerSettings.GetApplicationVersionCode()}";
 
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, token: token,
-                    credentials: this.restCredentials).ConfigureAwait(false);
+                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, 
+                    token: token,
+                    credentials: this.restCredentials,
+                    onDownloadProgressChanged: onDownloadProgressChanged);
 
                 return restFile.Content;
             });
@@ -420,7 +422,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
                 await this.restService.GetAsync<int?>(
-                    url: string.Concat(checkVersionUrl, "latestversion"),
+                    url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion"),
                     credentials: this.restCredentials, token: token).ConfigureAwait(false));
         }
 
@@ -582,11 +584,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private static Action<DownloadProgressChangedEventArgs> ToDownloadProgressChangedEvent(Action<decimal, long, long> onDownloadProgressChanged)
         {
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChangedInternal = (args) =>
+            void OnDownloadProgressChangedInternal(DownloadProgressChangedEventArgs args)
             {
                 onDownloadProgressChanged?.Invoke(args.ProgressPercentage, args.BytesReceived, args.TotalBytesToReceive ?? 0);
-            };
-            return onDownloadProgressChangedInternal;
+            }
+
+            return OnDownloadProgressChangedInternal;
         }
 
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)

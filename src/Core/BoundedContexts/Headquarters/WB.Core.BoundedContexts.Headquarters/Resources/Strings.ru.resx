@@ -212,4 +212,18 @@
     <value>Среднее</value>
     <comment>Среднее</comment>
   </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Все команды</value>
+  </data>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>Все периоды</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Интервью</value>
+    <comment>Интервью</comment>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Задания</value>
+    <comment>Задания</comment>
+  </data>
 </root>

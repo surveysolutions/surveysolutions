@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -24,23 +25,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
         {
             string[] variableNames = this.substitutionService.GetAllSubstitutionVariableNames(text);
 
-            var substitutionVariables = new SubstitutionVariables();
+            var substitutionVariables = new List<SubstitutionVariable>();
 
             foreach (var variable in variableNames)
             {
-                if (questionnaire.HasQuestion(variable)) substitutionVariables.ByQuestions.Add(new SubstitutionVariable
+                if (questionnaire.HasQuestion(variable)) substitutionVariables.Add(new SubstitutionVariable
                 {
                     Name = variable,
                     Id = questionnaire.GetQuestionIdByVariable(variable).Value
                 });
 
-                if (questionnaire.HasVariable(variable)) substitutionVariables.ByVariables.Add(new SubstitutionVariable
+                if (questionnaire.HasVariable(variable)) substitutionVariables.Add(new SubstitutionVariable
                 {
                     Name = variable,
                     Id = questionnaire.GetVariableIdByVariableName(variable)
                 });
 
-                if (questionnaire.HasRoster(variable)) substitutionVariables.ByRosters.Add(new SubstitutionVariable
+                if (questionnaire.HasRoster(variable)) substitutionVariables.Add(new SubstitutionVariable
                 {
                     Name = variable,
                     Id = questionnaire.GetGroupIdByVariableName(variable)
@@ -49,7 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 
             if (this.substitutionService.ContainsRosterTitle(text))
             {
-                substitutionVariables.ByRosters.Add(new SubstitutionVariable
+                substitutionVariables.Add(new SubstitutionVariable
                 {
                     Name = this.substitutionService.RosterTitleSubstitutionReference,
                     Id = questionnaire.GetRostersFromTopToSpecifiedEntity(identity.Id).Last()

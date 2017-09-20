@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Threading;
 
@@ -21,14 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         IInterviewPackagesService interviewPackagesService => ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
         SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
         IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-        ITransactionManager readSideTransactionManager => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
-        IReadSideStatusService readSideStatusService => ServiceLocator.Current.GetInstance<IReadSideStatusService>();
 
         public void Execute(IJobExecutionContext context)
         {
-            if(this.readSideStatusService.AreViewsBeingRebuiltNow())
-                return;
-
             try
             {
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -52,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     {
                         this.ExecuteInPlainTransaction(() =>
                         {
-                            readSideTransactionManager.ExecuteInQueryTransaction(() => this.interviewPackagesService.ProcessPackage(packageId));
+                            this.interviewPackagesService.ProcessPackage(packageId);
                         });
                     });
 

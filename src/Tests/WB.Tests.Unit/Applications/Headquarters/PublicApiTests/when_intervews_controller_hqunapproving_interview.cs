@@ -4,12 +4,14 @@ using System.Net;
 using System.Net.Http;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using Main.DenormalizerStorage;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using It = Machine.Specifications.It;
@@ -20,9 +22,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
     {
         private Establish context = () =>
         {
-            var interviewReferences =
-               Mock.Of<IReadSideKeyValueStorage<InterviewReferences>>(
-                   y => y.GetById(Moq.It.IsAny<string>()) == new InterviewReferences(interviewId, Guid.NewGuid(), 1));
+            var interviewReferences = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
+            interviewReferences.Store(Create.Entity.InterviewSummary(interviewId, Guid.NewGuid(), questionnaireVersion: 1), "1");
 
             var userViewFactory =
                 Mock.Of<IUserViewFactory>(

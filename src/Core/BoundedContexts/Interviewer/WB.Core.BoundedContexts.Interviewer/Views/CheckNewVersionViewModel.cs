@@ -35,27 +35,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public bool IsVersionCheckInProgress
         {
-            get { return this.isVersionCheckInProgress; }
-            set { this.RaiseAndSetIfChanged(ref this.isVersionCheckInProgress, value); }
+            get => this.isVersionCheckInProgress;
+            set => this.RaiseAndSetIfChanged(ref this.isVersionCheckInProgress, value);
         }
 
         public bool IsNewVersionAvaliable
         {
-            get { return this.isNewVersionAvaliable; }
-            set { this.RaiseAndSetIfChanged(ref this.isNewVersionAvaliable, value); }
+            get => this.isNewVersionAvaliable;
+            set => this.RaiseAndSetIfChanged(ref this.isNewVersionAvaliable, value);
         }
 
         public string CheckNewVersionResult
         {
-            get { return this.checkNewVersionResult; }
-            set { this.RaiseAndSetIfChanged(ref this.checkNewVersionResult, value); }
+            get => this.checkNewVersionResult;
+            set => this.RaiseAndSetIfChanged(ref this.checkNewVersionResult, value);
         }
 
         public string Version { get; set; }
 
         public IMvxAsyncCommand CheckVersionCommand => new MvxAsyncCommand(this.CheckVersion);
 
-        public IMvxCommand CancelUpgrade => new MvxCommand(this.cancellationTokenSource.Cancel);
+        public IMvxCommand CancelUpgrade => new MvxCommand(() => this.cancellationTokenSource.Cancel());
         public IMvxAsyncCommand UpdateApplicationCommand => new MvxAsyncCommand(this.UpdateApplication);
         public IMvxCommand RejectUpdateApplicationCommand => new MvxCommand(RejectUpdateApplication);
 
@@ -70,9 +70,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
 
-                await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token);
+                await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token,
+                    progress =>
+                    {
+                        this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
+                                                     + $" ({progress.ProgressPercentage}%)";
+                    });
 
                 this.CheckNewVersionResult = null;
+            }
+            catch (Exception) when (cancellationTokenSource.IsCancellationRequested)
+            {
+                this.CheckNewVersionResult = InterviewerUIResources.RequestCanceledByUser;
             }
             catch (Exception ex)
             {

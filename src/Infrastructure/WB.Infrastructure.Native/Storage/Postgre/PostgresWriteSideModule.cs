@@ -24,6 +24,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             try
             {
                 DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
+                DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
             }
             catch (Exception exc)
             {
@@ -31,17 +32,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 throw;
             }
 
-            this.Kernel.Bind<IStreamableEventStore>().ToMethod(_ => this.GetEventStore()).InSingletonScope();
+
+            this.Kernel.Bind<IStreamableEventStore>().To<PostgresEventStore>().InSingletonScope().WithConstructorArgument("connectionSettings", this.eventStoreSettings);
             this.Kernel.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IStreamableEventStore>());
-        }
-
-        private IStreamableEventStore GetEventStore()
-        {
-            var eventStore = new PostgresEventStore(this.eventStoreSettings, this.Kernel.Get<IEventTypeResolver>());
-
-            DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
-
-            return eventStore;
         }
     }
 }

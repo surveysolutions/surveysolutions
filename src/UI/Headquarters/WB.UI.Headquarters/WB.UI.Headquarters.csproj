@@ -95,13 +95,6 @@
       <HintPath>..\..\..\..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Elmah">
-      <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
-    </Reference>
-    <Reference Include="Elmah.Mvc, Version=2.1.2.1389, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Elmah.Mvc.2.1.2\lib\net40\Elmah.Mvc.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -250,6 +243,12 @@
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha-129\lib\net451\StackExchange.Exceptional.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-alpha-129\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
@@ -318,12 +317,14 @@
     <Reference Include="System.Text.Encoding.CodePages, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Text.Encoding.CodePages.4.3.0\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.ValueTuple.4.3.1\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
       <Private>True</Private>
@@ -684,7 +685,6 @@
     <Content Include="Dependencies\build\libs.css" />
     <Content Include="Dependencies\build\libs.js" />
     <Content Include="Dependencies\build\markup.css" />
-    <Content Include="Dependencies\build\vue-libs.js" />
     <Content Include="Dependencies\css\markup.css">
       <DependentUpon>markup.scss</DependentUpon>
     </Content>
@@ -748,7 +748,6 @@
     <Content Include="Dependencies\js\dataTables.conditionalPaging.js" />
     <Content Include="Dependencies\js\searchHighlight.js" />
     <Content Include="ErrorPages\genericError.html" />
-    <None Include="Dependencies\vue\Typeahead.vue" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Configuration\Vitalii.Headquarters.Web.config">
       <SubType>Designer</SubType>
@@ -857,6 +856,7 @@
     <EmbeddedResource Include="Resources\EnumNames.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>EnumNames.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.ru.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
@@ -995,7 +995,9 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.zh.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx" />
+    <EmbeddedResource Include="Resources\Strings.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Strings.ru.resx">
       <DependentUpon>Strings.resx</DependentUpon>
     </EmbeddedResource>
@@ -1186,10 +1188,6 @@
     <Content Include="Dependencies\css\_main-information.scss" />
     <Content Include="Dependencies\css\_modal.scss" />
     <Content Include="Dependencies\css\markup-detalica.scss" />
-    <None Include="Dependencies\vue\DatePicker.vue" />
-    <None Include="Dependencies\vue\InterviewTable.vue">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Content\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker3.min.css.map" />
@@ -1421,7 +1419,6 @@
     <Content Include="Views\ControlPanel\Designer.cshtml" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\NConfig.cshtml" />
-    <Content Include="Views\ControlPanel\ReadSide.cshtml" />
     <Content Include="Views\ControlPanel\RepeatLastInterviewStatus.cshtml" />
     <Content Include="Views\ControlPanel\RevalidateInterviews.cshtml" />
     <Content Include="Views\ControlPanel\Settings.cshtml" />
@@ -1445,8 +1442,6 @@
     <Content Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
     <Content Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
     <Content Include="Views\Interview\StaticTextPartialView.cshtml" />
-    <Content Include="Views\Interview\Troubleshoot.cshtml" />
-    <Content Include="Views\Interview\Troubleshooting.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
@@ -1509,7 +1504,6 @@
     <Content Include="Views\Shared\Profile\UpdateOwnPassword.cshtml" />
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
-    <Content Include="Views\Assignments\Index.cshtml" />
     <Content Include="Views\Shared\typeahead.cshtml" />
     <Content Include="Views\Shared\_MainLayoutVue.cshtml" />
     <Content Include="Views\Assignments\assignmentslist.cshtml" />
@@ -1521,8 +1515,11 @@
     <Content Include="Views\InterviewerHq\Interviews.cshtml" />
     <Content Include="Views\Reports\InterviewersAndDevices.cshtml" />
     <Content Include="Views\Shared\Interviews\_InterviewStatusHistoryModal.cshtml" />
-    <Content Include="Views\Reports\CountDaysOfInterviewInStatus.cshtml" />
+    <Content Include="Views\Reports\StatusDuration.cshtml" />
     <Content Include="Views\Shared\_export-buttons.cshtml" />
+    <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
+    <Content Include="Views\Assignments\index.cshtml" />
+    <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1542,7 +1539,7 @@
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
-    <Compile Include="API\ReportDataApiController.Report.cs" />
+    <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
@@ -1719,16 +1716,29 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M022_AddQuestionnaireIdColumn_to_Assignmenst.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M017_AddQuestionnaireIdentityColumn.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M015_Add_indexes_for_interviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M014_AddStatusIndexToStatusHistory.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M012_DeleteDeletedInterviews.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M013_AddIndexesForQuantityReport.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M016_AddQuestionnaireIdAndVersionIndexesToInterviewSummary.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M023AddInterviewEntitiesTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M018_RemoveInterviewReferencesTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M019_RemoveLastInterviewStatusAndAddColumnsToCumulativeChart.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M020_RemoveInterviewStatuses.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201709071637_AddIndexToCumulativeReportStatusChangesTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201709081726_RemoveInterviewLinkedQuestionOptions.cs" />
+    <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
+    <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
-    <Compile Include="Models\Reports\CountDaysOfInterviewInStatusModel.cs" />
+    <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxOptionModel.cs" />
@@ -1775,7 +1785,7 @@
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
     <Compile Include="Controllers\WebInterviewSetupController.cs" />
     <Compile Include="FilteredCamelCasePropertyNamesContractResolver.cs" />
-    <Compile Include="Filters\ElmahHandledErrorLoggerFilter.cs" />
+    <Compile Include="Filters\ErrorLoggerFilter.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\HttpStatusException.cs" />
     <Compile Include="Filters\GlobalNotificationAttribute.cs" />
@@ -1840,9 +1850,7 @@
     <Compile Include="Controllers\Profile\HeadquartersController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TypeExtensions.cs" />
-    <Compile Include="Filters\ApiMaintenanceFilter.cs" />
     <Compile Include="Filters\FormMultipartEncodedMediaTypeFormatter .cs" />
-    <Compile Include="Filters\MaintenanceFilter.cs" />
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Controllers\Profile\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
@@ -1868,15 +1876,12 @@
     <Compile Include="Models\PreloadedDataInterviewProgressModel.cs" />
     <Compile Include="Models\QuantityByInterviewersReportModel.cs" />
     <Compile Include="Models\QuantityBySupervisorsReportModel.cs" />
-    <Compile Include="Models\RebuildReadSideInputViewModel.cs" />
-    <Compile Include="Models\RebuildReadSideType.cs" />
     <Compile Include="Models\SpeedByInterviewersReportModel.cs" />
     <Compile Include="Models\SpeedBySupervisorsReportModel.cs" />
     <Compile Include="Models\TeamsAndStatusesFilter.cs" />
     <Compile Include="Models\TabletInfoReportListViewModel.cs" />
     <Compile Include="Models\Template\ImportQuestionnaireList.cs" />
     <Compile Include="Models\Template\QuestionnaireListItemModel.cs" />
-    <Compile Include="Models\TroubleshootModel.cs" />
     <Compile Include="Models\UserBatchUploadModel.cs" />
     <Compile Include="Models\Account\UserEditModel.cs" />
     <Compile Include="Models\Account\UserModel.cs" />
@@ -2087,27 +2092,28 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="Cleanup HqApp" BeforeTargets="BeforeRebuild" Condition="'$(NCrunch)' != '1'">
+    <Message Text="Cleaning up HQ App" />
+    <ItemGroup>
+      <FilesToDelete Include="HqApp\dist\**\*.js" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+  </Target>
   <!-- HQ APP -->
-  <Target Name="RestoreHqAppDeps" BeforeTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug'">
+  <Target Name="RestoreHqAppDeps" BeforeTargets="RunWebpackDev" Condition=" '$(NCrunch)' != '1' And '$(Configuration)' == 'Debug' ">
     <Message Importance="high" Text="Restoring HQ App npm deps" />
     <Exec Command="yarn --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
-    <Exec Command="yarn" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
+    <Exec Command="yarn --ignore-scripts" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
     <Exec Command="npm install" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' != '0'" />
   </Target>
-  <Target Name="RunWebpackVendor" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\vendor.bundle.js') ">
-    <!-- In development, the dist files won't exist on the first run or when cloning to a different machine, so rebuild them if not already present. -->
-    <Message Importance="high" Text="Performing first-run Webpack build..." />
-    <Exec Command="npm run vendor" WorkingDirectory="HqApp" />
-    <Exec Command="npm run dev" WorkingDirectory="HqApp" />
-  </Target>
-  <Target Name="RunWebpackDev" AfterTargets="RestoreHqAppDeps" Condition=" '$(Configuration)' == 'Debug' And Exists('HqApp\dist\vendor.bundle.js') ">
+  <Target Name="RunWebpackDev" AfterTargets="AfterBuild" Condition="  '$(NCrunch)' != '1' And '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\app.bundle.js') ">
     <Message Importance="high" Text="Performing dev Webpack build..." />
-    <Exec Command="npm run dev" WorkingDirectory="HqApp" />
+    <Exec Command="npm run dev -- --no-color" WorkingDirectory="HqApp" />
   </Target>
   <!-- /HQ APP -->
-  <Target Name="CollectWebInterviewView" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollectWebInterviewView" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CollectWebInterviewView_CustomFiles Include="Views\WebInterview\**\*" />
       <FilesForPackagingFromProject Include="%(CollectWebInterviewView_CustomFiles.Identity)">
@@ -2115,7 +2121,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollecHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollecHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CollecHqApp_CustomFiles Include="HqApp\dist\**\*.js" />
       <FilesForPackagingFromProject Include="%(CollecHqApp_CustomFiles.Identity)">
@@ -2123,7 +2129,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.*" />
       <FilesForPackagingFromProject Include="%(CollecHqDeps_CustomFiles.Identity)">
@@ -2131,7 +2137,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollectWebInterviewAppFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollectWebInterviewAppFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CollectWebInterviewAppFiles_CustomFiles Include="InterviewApp\**\*" />
       <FilesForPackagingFromProject Include="%(CollectWebInterviewAppFiles_CustomFiles.Identity)">
@@ -2139,7 +2145,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CustomCollectFilesToExternals" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CustomCollectFilesToExternals" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CustomCollectFilesToExternals_CustomFiles Include="Externals\**\*" />
       <FilesForPackagingFromProject Include="%(CustomCollectFilesToExternals_CustomFiles.Identity)">
@@ -2147,7 +2153,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CollectVendorFileFonts_CustomFiles Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\*" />
       <FilesForPackagingFromProject Include="%(CollectVendorFileFonts_CustomFiles.Identity)">
@@ -2155,7 +2161,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollectFilesFromBin_x64" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollectFilesFromBin_x64" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <Message Text="Copying sqlite x64" Importance="high" />
     <ItemGroup>
       <_SQLiteFiles_x64 Include="$(MSBuildProjectDirectory)\bin\x64\**\*" />
@@ -2164,7 +2170,7 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollectFilesFromBin_x86" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy">
+  <Target Name="CollectFilesFromBin_x86" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <Message Text="Copying sqlite x86" Importance="high" />
     <ItemGroup>
       <_SQLiteFiles_x86 Include="$(MSBuildProjectDirectory)\bin\x86\**\*" />
@@ -2177,16 +2183,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50491</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/headquarters</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

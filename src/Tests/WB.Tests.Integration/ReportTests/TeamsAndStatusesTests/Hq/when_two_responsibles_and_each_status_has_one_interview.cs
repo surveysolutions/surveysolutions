@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             reportFactory = CreateHqTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel {Order = "CompletedCount ASC" }));
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesInputModel {Order = "CompletedCount ASC" }));
 
         It should_return_row_per_responsible = () => report.TotalCount.ShouldEqual(2);
 
@@ -59,7 +59,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
 
         It should_count_3_interviews_for_second_responsible = () => report.Items.ToList()[1].CompletedCount.ShouldEqual(3);
 
-        static HeadquartersTeamsAndStatusesReport reportFactory;
+        static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
     }
 }

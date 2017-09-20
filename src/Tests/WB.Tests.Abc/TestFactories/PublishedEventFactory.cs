@@ -24,8 +24,8 @@ namespace WB.Tests.Abc.TestFactories
                 .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
 
         public IPublishedEvent<InterviewCreated> InterviewCreated(
-            Guid? interviewId = null, string userId = null, string questionnaireId = null, long questionnaireVersion = 0)
-            => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null)
+            Guid? interviewId = null, string userId = null, string questionnaireId = null, long questionnaireVersion = 0, DateTime? createTime = null)
+            => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null, creationTime: createTime)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewDeleted> InterviewDeleted(string userId = null, string origin = null, Guid? interviewId = null)
@@ -33,8 +33,8 @@ namespace WB.Tests.Abc.TestFactories
                 .ToPublishedEvent(origin: origin, eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewerAssigned> InterviewerAssigned(
-            Guid? interviewId = null, string userId = null, string interviewerId = null)
-            => new InterviewerAssigned(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(interviewerId) ?? Guid.NewGuid(), DateTime.Now)
+            Guid? interviewId = null, string userId = null, string interviewerId = null, DateTime? assignTime = null)
+            => new InterviewerAssigned(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(interviewerId) ?? Guid.NewGuid(), assignTime ?? DateTime.Now)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewFromPreloadedDataCreated> InterviewFromPreloadedDataCreated(
@@ -77,8 +77,8 @@ namespace WB.Tests.Abc.TestFactories
             => Create.PublishedEvent.InterviewStatusChanged(interviewId ?? Guid.NewGuid(), status, comment: comment);
 
         public IPublishedEvent<SupervisorAssigned> SupervisorAssigned(Guid? interviewId = null, string userId = null,
-            string supervisorId = null)
-            => new SupervisorAssigned(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(supervisorId) ?? Guid.NewGuid())
+            string supervisorId = null, DateTime? assignTime = null)
+            => new SupervisorAssigned(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(supervisorId) ?? Guid.NewGuid(), assignTime)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<SynchronizationMetadataApplied> SynchronizationMetadataApplied(string userId = null,

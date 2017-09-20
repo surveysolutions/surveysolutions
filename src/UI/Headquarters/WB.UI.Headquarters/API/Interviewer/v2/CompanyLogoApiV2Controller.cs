@@ -14,18 +14,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class CompanyLogoApiV2Controller : ApiController
     {
-        private readonly IPlainKeyValueStorage<CompanyLogo> logoStorage;
+        private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
 
-        public CompanyLogoApiV2Controller(IPlainKeyValueStorage<CompanyLogo> logoStorage)
+        public CompanyLogoApiV2Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
         {
-            this.logoStorage = logoStorage;
+            this.appSettingsStorage = appSettingsStorage;
         }
 
         [HttpGet]
         public HttpResponseMessage Get()
         {
             var incomingEtag = Request.Headers.IfNoneMatch.FirstOrDefault()?.Tag ?? "";
-            var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
+            var companyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
 
             if (companyLogo == null) return Request.CreateResponse(HttpStatusCode.NoContent);
 

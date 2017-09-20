@@ -34,23 +34,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = null,
-            params ExportedHeaderItem[] exportedHeaderItems)
+            params ExportedQuestionHeaderItem[] exportedQuestionHeaderItems)
         {
             var result = new HeaderStructureForLevel();
             result.LevelScopeVector = new ValueVector<Guid>();
             result.LevelName = levelName;
             result.LevelIdColumnName = "Id";
-            foreach (var exportedHeaderItem in exportedHeaderItems)
+            foreach (var exportedHeaderItem in exportedQuestionHeaderItems)
             {
                 result.HeaderItems.Add(exportedHeaderItem.PublicKey, exportedHeaderItem);
             }
             return result;
         }
 
-        protected static ExportedHeaderItem CreateExportedHeaderItem(string variableName = "item", string title = "some item",
+        protected static ExportedQuestionHeaderItem CreateExportedHeaderItem(string variableName = "item", string title = "some item",
             params LabelItem[] labels)
         {
-            return new ExportedHeaderItem()
+            return new ExportedQuestionHeaderItem()
             {
                 PublicKey = Guid.NewGuid(),
                 VariableName = variableName,

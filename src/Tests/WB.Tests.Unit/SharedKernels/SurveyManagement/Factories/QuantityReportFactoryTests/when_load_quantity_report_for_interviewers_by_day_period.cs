@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         private QuantityReportFactory quantityReportFactory;
         private QuantityByInterviewersReportInputModel input;
         private QuantityByResponsibleReportView result;
-        private TestInMemoryWriter<InterviewStatuses> interviewStatuses;
+        private TestInMemoryWriter<InterviewSummary> interviewStatuses;
         private readonly Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
 
         [OneTimeSetUp]
@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
                 supervisorId: supervisorId,
                 timestamp: input.From.Date.AddDays(2)));
 
-            interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
 
             interviewStatuses.Store(
-                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: interviewsInStaus.ToArray()), "2");
 
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
         [Test]
         public void should_return_total_row_with_21_interview_at_first_period_and_zero_interviews_at_second()
         {
-            result.TotalRow.QuantityByPeriod.Should().Equal(21, 0);
+            result.TotalRow.QuantityByPeriod.Should().Equal(0, 21);
         }
 
         [Test]

@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
@@ -37,8 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 commandService ?? Mock.Of<ICommandService>(),
                 uniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(x => x.Get() == GeneratedInterviewKey),
                 syncSettings ?? new SyncSettings(),
-                interviews ?? new TestInMemoryWriter<InterviewSummary>()
-                );
+                interviews ?? new TestInMemoryWriter<InterviewSummary>(),
+                Mock.Of<ITransactionManager>());
         }
     }
 }

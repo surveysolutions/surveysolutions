@@ -31,16 +31,7 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.7",
     "main-bower-files": "^2.13.1",
-    "vinyl-source-stream": "^1.1.0",
-    "vue": "^2.2.2",
-    "vue-resource": "^1.2.1",
-    "vueify": "^9.4.1",
-    "vueify-insert-css": "^1.0.0"
-  },
-  "browserify-shim": {
-    "vue": "global:Vue",
-    "vue-resource": "global:VueResource",
-    "vee-validate": "global:VeeValidate"
+    "vinyl-source-stream": "^1.1.0"
   },
   "browserify": {
     "transform": [
@@ -58,7 +49,6 @@
     "browserify": "^14.1.0",
     "gulp": "^3.9.1",
     "gulp-install": "^1.1.0",
-    "gulp-main-bower-files": "^1.6.0",
-    "vue-flatpickr": "^2.3.0"
+    "gulp-main-bower-files": "^1.6.0"
   }
 }

@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.Engine;
-using NHibernate.Hql.Ast.ANTLR;
 using NHibernate.Impl;
 using NHibernate.Linq;
 using NHibernate.Loader.Criteria;
 using NHibernate.Persister.Entity;
 using Ninject;
-using Npgsql;
-using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -68,18 +63,28 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").ExecuteUpdate();
         }
 
+        public List<string> GetIdsStartWith(string beginingOfId)
+        {
+            var session = this.sessionProvider.GetSession();
+
+            string hql = $"SELECT e.{entityIdentifierColumnName} FROM {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
+
+            return session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").List<string>().ToList();
+        }
+
         public virtual void Store(TEntity entity, string id)
         {
             ISession session = this.sessionProvider.GetSession();
 
             var storedEntity = session.Get<TEntity>(id);
-
             if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
             {
-                session.Evict(storedEntity);
+                session.Merge(storedEntity);
             }
-
-            session.SaveOrUpdate(null, entity, id);
+            else
+            {
+                session.SaveOrUpdate(entity);
+            }
         }
 
         public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
