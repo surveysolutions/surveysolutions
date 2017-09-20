@@ -1519,6 +1519,7 @@
     <Content Include="Views\Shared\_export-buttons.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <Content Include="Views\Assignments\index.cshtml" />
+    <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
