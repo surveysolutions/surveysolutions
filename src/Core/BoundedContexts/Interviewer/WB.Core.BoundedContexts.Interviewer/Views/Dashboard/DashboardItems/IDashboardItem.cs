@@ -36,8 +36,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     public class ActionDefinition : INotifyPropertyChanged
     {
         private string label;
-        private DashboardInterviewStatus colorStatus;
-       
         public ActionType ActionType { get; set; }
         public int Tag { get; set; }
 
@@ -55,17 +53,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public bool IsEnabled => Command?.CanExecute() ?? false;
 
         public IMvxCommand Command { get; set; }
-
-        public DashboardInterviewStatus ColorStatus
-        {
-            get => colorStatus;
-            set
-            {
-                if (colorStatus == value) return;
-                colorStatus = value;
-                OnPropertyChanged();
-            }
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -665,6 +665,9 @@ your next synchronization</value>
   </data>
   <data name="Dashboard_Open" xml:space="preserve">
     <value>Open</value>
+  </data>  
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>View Issues</value>
   </data>
   <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Reopen</value>
@@ -677,6 +680,9 @@ your next synchronization</value>
   </data>
   <data name="Dashboard_Dismiss" xml:space="preserve">
     <value>Dismiss</value>
+  </data>
+  <data name="Dashboard_Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat">
     <value>{0} question(s) answered</value>

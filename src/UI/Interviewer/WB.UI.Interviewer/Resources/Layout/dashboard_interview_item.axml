@@ -112,10 +112,13 @@
     <Button android:id="@+id/main_action"
           app:MvxBind="Text PrimaryAction.Label; 
           Click PrimaryAction.Command;
-          Enabled PrimaryAction.IsEnabled;          
+          Enabled PrimaryAction.IsEnabled;
+          BackgroundStyle InterviewStatusToButton(Status);
           Visible (IsExpanded || Not(HasExpandedView))"
-          
+            
           style="@style/Dashboard_InterviewItem_MainActionButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
           app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
           app:layout_constraintTop_toBottomOf="@+id/prefilledQuestions" />
 

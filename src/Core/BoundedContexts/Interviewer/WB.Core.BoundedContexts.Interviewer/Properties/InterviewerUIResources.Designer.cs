@@ -181,6 +181,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Dashboard_Delete {
+            get {
+                return ResourceManager.GetString("Dashboard_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Discard.
         /// </summary>
         public static string Dashboard_Discard {
@@ -379,6 +388,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_Title {
             get {
                 return ResourceManager.GetString("Dashboard_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Issues.
+        /// </summary>
+        public static string Dashboard_ViewIssues {
+            get {
+                return ResourceManager.GetString("Dashboard_ViewIssues", resourceCulture);
             }
         }
         
