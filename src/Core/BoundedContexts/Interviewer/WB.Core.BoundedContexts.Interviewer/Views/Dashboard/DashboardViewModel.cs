@@ -155,6 +155,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             var interviewView = this.interviewsRepository.GetById(lastVisitedInterviewId.FormatGuid());
             if (interviewView == null) return;
 
+
             if (interviewView.Status == InterviewStatus.RejectedBySupervisor)
                 this.TypeOfInterviews = this.RejectedInterviews.InterviewStatus;
 
