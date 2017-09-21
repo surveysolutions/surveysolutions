@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             try
             {
-                var newItems = this.GetUiItems();
+                var newItems = this.GetUiItems().ToList();
                 this.UiItems.ReplaceWith(newItems);
             }
             finally
