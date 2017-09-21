@@ -17,8 +17,7 @@
 
     <View android:id="@+id/card_status"
       style="@style/Dashboard_Card_Status"
-      app:MvxBind="BackgroundStyle InterviewStatusToDrawable(Status)"
-      
+      app:MvxBind="BackgroundStyle InterviewStatusToDrawable(Status); Visible Not(IsAssignment)"
       android:orientation="horizontal"
       android:background="@drawable/dashboard_interview_status_new"
       app:layout_constraintBottom_toBottomOf="parent"
@@ -48,7 +47,7 @@
 
     <!--For some reason moving padding data to styles - break visuals-->
     <TextView
-      android:id="@+id/menu" app:MvxBind="Visible HasAdditionalActions"
+      android:id="@+id/menu" app:MvxBind="Visible HasContextMenu"
       android:text="@string/vertical_ellipsis"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintRight_toRightOf="parent"
@@ -111,10 +110,10 @@
                style="@style/Dashboard_ExpandHandle" />
 
     <Button android:id="@+id/main_action"
-          app:MvxBind="Text MainActionLabel; 
-          Click MainAction;
-          Enabled MainActionEnabled;          
-          Visible (IsExpanded || Not(HasExpandedView));"
+          app:MvxBind="Text PrimaryAction.Label; 
+          Click PrimaryAction.Command;
+          Enabled PrimaryAction.IsEnabled;          
+          Visible (IsExpanded || Not(HasExpandedView))"
           
           style="@style/Dashboard_InterviewItem_MainActionButton"
           app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
@@ -123,9 +122,9 @@
     <TextView
       android:id="@+id/show_location"
       style="@style/Dashboard_Location"
-      app:MvxBind="Visible And(HasGpsLocation, Or(IsExpanded, Not(HasExpandedView)));
+      app:MvxBind="Visible And(SecondaryAction.HasValue, Or(IsExpanded, Not(HasExpandedView)));
                 Text Localization('Dashboard_ShowLocation');                               
-                Click NavigateToGpsLocationCommand;"
+                Click SecondaryAction.Command;"
 
       app:layout_constraintBaseline_toBaselineOf="@+id/main_action"
       app:layout_constraintLeft_toRightOf="@+id/main_action" />

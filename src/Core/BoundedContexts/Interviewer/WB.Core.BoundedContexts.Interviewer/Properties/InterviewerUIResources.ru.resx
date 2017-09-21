@@ -666,9 +666,6 @@
     <value>Синхронизация {0} из {1} заданий</value>
     <comment>Синхронизация {0} из {1} заданий</comment>
   </data>
-  <data name="Dashboard_CardIdTitleFormat" xml:space="preserve">
-    <value>id {0}</value>
-  </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
     <value>Интервью {0} из {1} для этой задачи</value>
   </data>
@@ -682,12 +679,18 @@
     <value>{0} вопросов(а) отвечено</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
-    <value>Задача #{0}</value>
+    <value>Задача {0}</value>
   </data>
   <data name="Dashboard_No_InterviewKey" xml:space="preserve">
     <value>Без ключа</value>
   </data>
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Цензус</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Переоткрыть</value>
+  </data>
+  <data name="Dashboard_Dismiss" xml:space="preserve">
+    <value>Отклонить</value>
   </data>
 </root>

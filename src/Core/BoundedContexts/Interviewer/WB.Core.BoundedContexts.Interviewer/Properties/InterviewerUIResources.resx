@@ -648,10 +648,6 @@ your next synchronization</value>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>You can create new interviews using assignments</value>
   </data>
-  <data name="Dashboard_CardIdTitleFormat" xml:space="preserve">
-    <value>id {0}</value>
-    <comment>{0} - Assignment id</comment>
-  </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
     <value>Interview {0} of {1} for this assignment</value>
     <comment>{0} - number of interviews created
@@ -670,17 +666,23 @@ your next synchronization</value>
   <data name="Dashboard_Open" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Reopen</value>
+  </data>
   <data name="Dashboard_ShowLocation" xml:space="preserve">
     <value>Show location</value>
   </data>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Discard</value>
   </data>
+  <data name="Dashboard_Dismiss" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat">
     <value>{0} questions answered</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat">
-    <value>Assignment #{0}</value>
+    <value>Assignment {0}</value>
     <comment>{0} - is an assignment id</comment>
   </data>
   <data name="Dashboard_No_InterviewKey">
