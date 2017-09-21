@@ -96,7 +96,8 @@
   <style name="Dashboard_InterviewItem_Title">
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:maxLines">2</item>
+    <item name="android:maxLines">3</item>
+    <item name="android:ellipsize">end</item>
     <item name="android:paddingEnd">14dp</item>
     <item name="android:scrollHorizontally">false</item>
     <item name="android:textSize">@dimen/textsize_14</item>
