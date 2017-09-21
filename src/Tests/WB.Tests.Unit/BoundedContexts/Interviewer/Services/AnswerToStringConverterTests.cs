@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
 
 
         [Test]
-        public void should_use_local_user_timezone_of_date_question_for_timestamp_question()
+        public void should_not_use_local_user_timezone_of_date_question_for_timestamp_question()
         {
             TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
             DateTime dt =TimeZoneInfo.ConvertTimeBySystemTimeZoneId(new DateTime(2010, 4, 15, 14, 30, 0), tzi.StandardName);
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             var stringAnswer = converter.Convert(dt, Id.g1, questionnaire);
 
             // assert
-            Assert.That(stringAnswer, Is.EqualTo(dt.ToLocalTime().ToString(DateTimeFormat.DateWithTimeFormat)));
+            Assert.That(stringAnswer, Is.EqualTo(dt.ToString(DateTimeFormat.DateWithTimeFormat)));
         }
     }
 }
