@@ -705,12 +705,15 @@
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived_having_answered_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryDenormalizerTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\StatusChangeHistoryDenormalizerFunctionalTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\ExportViewFactoryTestsContext_Variables_Tests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_linked_multi_question_on_second_level_referenced_on_third.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_question_text_contains_html.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_first_created_intervew_exists.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_getting_report_with_header.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\QuantityReportFactoryTests\when_loading_report_with_data_in_last_period.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ReportHelpersTests.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_getting_report_with_header.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_load_speed_report_for_interview_duration.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\SpeedReportFactoryTests\when_calculating_grand_averagel_with_supervisor_id_provided.cs" />
     <Compile Include="SharedKernels\SurveyManagement\FilebasedPreloadedDataRepositoryTests\FilebasedPreloadedDataRepositoryTests.cs" />

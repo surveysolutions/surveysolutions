@@ -144,6 +144,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsEndpointValid = true;
             bool isNeedNavigateToRelinkPage = false;
 
+            if (this.Endpoint?.StartsWith("@") == true)
+            {
+                this.Endpoint = $"https://{this.Endpoint.Substring(1)}.mysurvey.solutions";
+            }
+
             this.interviewerSettings.SetEndpoint(this.Endpoint);
 
             var restCredentials = new RestCredentials
