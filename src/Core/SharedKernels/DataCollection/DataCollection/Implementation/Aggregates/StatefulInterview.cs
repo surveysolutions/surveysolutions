@@ -247,6 +247,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
+            Complete(userId, comment, completeTime, true);
+        }
+
+        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTime completeTime)
+        {
+            Complete(userId, comment, completeTime, false);
+        }
+
+        private void Complete(Guid userId, string comment, DateTime completeTime, bool isNeedFirePassiveEvents)
+        {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
@@ -255,9 +265,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
-            var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
-
-            this.ApplyPassiveEvents(treeDifference);
+            if (isNeedFirePassiveEvents)
+            {
+                var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
+                this.ApplyPassiveEvents(treeDifference);
+            }
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
