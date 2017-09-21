@@ -668,7 +668,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
                     question.Identity.RosterVector,
-                    InterviewTreeQuestion.GetAnswerAsObjectForSync(question),
+                    InterviewTreeQuestion.GetAnswerAsObject(question),
                     comments);
 
                 if (question.IsAnswered() || answeredQuestion.HasComments())
