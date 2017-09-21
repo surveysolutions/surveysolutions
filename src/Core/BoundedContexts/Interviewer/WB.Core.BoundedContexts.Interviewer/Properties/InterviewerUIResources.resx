@@ -679,7 +679,7 @@ your next synchronization</value>
     <value>Dismiss</value>
   </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat">
-    <value>{0} questions answered</value>
+    <value>{0} question(s) answered</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat">
     <value>Assignment {0}</value>
