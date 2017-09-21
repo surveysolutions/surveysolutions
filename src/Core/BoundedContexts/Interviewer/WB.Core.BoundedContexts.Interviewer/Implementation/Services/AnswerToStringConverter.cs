@@ -27,10 +27,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             ? DateTime.Parse((string) answer)
                             : (DateTime) answer;
                         var isTimestamp = questionnaire.IsTimestampQuestion(questionId);
-                        var localTime = isTimestamp ? dateTimeAnswer.ToLocalTime() : dateTimeAnswer;
                         answer = isTimestamp
-                            ? localTime.ToString(DateTimeFormat.DateWithTimeFormat)
-                            : localTime.ToString(DateTimeFormat.DateFormat);
+                            ? dateTimeAnswer.ToString(DateTimeFormat.DateWithTimeFormat)
+                            : dateTimeAnswer.ToString(DateTimeFormat.DateFormat);
                         break;
 
                     case QuestionType.MultyOption:
