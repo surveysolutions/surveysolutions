@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -37,7 +38,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<TextListQuestionAnswered>,
                                          ILitePublishedEventHandler<PictureQuestionAnswered>,
                                          ILitePublishedEventHandler<AudioQuestionAnswered>,
-
                                          ILitePublishedEventHandler<AnswersRemoved>,
                                          ILitePublishedEventHandler<InterviewOnClientCreated>,
                                          ILitePublishedEventHandler<InterviewFromPreloadedDataCreated>,
@@ -73,28 +73,31 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Handle(IPublishedEvent<SynchronizationMetadataApplied> evnt)
         {
-            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
-                evnt.Payload.QuestionnaireVersion,
+            var payload = evnt.Payload;
+
+            this.AddOrUpdateInterviewToDashboard(payload.QuestionnaireId,
+                payload.QuestionnaireVersion,
                 evnt.EventSourceId,
-                evnt.Payload.UserId,
-                evnt.Payload.Status,
-                evnt.Payload.Comments,
-                evnt.Payload.FeaturedQuestionsMeta,
-                evnt.Payload.CreatedOnClient,
+                payload.UserId,
+                payload.Status,
+                payload.Comments,
+                payload.FeaturedQuestionsMeta,
+                payload.CreatedOnClient,
                 canBeDeleted: false,
-                assignedDateTime: evnt.Payload.InterviewerAssignedDateTime,
+                assignedDateTime: payload.InterviewerAssignedDateTime,
                 startedDateTime: null,
-                rejectedDateTime: evnt.Payload.RejectedDateTime,
+                rejectedDateTime: payload.RejectedDateTime,
                 assignmentId: null,
                 interviewKey: null);
         }
 
         public void Handle(IPublishedEvent<InterviewCreated> evnt)
         {
-            this.AddOrUpdateInterviewToDashboard(evnt.Payload.QuestionnaireId,
-                evnt.Payload.QuestionnaireVersion,
+            var payload = evnt.Payload;
+            this.AddOrUpdateInterviewToDashboard(payload.QuestionnaireId,
+                payload.QuestionnaireVersion,
                 evnt.EventSourceId,
-                evnt.Payload.UserId,
+                payload.UserId,
                 InterviewStatus.InterviewerAssigned,
                 comments: null,
                 answeredQuestions: new AnsweredQuestionSynchronizationDto[0],
@@ -103,7 +106,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 assignedDateTime: evnt.EventTimeStamp,
                 startedDateTime: evnt.EventTimeStamp,
                 rejectedDateTime: null,
-                assignmentId: evnt.Payload.AssignmentId,
+                assignmentId: payload.AssignmentId,
                 interviewKey: null);
         }
 
@@ -142,8 +145,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 assignmentId: evnt.Payload.AssignmentId,
                 interviewKey: null);
         }
-
-
+        
         private void AddOrUpdateInterviewToDashboard(Guid questionnaireId, 
             long questionnaireVersion, 
             Guid interviewId, 
@@ -157,7 +159,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             DateTime? startedDateTime, 
             DateTime? rejectedDateTime, 
             int? assignmentId, 
-            InterviewKey interviewKey)
+            InterviewKey interviewKey,
+            int? answersCount = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
@@ -183,6 +186,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 LastInterviewerOrSupervisorComment = comments,
                 AnsweredQuestionsCount = answeredQuestions.Count()
             };
+
+            if (answersCount.HasValue)
+            {
+                interviewView.AnsweredQuestionsCount = answersCount.Value;
+            }
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
@@ -270,20 +278,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Handle(IPublishedEvent<InterviewSynchronized> evnt)
         {
-            this.AddOrUpdateInterviewToDashboard(evnt.Payload.InterviewData.QuestionnaireId,
-                evnt.Payload.InterviewData.QuestionnaireVersion,
+            var payload = evnt.Payload;
+
+            this.AddOrUpdateInterviewToDashboard(payload.InterviewData.QuestionnaireId,
+                payload.InterviewData.QuestionnaireVersion,
                 evnt.EventSourceId,
-                evnt.Payload.UserId,
-                evnt.Payload.InterviewData.Status,
-                evnt.Payload.InterviewData.Comments,
-                evnt.Payload.InterviewData.Answers,
-                evnt.Payload.InterviewData.CreatedOnClient,
+                payload.UserId,
+                payload.InterviewData.Status,
+                payload.InterviewData.Comments,
+                payload.InterviewData.Answers,
+                payload.InterviewData.CreatedOnClient,
                 canBeDeleted: false,
-                assignedDateTime: evnt.Payload.InterviewData.InterviewerAssignedDateTime,
+                assignedDateTime: payload.InterviewData.InterviewerAssignedDateTime,
                 startedDateTime: null,
-                rejectedDateTime: evnt.Payload.InterviewData.RejectDateTime, 
-                assignmentId: evnt.Payload.InterviewData.AssignmentId,
-                interviewKey: evnt.Payload.InterviewData.InterviewKey);
+                rejectedDateTime: payload.InterviewData.RejectDateTime,
+                assignmentId: payload.InterviewData.AssignmentId,
+                interviewKey: payload.InterviewData.InterviewKey,
+                answersCount: payload.InterviewData.Answers?.Length);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
@@ -321,15 +332,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.AnswerOnPrefilledQuestion(interviewId, questionId, answer);
             this.SetStartedDateTimeOnFirstAnswer(interviewId, questionId, answerTimeUtc);
-            HandleAnswersCount(interviewId, answer != null);
+            HandleAnswersCount(interviewId, 1);
         }
 
-        private void HandleAnswersCount(Guid interviewId, bool addAnswer)
+        private void HandleAnswersCount(Guid interviewId, int answersAmount)
         {
             var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
             if (interviewView == null) return;
 
-            interviewView.AnsweredQuestionsCount += addAnswer ? 1 : -1;
+            interviewView.AnsweredQuestionsCount += answersAmount;
 
             this.interviewViewRepository.Store(interviewView);
         }
