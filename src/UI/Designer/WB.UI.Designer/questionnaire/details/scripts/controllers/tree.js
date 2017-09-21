@@ -295,14 +295,15 @@
                     var destItem = event.dest.nodesScope.item;
                     var destGroupId = destItem ? destItem.itemId : $state.params.chapterId;
                     var rollbackMoveAction = function (item, parent, index, destEvent) {
-                        var dropFrom = item.getParentItem() || $scope;
+                        var dropFrom = item.getParentItem() || $scope.currentChapter;
 
                         var indexOfItem = _.indexOf(dropFrom.items, item);
-                        dropFrom.items.splice(indexOfItem, 1);
+                        if (indexOfItem >= 0)
+                            dropFrom.items.splice(indexOfItem, 1);
                         var itemsToAddTo = _.isNull(parent) ? $scope.items : parent.items;
                         itemsToAddTo.splice(index, 0, item);
 
-                        destEvent.nodesScope.items.splice(destEvent.index, 1);
+                        destEvent.nodesScope.item.items.splice(destEvent.index, 1);
 
                         connectTree();
                     };
