@@ -47,21 +47,14 @@
       app:layout_constraintGuide_begin="@dimen/dashboard_card_base_margin" />
 
     <!--For some reason moving padding data to styles - break visuals-->
-    <ImageView
-      android:id="@+id/menu"
-      app:MvxBind="Visible HasAdditionalActions"
-      
-      android:layout_width="wrap_content"
-      android:layout_height="@dimen/dashboard_card_duo_margin"
-
-      android:layout_marginRight="18dp"
-      android:paddingLeft="14dp"
-      android:paddingRight="0dp"
+    <TextView
+      android:id="@+id/menu" app:MvxBind="Visible HasAdditionalActions"
+      android:text="@string/vertical_ellipsis"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/top_guideline"
       app:layout_constraintVertical_bias="0"
-      app:srcCompat="@drawable/dashboard_menu_handle" />
+      style="@style/Dashboard_Menu_Handle_Text" />
 
     <TextView
 	    android:id="@+id/id"

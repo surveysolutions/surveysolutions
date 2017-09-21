@@ -63,6 +63,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").ExecuteUpdate();
         }
 
+        public List<string> GetIdsStartWith(string beginingOfId)
+        {
+            var session = this.sessionProvider.GetSession();
+
+            string hql = $"SELECT e.{entityIdentifierColumnName} FROM {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
+
+            return session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").List<string>().ToList();
+        }
+
         public virtual void Store(TEntity entity, string id)
         {
             ISession session = this.sessionProvider.GetSession();

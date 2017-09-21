@@ -25,10 +25,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
     public class MenuAction
     {
-        public MenuAction(string dashboard_Discard, IMvxCommand mvxAsyncCommand, bool enabled)
+        public MenuAction(string label, IMvxCommand action, bool enabled)
         {
-            this.Label = dashboard_Discard;
-            this.Action = mvxAsyncCommand;
+            this.Label = label;
+            this.Action = action;
             this.Enabled = enabled;
         }
 
