@@ -167,7 +167,21 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaire == null)
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotFound, $@"Questionnaire not found: {createItem?.QuestionnaireId}"));
 
-            var assignment = new Assignment(questionnaireId, responsible.Id, createItem.Quantity);
+            int? quantity;
+            switch (createItem.Quantity)
+            {
+                case null:
+                    quantity = 1;
+                    break;
+                case -1:
+                    quantity = null;
+                    break;
+                default:
+                    quantity = createItem.Quantity;
+                    break;
+            }
+
+            var assignment = new Assignment(questionnaireId, responsible.Id, quantity);
 
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
