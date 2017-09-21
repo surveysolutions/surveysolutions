@@ -124,5 +124,33 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
 
             this.assignmentsStorage.Verify(ass => ass.Store(It.IsAny<Assignment>(), null), Times.Once);
         }
+
+        [Test]
+        public void and_quantity_minus_1_should_stored_new_assignment_has_null_quantity()
+        {
+            var qid = QuestionnaireIdentity.Parse("f2250674-42e6-4756-b394-b86caa62225e$1");
+
+            this.SetupResponsibleUser(Create.Entity.HqUser());
+            this.SetupQuestionnaire(Create.Entity.QuestionnaireDocument());
+
+            var assignment = Create.Entity.Assignment(1, qid);
+
+            this.mapper
+                .Setup(m => m.Map(It.IsAny<CreateAssignmentApiRequest>(), It.IsAny<Assignment>()))
+                .Returns(assignment);
+
+            this.interviewImportService
+                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
+                .Returns(AssignmentVerificationResult.Ok());
+
+            this.controller.Create(new CreateAssignmentApiRequest
+            {
+                QuestionnaireId = qid.ToString(),
+                Responsible = "any",
+                Quantity = -1
+            });
+
+            this.assignmentsStorage.Verify(ass => ass.Store(It.Is<Assignment>(x=>x.Quantity == null), null), Times.Once);
+        }
     }
 }
