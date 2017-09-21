@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 
         void RemoveIfStartsWith(string beginingOfId);
 
-        List<string> GetIdsStartWith(string beginingOfId);
+        IEnumerable<string> GetIdsStartWith(string beginingOfId);
 
         void Store(TEntity view, string id);
 
