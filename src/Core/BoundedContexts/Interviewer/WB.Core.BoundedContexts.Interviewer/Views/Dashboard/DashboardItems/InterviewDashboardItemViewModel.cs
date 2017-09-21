@@ -49,8 +49,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
 
-            BindTitles();
             BindDetails();
+            BindTitles();
             BindActions();
    
             this.RaiseAllPropertiesChanged();
@@ -150,7 +150,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             this.SubTitle = dateComment;
 
-            var answeredQuestions = interview.AnsweredQuestionsCount - interview.AnswersOnPrefilledQuestions?.Length ?? 0;
+            var prefilledAnswersCount = this.DetailedIdentifyingData.Count(id => !string.IsNullOrWhiteSpace(id.Answer));
+
+            var answeredQuestions = interview.AnsweredQuestionsCount - prefilledAnswersCount;
             if (answeredQuestions > 0)
             {
                 SubTitle += "\n" + InterviewerUIResources.Dashboard_Interview_QuestionsAnsweredFormat.FormatString(answeredQuestions);
