@@ -208,7 +208,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} questions answered.
+        ///   Looks up a localized string similar to {0} question(s) answered.
         /// </summary>
         public static string Dashboard_Interview_QuestionsAnsweredFormat {
             get {
