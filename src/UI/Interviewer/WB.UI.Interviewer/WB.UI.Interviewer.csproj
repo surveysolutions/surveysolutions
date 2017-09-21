@@ -342,6 +342,7 @@
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
     <Compile Include="Bootstrap\WebBrowserPluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="Converters\InterviewStatusToButtonConverter.cs" />
     <Compile Include="Converters\InterviewStatusToDrawableConverter.cs" />
     <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />

@@ -47,12 +47,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.interview = interviewView;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
-            this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
+            this.Status = this.GetDashboardCategoryForInterview(interview.Status);
 
             BindDetails();
             BindTitles();
             BindActions();
-   
+
             this.RaiseAllPropertiesChanged();
         }
 
@@ -69,16 +69,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 ActionType = ActionType.Primary,
                 Command = new MvxAsyncCommand(this.LoadInterviewAsync, () => this.isInterviewReadyToLoad),
-                Label = MainLabel(),
-                ColorStatus = Status
+                Label = MainLabel()
             });
 
             Actions.Add(new ActionDefinition
             {
                 ActionType = ActionType.Context,
                 Command = new MvxAsyncCommand(this.RemoveInterviewAsync, () => this.isInterviewReadyToLoad && interview.CanBeDeleted),
-                Label = DiscardLabel(),
-                ColorStatus = Status
+                Label = DiscardLabel()
             });
 
             string MainLabel()
@@ -91,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     case DashboardInterviewStatus.Completed:
                         return InterviewerUIResources.Dashboard_Reopen;
                     case DashboardInterviewStatus.Rejected:
-                        return InterviewerUIResources.Dashboard_Open;
+                        return InterviewerUIResources.Dashboard_ViewIssues;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -101,14 +99,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 switch (Status)
                 {
-                    case DashboardInterviewStatus.New:
-                        return InterviewerUIResources.Dashboard_Discard;
-                    case DashboardInterviewStatus.InProgress:
-                        return InterviewerUIResources.Dashboard_Discard;
                     case DashboardInterviewStatus.Completed:
-                        return InterviewerUIResources.Dashboard_Discard;
+                        return InterviewerUIResources.Dashboard_Delete;
+                    case DashboardInterviewStatus.New:
+                        return InterviewerUIResources.Dashboard_Dismiss;
+                    case DashboardInterviewStatus.InProgress:
+                        return InterviewerUIResources.Dashboard_Dismiss;
                     case DashboardInterviewStatus.Rejected:
-                        return InterviewerUIResources.Dashboard_Discard;
+                        return InterviewerUIResources.Dashboard_Dismiss;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -200,7 +198,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
 
-        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
+        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus)
         {
             switch (interviewStatus)
             {
@@ -211,9 +209,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;
                 case InterviewStatus.InterviewerAssigned:
-                    return startedDateTime.HasValue
-                        ? DashboardInterviewStatus.InProgress
-                        : DashboardInterviewStatus.New;
+                    return DashboardInterviewStatus.InProgress;
+                        
 
                 default:
                     throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
