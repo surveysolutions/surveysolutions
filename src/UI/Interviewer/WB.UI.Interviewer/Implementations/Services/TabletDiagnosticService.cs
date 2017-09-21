@@ -102,6 +102,11 @@ namespace WB.UI.Interviewer.Implementations.Services
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken, onDownloadProgressChanged);
                 cancellationToken.ThrowIfCancellationRequested();
 
+                if (this.fileSystemAccessor.IsFileExists(pathToNewApk))
+                {
+                    this.fileSystemAccessor.DeleteFile(pathToNewApk);
+                }
+
                 this.fileSystemAccessor.WriteAllBytes(pathToNewApk, patchOrFullApkBytes);
             }
 

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -84,6 +84,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string AnyHeadquarters {
             get {
                 return ResourceManager.GetString("AnyHeadquarters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments.
+        /// </summary>
+        public static string Assignments {
+            get {
+                return ResourceManager.GetString("Assignments", resourceCulture);
             }
         }
         
@@ -187,7 +196,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved by Headquarters interviews.
+        ///   Looks up a localized string similar to Interviews.
+        /// </summary>
+        public static string Interviews {
+            get {
+                return ResourceManager.GetString("Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approved by Headquarters.
         /// </summary>
         public static string InterviewStatus_ApprovedByHeadquarters {
             get {
@@ -196,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved by Supervisor interviews.
+        ///   Looks up a localized string similar to Approved by Supervisor.
         /// </summary>
         public static string InterviewStatus_ApprovedBySupervisor {
             get {
@@ -205,7 +223,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed interviews.
+        ///   Looks up a localized string similar to Completed.
         /// </summary>
         public static string InterviewStatus_Completed {
             get {
@@ -232,7 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer assigned assignments.
+        ///   Looks up a localized string similar to Interviewer assigned.
         /// </summary>
         public static string InterviewStatus_InterviewerAssigned {
             get {
@@ -250,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected by Headquarters interviews.
+        ///   Looks up a localized string similar to Rejected by Headquarters.
         /// </summary>
         public static string InterviewStatus_RejectedByHeadquarters {
             get {
@@ -259,7 +277,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rejected by Supervisor interviews.
+        ///   Looks up a localized string similar to Rejected by Supervisor.
         /// </summary>
         public static string InterviewStatus_RejectedBySupervisor {
             get {
@@ -295,7 +313,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor assigned assignments.
+        ///   Looks up a localized string similar to Supervisor assigned.
         /// </summary>
         public static string InterviewStatus_SupervisorAssigned {
             get {

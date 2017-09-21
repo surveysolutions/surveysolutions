@@ -76,10 +76,11 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize]
         [CamelCase]
-        public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showArchived = DEFAULT_SHOW_LOCKED)
+        public ResponsibleComboboxModel InterviewersCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
         {
             bool? isNeedShowActiveAndArchivedInterviewers = showArchived ? (bool?) null : false;
-            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null, archived: isNeedShowActiveAndArchivedInterviewers);
+            var supervisorId = this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null;
+            var users = this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: supervisorId, showLocked: showLocked, archived: isNeedShowActiveAndArchivedInterviewers);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.UserId.FormatGuid(), x.UserName, x.IconClass)).ToArray();
             return new ResponsibleComboboxModel(options, users.TotalCountByQuery);
         }
@@ -87,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
-        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_LOCKED)
+        public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
         {
             var users = this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked, showArchived: showArchived);
             var options = users.Users.Select(x => new ResponsibleComboboxOptionModel(x.ResponsibleId.FormatGuid(), x.UserName, x.IconClass)).ToArray();

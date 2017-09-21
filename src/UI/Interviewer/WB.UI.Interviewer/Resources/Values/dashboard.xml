@@ -100,7 +100,8 @@
     <item name="android:paddingEnd">14dp</item>
     <item name="android:scrollHorizontally">false</item>
     <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:textStyle">bold</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
   </style>
   <style name="Dashboard_InterviewItem_SubTitle">
@@ -108,7 +109,8 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:paddingEnd">@dimen/dashboard_card_base_margin</item>
     <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:textStyle">bold</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
   </style>
 
   <style name="dashboard_prefilledQuestion_container">
@@ -158,10 +160,12 @@
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">left|center_vertical</item>
     <item name="android:layout_weight">55</item>
-    <item name="android:textSize">@dimen/textsize_14</item>
 
+    <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:textColor">@color/dashboard_interview_title</item>
-    <item name="android:textStyle">bold</item>
+
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textStyle">normal</item>
     <item name="android:singleLine">true</item>
   </style>
 
@@ -190,10 +194,12 @@
     <item name="android:background">@drawable/default_input_button</item>
     <item name="android:paddingLeft">@dimen/dashboard_card_base_margin</item>
     <item name="android:paddingRight">@dimen/dashboard_card_base_margin</item>
-    <item name="android:textStyle">bold</item>
     <item name="android:textSize">@dimen/textsize_12</item>
     <item name="android:letterSpacing">0.2</item>
     <item name="android:textAllCaps">true</item>
+
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textStyle">normal</item>
   </style>
   
   <style name="Dashboard_Location">
@@ -203,7 +209,10 @@
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textSize">@dimen/textsize_12</item>
-    <item name="android:letterSpacing">0.2</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textStyle">normal</item>
+    
     <item name="android:background">?attr/selectableItemBackground</item>
     <item name="android:padding">@dimen/Interview_Group_button_padding</item>
   </style>
@@ -240,6 +249,16 @@
     <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
     <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+  </style>
+
+  <style name="Dashboard_Menu_Handle_Text">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">@dimen/dashboard_card_duo_margin</item>
+    <item name="android:layout_marginRight">24dp</item>
+    <item name="android:paddingLeft">14dp</item>
+    <item name="android:paddingRight">0dp</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textSize">20dp</item>
   </style>
 
   <style name="Dashboard_NoInterviewsPanel" parent="AppTheme">

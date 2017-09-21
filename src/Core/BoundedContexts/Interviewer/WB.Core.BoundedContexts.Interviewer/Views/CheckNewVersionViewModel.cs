@@ -73,11 +73,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token,
                     progress =>
                     {
-                        this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait 
-                        + $" ({progress.ProgressPercentage}%)";
+                        this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
+                                                     + $" ({progress.ProgressPercentage}%)";
                     });
 
                 this.CheckNewVersionResult = null;
+            }
+            catch (Exception) when (cancellationTokenSource.IsCancellationRequested)
+            {
+                this.CheckNewVersionResult = InterviewerUIResources.RequestCanceledByUser;
             }
             catch (Exception ex)
             {

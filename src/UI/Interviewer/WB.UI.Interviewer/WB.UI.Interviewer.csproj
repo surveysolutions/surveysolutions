@@ -367,10 +367,12 @@
     <Compile Include="App.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerLoggingModule.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
+    <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
+    <Compile Include="Services\CheckForVersionUriProvider.cs" />
     <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
     <Compile Include="Services\SyncServiceConnection.cs" />
     <Compile Include="Services\SyncBgService.cs" />
@@ -634,9 +636,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\dashboard_menu_handle.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

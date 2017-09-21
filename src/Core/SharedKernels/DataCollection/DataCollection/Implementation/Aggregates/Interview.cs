@@ -1418,7 +1418,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvents(treeDifference, command.UserId);
 
-            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId));
+            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.AnswersTime));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
 
             if (command.InterviewerId.HasValue)
@@ -1572,15 +1572,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             // events
             if (isNeedPerformAssignToSupervisor)
             {
-                this.FireSupervisorAssignedEvents(userId, supervisorId.Value);
+                this.FireSupervisorAssignedEvents(userId, supervisorId.Value, assignTime);
             }
 
             this.FireInterviewerAssignedEvents(userId, interviewerId, assignTime);
         }
 
-        private void FireSupervisorAssignedEvents(Guid userId, Guid supervisorId)
+        private void FireSupervisorAssignedEvents(Guid userId, Guid supervisorId, DateTime? assignTime)
         {
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId));
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, assignTime));
 
             if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
             {
