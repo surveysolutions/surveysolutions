@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected void UpdateUiItems() => Task.Run(() =>
         {
-            Debug.WriteLine("------------START UPDATE UI ITEMS: " + this.GetType().Name + " ---------------");
             this.IsItemsLoaded = false;
 
             try
@@ -40,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             {
                 this.IsItemsLoaded = true;
             }
-            Debug.WriteLine("------------END UPDATE UI ITEMS: " + this.GetType().Name + " ---------------");
+            
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
         });
     }
