@@ -47,8 +47,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.interview = interviewView;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
-            this.Status = this.GetDashboardCategoryForInterview(interview.Status);
-
+            this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
+            
             BindDetails();
             BindTitles();
             BindActions();
@@ -174,6 +174,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             switch (this.Status)
             {
+                case DashboardInterviewStatus.Assignment:
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
                 case DashboardInterviewStatus.New:
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_AssignedOn, interview.InterviewerAssignedDateTime);
                 case DashboardInterviewStatus.InProgress:
@@ -197,7 +199,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             return string.Format(formatString, utcDateTime.ToLocalTime().ToString("MMM dd, HH:mm", culture).ToPascalCase());
         }
 
-        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus)
+        private DashboardInterviewStatus GetDashboardCategoryForInterview(InterviewStatus interviewStatus, DateTime? startedDateTime)
         {
             switch (interviewStatus)
             {
@@ -208,7 +210,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;
                 case InterviewStatus.InterviewerAssigned:
-                    return DashboardInterviewStatus.InProgress;
+                    return startedDateTime.HasValue
+                        ? DashboardInterviewStatus.InProgress
+                        : DashboardInterviewStatus.New; ;
                         
 
                 default:

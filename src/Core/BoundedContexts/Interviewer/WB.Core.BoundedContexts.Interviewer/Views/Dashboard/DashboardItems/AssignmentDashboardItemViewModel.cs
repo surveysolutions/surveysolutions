@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             interviewsByAssignmentCount = interviewsCount;
             assignment = assignmentDocument;
             questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
-            Status = DashboardInterviewStatus.New;
+            Status = DashboardInterviewStatus.Assignment;
 
             BindTitles();
             BindDetails();
