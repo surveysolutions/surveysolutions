@@ -171,29 +171,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete.
-        /// </summary>
-        public static string Dashboard_Delete {
-            get {
-                return ResourceManager.GetString("Dashboard_Delete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Discard.
         /// </summary>
         public static string Dashboard_Discard {
             get {
                 return ResourceManager.GetString("Dashboard_Discard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dismiss.
-        /// </summary>
-        public static string Dashboard_Dismiss {
-            get {
-                return ResourceManager.GetString("Dashboard_Dismiss", resourceCulture);
             }
         }
         
