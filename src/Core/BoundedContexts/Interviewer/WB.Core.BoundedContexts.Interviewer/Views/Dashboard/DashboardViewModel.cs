@@ -88,14 +88,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public bool IsInProgress
         {
             get => this.isInProgress;
-            set => SetProperty(ref isInProgress, value);
+            set
+            {
+                if (this.isInProgress != value)
+                {
+                    this.isInProgress = value;
+                    RaisePropertyChanged();
+                }
+            }
         }
 
         private GroupStatus typeOfInterviews;
         public GroupStatus TypeOfInterviews
         {
             get => this.typeOfInterviews;
-            set => SetProperty(ref typeOfInterviews, value);
+            set
+            {
+                if (this.typeOfInterviews != value)
+                {
+                    this.typeOfInterviews = value;
+                    RaisePropertyChanged();
+                }
+            }
         }
 
         private int NumberOfAssignedInterviews => this.StartedInterviews.ItemsCount
@@ -120,30 +134,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
-            using (GlobalStopwatcher.Scope("DashbloardViewModel", "RefreshDashboard"))
-            {
-                if (this.principal.CurrentUserIdentity == null)
-                    return;
+            if (this.principal.CurrentUserIdentity == null)
+                return;
 
-                this.IsInProgress = true;
+            this.IsInProgress = true;
 
-                using (GlobalStopwatcher.Scope("DashbloardViewModel", "RefreshDashboard.CreateNew"))
-                    this.CreateNew.Load(this.Synchronization);
+            this.CreateNew.Load(this.Synchronization);
+            this.StartedInterviews.Load(lastVisitedInterviewId);
+            this.RejectedInterviews.Load(lastVisitedInterviewId);
+            this.CompletedInterviews.Load(lastVisitedInterviewId);
 
-                using (GlobalStopwatcher.Scope("DashbloardViewModel", "RefreshDashboard.StartedInterviews"))
-                    this.StartedInterviews.Load(lastVisitedInterviewId);
-
-                using (GlobalStopwatcher.Scope("DashbloardViewModel", "RefreshDashboard.RejectedInterviews"))
-                    this.RejectedInterviews.Load(lastVisitedInterviewId);
-
-                using (GlobalStopwatcher.Scope("DashbloardViewModel", "RefreshDashboard.CompletedInterviews"))
-                    this.CompletedInterviews.Load(lastVisitedInterviewId);
-
-                using (GlobalStopwatcher.Scope("DashbloardViewModel", "RefreshDashboard.DashboardTitle"))
-                    this.RaisePropertyChanged(() => this.DashboardTitle);
-            }
-
-            GlobalStopwatcher.DumpToDebug();
+            this.RaisePropertyChanged(() => this.DashboardTitle);
         }
 
         private void SelectTypeOfInterviewsByInterviewId(Guid? lastVisitedInterviewId)
@@ -153,6 +154,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             var interviewView = this.interviewsRepository.GetById(lastVisitedInterviewId.FormatGuid());
             if (interviewView == null) return;
+
 
             if (interviewView.Status == InterviewStatus.RejectedBySupervisor)
                 this.TypeOfInterviews = this.RejectedInterviews.InterviewStatus;
