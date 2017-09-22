@@ -663,13 +663,13 @@
     <comment>Синхронизация {0} из {1} заданий</comment>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
-    <value>Интервью {0} из {1} для этой задачи</value>
+    <value>Необходимо собрать: {0} интервью</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
     <value>Задача с единственным интервью</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
-    <value>Интервью {0} из неограниченных для этой задачи</value>
+    <value>Необходимо собрать: неограниченное</value>
   </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
     <value>{0} вопросов(а) отвечено</value>
