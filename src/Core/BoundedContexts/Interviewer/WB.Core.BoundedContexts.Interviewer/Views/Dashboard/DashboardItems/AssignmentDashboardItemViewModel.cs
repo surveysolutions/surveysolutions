@@ -4,32 +4,34 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class AssignmentDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
     {
-        private readonly IInterviewFromAssignmentCreatorService interviewFromAssignmentCreator;
+        private readonly IServiceLocator serviceLocator;
+
+        private IInterviewFromAssignmentCreatorService InterviewFromAssignmentCreator
+            => serviceLocator.GetInstance<IInterviewFromAssignmentCreatorService>();
 
         private AssignmentDocument assignment;
         private int interviewsByAssignmentCount;
         private QuestionnaireIdentity questionnaireIdentity;
-
-        public AssignmentDashboardItemViewModel(IExternalAppLauncher externalAppLauncher,
-            IInterviewFromAssignmentCreatorService interviewFromAssignmentCreator) : base(externalAppLauncher)
-        {
-            this.interviewFromAssignmentCreator = interviewFromAssignmentCreator;
-        }
-
+        
         private int InterviewsLeftByAssignmentCount =>
             assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
 
         public bool HasAdditionalActions => Actions.Any(a => a.ActionType == ActionType.Context);
         
         public int AssignmentId => this.assignment.Id;
-        
+
+        public AssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
+        }
+
         public void Init(AssignmentDocument assignmentDocument, int interviewsCount)
         {
             interviewsByAssignmentCount = interviewsCount;
@@ -77,7 +79,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxAsyncCommand(
-                    () => interviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
+                    () => InterviewFromAssignmentCreator.CreateInterviewAsync(assignment.Id),
                     () => !assignment.Quantity.HasValue ||
                           Math.Max(val1: 0, val2: InterviewsLeftByAssignmentCount) > 0),
 
