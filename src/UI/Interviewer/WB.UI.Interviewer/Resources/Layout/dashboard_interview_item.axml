@@ -17,7 +17,7 @@
 
     <View android:id="@+id/card_status"
       style="@style/Dashboard_Card_Status"
-      app:MvxBind="BackgroundStyle InterviewStatusToDrawable(Status); Visible Not(IsAssignment)"
+      app:MvxBind="BackgroundStyle InterviewStatusToDrawable(Status)"
       android:orientation="horizontal"
       android:background="@drawable/dashboard_interview_status_new"
       app:layout_constraintBottom_toBottomOf="parent"

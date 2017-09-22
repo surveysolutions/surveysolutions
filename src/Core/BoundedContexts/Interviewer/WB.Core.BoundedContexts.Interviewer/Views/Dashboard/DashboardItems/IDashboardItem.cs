@@ -22,8 +22,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         ActionDefinition SecondaryAction {get;}
         ActionDefinition[] ContextMenu { get; }
         DashboardInterviewStatus Status { get; }
-
-        bool IsAssignment { get; }
     }
 
     public enum ActionType
