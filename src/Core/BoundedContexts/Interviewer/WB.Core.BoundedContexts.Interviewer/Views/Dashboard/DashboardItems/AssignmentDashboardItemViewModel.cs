@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public bool HasAdditionalActions => Actions.Any(a => a.ActionType == ActionType.Context);
         
-        public bool IsAssignment { get; } = true;
         public int AssignmentId => this.assignment.Id;
         
         public void Init(AssignmentDocument assignmentDocument, int interviewsCount)

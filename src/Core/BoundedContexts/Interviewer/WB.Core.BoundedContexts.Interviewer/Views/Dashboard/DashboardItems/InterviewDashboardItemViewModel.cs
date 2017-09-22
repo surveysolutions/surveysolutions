@@ -57,7 +57,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         public Guid InterviewId => this.interview.InterviewId;
-        public bool IsAssignment { get; } = false;
 
         private void BindActions()
         {
