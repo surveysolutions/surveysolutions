@@ -4,7 +4,6 @@ using Android.Views;
 using MvvmCross.Platform.Converters;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Shared.Enumerator.CustomBindings;
 
 namespace WB.UI.Interviewer.CustomBindings
 {
@@ -14,9 +13,10 @@ namespace WB.UI.Interviewer.CustomBindings
         {
             switch (status)
             {
-                case DashboardInterviewStatus.New:
+                case DashboardInterviewStatus.Assignment:
                     return Resource.Drawable.dashboard_interview_status_new;
 
+                case DashboardInterviewStatus.New:
                 case DashboardInterviewStatus.InProgress:
                     return Resource.Drawable.dashboard_interview_status_inprogress;
 

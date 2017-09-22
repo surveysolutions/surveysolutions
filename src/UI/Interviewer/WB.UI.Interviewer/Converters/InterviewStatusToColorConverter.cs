@@ -13,6 +13,7 @@ namespace WB.UI.Interviewer.Converters
         {
             switch (status)
             {
+                case DashboardInterviewStatus.Assignment:
                 case DashboardInterviewStatus.New:
                     return Resource.Color.dashboard_interview_subtitle;
 

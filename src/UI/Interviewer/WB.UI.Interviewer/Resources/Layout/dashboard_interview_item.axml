@@ -125,7 +125,7 @@
     <TextView
       android:id="@+id/show_location"
       style="@style/Dashboard_Location"
-      app:MvxBind="Visible And(SecondaryAction.HasValue, Or(IsExpanded, Not(HasExpandedView)));
+      app:MvxBind="Visible And(IsNotNull(SecondaryAction), Or(IsExpanded, Not(HasExpandedView)));
                 Text Localization('Dashboard_ShowLocation');                               
                 Click SecondaryAction.Command;"
 
