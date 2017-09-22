@@ -159,8 +159,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             DateTime? startedDateTime, 
             DateTime? rejectedDateTime, 
             int? assignmentId, 
-            InterviewKey interviewKey,
-            int? answersCount = null)
+            InterviewKey interviewKey)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaireDocumentView = this.questionnaireRepository.GetQuestionnaireDocument(questionnaireIdentity);
@@ -183,14 +182,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 RejectedDateTime = rejectedDateTime,
                 CanBeDeleted = canBeDeleted,
                 Assignment = assignmentId,
-                LastInterviewerOrSupervisorComment = comments,
-                AnsweredQuestionsCount = answeredQuestions.Count()
+                LastInterviewerOrSupervisorComment = comments
             };
-
-            if (answersCount.HasValue)
-            {
-                interviewView.AnsweredQuestionsCount = answersCount.Value;
-            }
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, interviewView.Language);
 
@@ -293,8 +286,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 startedDateTime: null,
                 rejectedDateTime: payload.InterviewData.RejectDateTime,
                 assignmentId: payload.InterviewData.AssignmentId,
-                interviewKey: payload.InterviewData.InterviewKey,
-                answersCount: payload.InterviewData.Answers?.Length);
+                interviewKey: payload.InterviewData.InterviewKey);
         }
 
         public void Handle(IPublishedEvent<InterviewHardDeleted> evnt)
@@ -332,17 +324,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.AnswerOnPrefilledQuestion(interviewId, questionId, answer);
             this.SetStartedDateTimeOnFirstAnswer(interviewId, questionId, answerTimeUtc);
-            HandleAnswersCount(interviewId, 1);
-        }
-
-        private void HandleAnswersCount(Guid interviewId, int answersAmount)
-        {
-            var interviewView = this.interviewViewRepository.GetById(interviewId.FormatGuid());
-            if (interviewView == null) return;
-
-            interviewView.AnsweredQuestionsCount += answersAmount;
-
-            this.interviewViewRepository.Store(interviewView);
         }
 
         private readonly HashSet<Guid> interviewsWithExistedStartedDateTime = new HashSet<Guid>();

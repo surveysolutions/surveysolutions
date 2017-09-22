@@ -144,17 +144,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var comment = GetInterviewCommentByStatus(interview);
             var dateComment = GetInterviewDateCommentByStatus(interview);
 
-            this.SubTitle = dateComment;
-
-            var prefilledAnswersCount = this.DetailedIdentifyingData.Count(id => !string.IsNullOrWhiteSpace(id.Answer));
-
-            var answeredQuestions = interview.AnsweredQuestionsCount - prefilledAnswersCount;
-            if (answeredQuestions > 0)
-            {
-                SubTitle += "\n" + InterviewerUIResources.Dashboard_Interview_QuestionsAnsweredFormat.FormatString(answeredQuestions);
-            }
-
-            this.SubTitle += $"\n{comment}";
+            this.SubTitle = $"{dateComment}\n{comment}";
             
             this.AssignmentIdLabel = interview.Assignment.HasValue
                 ? InterviewerUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
