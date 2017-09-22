@@ -276,3 +276,9 @@
         return users;
     }
 };
+
+function formatNumber(value) {
+    if (value == null || value == undefined)
+        return value;
+    return value.toLocaleString();
+}

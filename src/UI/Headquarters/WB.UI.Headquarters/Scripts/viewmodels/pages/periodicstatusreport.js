@@ -46,7 +46,8 @@
     };
 
     self.FormatQuantityPeriod = function (data) {
-        return data;
+        var formatedNumber = formatNumber(data);
+        return formatedNumber;
     };
 
     var updateQuestionnaireName = function (value) {
