@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using MvvmCross.Core.ViewModels;
@@ -20,7 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         MvxObservableCollection<ActionDefinition> Actions { get; }
         ActionDefinition PrimaryAction {get;}
         ActionDefinition SecondaryAction {get;}
-        ActionDefinition[] ContextMenu { get; }
+        IEnumerable<ActionDefinition> ContextMenu { get; }
         DashboardInterviewStatus Status { get; }
     }
 

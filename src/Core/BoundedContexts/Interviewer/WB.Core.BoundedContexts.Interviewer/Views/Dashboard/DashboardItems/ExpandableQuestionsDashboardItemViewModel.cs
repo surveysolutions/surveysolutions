@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
-        private readonly IExternalAppLauncher externalAppLauncher;
-
+        private readonly IServiceLocator serviceLocator;
         private string idLabel;
         private string subTitle;
         private string title;
         private bool isExpanded = true;
         private DashboardInterviewStatus status;
 
-        public ExpandableQuestionsDashboardItemViewModel(IExternalAppLauncher externalAppLauncher)
+        public ExpandableQuestionsDashboardItemViewModel(IServiceLocator serviceLocator)
         {
-            this.externalAppLauncher = externalAppLauncher;
+            this.serviceLocator = serviceLocator;
             Actions = new MvxObservableCollection<ActionDefinition>();
             Actions.CollectionChanged += (sender, args) =>
             {
@@ -27,11 +27,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 RaisePropertyChanged(nameof(SecondaryAction));
                 RaisePropertyChanged(nameof(ContextMenu));
                 RaisePropertyChanged(nameof(HasContextMenu));
+                RaisePropertyChanged(nameof(HasSecondaryAction));
             };
         }
 
+        private IExternalAppLauncher ExternalAppLauncher =>
+            serviceLocator.GetInstance<IExternalAppLauncher>();
+
         public bool HasExpandedView { get; protected set; }
-        
+
         public bool IsExpanded
         {
             get => this.isExpanded;
@@ -51,14 +55,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             set => SetProperty(ref status, value);
         }
 
-        public List<PrefilledQuestion> PrefilledQuestions  => this.IsExpanded ? this.DetailedIdentifyingData : this.IdentifyingData;
-        
+        public List<PrefilledQuestion> PrefilledQuestions =>
+            this.IsExpanded ? this.DetailedIdentifyingData : this.IdentifyingData;
+
         protected List<PrefilledQuestion> IdentifyingData;
         protected List<PrefilledQuestion> DetailedIdentifyingData;
-        
+
         public ActionDefinition PrimaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Primary);
         public ActionDefinition SecondaryAction => Actions.SingleOrDefault(a => a.ActionType == ActionType.Secondary);
-        public ActionDefinition[] ContextMenu => Actions.Where(a => a.ActionType == ActionType.Context).ToArray();
+        public IEnumerable<ActionDefinition> ContextMenu => Actions.Where(a => a.ActionType == ActionType.Context);
+
         public bool HasContextMenu => ContextMenu.Any(cm => cm.IsEnabled);
 
         public bool HasSecondaryAction => SecondaryAction != null;
@@ -86,11 +92,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         protected void BindLocationAction(Guid? questionId, double? latitude, double? longtitude)
         {
             if (!questionId.HasValue || !latitude.HasValue || !longtitude.HasValue) return;
-            
+
             Actions.Add(new ActionDefinition
             {
                 Command = new MvxCommand(
-                    () => externalAppLauncher.LaunchMapsWithTargetLocation(latitude.Value, longtitude.Value)),
+                    () => ExternalAppLauncher.LaunchMapsWithTargetLocation(latitude.Value, longtitude.Value)),
 
                 ActionType = ActionType.Secondary,
 
