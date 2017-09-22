@@ -251,17 +251,15 @@
     <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
   </style>
-
-  <style name="Dashboard_Menu_Handle_Text">
-    <item name="android:layout_width">wrap_content</item>
+  
+    <style name="Dashboard_Menu_Handle">
+    <item name="android:layout_width">@dimen/dashboard_card_duo_margin</item>
     <item name="android:layout_height">@dimen/dashboard_card_duo_margin</item>
     <item name="android:layout_marginRight">@dimen/dashboard_card_base_margin</item>
-    <item name="android:paddingLeft">@dimen/dashboard_card_base_margin</item>
-    <item name="android:paddingRight">@dimen/dashboard_card_base_margin</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:textSize">20dp</item>
+    <item name="android:paddingLeft">0dp</item>
+    <item name="android:paddingRight">0dp</item>
   </style>
-
+  
   <style name="Dashboard_NoInterviewsPanel" parent="AppTheme">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
