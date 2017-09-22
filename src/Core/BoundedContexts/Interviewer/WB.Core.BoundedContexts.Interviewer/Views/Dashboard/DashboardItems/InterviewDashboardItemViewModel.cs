@@ -6,6 +6,7 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -16,31 +17,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IUserInteractionService userInteractionService;
-        private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
-        private readonly IPlainStorage<PrefilledQuestionView> prefilledQuestions;
-        private readonly IInterviewerInterviewAccessor interviewerInterviewFactory;
-   
+        private readonly IServiceLocator serviceLocator;
+
+        private IViewModelNavigationService ViewModelNavigationService =>
+            serviceLocator.GetInstance<IViewModelNavigationService>();
+
+        private IUserInteractionService UserInteractionService =>
+            serviceLocator.GetInstance<IUserInteractionService>();
+
+        private IPlainStorage<QuestionnaireView> QuestionnaireViewRepository =>
+            serviceLocator.GetInstance<IPlainStorage<QuestionnaireView>>();
+
+        private IPlainStorage<PrefilledQuestionView> PrefilledQuestionsRepository =>
+            serviceLocator.GetInstance<IPlainStorage<PrefilledQuestionView>>();
+
+        private IInterviewerInterviewAccessor InterviewerInterviewFactory =>
+            serviceLocator.GetInstance<IInterviewerInterviewAccessor>();
+
         public event EventHandler OnItemRemoved;
         private bool isInterviewReadyToLoad = true;
         private QuestionnaireIdentity questionnaireIdentity;
         private InterviewView interview;
         private string assignmentIdLabel;
 
-        public InterviewDashboardItemViewModel(
-            IViewModelNavigationService viewModelNavigationService,
-            IUserInteractionService userInteractionService,
-            IExternalAppLauncher externalAppLauncher,
-            IPlainStorage<QuestionnaireView> questionnaireViewRepository,
-            IPlainStorage<PrefilledQuestionView> prefilledQuestions,
-            IInterviewerInterviewAccessor interviewFactory) : base(externalAppLauncher)
+        public InterviewDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
-            this.userInteractionService = userInteractionService;
-            this.questionnaireViewRepository = questionnaireViewRepository;
-            this.prefilledQuestions = prefilledQuestions;
-            this.interviewerInterviewFactory = interviewFactory;
+            this.serviceLocator = serviceLocator;
         }
 
         public void Init(InterviewView interviewView)
@@ -111,7 +113,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private void BindDetails()
         {
-            var preffilledQuestions = this.prefilledQuestions
+            var preffilledQuestions = this.PrefilledQuestionsRepository
                 .Where(_ => _.InterviewId == this.interview.InterviewId)
                 .OrderBy(x => x.SortIndex)
                 .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText })
@@ -128,7 +130,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             if (string.IsNullOrWhiteSpace(interview.QuestionnaireTitle)) // only to support existing clients
             {
-                var questionnaire = this.questionnaireViewRepository.GetById(interview.QuestionnaireId);
+                var questionnaire = this.QuestionnaireViewRepository.GetById(interview.QuestionnaireId);
                 interview.QuestionnaireTitle = questionnaire.Title;
             }
 
@@ -235,7 +237,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         {
             this.isInterviewReadyToLoad = false;
 
-            var isNeedDelete = await this.userInteractionService.ConfirmAsync(
+            var isNeedDelete = await this.UserInteractionService.ConfirmAsync(
                 InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.interview.QuestionnaireTitle),
                 okButton: UIResources.Yes,
                 cancelButton: UIResources.No);
@@ -246,7 +248,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 return;
             }
 
-            this.interviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
+            this.InterviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
             this.OnItemRemoved(this, EventArgs.Empty);
         }
 
@@ -257,7 +259,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             {
                 if (this.Status == DashboardInterviewStatus.Completed)
                 {
-                    var isReopen = await this.userInteractionService.ConfirmAsync(
+                    var isReopen = await this.UserInteractionService.ConfirmAsync(
                         InterviewerUIResources.Dashboard_Reinitialize_Interview_Message,
                         okButton: UIResources.Yes,
                         cancelButton: UIResources.No);
@@ -268,7 +270,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     }
                 }
 
-                this.viewModelNavigationService.NavigateTo<LoadingViewModel>(new { interviewId = this.interview.InterviewId });
+                this.ViewModelNavigationService.NavigateTo<LoadingViewModel>(new { interviewId = this.interview.InterviewId });
             }
             finally
             {
