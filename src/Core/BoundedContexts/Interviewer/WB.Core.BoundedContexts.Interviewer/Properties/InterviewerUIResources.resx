@@ -648,7 +648,7 @@ your next synchronization</value>
     <value>You can create new interviews using assignments</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
-    <value>Interview {0} of {1} for this assignment</value>
+    <value>To collect: {0} interview(s)</value>
     <comment>{0} - number of interviews created
     {1} - number of interviewer to be created by assignment</comment>
   </data>
@@ -659,7 +659,7 @@ your next synchronization</value>
     <value>Single interview assignment</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
-    <value>Interview {0} of  unlimited for this assignment</value>
+    <value>To collect: unlimited</value>
     <comment>{0} - number of interviews created</comment>
   </data>
   <data name="Dashboard_Open" xml:space="preserve">

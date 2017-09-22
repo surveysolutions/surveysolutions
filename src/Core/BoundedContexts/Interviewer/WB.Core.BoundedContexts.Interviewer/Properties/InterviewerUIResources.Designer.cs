@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview {0} of  unlimited for this assignment.
+        ///   Looks up a localized string similar to To collect: unlimited.
         /// </summary>
         public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
             get {
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview {0} of {1} for this assignment.
+        ///   Looks up a localized string similar to To collect: {0} interview(s).
         /// </summary>
         public static string Dashboard_AssignmentCard_SubTitleCountdownFormat {
             get {
