@@ -11,6 +11,7 @@ namespace WB.UI.Interviewer.Converters
         {
             switch (status)
             {
+                case DashboardInterviewStatus.Assignment:
                 case DashboardInterviewStatus.New:
                     return Resource.Drawable.default_input_button;
 
