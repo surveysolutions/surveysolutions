@@ -141,10 +141,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Законченные ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Создать
-интервью</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Новые ({0})</value>
   </data>
@@ -699,5 +695,8 @@
   <data name="Dashboard_ViewIssues" xml:space="preserve">
     <value>Просмотреть
 проблемы</value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Начать новое интервью</value>
   </data>
 </root>

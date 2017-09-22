@@ -132,10 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Selesai ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Membuat
-Wawancara</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Baru ({0})</value>
   </data>
