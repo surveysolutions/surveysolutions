@@ -99,13 +99,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 switch (Status)
                 {
                     case DashboardInterviewStatus.Completed:
-                        return InterviewerUIResources.Dashboard_Delete;
                     case DashboardInterviewStatus.New:
-                        return InterviewerUIResources.Dashboard_Dismiss;
                     case DashboardInterviewStatus.InProgress:
-                        return InterviewerUIResources.Dashboard_Dismiss;
                     case DashboardInterviewStatus.Rejected:
-                        return InterviewerUIResources.Dashboard_Dismiss;
+                        return InterviewerUIResources.Dashboard_Discard;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
