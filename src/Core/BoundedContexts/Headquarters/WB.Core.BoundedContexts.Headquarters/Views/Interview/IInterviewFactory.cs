@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void RemoveAnswers(Guid interviewId, Identity[] questionIds);
         
         InterviewData GetInterviewData(Guid interviewId);
-        string[] GetMultimediaAnswers(Guid interviewId, Guid[] multimediaQuestionIds);
-        string[] GetAudioAnswers(Guid interviewId, Guid[] audioQuestionIds);
+        InterviewStringAnswer[] GetAllMultimediaAnswers(Guid[] multimediaQuestionIds);
+        InterviewStringAnswer[] GetAllAudioAnswers(Guid[] audioQuestionIds);
     }
 }

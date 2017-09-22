@@ -351,19 +351,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return interviewData;
         }
 
-        public string[] GetMultimediaAnswers(Guid interviewId, Guid[] multimediaQuestionIds)
-            => this.interviewRepository.Query(_ => _
-                .Where(x => x.InterviewId == interviewId && multimediaQuestionIds.Contains(x.Identity.Id) &&
-                            x.IsEnabled && x.AsString != null)
-                .Select(x => x.AsString)
-                .ToArray());
+        public InterviewStringAnswer[] GetAllMultimediaAnswers(Guid[] multimediaQuestionIds)
+        {
+            if (!multimediaQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
 
-        public string[] GetAudioAnswers(Guid interviewId, Guid[] audioQuestionIds)
-            => this.interviewRepository.Query(_ => _
-                .Where(x => x.InterviewId == interviewId && audioQuestionIds.Contains(x.Identity.Id) && x.IsEnabled &&
-                            x.AsAudio != null)
-                .Select(x => x.AsAudio).ToArray()
-                .Select(x => x.FileName).ToArray());
+            return this.interviewRepository.Query(_ => _
+                .Where(x => multimediaQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsString != null)
+                .Select(x => new InterviewStringAnswer {InterviewId = x.InterviewId, Answer = x.AsString})
+                .ToArray());
+        }
+
+        public InterviewStringAnswer[] GetAllAudioAnswers(Guid[] audioQuestionIds)
+        {
+            if (!audioQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
+
+            return this.sessionProvider.GetSession().Connection.Query<InterviewStringAnswer>(
+                $"SELECT {InterviewIdColumn}, {AsAudioColumn}::json->'FileName' as Answer " +
+                $"FROM {InterviewsTableName} " +
+                $"WHERE {AsAudioColumn} IS NOT NULL " +
+                $"AND {EnabledColumn} = true " +
+                $"AND {EntityIdColumn} IN ({string.Join(",", audioQuestionIds.Select(x => $"'{x}'"))})").ToArray();
+        }
 
         private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities,
             IQuestionnaire questionnaire)

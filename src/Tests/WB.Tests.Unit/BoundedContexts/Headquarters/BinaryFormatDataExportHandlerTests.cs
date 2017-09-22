@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var interviewSummaryStorage = new TestInMemoryWriter<InterviewSummary>();
 
             interviewSummaryStorage.Store(interviewSummary, interviewId.FormatGuid());
-            mockOfInterviewFactory.Setup(x => x.GetMultimediaAnswers(interviewId, Moq.It.IsAny<Guid[]>()))
-                .Returns(new[] {"var.jpg"});
+            mockOfInterviewFactory.Setup(x => x.GetAllMultimediaAnswers(Moq.It.IsAny<Guid[]>()))
+                .Returns(new[] {new InterviewStringAnswer{InterviewId = interviewId, Answer = "var.jpg"}});
 
             var plainInterviewFileStorageMock = new Mock<IImageFileStorage>();
             plainInterviewFileStorageMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))

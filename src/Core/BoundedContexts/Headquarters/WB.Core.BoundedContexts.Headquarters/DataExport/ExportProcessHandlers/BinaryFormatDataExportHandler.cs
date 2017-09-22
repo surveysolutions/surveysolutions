@@ -61,36 +61,36 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
         {
-            List<Guid> interviewIdsToExport = this.transactionManager.ExecuteInQueryTransaction(() =>
-                this.interviewSummaries.Query(_ => _
-                    .Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                                x.QuestionnaireVersion == questionnaireIdentity.Version)
-                    .OrderBy(x => x.InterviewId)
-                    .Select(x => x.InterviewId).ToList()));
-
-            cancellationToken.ThrowIfCancellationRequested();
-
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
             var multimediaQuestionIds = questionnaire.Find<IMultimediaQuestion>().Select(x => x.PublicKey).ToArray();
             var audioQuestionIds = questionnaire.Find<AudioQuestion>().Select(x => x.PublicKey).ToArray();
 
             cancellationToken.ThrowIfCancellationRequested();
+            
+            var allMultimediaAnswers = this.transactionManager.ExecuteInQueryTransaction(
+                () => this.interviewFactory.GetAllMultimediaAnswers(multimediaQuestionIds));
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var allAudioAnswers = this.transactionManager.ExecuteInQueryTransaction(
+                () => this.interviewFactory.GetAllAudioAnswers(audioQuestionIds));
+
+            var interviewIds = allMultimediaAnswers.Select(x => x.InterviewId)
+                .Union(allAudioAnswers.Select(x => x.InterviewId)).Distinct().ToList();
+
+            cancellationToken.ThrowIfCancellationRequested();
 
             long totalInterviewsProcessed = 0;
-            foreach (var interviewId in interviewIdsToExport)
+            foreach (var interviewId in interviewIds)
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var multimediaAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                        () => this.interviewFactory.GetMultimediaAnswers(interviewId, multimediaQuestionIds));
-                var audioAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                        () => this.interviewFactory.GetAudioAnswers(interviewId, audioQuestionIds));
-
                 var interviewDirectory = this.fileSystemAccessor.CombinePath(directoryPath, interviewId.FormatGuid());
-                if (multimediaAnswers.Any() || audioAnswers.Any() && !this.fileSystemAccessor.IsDirectoryExists(interviewDirectory))
+
+                if (!this.fileSystemAccessor.IsDirectoryExists(interviewDirectory))
                     this.fileSystemAccessor.CreateDirectory(interviewDirectory);
 
-                foreach (var imageFileName in multimediaAnswers)
+                foreach (var imageFileName in allMultimediaAnswers.Where(x=>x.InterviewId == interviewId).Select(x=>x.Answer))
                 {
                     var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId, imageFileName);
 
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     }
                 }
 
-                foreach (var audioFileName in audioAnswers)
+                foreach (var audioFileName in allAudioAnswers.Where(x=>x.InterviewId == interviewId).Select(x=>x.Answer))
                 {
                     var fileContent = this.plainTransactionManagerProvider.GetPlainTransactionManager().ExecuteInQueryTransaction(
                             () => audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName));
@@ -112,10 +112,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                         this.fileSystemAccessor.WriteAllBytes(pathToFile, fileContent);
                     }
                 }
-            }
 
-            totalInterviewsProcessed++;
-            progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
+                totalInterviewsProcessed++;
+                progress.Report(totalInterviewsProcessed.PercentOf(interviewIds.Count));
+            }
         }
     }
 }
