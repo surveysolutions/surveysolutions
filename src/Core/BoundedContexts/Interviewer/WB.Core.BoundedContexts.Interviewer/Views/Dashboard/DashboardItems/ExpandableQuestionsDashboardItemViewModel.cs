@@ -61,6 +61,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public ActionDefinition[] ContextMenu => Actions.Where(a => a.ActionType == ActionType.Context).ToArray();
         public bool HasContextMenu => ContextMenu.Any(cm => cm.IsEnabled);
 
+        public bool HasSecondaryAction => SecondaryAction != null;
+
         public MvxObservableCollection<ActionDefinition> Actions { get; }
 
         public string IdLabel
