@@ -132,9 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>({0}) concluído</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Criar entrevista</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Nova ({0})</value>
   </data>
