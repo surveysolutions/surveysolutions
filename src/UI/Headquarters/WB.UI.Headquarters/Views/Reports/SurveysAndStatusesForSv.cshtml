@@ -79,7 +79,9 @@
             model.load();
         });
         function getLinkToInterviews(model, data, row, interviewStatus, responsible) {
-            if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + data + "</span>";
+            var formatedNumber = formatNumber(data);
+
+            if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + formatedNumber + "</span>";
 
             var link = "<a href=\"" + $interviewsUrl + '?templateId=' + row.questionnaireId +
                 '&templateVersion=' + row.questionnaireVersion;
@@ -90,7 +92,7 @@
             if (!_.isUndefined(interviewStatus))
                 link += '&status=' + interviewStatus;
 
-            return link + '"\">' + data + "</a>";
+            return link + '"\">' + formatedNumber + "</a>";
         };
     </script>
 }
