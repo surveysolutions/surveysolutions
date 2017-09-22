@@ -42,6 +42,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             BindActions();
         }
 
+        public string AssignmentIdLabel { get; } = String.Empty;
+
         private void BindTitles()
         {
             Title = string.Format(InterviewerUIResources.DashboardItem_Title, assignment.Title, questionnaireIdentity.Version);

@@ -88,28 +88,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public bool IsInProgress
         {
             get => this.isInProgress;
-            set
-            {
-                if (this.isInProgress != value)
-                {
-                    this.isInProgress = value;
-                    RaisePropertyChanged();
-                }
-            }
+            set => SetProperty(ref this.isInProgress, value);
         }
 
         private GroupStatus typeOfInterviews;
         public GroupStatus TypeOfInterviews
         {
             get => this.typeOfInterviews;
-            set
-            {
-                if (this.typeOfInterviews != value)
-                {
-                    this.typeOfInterviews = value;
-                    RaisePropertyChanged();
-                }
-            }
+            set => SetProperty(ref this.typeOfInterviews, value);
         }
 
         private int NumberOfAssignedInterviews => this.StartedInterviews.ItemsCount
