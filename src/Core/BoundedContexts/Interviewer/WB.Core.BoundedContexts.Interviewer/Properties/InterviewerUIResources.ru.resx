@@ -686,12 +686,6 @@
   <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Переоткрыть</value>
   </data>
-  <data name="Dashboard_Dismiss" xml:space="preserve">
-    <value>Отклонить</value>
-  </data>
-  <data name="Dashboard_Delete" xml:space="preserve">
-    <value>Удалить</value>
-  </data>
   <data name="Dashboard_ViewIssues" xml:space="preserve">
     <value>Просмотреть
 проблемы</value>
