@@ -47,7 +47,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
         {
-            return Task.Run(() => this.Execute(command, origin, cancellationToken));
+            return Task.Run(() => this.Execute(command, origin, cancellationToken), cancellationToken);
         }
 
         public void Execute(ICommand command, string origin)
