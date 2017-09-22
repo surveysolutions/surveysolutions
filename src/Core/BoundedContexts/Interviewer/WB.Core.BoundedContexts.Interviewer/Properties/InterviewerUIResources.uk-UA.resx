@@ -132,10 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Завершено ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Cтворити 
-iнтервью</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Нові ({0})</value>
   </data>

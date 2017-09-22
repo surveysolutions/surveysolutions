@@ -159,9 +159,8 @@
   <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
     <value>Create New</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Create
-interview</value>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Start new interview</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>New ({0})</value>
@@ -665,7 +664,7 @@ your next synchronization</value>
   </data>
   <data name="Dashboard_Open" xml:space="preserve">
     <value>Open</value>
-  </data>  
+  </data>
   <data name="Dashboard_ViewIssues" xml:space="preserve">
     <value>View Issues</value>
   </data>

@@ -196,7 +196,7 @@
     <item name="android:paddingLeft">@dimen/dashboard_card_base_margin</item>
     <item name="android:paddingRight">@dimen/dashboard_card_base_margin</item>
     <item name="android:textSize">@dimen/textsize_12</item>
-    <item name="android:letterSpacing">0.2</item>
+    <item name="android:letterSpacing">0.05</item>
     <item name="android:textAllCaps">true</item>
 
     <item name="android:fontFamily">sans-serif-medium</item>
@@ -210,7 +210,7 @@
     <item name="android:textColor">@color/btn_default</item>
     <item name="android:textAllCaps">true</item>
     <item name="android:textSize">@dimen/textsize_12</item>
-    <item name="android:letterSpacing">0.1</item>
+    <item name="android:letterSpacing">0.05</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
     

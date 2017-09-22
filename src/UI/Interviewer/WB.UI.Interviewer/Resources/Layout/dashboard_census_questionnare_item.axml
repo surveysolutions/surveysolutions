@@ -57,7 +57,7 @@
 
 
     <Button android:id="@+id/new_button"
-            app:MvxBind="Text Localization('Dashboard_CreateInterview');
+            app:MvxBind="Text Localization('Dashboard_StartNewInterview');
                        Click CreateNewInterviewCommand;"
       
       style="@style/Dashboard_InterviewItem_MainActionButton"
