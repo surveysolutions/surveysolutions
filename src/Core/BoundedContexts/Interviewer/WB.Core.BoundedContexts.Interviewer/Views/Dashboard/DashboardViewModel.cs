@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
@@ -9,11 +10,12 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class DashboardViewModel : MvxViewModel<DashboardArgs>, IDisposable
+    public class DashboardViewModel : BaseViewModel, IDisposable
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IPrincipal principal;
@@ -36,14 +38,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             StartedInterviewsViewModel startedInterviewsViewModel,
             CompletedInterviewsViewModel completedInterviewsViewModel,
             RejectedInterviewsViewModel rejectedInterviewsViewModel,
-            IPlainStorage<InterviewView> interviewsRepository)
+            IPlainStorage<InterviewView> interviewsRepository): base (principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.messenger = messenger;
             this.interviewsRepository = interviewsRepository;
             this.Synchronization = synchronization;
-            this.Synchronization.SyncCompleted += (sender, args) => this.RefreshDashboard();
+            this.Synchronization.SyncCompleted += this.Refresh;
 
             this.CreateNew = createNewViewModel;
             this.StartedInterviews = startedInterviewsViewModel;
@@ -51,7 +53,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RejectedInterviews = rejectedInterviewsViewModel;
         }
 
-        public override Task Initialize(DashboardArgs parameter)
+        public void Init(DashboardArgs parameter)
+        {
+            this.LastVisitedInterviewId = parameter?.LastVisitedInterviewId;
+        }
+
+        public override void Load()
         {
             startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
             stopLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
@@ -63,11 +70,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
 
-            this.RefreshDashboard(parameter.LastVisitedInterviewId);
-            this.SelectTypeOfInterviewsByInterviewId(parameter.LastVisitedInterviewId);
-
-            return Task.CompletedTask;
+            this.RefreshDashboard(this.LastVisitedInterviewId);
+            this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
         }
+
+        private Guid? LastVisitedInterviewId { set; get; }
 
         private IMvxCommand synchronizationCommand;
         public IMvxCommand SynchronizationCommand
@@ -118,10 +125,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded && this.RejectedInterviews.IsItemsLoaded &&
                                   this.CompletedInterviews.IsItemsLoaded && this.CreateNew.IsItemsLoaded);
 
+        private void Refresh(object sender, EventArgs e)
+        {
+            this.RefreshDashboard();
+        }
+
         private void RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
             if (this.principal.CurrentUserIdentity == null)
+            {
+                //dashboard is broken and user is lost
+                Mvx.Resolve<IViewModelNavigationService>().NavigateToSplashScreen();
                 return;
+            }
 
             this.IsInProgress = true;
 
@@ -191,6 +207,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             messenger.Unsubscribe<StartingLongOperationMessage>(startingLongOperationMessageSubscriptionToken);
             messenger.Unsubscribe<StopingLongOperationMessage>(stopLongOperationMessageSubscriptionToken);
+
+            this.Synchronization.SyncCompleted -= this.Refresh;
+
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.StartedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
@@ -198,6 +217,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
         }
+
     }
 
     public class DashboardArgs
