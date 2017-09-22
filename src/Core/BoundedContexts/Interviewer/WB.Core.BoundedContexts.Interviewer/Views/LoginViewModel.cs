@@ -1,14 +1,11 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -52,45 +49,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private string password;
         public string Password
         {
-            get { return this.password; }
-            set { this.password = value; RaisePropertyChanged(); }
+            get => this.password;
+            set => SetProperty(ref this.password, value);
         }
 
         private bool isUserValid;
         public bool IsUserValid
         {
-            get { return this.isUserValid; }
-            set { this.isUserValid = value; RaisePropertyChanged(); }
+            get => this.isUserValid;
+            set => SetProperty(ref this.isUserValid, value);
         }
 
         private int countOfFailedLoginAttempts;
 
         private bool isOnlineLoginButtonVisible;
         public bool IsOnlineLoginButtonVisible
-
         {
-            get { return this.isOnlineLoginButtonVisible; }
-            set { this.isOnlineLoginButtonVisible = value; RaisePropertyChanged(); }
+            get => this.isOnlineLoginButtonVisible;
+            set => SetProperty(ref this.isOnlineLoginButtonVisible, value);
         }  
         
         private string errorMessage;
         public string ErrorMessage
         {
-            get { return this.errorMessage; }
-            set { this.errorMessage = value; RaisePropertyChanged(); }
+            get => this.errorMessage;
+            set => SetProperty(ref this.errorMessage, value);
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
-            set { this.isInProgress = value; RaisePropertyChanged(); }
+            get => this.isInProgress;
+            set => SetProperty(ref this.isInProgress, value);
         }
 
-        public IMvxCommand SignInCommand => new MvxCommand(this.SignIn);
-
+        public IMvxAsyncCommand SignInCommand => new MvxAsyncCommand(this.SignIn);
         public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
-
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
 
         public override void Load()
@@ -112,7 +106,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public byte[] CustomLogo { get; private set; }
 
-        private void SignIn()
+        private async Task SignIn()
         {
             var userName = this.UserName;
 
@@ -124,7 +118,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 return;
             }
 
-            this.viewModelNavigationService.NavigateToDashboard();
+            await this.viewModelNavigationService.NavigateToDashboard();
         }
 
         private async Task RemoteSignInAsync()
@@ -153,7 +147,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 this.interviewersPlainStorage.Store(localInterviewer);
 
-                this.SignIn();
+                await this.SignIn();
             }
             catch (SynchronizationException ex)
             {

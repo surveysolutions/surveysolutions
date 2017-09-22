@@ -80,13 +80,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public IList<EntityWithErrorsViewModel> EntitiesWithErrors { get; private set; }
 
-        private IMvxCommand completeInterviewCommand;
-        public IMvxCommand CompleteInterviewCommand
+        private IMvxAsyncCommand completeInterviewCommand;
+        public IMvxAsyncCommand CompleteInterviewCommand
         {
             get
             {
                 return this.completeInterviewCommand ?? 
-                    (this.completeInterviewCommand = new MvxCommand(async () => await this.CompleteInterviewAsync(), () => !wasThisInterviewCompleted));
+                    (this.completeInterviewCommand = new MvxAsyncCommand(async () => await this.CompleteInterviewAsync(), () => !wasThisInterviewCompleted));
             }
         }
 
@@ -99,20 +99,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.wasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
-            var completeInterviewCommand = new CompleteInterviewCommand(
+            var completeInterview = new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 comment: this.CompleteComment,
                 completeTime: DateTime.UtcNow);
 
-            await this.commandService.ExecuteAsync(completeInterviewCommand);
+            await this.commandService.ExecuteAsync(completeInterview);
 
-            this.CloseInterview();
+            await this.CloseInterview();
         }
 
-        protected virtual void CloseInterview()
+        protected virtual async Task CloseInterview()
         {
-            this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
+            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
 
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }
