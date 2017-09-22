@@ -140,7 +140,7 @@ export default {
                         title: this.$t("Strings.Total"),
                         orderable: false,
                         render: function(data) {
-                            return `<span>${data}</span>`;
+                            return `<span>${self.formatNumber(data)}</span>`;
                         }
                     }
                 ],
@@ -177,33 +177,35 @@ export default {
         },
 
         renderAssignmentsUrl(row, data, userRole){
+            const formatedNumber = this.formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") 
-                return `<span>${data}</span>`;
+                return `<span>${formatedNumber}</span>`;
 
             if (this.questionnaireId != undefined){
                 var questionnaireId = this.questionnaireId.key;
                 var questionnaireVersion = this.questionnaireId.key.split('$')[1];
                 var startDate = row.startDate == undefined ? '' : row.startDate;
 
-                return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${startDate}&dateEnd=${row.endDate}&questionnaireId=${questionnaireId}&version=${questionnaireVersion}&userRole=${userRole}'>${data}</a>`;
+                return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${startDate}&dateEnd=${row.endDate}&questionnaireId=${questionnaireId}&version=${questionnaireVersion}&userRole=${userRole}'>${formatedNumber}</a>`;
             }
 
-            return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=${userRole}'>${data}</a>`;
+            return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=${userRole}'>${formatedNumber}</a>`;
         },
 
         renderInterviewsUrl(row, data, status){
+            const formatedNumber = this.formatNumber(data);
             if(data === 0 || row.DT_RowClass == "total-row") 
-                return `<span>${data}</span>`;
+                return `<span>${formatedNumber}</span>`;
 
             var templateId = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key.split('$')[0]);
             var templateVersion = this.questionnaireId == undefined ? '' : this.questionnaireId.key.split('$')[1];
             
             if (row.startDate == undefined)
-                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${data}</a>`;
+                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
             if (row.endDate == undefined)
-                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${data}</a>`;
+                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
 
-            return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${data}</a>`;
+            return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
         },
 
         formatGuid(guid){
@@ -214,6 +216,11 @@ export default {
             parts.push(guid.slice(16,20));
             parts.push(guid.slice(20,32));
             return parts.join('-'); 
+        },
+        formatNumber(value) {
+            if (value == null || value == undefined)
+                return value;
+            return value.toLocaleString();
         }
     },
 }
