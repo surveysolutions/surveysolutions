@@ -202,7 +202,7 @@
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
   </style>
-  
+
   <style name="Dashboard_Location">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
@@ -213,7 +213,7 @@
     <item name="android:letterSpacing">0.05</item>
     <item name="android:fontFamily">sans-serif-medium</item>
     <item name="android:textStyle">normal</item>
-    
+
     <item name="android:background">?attr/selectableItemBackground</item>
     <item name="android:padding">@dimen/Interview_Group_button_padding</item>
   </style>
@@ -255,9 +255,9 @@
   <style name="Dashboard_Menu_Handle_Text">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">@dimen/dashboard_card_duo_margin</item>
-    <item name="android:layout_marginRight">24dp</item>
-    <item name="android:paddingLeft">16dp</item>
-    <item name="android:paddingRight">0dp</item>
+    <item name="android:layout_marginRight">@dimen/dashboard_card_base_margin</item>
+    <item name="android:paddingLeft">@dimen/dashboard_card_base_margin</item>
+    <item name="android:paddingRight">@dimen/dashboard_card_base_margin</item>
     <item name="android:textStyle">bold</item>
     <item name="android:textSize">20dp</item>
   </style>

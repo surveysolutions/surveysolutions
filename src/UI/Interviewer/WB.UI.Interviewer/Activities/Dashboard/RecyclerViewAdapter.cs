@@ -71,6 +71,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                         action.Command.Execute();
                     };
 
+                    popup.Gravity = (int) GravityFlags.Left;
                     popup.Show();
                 };
             }            
