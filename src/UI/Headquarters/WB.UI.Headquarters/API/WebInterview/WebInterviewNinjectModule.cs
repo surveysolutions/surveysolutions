@@ -11,6 +11,7 @@ using Prometheus.Advanced;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
@@ -26,7 +27,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             pipiline.AddModule(new SignalrErrorHandler());
             pipiline.AddModule(new PlainSignalRTransactionManager());
             pipiline.AddModule(new WebInterviewAllowedModule());
-            pipiline.AddModule(new WebInterviewStateManager(GlobalHost.DependencyResolver.Resolve<IProductVersion>(), ServiceLocator.Current));
+            pipiline.AddModule(new WebInterviewStateManager(GlobalHost.DependencyResolver.Resolve<IProductVersion>(), GlobalHost.DependencyResolver.Resolve<IStatefulInterviewRepository>()));
             pipiline.AddModule(new WebInterviewConnectionsCounter());
 
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewLazyNotificationService>().InSingletonScope();

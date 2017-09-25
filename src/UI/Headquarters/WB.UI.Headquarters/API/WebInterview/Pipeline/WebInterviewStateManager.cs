@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR.Hubs;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
@@ -9,12 +7,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
     public class WebInterviewStateManager : HubPipelineModule
     {
         private readonly IProductVersion productVersion;
-        private readonly IServiceLocator serviceLocator;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
-        public WebInterviewStateManager(IProductVersion productVersion, IServiceLocator serviceLocator)
+        public WebInterviewStateManager(IProductVersion productVersion, IStatefulInterviewRepository statefulInterviewRepository)
         {
             this.productVersion = productVersion;
-            this.serviceLocator = serviceLocator;
+            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         protected override bool OnBeforeConnect(IHub hub)
@@ -26,7 +24,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         protected override void OnAfterConnect(IHub hub)
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
-            var interview = this.serviceLocator.GetInstance<IStatefulInterviewRepository>().Get(interviewId);
+            var interview = this.statefulInterviewRepository.Get(interviewId);
 
             hub.Clients.OthersInGroup(interviewId).closeInterview();
 
