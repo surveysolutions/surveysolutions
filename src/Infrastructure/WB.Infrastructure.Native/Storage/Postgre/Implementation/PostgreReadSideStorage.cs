@@ -79,7 +79,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var storedEntity = session.Get<TEntity>(id);
             if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
             {
-                session.Merge(storedEntity);
+                session.Merge(entity);
             }
             else
             {
