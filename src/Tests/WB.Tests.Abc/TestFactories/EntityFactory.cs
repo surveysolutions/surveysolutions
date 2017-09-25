@@ -384,15 +384,18 @@ namespace WB.Tests.Abc.TestFactories
             string[] referenceValues = null,
             string[] parentLevelIds = null,
             string[] systemVariableValues = null,
-            string[] answers = null)
-            => new InterviewDataExportRecord(interviewId.FormatGuid(), 
+            string[] answers = null,
+            string id = null)
+            => new InterviewDataExportRecord(
+               id ?? interviewId.FormatGuid(), 
                referenceValues?? new string[0],
                parentLevelIds ?? new string[0],
                systemVariableValues ?? new string[0])
                { 
                    Answers = answers ?? new string[0],
                    LevelName = levelName,
-                   InterviewId = interviewId
+                   InterviewId = interviewId,
+                   Id = id
                };
 
         public InterviewDataExportView InterviewDataExportView(
