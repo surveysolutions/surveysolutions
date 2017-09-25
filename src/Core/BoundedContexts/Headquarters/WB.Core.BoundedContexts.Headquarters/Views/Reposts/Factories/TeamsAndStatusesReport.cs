@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         public ReportView GetReport(TeamsAndStatusesInputModel model)
         {
             var view = this.GetBySupervisorAndDependentInterviewers(model);
-            view.TotalRow.Responsible = Report.COLUMN_TOTAL;
+            view.TotalRow.Responsible = Strings.AllTeams;
 
             return new ReportView
             {
