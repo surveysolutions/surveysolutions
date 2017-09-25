@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,6 +27,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IPlainStorageAccessor<Assignment> assignments;
         private readonly IAssignmentsService assignmentsService;
+        private readonly IWebInterviewNotificationService webInterviewNotificationService;
 
         // GET: WebInterviewSetup
         public WebInterviewSetupController(ICommandService commandService,
@@ -34,7 +36,8 @@ namespace WB.UI.Headquarters.Controllers
             IWebInterviewConfigurator configurator,
             IWebInterviewConfigProvider webInterviewConfigProvider,
             IPlainStorageAccessor<Assignment> assignments,
-            IAssignmentsService assignmentsService)
+            IAssignmentsService assignmentsService,
+            IWebInterviewNotificationService webInterviewNotificationService)
             : base(commandService, 
                   logger)
         {
@@ -43,6 +46,7 @@ namespace WB.UI.Headquarters.Controllers
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.assignments = assignments;
             this.assignmentsService = assignmentsService;
+            this.webInterviewNotificationService = webInterviewNotificationService;
         }
 
         public ActionResult Start(string id)
@@ -115,6 +119,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var questionnaireId = QuestionnaireIdentity.Parse(id);
             this.configurator.Stop(questionnaireId);
+            this.webInterviewNotificationService.ReloadInterviewByQuestionnaire(questionnaireId);
 
             return RedirectToAction("Index", "SurveySetup");
         }

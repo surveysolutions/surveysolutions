@@ -263,8 +263,14 @@ namespace WB.UI.Headquarters.Controllers
                 return RedirectToAction("Completed", "InterviewerHq");
             }
 
-            if(!isAuthorizedUser && !webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+            if (!isAuthorizedUser)
+            {
+                if (!webInterviewConfig.Started)
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+
+                if(interview.Status == InterviewStatus.Completed)
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
+            }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
             {
