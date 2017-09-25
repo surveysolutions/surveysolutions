@@ -46,7 +46,7 @@ namespace WB.UI.Interviewer.ViewModel
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => {
-            await this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
+            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
             this.Dispose();
         });
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
@@ -60,7 +60,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
             else
             {
-                this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
+                this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
             }
         }
 
