@@ -13,9 +13,7 @@ module.exports = {
         "vendor": [
             "axios",
             "babel-runtime/helpers/asyncToGenerator.js",
-            "bootstrap/js/dropdown.js",
-            "bootstrap/js/modal.js",
-            "bootstrap/js/alert.js",
+            "bootstrap/dist/js/bootstrap.js",
             "bootstrap-select",
             "core-js/es6/promise",
             "core-js/modules/es6.object.assign",
