@@ -24,15 +24,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected override void InitFromBundle(IMvxBundle parameters)
         {
             base.InitFromBundle(parameters);
-            if (parameters.Data.ContainsKey("userName") && !this.principal.IsAuthenticated)
-            {
-                this.principal.SignInWithHash(parameters.Data["userName"], parameters.Data["passwordHash"], true);
-            }
+            this.LoadFromBundle(parameters);
         }
 
         protected override void ReloadFromBundle(IMvxBundle parameters)
         {
             base.ReloadFromBundle(parameters);
+            this.LoadFromBundle(parameters);
+        }
+
+        private void LoadFromBundle(IMvxBundle parameters)
+        {
             if (parameters.Data.ContainsKey("userName") && !this.principal.IsAuthenticated)
             {
                 this.principal.SignInWithHash(parameters.Data["userName"], parameters.Data["passwordHash"], true);
