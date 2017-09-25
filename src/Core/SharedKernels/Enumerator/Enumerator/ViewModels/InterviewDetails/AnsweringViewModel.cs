@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 e.Data.Add("Failed to answer question", answerCommand.Question.ToString());
                 e.Data.Add("CommandType", answerCommand.GetType());
-                e.Data.Add("Interview Id", answerCommand.InterviewId);
+                e.Data.Add("Interview Id", answerCommand.InterviewId.ToString());
                 throw;
             }
         }
