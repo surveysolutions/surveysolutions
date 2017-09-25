@@ -43,7 +43,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             session.Transaction.Enlist(command);
         }
 
-        public List<string> GetIdsStartWith(string beginingOfId)
+        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
         {
             throw new NotImplementedException();
         }

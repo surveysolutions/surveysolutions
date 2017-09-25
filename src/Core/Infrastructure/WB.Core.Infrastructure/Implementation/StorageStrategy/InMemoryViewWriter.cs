@@ -53,7 +53,7 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
                 this.view = null;
         }
 
-        public List<string> GetIdsStartWith(string beginingOfId)
+        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
         {
             return this.viewId.FormatGuid().StartsWith(beginingOfId) ?  new List<string>{ this.viewId.FormatGuid() } : new List<string>();
         }

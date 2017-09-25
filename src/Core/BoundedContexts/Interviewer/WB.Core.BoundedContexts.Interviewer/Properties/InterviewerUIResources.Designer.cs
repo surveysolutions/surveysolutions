@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview {0} of  unlimited for this assignment.
+        ///   Looks up a localized string similar to To collect: unlimited.
         /// </summary>
         public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
             get {
@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interview {0} of {1} for this assignment.
+        ///   Looks up a localized string similar to To collect: {0} interview(s).
         /// </summary>
         public static string Dashboard_AssignmentCard_SubTitleCountdownFormat {
             get {
@@ -130,15 +130,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_AssignmentsTabTitle {
             get {
                 return ResourceManager.GetString("Dashboard_AssignmentsTabTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to id {0}.
-        /// </summary>
-        public static string Dashboard_CardIdTitleFormat {
-            get {
-                return ResourceManager.GetString("Dashboard_CardIdTitleFormat", resourceCulture);
             }
         }
         
@@ -171,16 +162,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create
-        ///interview.
-        /// </summary>
-        public static string Dashboard_CreateInterview {
-            get {
-                return ResourceManager.GetString("Dashboard_CreateInterview", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create new interview using templates.
         /// </summary>
         public static string Dashboard_CreateNewTabText {
@@ -199,7 +180,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment #{0}.
+        ///   Looks up a localized string similar to Assignment {0}.
         /// </summary>
         public static string Dashboard_Interview_AssignmentLabelFormat {
             get {
@@ -208,7 +189,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} questions answered.
+        ///   Looks up a localized string similar to {0} question(s) answered.
         /// </summary>
         public static string Dashboard_Interview_QuestionsAnsweredFormat {
             get {
@@ -328,6 +309,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reopen.
+        /// </summary>
+        public static string Dashboard_Reopen {
+            get {
+                return ResourceManager.GetString("Dashboard_Reopen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show location.
         /// </summary>
         public static string Dashboard_ShowLocation {
@@ -365,11 +355,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start new interview.
+        /// </summary>
+        public static string Dashboard_StartNewInterview {
+            get {
+                return ResourceManager.GetString("Dashboard_StartNewInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} interviews for {1}.
         /// </summary>
         public static string Dashboard_Title {
             get {
                 return ResourceManager.GetString("Dashboard_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Issues.
+        /// </summary>
+        public static string Dashboard_ViewIssues {
+            get {
+                return ResourceManager.GetString("Dashboard_ViewIssues", resourceCulture);
             }
         }
         

@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All members.
+        /// </summary>
+        internal static string AllMembers {
+            get {
+                return ResourceManager.GetString("AllMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Questionnaires.
         /// </summary>
         internal static string AllQuestionnaires {

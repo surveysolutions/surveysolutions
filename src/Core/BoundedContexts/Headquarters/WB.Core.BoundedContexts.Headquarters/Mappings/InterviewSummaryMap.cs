@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.UpdateDate);
             Property(x => x.WasCreatedOnClient);
             Property(x => x.WasRejectedBySupervisor);
+            Property(x => x.WasCompleted);
             Property(x => x.InterviewId);
             Property(x => x.QuestionnaireId);
             Property(x => x.QuestionnaireVersion);

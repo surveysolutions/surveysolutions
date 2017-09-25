@@ -13,8 +13,11 @@ namespace WB.UI.Interviewer.Converters
         {
             switch (status)
             {
-                case DashboardInterviewStatus.New:
+                case DashboardInterviewStatus.Assignment:
                     return Resource.Drawable.dashboard_interview_status_new;
+
+                case DashboardInterviewStatus.New:
+                    return Resource.Drawable.dashboard_interview_status_inprogress;
 
                 case DashboardInterviewStatus.InProgress:
                     return Resource.Drawable.dashboard_interview_status_inprogress;

@@ -34,7 +34,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnPause()
         {
             base.OnPause();
-
             this.RemoveFragments();
         }
 
@@ -54,6 +53,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         private void RemoveFragments()
         {
             this.fragmentStatePagerAdapter.RemoveAllFragments();
+            this.fragmentStatePagerAdapter = null;
+            this.viewPager.Adapter = null;
+
             this.viewPager.PageSelected -= this.ViewPager_PageSelected;
 
             this.ViewModel.StartedInterviews.PropertyChanged -= this.StartedInterviewsOnPropertyChanged;
@@ -65,7 +67,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.viewPager = this.FindViewById<ViewPager>(Resource.Id.pager);
 
-            this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.viewPager, this.SupportFragmentManager);
+            this.fragmentStatePagerAdapter = new MvxFragmentStatePagerAdapter(this, this.SupportFragmentManager);
             this.viewPager.Adapter = this.fragmentStatePagerAdapter;
             this.viewPager.PageSelected += this.ViewPager_PageSelected;
 
@@ -93,7 +95,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         private void OpenRequestedTab()
         {
-            for (int i = 0; i < fragmentStatePagerAdapter.Count; i++)
+            for (int i = 0; i < this.fragmentStatePagerAdapter.Count; i++)
             {
                 var fragment = (MvxFragment) fragmentStatePagerAdapter.GetItem(i);
                 InterviewTabPanel viewModel = (InterviewTabPanel) fragment.ViewModel;

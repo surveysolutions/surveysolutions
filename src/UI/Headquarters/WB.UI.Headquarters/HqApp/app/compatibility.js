@@ -1,6 +1,6 @@
-$.fn.preventDoubleSubmission = () => {
-    $(this).on('submit',  (e) => {
-        const $form = $(this);
+$.fn.preventDoubleSubmission = function () {
+    $(this).on('submit', function (e) {
+        var $form = $(this);
 
         if ($form.data('submitted') === true) {
             // Previously submitted - don't submit again
@@ -15,28 +15,27 @@ $.fn.preventDoubleSubmission = () => {
     return this;
 };
 
-function ajustNoticeHeight() {
-    const height = $(".view-mode").outerHeight();
-    $('.view-mode + main').css("margin-top", `${height}px`);
+var ajustNoticeHeight = function () {
+    var height = $(".view-mode").outerHeight();
+    $('.view-mode + main').css("margin-top", height + "px");
     $('.wrapper-view-mode').css("padding-top", height);
     $('.wrapper-view-mode .foldback-button').css("margin-top", height);
     $('.wrapper-view-mode .humburger-foldback-button').css("margin-top", height);
-}
+};
 
 
-$(() => {
-    const globalSettings = window.input.settings;
+$(function() {
+    var globalSettings = window.input.settings;
     
-    $("#hide-filters").click(() => {
+    $("#hide-filters").click(function () {
         $(".filters").toggleClass("hidden-filters");
         $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
     });
-    
     $("main").removeClass("hold-transition");
     $("footer").removeClass("hold-transition");
 
     $(window).on('resize',
-        () => {
+        function() {
             if ($(window).width() > 880) {
                 if ($(".navbar-collapse.collapse.in").length > 0) {
                     $("main").addClass("display-block");
@@ -46,7 +45,7 @@ $(() => {
             }
         });
 
-    $(".navbar-toggle").click(() => {
+    $(".navbar-toggle").click(function() {
         $(".navbar-collapse").fadeToggle();
         $(".navbar-collapse").animate({ height: '100%' }, 0);
         $(".top-menu").toggleClass("top-animate");
@@ -65,14 +64,14 @@ $(() => {
 
     $('form').preventDoubleSubmission();
 
-    const syncQueueConfig = globalSettings.config.syncQueue;
+    var syncQueueConfig = globalSettings.config.syncQueue;
     if (syncQueueConfig.enabled) {
-        const updateQueueLength = () => {
+        var updateQueueLength = function() {
             $.ajax({
                 url: syncQueueConfig.lengthUrl,
                 type: 'get',
                 dataType: 'json',
-                success(data) {
+                success: function(data) {
                     $('#sync-queue-size').text(data);
                     if (data > 0) {
                         $('#IncomingPackagesQueueIndicator').fadeIn();
@@ -81,7 +80,7 @@ $(() => {
                     }
                 }
             });
-        };
+        }
 
         setInterval(updateQueueLength, 3000);
     }
@@ -90,11 +89,11 @@ $(() => {
     $(".view-mode + main .container-fluid .content").wrapInner("<div class='wrapper-view-mode'></div>");
     ajustNoticeHeight();
 
-    $('.view-mode .alerts .alert').on('closed.bs.alert', () => {
+    $('.view-mode .alerts .alert').on('closed.bs.alert', function() {
         ajustNoticeHeight();
     });
 });
 
-$(window).resize(() => {
+$(window).resize(function () {
     ajustNoticeHeight();
 });

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using MvvmCross.Core.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
@@ -15,26 +18,46 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         string SubTitle { get; }
         string IdLabel { get; }
 
-        string MainActionLabel { get; }
-        IMvxAsyncCommand MainAction { get; }
-        bool MainActionEnabled { get;  }
-
-        bool HasAdditionalActions { get; }
-        MenuAction[] Actions { get; }
+        MvxObservableCollection<ActionDefinition> Actions { get; }
+        ActionDefinition PrimaryAction {get;}
+        ActionDefinition SecondaryAction {get;}
+        IEnumerable<ActionDefinition> ContextMenu { get; }
+        DashboardInterviewStatus Status { get; }
     }
 
-    public class MenuAction
+    public enum ActionType
     {
-        public MenuAction(string label, IMvxCommand action, bool enabled)
+        Primary,
+        Secondary,
+        Context
+    }
+
+    public class ActionDefinition : INotifyPropertyChanged
+    {
+        private string label;
+        public ActionType ActionType { get; set; }
+        public int Tag { get; set; }
+
+        public string Label
         {
-            this.Label = label;
-            this.Action = action;
-            this.Enabled = enabled;
+            get => label;
+            set
+            {
+                if (label == value) return;
+                label = value;
+                OnPropertyChanged();
+            }
         }
 
-        public string Label { get; set; }
-        public IMvxCommand Action { get; set; }
-        public Boolean Enabled { get; set; }
-        public int MenuItemId { get; set; }
+        public bool IsEnabled => Command?.CanExecute() ?? false;
+
+        public IMvxCommand Command { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

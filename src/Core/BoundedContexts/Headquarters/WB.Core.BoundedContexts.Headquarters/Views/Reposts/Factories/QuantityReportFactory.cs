@@ -106,13 +106,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
 
             var quantityTotalRow =
-                this.CreateQuantityTotalRow(interviewStatusesByDateRange, ranges.ColumnRangesLocal, timezoneAdjastmentMins, selectUserAndTimestamp);
+                this.CreateQuantityTotalRow(interviewStatusesByDateRange, ranges.ColumnRangesUtc, selectUserAndTimestamp);
 
             return new QuantityByResponsibleReportView(list, quantityTotalRow, ranges.ColumnRangesLocal, responsibleUsersCount);
         }
 
         
-        private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges, int timezoneAdjastmentMins,
+        private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges,
             Expression<Func<T, UserAndTimestamp>> userIdSelector)
         {
             var allInterviewsInStatus = interviews.Select(userIdSelector)
@@ -122,8 +122,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             foreach (var dateTimeRange in dateTimeRanges)
             {
-                var fromDate = dateTimeRange.From.AddMinutes(timezoneAdjastmentMins);
-                var toDate = dateTimeRange.To.AddMinutes(timezoneAdjastmentMins);
+                var fromDate = dateTimeRange.From;
+                var toDate = dateTimeRange.To;
                 var count = allInterviewsInStatus.Count(d => d >= fromDate && d < toDate);
                 quantityByPeriod.Add(count);
             }

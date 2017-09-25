@@ -1,5 +1,5 @@
 <template>
-  <div class="block-filter">
+  <div class="block-filter" :title="tooltip">
         <h5>{{title}}</h5>
         <slot></slot>
     </div>
@@ -8,7 +8,8 @@
 <script>
 export default {
     props: [
-        "title"
+        "title",
+        "tooltip"
     ]
 }
 </script>

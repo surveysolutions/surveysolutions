@@ -59,7 +59,7 @@ namespace Main.DenormalizerStorage
             }
         }
 
-        public List<string> GetIdsStartWith(string beginingOfId)
+        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
         {
             lock (locker)
             {
