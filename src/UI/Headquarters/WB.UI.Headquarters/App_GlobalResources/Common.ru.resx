@@ -292,4 +292,8 @@
   <data name="AllAssignments" xml:space="preserve">
     <value>Все задания</value>
   </data>
+  <data name="AllMembers" xml:space="preserve">
+    <value>Вся команда</value>
+    <comment>Вся команда</comment>
+  </data>
 </root>

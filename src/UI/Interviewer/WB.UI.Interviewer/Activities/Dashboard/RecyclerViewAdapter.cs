@@ -51,7 +51,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 };
             }
 
-            if(item is IDashboardViewItem viewItem && viewItem.HasAdditionalActions)
+            if(item is IDashboardViewItem viewItem && viewItem.ContextMenu.Any())
             {
                 var viewHolder = (ExpandableViewHolder)holder;
 
@@ -59,21 +59,19 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 {
                     var popup = new PopupMenu(context, viewHolder.MenuHandle);
 
-                    foreach(var action in viewItem.Actions.Where(a => a.Enabled))
+                    foreach(var action in viewItem.ContextMenu.Where(a => a.Command.CanExecute()))
                     {
                         var menu = popup.Menu.Add(action.Label);
-                        action.MenuItemId = menu.ItemId;
+                        action.Tag = menu.ItemId;
                     }
 
                     popup.MenuItemClick += (s, e) =>
                     {
-                        var action = viewItem.Actions.SingleOrDefault(a => a.MenuItemId == e.Item.ItemId);
-                        if (action?.Action.CanExecute() ?? false)
-                        {
-                            action.Action.Execute();
-                        }
+                        var action = viewItem.ContextMenu.SingleOrDefault(a => a.Tag == e.Item.ItemId);
+                        action.Command.Execute();
                     };
 
+                    popup.Gravity = (int) GravityFlags.Left;
                     popup.Show();
                 };
             }            

@@ -40,12 +40,13 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel => this.NavigateTo<TViewModel>(null);
 
-        public async Task NavigateToDashboard(Guid? interviewId = null)
+        public Task NavigateToDashboard(Guid? interviewId = null)
         {
-            await this.navigationService.Navigate<DashboardViewModel, DashboardArgs>(new DashboardArgs
+            this.NavigateTo<DashboardViewModel>(new DashboardArgs
             {
                 LastVisitedInterviewId = interviewId
             });
+            return Task.CompletedTask;
         }
 
         public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });

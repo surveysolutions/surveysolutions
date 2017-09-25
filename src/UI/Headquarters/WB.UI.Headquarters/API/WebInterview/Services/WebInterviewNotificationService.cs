@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
@@ -255,5 +256,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             this.webInterviewHubContext.Clients.Group(clientQuestionIdentity).refreshComment(question.ToString());
         }
+
+        public void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+            => this.webInterviewHubContext.Clients.Group(questionnaireIdentity.ToString()).reloadInterview();
     }
 }

@@ -37,7 +37,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public string QuestionnaireTitle { get; set; }
 
         public string InterviewKey { get; set; }
-
-        public int AnsweredQuestionsCount { get; set; }
     }
 }

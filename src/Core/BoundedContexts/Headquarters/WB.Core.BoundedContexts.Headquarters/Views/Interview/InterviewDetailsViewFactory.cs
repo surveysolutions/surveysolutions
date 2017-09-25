@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -261,6 +262,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return questionnaire.ShouldUseFormatting(interviewQuestion.Identity.Id)
                     ? $"{doubleValue:0,0.#################}"
                     : doubleValue.ToString(CultureInfo.InvariantCulture);
+            }
+
+            if (interviewQuestion.IsDateTime)
+            {
+                var interviewTreeDateTimeQuestion = interviewQuestion.GetAsInterviewTreeDateTimeQuestion();
+                DateTime? dateTime = interviewTreeDateTimeQuestion.GetAnswer()?.Value;
+                return AnswerUtils.AnswerToString(dateTime, cultureInfo: null, isTimestamp: interviewTreeDateTimeQuestion.IsTimestamp);
             }
 
             return interviewQuestion.GetAnswerAsString();

@@ -190,4 +190,34 @@
     <value>Необходимо интервью</value>
     <comment>Необходимо интервью</comment>
   </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Показывает состояние задания. Может быть активным или заархивированным.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Версия опросника. Выберите версию опросника, чтобы посмотреть собранные по нему интервью. Выберите "Все опросники", чтобы увидеть интервью по всем опросникам</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Ответственный пользователь. Кликните по полю, чтобы выбрать пользователя из списка или начать вводить его имя для дальнейшей фильтрации списка.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Количество интервью, собранных и отправленных на сервер по этому заданию. Некоторые интервью могут быть созданы на планшете, но еще не синхронизированы. Кликните по ячейке, чтобы увидеть интервью по данному заданию. Кликните по иконке сортировки для упорядочивания по количеству собранных интервью.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Дата создания задания. Кликните по иконке сортировки для упорядочивания по времени создания.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Идентифицирующая информация по каждому заданию.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Количество интервью необходимое для завершения задания.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Ответственный за задание пользователь. Кликните по иконке сортировки для упорядочивания по имени пользователя.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Максимальное количество интервью, которое может быть собрано по этому заданию. Кликните на ячейке для редактирования значения. Кликните по иконке сортировки для упорядочивания по размеру задания.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Дата последнего изменения задания (например, последнего изменения размера). Кликните по иконке сортировки для упорядочивания по времени изменения.</value>
+  </data>
 </root>

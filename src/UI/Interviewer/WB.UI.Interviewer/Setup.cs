@@ -113,6 +113,7 @@ namespace WB.UI.Interviewer
             registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
+            registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
             registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
             registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
