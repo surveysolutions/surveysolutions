@@ -53,6 +53,7 @@
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/top_guideline"
       app:layout_constraintVertical_bias="0"
+      android:background="?attr/selectableItemBackgroundBorderless"
       style="@style/Dashboard_Menu_Handle" />
 
     <TextView
@@ -106,6 +107,7 @@
                app:layout_constraintBottom_toBottomOf="parent"
                app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
                app:layout_constraintTop_toBottomOf="@+id/prefilledQuestions"
+               android:background="?attr/selectableItemBackgroundBorderless"
                app:srcCompat="@drawable/dashboard_expand_handle"
                style="@style/Dashboard_ExpandHandle" />
 
