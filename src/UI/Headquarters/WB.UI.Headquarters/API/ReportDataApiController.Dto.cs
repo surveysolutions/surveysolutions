@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             switch (reportType)
             {
                 case PeriodiceReportType.NumberOfInterviewTransactionsBySupervisor:
-                    return new[] { InterviewExportedAction.ApprovedByHeadquarter, InterviewExportedAction.RejectedBySupervisor };
+                    return new[] { InterviewExportedAction.ApprovedBySupervisor, InterviewExportedAction.RejectedBySupervisor };
                 case PeriodiceReportType.NumberOfCompletedInterviews:
                     return new[] { InterviewExportedAction.Completed };
                 case PeriodiceReportType.NumberOfInterviewTransactionsByHQ:
