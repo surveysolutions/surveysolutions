@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.Designer
             }
         }
 
-        public List<string> GetIdsStartWith(string beginingOfId)
+        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
         {
             return this.storage.Keys.Where(k => k.StartsWith(beginingOfId)).ToList();
         }

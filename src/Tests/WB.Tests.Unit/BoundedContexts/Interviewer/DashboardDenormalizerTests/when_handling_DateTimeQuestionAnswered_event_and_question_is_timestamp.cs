@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         public void should_set_formatted_date_to_specified_answer_view() =>
             prefilledQuestions.Where(x => x.QuestionId == dateTimeQuestionIdentity.Id)
                 .First()
-                .Answer.ShouldEqual(answer.ToLocalTime().ToString(DateTimeFormat.DateWithTimeFormat));
+                .Answer.ShouldEqual(answer.ToString(DateTimeFormat.DateWithTimeFormat));
 
         static InterviewerDashboardEventHandler denormalizer;
         static IPublishedEvent<DateTimeQuestionAnswered> @event;

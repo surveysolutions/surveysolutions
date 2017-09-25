@@ -41,6 +41,14 @@ namespace WB.UI.Headquarters.API.Interviewer
         private readonly HqSignInManager signInManager;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
+        public enum ClientVersionFromUserAgent
+        {
+            Unknown = 0,
+            WithoutMaps = 1,
+            WithMaps = 2
+        }
+
+
         public InterviewerApiController(
             IFileSystemAccessor fileSystemAccessor,
             ITabletInformationService tabletInformationService,
@@ -68,21 +76,27 @@ namespace WB.UI.Headquarters.API.Interviewer
         [HttpGet]
         public virtual HttpResponseMessage Get()
         {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONFILENAME);
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithMaps)
+                return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
 
-            return this.HttpResponseMessage(pathToInterviewerApp);
+            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
         }
 
         [HttpGet]
         public virtual HttpResponseMessage GetExtended()
         {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONEXTENDEDFILENAME);
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
+                return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
 
-            return this.HttpResponseMessage(pathToInterviewerApp);
+            return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
         }
 
-        private HttpResponseMessage HttpResponseMessage(string pathToInterviewerApp)
+        private HttpResponseMessage HttpResponseMessage(string appName)
         {
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
+
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
@@ -101,12 +115,20 @@ namespace WB.UI.Headquarters.API.Interviewer
         [HttpGet]
         public virtual HttpResponseMessage Patch(int deviceVersion)
         {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if(clientVersion == ClientVersionFromUserAgent.WithMaps)
+                return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
+
             return GetPatchFile($@"WBCapi.{deviceVersion}.delta");
         }
 
         [HttpGet]
         public virtual HttpResponseMessage PatchExtended(int deviceVersion)
         {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
+                return GetPatchFile($@"WBCapi.{deviceVersion}.delta");
+
             return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
         }
 
@@ -125,19 +147,27 @@ namespace WB.UI.Headquarters.API.Interviewer
         [HttpGet]
         public virtual int? GetLatestVersion()
         {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
-                    PHYSICALAPPLICATIONFILENAME);
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithMaps)
+                return GetLatestVersion(PHYSICALAPPLICATIONEXTENDEDFILENAME);
 
-            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
-                ? null
-                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
+            return GetLatestVersion(PHYSICALAPPLICATIONFILENAME);
         }
 
         [HttpGet]
         public virtual int? GetLatestExtendedVersion()
         {
+            var clientVersion = GetClientVersionFromUserAgent(this.Request);
+            if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
+                return GetLatestVersion(PHYSICALAPPLICATIONFILENAME);
+
+            return GetLatestVersion(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+        }
+
+        private int? GetLatestVersion(string appName)
+        {
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
-                    PHYSICALAPPLICATIONEXTENDEDFILENAME);
+                appName);
 
             return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null
@@ -230,6 +260,22 @@ namespace WB.UI.Headquarters.API.Interviewer
             }
 
             return null;
+        }
+
+        private ClientVersionFromUserAgent GetClientVersionFromUserAgent(HttpRequestMessage request)
+        {
+            if (request.Headers?.UserAgent != null)
+            {
+                foreach (var product in request.Headers?.UserAgent)
+                {
+                    if (product.Product?.Name.Equals(@"maps",StringComparison.OrdinalIgnoreCase)??false)
+                    {
+                        return ClientVersionFromUserAgent.WithMaps;
+                    }
+                }
+                return ClientVersionFromUserAgent.WithoutMaps;
+            }
+            return ClientVersionFromUserAgent.Unknown;
         }
     }
 }

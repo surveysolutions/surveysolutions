@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.WebInterview
 {
@@ -14,5 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.WebInterview
         void RefreshEntitiesWithFilteredOptions(Guid interviewId);
         void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities);
         void RefreshComment(Guid interviewId, Identity question);
+        void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
     }
 }

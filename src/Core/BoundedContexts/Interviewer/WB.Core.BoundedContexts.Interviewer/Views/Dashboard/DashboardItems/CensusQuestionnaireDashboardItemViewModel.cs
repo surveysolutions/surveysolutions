@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.SubTitle = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
         }
 
-        public DashboardInterviewStatus Status => DashboardInterviewStatus.New;
+        public DashboardInterviewStatus Status => DashboardInterviewStatus.Assignment;
         public string Title { get; set; }
         public string SubTitle { get; set; }
 

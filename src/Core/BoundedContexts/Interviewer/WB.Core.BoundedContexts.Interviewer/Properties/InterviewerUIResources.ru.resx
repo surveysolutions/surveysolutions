@@ -141,10 +141,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Законченные ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Создать
-интервью</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Новые ({0})</value>
   </data>
@@ -666,28 +662,35 @@
     <value>Синхронизация {0} из {1} заданий</value>
     <comment>Синхронизация {0} из {1} заданий</comment>
   </data>
-  <data name="Dashboard_CardIdTitleFormat" xml:space="preserve">
-    <value>id {0}</value>
-  </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
-    <value>Интервью {0} из {1} для этой задачи</value>
+    <value>Необходимо собрать: {0} интервью</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
     <value>Задача с единственным интервью</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
-    <value>Интервью {0} из неограниченных для этой задачи</value>
+    <value>Необходимо собрать: неограниченное</value>
   </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
     <value>{0} вопросов(а) отвечено</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
-    <value>Задача #{0}</value>
+    <value>Задача {0}</value>
   </data>
   <data name="Dashboard_No_InterviewKey" xml:space="preserve">
     <value>Без ключа</value>
   </data>
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Цензус</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Переоткрыть</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Просмотреть
+проблемы</value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Начать новое интервью</value>
   </data>
 </root>

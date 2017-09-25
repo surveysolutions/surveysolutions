@@ -63,7 +63,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").ExecuteUpdate();
         }
 
-        public List<string> GetIdsStartWith(string beginingOfId)
+        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
         {
             var session = this.sessionProvider.GetSession();
 
@@ -79,7 +79,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var storedEntity = session.Get<TEntity>(id);
             if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
             {
-                session.Merge(storedEntity);
+                session.Merge(entity);
             }
             else
             {

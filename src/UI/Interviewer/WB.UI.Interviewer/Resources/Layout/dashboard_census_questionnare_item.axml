@@ -65,9 +65,8 @@
 	    app:layout_constraintTop_toBottomOf="@+id/title"
 	    app:layout_constraintRight_toRightOf="@+id/title" />
 
-
     <Button android:id="@+id/new_button"
-            app:MvxBind="Text Localization('Dashboard_CreateInterview');
+            app:MvxBind="Text Localization('Dashboard_StartNewInterview');
                        Click CreateNewInterviewCommand;"
       
       style="@style/Dashboard_InterviewItem_MainActionButton"

@@ -30,10 +30,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
         }
 
+        protected override void ReloadFromBundle(IMvxBundle parameters)
+        {
+            base.ReloadFromBundle(parameters);
+            if (parameters.Data.ContainsKey("userName") && !this.principal.IsAuthenticated)
+            {
+                this.principal.SignInWithHash(parameters.Data["userName"], parameters.Data["passwordHash"], true);
+            }
+        }
+
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            if (this.principal.IsAuthenticated)
+            if (this.principal?.IsAuthenticated ?? false)
             {
                 bundle.Data["userName"] = this.principal.CurrentUserIdentity.Name;
                 bundle.Data["passwordHash"] = this.principal.CurrentUserIdentity.PasswordHash;
@@ -46,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (this.IsAuthenticationRequired && !this.principal.IsAuthenticated)
             {
-                this.viewModelNavigationService.NavigateToLogin();
+                this.viewModelNavigationService.NavigateToSplashScreen();
                 return;
             }
 

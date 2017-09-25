@@ -132,9 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>เสร็จสมบูรณ์ : ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>สร้างการสัมภาษณ์</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>งานใหม่ : ({0})</value>
   </data>

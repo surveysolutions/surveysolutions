@@ -3,7 +3,7 @@
             :hasFilter="true">
 
         <Filters slot="filters">
-            <FilterBlock :title="$t('Common.Questionnaire')">
+            <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
                 <Typeahead data-vv-name="questionnaireId"
                            data-vv-as="questionnaire"
                            :placeholder="$t('Common.AllQuestionnaires')"
@@ -15,7 +15,7 @@
                 </typeahead>
             </FilterBlock>
 
-            <FilterBlock :title="$t('Common.Responsible')">
+            <FilterBlock :title="$t('Common.Responsible')" :tooltip="$t('Assignments.Tooltip_Filter_Responsible')">
                 <Typeahead :placeholder="$t('Common.AllResponsible')"
                            control-id="responsibleId"
                            :value="responsibleId"
@@ -24,7 +24,7 @@
                            :fetch-url="$config.Api.Responsible"></Typeahead>
             </FilterBlock>
 
-            <FilterBlock :title="$t('Assignments.ShowArchived')">
+            <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
                 <select class="ddl"
                         v-model="showArchive">
                     <option v-bind:value="false">{{ $t("Assignments.Active") }}</option>
@@ -168,6 +168,7 @@ export default {
                     data: "responsible",
                     name: "Responsible.Name",
                     title: this.$t("Common.Responsible"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_Responsible"),
                     responsivePriority: 3,
                     render(data, type, row) {
                         var resultString = '<span class="' + row.responsibleRole.toLowerCase() + '">';
@@ -186,6 +187,7 @@ export default {
                     searchHighlight: false,
                     searchable: false,
                     title: this.$t("Assignments.Size"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_Size"),
                     if() {
                         return self.$config.IsHeadquarter;
                     }
@@ -194,6 +196,7 @@ export default {
                     name: "InterviewsCount",
                     class: "type-numeric",
                     title: this.$t("Assignments.Count"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_Count"),
                     orderable: true,
                     searchable: false,
                     render(data, type, row) {
@@ -209,6 +212,7 @@ export default {
                     name: "InterviewsCount",
                     class: "type-numeric",
                     title: this.$t("Assignments.InterviewsNeeded"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_InterviewsNeeded"),
                     orderable: false,
                     searchable: false,
                     render(data, type, row) {
@@ -222,6 +226,7 @@ export default {
                 }, {
                     data: "identifyingQuestions",
                     title: this.$t("Assignments.IdentifyingQuestions"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_IdentifyingQuestions"),
                     class: "prefield-column first-identifying last-identifying sorting_disabled visible",
                     orderable: false,
                     searchable: false,
@@ -234,6 +239,7 @@ export default {
                     data: "updatedAtUtc",
                     name: "UpdatedAtUtc",
                     title: this.$t("Assignments.UpdatedAt"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_UpdatedAt"),
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data);
@@ -243,6 +249,7 @@ export default {
                     data: "createdAtUtc",
                     name: "CreatedAtUtc",
                     title: this.$t("Assignments.CreatedAt"),
+                    tooltip: this.$t("Assignments.Tooltip_Table_CreatedAt"),
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data);
@@ -266,7 +273,12 @@ export default {
                     style: 'multi',
                     selector: 'td>.checkbox-filter'
                 },
-                sDom: 'fr<"table-with-scroll"t>ip'
+                sDom: 'fr<"table-with-scroll"t>ip',
+                headerCallback: (thead) => {
+                    for(let i=0;i<columns.length;i++){
+                        $(thead).find('th').eq(i).attr("title", columns[i].tooltip);
+                    }
+                }
             };
 
             return tableOptions;

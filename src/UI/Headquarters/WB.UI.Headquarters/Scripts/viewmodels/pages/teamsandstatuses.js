@@ -50,8 +50,10 @@
         self.reloadDataTable();
     };
 
-    self.getLinkToInterviews = function(data, row, interviewStatus, templateId, templateVersion) {
-        if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + data + "</span>";
+    self.getLinkToInterviews = function (data, row, interviewStatus, templateId, templateVersion) {
+        var formatedNumber = formatNumber(data);
+
+        if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + formatedNumber + "</span>";
 
         var queryObject = {};
 
@@ -72,7 +74,7 @@
 
         var linkUrl = $interviewsUrl + (queryString ? "?" + queryString : "");
 
-        return "<a href=\"" + linkUrl + "\">" + data + "</a>";
+        return "<a href=\"" + linkUrl + "\">" + formatedNumber + "</a>";
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.TeamsAndStatuses, Supervisor.VM.ListView);
