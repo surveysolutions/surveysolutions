@@ -346,7 +346,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private IEnumerable<object> ToReportRow(SpeedByResponsibleTotalRow totalRow)
         {
-            yield return Report.COLUMN_AVERAGE;
+            yield return Strings.AllTeams;
             foreach (var total in totalRow.SpeedByPeriod)
             {
                 yield return ToSpecDaysFormat(total);
