@@ -254,7 +254,7 @@
   
     <style name="Dashboard_Menu_Handle">
     <item name="android:layout_width">@dimen/dashboard_card_duo_margin</item>
-    <item name="android:layout_height">@dimen/dashboard_card_duo_margin</item>
+    <item name="android:layout_height">18dp</item>
     <item name="android:layout_marginRight">@dimen/dashboard_card_base_margin</item>
     <item name="android:paddingLeft">0dp</item>
     <item name="android:paddingRight">0dp</item>
