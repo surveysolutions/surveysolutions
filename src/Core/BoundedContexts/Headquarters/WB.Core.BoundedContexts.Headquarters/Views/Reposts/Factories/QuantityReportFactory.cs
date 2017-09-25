@@ -292,7 +292,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         private IEnumerable<object> ToReportRow(QuantityTotalRow totalRow)
         {
-            yield return Report.COLUMN_TOTAL;
+            yield return Strings.AllTeams;
             foreach (var total in totalRow.QuantityByPeriod)
             {
                 yield return total;

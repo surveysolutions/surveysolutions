@@ -157,7 +157,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 Headers = new[]
                 {
-                    Report.COLUMN_TEMPLATE_VERSION, Report.COLUMN_QUESTIONNAIRE_TEMPLATE,
+                    Report.COLUMN_QUESTIONNAIRE_TEMPLATE, Report.COLUMN_TEMPLATE_VERSION,
                     Report.COLUMN_SUPERVISOR_ASSIGNED, Report.COLUMN_INTERVIEWER_ASSIGNED,
                     Report.COLUMN_COMPLETED, Report.COLUMN_REJECTED_BY_SUPERVISOR, Report.COLUMN_APPROVED_BY_SUPERVISOR,
                     Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
@@ -167,7 +167,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 {
                     new object[]
                     {
-                        Report.TOTAL, "", view.TotalRow.SupervisorAssignedCount, view.TotalRow.InterviewerAssignedCount,
+                        Strings.AllQuestionnaires, "", view.TotalRow.SupervisorAssignedCount, view.TotalRow.InterviewerAssignedCount,
                         view.TotalRow.CompletedCount, view.TotalRow.RejectedBySupervisorCount,
                         view.TotalRow.ApprovedBySupervisorCount,
                         view.TotalRow.RejectedByHeadquartersCount, view.TotalRow.ApprovedByHeadquartersCount,
@@ -175,7 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     }
                 }.Concat(view.Items.Select(x => new object[]
                 {
-                    x.QuestionnaireVersion, x.QuestionnaireTitle, x.SupervisorAssignedCount, x.InterviewerAssignedCount,
+                    x.QuestionnaireTitle, x.QuestionnaireVersion, x.SupervisorAssignedCount, x.InterviewerAssignedCount,
                     x.CompletedCount, x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount,
                     x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
                     x.TotalCount
