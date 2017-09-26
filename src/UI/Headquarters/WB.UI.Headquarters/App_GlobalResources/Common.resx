@@ -180,9 +180,6 @@
   <data name="Any" xml:space="preserve">
     <value>Any</value>
   </data>
-  <data name="AllQuestionnaires" xml:space="preserve">
-    <value>All Questionnaires</value>
-  </data>
   <data name="AllAssignments" xml:space="preserve">
     <value>All Assignments</value>
   </data>
@@ -272,12 +269,6 @@
   </data>
   <data name="AllInterviewers" xml:space="preserve">
     <value>All interviewers</value>
-  </data>
-  <data name="AllTeams" xml:space="preserve">
-    <value>All teams</value>
-  </data>
-  <data name="AllMembers" xml:space="preserve">
-    <value>All members</value>
   </data>
   <data name="AllStatuses" xml:space="preserve">
     <value>All Statuses</value>
