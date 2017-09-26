@@ -103,11 +103,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
             if (responsible == null)
-                throw new ArgumentException("Responsible can't be null");
+                throw new ArgumentException("Responsible can't be null. Responsible id: " + userId);
 
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
             if (questionnarie == null)
-                throw new ArgumentException("Questionnarie can't be null");
+                throw new ArgumentException("Questionnarie can't be null. Questionnarie Id: " + questionnaireId);
 
             var interviewSummary = new InterviewSummary(questionnarie)
             {
