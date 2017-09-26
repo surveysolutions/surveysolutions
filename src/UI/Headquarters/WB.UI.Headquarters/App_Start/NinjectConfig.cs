@@ -137,8 +137,8 @@ namespace WB.UI.Headquarters
                 new CaptchaModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
-                new HeadquartersRegistry(),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
+                new HeadquartersUIModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
