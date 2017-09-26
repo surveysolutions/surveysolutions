@@ -1,13 +1,9 @@
 ﻿using System;
-using Moq;
+using System.Collections.Generic;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboardItemViewModelTests
 {
@@ -16,24 +12,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
         [Test]
         public void should_put_answers_for_each_interview()
         {
-            Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            Guid interviewId = Id.gA;
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
-            var prefilledQuestions = new SqliteInmemoryStorage<PrefilledQuestionView>();
-            prefilledQuestions.Store(Create.Entity.PrefilledQuestionView(interviewId: interviewId));
-            prefilledQuestions.Store(Create.Entity.PrefilledQuestionView(interviewId: Guid.NewGuid()));
-
-            IPlainStorage<QuestionnaireView> questionnaires =
-                Mock.Of<IPlainStorage<QuestionnaireView>>(x => x.GetById(Moq.It.IsAny<string>()) == Create.Entity.QuestionnaireView(questionnaireIdentity));
-
-            var viewModel = GetViewModel(prefilledQuestions: prefilledQuestions,
-                questionnaireViewRepository: questionnaires);
+            var viewModel = GetViewModel();
 
             viewModel.Init(Create.Entity.InterviewView(interviewId: interviewId,
-                questionnaireId: questionnaireIdentity.ToString(),
-                status: InterviewStatus.InterviewerAssigned));
+                   questionaireTitle: "Sample",
+                    questionnaireId: questionnaireIdentity.ToString(),
+                    status: InterviewStatus.InterviewerAssigned),
+                new List<PrefilledQuestion>
+                {
+                    new PrefilledQuestion(){ Answer = "A", Question = "B"},
+                    new PrefilledQuestion(){ Answer = "A1", Question = "B1"},
+                    new PrefilledQuestion(){ Answer = "A2", Question = "B2"},
+                    new PrefilledQuestion(){ Answer = "A3", Question = "B3"}
+                });
 
-            Assert.That(viewModel.PrefilledQuestions.Count, Is.EqualTo(1));
+            viewModel.IsExpanded = true;
+            Assert.That(viewModel.PrefilledQuestions, Has.Count.EqualTo(4));
+   
+            viewModel.IsExpanded = false;
+            Assert.That(viewModel.PrefilledQuestions, Has.Count.EqualTo(3), "should limit to 3 items in non expanded view");
         }
     }
 }

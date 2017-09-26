@@ -22,7 +22,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public CompletedInterviewsViewModel(
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewViewModelFactory viewModelFactory,
-            IPrincipal principal) : base(viewModelFactory, interviewViewRepository)
+            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo,
+            IPrincipal principal) : base(viewModelFactory, interviewViewRepository, identifyingQuestionsRepo)
         {
             this.principal = principal;
         }

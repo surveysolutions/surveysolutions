@@ -1,22 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public abstract class BaseInterviewsViewModel : ListViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo;
 
         protected BaseInterviewsViewModel(IInterviewViewModelFactory viewModelFactory, 
-            IPlainStorage<InterviewView> interviewViewRepository)
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo)
         {
             this.viewModelFactory = viewModelFactory;
             this.interviewViewRepository = interviewViewRepository;
+            this.identifyingQuestionsRepo = identifyingQuestionsRepo;
         }
         
         private int? highLightedItemIndex;
@@ -59,10 +62,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             yield return subTitle;
 
             var interviewIndex = 1;
+
+            var preffilledQuestions = this.identifyingQuestionsRepo
+                .LoadAll().ToLookup(d => d.InterviewId);
+            
             foreach (var interviewView in this.GetDbItems())
             {
                 var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
-                interviewDashboardItem.Init(interviewView);
+
+                var details = preffilledQuestions[interviewView.InterviewId]
+                    .OrderBy(x => x.SortIndex)
+                    .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
+                    .ToList();
+
+                interviewDashboardItem.Init(interviewView, details);
 
                 this.OnItemCreated(interviewDashboardItem);
 
