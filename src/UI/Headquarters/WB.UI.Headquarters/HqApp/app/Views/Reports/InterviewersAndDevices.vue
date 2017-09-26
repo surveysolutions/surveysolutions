@@ -33,7 +33,10 @@ export default {
         formatNumber(value) {
             if (value == null || value == undefined)
                 return value;
-            return value.toLocaleString();
+            var language = navigator.languages && navigator.languages[0] ||
+               navigator.language ||  
+               navigator.userLanguage; 
+            return value.toLocaleString(language);
         }
     },
     computed: {
