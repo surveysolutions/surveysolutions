@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Create.Column("wascompleted").OnTable("interviewsummaries").AsBoolean().NotNullable()
+            Create.Column("wascompleted").OnTable("interviewsummaries").AsBoolean().Nullable()
                 .WithDefaultValue(false);
             Execute.Sql(@"
                     UPDATE readside.interviewsummaries s
@@ -15,6 +15,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         (SELECT COALESCE((value->> 'WasCompleted')::boolean, false)
                         FROM readside.interviewdatas d
                         WHERE s.summaryid = d.id)");
+
+            Update.Table("interviewsummaries").Set(new { wascompleted = false}).Where(new { wwascompleted = (bool?)null});
+            Alter.Column("wascompleted").OnTable("interviewsummaries").AsBoolean().NotNullable();
         }
 
         public override void Down()
