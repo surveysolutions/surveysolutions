@@ -280,5 +280,8 @@
 function formatNumber(value) {
     if (value == null || value == undefined)
         return value;
-    return value.toLocaleString();
+    var language = navigator.languages && navigator.languages[0] || // Chrome / Firefox
+        navigator.language ||   // All browsers
+        navigator.userLanguage; // IE <= 10
+    return value.toLocaleString(language);
 }
