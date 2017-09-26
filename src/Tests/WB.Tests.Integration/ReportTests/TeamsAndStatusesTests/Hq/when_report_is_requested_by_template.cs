@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             reportFactory = CreateHqTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(()=>reportFactory.GetBySupervisors(new TeamsAndStatusesInputModel
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(()=>reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,

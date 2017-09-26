@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
 {
     public interface ITeamsAndStatusesReport : IReport<TeamsAndStatusesInputModel>
     {
-        TeamsAndStatusesReportView GetBySupervisors(TeamsAndStatusesInputModel input);
+        TeamsAndStatusesReportView GetBySupervisors(TeamsAndStatusesByHqInputModel input);
         TeamsAndStatusesReportView GetBySupervisorAndDependentInterviewers(TeamsAndStatusesInputModel input);
     }
 }

@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (interview == null)
             {
-                this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
+                this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
                 return;
             }
 

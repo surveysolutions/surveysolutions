@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             reportFactory = CreateHqTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesInputModel {Order = "CompletedCount ASC" }));
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel {Order = "CompletedCount ASC" }));
 
         It should_return_row_per_responsible = () => report.TotalCount.ShouldEqual(2);
 

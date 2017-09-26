@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
@@ -21,6 +20,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPrincipal principal;
         private readonly IMvxMessenger messenger;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
+
+        private readonly string lastVisitedInterviewIdKeyName = "lastVisitedInterviewId";
 
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
         private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
@@ -53,9 +54,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RejectedInterviews = rejectedInterviewsViewModel;
         }
 
-        public void Init(DashboardArgs parameter)
+        public void Init(string lastVisitedInterviewId)
         {
-            this.LastVisitedInterviewId = parameter?.LastVisitedInterviewId;
+            if (lastVisitedInterviewId == null) return;
+
+            if (Guid.TryParse(lastVisitedInterviewId, out var parsedLastVisitedId))
+                this.LastVisitedInterviewId = parsedLastVisitedId;
         }
 
         public override void Load()
@@ -216,6 +220,36 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RejectedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
+        }
+
+
+        protected override void InitFromBundle(IMvxBundle parameters)
+        {
+            base.InitFromBundle(parameters);
+            this.LoadFromBundle(parameters);
+        }
+
+        protected override void ReloadFromBundle(IMvxBundle parameters)
+        {
+            base.ReloadFromBundle(parameters);
+            this.LoadFromBundle(parameters);
+        }
+
+        private void LoadFromBundle(IMvxBundle parameters)
+        {
+            if (!parameters.Data.ContainsKey(lastVisitedInterviewIdKeyName) || parameters.Data[lastVisitedInterviewIdKeyName] == null) return;
+
+            if (Guid.TryParse(parameters.Data[lastVisitedInterviewIdKeyName], out var parsedLastVisitedId))
+                this.LastVisitedInterviewId = parsedLastVisitedId;
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            if (this.LastVisitedInterviewId != null)
+            {
+                bundle.Data[lastVisitedInterviewIdKeyName] = this.LastVisitedInterviewId.ToString();
+            }
         }
 
     }
