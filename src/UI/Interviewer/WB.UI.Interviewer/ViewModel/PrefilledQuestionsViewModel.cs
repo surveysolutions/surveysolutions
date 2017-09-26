@@ -37,7 +37,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
+            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
             this.Dispose();
         });
 

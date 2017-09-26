@@ -153,14 +153,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        public TeamsAndStatusesReportView GetBySupervisors(TeamsAndStatusesInputModel input) => this.Load(input, true);
+        public TeamsAndStatusesReportView GetBySupervisors(TeamsAndStatusesByHqInputModel input) => this.Load(input, true);
 
         public TeamsAndStatusesReportView GetBySupervisorAndDependentInterviewers(TeamsAndStatusesInputModel input) => this.Load(input, false);
-
+        
         public ReportView GetReport(TeamsAndStatusesInputModel model)
         {
-            var view = this.GetBySupervisorAndDependentInterviewers(model);
-            view.TotalRow.Responsible = Report.COLUMN_TOTAL;
+            var view = this.Load(model, model is TeamsAndStatusesByHqInputModel);
+            view.TotalRow.Responsible = Strings.AllTeams;
 
             return new ReportView
             {

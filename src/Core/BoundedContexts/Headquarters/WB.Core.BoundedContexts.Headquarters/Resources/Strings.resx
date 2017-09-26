@@ -219,4 +219,7 @@
   <data name="AllPeriods" xml:space="preserve">
     <value>All periods</value>
   </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>All questionnaires</value>
+  </data>
 </root>
