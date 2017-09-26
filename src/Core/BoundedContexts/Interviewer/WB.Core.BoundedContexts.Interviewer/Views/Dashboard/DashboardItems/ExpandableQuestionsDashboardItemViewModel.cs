@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
                 this.isExpanded = value;
                 this.RaisePropertyChanged();
-                this.RaisePropertyChanged(() => this.PrefilledQuestions);
+                this.RaisePropertyChanged(nameof(PrefilledQuestions));
             }
         }
 
