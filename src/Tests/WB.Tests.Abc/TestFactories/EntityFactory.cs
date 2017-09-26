@@ -522,7 +522,12 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewView InterviewView(Guid? prefilledQuestionId = null, Guid? interviewId = null, string questionnaireId = null, InterviewStatus? status = null)
+        public InterviewView InterviewView(Guid? prefilledQuestionId = null, 
+            Guid? interviewId = null, 
+            string questionnaireId = null, 
+            InterviewStatus? status = null,
+            string questionaireTitle = null
+            )
         {
             interviewId = interviewId ?? Guid.NewGuid();
             return new InterviewView
@@ -531,6 +536,7 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewId = interviewId.Value,
                 QuestionnaireId = questionnaireId,
                 LocationQuestionId = prefilledQuestionId,
+                QuestionnaireTitle = questionaireTitle,
                 Status = status ?? default(InterviewStatus)
             };
         }
