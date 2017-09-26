@@ -20,11 +20,11 @@
 <#
 	foreach (var method in Storage.GetEnablementConditions(Model.ClassName)) 
     {
-#>            enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
+#>            
+			enablementConditions.Add(IdOf.<#=method.Variable#>, <#=method.MethodName#>);
 <# 
 	}
 #>
-
 <#
 	foreach (var methodGroup in Storage.GetValidationConditions(Model.ClassName)) 
     {
@@ -33,7 +33,6 @@
 <# 
 	}
 #>
-
 <#
 	foreach (var method in Storage.GetVariableExpressions(Model.ClassName)) 
     {
@@ -113,19 +112,33 @@
 		}
 
 		private Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
+
 		private Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
+
 		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+
 		private Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
+
 		private Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
+
 		private readonly <#= Storage.ClassName #> _storage;
+
 		private <#=typeof(IInterviewStateForExpressions).Name#> _state => _storage.state;
+
 		private <#=typeof(IInterviewPropertiesForExpressions).Name#> properties => _state.Properties;
+
 		public RosterVector RosterVector { get; private set; }
+
 		public Identity Identity  { get; private set; }
+
 		public int @rowcode => this.RosterVector[this.RosterVector.Length - 1];
+
 		public int @rowindex => _state.GetRosterIndex(Identity);
+
 		public string @rowname => _state.GetRosterTitle(Identity);
+		
 		public int RowCode => @rowcode;
+
         public int RowIndex => @rowindex;
 
 		// backward compatibility		

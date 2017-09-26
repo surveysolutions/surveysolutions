@@ -26,7 +26,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <#
 		foreach (var roster in Model.AllRosters) 
 		{
-#>			levelFactory.Add(IdOf.<#= roster.Variable #>, (v, s) => new <#= roster.ClassName#>(v, s));
+#>
+			levelFactory.Add(IdOf.<#= roster.Variable #>, (v, s) => new <#= roster.ClassName#>(v, s));
 <#
 		}
 #>	
@@ -48,7 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         {
 			var rosterIdentities = this.state.FindEntitiesFromSameOrDeeperLevel(levelId, forRosterIdentity);
 			var rosters = rosterIdentities.Select(CreateLevel).Cast<T>().ToList();
-			return new RostersCollection<T>(rosters);
+            return new RostersCollection<T>(rosters);
         }
 
 		private <#=typeof(IInterviewLevel).Name#> CreateLevel(Identity rosterIdentity)
@@ -58,7 +59,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 			return null;
 		}
 	}
-	<#
+
+<#
 	foreach (var level in Model.Levels) 
 	{
 		var template = CreateLevelTemplate(level, Model);
@@ -71,7 +73,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <#
 		foreach (var pair in Model.IdMap)
 		{
-#>		  public static readonly Guid <#=pair.Value#> = <#= pair.Key.AsBytesString() #>;
+#>
+		public static readonly Guid <#=pair.Value#> = <#= pair.Key.AsBytesString() #>;
 <#
 		}
 #>

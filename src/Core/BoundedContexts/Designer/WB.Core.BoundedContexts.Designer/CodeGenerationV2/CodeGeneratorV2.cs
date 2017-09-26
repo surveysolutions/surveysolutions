@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates;
@@ -17,14 +16,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
         public const string EnablementPrefix = "IsEnabled__";
         public const string OptionsFilterPrefix = "FilterOption__";
         public const string VariablePrefix = "Variable__";
-
+        
         public const string ValidationPrefix = "IsValid__";
         public const string LinkedFilterPrefix = "FilterForLinkedQuestion__";
         public const string LevelPrefix = "Level_";
         public const string StaticText = "text_";
         public const string LookupPrefix = "Lookup__";
         public const string PrivateFieldsPrefix = "__";
-
+        
         private readonly ICodeGenerationModelsFactory modelsFactory;
 
         public CodeGeneratorV2(ICodeGenerationModelsFactory modelsFactory)
@@ -47,33 +46,31 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             var lookupTablesTemplate = new LookupTablesTemplate(model.LookupTables);
             generatedClasses.Add(ExpressionLocation.LookupTables().Key, lookupTablesTemplate.TransformText());
 
-            GenerateGroup("variables", model.VariableMethodModel,
-                group => new ConditionMethodTemplate(group).TransformText());
+            foreach (ConditionMethodModel variableMethodModel in model.VariableMethodModel)
+            {
+                var methodTemplate = new ConditionMethodTemplate(variableMethodModel);
+                generatedClasses.Add(variableMethodModel.Location.Key, methodTemplate.TransformText());
+            }
 
-            GenerateGroup("expressions", model.ExpressionMethodModel,
-                group => new ConditionMethodTemplate(group).TransformText());
+            foreach (ConditionMethodModel expressionMethodModel in model.ExpressionMethodModel)
+            {
+                var methodTemplate = new ConditionMethodTemplate(expressionMethodModel);
+                generatedClasses.Add(expressionMethodModel.Location.Key, methodTemplate.TransformText());
+            }
 
-            GenerateGroup("categoricalOptions", model.CategoricalOptionsFilterModel,
-                group => new OptionsFilterMethodTemplate(group).TransformText());
+            foreach (OptionsFilterMethodModel categoricalOptionsFilterModel in model.CategoricalOptionsFilterModel)
+            {
+                var methodTemplate = new OptionsFilterMethodTemplate(categoricalOptionsFilterModel);
+                generatedClasses.Add(categoricalOptionsFilterModel.Location.Key, methodTemplate.TransformText());
+            }
 
-            GenerateGroup("linkedFilter", model.LinkedFilterMethodModel,
-                group => new LinkedFilterMethodTemplate(group).TransformText());
+            foreach (LinkedFilterMethodModel linkedFilterMethodModel in model.LinkedFilterMethodModel)
+            {
+                var methodTemplate = new LinkedFilterMethodTemplate(linkedFilterMethodModel);
+                generatedClasses.Add(linkedFilterMethodModel.Location.Key, methodTemplate.TransformText());
+            }
 
             return generatedClasses;
-
-            void GenerateGroup<T>(string prefix, List<T> items, Func<GroupedModel<T>, string> factory) where T : ConditionMethodModel
-            {
-                foreach (var groupModel in items.GroupBy(vmm => vmm.ClassName))
-                {
-                    var group = new GroupedModel<T>
-                    {
-                        ClassName = groupModel.Key,
-                        Models = groupModel.Cast<T>().ToList()
-                    };
-
-                    generatedClasses.Add(prefix + "_" + groupModel.Key, factory(group));
-                }
-            }
         }
     }
 }
