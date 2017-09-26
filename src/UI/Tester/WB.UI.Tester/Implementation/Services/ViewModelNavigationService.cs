@@ -35,7 +35,7 @@ namespace WB.UI.Tester.Implementation.Services
 
         public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel => this.NavigateTo<TViewModel>(null);
 
-        public Task NavigateToDashboard(Guid? interviewId = null)
+        public Task NavigateToDashboard(string interviewId = null)
         {
             this.NavigateTo<DashboardViewModel>();
             return Task.CompletedTask;

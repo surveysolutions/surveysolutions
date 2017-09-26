@@ -70,6 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All questionnaires.
+        /// </summary>
+        public static string AllQuestionnaires {
+            get {
+                return ResourceManager.GetString("AllQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Teams.
         /// </summary>
         public static string AllTeams {
