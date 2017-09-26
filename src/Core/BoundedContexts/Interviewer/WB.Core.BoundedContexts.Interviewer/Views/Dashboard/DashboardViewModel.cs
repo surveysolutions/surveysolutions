@@ -21,8 +21,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IMvxMessenger messenger;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
 
-        private readonly string lastVisitedInterviewIdKeyName = "lastVisitedInterviewId";
-
         private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
         private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
 
@@ -237,9 +235,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void LoadFromBundle(IMvxBundle parameters)
         {
-            if (!parameters.Data.ContainsKey(lastVisitedInterviewIdKeyName) || parameters.Data[lastVisitedInterviewIdKeyName] == null) return;
+            if (!parameters.Data.ContainsKey(nameof(LastVisitedInterviewId)) || parameters.Data[nameof(LastVisitedInterviewId)] == null) return;
 
-            if (Guid.TryParse(parameters.Data[lastVisitedInterviewIdKeyName], out var parsedLastVisitedId))
+            if (Guid.TryParse(parameters.Data[nameof(LastVisitedInterviewId)], out var parsedLastVisitedId))
                 this.LastVisitedInterviewId = parsedLastVisitedId;
         }
 
@@ -248,14 +246,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             base.SaveStateToBundle(bundle);
             if (this.LastVisitedInterviewId != null)
             {
-                bundle.Data[lastVisitedInterviewIdKeyName] = this.LastVisitedInterviewId.ToString();
+                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
             }
         }
-
-    }
-
-    public class DashboardArgs
-    {
-        public Guid? LastVisitedInterviewId { get; set; }
     }
 }
