@@ -237,7 +237,4 @@
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
     <value>in the {0} team</value>
   </data>
-  <data name="AllTeams" xml:space="preserve">
-    <value>All Teams</value>
-  </data>
 </root>
