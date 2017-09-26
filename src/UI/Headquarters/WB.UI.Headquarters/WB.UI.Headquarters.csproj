@@ -1858,7 +1858,7 @@
     <Compile Include="Filters\InstallationAttribute.cs" />
     <Compile Include="Controllers\Profile\SupervisorController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
-    <Compile Include="Injections\HeadquartersRegistry.cs" />
+    <Compile Include="Injections\HeadquartersUIModule.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HistoryItemView.cs" />
     <Compile Include="Models\ImportModeModel.cs" />
