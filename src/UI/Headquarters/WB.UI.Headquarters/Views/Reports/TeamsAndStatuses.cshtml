@@ -1,4 +1,5 @@
-﻿@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+﻿@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @model IEnumerable<WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views.TemplateViewItem>
 @{
     ViewBag.Title = Reports.TeamsAndStatuses;
@@ -16,7 +17,7 @@
     <script type="text/javascript">
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "Reports")';
         var $interviewsUrl = '@Url.Action("Interviews", "HQ")';
-        var $allTeams = '@HttpUtility.JavaScriptStringEncode(Common.AllTeams)';
+        var $allTeams = '@HttpUtility.JavaScriptStringEncode(Strings.AllTeams)';
         $(function () {
             var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction",
                                                            new { httproute = "", controller = "ReportDataApi", action = "HeadquarterSupervisorsAndStatusesReport" })',
@@ -95,7 +96,7 @@
                         <select id="questionnaireSelector" data-bind="value: SelectedTemplate, selectPicker: {}" class="form-control">
                             @if (Model.Count() > 1)
                             {
-                                <option value="">@Common.AllQuestionnaires</option>
+                                <option value="">@Strings.AllQuestionnaires</option>
                             }
                             @foreach (var item in Model)
                             {

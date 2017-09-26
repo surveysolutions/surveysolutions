@@ -1,4 +1,5 @@
 ﻿@using Microsoft.Security.Application
+@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 @model IEnumerable<WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views.TemplateViewItem>
 @{
@@ -17,7 +18,7 @@
 
         var $interviewsUrl = '@Url.Action("Interviews", "Survey")';
         var $totalTitle = '@HttpUtility.JavaScriptStringEncode(Common.Total)';
-        var $allTeams = '@HttpUtility.JavaScriptStringEncode(Common.AllMembers)';
+        var $allTeams = '@HttpUtility.JavaScriptStringEncode(Common.AllInterviewers)';
         $(function () {
             var model = new Supervisor.VM.TeamsAndStatuses('@Url.RouteUrl("DefaultApiWithAction",
                                                            new { httproute = "", controller = "ReportDataApi", action = "SupervisorTeamMembersAndStatusesReport" })',
@@ -95,7 +96,7 @@
                         <select id="questionnaireSelector" data-bind="value: SelectedTemplate, selectPicker: {}" class="form-control">
                             @if (Model.Count() > 1)
                             {
-                                <option value="">@Common.AllQuestionnaires</option>
+                                <option value="">@Strings.AllQuestionnaires</option>
                             }
                             @foreach (var item in Model)
                             {
