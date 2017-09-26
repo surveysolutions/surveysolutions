@@ -342,7 +342,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public HttpResponseMessage HeadquarterSupervisorsAndStatusesReport([FromUri]TeamsAndStatusesFilter filter, [FromUri]string exportType = null)
         {
 
-            var input = new TeamsAndStatusesInputModel
+            var input = new TeamsAndStatusesByHqInputModel
             {
                 Orders = filter.GetSortOrderRequestItems(),
                 Page = filter.PageIndex,
