@@ -89,7 +89,7 @@
             <div class="export-types">
                 @Html.Partial("_alerts")
                 <div class="page-header clearfix">
-                    <h1 data-bind="text: selectedTemplate().title"></h1>
+                    <h1 data-bind="text: selectedTemplate()? selectedTemplate().title : ''"></h1>
                         <p>@DataExport.ExportExplanation</p>
                 </div>
                     <!-- ko if:selectedTemplateTitle() != null -->
