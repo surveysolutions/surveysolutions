@@ -303,7 +303,8 @@
                         var itemsToAddTo = _.isNull(parent) ? $scope.items : parent.items;
                         itemsToAddTo.splice(index, 0, item);
 
-                        destEvent.nodesScope.item.items.splice(destEvent.index, 1);
+                        var droppedTo = destEvent.nodesScope.item || $scope.currentChapter;
+                        droppedTo.items.splice(destEvent.index, 1);
 
                         connectTree();
                     };
