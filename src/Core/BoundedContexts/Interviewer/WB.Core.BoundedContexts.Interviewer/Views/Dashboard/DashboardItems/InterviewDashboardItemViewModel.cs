@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,10 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         private IPlainStorage<QuestionnaireView> QuestionnaireViewRepository =>
             serviceLocator.GetInstance<IPlainStorage<QuestionnaireView>>();
-
-        private IPlainStorage<PrefilledQuestionView> PrefilledQuestionsRepository =>
-            serviceLocator.GetInstance<IPlainStorage<PrefilledQuestionView>>();
-
+        
         private IInterviewerInterviewAccessor InterviewerInterviewFactory =>
             serviceLocator.GetInstance<IInterviewerInterviewAccessor>();
 
@@ -45,16 +43,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.serviceLocator = serviceLocator;
         }
 
-        public void Init(InterviewView interviewView)
+        public void Init(InterviewView interviewView, List<PrefilledQuestion> details)
         {
             this.interview = interviewView;
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(interview.QuestionnaireId);
             this.Status = this.GetDashboardCategoryForInterview(interview.Status, interview.StartedDateTime);
-            
-            BindDetails();
+
+            BindDetails(details);
             BindTitles();
             BindActions();
-
             this.RaiseAllPropertiesChanged();
         }
 
@@ -111,17 +108,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
         }
 
-        private void BindDetails()
+        private void BindDetails(List<PrefilledQuestion> preffilledQuestions)
         {
-            var preffilledQuestions = this.PrefilledQuestionsRepository
-                .Where(_ => _.InterviewId == this.interview.InterviewId)
-                .OrderBy(x => x.SortIndex)
-                .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText })
-                .ToList();
-
             this.DetailedIdentifyingData = preffilledQuestions;
             this.IdentifyingData = this.DetailedIdentifyingData.Take(3).ToList();
-
             this.HasExpandedView = this.PrefilledQuestions.Count > 0;
             this.IsExpanded = false;
         }
