@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Teams.
+        ///   Looks up a localized string similar to All teams.
         /// </summary>
         public static string AllTeams {
             get {
