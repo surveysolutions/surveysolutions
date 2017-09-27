@@ -31,22 +31,32 @@
         style="@style/TabLayoutStyle"/>
   </android.support.design.widget.AppBarLayout>
 
-  <ProgressBar style="@style/Dashboard_Progress_Indicator"
-               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility VisibleOrInvisible(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
-
-  <include layout="@layout/synchronization_panel" />
-
   <FrameLayout android:layout_width="match_parent"
                android:layout_height="match_parent">
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
-    <LinearLayout style="@style/Interview_GroupWithDivider"
-                  local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));
+
+    <ProgressBar style="@style/Dashboard_Progress_Indicator"
+               local:MvxBind="ShowProgress Or(IsInProgress, Synchronization.IsSynchronizationInProgress); Visibility VisibleOrInvisible(Or(IsInProgress, Synchronization.IsSynchronizationInProgress))" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:orientation="vertical"
+      android:layout_height="match_parent">
+
+      <include layout="@layout/synchronization_panel" />
+
+      <FrameLayout android:layout_width="match_parent"
+                   android:layout_height="match_parent">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </android.support.v4.view.ViewPager>
+        <LinearLayout style="@style/Interview_GroupWithDivider"
+                      local:MvxBind="Enabled Not(Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice));
                                  Clickable Or(Synchronization.IsSynchronizationInProgress, IsInProgress, Synchronization.HasUserAnotherDevice);"
-                  android:layout_height="match_parent">
+                      android:layout_height="match_parent">
+        </LinearLayout>
+      </FrameLayout>
     </LinearLayout>
   </FrameLayout>
 </LinearLayout>
