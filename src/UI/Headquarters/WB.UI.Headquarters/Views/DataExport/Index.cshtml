@@ -28,10 +28,7 @@
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
         $(function() {
             var templates = [
-                @foreach (var item in Model.Questionnaires)
-                {
-                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
-                }
+                
             ];
             var exportFromats = [];
             @foreach (DataExportFormat formatValue in Enum.GetValues(typeof (DataExportFormat)))
@@ -88,72 +85,75 @@
             </aside>
             <div class="export-types">
                 @Html.Partial("_alerts")
+                <!-- ko if:selectedTemplateTitle() != null -->
                 <div class="page-header clearfix">
                     <h1 data-bind="text: selectedTemplate()? selectedTemplate().title : ''"></h1>
-                        <p>@DataExport.ExportExplanation</p>
+                    <p>@DataExport.ExportExplanation</p>
                 </div>
-                    <!-- ko if:selectedTemplateTitle() != null -->
-                    <div class="main  data">
-                        <h3>@DataExport.MainSurveyDataTitle</h3>
-                        <p>@DataExport.ZipArchiveDescription</p>
-                        <div class="container-data">
-                            <div class="table-data-header">
-                                <div class="cell-data size">@DataExport.FileSizeTitle</div>
-                                <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
+                <div class="main  data">
+                    <h3>@DataExport.MainSurveyDataTitle</h3>
+                    <p>@DataExport.ZipArchiveDescription</p>
+                    <div class="container-data">
+                        <div class="table-data-header">
+                            <div class="cell-data size">@DataExport.FileSizeTitle</div>
+                            <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
+                        </div>
+
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, styleName: "stata", dataUrl: "$AllDataUrl", addFromat: true)
+
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, styleName: "spss", dataUrl: "$AllDataUrl", addFromat: true)
+
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, styleName: "separated-data", dataUrl: "$AllDataUrl", addFromat: true)
+
+                    </div>
+                </div>
+                <div class="binary data">
+                    <h3>@DataExport.BinaryData</h3>
+                    <p>@DataExport.BinaryDescription</p>
+                    <div class="container-data">
+                        <div class="table-data-header">
+                            <div class="cell-data size">@DataExport.FileSizeTitle</div>
+                            <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
+                        </div>
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", styleName: "zip", addFromat: true)
+                    </div>
+                </div>
+                <div class="metadata data">
+                    <h3>@DataExport.DDI</h3>
+                    <p>
+                        <span>@DataExport.DDIDescription</span>
+                    </p>
+                    <div class="container-data">
+                        <div class="table-data-header"></div>
+                        <div class="table-data generated-data">
+                            <div class="cell-data format-data">@DataExport.XMLFileDescription</div>
+                            <div class="cell-data  download-block">
+                                <a type="button" class="btn btn-primary btn-lg download" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">@DataExport.Download</a>
                             </div>
-
-                            @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, styleName: "stata", dataUrl: "$AllDataUrl", addFromat: true)
-
-                            @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, styleName: "spss", dataUrl: "$AllDataUrl", addFromat: true)
-
-                            @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, styleName: "separated-data", dataUrl: "$AllDataUrl", addFromat: true)
-
                         </div>
                     </div>
-                    <div class="binary data">
-                        <h3>@DataExport.BinaryData</h3>
-                        <p>@DataExport.BinaryDescription</p>
-                        <div class="container-data">
-                            <div class="table-data-header">
-                                <div class="cell-data size">@DataExport.FileSizeTitle</div>
-                                <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
-                            </div>
-                            @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", styleName: "zip", addFromat: true)
-                        </div>
-                    </div>
-                    <div class="metadata data">
-                        <h3>@DataExport.DDI</h3>
+                </div>
+                @if (this.ViewBag.EnableInterviewHistory)
+                {
+                    <div class="paradata data" data-bind="visible: selectedStatus().status == null">
+                        <h3>@DataExport.ParaData</h3>
                         <p>
-                            <span>@DataExport.DDIDescription</span>
+                            <span>@DataExport.ParadataDescription</span>
                         </p>
                         <div class="container-data">
-                            <div class="table-data-header"></div>
-                            <div class="table-data generated-data">
-                                <div class="cell-data format-data">@DataExport.XMLFileDescription</div>
-                                <div class="cell-data  download-block">
-                                    <a type="button" class="btn btn-primary btn-lg download" data-bind="attr: { href: $DDIUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() }">@DataExport.Download</a>
-                                </div>
+                            <div class="table-data-header">
+                                <div class="cell-data size">@DataExport.FileSizeTitle</div>
+                                <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                             </div>
+                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl", styleName: "separated-data")
                         </div>
                     </div>
-                    @if (this.ViewBag.EnableInterviewHistory)
-                    {
-                        <div class="paradata data" data-bind="visible: selectedStatus().status == null">
-                            <h3>@DataExport.ParaData</h3>
-                            <p>
-                                <span>@DataExport.ParadataDescription</span>
-                            </p>
-                            <div class="container-data">
-                                <div class="table-data-header">
-                                    <div class="cell-data size">@DataExport.FileSizeTitle</div>
-                                    <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
-                                </div>
-                                @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl", styleName: "separated-data")
-                            </div>
-                        </div>
-                    }
-                    <!-- /ko  -->
-                </div>
+                }
+                <!-- /ko  -->        
+                <!-- ko if:selectedTemplateTitle() == null -->
+                <div class="page-header clearfix">@DataExport.NoDataAvailable</div>
+                <!-- /ko  -->
+            </div>
         </div>
     </div>
 </main>
