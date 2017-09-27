@@ -88,22 +88,19 @@
                 case "DateTime":
                     var dateAnswer = question.selectedOption();
                     if (hasValue(dateAnswer) && !_.isNull(dateAnswer)) {
-                        var answerUTC = null;
+                        answer = {
+                            id: question.id(),
+                            answer: dateAnswer,
+                            type: question.type()
+                        };
 
-                        if (question.settings().IsTimestamp) {
-                            answerUTC = moment(dateAnswer);
-                        } else {
-                            answerUTC = dateAnswer.getFullYear() +
+                        if (!question.settings().IsTimestamp) {
+                            answer.answer = dateAnswer.getFullYear() +
                                 '-' +
                                 (dateAnswer.getMonth() + 1) +
                                 '-' +
                                 dateAnswer.getDate();
                         }
-                        answer = {
-                            id: question.id(),
-                            answer: answerUTC,
-                            type: question.type()
-                        };
                     }
                     break;
                 case "GpsCoordinates":
