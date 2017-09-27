@@ -18,6 +18,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             var view = this.BindingInflate(this.ViewResourceId, null);
 
             var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.dashboard_tab_recycler);
+            recyclerView.HasFixedSize = true;
             if (recyclerView != null)
                 recyclerView.Adapter = new RecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
             return view;
