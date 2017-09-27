@@ -222,4 +222,7 @@
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>All questionnaires</value>
   </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>All interviewers</value>
+  </data>
 </root>

@@ -226,4 +226,8 @@
     <value>Задания</value>
     <comment>Задания</comment>
   </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Все интервьюверы</value>
+    <comment>Все интервьюверы</comment>
+  </data>
 </root>

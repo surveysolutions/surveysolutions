@@ -159,10 +159,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         
         public ReportView GetReport(TeamsAndStatusesInputModel model)
         {
-            var view = this.Load(model, model is TeamsAndStatusesByHqInputModel);
-            view.TotalRow.Responsible = Strings.AllTeams;
+            var forAdminOrHq = model is TeamsAndStatusesByHqInputModel;
+
+            var view = this.Load(model, forAdminOrHq);
+            view.TotalRow.Responsible = forAdminOrHq ? Strings.AllTeams : Strings.AllInterviewers;
 
             return new ReportView
+
             {
                 Headers = new[]
                 {
