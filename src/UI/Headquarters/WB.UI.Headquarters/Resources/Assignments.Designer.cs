@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All Questionnaires” to see interviews associated with any questionnaire..
+        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire..
         /// </summary>
         public static string Tooltip_Filter_Questionnaire {
             get {
@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When the assignment was last updated. Click on the sort icon to sort by time..
+        ///   Looks up a localized string similar to When the assignment was initially created. Click on the sort icon to sort by time..
         /// </summary>
         public static string Tooltip_Table_CreatedAt {
             get {
@@ -322,7 +322,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When the assignment was initially created. Click on the sort icon to sort by time..
+        ///   Looks up a localized string similar to When the assignment was last updated. Click on the sort icon to sort by time..
         /// </summary>
         public static string Tooltip_Table_UpdatedAt {
             get {
