@@ -306,22 +306,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         public ReportView GetReport(SpeedByInterviewersReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), false);
 
         public ReportView GetReport(SpeedBySupervisorsReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), true);
 
         public ReportView GetReport(SpeedBetweenStatusesByInterviewersReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), false);
 
         public ReportView GetReport(SpeedBetweenStatusesBySupervisorsReportInputModel model) 
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), true);
 
-        private ReportView GetReportView(SpeedByResponsibleReportView view)
+        private ReportView GetReportView(SpeedByResponsibleReportView view, bool forAdminOrHq)
             => new ReportView
             {
                 Headers = ToReportHeader(view).ToArray(),
-                Data = ToDataView(view)
+                Data = ToDataView(view, forAdminOrHq)
             };
 
         private IEnumerable<string> ToReportHeader(SpeedByResponsibleReportView view)
@@ -335,18 +335,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             yield return Report.COLUMN_TOTAL;
         }
 
-        private object[][] ToDataView(SpeedByResponsibleReportView view)
+        private object[][] ToDataView(SpeedByResponsibleReportView view, bool forAdminOrHq)
         {
-            var data = new List<object[]> { ToReportRow(view.TotalRow).ToArray() };
+            var data = new List<object[]> { ToReportRow(view.TotalRow, forAdminOrHq).ToArray() };
 
             data.AddRange(view.Items.Select(ToReportRow).Select(item => item.ToArray()));
 
             return data.ToArray();
         }
 
-        private IEnumerable<object> ToReportRow(SpeedByResponsibleTotalRow totalRow)
+        private IEnumerable<object> ToReportRow(SpeedByResponsibleTotalRow totalRow, bool forAdminOrHq)
         {
-            yield return Strings.AllTeams;
+            yield return forAdminOrHq ? Strings.AllTeams : Strings.AllInterviewers;
             foreach (var total in totalRow.SpeedByPeriod)
             {
                 yield return ToSpecDaysFormat(total);

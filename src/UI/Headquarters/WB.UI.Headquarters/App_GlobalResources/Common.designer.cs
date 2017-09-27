@@ -79,15 +79,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All interviewers.
-        /// </summary>
-        internal static string AllInterviewers {
-            get {
-                return ResourceManager.GetString("AllInterviewers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All Responsibles.
         /// </summary>
         internal static string AllResponsible {
