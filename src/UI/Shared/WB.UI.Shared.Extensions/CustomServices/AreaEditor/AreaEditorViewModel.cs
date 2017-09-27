@@ -272,8 +272,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         this.cancellationTokenSource.Cancel();
                 }
             }
-            catch
+            catch (Exception exc)
             {
+                logger.Error("Error occured on map update.", exc);
                 this.userInteractionService.ShowToast(UIResources.AreaMap_UpdateFailed);
             }
             finally
