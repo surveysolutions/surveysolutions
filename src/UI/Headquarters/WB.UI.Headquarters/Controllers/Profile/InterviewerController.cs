@@ -180,6 +180,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [Authorize(Roles = "Administrator")]
+        [HttpPost]
         public async Task<ActionResult> UnArchive(Guid id)
         {
             var interviewer = await this.userManager.FindByIdAsync(id);
@@ -189,7 +190,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (!interviewer.IsInRole(UserRoles.Interviewer))
                 throw new HttpException(403, string.Empty);
 
-            await this.userManager.UnarchiveUsersAsync(new[] { id });
+            var unarchiveResult = await this.userManager.UnarchiveUsersAsync(new[] { id });
+            var identityResult = unarchiveResult.First();
+            if (!identityResult.Succeeded)
+            {
+                Error(identityResult.Errors.FirstOrDefault());
+            }
 
             return RedirectToAction("Profile", new { id = id });
         }

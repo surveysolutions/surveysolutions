@@ -96,6 +96,10 @@ else
                 </ol>
             }
             <h1>
+                @if (Model.IsArchived)
+                {
+                    <span class="badge">@Common.Archived</span>
+                }
                 @string.Format(Pages.InterviewerProfile_AssignedToFormat, Model.LoginName, Model.SupervisorName)
             </h1>
 
@@ -116,11 +120,11 @@ else
                         }
                         else
                         {
-                            @Pages.InterviewerIsArchived
-
                             if (authorizedUser.IsAdministrator)
                             {
-                                <text>(<a href="@Url.Action("UnArchive", new {Id = Model.Id})">@Pages.Unarchive</a>)</text>
+                                <form action="@Url.Action("UnArchive", new {Id = Model.Id})" method="post">
+                                    <input class="btn btn-success" type="submit" value="@Pages.Unarchive"/>
+                                </form>
                             }
                         }
                     }
