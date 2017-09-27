@@ -267,9 +267,6 @@
   <data name="ShowStatusHistory" xml:space="preserve">
     <value>Show Status History</value>
   </data>
-  <data name="AllInterviewers" xml:space="preserve">
-    <value>All interviewers</value>
-  </data>
   <data name="AllStatuses" xml:space="preserve">
     <value>All Statuses</value>
   </data>
