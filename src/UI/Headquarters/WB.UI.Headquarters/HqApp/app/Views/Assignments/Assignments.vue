@@ -6,7 +6,7 @@
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
                 <Typeahead data-vv-name="questionnaireId"
                            data-vv-as="questionnaire"
-                           :placeholder="$t('Common.AllQuestionnaires')"
+                           :placeholder="$t('Strings.AllQuestionnaires')"
                            control-id="questionnaireId"
                            :ajax-params="questionnaireParams"
                            :value="questionnaireId"
