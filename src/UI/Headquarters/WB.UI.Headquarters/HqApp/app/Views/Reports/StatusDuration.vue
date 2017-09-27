@@ -4,7 +4,7 @@
             :subtitle="$t('Pages.StatusDurationDescription')">
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
-                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
+                 <Typeahead :placeholder="$t('Strings.AllQuestionnaires')"
                            :values="questionnaires"
                            :value="questionnaireId"
                            noSearch
