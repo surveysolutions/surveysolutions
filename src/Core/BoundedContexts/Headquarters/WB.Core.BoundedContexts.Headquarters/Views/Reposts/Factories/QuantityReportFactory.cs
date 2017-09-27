@@ -258,16 +258,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         public ReportView GetReport(QuantityByInterviewersReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), false);
 
         public ReportView GetReport(QuantityBySupervisorsReportInputModel model) 
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), true);
 
-        private ReportView GetReportView(QuantityByResponsibleReportView view)
+        private ReportView GetReportView(QuantityByResponsibleReportView view, bool forAdminOrHq)
             => new ReportView
             {
                 Headers = ToReportHeader(view).ToArray(),
-                Data = ToDataView(view) 
+                Data = ToDataView(view, forAdminOrHq) 
             };
 
         private IEnumerable<string> ToReportHeader(QuantityByResponsibleReportView view)
@@ -281,18 +281,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             yield return Report.COLUMN_TOTAL;
         }
 
-        private object[][] ToDataView(QuantityByResponsibleReportView view)
+        private object[][] ToDataView(QuantityByResponsibleReportView view, bool forAdminOrHq)
         {
-            var data = new List<object[]> {ToReportRow(view.TotalRow).ToArray()};
+            var data = new List<object[]> {ToReportRow(view.TotalRow, forAdminOrHq).ToArray()};
 
             data.AddRange(view.Items.Select(ToReportRow).Select(item => item.ToArray()));
 
             return data.ToArray();
         }
 
-        private IEnumerable<object> ToReportRow(QuantityTotalRow totalRow)
+        private IEnumerable<object> ToReportRow(QuantityTotalRow totalRow, bool forAdminOrHq)
         {
-            yield return Strings.AllTeams;
+            yield return forAdminOrHq ? Strings.AllTeams : Strings.AllInterviewers;
             foreach (var total in totalRow.QuantityByPeriod)
             {
                 yield return total;
