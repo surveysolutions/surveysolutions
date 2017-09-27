@@ -28,7 +28,10 @@
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
         $(function() {
             var templates = [
-                
+                @foreach (var item in Model.Questionnaires)
+                {
+                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
+                }
             ];
             var exportFromats = [];
             @foreach (DataExportFormat formatValue in Enum.GetValues(typeof (DataExportFormat)))
