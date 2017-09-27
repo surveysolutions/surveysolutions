@@ -25,7 +25,6 @@ namespace WB.UI.Interviewer.Activities
 
             this.BackwardCompatibility();
 
-            Mvx.Resolve<InterviewerDashboardEventHandler>(); // In order to start listening for interview events
             Mvx.Resolve<IViewModelNavigationService>().NavigateToLogin();
         }
 
