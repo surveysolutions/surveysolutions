@@ -2,6 +2,7 @@
 using System.Resources;
 using System.Web.Mvc;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -64,7 +65,8 @@ namespace WB.UI.Headquarters.Controllers
             MainMenu.ResourceManager,
             Assignments.ResourceManager,
             Pages.ResourceManager,
-            global::Resources.Common.ResourceManager
+            global::Resources.Common.ResourceManager,
+            Strings.ResourceManager
         };
 
     }
