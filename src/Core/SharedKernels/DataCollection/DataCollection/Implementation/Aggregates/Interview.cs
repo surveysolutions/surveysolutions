@@ -1558,7 +1558,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
-            var isNeedPerformAssignToSupervisor = supervisorId.HasValue && this.properties.SupervisorId != supervisorId;
+            var isNeedPerformAssignToSupervisor = supervisorId.HasValue;
             var isNeedPerformAssignToInterviewer = interviewerId.HasValue;
 
             if (isNeedPerformAssignToSupervisor)
