@@ -153,7 +153,8 @@ namespace WB.Tests.Abc.TestFactories
             => new EventSourcedAggregateRootRepositoryWithCache(
                 eventStore ?? Mock.Of<IEventStore>(),
                 snapshotStore ?? Mock.Of<ISnapshotStore>(),
-                repository ?? Mock.Of<IDomainRepository>());
+                repository ?? Mock.Of<IDomainRepository>(),
+                new AggregateLock());
 
         public EventSourcedAggregateRootRepositoryWithExtendedCache EventSourcedAggregateRootRepositoryWithExtendedCache(
             IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
