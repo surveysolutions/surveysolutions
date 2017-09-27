@@ -203,7 +203,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All Questionnaires” to see interviews associated with any questionnaire..
+        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire..
         /// </summary>
         public static string Tooltip_Filter_Questionnaire {
             get {
@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status of interview. Select an status to see all interviews with that status. Select “All Statuses” to see interviews with any status..
+        ///   Looks up a localized string similar to Status of interview. Select a status to see all interviews with that status. Select “All Statuses” to see interviews with any status..
         /// </summary>
         public static string Tooltip_Filter_Status {
             get {

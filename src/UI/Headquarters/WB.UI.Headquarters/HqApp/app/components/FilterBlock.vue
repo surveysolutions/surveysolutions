@@ -1,6 +1,6 @@
 <template>
-  <div class="block-filter" :title="tooltip">
-        <h5>{{title}}</h5>
+  <div class="block-filter" >
+        <h5 :title="tooltip">{{title}}</h5>
         <slot></slot>
     </div>
 </template>
