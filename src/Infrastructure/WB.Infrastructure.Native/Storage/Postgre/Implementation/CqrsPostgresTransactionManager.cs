@@ -60,7 +60,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         protected override void InitializeSessionSettings(ISession session)
         {
-            session.BeginTransaction(IsolationLevel.RepeatableRead);
+            session.BeginTransaction(IsolationLevel.ReadCommitted);
             session.FlushMode = FlushMode.Commit;
         }
     }
