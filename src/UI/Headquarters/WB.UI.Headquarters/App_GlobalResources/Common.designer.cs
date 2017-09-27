@@ -133,6 +133,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archived.
+        /// </summary>
+        internal static string Archived {
+            get {
+                return ResourceManager.GetString("Archived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assign.
         /// </summary>
         internal static string Assign {

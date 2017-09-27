@@ -279,7 +279,10 @@
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Open responsible's profile</value>
   </data>
-  <data name="Confirm">
+  <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Archived</value>
   </data>
 </root>
