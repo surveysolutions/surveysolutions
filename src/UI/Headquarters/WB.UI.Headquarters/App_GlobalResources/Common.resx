@@ -276,6 +276,9 @@
   <data name="AllResponsible" xml:space="preserve">
     <value>All Responsibles</value>
   </data>
+    <data name="AllQuestionnaires" xml:space="preserve">
+    <value>All Questionnaires</value>
+  </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Open responsible's profile</value>
   </data>
