@@ -194,7 +194,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var identityResult = unarchiveResult.First();
             if (!identityResult.Succeeded)
             {
-                this.AddErrors(identityResult);
+                Error(identityResult.Errors.FirstOrDefault());
             }
 
             return RedirectToAction("Profile", new { id = id });
