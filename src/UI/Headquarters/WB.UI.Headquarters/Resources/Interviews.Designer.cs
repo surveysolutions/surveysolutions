@@ -194,7 +194,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment ID. Click in the field to type the ID number..
+        ///   Looks up a localized string similar to Assignment ID. Click in the field to type the full ID number..
         /// </summary>
         public static string Tooltip_Filter_Assignment {
             get {
@@ -203,7 +203,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire..
+        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire..
         /// </summary>
         public static string Tooltip_Filter_Questionnaire {
             get {
@@ -221,7 +221,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status of interview. Select a status to see all interviews with that status. Select “All Statuses” to see interviews with any status..
+        ///   Looks up a localized string similar to Status of interview. Select a status to see all interviews with that status. Select “All statuses” to see interviews with any status..
         /// </summary>
         public static string Tooltip_Filter_Status {
             get {
@@ -302,7 +302,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status of the interview in the survey workflow. See this article for more details on the different statuses.  Click on the sort icon to sort by status..
+        ///   Looks up a localized string similar to Status of the interview in the survey workflow. Click on the sort icon to sort by status..
         /// </summary>
         public static string Tooltip_Table_Status {
             get {

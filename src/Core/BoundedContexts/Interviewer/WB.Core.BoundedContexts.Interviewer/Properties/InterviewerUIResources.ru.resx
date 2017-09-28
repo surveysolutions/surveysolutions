@@ -632,7 +632,7 @@
 Вам необходимо учесть замечания супервизора на обложке интервью</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Завершенные интервью, будут загружены на сервер
+    <value>Завершенные интервью будут загружены на сервер
 при следующей синхронизации</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
