@@ -9552,6 +9552,9 @@ main.hidden.display-block {
   .main-information-no-filter {
     padding: 0 5px; } }
 
+.pointer {
+  cursor: pointer; }
+
 .questionnaire-statistics {
   margin-bottom: 30px; }
   .questionnaire-statistics ul {
