@@ -1594,7 +1594,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, assignTime));
 
-                if (!this.properties.WasCompleted && this.properties.Status == InterviewStatus.SupervisorAssigned)
+                if (this.properties.RejectDateTime == null && this.properties.Status == InterviewStatus.SupervisorAssigned)
                 {
                     this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
                 }
