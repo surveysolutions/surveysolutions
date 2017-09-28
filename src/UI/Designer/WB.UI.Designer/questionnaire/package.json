@@ -49,6 +49,7 @@
     "angular-hotkeys": "1.7.0",
     "angular-loading-bar": "^0.9.0",
     "angular-moment": "^1.1.0",
+    "angular-perfect-scrollbar-2": "^1.2.5",
     "angular-pnotify": "^0.1.2",
     "angular-resource": "1.6.6",
     "angular-sanitize": "1.6.6",

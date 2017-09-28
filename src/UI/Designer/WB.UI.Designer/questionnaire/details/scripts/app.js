@@ -9,7 +9,7 @@
         'ui.bootstrap',
         'ui.bootstrap.tpls',
         'ui.tree',
-        'ui.utils',
+        'ui.highlight',
         'jlareau.pnotify',
         'ui.router',
         'angular-loading-bar',
