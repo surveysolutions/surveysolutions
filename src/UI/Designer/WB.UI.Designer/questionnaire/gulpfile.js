@@ -33,17 +33,79 @@ gulp.task("styles", function(){
 });
 
 gulp.task("bowerCss", function () {
-    return gulp.src(mainBowerFiles('**/*.css'))
-        .pipe(concat('libs.css'))
-	    .pipe(plugins.rev())
+    var sourcesToInclude = [
+      'node_modules/angular-block-ui/dist/css/angular-block-ui.css',
+      'node_modules\angular-hotkeys\build\hotkeys.css',
+      'node_modules\angular-loading-bar\build\loading-bar.css',
+      'node_modules\perfect-scrollbar/dist/css/perfect-scrollbar.css',
+      'node_modules\pnotify\dist\pnotify.css',
+      'node_modules\pnotify\dist\pnotify.buttons.css',
+      'node_modules\angular-ui-tree\dist\angular-ui-tree.css'
+    ];
 
-	    .pipe(gulp.dest('build'));
+    return gulp.src(sourcesToInclude)
+        .pipe(concat('libs.css'))
+        .pipe(plugins.rev())
+        .pipe(gulp.dest('build'));
     
 });
 
 gulp.task("bowerJs", function(){
-    return gulp.src(mainBowerFiles('**/*.js'))
-//        .pipe(debug({ title: 'unicorn:' }))
+    var sourcesToInclude = [
+      'node_modules/jquery/dist/jquery.js',
+      'node_modules/ace-builds/src-noconflict/ace.js',
+      'node_modules/ace-builds/src-noconflict/ext-language_tools.js',
+      'node_modules/angular/angular.js',
+      'node_modules/angular-animate/angular-animate.js',
+      'node_modules/angular-block-ui/dist/angular-block-ui.js',
+      'node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js',
+      'node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js',
+      'node_modules/angular-cookies/angular-cookies.js',
+      'node_modules/angular-elastic/elastic.js',
+      'node_modules/angular-hotkeys/build/hotkeys.js',
+      'node_modules/angular-loading-bar/build/loading-bar.js',
+      'node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
+      'node_modules/pnotify/dist/pnotify.js',
+      'node_modules/pnotify/dist/pnotify.animate.js',
+      'node_modules/pnotify/dist/pnotify.buttons.js',
+      'node_modules/pnotify/dist/pnotify.callbacks.js',
+      'node_modules/pnotify/dist/pnotify.confirm.js',
+      'node_modules/pnotify/dist/pnotify.desktop.js',
+      'node_modules/pnotify/dist/pnotify.history.js',
+      'node_modules/pnotify/dist/pnotify.mobile.js',
+      'node_modules/pnotify/dist/pnotify.nonblock.js',
+      'node_modules/bootstrap/dist/js/bootstrap.js',
+      'node_modules/angular-resource/angular-resource.js',
+      'node_modules/angular-sanitize/angular-sanitize.js',
+      'node_modules/angular-ui-tree/dist/angular-ui-tree.js',
+      'node_modules/angular-ui-utils/modules/highlight/highlight.js',
+      'details/scripts/modules/unsavedChanges.js',
+      'node_modules/console-shim/console-shim.js',
+      'node_modules/es5-shim/es5-shim.js',
+      'node_modules/jquery-mousewheel/jquery.mousewheel.js',
+      'node_modules/jquery-placeholder/jquery.placeholder.js',
+      'node_modules/jquery.scrollTo/jquery.scrollTo.js',
+      'node_modules/json3/lib/json3.js',
+      'details/scripts/modules/ng-context-menu.js',
+      'node_modules/ng-file-upload/dist/ng-file-upload.js',
+      'node_modules/ng-file-upload/dist/ng-file-upload-shim.js',
+      'node_modules/moment/moment.js',
+      'details/scripts/modules/positionCalculator.js',
+      'node_modules/underscore/underscore.js',
+      'node_modules/js-cookie/src/js.cookie.js',
+      'node_modules/angular-ui-router/release/angular-ui-router.js',
+      'node_modules/xss/dist/xss.js',
+      'node_modules/html5shiv/dist/html5shiv.js',
+      'node_modules/angular-ui-ace/src/ui-ace.js',
+      'node_modules/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js',
+      'node_modules/jquery-validation/dist/jquery.validate.js',
+      'details/scripts/modules/perfect_scrollbar.js',
+      'node_modules/angular-pnotify/src/angular-pnotify.js',
+      'node_modules/angular-moment/angular-moment.js'
+    ];
+
+    return gulp.src(sourcesToInclude)
+      .pipe(debug({ title: 'unicorn:' }))
     	.pipe(plugins.ngAnnotate())
     	.pipe(plugins.uglify())
       	.pipe(concat('libs.js'))

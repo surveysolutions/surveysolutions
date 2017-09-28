@@ -17,13 +17,13 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <!-- libs:css -->
-    <link href="~/questionnaire/vendor/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/angular-hotkeys/build/hotkeys.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/pnotify/dist/pnotify.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/pnotify/dist/pnotify.buttons.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/angular-block-ui/dist/angular-block-ui.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-hotkeys/build/hotkeys.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/pnotify/dist/pnotify.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/pnotify/dist/pnotify.buttons.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-block-ui/dist/angular-block-ui.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css" rel="stylesheet" />
     <!-- endinject -->
     <!-- endbower -->
     <!-- endbuild -->
@@ -63,44 +63,49 @@
     <!-- inject:js -->
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="~/questionnaire/vendor/jquery/dist/jquery.js"></script>
-    <script src="~/questionnaire/vendor/js-cookie/src/js.cookie.js"></script>
-    <script src="~/questionnaire/vendor/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/questionnaire/vendor/underscore/underscore.js"></script>
-    <script src="~/questionnaire/vendor/ace-builds/src-noconflict/ace.js"></script>
-    <script src="~/questionnaire/vendor/angular/angular.js"></script>
-    <script src="~/questionnaire/vendor/angular-cookies/angular-cookies.js"></script>
-    <script src="~/questionnaire/vendor/angular-animate/angular-animate.js"></script>
-    <script src="~/questionnaire/vendor/angular-sanitize/angular-sanitize.js"></script>
-    <script src="~/questionnaire/vendor/angular-bootstrap/ui-bootstrap.js"></script>
-    <script src="~/questionnaire/vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-utils/ui-utils.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-tree/dist/angular-ui-tree.js"></script>
-    <script src="~/questionnaire/vendor/angular-hotkeys/build/hotkeys.js"></script>
-    <script src="~/questionnaire/vendor/angular-resource/angular-resource.js"></script>
-    <script src="~/questionnaire/vendor/angular-loading-bar/build/loading-bar.js"></script>
-    <script src="~/questionnaire/vendor/angular-block-ui/dist/angular-block-ui.js"></script>
-    <script src="~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
-    <script src="~/questionnaire/vendor/angular-unsavedChanges/dist/unsavedChanges.js"></script>
-    <script src="~/questionnaire/vendor/pnotify/dist/pnotify.js"></script>
-    <script src="~/questionnaire/vendor/pnotify/dist/pnotify.confirm.js"></script>
-    <script src="~/questionnaire/vendor/pnotify/dist/pnotify.buttons.js"></script>
-    <script src="~/questionnaire/vendor/angular-pnotify/src/angular-pnotify.js"></script>
-    <script src="~/questionnaire/vendor/angular-elastic/elastic.js"></script>
-    <script src="~/questionnaire/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
-    <script src="~/questionnaire/vendor/jquery.scrollTo/jquery.scrollTo.js"></script>
-    <script src="~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-ace/ui-ace.js"></script>
-    <script src="~/questionnaire/vendor/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
-    <script src="~/questionnaire/vendor/ng-context-menu/dist/ng-context-menu.js"></script>
-    <script src="~/questionnaire/vendor/ace-builds/src-noconflict/ext-language_tools.js"></script>
-    <script src="~/questionnaire/vendor/ng-file-upload/ng-file-upload-shim.js"></script> <!-- for no html5 browsers support -->
-    <script src="~/questionnaire/vendor/ng-file-upload/ng-file-upload.js"></script>
-    <script src="~/questionnaire/vendor/moment/moment.js"></script>
-    <script src="~/questionnaire/vendor/angular-moment/angular-moment.js"></script>
-    <script src="~/questionnaire/vendor/position-calculator/dist/position-calculator.js"></script>
-    <script src="~/questionnaire/vendor/xss/dist/xss.js"></script>
+    <script src="~/questionnaire/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/questionnaire/node_modules/js-cookie/src/js.cookie.js"></script>
+    <script src="~/questionnaire/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/questionnaire/node_modules/underscore/underscore.js"></script>
+    <script src="~/questionnaire/node_modules/ace-builds/src-noconflict/ace.js"></script>
+    <script src="~/questionnaire/node_modules/angular/angular.js"></script>
+    <script src="~/questionnaire/node_modules/angular-cookies/angular-cookies.js"></script>
+    <script src="~/questionnaire/node_modules/angular-animate/angular-animate.js"></script>
+    <script src="~/questionnaire/node_modules/angular-sanitize/angular-sanitize.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-utils/modules/utils.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/ng-context-menu.js"></script>
+    <script src="~/questionnaire/node_modules/ng-file-upload/dist/ng-file-upload.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/perfect_scrollbar.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-utils/modules/highlight/highlight.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/positionCalculator.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="~/questionnaire/node_modules/angular-hotkeys/build/hotkeys.js"></script>
+    <script src="~/questionnaire/node_modules/angular-resource/angular-resource.js"></script>
+    <script src="~/questionnaire/node_modules/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="~/questionnaire/node_modules/angular-block-ui/dist/angular-block-ui.js"></script>
+    <script src="~/questionnaire/node_modules/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/unsavedChanges.js"></script>
+
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.js"></script>
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.confirm.js"></script>
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/questionnaire/node_modules/angular-pnotify/src/angular-pnotify.js"></script>
+    <script src="~/questionnaire/node_modules/angular-elastic/elastic.js"></script>
+    <script src="~/questionnaire/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js"></script>
+    <script src="~/questionnaire/node_modules/jquery.scrollTo/jquery.scrollTo.js"></script>
+    <script src="~/questionnaire/node_modules/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-ace/src/ui-ace.js"></script>
+
+
+    <script src="~/questionnaire/node_modules/ace-builds/src-noconflict/ext-language_tools.js"></script>
+    <script src="~/questionnaire/node_modules/ng-file-upload/dist/ng-file-upload-shim.js"></script><!-- for no html5 browsers support -->
+    <script src="~/questionnaire/node_modules/moment/moment.js"></script>
+    <script src="~/questionnaire/node_modules/angular-moment/angular-moment.js"></script>
+  
+    <script src="~/questionnaire/node_modules/xss/dist/xss.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
