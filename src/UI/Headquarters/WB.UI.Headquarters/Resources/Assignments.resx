@@ -217,4 +217,7 @@
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
     <value>When the assignment was last updated. Click on the sort icon to sort by time.</value>
   </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>The Size field must be -1 or more.</value>
+  </data>
 </root>
