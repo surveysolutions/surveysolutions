@@ -154,7 +154,7 @@
     <value>Không chấp nhận ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Bạn có chắc chắn muốn xóa cuộc phỏng vấn này không "{0}" ?</value>
+    <value>Bạn có chắc chắn muốn xóa cuộc phỏng vấn này không #{0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Bắt đầu ({0})</value>
