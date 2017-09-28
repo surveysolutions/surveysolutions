@@ -105,7 +105,7 @@ gulp.task("bowerJs", function(){
     ];
 
     return gulp.src(sourcesToInclude)
-      .pipe(debug({ title: 'unicorn:' }))
+      //.pipe(debug({ title: 'unicorn:' }))
     	.pipe(plugins.ngAnnotate())
     	.pipe(plugins.uglify())
       	.pipe(concat('libs.js'))
