@@ -232,17 +232,6 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
-        public MapReportDenormalizer MapReportDenormalizer(
-            IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage = null,
-            QuestionnaireQuestionsInfo questionnaireQuestionsInfo = null,
-            QuestionnaireDocument questionnaireDocument = null)
-            => new MapReportDenormalizer(
-                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
-                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_ => _.GetById(It.IsAny<string>()) == questionnaireQuestionsInfo));
-
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),

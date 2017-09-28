@@ -63,7 +63,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
             var multimediaQuestionIds = questionnaire.Find<IMultimediaQuestion>().Select(x => x.PublicKey).ToArray();
-            var audioQuestionIds = questionnaire.Find<AudioQuestion>().Select(x => x.PublicKey).ToArray();
 
             cancellationToken.ThrowIfCancellationRequested();
             
@@ -73,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             cancellationToken.ThrowIfCancellationRequested();
 
             var allAudioAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetAllAudioAnswers(audioQuestionIds));
+                () => this.interviewFactory.GetAllAudioAnswers());
 
             var interviewIds = allMultimediaAnswers.Select(x => x.InterviewId)
                 .Union(allAudioAnswers.Select(x => x.InterviewId)).Distinct().ToList();

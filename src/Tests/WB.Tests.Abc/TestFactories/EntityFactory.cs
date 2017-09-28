@@ -1345,20 +1345,7 @@ namespace WB.Tests.Abc.TestFactories
             => new RosterSynchronizationDto(rosterId,
                     outerScopeRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                     rosterInstanceId ?? 0, sortIndex ?? 0, rosterTitle ?? "roster title");
-
-        public MapReportPoint MapReportPoint(string id, double latitude, double longitude, Guid? interviewId = null, Guid? questionnaireId = null, string variable = "var", long version = 1)
-        {
-            return new MapReportPoint(id)
-            {
-                Latitude = latitude,
-                Longitude = longitude,
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = version,
-                Variable = variable,
-                InterviewId = interviewId ?? Guid.NewGuid()
-            };
-        }
-
+        
         public PrefilledQuestionView PrefilledQuestionView(Guid? interviewId = null, 
             string answer = null, 
             Guid? questionId = null,

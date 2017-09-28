@@ -312,6 +312,66 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityType = EntityType.Question
                 }));
 
+        public InterviewStringAnswer[] GetAllMultimediaAnswers(Guid[] multimediaQuestionIds)
+        {
+            if (!multimediaQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
+
+            return this.interviewRepository.Query(_ => _
+                .Where(x => multimediaQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsString != null)
+                .Select(x => new InterviewStringAnswer {InterviewId = x.InterviewId, Answer = x.AsString})
+                .ToArray());
+        }
+
+        public InterviewStringAnswer[] GetAllAudioAnswers()
+            => this.sessionProvider.GetSession().Connection.Query<InterviewStringAnswer>(
+                $"SELECT {InterviewIdColumn}, {AsAudioColumn}::json->'FileName' as Answer " +
+                $"FROM {InterviewsTableName} " +
+                $"WHERE {AsAudioColumn} IS NOT NULL " +
+                $"AND {EnabledColumn} = true").ToArray();
+
+        public Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+            => this.sessionProvider.GetSession().Connection.Query<Guid>(
+                $"SELECT {EntityIdColumn} " +
+                $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
+                $"WHERE questionnaireidentity = '{questionnaireIdentity}' " +
+                $"AND {AsGpsColumn} is not null " +
+                $"GROUP BY {EntityIdColumn} ").ToArray();
+
+        public string[] GetQuestionnairesWithAnsweredGpsQuestions()
+            => this.sessionProvider.GetSession().Connection.Query<string>(
+                $"SELECT questionnaireidentity " +
+                $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
+                $"WHERE {AsGpsColumn} is not null " +
+                $"GROUP BY questionnaireidentity").ToArray();
+
+        public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
+            Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude, double southWestCornerLatitude,
+            double northEastCornerLongtitude, double southWestCornerLongtitude)
+            => this.sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
+                    $"SELECT i.{InterviewIdColumn}, {AsGpsColumn}::json->'{nameof(GeoPosition.Latitude)}' as latitude, {AsGpsColumn}::json->'{nameof(GeoPosition.Longitude)}' as longitude " +
+                    $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
+                    $"WHERE questionnaireidentity = @Questionnaire " +
+                    $"AND {EntityIdColumn} = @QuestionId " +
+                    $"AND {AsGpsColumn} is not null " +
+                    $"AND CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}' as double precision) > @SouthWestCornerLatitude " +
+                    $"AND CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}' as double precision) < @NorthEastCornerLatitude " +
+                    $"AND CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}' as double precision) > @SouthWestCornerLongtitude " +
+                    $"{(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")}" +
+                    $" CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}' as double precision) < @NorthEastCornerLongtitude " +
+                    $"LIMIT @MaxCount",
+                    new
+                    {
+                        Questionnaire = questionnaireIdentity.ToString(),
+                        QuestionId = gpsQuestionId,
+                        MaxCount = maxAnswersCount,
+                        SouthWestCornerLatitude = southWestCornerLatitude,
+                        NorthEastCornerLatitude = northEastCornerLatitude,
+                        SouthWestCornerLongtitude = southWestCornerLongtitude,
+                        NorthEastCornerLongtitude = northEastCornerLongtitude
+                    })
+                .ToArray();
+
+        #region Obsolete InterviewData
         public InterviewData GetInterviewData(Guid interviewId)
         {
             var interviewSummary = this.summaryRepository.GetById(interviewId.FormatGuid());
@@ -350,29 +410,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             return interviewData;
         }
-
-        public InterviewStringAnswer[] GetAllMultimediaAnswers(Guid[] multimediaQuestionIds)
-        {
-            if (!multimediaQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
-
-            return this.interviewRepository.Query(_ => _
-                .Where(x => multimediaQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsString != null)
-                .Select(x => new InterviewStringAnswer {InterviewId = x.InterviewId, Answer = x.AsString})
-                .ToArray());
-        }
-
-        public InterviewStringAnswer[] GetAllAudioAnswers(Guid[] audioQuestionIds)
-        {
-            if (!audioQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
-
-            return this.sessionProvider.GetSession().Connection.Query<InterviewStringAnswer>(
-                $"SELECT {InterviewIdColumn}, {AsAudioColumn}::json->'FileName' as Answer " +
-                $"FROM {InterviewsTableName} " +
-                $"WHERE {AsAudioColumn} IS NOT NULL " +
-                $"AND {EnabledColumn} = true " +
-                $"AND {EntityIdColumn} IN ({string.Join(",", audioQuestionIds.Select(x => $"'{x}'"))})").ToArray();
-        }
-
         private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities,
             IQuestionnaire questionnaire)
         {
@@ -477,6 +514,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return "#";
             return vector.CreateLeveKeyFromPropagationVector();
         }
+        #endregion
 
         private void ThrowIfInterviewDeletedOrReadOnly(Guid interviewId)
         {
