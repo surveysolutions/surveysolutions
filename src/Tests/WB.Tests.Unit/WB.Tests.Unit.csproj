@@ -1070,12 +1070,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_processing_package.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_invalid_packages_count.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_getting_queue_length.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_answer_removed_from_gps_qestion.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_gps_question_answered.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewDeleted_event_and_interview_has_2_gps_questions.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportDenormalizerTests\when_handling_InterviewHardDeleted_event_and_interview_has_2_gps_questions.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_bounds_are_inverted.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_and_interviewer_locked_by_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_valid_interviewer_responsible_name.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_file_with_locked_interviewer_by_supervisor.cs" />
@@ -1514,9 +1508,6 @@
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_input_view_model_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_contains_history_of_statuses.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewApiControllerTests\when_getting_interview_summary_for_map_point_and_interview_summary_does_not_exists_for_current_interview.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\MapReportTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_where_is_answer_collection.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\MapReportTests\when_map_report_data_is_being_queried_and_where_is_no_answer_collection.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\PreloadedDataServiceTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_is_called.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_is_called_for_2_data_files.cs" />

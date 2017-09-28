@@ -51,7 +51,6 @@ namespace WB.UI.Headquarters.Injections
     {
         protected void RegisterDenormalizers()
         {
-            this.Kernel.RegisterDenormalizer<MapReportDenormalizer>();
             this.Kernel.RegisterDenormalizer<InterviewsExportDenormalizer>();
             this.Kernel.RegisterDenormalizer<CumulativeChartDenormalizer>();
         }

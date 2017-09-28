@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             interviewSummaryStorage.Store(interviewSummary, interviewId.FormatGuid());
             mockOfInterviewFactory.Setup(x => x.GetAllMultimediaAnswers(Moq.It.IsAny<Guid[]>())).Returns(new[]
                 {new InterviewStringAnswer {InterviewId = interviewId, Answer = "var.jpg"}});
-            mockOfInterviewFactory.Setup(x => x.GetAllAudioAnswers(Moq.It.IsAny<Guid[]>())).Returns(new[]
+            mockOfInterviewFactory.Setup(x => x.GetAllAudioAnswers()).Returns(new[]
                 {new InterviewStringAnswer {InterviewId = interviewId, Answer = audioFileName}});
             
             plainInterviewFileStorageMock = new Mock<IImageFileStorage>();

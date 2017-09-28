@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -23,6 +24,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         
         InterviewData GetInterviewData(Guid interviewId);
         InterviewStringAnswer[] GetAllMultimediaAnswers(Guid[] multimediaQuestionIds);
-        InterviewStringAnswer[] GetAllAudioAnswers(Guid[] audioQuestionIds);
+        InterviewStringAnswer[] GetAllAudioAnswers();
+        Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
+
+        InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
+            Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
+            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude);
+
+        string[] GetQuestionnairesWithAnsweredGpsQuestions();
     }
 }
