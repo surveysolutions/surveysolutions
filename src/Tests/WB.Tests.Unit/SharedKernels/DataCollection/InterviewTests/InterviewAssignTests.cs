@@ -4,8 +4,10 @@ using System.Linq;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -198,6 +200,42 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.ShouldContainEvent<SupervisorAssigned>();
             eventContext.ShouldContainEvent<InterviewerAssigned>();
             eventContext.ShouldContainEvent<InterviewStatusChanged>(e => e.Status == InterviewStatus.InterviewerAssigned);
+        }
+
+        [Test]
+        public void When_Interview_in_status_InterviewerAssigned_And_interview_being_moved_to_supervisor_in_same_team_As_result_status_should_be_changed()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null, assignTime: DateTime.UtcNow));
+
+            // assert
+            eventContext.ShouldContainEvent<SupervisorAssigned>();
+            eventContext.ShouldContainEvent<InterviewerAssigned>();
+            eventContext.ShouldContainEvent<InterviewStatusChanged>(e => e.Status == InterviewStatus.SupervisorAssigned);
+        }
+
+        [Test]
+        public void When_Interview_in_status_SupervisorAssigned_And_interview_being_moved_to_the_same_supervisor_As_result_exception_should_be_thrown()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
+            SetupEventContext();
+
+            // act
+            void AssignResponsible () => 
+                interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null, assignTime: DateTime.UtcNow));
+
+            // assert
+            Assert.Throws(Is.TypeOf<InterviewException>().And.Message.EqualTo($"Interview has assigned on this supervisor already. InterviewId: {interview.EventSourceId.FormatGuid()}, SupervisorId: {supervisorId}"), AssignResponsible);
         }
 
         readonly Guid interviewerId   = Guid.Parse("99999999999999999999999999999999");
