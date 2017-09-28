@@ -191,7 +191,7 @@
     <value>Indicator of whether the assignment is active or has been archived.</value>
   </data>
   <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All Questionnaires” to see interviews associated with any questionnaire.</value>
+    <value>Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire.</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further.</value>
@@ -200,7 +200,7 @@
     <value>Number of interviews currently submitted for this assignment. More interviews may have been created but not synced. Click on any cell to view the associated interviews. Click on the sort icon to sort by count.</value>
   </data>
   <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
-    <value>When the assignment was last updated. Click on the sort icon to sort by time.</value>
+    <value>When the assignment was initially created. Click on the sort icon to sort by time.</value>
   </data>
   <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
     <value>Information that identifies each assignment. These are the answers to questions marked as identifying in Designer.</value>
@@ -215,6 +215,6 @@
     <value>Maximum number of interviews that may be conducted for this assignment. Click on any cell to change this number. Click on the sort icon to sort by size.</value>
   </data>
   <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
-    <value>When the assignment was initially created. Click on the sort icon to sort by time.</value>
+    <value>When the assignment was last updated. Click on the sort icon to sort by time.</value>
   </data>
 </root>

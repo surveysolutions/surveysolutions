@@ -69,9 +69,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var stopwatch = Stopwatch.StartNew();
             foreach (var interviewsBatch in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
-                var interviewIdsStrings = interviewsBatch.Select(x => x).ToArray();
+                var interviewIdsStrings = interviewsBatch.Select(x => x.FormatGuid()).ToArray();
                 Expression<Func<InterviewSummary, bool>> whereClauseForAction = 
-                    x => interviewIdsStrings.Contains(x.InterviewId);
+                    x => interviewIdsStrings.Contains(x.SummaryId);
                 string[][] actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction));
 
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
