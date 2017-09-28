@@ -106,6 +106,25 @@ export default {
             });
 
             this.initContextMenu();
+            this.initHeaderCheckBox();
+        },
+
+        initHeaderCheckBox() {
+            var table = this.table;
+            var firstHeader = table.column(0).header();
+            $(firstHeader).html('<input class="double-checkbox" id="check-all" type="checkbox">' +
+                '<label for="check-all">' +
+                '<span class="tick"></span>' +
+                '</label>');
+            $('#check-all').change(function() {
+                if (!this.checked) {
+                    table.rows().deselect();
+                    $(table.rows).find(".checkbox-filter").prop('checked', false);
+                } else {
+                    table.rows().select();
+                    $(table.rows).find(".checkbox-filter").prop('checked', true);
+                }
+            });
         },
 
         initContextMenu() {
