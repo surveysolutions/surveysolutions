@@ -141,4 +141,7 @@
   <data name="UserDesignerCredentials" xml:space="preserve">
     <value>Пожалуйста, войдите на сайт, используя свою учетную запись сайта Designer и приложения Tester</value>
   </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>Время сессии истекло. Войдите снова</value>
+  </data>
 </root>
