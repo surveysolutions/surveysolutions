@@ -240,6 +240,9 @@ export default {
             }
         });
 
+        this.table.on('page', () => {
+            self.$emit('page');
+        });
         this.$emit('DataTableRef', this.table);
     }
 

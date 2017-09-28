@@ -41,6 +41,7 @@
                     @selectedRowsChanged="rows => selectedRows = rows"
                     @totalRows="(rows) => totalRows = rows"
                     @ajaxComlete="isLoading = false"
+                    @page="resetSelection"
                     :selectable="!$config.IsObserver && !$config.IsObserving">
             <div class="panel panel-table"
                  v-if="selectedRows.length">
@@ -463,6 +464,10 @@ export default {
                     onDone(response.data.options[0].key, response.data.options[0].value);
                 }
             } else onDone();
+        },
+        
+        resetSelection() {
+            this.selectedRows.splice(0,this.selectedRows.length);
         }
     },
 
