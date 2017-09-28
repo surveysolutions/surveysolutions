@@ -1,91 +1,71 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     internal class MapReport : IMapReport
     {
-        private readonly IQueryableReadSideRepositoryReader<MapReportPoint> mapPointsReader;
+        private readonly IInterviewFactory interviewFactory;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
         private const int MAXCOORDINATESCOUNTLIMIT = 50000;
 
-        public MapReport(
-            IQueryableReadSideRepositoryReader<MapReportPoint> mapPointsReader, 
+        public MapReport(IInterviewFactory interviewFactory, IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor)
         {
-            this.mapPointsReader = mapPointsReader;
+            this.interviewFactory = interviewFactory;
+            this.questionnaireStorage = questionnaireStorage;
             this.questionnairesAccessor = questionnairesAccessor;
         }
 
         public List<string> GetVariablesForQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
-            var variables = this.mapPointsReader.Query(_ => _
-               .Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId && x.QuestionnaireVersion == questionnaireIdentity.Version)
-               .GroupBy(x => x.Variable)
-               .Select(group => group.Key)
-               .ToList());
+            var answeredGpsQuestionIds = this.interviewFactory.GetAnsweredGpsQuestionIdsByQuestionnaire(questionnaireIdentity);
 
-            return variables;
+            if (!answeredGpsQuestionIds.Any()) return new List<string>();
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            var gpsQuestions = questionnaire.Find<GpsCoordinateQuestion>().ToArray();
+
+            return answeredGpsQuestionIds.Select(questionId =>
+                gpsQuestions.FirstOrDefault(y => y.PublicKey == questionId).StataExportCaption).ToList();
         }
 
         public MapReportView Load(MapReportInputModel input)
         {
-            var points = this.mapPointsReader.Query(_ =>
-                 this.AddMapFilterCondition(_, input)
-                    .Where(x => x.QuestionnaireId == input.QuestionnaireIdentity.QuestionnaireId 
-                             && x.QuestionnaireVersion == input.QuestionnaireIdentity.Version 
-                             && x.Variable == input.Variable)
-                    .Select(x => new { x.InterviewId, x.Latitude, x.Longitude })
-                    .Take(MAXCOORDINATESCOUNTLIMIT)
-                    .ToList());
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
+            var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
 
-            var mapPointViews = points.GroupBy(x => x.InterviewId).Select(x => new MapPointView
-            {
-                Id = x.Key.ToString(),
-                Answers = string.Join("|", x.Select(val => $"{val.Latitude};{val.Longitude}"))
-            }).ToArray();
+            if(!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
+
+            var gpsAnswers = this.interviewFactory.GetGpsAnswersByQuestionIdAndQuestionnaire(input.QuestionnaireIdentity,
+                gpsQuestionId.Value, MAXCOORDINATESCOUNTLIMIT, input.NorthEastCornerLatitude, input.SouthWestCornerLatitude,
+                input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude);
+
             return new MapReportView
             {
-                Points = mapPointViews
+                Points = gpsAnswers.GroupBy(x => x.InterviewId).Select(x => new MapPointView
+                {
+                    Id = x.Key.ToString(),
+                    Answers = string.Join("|", x.Select(val => $"{val.Latitude};{val.Longitude}"))
+                }).ToArray()
             };
         }
 
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints()
         {
-            var questionnaireIdentities = this.mapPointsReader.Query(_ => _
-                .GroupBy(x=> new { x.QuestionnaireId, x.QuestionnaireVersion })
-                .Select(group => new QuestionnaireIdentity(group.Key.QuestionnaireId, group.Key.QuestionnaireVersion).ToString())
-                .ToList());
+            var questionnaireIdentities = this.interviewFactory.GetQuestionnairesWithAnsweredGpsQuestions();
 
-            var questionnaires = questionnairesAccessor.Query(_ => _.Where(x => questionnaireIdentities.Contains(x.Id)).ToList());
-
-            return questionnaires;
-        }
-
-        private IQueryable<MapReportPoint> AddMapFilterCondition(IQueryable<MapReportPoint> _, MapReportInputModel input)
-        {
-            IQueryable<MapReportPoint> mapPoints;
-            if (input.NorthEastCornerLongtitude >= input.SouthWestCornerLongtitude)
-            {
-                mapPoints = _.Where(x => x.Longitude > input.SouthWestCornerLongtitude &&
-                                         x.Longitude < input.NorthEastCornerLongtitude);
-            }
-            else
-            {
-                mapPoints = _.Where(x => x.Longitude > input.SouthWestCornerLongtitude ||
-                                         x.Longitude < input.NorthEastCornerLongtitude);
-            }
-            mapPoints = mapPoints.Where(x => x.Latitude > input.SouthWestCornerLatitude &&
-                                             x.Latitude < input.NorthEastCornerLatitude);
-
-            return mapPoints;
+           return this.questionnairesAccessor.Query(_ => _.Where(x => questionnaireIdentities.Contains(x.Id)).ToList());
         }
     }
 }
