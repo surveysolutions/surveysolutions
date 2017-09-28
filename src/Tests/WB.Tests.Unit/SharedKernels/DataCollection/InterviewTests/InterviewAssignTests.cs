@@ -163,6 +163,50 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         [Test]
+        public void Interview_that_were_restarted_in_status_InterviewerAssigned_And_interview_being_moved_to_other_team_As_result_supervisor_should_be_changed_and_interviewer_set_to_new_one_and_status_set_to_InterviewerAssigned()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(interview.EventSourceId, headquarterId, interviewerId2));
+
+            // assert
+            eventContext.AssertThatContainsEvent<SupervisorAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.SupervisorAssigned);
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.InterviewerAssigned);
+            eventContext.AssertThatContainsEvent<InterviewerAssigned>(e => e.InterviewerId == interviewerId2);
+        }
+
+        [Test]
+        public void Interview_that_were_rejected_InterviewerAssigned_And_interview_being_moved_to_other_team_As_result_supervisor_should_be_changed_and_interviewer_set_to_null_and_status_set_to_SupervisorAssigned()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewRejected(supervisorId, null, DateTime.UtcNow));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(interview.EventSourceId, headquarterId, interviewerId2));
+
+            // assert
+            eventContext.AssertThatContainsEvent<SupervisorAssigned>();
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.SupervisorAssigned);
+            eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.InterviewerAssigned);
+        }
+
+        [Test]
         public void Interview_in_status_InterviewerAssigned_And_interview_being_reassigned_to_different_responsible_in_one_team_As_result_interviewer_should_be_changed()
         {
             // arrange
