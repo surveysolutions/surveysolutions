@@ -86,6 +86,12 @@ angular-moment@^1.1.0:
   dependencies:
     moment ">=2.8.0 <3.0.0"
 
+angular-perfect-scrollbar-2@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/angular-perfect-scrollbar-2/-/angular-perfect-scrollbar-2-1.2.5.tgz#e11f5d53dd6c13d1c7d91fc8a765c566778fc252"
+  dependencies:
+    perfect-scrollbar "^0.6.4"
+
 angular-pnotify@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/angular-pnotify/-/angular-pnotify-0.1.2.tgz#16450f1558f05c70178fc2fcf89926c21adcdf63"
@@ -2547,6 +2553,10 @@ pause-stream@0.0.11:
   resolved "https://registry.yarnpkg.com/pause-stream/-/pause-stream-0.0.11.tgz#fe5a34b0cbce12b5aa6a2b403ee2e73b602f1445"
   dependencies:
     through "~2.3"
+
+perfect-scrollbar@^0.6.4:
+  version "0.6.16"
+  resolved "https://registry.yarnpkg.com/perfect-scrollbar/-/perfect-scrollbar-0.6.16.tgz#b1d61a5245cf3962bb9a8407a3fc669d923212fc"
 
 perfect-scrollbar@^0.8.1:
   version "0.8.1"

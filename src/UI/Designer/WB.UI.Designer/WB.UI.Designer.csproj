@@ -794,8 +794,6 @@
     <Content Include="questionnaire\content\lib\wb-vars.css.less" />
     <Content Include="questionnaire\content\markup.css.less" />
     <Content Include="questionnaire\content\wb-init.css.less" />
-    <Content Include="questionnaire\.bowerrc" />
-    <Content Include="questionnaire\bower.json" />
     <Content Include="questionnaire\.jscsrc" />
     <Content Include="questionnaire\.jshintrc" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
@@ -890,15 +888,12 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-
   <!-- questionnaire -->
-
   <Target Name="CleanupQuestionnaire" BeforeTargets="BeforeRebuild">
     <Message Text="Cleaning up questionnaire" />
     <RemoveDir Directories="questionnaire\vendor" ContinueOnError="true" />
   </Target>
-  
-  <Target Name="RestoreNodeModules" BeforeTargets="BowerInstall" Condition=" '$(Configuration)' == 'Debug'">
+  <Target Name="RestoreNodeModules" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug'">
     <Message Importance="High" Text="Restoring node_modules" />
     <Exec Command="yarn --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
@@ -906,18 +901,10 @@
     <Exec Command="yarn --ignore-scripts" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' == '0'" />
     <Exec Command="npm install" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' != '0'" />
   </Target>
-
-  <Target Name="BowerInstall" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And !Exists('questionnaire\vendor') ">
-    <Message Importance="High" Text="Restoring vendor from bower" />
-    <Exec Command="node_modules\.bin\bower install" WorkingDirectory="questionnaire" />
-  </Target>
-  
   <!-- /questionnaire -->
-
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
-  
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
