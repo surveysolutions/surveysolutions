@@ -154,7 +154,7 @@
     <value>បដិសេធ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>តើអ្នកប្រាកដទេថាអ្នកចង់លុបការសម្ភាសន៍នេះ{0}?</value>
+    <value>តើអ្នកប្រាកដទេថាអ្នកចង់លុបការសម្ភាសន៍នេះ#{0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>ចាប់ផ្តើម ({0})</value>

@@ -224,7 +224,7 @@
     <value>Выход</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
+    <value>Вы уверены, что хотите удалить интервью #{0}?</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
     <value>Невозможно подключиться к вашему серверу. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
