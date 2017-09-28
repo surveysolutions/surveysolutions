@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Assignments.
+        ///   Looks up a localized string similar to All assignments.
         /// </summary>
         internal static string AllAssignments {
             get {
@@ -79,7 +79,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Questionnaires.
+        ///   Looks up a localized string similar to All questionnaires.
         /// </summary>
         internal static string AllQuestionnaires {
             get {
@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Responsibles.
+        ///   Looks up a localized string similar to All responsibles.
         /// </summary>
         internal static string AllResponsible {
             get {
@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Statuses.
+        ///   Looks up a localized string similar to All statuses.
         /// </summary>
         internal static string AllStatuses {
             get {
@@ -106,7 +106,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All Supervisors.
+        ///   Looks up a localized string similar to All supervisors.
         /// </summary>
         internal static string AllSupervisors {
             get {
