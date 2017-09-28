@@ -186,7 +186,7 @@ for further instructions</value>
     <value>Rejected ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Are you sure you want to delete this interview "{0}" ?</value>
+    <value>Are you sure you want to delete this interview "{0}"?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Started ({0})</value>
