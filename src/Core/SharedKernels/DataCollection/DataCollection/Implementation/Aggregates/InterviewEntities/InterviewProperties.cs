@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewStatus Status { get; set; }
         public bool IsReceivedByInterviewer { get; set; }
         public bool WasCompleted { get; set; }
+        public bool WasRejected { get; set; }
         public bool IsHardDeleted { get; set; }
         public DateTime? StartedDate { get; set; }
         public DateTime? CompletedDate { get; set; }
