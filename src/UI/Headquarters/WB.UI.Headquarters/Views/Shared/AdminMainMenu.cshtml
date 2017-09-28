@@ -33,8 +33,8 @@
             @MainMenu.TeamsAndRoles <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            @Html.MainMenuItem("Index", "Supervisor", @MainMenu.Supervisors, MenuItem.Teams)
             @Html.MainMenuItem("Index", "Headquarters", @MainMenu.Headquarters, MenuItem.Headquarters)
+            @Html.MainMenuItem("Index", "Supervisor", @MainMenu.Supervisors, MenuItem.Teams)
             @Html.MainMenuItem("Index", "Interviewers", @MainMenu.Interviewers, MenuItem.Interviewers)
             @Html.MainMenuItem("Index", "Observer", @MainMenu.Observers, MenuItem.Observers)
             @Html.MainMenuItem("Index", "ApiUser", @MainMenu.ApiUsers, MenuItem.ApiUsers)

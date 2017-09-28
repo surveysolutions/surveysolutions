@@ -163,6 +163,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         [Test]
+        [Ignore("KP-10222")]
         public void Interview_that_were_restarted_in_status_InterviewerAssigned_And_interview_being_moved_to_other_team_As_result_supervisor_should_be_changed_and_interviewer_set_to_new_one_and_status_set_to_InterviewerAssigned()
         {
             // arrange

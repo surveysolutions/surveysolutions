@@ -485,11 +485,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 var interviewTreeDateTimeQuestion = (InterviewTreeDateTimeQuestion)this.InterviewQuestion;
                 DateTime? dateTime = interviewTreeDateTimeQuestion.GetAnswer()?.Value;
-                if (interviewTreeDateTimeQuestion.IsTimestamp)
-                {
-                    // This is wrong! We should show what was entered
-                    dateTime = dateTime?.ToLocalTime();
-                }
                 return AnswerUtils.AnswerToString(dateTime, cultureInfo: cultureInfo, isTimestamp: ((InterviewTreeDateTimeQuestion)this.InterviewQuestion).IsTimestamp);
             }
             if (this.IsGps) return AnswerUtils.AnswerToString(((InterviewTreeGpsQuestion)this.InterviewQuestion).GetAnswer()?.Value);

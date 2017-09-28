@@ -75,17 +75,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            var interview = this.interviewRepository.Get(interviewId);
-
-            Identity groupWithAnswersToMonitor = interview.GetParentGroup(entityIdentity);
-
+            this.groupIdentity = entityIdentity;
             this.interviewId = interviewId;
+            this.navigationState = navigationState;
+
             var statefulInterview = this.interviewRepository.Get(interviewId);
+
+            Identity groupWithAnswersToMonitor = statefulInterview.GetParentGroup(entityIdentity);
+
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(statefulInterview.QuestionnaireIdentity, statefulInterview.Language);
 
             this.isRoster = questionnaire.IsRosterGroup(entityIdentity.Id);
-            this.navigationState = navigationState;
-            this.groupIdentity = entityIdentity;
 
             this.eventRegistry.Subscribe(this, interviewId);
 
