@@ -165,7 +165,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         [Test]
-        [Ignore("KP-10222")]
         public void Interview_in_status_InterviewerAssigned_And_interview_being_reassigned_to_different_responsible_in_one_team_As_result_interviewer_should_be_changed()
         {
             // arrange
