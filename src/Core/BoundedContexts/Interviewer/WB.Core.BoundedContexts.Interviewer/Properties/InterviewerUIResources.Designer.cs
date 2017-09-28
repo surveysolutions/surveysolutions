@@ -300,7 +300,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete this interview &quot;{0}&quot;?.
+        ///   Looks up a localized string similar to Are you sure you want to delete this interview #{0}?.
         /// </summary>
         public static string Dashboard_RemoveInterviewQuestion {
             get {
