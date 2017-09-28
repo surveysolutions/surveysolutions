@@ -178,7 +178,7 @@
     <value>Версия опросника. Выберите версию опросника, чтобы посмотреть собранные по нему интервью. Выберите "Все опросники", чтобы увидеть интервью по всем опросникам</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
-    <value>User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further.</value>
+    <value>Ответственный пользователь. Кликните по полю, чтобы выбрать пользователя из списка или начать вводить его имя для дальнейшей фильтрации списка.</value>
   </data>
   <data name="Tooltip_Filter_Status" xml:space="preserve">
     <value>Статус интервью. Фильтрует список интервью по выбранному статусу. Выберите “Все статусы”, чтобы увидеть интервью в любых статусах.</value>
