@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
             catch (Exception e)
             {
-                this.Clients.Caller.markAnswerAsNotSaved(command.QuestionId.FormatGuid(), e.Message);
+                this.Clients.Caller.markAnswerAsNotSaved(command.Question.ToString(), e.Message);
             }
         }
        
