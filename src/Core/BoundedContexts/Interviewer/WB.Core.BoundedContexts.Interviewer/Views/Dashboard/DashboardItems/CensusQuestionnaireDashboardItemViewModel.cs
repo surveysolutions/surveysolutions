@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class CensusQuestionnaireDashboardItemViewModel : IDashboardItem
+    public class CensusQuestionnaireDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
@@ -43,19 +43,36 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         private QuestionnaireIdentity questionnaireIdentity;
+        private string subTitle;
 
         public void Init(QuestionnaireView questionnaire)
         {
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
             this.Title = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, this.questionnaireIdentity.Version);
 
-            var interviewsByQuestionnareCount = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaire.Id);
+            UpdateSubtitle();
+        }
+
+        public void UpdateSubtitle()
+        {
+            var questionnaireId = this.questionnaireIdentity.ToString();
+            var interviewsByQuestionnareCount = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaireId);
             this.SubTitle = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
         }
 
         public DashboardInterviewStatus Status => DashboardInterviewStatus.Assignment;
         public string Title { get; set; }
-        public string SubTitle { get; set; }
+
+        public string SubTitle
+        {
+            get => subTitle;
+            set
+            {
+                if (value == subTitle) return;
+                subTitle = value;
+                RaisePropertyChanged(() => SubTitle);
+            }
+        }
 
         public IMvxCommand CreateNewInterviewCommand => new MvxAsyncCommand(this.CreateNewInterviewAsync);
 

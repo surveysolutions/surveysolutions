@@ -24,6 +24,7 @@
 import 'datatables.net'
 import 'datatables.net-select'
 import 'jquery-contextmenu'
+import './conditionalPaging'
 
 var checkBox =
     _.template(
@@ -110,6 +111,9 @@ export default {
         },
 
         initHeaderCheckBox() {
+            if (!this.selectable) 
+                return;
+
             var table = this.table;
             var firstHeader = table.column(0).header();
             $(firstHeader).html('<input class="double-checkbox" id="check-all" type="checkbox">' +
