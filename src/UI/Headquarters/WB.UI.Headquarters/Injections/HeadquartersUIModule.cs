@@ -61,7 +61,6 @@ namespace WB.UI.Headquarters.Injections
 
             this.Kernel.Bind<IInterviewImportService>().To<InterviewImportService>();
             this.Kernel.Bind<IFormDataConverterLogger>().To<FormDataConverterLogger>();
-            this.Kernel.Bind<IMaskedFormatter>().To<MaskedFormatter>();
             this.Kernel.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
             this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
             this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
