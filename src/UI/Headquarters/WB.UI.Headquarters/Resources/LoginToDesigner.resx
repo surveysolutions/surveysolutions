@@ -135,6 +135,9 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>Session has expired please sign in again</value>
+  </data>
   <data name="UnableToImportNewQuestionnaire" xml:space="preserve">
     <value>Unable to import new questionnaire:</value>
   </data>
