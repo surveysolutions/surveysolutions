@@ -224,7 +224,7 @@
     <value>Выход</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
+    <value>Вы уверены, что хотите удалить интервью #{0}?</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
     <value>Невозможно подключиться к вашему серверу. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
@@ -632,7 +632,7 @@
 Вам необходимо учесть замечания супервизора на обложке интервью</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Завершенные интервью, будут загружены на сервер
+    <value>Завершенные интервью будут загружены на сервер
 при следующей синхронизации</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">

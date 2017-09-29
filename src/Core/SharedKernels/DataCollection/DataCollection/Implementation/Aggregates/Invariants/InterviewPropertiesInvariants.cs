@@ -58,6 +58,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     $"Interview has assigned on this interviewer already. InterviewId: {this.InterviewProperties.Id}, InterviewerId: {this.InterviewProperties.InterviewerId}");
         }
 
+        public void ThrowIfTryAssignToSameSupervisor(Guid supervisorIdToAssign)
+        {
+            if ((this.InterviewProperties.Status == InterviewStatus.SupervisorAssigned || this.InterviewProperties.Status == InterviewStatus.RejectedBySupervisor)
+                && this.InterviewProperties.SupervisorId == supervisorIdToAssign)
+                throw new InterviewException(
+                    $"Interview has assigned on this supervisor already. InterviewId: {this.InterviewProperties.Id}, SupervisorId: {this.InterviewProperties.SupervisorId}");
+        }
+
         public void ThrowIfInterviewHardDeleted()
         {
             if (this.InterviewProperties.IsHardDeleted)

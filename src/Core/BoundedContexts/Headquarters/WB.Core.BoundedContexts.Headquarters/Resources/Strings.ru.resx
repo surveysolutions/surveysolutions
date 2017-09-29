@@ -230,4 +230,7 @@
     <value>Все интервьюверы</value>
     <comment>Все интервьюверы</comment>
   </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Все опросники</value>
+  </data>
 </root>

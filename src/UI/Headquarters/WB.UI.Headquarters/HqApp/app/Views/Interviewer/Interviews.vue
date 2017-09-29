@@ -3,7 +3,7 @@
             :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Questionnaire')">
-                <Typeahead :placeholder="$t('Strings.AllQuestionnaires')"
+                <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
                            :values="questionnaires"
                            :value="questionnaireId"
                            noSearch
