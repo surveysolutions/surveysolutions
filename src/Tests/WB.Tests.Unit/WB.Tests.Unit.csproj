@@ -1223,7 +1223,6 @@
     <Compile Include="Applications\Headquarters\FilterTests\InstallationAttributeTests\when_action_executing_and_admin_user_exists_and_install_controller.cs" />
     <Compile Include="AssemblyContext.cs" />
     <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_invalid_text.cs" />
-    <Compile Include="SharedKernels\DataCollection\MaskedFormatterTests\when_IsTextMaskMatched_called_for_valid_text.cs" />
     <Compile Include="Empty.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="EventContextExtenstions.cs" />

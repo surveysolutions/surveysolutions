@@ -14,6 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.MaskedFormatterTests
         [TestCase("12*456", "12a456", true)]
         [TestCase("12*456", "12п456", true)]
         [TestCase("12#456", "12п456", false)]
+        [TestCase("a*-###-~###", "a9-123-s123", true)]
         public void when_IsTextMaskMatched_called_for_text(string mask, string value, bool isMatched)
         {
             var maskFormater = new MaskedFormatter(mask);
