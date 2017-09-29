@@ -21,7 +21,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.questionnairedocuments", "value"));
 
             Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.webinterviewconfigs", "value"));
-            Execute.Sql(GetScriptToChangeJsonToJsonb("events.events", "value"));
         }
 
         private static string GetScriptToChangeJsonToJsonb(string tableName, string columnName)
