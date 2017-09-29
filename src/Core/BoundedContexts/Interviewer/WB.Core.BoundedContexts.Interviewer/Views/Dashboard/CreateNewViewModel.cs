@@ -100,12 +100,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void UpdateAssignment(int? assignmentId)
         {
-            if (!assignmentId.HasValue) return;
+            if (!assignmentId.HasValue)
+            {
+                this.UiItems.OfType<CensusQuestionnaireDashboardItemViewModel>()
+                    .ForEach(x => x.UpdateSubtitle());
+            }
+            else
+            {
+                var assignment = this.UiItems.OfType<AssignmentDashboardItemViewModel>()
+                    .FirstOrDefault(x => x.AssignmentId == assignmentId.Value);
 
-            var assignment = this.UiItems.OfType<AssignmentDashboardItemViewModel>()
-                .FirstOrDefault(x => x.AssignmentId == assignmentId.Value);
-
-            assignment?.DecreaseInterviewsCount();
+                assignment?.DecreaseInterviewsCount();
+            }
         }
     }
 }
