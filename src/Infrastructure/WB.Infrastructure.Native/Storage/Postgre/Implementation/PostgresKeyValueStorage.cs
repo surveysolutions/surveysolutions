@@ -112,7 +112,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
                 var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = id };
                 var serializedValue = this.serializer.Serialize(view);
-                var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Json) { Value = serializedValue };
+                var valueParameter = new NpgsqlParameter("value", NpgsqlDbType.Jsonb) { Value = serializedValue };
 
                 upsertCommand.Parameters.Add(parameter);
                 upsertCommand.Parameters.Add(valueParameter);
@@ -172,7 +172,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                         writer.StartRow();
                         writer.Write(item.Item2, NpgsqlDbType.Text); // write Id
                         var serializedValue = this.serializer.Serialize(item.Item1);
-                        writer.Write(serializedValue, NpgsqlDbType.Json); // write value
+                        writer.Write(serializedValue, NpgsqlDbType.Jsonb); // write value
                     }
                 }
             }

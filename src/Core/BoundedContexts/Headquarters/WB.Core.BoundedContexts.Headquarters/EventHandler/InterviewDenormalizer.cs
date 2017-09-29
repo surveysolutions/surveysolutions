@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -87,10 +88,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.SelectedValue);
 
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
-            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.SelectedRosterVector);
+            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                evnt.Payload.SelectedRosterVector.Select(Convert.ToInt32).ToArray());
 
         public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
-            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.SelectedRosterVectors);
+            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                evnt.Payload.SelectedRosterVectors.Select(x => x.Select(Convert.ToInt32).ToArray()).ToArray());
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
             => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);

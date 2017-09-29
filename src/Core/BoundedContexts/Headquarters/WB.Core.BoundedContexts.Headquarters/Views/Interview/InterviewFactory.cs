@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 command.Parameters.Add(new NpgsqlParameter(EntityTypeColumn, NpgsqlDbType.Integer) { Value = entityType });
                 command.Parameters.Add(new NpgsqlParameter(AnswerTypeColumn, NpgsqlDbType.Integer) { Value = answerType });
                 command.Parameters.Add(isJsonAnswer
-                    ? new NpgsqlParameter("Answer", NpgsqlDbType.Json){Value = this.jsonSerializer.Serialize(answer)}
+                    ? new NpgsqlParameter("Answer", NpgsqlDbType.Jsonb){Value = this.jsonSerializer.Serialize(answer)}
                     : new NpgsqlParameter("Answer", answer));
 
                 command.ExecuteNonQuery();

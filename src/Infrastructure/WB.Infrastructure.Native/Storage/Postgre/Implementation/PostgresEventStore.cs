@@ -132,7 +132,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     writer.Write(@event.EventTimeStamp, NpgsqlDbType.Timestamp);
                     writer.Write(@event.EventSourceId, NpgsqlDbType.Uuid);
                     writer.Write(nextSequence, NpgsqlDbType.Integer);
-                    writer.Write(eventString, NpgsqlDbType.Json);
+                    writer.Write(eventString, NpgsqlDbType.Jsonb);
                     writer.Write(@event.EventSequence, NpgsqlDbType.Integer);
                     writer.Write(@event.Payload.GetType().Name, NpgsqlDbType.Text);
 
