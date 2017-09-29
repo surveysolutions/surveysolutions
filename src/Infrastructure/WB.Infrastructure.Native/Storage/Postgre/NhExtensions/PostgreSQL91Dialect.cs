@@ -339,7 +339,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             var expectedValue = value as T;
 
             var parameter = (NpgsqlParameter)cmd.Parameters[index];
-            parameter.NpgsqlDbType = NpgsqlDbType.Json;
+            parameter.NpgsqlDbType = NpgsqlDbType.Jsonb;
 
             if (expectedValue == null)
                 parameter.Value = DBNull.Value;
@@ -371,7 +371,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return expectedValue == null ? null : JsonConvert.Serialize(expectedValue);
         }
 
-        public SqlType[] SqlTypes => new SqlType[] { new NpgsqlExtendedSqlType(DbType.Object, NpgsqlTypes.NpgsqlDbType.Json) };
+        public SqlType[] SqlTypes => new SqlType[] { new NpgsqlExtendedSqlType(DbType.Object, NpgsqlTypes.NpgsqlDbType.Jsonb) };
 
         public Type ReturnedType => typeof(T);
 
@@ -412,7 +412,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         public void NullSafeSet(IDbCommand cmd, object value, int index)
         {
             var parameter = (NpgsqlParameter)cmd.Parameters[index];
-            parameter.NpgsqlDbType = NpgsqlDbType.Json;
+            parameter.NpgsqlDbType = NpgsqlDbType.Jsonb;
 
             if (value == null)
                 parameter.Value = DBNull.Value;
@@ -439,7 +439,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
         public object Disassemble(object value) => value == null ? null : JsonConvert.Serialize(value);
 
-        public SqlType[] SqlTypes => new SqlType[] { new NpgsqlExtendedSqlType(DbType.Object, NpgsqlTypes.NpgsqlDbType.Json) };
+        public SqlType[] SqlTypes => new SqlType[] { new NpgsqlExtendedSqlType(DbType.Object, NpgsqlTypes.NpgsqlDbType.Jsonb) };
 
         public Type ReturnedType => typeof(T);
 
