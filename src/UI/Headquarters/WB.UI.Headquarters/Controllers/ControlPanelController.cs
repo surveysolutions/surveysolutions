@@ -24,7 +24,6 @@ namespace WB.UI.Headquarters.Controllers
     [ControlPanelAccess]
     public class ControlPanelController : BaseController
     {
-        private readonly IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService;
         private readonly HqUserManager userManager;
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
@@ -34,11 +33,9 @@ namespace WB.UI.Headquarters.Controllers
             ICommandService commandService,
             HqUserManager userManager,
             ILogger logger,
-            ISettingsProvider settingsProvider,
-            IRestoreDeletedQuestionnaireProjectionsService restoreDeletedQuestionnaireProjectionsService)
+            ISettingsProvider settingsProvider)
              : base(commandService: commandService, logger: logger)
         {
-            this.restoreDeletedQuestionnaireProjectionsService = restoreDeletedQuestionnaireProjectionsService;
             this.userManager = userManager;
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
@@ -113,19 +110,6 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserEditModel());
-        }
-
-        public ActionResult RestoreAllDeletedQuestionnaireProjections()
-        {
-            return this.View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult RestoreAllDeletedQuestionnaireProjectionsPost()
-        {
-            this.restoreDeletedQuestionnaireProjectionsService.RestoreAllDeletedQuestionnaireProjections();
-            return View("RestoreAllDeletedQuestionnaireProjections");
         }
 
         [HttpPost]

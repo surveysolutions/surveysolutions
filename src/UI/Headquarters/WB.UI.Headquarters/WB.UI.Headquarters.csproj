@@ -1413,7 +1413,6 @@
     <Content Include="Views\ApiUser\Edit.cshtml" />
     <Content Include="Views\ApiUser\Index.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
-    <Content Include="Views\ControlPanel\RestoreAllDeletedQuestionnaireProjections.cshtml" />
     <Content Include="Views\HQ\CloneQuestionnaire.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\ControlPanel\BrokenInterviewPackages.cshtml" />
@@ -1721,6 +1720,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M022_AddQuestionnaireIdColumn_to_Assignmenst.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201709291647_RemoveQuestionnaireQuestionsInfos.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
@@ -1740,6 +1740,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201709081726_RemoveInterviewLinkedQuestionOptions.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709281806_RemoveMapReportPointsTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709251028_AddWasCompletedFlagToSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201709291355_ChangeJsonToJsonB.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
@@ -1798,7 +1799,6 @@
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
-    <Compile Include="Implementation\Services\RestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="App_Start\NinjectConfig.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
@@ -2017,7 +2017,6 @@
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
-    <Compile Include="Services\IRestoreDeletedQuestionnaireProjectionsService.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\IVersionCheckService.cs" />
     <Compile Include="Startup.cs" />
