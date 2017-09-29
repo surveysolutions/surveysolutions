@@ -230,7 +230,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifier for the assignment to which this interview belongs.Click on the sort icon to sort by assignment number..
+        ///   Looks up a localized string similar to Identifier for the assignment to which this interview belongs. Click on the sort icon to sort by assignment number..
         /// </summary>
         public static string Tooltip_Table_Assignment {
             get {
