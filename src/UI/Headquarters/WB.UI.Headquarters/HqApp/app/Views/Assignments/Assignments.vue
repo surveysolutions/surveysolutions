@@ -223,7 +223,7 @@ export default {
                     searchable: false,
                     render(data, type, row) {
                         if (row.quantity < 0) return row.quantity;
-                        return row.quantity - row.interviewsCount;
+                        return row.interviewsCount > row.quantity ? 0 : row.quantity - row.interviewsCount;
                     },
                     defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
                     if() {
