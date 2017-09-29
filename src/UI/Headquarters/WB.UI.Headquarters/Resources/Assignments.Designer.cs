@@ -187,6 +187,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Size field must be -1 or more..
+        /// </summary>
+        public static string InvalidSize {
+            get {
+                return ResourceManager.GetString("InvalidSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Assignment(s) are going to be changed.
         /// </summary>
         public static string NumberOfAssignmentsAffected {
@@ -250,7 +259,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire..
+        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire..
         /// </summary>
         public static string Tooltip_Filter_Questionnaire {
             get {

@@ -63,6 +63,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.designerUserCredentials.Get() == null)
             {
+                Error(Resources.LoginToDesigner.SessionExpired);
                 return this.RedirectToAction("LoginToDesigner");
             }
 
@@ -70,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.designerUserCredentials.Get() == null)
             {
+                Error(Resources.LoginToDesigner.SessionExpired);
                 return this.RedirectToAction("LoginToDesigner");
             }
 
@@ -82,6 +84,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.designerUserCredentials.Get() == null)
             {
+                Error(Resources.LoginToDesigner.SessionExpired);
                 return this.RedirectToAction("LoginToDesigner");
             }
 
@@ -95,6 +98,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (this.designerUserCredentials.Get() == null)
             {
+                Error(Resources.LoginToDesigner.SessionExpired);
                 return this.RedirectToAction("LoginToDesigner");
             }
 

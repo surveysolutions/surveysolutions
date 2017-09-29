@@ -162,6 +162,10 @@ namespace WB.UI.Headquarters.API
         public IHttpActionResult SetQuantity(int id, [FromBody] UpdateAssignmentRequest request)
         {
             var assignment = this.assignmentsStorage.GetById(id);
+
+            if (request.Quantity < -1)
+                return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
+
             assignment.UpdateQuantity(request.Quantity);
             return this.Ok();
         }

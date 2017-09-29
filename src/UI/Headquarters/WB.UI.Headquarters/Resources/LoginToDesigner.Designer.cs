@@ -115,6 +115,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Session has expired please sign in again.
+        /// </summary>
+        public static string SessionExpired {
+            get {
+                return ResourceManager.GetString("SessionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to import new questionnaire:.
         /// </summary>
         public static string UnableToImportNewQuestionnaire {

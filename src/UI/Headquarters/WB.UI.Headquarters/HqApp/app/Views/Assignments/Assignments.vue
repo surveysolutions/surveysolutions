@@ -6,7 +6,7 @@
             <FilterBlock :title="$t('Common.Questionnaire')" :tooltip="$t('Assignments.Tooltip_Filter_Questionnaire')">
                 <Typeahead data-vv-name="questionnaireId"
                            data-vv-as="questionnaire"
-                           :placeholder="$t('Strings.AllQuestionnaires')"
+                           :placeholder="$t('Common.AllQuestionnaires')"
                            control-id="questionnaireId"
                            :ajax-params="questionnaireParams"
                            :value="questionnaireId"
@@ -41,6 +41,7 @@
                     @selectedRowsChanged="rows => selectedRows = rows"
                     @totalRows="(rows) => totalRows = rows"
                     @ajaxComlete="isLoading = false"
+                    @page="resetSelection"
                     :selectable="!$config.IsObserver && !$config.IsObserving">
             <div class="panel panel-table"
                  v-if="selectedRows.length">
@@ -102,19 +103,24 @@
             <form onsubmit="return false;">
                 <div class="form-group"
                      v-bind:class="{'has-error': errors.has('editedQuantity')}">
+
                     <label class="control-label"
                            for="newQuantity">{{$t("Assignments.Size")}}</label>
+                           
                     <input type="text"
                            class="form-control"
                            v-model.trim="editedQuantity"
                            name="editedQuantity"
                            number
                            v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
+                           :data-vv-as="$t('Assignments.Size')"
                            maxlength="9"
                            autocomplete="off"
                            @keyup.enter="updateQuantity"
                            id="newQuantity"
                            placeholder="1">
+
+                    <p v-for="error in errors.collect('editedQuantity')" :key="error" class="text-danger">{{error}}</p>
                 </div>
             </form>
             <div class="modal-footer">
@@ -183,7 +189,7 @@ export default {
                 }, {
                     data: "quantity",
                     name: "Quantity",
-                    class: "type-numeric",
+                    class: "type-numeric pointer",
                     searchHighlight: false,
                     searchable: false,
                     title: this.$t("Assignments.Size"),
@@ -387,7 +393,11 @@ export default {
         },
 
         async updateQuantity() {
-            await this.$validator.validateAll()
+            const validationResult = await this.$validator.validateAll()
+
+            if(validationResult == false) {
+                return false;
+            }
             
             const patchQuantityUrl = this.$config.Api.Assignments + "/" + this.editedRowId + "/SetQuantity";
 
@@ -401,13 +411,23 @@ export default {
                 targetQuantity = this.editedQuantity;
             }
 
-            await this.$http.patch(patchQuantityUrl, {
+            const self = this;
+            this.$http.patch(patchQuantityUrl, {
                 quantity: targetQuantity
             })
-
-            this.$refs.editQuantityModal.hide();
-            this.editedQuantity = this.editedRowId = null;
-            this.reloadTable();
+            .then(() => {
+                this.$refs.editQuantityModal.hide();
+                this.editedQuantity = this.editedRowId = null;
+                this.reloadTable();
+            })
+            .catch(error => {
+                self.errors.clear();
+                self.errors.add({
+                    field: 'editedQuantity',
+                    msg: error.response.data.message,
+                    id: error.toString()
+                })
+            })
 
             return false;
         },
@@ -444,6 +464,10 @@ export default {
                     onDone(response.data.options[0].key, response.data.options[0].value);
                 }
             } else onDone();
+        },
+        
+        resetSelection() {
+            this.selectedRows.splice(0,this.selectedRows.length);
         }
     },
 

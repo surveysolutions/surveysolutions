@@ -218,7 +218,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.isInterviewReadyToLoad = false;
 
             var isNeedDelete = await this.UserInteractionService.ConfirmAsync(
-                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.interview.QuestionnaireTitle),
+                InterviewerUIResources.Dashboard_RemoveInterviewQuestion.FormatString(this.interview.InterviewKey),
                 okButton: UIResources.Yes,
                 cancelButton: UIResources.No);
 

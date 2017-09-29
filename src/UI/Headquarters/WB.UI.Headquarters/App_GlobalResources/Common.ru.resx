@@ -282,6 +282,9 @@
   <data name="AllAssignments" xml:space="preserve">
     <value>Все задания</value>
   </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Все опросники</value>
+    </data>
   <data name="Archived" xml:space="preserve">
     <value>Архивирован</value>
   </data>

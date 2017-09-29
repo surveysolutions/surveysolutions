@@ -1559,8 +1559,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
+            var isInterviewInSupervisorResponsibility = this.properties.Status == InterviewStatus.SupervisorAssigned ||
+                                                        this.properties.Status == InterviewStatus.RejectedBySupervisor;
+
             var isNeedPerformAssignToSupervisor = supervisorId.HasValue;
             var isNeedPerformAssignToInterviewer = interviewerId.HasValue;
+            var isAssignForTheSameSupervisor = supervisorId.HasValue && supervisorId.Value == this.properties.SupervisorId;
 
             if (isNeedPerformAssignToSupervisor)
                 propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
@@ -1570,11 +1574,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (isNeedPerformAssignToInterviewer)
                 propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId.Value);
 
+            if (isAssignForTheSameSupervisor && isInterviewInSupervisorResponsibility)
+                propertiesInvariants.ThrowIfTryAssignToSameSupervisor(supervisorId.Value);
+
             // events
-            if (isNeedPerformAssignToSupervisor)
-            {
+            if (isNeedPerformAssignToSupervisor && !(isAssignForTheSameSupervisor && isNeedPerformAssignToInterviewer))
                 this.FireSupervisorAssignedEvents(userId, supervisorId.Value, assignTime);
-            }
 
             this.FireInterviewerAssignedEvents(userId, interviewerId, assignTime);
         }

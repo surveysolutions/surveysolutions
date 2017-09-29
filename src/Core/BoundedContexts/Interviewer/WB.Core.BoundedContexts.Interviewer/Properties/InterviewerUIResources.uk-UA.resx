@@ -154,7 +154,7 @@
     <value>Відхилені ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Ви дійсно бажаєте видалити це інтерв'ю "{0}" ?</value>
+    <value>Ви дійсно бажаєте видалити це інтерв'ю #{0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Розпочаті ({0})</value>

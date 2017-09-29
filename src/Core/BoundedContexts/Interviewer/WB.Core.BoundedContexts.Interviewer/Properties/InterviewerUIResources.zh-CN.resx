@@ -154,7 +154,7 @@
     <value>驳回({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>您确定要删除这个调查“{0}”吗？</value>
+    <value>您确定要删除这个调查#{0}吗？</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>已开始({0})</value>
