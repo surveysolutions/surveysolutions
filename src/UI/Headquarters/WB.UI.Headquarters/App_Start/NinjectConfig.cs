@@ -248,8 +248,6 @@ namespace WB.UI.Headquarters
             
             kernel.Unbind<IInterviewImportService>();
             kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
-            kernel.Bind<IRestoreDeletedQuestionnaireProjectionsService>()
-                .To<RestoreDeletedQuestionnaireProjectionsService>();
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
