@@ -4,7 +4,6 @@ using System.Text.RegularExpressions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Commands;
-using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,7 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
-        private readonly IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
@@ -36,14 +34,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             IQuestionnaireStorage questionnaireStorage, 
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage,
-            IPlainKeyValueStorage<QuestionnaireQuestionsInfo> questionnaireQuestionsInfoStorage,
             IFileSystemAccessor fileSystemAccessor, 
             IPlainStorageAccessor<TranslationInstance> translations)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
-            this.questionnaireQuestionsInfoStorage = questionnaireQuestionsInfoStorage;
             this.fileSystemAccessor = fileSystemAccessor;
             this.translations = translations;
         }
@@ -133,15 +129,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
 
             this.questionnaireBrowseItemStorage.Store(
                 new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion, isSupportAssignments, isSupportExportVariables),
-                projectionId);
-
-            this.questionnaireQuestionsInfoStorage.Store(
-                new QuestionnaireQuestionsInfo
-                {
-                    QuestionIdToVariableMap = questionnaireDocument
-                        .Find<IQuestion>()
-                        .ToDictionary(x => x.PublicKey, x => x.StataExportCaption)
-                },
                 projectionId);
         }
 
