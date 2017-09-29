@@ -277,7 +277,8 @@ export default {
                 ajax: { url: this.$config.Api.Assignments, type: "GET" },
                 select: {
                     style: 'multi',
-                    selector: 'td>.checkbox-filter'
+                    selector: 'td>.checkbox-filter',
+                    info: false
                 },
                 sDom: 'fr<"table-with-scroll"t>ip',
                 headerCallback: (thead) => {
