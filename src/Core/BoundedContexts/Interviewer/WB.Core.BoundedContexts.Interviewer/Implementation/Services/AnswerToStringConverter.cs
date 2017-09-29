@@ -57,8 +57,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                     case QuestionType.Numeric:
                         decimal answerTyped = answer is string
-                            ? decimal.Parse((string) answer, CultureInfo.InvariantCulture)
-                            : System.Convert.ToDecimal(answer);
+                            ? decimal.Parse((string) answer, CultureInfo.CurrentCulture)
+                            : System.Convert.ToDecimal(answer, CultureInfo.CurrentCulture);
                         answer = questionnaire.ShouldUseFormatting(questionId)
                             ? answerTyped.FormatDecimal()
                             : answerTyped.ToString(CultureInfo.CurrentCulture);
