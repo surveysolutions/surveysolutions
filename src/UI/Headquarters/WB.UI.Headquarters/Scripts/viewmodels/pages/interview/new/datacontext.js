@@ -89,24 +89,25 @@
                 case "DateTime":
                     var dateAnswer = question.selectedOption();
                     if (hasValue(dateAnswer) && !_.isNull(dateAnswer)) {
+                        var date = new Date(dateAnswer);
                         answer = {
                             id: question.id(),
-                            answer: dateAnswer.getFullYear() +
+                            answer: date.getFullYear() +
                                 '-' +
-                                (dateAnswer.getMonth() + 1) +
+                                (date.getMonth() + 1) +
                                 '-' +
-                                dateAnswer.getDate(),
+                                date.getDate(),
                             type: question.type()
                         };
 
                         if (question.settings().IsTimestamp) {
                             answer.answer = answer.answer +
                                 "T" +
-                                dateAnswer.getHours() +
+                                date.getHours() +
                                 ":" + 
-                                dateAnswer.getMinutes() +
+                                date.getMinutes() +
                                 ":" + 
-                                dateAnswer.getSeconds();
+                                date.getSeconds();
                         }
                     }
                     break;
