@@ -23,7 +23,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { CreatePreloadedDataByFile() }, status);
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 
+                1, 
+                new[]
+                {
+                    CreatePreloadedDataByFile(fileName: questionnaire.Title + ".csv"),
+                }, 
+                status);
         
         It should_result_has_1_error = () =>
             status.VerificationState.Errors.Count().ShouldEqual(1);

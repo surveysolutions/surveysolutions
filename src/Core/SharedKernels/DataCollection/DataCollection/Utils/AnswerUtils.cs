@@ -5,8 +5,6 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -19,73 +17,63 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             if (answer == null)
                 return string.Empty;
 
-            if (answer is string)
-                return (string) answer;
+            if (answer is string answerAsString)
+                return answerAsString;
 
-            if (answer is int)
-                return ((int) answer).ToString(CultureInfo.InvariantCulture);
+            if (answer is int answerAsInteger)
+                return answerAsInteger.ToString(CultureInfo.InvariantCulture);
 
-            if (answer is DateTime)
+            if (answer is DateTime dateTime)
             {
-                var dateTime = (DateTime) answer;
-                if (isTimestamp)
-                    return dateTime.ToString(cultureInfo ?? CultureInfo.InvariantCulture); 
-                return dateTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture);
+                return isTimestamp 
+                    ? dateTime.ToString(cultureInfo ?? CultureInfo.InvariantCulture) 
+                    : dateTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture);
             }
 
-            if (answer is decimal)
+            if (answer is decimal decimalAnswer)
             {
-                var decimalAnswer = (decimal) answer;
-
                 return getCategoricalAnswerOptionText == null
                     ? decimalAnswer.ToString(CultureInfo.InvariantCulture)
                     : getCategoricalAnswerOptionText(decimalAnswer);
             }
 
-            if (answer is decimal[])
+            if (answer is decimal[] multiDecimalAnswer)
             {
-                var multiAnswer = (decimal[]) answer;
-
                 return getCategoricalAnswerOptionText == null
-                    ? string.Join(", ", multiAnswer)
-                    : string.Join(", ", multiAnswer.Select(getCategoricalAnswerOptionText));
+                    ? string.Join(", ", multiDecimalAnswer)
+                    : string.Join(", ", multiDecimalAnswer.Select(getCategoricalAnswerOptionText));
             }
-            if (answer is int[])
+            if (answer is int[] multiAnswer)
             {
-                var multiAnswer = (int[])answer;
-
                 return getCategoricalAnswerOptionText == null
                     ? string.Join(", ", multiAnswer)
                     : string.Join(", ", multiAnswer.Select(x => getCategoricalAnswerOptionText(x)));
             }
 
-            if (answer is AnsweredYesNoOption[])
+            if (answer is AnsweredYesNoOption[] yesNoAnswer)
             {
-                var yesNoAnswer = (AnsweredYesNoOption[])answer;
                 var yesAnsweredValues = yesNoAnswer.Where(a => a.Yes).Select(a => a.OptionValue);
 
                 return getCategoricalAnswerOptionText == null
                     ? string.Join(", ", yesAnsweredValues)
                     : string.Join(", ", yesAnsweredValues.Select(getCategoricalAnswerOptionText));
             }
-            if (answer is decimal[][])
+            if (answer is decimal[][] multiLinkDecimalAnswer)
             {
-                var multiLinkAnswer = (decimal[][])answer;
+                return string.Join("|", multiLinkDecimalAnswer.Select(a => string.Join(", ", a)));
+            }
+            if (answer is int[][] multiLinkAnswer)
+            {
                 return string.Join("|", multiLinkAnswer.Select(a => string.Join(", ", a)));
             }
-            if (answer is int[][])
+            if (answer is GeoPosition geoAnswer)
             {
-                var multiLinkAnswer = (int[][])answer;
-                return string.Join("|", multiLinkAnswer.Select(a => string.Join(", ", a)));
-            }
-            if (answer is GeoPosition)
-            {
-                return ((GeoPosition) answer).ToString();
+                return geoAnswer.ToString();
             }
 
-            if (answer is InterviewTextListAnswers)
+            if (answer is InterviewTextListAnswers textListAnswers)
             {
-                return string.Join("|", ((InterviewTextListAnswers) answer).Answers.Select(x => x.Answer));
+                return string.Join("|", (textListAnswers).Answers.Select(x => x.Answer));
             }
             if (answer is Tuple<decimal, string>[])
             {
