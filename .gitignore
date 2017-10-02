@@ -88,3 +88,4 @@ src/UI/Designer/WB.UI.Designer/questionnaire/build/*.js
 src/UI/Designer/WB.UI.Designer/questionnaire/build/*.css
 
 src/Tools/k6/k6.exe
+/src/UI/Designer/WB.UI.Designer/questionnaire/build/resources/*.*

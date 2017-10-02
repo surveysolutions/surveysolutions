@@ -121,6 +121,20 @@ gulp.task('templates', function () {
       .pipe(gulp.dest('build'));
 });
 
+gulp.task('resx2json', function(){
+    gulp.src([
+        '../Resources/QuestionnaireEditor.resx',
+        '../Resources/QuestionnaireEditor.*.resx'])
+      .pipe(plugins.resx2json())
+      .pipe(plugins.rename(function(filePath) {
+          filePath.extname = ".json";
+          if (!filePath.basename.includes('.')){
+            filePath.basename += ".en";
+          }
+      }))
+      .pipe(gulp.dest('build/resources'));
+});
+
 gulp.task('devJs', function () {
     return gulp.src(paths.scripts)
       //.pipe(debug({ title: 'unicorn:' }))
@@ -151,7 +165,7 @@ gulp.task('index', function () {
 
 gulp.task('default', function(callback){
 	runSequence('clean', 
-		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss'],
+		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss', 'resx2json'],
 		'index', 
 		callback);
 });
