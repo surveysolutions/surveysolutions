@@ -112,6 +112,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
 
             AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
+
+            if (assignmentImportData == null)
+            {
+                FinishImportProcess();
+                return;
+            }
+
             RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
         }
         public AssignmentVerificationResult VerifyAssignment(List<InterviewAnswer>[] answersGroupedByLevels, IQuestionnaire questionnaire)
