@@ -60,7 +60,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
                 preloadedDataVerifier: preloadedDataVerifier ?? Mock.Of<IPreloadedDataVerifier>(),
-                questionnaireBrowseItemStorage: questionnaireBrowseItemStorage?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
+                questionnaireBrowseItemStorage: questionnaireBrowseItemStorage ?? 
+                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(_ => _.GetById(Moq.It.IsAny<string>())==new QuestionnaireBrowseItem()));
         }
     }
 }
