@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -40,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly SampleImportSettings sampleImportSettings;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
 
         private readonly object lockStart = new object();
 
@@ -64,7 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IUserViewFactory userViewFactory, 
             IInterviewTreeBuilder interviewTreeBuilder, 
             IPreloadedDataRepository preloadedDataRepository, 
-            IPreloadedDataVerifier preloadedDataVerifier)
+            IPreloadedDataVerifier preloadedDataVerifier,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
         {
             this.commandService = commandService;
             this.logger = logger;
@@ -79,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.interviewTreeBuilder = interviewTreeBuilder;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
+            this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
 
         public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName)
@@ -126,7 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             catch (Exception e)
             {
                 FinishImportProcess();
-                logger.Error("Fail valiation preloading", e);
+                logger.Error("Fail validation preloading", e);
                 throw;
             }
         }
@@ -214,7 +218,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             try
             {
+                var browseItem = this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
+                if (browseItem == null || browseItem.IsDeleted == true)
+                {
+                    this.Status.State.Errors.Add(new InterviewImportError
+                    {
+                        ErrorMessage = Interviews.ImportInterviews_QuestionaireNotFound
+                    });
+                    return;
+                }
+
                 var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+                if (questionnaireDocument == null)
+                {
+                    this.Status.State.Errors.Add(new InterviewImportError
+                    {
+                        ErrorMessage = Interviews.ImportInterviews_QuestionaireNotFound
+                    });
+                    return;
+                }
+                
                 this.Status.QuestionnaireTitle = questionnaireDocument.Title;
 
                 if (records == null)
