@@ -90,37 +90,47 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.Status.Stage = AssignmentImportStage.FileVerification;
             this.Status.VerificationState.FileName = fileName;
 
-            PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
-
-            this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
-
-            void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
+            try
             {
-                var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(), questionnaire);
-                if (!result.Status)
-                    throw new InterviewException(result.ErrorMessage);
-            }
+                PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
 
-            if (this.Status.VerificationState.Errors.Any())
+                this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
+
+                void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
+                {
+                    var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(), questionnaire);
+                    if (!result.Status)
+                        throw new InterviewException(result.ErrorMessage);
+                }
+
+                if (this.Status.VerificationState.Errors.Any())
+                {
+                    FinishImportProcess();
+                    return;
+                }
+
+                this.Status.ProcessedCount = 0;
+                this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
+                this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
+
+                AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
+
+                if (assignmentImportData == null)
+                {
+                    FinishImportProcess();
+                    return;
+                }
+
+                RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
+            }
+            catch (Exception e)
             {
                 FinishImportProcess();
-                return;
+                logger.Error("Fail valiation preloading", e);
+                throw;
             }
-
-            this.Status.ProcessedCount = 0;
-            this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
-            this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
-
-            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
-
-            if (assignmentImportData == null)
-            {
-                FinishImportProcess();
-                return;
-            }
-
-            RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
         }
+
         public AssignmentVerificationResult VerifyAssignment(List<InterviewAnswer>[] answersGroupedByLevels, IQuestionnaire questionnaire)
         {
             try
