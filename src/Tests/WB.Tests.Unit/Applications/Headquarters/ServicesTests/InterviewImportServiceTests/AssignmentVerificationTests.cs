@@ -46,6 +46,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             preloadedDataRepositoryMock = new Mock<IPreloadedDataRepository>();
             preloadedDataVerifierMock = new Mock<IPreloadedDataVerifier>();
             questionnaireBrowseItemStorageMock = new Mock<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+            questionnaireBrowseItemStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
+                .Returns(() => new QuestionnaireBrowseItem());
 
             importService = new InterviewImportService(
                 commandServiceMock.Object,
