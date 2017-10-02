@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             }
 
             if (!string.IsNullOrWhiteSpace(interview.InterviewKey))
-                this.IdLabel = "#" + interview.InterviewKey;
+                this.IdLabel = interview.InterviewKey;
             else
                 this.IdLabel = InterviewerUIResources.Dashboard_No_InterviewKey;
 
