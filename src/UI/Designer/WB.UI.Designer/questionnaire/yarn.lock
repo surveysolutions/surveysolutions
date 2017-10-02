@@ -1536,6 +1536,18 @@ http-signature@~1.1.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
+i18next-browser-languagedetector@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/i18next-browser-languagedetector/-/i18next-browser-languagedetector-2.0.0.tgz#4d9df2bd1a5deda3c8c0a6d3db62d50388b9eedd"
+
+i18next-xhr-backend@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/i18next-xhr-backend/-/i18next-xhr-backend-1.4.3.tgz#d72f70536a3bf6a3892261dde352bc77d708886a"
+
+i18next@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-9.0.1.tgz#8b8a55d017c1e256df9700ded277d47c53cd833b"
+
 image-size@~0.5.0:
   version "0.5.5"
   resolved "https://registry.yarnpkg.com/image-size/-/image-size-0.5.5.tgz#09dfd4ab9d20e29eb1c3e80b8990378df9e3cb9c"
@@ -2373,6 +2385,10 @@ ng-annotate@^1.2.1:
 ng-file-upload@^12.2.13:
   version "12.2.13"
   resolved "https://registry.yarnpkg.com/ng-file-upload/-/ng-file-upload-12.2.13.tgz#01800f3872e526f95310f8477e99e4f12d0d8d14"
+
+ng-i18next@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/ng-i18next/-/ng-i18next-1.0.5.tgz#fa3e924bb50f81e51c71ec3cd5bd84c0e7a9b013"
 
 no-case@^2.2.0:
   version "2.3.1"
