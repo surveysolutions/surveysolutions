@@ -75,6 +75,7 @@
                             type: question.type()
                         };
                     }
+                    break;
                 case "Numeric":
                     if (hasValue(question.selectedOption())) {
                         answer = {
@@ -90,16 +91,22 @@
                     if (hasValue(dateAnswer) && !_.isNull(dateAnswer)) {
                         answer = {
                             id: question.id(),
-                            answer: dateAnswer,
-                            type: question.type()
-                        };
-
-                        if (!question.settings().IsTimestamp) {
-                            answer.answer = dateAnswer.getFullYear() +
+                            answer: dateAnswer.getFullYear() +
                                 '-' +
                                 (dateAnswer.getMonth() + 1) +
                                 '-' +
-                                dateAnswer.getDate();
+                                dateAnswer.getDate(),
+                            type: question.type()
+                        };
+
+                        if (question.settings().IsTimestamp) {
+                            answer.answer = answer.answer +
+                                "T" +
+                                dateAnswer.getHours() +
+                                ":" + 
+                                dateAnswer.getMinutes() +
+                                ":" + 
+                                dateAnswer.getSeconds();
                         }
                     }
                     break;
