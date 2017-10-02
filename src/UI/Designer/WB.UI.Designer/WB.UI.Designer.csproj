@@ -878,6 +878,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.ru.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
