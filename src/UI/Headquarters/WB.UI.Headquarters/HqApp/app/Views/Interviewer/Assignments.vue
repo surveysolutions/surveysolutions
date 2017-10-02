@@ -67,12 +67,12 @@ export default {
                     orderable: false,
                     searchable: false,
                     width: "11%",
-                    render(data, type, row) {
-                        const quantity = row.quantity - row.interviewsCount;
-                        if(quantity <= 0){
+                    render(data, type, row) {                    
+                        if (row.quantity < 0){
                             return '<span>' + self.$t("Assignments.Unlimited") + '</span>'
-                        }
-                        return quantity
+                        };
+                        
+                        return row.interviewsCount > row.quantity ? 0 : row.quantity - row.interviewsCount;
                     },
                     defaultContent: '<span>' + this.$t("Assignments.Unlimited") + '</span>'
                 }, {
