@@ -23,8 +23,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 switch (questionType)
                 {
                     case QuestionType.DateTime:
-                        DateTime dateTimeAnswer = answer is string
-                            ? DateTime.Parse((string) answer)
+                        DateTime dateTimeAnswer = answer is string dataTimeAnswerAsString
+                            ? DateTime.Parse(dataTimeAnswerAsString)
                             : (DateTime) answer;
                         var isTimestamp = questionnaire.IsTimestampQuestion(questionId);
                         answer = isTimestamp
@@ -56,8 +56,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         break;
 
                     case QuestionType.Numeric:
-                        decimal answerTyped = answer is string
-                            ? decimal.Parse((string) answer, CultureInfo.CurrentCulture)
+                        decimal answerTyped = answer is string namericAnswerAsString
+                            ? decimal.Parse(namericAnswerAsString, CultureInfo.InvariantCulture)
                             : System.Convert.ToDecimal(answer, CultureInfo.CurrentCulture);
                         answer = questionnaire.ShouldUseFormatting(questionId)
                             ? answerTyped.FormatDecimal()
@@ -65,8 +65,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         break;
 
                     case QuestionType.GpsCoordinates:
-                        var gps = answer is string
-                            ? GeoPosition.FromString((string) answer)
+                        var gps = answer is string gpsAnswerAsString
+                            ? GeoPosition.FromString(gpsAnswerAsString)
                             : (GeoPosition) answer;
                         answer = $"{gps.Latitude}, {gps.Longitude}";
                         break;
