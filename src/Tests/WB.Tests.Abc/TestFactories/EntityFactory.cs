@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -1823,6 +1824,16 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewTreeVariableDiff InterviewTreeVariableDiff(InterviewTreeVariable sourceVariable, InterviewTreeVariable targetVariable)
         {
             return new InterviewTreeVariableDiff(sourceVariable, targetVariable);
+        }
+
+        public PreloadedDataByFile PreloadedDataByFile(string id = null, string fileName = null, string[] header = null, string[][] content = null)
+        {
+            var randomstring = Guid.NewGuid().ToString();
+            return new PreloadedDataByFile(
+                id: id ?? randomstring,
+                fileName: fileName ?? "file-" + randomstring,
+                header: header,
+                content: content);
         }
     }
 }

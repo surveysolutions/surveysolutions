@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                 ? preloadedDataService.CreatePreloadedDataDtosFromPanelData(this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId))
                 : preloadedDataService.CreatePreloadedDataDtoFromAssignmentData(this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId));
 
-            return dataToPreload.Select(d => new AssignmentImportData
+            return dataToPreload?.Select(d => new AssignmentImportData
             {
                 PreloadedData = d.PreloadedDataDto,
                 InterviewerId = d.InterviewerId,
