@@ -261,7 +261,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         this.Status.EstimatedTime = this.Status.TimePerItem * this.Status.TotalCount;
                     });
 
-                this.logger.Info($"Imported {this.Status.TotalCount:N0} of interviews. Took {elapsedTime.Elapsed:c} to complete");
+                this.logger.Info($"Imported {this.Status.TotalCount:N0} of assignments for questionnaire {questionnaireIdentity}. Took {elapsedTime.Elapsed:c} to complete");
             }
             finally
             {
