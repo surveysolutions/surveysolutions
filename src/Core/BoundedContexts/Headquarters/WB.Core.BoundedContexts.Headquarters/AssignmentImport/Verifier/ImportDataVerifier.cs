@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Main.Core.Entities.SubEntities;
@@ -158,6 +159,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (data == null || !data.Any())
             {
                 status.VerificationState.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+                return;
+            }
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, version);
+
+            var isExistsTopLevelData = data.Any(d => Path.GetFileNameWithoutExtension(d.FileName) == questionnaire.Title);
+            if (!isExistsTopLevelData)
+            {
+                status.VerificationState.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0040", PreloadingVerificationMessages.PL0040_QuestionnaireDataIsNotFound) };
                 return;
             }
 
