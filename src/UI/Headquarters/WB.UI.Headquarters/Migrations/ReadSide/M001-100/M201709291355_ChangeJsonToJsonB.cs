@@ -15,12 +15,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Execute.Sql(GetScriptToChangeJsonToJsonb("readside.interviews", "asaudio"));
             Execute.Sql(GetScriptToChangeJsonToJsonb("readside.interviews", "asarea"));
             Execute.Sql(GetScriptToChangeJsonToJsonb("readside.interviews", "aslist"));
-
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.appsettings", "value"));
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.assignments", "answers"));
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.questionnairedocuments", "value"));
-
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.webinterviewconfigs", "value"));
         }
 
         private static string GetScriptToChangeJsonToJsonb(string tableName, string columnName)
