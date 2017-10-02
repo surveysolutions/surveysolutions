@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -34,7 +35,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory = null,
             IInterviewTreeBuilder interviewTreeBuilder = null,
             IPreloadedDataRepository preloadedDataRepository = null,
-            IPreloadedDataVerifier preloadedDataVerifier = null)
+            IPreloadedDataVerifier preloadedDataVerifier = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
         {
             var plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(_ 
@@ -57,7 +59,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 userViewFactory : Mock.Of<IUserViewFactory>(),
                 interviewTreeBuilder: interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 preloadedDataRepository: preloadedDataRepository ?? Mock.Of<IPreloadedDataRepository>(),
-                preloadedDataVerifier: preloadedDataVerifier ?? Mock.Of<IPreloadedDataVerifier>());
+                preloadedDataVerifier: preloadedDataVerifier ?? Mock.Of<IPreloadedDataVerifier>(),
+                questionnaireBrowseItemStorage: questionnaireBrowseItemStorage?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
         }
     }
 }
