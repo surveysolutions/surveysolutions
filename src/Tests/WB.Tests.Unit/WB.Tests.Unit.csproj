@@ -737,6 +737,7 @@
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_missing_text_value.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_preloaded_data_with_missing_numeric_value.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_sample_data_with_no_answers_on_gps_question.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\when_verifying_panel_preloaded_data_and_file_with_questionnaire_level_is_absent.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadingTemplateServiceTests\when_questionnaire_has_5_prefilled_questions.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionDataParserTests\when_pasing_answer_on_date_question.cs" />
     <Compile Include="SharedKernels\SurveyManagement\QuestionnaireNameValidatorTests\when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists.cs" />
