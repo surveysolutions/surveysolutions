@@ -348,16 +348,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude, double southWestCornerLatitude,
             double northEastCornerLongtitude, double southWestCornerLongtitude)
             => this.sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
-                    $"SELECT i.{InterviewIdColumn}, {AsGpsColumn}::json->'{nameof(GeoPosition.Latitude)}' as latitude, {AsGpsColumn}::json->'{nameof(GeoPosition.Longitude)}' as longitude " +
+                    $"SELECT i.{InterviewIdColumn}, {AsGpsColumn}->>'{nameof(GeoPosition.Latitude)}' as latitude, {AsGpsColumn}->>'{nameof(GeoPosition.Longitude)}' as longitude " +
                     $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
                     $"WHERE questionnaireidentity = @Questionnaire " +
                     $"AND {EntityIdColumn} = @QuestionId " +
                     $"AND {AsGpsColumn} is not null " +
-                    $"AND CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}' as double precision) > @SouthWestCornerLatitude " +
-                    $"AND CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}' as double precision) < @NorthEastCornerLatitude " +
-                    $"AND CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}' as double precision) > @SouthWestCornerLongtitude " +
+                    $"AND ({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}')::double precision > @SouthWestCornerLatitude " +
+                    $"AND ({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}')::double precision < @NorthEastCornerLatitude " +
+                    $"AND ({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}')::double precision > @SouthWestCornerLongtitude " +
                     $"{(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")}" +
-                    $" CAST({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}' as double precision) < @NorthEastCornerLongtitude " +
+                    $" ({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}')::double precision < @NorthEastCornerLongtitude " +
                     $"LIMIT @MaxCount",
                     new
                     {
