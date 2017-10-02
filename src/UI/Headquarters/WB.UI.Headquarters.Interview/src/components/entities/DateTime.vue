@@ -73,7 +73,7 @@
                         }
                     }
                     else {
-                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: new Date() })
+                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: new Date().toLocaleString() })
                     }
                 }
             }
