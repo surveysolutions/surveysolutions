@@ -90,25 +90,13 @@
                     var dateAnswer = question.selectedOption();
                     if (hasValue(dateAnswer) && !_.isNull(dateAnswer)) {
                         var date = new Date(dateAnswer);
+                        var dateFormat = question.settings().IsTimestamp ? "YYYY-MM-DDTHH:mm:ss" : "YYYY-MM-DD";
+
                         answer = {
                             id: question.id(),
-                            answer: date.getFullYear() +
-                                '-' +
-                                (date.getMonth() + 1) +
-                                '-' +
-                                date.getDate(),
+                            answer: moment(date).format(dateFormat),
                             type: question.type()
                         };
-
-                        if (question.settings().IsTimestamp) {
-                            answer.answer = answer.answer +
-                                "T" +
-                                date.getHours() +
-                                ":" + 
-                                date.getMinutes() +
-                                ":" + 
-                                date.getSeconds();
-                        }
                     }
                     break;
                 case "GpsCoordinates":
