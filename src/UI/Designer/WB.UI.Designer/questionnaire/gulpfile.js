@@ -101,16 +101,21 @@ gulp.task("bowerJs", function(){
       'node_modules/jquery-validation/dist/jquery.validate.js',
       'details/scripts/modules/perfect_scrollbar.js',
       'node_modules/angular-pnotify/src/angular-pnotify.js',
-      'node_modules/angular-moment/angular-moment.js'
+      'node_modules/angular-moment/angular-moment.js',
+      'node_modules/xss/dist/xss.js',
+      'node_modules/i18next/i18next.min.js',
+      'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
+      'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
+      'node_modules/ng-i18next/dist/ng-i18next.js'
     ];
 
     return gulp.src(sourcesToInclude)
       //.pipe(debug({ title: 'unicorn:' }))
-    	.pipe(plugins.ngAnnotate())
-    	.pipe(plugins.uglify())
-      	.pipe(concat('libs.js'))
-      	.pipe(plugins.rev())
-      	.pipe(gulp.dest('build'));
+      .pipe(plugins.ngAnnotate())
+      .pipe(plugins.uglify())
+      .pipe(concat('libs.js'))
+      .pipe(plugins.rev())
+      .pipe(gulp.dest('build'));
 });
 
 gulp.task('templates', function () {
