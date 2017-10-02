@@ -292,7 +292,8 @@ export default {
                     for(let i=0;i<columns.length;i++){
                         $(thead).find('th').eq(i).attr("title", columns[i].tooltip);
                     }
-                }
+                },
+                searchHighlight: true
             };
 
             return tableOptions;

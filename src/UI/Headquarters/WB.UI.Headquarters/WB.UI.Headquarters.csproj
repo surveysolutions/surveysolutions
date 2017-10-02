@@ -770,6 +770,7 @@
     <Content Include="Scripts\bootstrap3-typeahead.js" />
     <Content Include="Scripts\bootstrap3-typeahead.min.js" />
     <Content Include="Scripts\components\bindings.js" />
+    <Content Include="Scripts\jquery.highlight.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
     <Content Include="Scripts\components\typeahead-extended.js" />
     <Content Include="Scripts\dateRangePicker\daterangepicker.css" />

@@ -38,3 +38,9 @@
     width: 60px;
     text-align: center;
 }
+
+table span.highlight {
+    background-color: #ff8;
+    color: #3f3f3f;
+    border-radius: 0.28571429rem;
+}
