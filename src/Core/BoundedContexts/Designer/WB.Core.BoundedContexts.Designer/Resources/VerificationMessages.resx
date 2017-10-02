@@ -130,7 +130,7 @@
     <value>Variable cannot have empty expression.</value>
   </data>
   <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Variable expression has length more than 10,000 characters.</value>
+    <value>Variable expression has length more than {0} characters.</value>
   </data>
   <data name="WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion" xml:space="preserve">
     <value>Roster size question is missing.</value>
@@ -172,7 +172,7 @@
     <value>Expression has a syntax error.</value>
   </data>
   <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Options filter expression has length more than 10,000 characters.</value>
+    <value>Options filter expression has length more than {0} characters.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
     <value>Identifying questions cannot be inside a roster.</value>
@@ -205,7 +205,7 @@
     <value>List  question cannot be filled by supervisor.</value>
   </data>
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
-    <value>Maximum number of list elements must be in range [1, {0}].</value>
+    <value>Maximum number of list elements must be in range [{1}, {0}].</value>
   </data>
   <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
     <value>Question has option(s) with empty value.</value>
@@ -226,7 +226,7 @@
     <value>Roster should have deeper or the same roster level as it's roster size question.</value>
   </data>
   <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
-    <value>Roster can have no more than 3 parent rosters.</value>
+    <value>Roster can have no more than {0} parent rosters.</value>
   </data>
   <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
     <value>Circular references are not allowed.</value>
@@ -241,10 +241,10 @@
     <value>If item uses %rostertitle% substitution it needs to be placed inside roster.</value>
   </data>
   <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
-    <value>Question has less than 2 options.</value>
+    <value>Question has less than {0} options.</value>
   </data>
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
-    <value>Question has max allowed answers less than 2.</value>
+    <value>Question has max allowed answers less than {0}.</value>
   </data>
   <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>Option filter expression has a syntax error.</value>
@@ -283,10 +283,10 @@
     <value>Combo box cannot be linked to another question.</value>
   </data>
   <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
-    <value>Contains more than 5000 options.</value>
+    <value>Contains more than {0} options.</value>
   </data>
   <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
-    <value>Contains more than 200 options.</value>
+    <value>Contains more than {0} options.</value>
   </data>
   <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
     <value>Question has invalid variable name.</value>
@@ -313,7 +313,7 @@
     <value>Circular references in cascading combo box questions not allowed.</value>
   </data>
   <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
-    <value>Cascading combo box question should have less than 15,000 options.</value>
+    <value>Cascading combo box question should have less than {0} options.</value>
   </data>
   <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
     <value>Cascading combo box question should have unique value and parent value options list.</value>
@@ -331,7 +331,7 @@
     <value>Roster size text list question should have limit</value>
   </data>
   <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Enabling condition has length more than 10,000 characters.</value>
+    <value>Enabling condition has length more than {0} characters.</value>
   </data>
   <data name="WB0096_GeneralCompilationError" xml:space="preserve">
     <value>Error occurred during questionnaire compilation.</value>
@@ -340,19 +340,16 @@
     <value>Questionnaire title contains characters that are not allowed. Only non Unicode letters, numbers, space and _ are allowed.</value>
   </data>
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
-    <value>Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than 5MB.</value>
+    <value>Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than {1}MB.</value>
   </data>
   <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
     <value>Fixed set of items roster values must be unique.</value>
   </data>
-  <data name="WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options" xml:space="preserve">
-    <value>Max number of answers for roster size question cannot be empty when question has more than 40 options.</value>
-  </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
-    <value>Max number of answers for roster size question cannot be greater than 200.</value>
+    <value>Max number of answers for roster size question cannot be greater than {0}.</value>
   </data>
   <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
-    <value>Sub-section can have no more than 10 parent sub-sections.</value>
+    <value>Sub-section can have no more than {0} parent sub-sections.</value>
   </data>
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
     <value>Only one GPS question could be marked as identifying</value>
@@ -361,7 +358,7 @@
     <value>Multi select yes/no question can't be linked</value>
   </data>
   <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Multi select question supports only integer values in range from -2147483648 to 2147483647</value>
+    <value>Multi select question supports only integer values in range from {0} to {1}</value>
   </data>
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
     <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
@@ -415,10 +412,10 @@
     <value>Roster which is the source of the link is a roster, not a subsection.</value>
   </data>
   <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
-    <value>Validation error message #{0} is too long. It should be no longer than 250 characters.</value>
+    <value>Validation error message #{0} is too long. It should be no longer than {1} characters.</value>
   </data>
   <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
-    <value>Validation condition #{0} is too long. It should be no longer than 10000 characters.</value>
+    <value>Validation condition #{0} is too long. It should be no longer than {1} characters.</value>
   </data>
   <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
     <value>Validation condition #{0} is empty.</value>
@@ -427,7 +424,7 @@
     <value>Validation error message #{0} is empty.</value>
   </data>
   <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
-    <value>Section or Roster contains more than 200 questions, consider splitting into sub-sections.</value>
+    <value>Section or Roster contains more than {0} questions, consider splitting into sub-sections.</value>
   </data>
   <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
     <value>Section contains no questions. Consider removing the empty section.</value>
@@ -439,7 +436,7 @@
     <value>Roster is empty. Remove it if it is not needed.</value>
   </data>
   <data name="WB0205_TooManyQuestions" xml:space="preserve">
-    <value>Questionnaire has more than 1000 questions. It might be difficult to administer it.</value>
+    <value>Questionnaire has more than {0} questions. It might be difficult to administer it.</value>
   </data>
   <data name="WB0209_LongEnablementCondition" xml:space="preserve">
     <value>Enabling condition is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
@@ -451,19 +448,19 @@
     <value>Questionnaire contains no GPS questions. Consider adding a GPS question.</value>
   </data>
   <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
-    <value>Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance.</value>
+    <value>Questionnaire contains more than {0} questions but only one or two sections. Group questions into sections to simplify navigation and improve performance.</value>
   </data>
   <data name="WB0212_LongValidationCondition" xml:space="preserve">
     <value>Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList()).</value>
   </data>
   <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
-    <value>Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
+    <value>Fixed roster contains {0} or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data.</value>
   </data>
   <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
-    <value>More than 50% of questions contain no validation conditions. Add validation conditions to improve data quality.</value>
+    <value>More than {0}% of questions contain no validation conditions. Add validation conditions to improve data quality.</value>
   </data>
   <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Linked question filter expression has length more than 10,000 characters.</value>
+    <value>Linked question filter expression has length more than {0} characters.</value>
   </data>
   <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
     <value>The question cannot be used in is it own filter expression.</value>
@@ -481,10 +478,10 @@
     <value>Attachment cannot be empty</value>
   </data>
   <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
-    <value>Attachment size is more than 5Mb</value>
+    <value>Attachment size is more than {0}Mb</value>
   </data>
   <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
-    <value>Total size of attachments is more than 50Mb</value>
+    <value>Total size of attachments is more than {0}Mb</value>
   </data>
   <data name="WB0215_UnusedAttachments" xml:space="preserve">
     <value>Questionnaire contains unused attachments</value>
@@ -511,7 +508,7 @@
     <value>Question is too short. This might be an incomplete question.</value>
   </data>
   <data name="WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Single select question supports only integer values in range from -2147483648 to 2147483647</value>
+    <value>Single select question supports only integer values in range from {0} to {1}</value>
   </data>
   <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
     <value>Fix roster supports only integer title values</value>
@@ -526,10 +523,10 @@
     <value>Translations have duplicate names</value>
   </data>
   <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
-    <value>Question title is too long. It should be no longer than 500 characters.</value>
+    <value>Question title is too long. It should be no longer than {0} characters.</value>
   </data>
   <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
-    <value>Title is too long. It should be no longer than 500 characters.</value>
+    <value>Title is too long. It should be no longer than {0} characters.</value>
   </data>
   <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
     <value>Roster with more than {0} rows cannot have nested rosters</value>
@@ -553,7 +550,7 @@
     <value>You have a GPS question. Tablets must support geolocation to be used with this questionnaire.</value>
   </data>
   <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
-    <value>More than 30% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead.</value>
+    <value>More than {0}% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead.</value>
   </data>
   <data name="WB0266_SameTitle" xml:space="preserve">
     <value>Duplicate questions. (Questions have the same title.)</value>
@@ -565,16 +562,16 @@
     <value>No identifying questions are defined. Define at least one identifying question.</value>
   </data>
   <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
-    <value>Variable label is too long (more than 120 chars) and will be truncated in SPSS file export.</value>
+    <value>Variable label is too long (more than {0} chars) and will be truncated in SPSS file export.</value>
   </data>
   <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
     <value>Consecutive questions contain identical enablement conditions. Consider placing in a sub-section and assign condition to the sub-section.</value>
   </data>
   <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
-    <value>Multiple consecutive unconditional single choice options with 2 options. Consider one multiple choice question.</value>
+    <value>Multiple consecutive unconditional single choice options with {0} options. Consider one multiple choice question.</value>
   </data>
   <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
-    <value>Using @rowindex with a multi-choice roster may be unstable. Consider using @rowcode instead.</value>
+    <value>Using @{0} with a multi-choice roster may be unstable. Consider using @{1} instead.</value>
   </data>
   <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
     <value>No current time question was found. Consider recording the date of interview in your questionnaire.</value>
@@ -613,7 +610,7 @@
     <value>Linked to list question doen't support options filter</value>
   </data>
   <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
-    <value>Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible.</value>
+    <value>Multichoice question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible.</value>
   </data>
   <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
     <value>Five or more questions have the same enabling condition. Place questions in a group and apply single enabling condition to a group to improve questionnaire efficiency.</value>
@@ -637,7 +634,7 @@
     <value>| is used in expression. Make sure you understand the difference between | and || operators. In most cases, use ||.</value>
   </data>
   <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
-    <value>Expression referencing forbidden DateTime properties: DateTime.Now, DateTime.UtcNow, DateTime.Today. Consider using current time question instead.</value>
+    <value>Expression referencing forbidden DateTime properties: {0}, {1}, {2}. Consider using current time question instead.</value>
   </data>
   <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
     <value>You try to use substitution for unsupported entity.</value>

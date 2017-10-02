@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable expression has length more than 10,000 characters..
+        ///   Looks up a localized string similar to Variable expression has length more than {0} characters..
         /// </summary>
         public static string WB0005_VariableExpressionHasLengthMoreThan10000Characters {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select question supports only integer values in range from -2147483648 to 2147483647.
+        ///   Looks up a localized string similar to Multi select question supports only integer values in range from {0} to {1}.
         /// </summary>
         public static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -305,7 +305,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Options filter expression has length more than 10,000 characters..
+        ///   Looks up a localized string similar to Options filter expression has length more than {0} characters..
         /// </summary>
         public static string WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters {
             get {
@@ -432,7 +432,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum number of list elements must be in range [1, {0}]..
+        ///   Looks up a localized string similar to Maximum number of list elements must be in range [{1}, {0}]..
         /// </summary>
         public static string WB0042_TextListQuestionMaxAnswerInRange1And200 {
             get {
@@ -549,7 +549,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster can have no more than 3 parent rosters..
+        ///   Looks up a localized string similar to Roster can have no more than {0} parent rosters..
         /// </summary>
         public static string WB0055_RosterHasRosterLevelMoreThan4 {
             get {
@@ -594,7 +594,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has less than 2 options..
+        ///   Looks up a localized string similar to Question has less than {0} options..
         /// </summary>
         public static string WB0060_CategoricalQuestionHasLessThan2Options {
             get {
@@ -603,7 +603,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question has max allowed answers less than 2..
+        ///   Looks up a localized string similar to Question has max allowed answers less than {0}..
         /// </summary>
         public static string WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2 {
             get {
@@ -729,7 +729,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than 5000 options..
+        ///   Looks up a localized string similar to Contains more than {0} options..
         /// </summary>
         public static string WB0075_FilteredComboboxContainsMoreThan5000Options {
             get {
@@ -738,7 +738,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains more than 200 options..
+        ///   Looks up a localized string similar to Contains more than {0} options..
         /// </summary>
         public static string WB0076_CategoricalOptionsCountMoreThan200 {
             get {
@@ -846,7 +846,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading combo box question should have less than 15,000 options..
+        ///   Looks up a localized string similar to Cascading combo box question should have less than {0} options..
         /// </summary>
         public static string WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers {
             get {
@@ -900,7 +900,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enabling condition has length more than 10,000 characters..
+        ///   Looks up a localized string similar to Enabling condition has length more than {0} characters..
         /// </summary>
         public static string WB0094_ConditionExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -936,7 +936,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than 5MB..
+        ///   Looks up a localized string similar to Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than {1}MB..
         /// </summary>
         public static string WB0098_QuestionnaireHasSizeMoreThan5MB {
             get {
@@ -945,17 +945,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be empty when question has more than 40 options..
-        /// </summary>
-        public static string WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreThan40Options {
-            get {
-                return ResourceManager.GetString("WB0099_MaxNumberOfAnswersForRosterSizeQuestionCannotBeEmptyWhenQuestionHasMoreTha" +
-                        "n40Options", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than 200..
+        ///   Looks up a localized string similar to Max number of answers for roster size question cannot be greater than {0}..
         /// </summary>
         public static string WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200 {
             get {
@@ -964,7 +954,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sub-section can have no more than 10 parent sub-sections..
+        ///   Looks up a localized string similar to Sub-section can have no more than {0} parent sub-sections..
         /// </summary>
         public static string WB0101_GroupHasLevelDepthMoreThan10 {
             get {
@@ -991,7 +981,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation condition #{0} is too long. It should be no longer than 10000 characters..
+        ///   Looks up a localized string similar to Validation condition #{0} is too long. It should be no longer than {1} characters..
         /// </summary>
         public static string WB0104_ValidationConditionIsTooLong {
             get {
@@ -1000,7 +990,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validation error message #{0} is too long. It should be no longer than 250 characters..
+        ///   Looks up a localized string similar to Validation error message #{0} is too long. It should be no longer than {1} characters..
         /// </summary>
         public static string WB0105_ValidationMessageIsTooLong {
             get {
@@ -1027,7 +1017,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked question filter expression has length more than 10,000 characters..
+        ///   Looks up a localized string similar to Linked question filter expression has length more than {0} characters..
         /// </summary>
         public static string WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters {
             get {
@@ -1081,7 +1071,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single select question supports only integer values in range from -2147483648 to 2147483647.
+        ///   Looks up a localized string similar to Single select question supports only integer values in range from {0} to {1}.
         /// </summary>
         public static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
             get {
@@ -1117,7 +1107,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expression referencing forbidden DateTime properties: DateTime.Now, DateTime.UtcNow, DateTime.Today. Consider using current time question instead..
+        ///   Looks up a localized string similar to Expression referencing forbidden DateTime properties: {0}, {1}, {2}. Consider using current time question instead..
         /// </summary>
         public static string WB0118_ExpressionReferencingForbiddenDateTimeProperies {
             get {
@@ -1135,7 +1125,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section or Roster contains more than 200 questions, consider splitting into sub-sections..
+        ///   Looks up a localized string similar to Section or Roster contains more than {0} questions, consider splitting into sub-sections..
         /// </summary>
         public static string WB0201_LargeNumberOfQuestionsInGroup {
             get {
@@ -1171,7 +1161,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire has more than 1000 questions. It might be difficult to administer it..
+        ///   Looks up a localized string similar to Questionnaire has more than {0} questions. It might be difficult to administer it..
         /// </summary>
         public static string WB0205_TooManyQuestions {
             get {
@@ -1180,7 +1170,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire contains more than 100 questions but only one or two sections. Group questions into sections to simplify navigation and improve performance..
+        ///   Looks up a localized string similar to Questionnaire contains more than {0} questions but only one or two sections. Group questions into sections to simplify navigation and improve performance..
         /// </summary>
         public static string WB0206_FewSectionsManyQuestions {
             get {
@@ -1189,7 +1179,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fixed roster contains 3 or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
+        ///   Looks up a localized string similar to Fixed roster contains {0} or less items. Consider using sub-sections and a series of questions. Rosters complicate structure of exported data..
         /// </summary>
         public static string WB0207_FixedRosterContains3OrLessItems {
             get {
@@ -1198,7 +1188,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than 50% of questions contain no validation conditions. Add validation conditions to improve data quality..
+        ///   Looks up a localized string similar to More than {0}% of questions contain no validation conditions. Add validation conditions to improve data quality..
         /// </summary>
         public static string WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions {
             get {
@@ -1243,7 +1233,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attachment size is more than 5Mb.
+        ///   Looks up a localized string similar to Attachment size is more than {0}Mb.
         /// </summary>
         public static string WB0213_AttachmentSizeIsMoreThan5Mb {
             get {
@@ -1252,7 +1242,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total size of attachments is more than 50Mb.
+        ///   Looks up a localized string similar to Total size of attachments is more than {0}Mb.
         /// </summary>
         public static string WB0214_TotalAttachmentsSizeIsMoreThan50Mb {
             get {
@@ -1279,7 +1269,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable label is too long (more than 120 chars) and will be truncated in SPSS file export..
+        ///   Looks up a localized string similar to Variable label is too long (more than {0} chars) and will be truncated in SPSS file export..
         /// </summary>
         public static string WB0217_VariableLableMoreThan120Characters {
             get {
@@ -1297,7 +1287,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multiple consecutive unconditional single choice options with 2 options. Consider one multiple choice question..
+        ///   Looks up a localized string similar to Multiple consecutive unconditional single choice options with {0} options. Consider one multiple choice question..
         /// </summary>
         public static string WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options {
             get {
@@ -1306,7 +1296,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Using @rowindex with a multi-choice roster may be unstable. Consider using @rowcode instead..
+        ///   Looks up a localized string similar to Using @{0} with a multi-choice roster may be unstable. Consider using @{1} instead..
         /// </summary>
         public static string WB0220_RowIndexInMultiOptionBasedRoster {
             get {
@@ -1405,7 +1395,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multichoice question contains too many (&gt;20) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
+        ///   Looks up a localized string similar to Multichoice question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible..
         /// </summary>
         public static string WB0231_MultiOptionWithMoreThan20Options {
             get {
@@ -1549,7 +1539,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question title is too long. It should be no longer than 500 characters..
+        ///   Looks up a localized string similar to Question title is too long. It should be no longer than {0} characters..
         /// </summary>
         public static string WB0259_QuestionTitleIsTooLong {
             get {
@@ -1558,7 +1548,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title is too long. It should be no longer than 500 characters..
+        ///   Looks up a localized string similar to Title is too long. It should be no longer than {0} characters..
         /// </summary>
         public static string WB0260_GroupTitleIsTooLong {
             get {
@@ -1603,7 +1593,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More than 30% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead..
+        ///   Looks up a localized string similar to More than {0}% of questions are text questions. Text questions are difficult to answer on tablets. Consider using single- or multi-choice questions instead..
         /// </summary>
         public static string WB0265_MoreThan30PercentQuestionsAreText {
             get {

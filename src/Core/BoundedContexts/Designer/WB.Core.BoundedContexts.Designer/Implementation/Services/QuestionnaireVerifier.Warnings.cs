@@ -7,41 +7,53 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Resources;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
-    internal partial class QuestionnaireVerifier : IQuestionnaireVerifier
+    internal partial class QuestionnaireVerifier
     {
+        private const int MaxMultiQuestionOptionsCount = 20;
+        private const int UnconditionalSingleChoiceQuestionOptionsCount = 2;
+        private const int MaxVariableLabelLength = 120;
+        private const int TextQuestionsLengthInPercents = 30;
+        private const int MaxAttachmentsSizeInMb = 50;
+        private const int MaxAttachmentSizeInMb = 5;
+        private const int MinValidationsInPercents = 50;
+        private const int MinFixedRosterItemsCount = 3;
+        private const int ManyQuestionsByFewSectionsCount = 100;
+        private const int MaxQuestionsCountInQuestionnaire = 1000;
+        private const int MaxQuestionsCountInSubSection = 200;
+
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> WarningsVerifiers => new[]
         {
             Warning(LargeNumberOfRosters, "WB0200", VerificationMessages.WB0200_LargeNumberOfRostersIsCreated),
-            Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup),
+            Warning<IGroup>(TooManyQuestionsInGroup, "WB0201", string.Format(VerificationMessages.WB0201_LargeNumberOfQuestionsInGroup, MaxQuestionsCountInSubSection)),
             Warning<IGroup>(EmptyGroup, "WB0202", VerificationMessages.WB0202_GroupWithoutQuestions),
             Warning<IGroup>(HasSingleQuestionInRoster, "WB0203", VerificationMessages.WB0203_RosterHasSingleQuestion),
             Warning<IGroup>(EmptyRoster, "WB0204", VerificationMessages.WB0204_EmptyRoster),
-            Warning(TooManyQuestions, "WB0205", VerificationMessages.WB0205_TooManyQuestions),
-            Warning(FewSectionsManyQuestions, "WB0206", VerificationMessages.WB0206_FewSectionsManyQuestions),
-            Warning<IGroup>(FixedRosterContains3OrLessItems, "WB0207", VerificationMessages.WB0207_FixedRosterContains3OrLessItems),
-            Warning(MoreThan50PercentQuestionsWithoutValidationConditions, "WB0208", VerificationMessages.WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions),
+            Warning(TooManyQuestions, "WB0205", string.Format(VerificationMessages.WB0205_TooManyQuestions, MaxQuestionsCountInQuestionnaire)),
+            Warning(FewSectionsManyQuestions, "WB0206", string.Format(VerificationMessages.WB0206_FewSectionsManyQuestions, ManyQuestionsByFewSectionsCount)),
+            Warning<IGroup>(FixedRosterContains3OrLessItems, "WB0207", string.Format(VerificationMessages.WB0207_FixedRosterContains3OrLessItems, MinFixedRosterItemsCount)),
+            Warning(MoreThan50PercentQuestionsWithoutValidationConditions, "WB0208", string.Format(VerificationMessages.WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions, MinValidationsInPercents)),
             Warning<IComposite>(HasLongEnablementCondition, "WB0209", VerificationMessages.WB0209_LongEnablementCondition),
             Warning<IQuestion>(CategoricalQuestionHasALotOfOptions, "WB0210", VerificationMessages.WB0210_CategoricalQuestionHasManyOptions),
             Warning(HasNoGpsQuestions, "WB0211", VerificationMessages.WB0211_QuestionnaireHasNoGpsQuestion),
             Warning<IQuestion, ValidationCondition>(q => q.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
             WarningForTranslation<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationMessageIsEmpty, "WB0107", index => string.Format(VerificationMessages.WB0107_ValidationMessageIsEmpty, index)),
-            Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb),
-            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb),
+            Warning(AttachmentSizeIsMoreThan5Mb, "WB0213", string.Format(VerificationMessages.WB0213_AttachmentSizeIsMoreThan5Mb, MaxAttachmentSizeInMb)),
+            Warning(TotalAttachmentsSizeIsMoreThan50Mb, "WB0214", string.Format(VerificationMessages.WB0214_TotalAttachmentsSizeIsMoreThan50Mb, MaxAttachmentsSizeInMb)),
             Warning(UnusedAttachments, "WB0215", VerificationMessages.WB0215_UnusedAttachments),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
-            Warning<IQuestion>(VariableLableMoreThan120Characters, "WB0217", VerificationMessages.WB0217_VariableLableMoreThan120Characters),
+            Warning<IQuestion>(VariableLableMoreThan120Characters, "WB0217", string.Format(VerificationMessages.WB0217_VariableLableMoreThan120Characters, MaxVariableLabelLength)),
             WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
-            WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options),
-            Warning<IQuestionnaireEntity>(this.RowIndexInMultiOptionBasedRoster, "WB0220", VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster),
+            WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", string.Format(VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, UnconditionalSingleChoiceQuestionOptionsCount)),
+            Warning<IQuestionnaireEntity>(this.RowIndexInMultiOptionBasedRoster, "WB0220", string.Format(VerificationMessages.WB0220_RowIndexInMultiOptionBasedRoster, nameof(IRosterLevel.rowindex), nameof(IRosterLevel.rowcode))),
             Warning(NoCurrentTimeQuestions, "WB0221", VerificationMessages.WB0221_NoCurrentTimeQuestions),
             Warning<SingleQuestion>(Prefilled, "WB0222", VerificationMessages.WB0222_SingleOptionPrefilled),
             Warning<IGroup>(NotSingleSectionWithLessThan5Questions, "WB0223", VerificationMessages.WB0223_SectionWithLessThan5Questions),
@@ -52,7 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<ICategoricalQuestion>(OmittedOptions, "WB0228", VerificationMessages.WB0228_OmittedOptions),
             Warning<IValidatable, IQuestionnaireEntity>(this.SupervisorQuestionInValidation, "WB0229", VerificationMessages.WB0229_SupervisorQuestionInValidation),
             Warning<ICategoricalQuestion>(NonconsecutiveCascadings, "WB0230", VerificationMessages.WB0230_NonconsecutiveCascadings),
-            Warning<MultyOptionsQuestion>(MoreThan20Options, "WB0231", VerificationMessages.WB0231_MultiOptionWithMoreThan20Options),
+            Warning<MultyOptionsQuestion>(MoreThan20Options, "WB0231", string.Format(VerificationMessages.WB0231_MultiOptionWithMoreThan20Options, MaxMultiQuestionOptionsCount)),
             WarningForCollection(FiveOrMoreQuestionsWithSameEnabling, "WB0232", VerificationMessages.WB0232_FiveOrMoreQuestionsWithSameEnabling),
             Warning<IGroup>(NestedRosterDegree3OrMore, "WB0233", VerificationMessages.WB0233_NestedRosterDegree3OrMore),
             Warning<IGroup>(RosterInRosterWithSameSourceQuestion, "WB0234", VerificationMessages.WB0234_RosterInRosterWithSameSourceQuestion),
@@ -67,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Warning<IQuestion>(UseFunctionIsValidEmailToValidateEmailAddress, "WB0254", VerificationMessages.WB0254_UseFunctionIsValidEmailToValidateEmailAddress),
             Warning<IQuestion>(QuestionIsTooShort, "WB0255", VerificationMessages.WB0255_QuestionIsTooShort),
             Warning<GpsCoordinateQuestion>(Any, "WB0264", VerificationMessages.WB0264_GpsQuestion),
-            Warning(MoreThan30PercentQuestionsAreText, "WB0265", VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText),
+            Warning(MoreThan30PercentQuestionsAreText, "WB0265", string.Format(VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText, TextQuestionsLengthInPercents)),
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
         };
