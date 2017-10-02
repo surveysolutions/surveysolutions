@@ -549,7 +549,6 @@
     <Content Include="questionnaire\details\views\treestatictext.html" />
     <Content Include="questionnaire\build\*.js" />
     <Content Include="questionnaire\build\*.css" />
-    <Content Include="questionnaire\vendor\**" />
     <Content Include="questionnaire\details\scripts\app.js" />
     <Content Include="questionnaire\details\scripts\controllers\chapters.js" />
     <Content Include="questionnaire\details\scripts\controllers\confirm.js" />
