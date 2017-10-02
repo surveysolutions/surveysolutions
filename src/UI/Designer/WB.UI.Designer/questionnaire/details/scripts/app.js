@@ -1,5 +1,20 @@
-(function ($) {
+(function ($, window) {
     'use strict';
+    window.i18next
+        .use(window.i18nextXHRBackend)
+        .use(window.i18nextBrowserLanguageDetector);
+    window.i18next.init({
+        debug: true,
+        //lng: 'de', // If not given, i18n will detect the browser language.
+        fallbackLng: 'en', // Default is dev
+        backend: {
+            loadPath: '../build/resources/QuestionnaireEditor.{{lng}}.json'
+        },
+        useCookie: false,
+        useLocalStorage: false
+    }, function (err, t) {
+        console.log('resources loaded');
+    });
 
     angular.module('designerApp', [
         'ngCookies',
@@ -22,7 +37,8 @@
         'ui.ace',
         'templates',
         'ngFileUpload',
-        'angularMoment'
+        'angularMoment',
+        'jm.i18next'
     ]);
 
     angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $rootScopeProvider, $locationProvider) {
@@ -132,4 +148,4 @@
 
     angular.module('templates', []);
 
-}(jQuery));
+}(jQuery, window));
