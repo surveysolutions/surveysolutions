@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NHibernate;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
@@ -30,18 +31,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
 
+        private readonly IInterviewImportService importService;
+
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
 
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
             ILogger logger, 
-            ITranslationManagementService translations)
+            ITranslationManagementService translations,
+            IInterviewImportService importService)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
             this.logger = logger;
             this.translations = translations;
+            this.importService = importService;
         }
 
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -88,14 +93,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
             try
             {
+                var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+
                 this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
-                this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
 
-                IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-                plainTransactionManager.ExecuteInPlainTransaction(() =>
-                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
-                        userId)));
+                var isAssignmentImportIsGoing = importService.Status.IsInProgress &&
+                                                importService.Status.QuestionnaireId.Equals(questionnaireIdentity);
+
+                if (!isAssignmentImportIsGoing)
+                {
+                    this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+
+                    IPlainTransactionManager plainTransactionManager = ServiceLocator.Current
+                        .GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+                    plainTransactionManager.ExecuteInPlainTransaction(() =>
+                        this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
+                            userId)));
+                }
             }
             catch (Exception e)
             {
