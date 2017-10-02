@@ -65,14 +65,18 @@
             self.SortOrder(so);
 
             self.search();
-        }
+        } 
     };
 
     self.filter = function (onSuccess, onDone) {
         if (self.Pager().CurrentPage() !== 1) 
             self.SetCurrentPageWithoutRunSubscribers(1);
 
-        self.search(onSuccess, onDone);
+        if (jQuery.isFunction(onSuccess) && jQuery.isFunction(onDone)) {
+            self.search(onSuccess, onDone);
+        } else {
+            self.search();
+        }
     };
 
     
@@ -99,6 +103,12 @@
 
             if (!_.isUndefined(onSuccess) && !_.isNull(onSuccess) && _.isFunction(onSuccess)) {
                 onSuccess();
+            }
+
+            $('.table').unhighlight();
+
+            if (self.Items().length > 0) {
+                $('.table').highlight(self.SearchBy());
             }
 
         }, true, self.useGetRequests, onDone);

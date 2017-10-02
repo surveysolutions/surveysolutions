@@ -142,7 +142,8 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/listview.js",
                 "~/Scripts/components/bindings.js",
                 "~/Scripts/spin.js",
-                "~/Scripts/knockout/ko.spin.js"
+                "~/Scripts/knockout/ko.spin.js",
+                "~/Scripts/jquery.highlight.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interview-general").Include(

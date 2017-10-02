@@ -48,5 +48,8 @@
     "vuex": "^2.4.0",
     "webpack": "^3.5.5",
     "webpack-bundle-analyzer": "^2.9.0"
+  },
+  "dependencies": {
+    "jquery-highlight": "^3.4.0"
   }
 }
