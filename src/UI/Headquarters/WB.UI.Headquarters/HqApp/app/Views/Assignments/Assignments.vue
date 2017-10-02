@@ -42,7 +42,7 @@
                     @totalRows="(rows) => totalRows = rows"
                     @ajaxComlete="isLoading = false"
                     @page="resetSelection"
-                    :selectable="!$config.IsObserver && !$config.IsObserving">
+                    :selectable="showSelectors">
             <div class="panel panel-table"
                  v-if="selectedRows.length">
                 <div class="panel-body">
@@ -265,14 +265,21 @@ export default {
             ]
         },
 
+        showSelectors() {
+            return !this.$config.IsObserver && !this.$config.IsObserving;
+        },
+
         tableOptions() {
             const columns = this.tableOptionsraw
                 .filter(x => x.if == null || x.if())
 
+            var defaultSortIndex = _.findIndex(columns, {name: "UpdatedAtUtc"});
+            if(this.showSelectors) defaultSortIndex += 1;
+
             var tableOptions = {
                 rowId: "id",
                 deferLoading: 0,
-                order: [[6, 'desc']],
+                order: [[defaultSortIndex, 'desc']],
                 columns,
                 ajax: { url: this.$config.Api.Assignments, type: "GET" },
                 select: {

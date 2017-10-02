@@ -68,9 +68,9 @@ export default {
                     searchable: false,
                     width: "11%",
                     render(data, type, row) {                    
-                        if (row.quantity < 0){
-                            return '<span>' + self.$t("Assignments.Unlimited") + '</span>'
-                        };
+                        if (row.quantity < 0) {
+                            return '<span>' + self.$t("Assignments.Unlimited") + '</span>';
+                        }
                         
                         return row.interviewsCount > row.quantity ? 0 : row.quantity - row.interviewsCount;
                     },
