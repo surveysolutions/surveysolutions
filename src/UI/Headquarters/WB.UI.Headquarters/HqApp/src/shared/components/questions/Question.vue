@@ -1,0 +1,93 @@
+<template>
+    <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
+        <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
+        <div class="dropdown aside-menu" v-if="showSideMenu">
+            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-link">
+                <span></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">{{ $t("CommentAdd") }}</a></li>
+                <li v-else><a href="javascript:void(0)" @click="hideAddComment">{{ $t("CommentHide") }}</a></li>
+            </ul>
+        </div>
+
+        <div class="question-editor" :class="questionEditorClass">
+            <wb-title v-if="!noTitle" />
+            <wb-instructions v-if="!noInstructions" />
+            <slot />
+            <wb-validation v-if="!noValidation" />
+            <wb-comments v-if="!noComments" :isShowingAddCommentDialog="isShowingAddCommentDialog" />
+        </div>
+        <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
+    </div>
+</template>
+
+<script lang="js">
+    import { getLocationHash } from "shared/helpers"
+
+    export default {
+        name: 'wb-question',
+        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled'],
+        data() {
+            return {
+                isShowingAddCommentDialogFlag: undefined
+            }
+        },
+        computed: {
+            id() {
+                return this.question.id
+            },
+            valuenow() {
+                if (this.question.fetchState) {
+                    return this.question.fetchState.uploaded
+                }
+                return 100
+            },
+            valuemax() {
+                if (this.question.fetchState) {
+                    return this.question.fetchState.total
+                }
+                return 100
+            },
+            hash() {
+                return getLocationHash(this.question.id)
+            },
+            isFetchInProgress() {
+                return this.question.fetching
+            },
+            isEnabled() {
+                return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
+            },
+            disabled() {
+                return this.isDisabled || this.question.isDisabled;
+            },
+            questionClass() {
+                return [{ 'disabled-question': this.disabled }]
+            },
+            questionEditorClass() {
+                return [{
+                    answered: this.question.isAnswered && !this.noAnswer,
+                    'has-error': !this.question.validity.isValid
+                }, this.questionCssClassName]
+            },
+            isShowingAddCommentDialog() {
+                if (this.isShowingAddCommentDialogFlag == undefined)
+                    return this.question.comments && this.question.comments.length > 0
+                else
+                    return this.isShowingAddCommentDialogFlag
+            },
+            showSideMenu() {
+                return !this.disabled && !this.noComments;
+            }
+        },
+        methods : {
+            showAddComment(){
+                this.isShowingAddCommentDialogFlag = true;
+            },
+            hideAddComment(){
+                this.isShowingAddCommentDialogFlag = false;
+            }
+        }
+    }
+
+</script>
