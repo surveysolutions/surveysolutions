@@ -1,4 +1,5 @@
-﻿@using WB.UI.Shared.Web.Captcha
+﻿@using WB.UI.Designer.Resources
+@using WB.UI.Shared.Web.Captcha
 @using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Models.LogonModel
 
@@ -10,9 +11,9 @@
 <!--[if lt IE 9]>
     <div class="hero-unit">
         <h1>
-            You are using an outdated browser
+            @LoginResources.OutdatedBrowserMessage
         </h1>
-        <p>Please <a href="http://browsehappy.com/">upgrade your browser</a> to use designer application.</p>
+        <p>@LoginResources.UpgradeYourBrowser</p>
     </div>
 <![endif]-->
 
@@ -20,29 +21,29 @@
 {
     @Html.AntiForgeryToken()
     <h1>
-        Welcome to Survey Solutions<br />
-        Questionnaire Designer
+        @LoginResources.Welcome<br />
+        @LoginResources.AppName
     </h1>
-    <p class="note">Please log in or @Html.ActionLink("Register", "register", "Account")</p>
+    <p class="note">@LoginResources.LoginMessage @Html.ActionLink(LoginResources.Register, "register", "Account")</p>
 
     if (TempData.ContainsKey(Alerts.ERROR))
     {
         <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
     <div class="form-group">
-        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = "Login or email" })
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = LoginResources.LoginOrEmail })
         @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
     </div>
     <div class="form-group">
-        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "Password" })
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = LoginResources.Password })
         @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
     </div>
 
     <div class="form-group">
-        @Html.CheckBoxFor(x => x.StaySignedIn, new { @class = "wb-checkbox", placeholder = "Stay logged in for a day" })
+        @Html.CheckBoxFor(x => x.StaySignedIn, new { @class = "wb-checkbox", placeholder = LoginResources.StaySignedIn })
 
         <label for="StaySignedIn">
-            <span></span>Stay logged in for a day
+            <span></span>@LoginResources.StaySignedIn
         </label>
         
         <br>
@@ -55,8 +56,8 @@
         </div>
     }
     <div class="form-actions">
-        <input class="btn btn-success btn-lg" type="submit" value="Log in"/>
-        <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">Forgot Password?</a>
+        <input class="btn btn-success btn-lg" type="submit" value="@LoginResources.Login"/>
+        <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">@LoginResources.ForgotPassword</a>
     </div>
 }
 @section Scripts {
