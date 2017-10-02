@@ -126,4 +126,7 @@
   <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>Ошибочный файл с данными</value>
   </data>
+  <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
+    <value>Опросник не найден</value>
+  </data>
 </root>

@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -42,6 +43,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             userViewFactoryMock = new Mock<IUserViewFactory>();
             preloadedDataRepositoryMock = new Mock<IPreloadedDataRepository>();
             preloadedDataVerifierMock = new Mock<IPreloadedDataVerifier>();
+            
+            questionnaireBrowseItemStorageMock = new Mock<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
 
             importService = new InterviewImportService(
                 commandServiceMock.Object,
@@ -56,7 +59,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 userViewFactoryMock.Object,
                 Create.Service.InterviewTreeBuilder(),
                 preloadedDataRepositoryMock.Object,
-                preloadedDataVerifierMock.Object);
+                preloadedDataVerifierMock.Object,
+                questionnaireBrowseItemStorageMock.Object);
         }
 
         [Test]
@@ -160,5 +164,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         private Mock<IUserViewFactory> userViewFactoryMock;
         private Mock<IPreloadedDataRepository> preloadedDataRepositoryMock;
         private Mock<IPreloadedDataVerifier> preloadedDataVerifierMock;
+        private Mock<IPlainStorageAccessor<QuestionnaireBrowseItem>> questionnaireBrowseItemStorageMock;
+
     }
 }
