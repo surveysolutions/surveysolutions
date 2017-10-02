@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
@@ -28,7 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 new DeleteQuestionnaireService(
                     factory,
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
-                    Mock.Of<ITranslationManagementService>());
+                    Mock.Of<ITranslationManagementService>(),
+                    Mock.Of<IInterviewImportService>());
         }
     }
 }
