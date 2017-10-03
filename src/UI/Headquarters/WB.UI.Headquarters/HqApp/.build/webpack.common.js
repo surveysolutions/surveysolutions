@@ -2,29 +2,21 @@ const webpack = require('webpack')
 const path = require('path')
 const baseAppPath = "../"
 const baseDir = path.resolve(__dirname, baseAppPath);
-const devMode = process.env.NODE_ENV != 'production';
+const devMode = process.env.NODE_ENV != 'production'; 
+const cleanWebpackPlugin = require('clean-webpack-plugin');
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const merge = require('webpack-merge')
 
-const sharedManifest = "dist/shared_vendor.manifest.json";
-
-var fs = require('fs');
-if (!fs.existsSync(path.resolve(sharedManifest))) {
-    const { execSync } = require('child_process');
-    console.log("Build missing `shared_vendor.bundle.js`")
-    execSync('npm run vendor')
-}
-
-var sharedVendor = require(baseAppPath + sharedManifest);
-
 module.exports = {
     output: {
         path: path.resolve(__dirname, baseAppPath, "dist"),
-        filename: "[name].bundle.js"
+        filename: devMode ? "[name].bundle.js" : "[name].bundle.[chunkhash].js",
+        chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js",
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
+        symlinks: false,
         alias: {
             "shared": path.resolve(baseDir, 'src/shared'),
             'vue$': 'vue/dist/vue.esm.js'
@@ -39,7 +31,11 @@ module.exports = {
             {
                 test: /\.vue$/,
                 include: path.resolve(baseDir, "src"),
-                use: [{ loader: 'vue-loader', options: { loaders: { js: 'babel-loader' } } }]
+                use: [{
+                    loader: 'vue-loader', options: {
+                        loaders: { js: 'babel-loader' }
+                    }
+                }]
             }, {
                 test: /\.js$/,
                 include: path.resolve(baseDir, "src"),
@@ -55,18 +51,34 @@ module.exports = {
             // }
         ]
     },
-    plugins: [
-        new webpack.DllReferencePlugin({
-            manifest: sharedVendor
-        }),
 
+    plugins: [
         new webpack.ProvidePlugin({
             _: 'lodash',
             '$': "jquery",
             "jQuery": 'jquery',
             'moment': 'moment'
         }),
-   
+
+        devMode ? null : new cleanWebpackPlugin(["dist/*.*"], {
+            root: path.resolve(__dirname, baseAppPath)
+        }),
+        
+        devMode ? null : new webpack.optimize.CommonsChunkPlugin({
+            name: 'common',
+            //async: true,
+            names: ['datatables.net', 'jquery-contextmenu', 'bootstrap-select', 'moment', 'flatpickr']
+        }),
+
+        devMode ? null : new webpack.optimize.CommonsChunkPlugin({
+            name: "manifest",
+            minChunks: Infinity
+        }),
+        
+        devMode ? null : new webpack.HashedModuleIdsPlugin(),
+
+        devMode ? null : new webpack.optimize.ModuleConcatenationPlugin(),
+
         devMode ? null : new webpack.optimize.UglifyJsPlugin({
             sourceMap: true
         }),
@@ -75,9 +87,7 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
 
-        new webpack.optimize.ModuleConcatenationPlugin(),
-
-        new BundleAnalyzerPlugin({
+        devMode ? null : new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             reportFilename: 'stats.html',
             defaultSizes: 'gzip',
