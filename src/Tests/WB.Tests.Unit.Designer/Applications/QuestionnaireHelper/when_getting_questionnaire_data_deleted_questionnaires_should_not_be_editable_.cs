@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
         }
 
         private void BecauseOf() =>
-            result = questionnaireHelper.GetQuestionnaires(user.UserId, user.IsAdmin);
+            result = questionnaireHelper.GetQuestionnaires(user.UserId, user.IsAdmin, false);
 
         [NUnit.Framework.Test] public void should_be_not_allowed_to_open_deleted_questionnaire_for_zero_element () =>
             result[0].CanOpen.ShouldEqual(false);
