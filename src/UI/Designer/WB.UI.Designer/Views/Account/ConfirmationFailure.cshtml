@@ -1,10 +1,11 @@
-﻿@{
-    ViewBag.Title = "Registration Error";
+﻿@using WB.UI.Designer.Resources
+@{
+    ViewBag.Title = AccountResources.RegistrationError;
     Layout = "~/Views/Account/Layout.Account.cshtml";
 }
 <form>
-    <h1>Registration Error</h1>
+    <h1>@AccountResources.RegistrationError</h1>
     <p class="note">
-        There was an error confirming your email. Please try again.
+        @AccountResources.RegistrationErrorDescription
     </p>
 </form>
