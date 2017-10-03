@@ -1,6 +1,7 @@
 ﻿@using System.Web.Configuration
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
+@using WB.UI.Designer.Resources
 
 @using WB.UI.Shared.Web.Extensions
 <!DOCTYPE html>
@@ -32,9 +33,9 @@
     <header>
         <a href="http://www.worldbank.org" class="logo"></a>
         <nav>
-            <a class="btn btn-default" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]" target="_blank">Help</a>
-            <a class="btn btn-default" href="@Url.Action("Register","Account")">Register</a>
-            <a class="btn btn-default" href="@Url.Action("Login", "Account")">Log in</a>
+            <a class="btn btn-default" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]" target="_blank">@AccountResources.Help</a>
+            <a class="btn btn-default" href="@Url.Action("Register","Account")">@AccountResources.Register</a>
+            <a class="btn btn-default" href="@Url.Action("Login", "Account")">@AccountResources.Login</a>
         </nav>
     </header>
 
@@ -53,7 +54,7 @@
                             <div class="form-left">
                                 <img src="~/questionnaire/content/i/designer-logo.png" />
                                 <p>
-                                    This is a tool for creating surveys for The&nbsp;World&nbsp;Bank’s CAPI platform with collaboration capabilities and export to PDF.
+                                    @AccountResources.AppDescription
                                 </p>
                             </div>
                             <div class="form-splitter">

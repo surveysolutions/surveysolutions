@@ -11,9 +11,9 @@
 <!--[if lt IE 9]>
     <div class="hero-unit">
         <h1>
-            @LoginResources.OutdatedBrowserMessage
+            @AccountResources.OutdatedBrowserMessage
         </h1>
-        <p>@LoginResources.UpgradeYourBrowser</p>
+        <p>@AccountResources.UpgradeYourBrowser</p>
     </div>
 <![endif]-->
 
@@ -21,29 +21,29 @@
 {
     @Html.AntiForgeryToken()
     <h1>
-        @LoginResources.Welcome<br />
-        @LoginResources.AppName
+        @AccountResources.Welcome<br />
+        @AccountResources.AppName
     </h1>
-    <p class="note">@LoginResources.LoginMessage @Html.ActionLink(LoginResources.Register, "register", "Account")</p>
+    <p class="note">@AccountResources.LoginMessage @Html.ActionLink(AccountResources.Register, "register", "Account")</p>
 
     if (TempData.ContainsKey(Alerts.ERROR))
     {
         <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
     <div class="form-group">
-        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = LoginResources.LoginOrEmail })
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = AccountResources.LoginOrEmail })
         @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
     </div>
     <div class="form-group">
-        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = LoginResources.Password })
+        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = AccountResources.Password })
         @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
     </div>
 
     <div class="form-group">
-        @Html.CheckBoxFor(x => x.StaySignedIn, new { @class = "wb-checkbox", placeholder = LoginResources.StaySignedIn })
+        @Html.CheckBoxFor(x => x.StaySignedIn, new { @class = "wb-checkbox", placeholder = AccountResources.StaySignedIn })
 
         <label for="StaySignedIn">
-            <span></span>@LoginResources.StaySignedIn
+            <span></span>@AccountResources.StaySignedIn
         </label>
         
         <br>
@@ -56,8 +56,8 @@
         </div>
     }
     <div class="form-actions">
-        <input class="btn btn-success btn-lg" type="submit" value="@LoginResources.Login"/>
-        <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">@LoginResources.ForgotPassword</a>
+        <input class="btn btn-success btn-lg" type="submit" value="@AccountResources.Login"/>
+        <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">@AccountResources.ForgotPassword</a>
     </div>
 }
 @section Scripts {
