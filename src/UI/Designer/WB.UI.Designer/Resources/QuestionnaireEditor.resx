@@ -190,6 +190,9 @@
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>add new Macro</value>
   </data>
+  <data name="SideBarAttachmentName" xml:space="preserve">
+    <value>attachment name</value>
+  </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
     <value>{{count}} File Attachment ({{bytes}} total)</value>
   </data>
@@ -282,6 +285,9 @@
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Toggle Dropdown</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
   </data>
   <data name="VariableName" xml:space="preserve">
     <value>name</value>
