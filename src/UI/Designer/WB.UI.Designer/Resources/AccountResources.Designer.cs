@@ -88,6 +88,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to Log in.
+        /// </summary>
+        public static string BackToLogin {
+            get {
+                return ResourceManager.GetString("BackToLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change.
         /// </summary>
         public static string Change {
@@ -111,6 +120,24 @@ namespace WB.UI.Designer.Resources {
         public static string CompanyName {
             get {
                 return ResourceManager.GetString("CompanyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To complete the registration process look for an email in your inbox that provides further instructions.
+        /// </summary>
+        public static string CompleteRegistrationInstruction {
+            get {
+                return ResourceManager.GetString("CompleteRegistrationInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string ConfirmPassword {
+            get {
+                return ResourceManager.GetString("ConfirmPassword", resourceCulture);
             }
         }
         
@@ -259,6 +286,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Registration Error.
+        /// </summary>
+        public static string RegistrationError {
+            get {
+                return ResourceManager.GetString("RegistrationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an error confirming your email. Please try again..
+        /// </summary>
+        public static string RegistrationErrorDescription {
+            get {
+                return ResourceManager.GetString("RegistrationErrorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Repeat password.
         /// </summary>
         public static string RepeatPassword {
@@ -300,6 +345,15 @@ namespace WB.UI.Designer.Resources {
         public static string TesterAppImageDescription {
             get {
                 return ResourceManager.GetString("TesterAppImageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you.
+        /// </summary>
+        public static string ThankYou {
+            get {
+                return ResourceManager.GetString("ThankYou", resourceCulture);
             }
         }
         

@@ -126,6 +126,9 @@
   <data name="AppName" xml:space="preserve">
     <value>Questionnaire Designer</value>
   </data>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Back to Log in</value>
+  </data>
   <data name="Change" xml:space="preserve">
     <value>Change</value>
   </data>
@@ -134,6 +137,12 @@
   </data>
   <data name="CompanyName" xml:space="preserve">
     <value>The World Bank Group</value>
+  </data>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>To complete the registration process look for an email in your inbox that provides further instructions</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
   </data>
   <data name="CurrentPassword" xml:space="preserve">
     <value>Current password</value>
@@ -183,6 +192,12 @@
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Registration Error</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>There was an error confirming your email. Please try again.</value>
+  </data>
   <data name="RepeatPassword" xml:space="preserve">
     <value>Repeat password</value>
   </data>
@@ -197,6 +212,9 @@
   </data>
   <data name="TesterAppImageDescription" xml:space="preserve">
     <value>Get it on Google Play</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Thank you</value>
   </data>
   <data name="UpgradeYourBrowser" xml:space="preserve">
     <value>Please &lt;a href="http://browsehappy.com/"&gt;upgrade your browser&lt;/a&gt; to use designer application.</value>
