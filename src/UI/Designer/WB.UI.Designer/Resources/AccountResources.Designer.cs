@@ -70,7 +70,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This is a tool for creating surveys for The&amp;nbsp;World&amp;nbsp;Bank’s CAPI platform with collaboration capabilities and export to PDF..
+        ///   Looks up a localized string similar to This is a tool for creating surveys for The World Bank’s CAPI platform with collaboration capabilities and export to PDF..
         /// </summary>
         public static string AppDescription {
             get {
