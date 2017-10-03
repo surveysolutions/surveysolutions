@@ -79,6 +79,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change password.
         /// </summary>
         internal static string ChangePassword {
@@ -111,6 +120,15 @@ namespace WB.UI.Designer.Resources {
         internal static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        internal static string Download {
+            get {
+                return ResourceManager.GetString("Download", resourceCulture);
             }
         }
         
@@ -214,6 +232,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        internal static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to saved at {{dateTime, H:mm}}.
         /// </summary>
         internal static string SavedAtTimestamp {
@@ -232,6 +259,123 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to add new Macro.
+        /// </summary>
+        internal static string SideBarAddMacro {
+            get {
+                return ResourceManager.GetString("SideBarAddMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this tab to define lookup tables..
+        /// </summary>
+        internal static string SideBarLookupEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarLookupEmptyLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A lookup table provides reference information that may be queried by a key and used in enabling conditions and validation expressions..
+        /// </summary>
+        internal static string SideBarLookupEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarLookupEmptyLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A lookup table consists of a name and the lookup file, which may contain multiple tab-delimited columns of numeric values..
+        /// </summary>
+        internal static string SideBarLookupEmptyLine3 {
+            get {
+                return ResourceManager.GetString("SideBarLookupEmptyLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ADD NEW Lookup table.
+        /// </summary>
+        internal static string SideBarLookupTableAdd {
+            get {
+                return ResourceManager.GetString("SideBarLookupTableAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop File here.
+        /// </summary>
+        internal static string SideBarLookupTableDropFile {
+            get {
+                return ResourceManager.GetString("SideBarLookupTableDropFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to file name.
+        /// </summary>
+        internal static string SideBarLookupTableFileName {
+            get {
+                return ResourceManager.GetString("SideBarLookupTableFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to table name.
+        /// </summary>
+        internal static string SideBarLookupTableName {
+            get {
+                return ResourceManager.GetString("SideBarLookupTableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Lookup Table:.
+        /// </summary>
+        internal static string SideBarLookupTablesCounter {
+            get {
+                return ResourceManager.GetString("SideBarLookupTablesCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Lookup Tables:.
+        /// </summary>
+        internal static string SideBarLookupTablesCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarLookupTablesCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select file.
+        /// </summary>
+        internal static string SideBarLookupTableSelectFile {
+            get {
+                return ResourceManager.GetString("SideBarLookupTableSelectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update file.
+        /// </summary>
+        internal static string SideBarLookupTableUpdateFile {
+            get {
+                return ResourceManager.GetString("SideBarLookupTableUpdateFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to content.
+        /// </summary>
+        internal static string SideBarMacroContent {
+            get {
+                return ResourceManager.GetString("SideBarMacroContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} Macro:.
         /// </summary>
         internal static string SideBarMacroCounter {
@@ -246,6 +390,69 @@ namespace WB.UI.Designer.Resources {
         internal static string SideBarMacroCounter_plural {
             get {
                 return ResourceManager.GetString("SideBarMacroCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to description.
+        /// </summary>
+        internal static string SideBarMacroDescription {
+            get {
+                return ResourceManager.GetString("SideBarMacroDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this tab to define macro substitutions..
+        /// </summary>
+        internal static string SideBarMacroEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarMacroEmptyLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content..
+        /// </summary>
+        internal static string SideBarMacroEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarMacroEmptyLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To use a macro in an expression, refer to it by its {{- substitution}}.
+        /// </summary>
+        internal static string SideBarMacroEmptyLine3 {
+            get {
+                return ResourceManager.GetString("SideBarMacroEmptyLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hide description.
+        /// </summary>
+        internal static string SideBarMacroHideDescription {
+            get {
+                return ResourceManager.GetString("SideBarMacroHideDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to macro name.
+        /// </summary>
+        internal static string SideBarMacroName {
+            get {
+                return ResourceManager.GetString("SideBarMacroName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to add description.
+        /// </summary>
+        internal static string SideBarMacroShowDescription {
+            get {
+                return ResourceManager.GetString("SideBarMacroShowDescription", resourceCulture);
             }
         }
         

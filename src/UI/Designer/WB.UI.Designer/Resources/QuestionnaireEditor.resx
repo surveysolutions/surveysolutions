@@ -123,6 +123,9 @@
   <data name="Backup" xml:space="preserve">
     <value>Backup</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}} error</value>
@@ -169,17 +175,80 @@
   <data name="ReadOnly" xml:space="preserve">
     <value>Read Only</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
     <value>saved at {{dateTime, H:mm}}</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="SideBarAddMacro" xml:space="preserve">
+    <value>add new Macro</value>
+  </data>
+  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+    <value>Use this tab to define lookup tables.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+    <value>A lookup table provides reference information that may be queried by a key and used in enabling conditions and validation expressions.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+    <value>A lookup table consists of a name and the lookup file, which may contain multiple tab-delimited columns of numeric values.</value>
+  </data>
+  <data name="SideBarLookupTableAdd" xml:space="preserve">
+    <value>ADD NEW Lookup table</value>
+  </data>
+  <data name="SideBarLookupTableDropFile" xml:space="preserve">
+    <value>Drop File here</value>
+  </data>
+  <data name="SideBarLookupTableFileName" xml:space="preserve">
+    <value>file name</value>
+  </data>
+  <data name="SideBarLookupTableName" xml:space="preserve">
+    <value>table name</value>
+  </data>
+  <data name="SideBarLookupTablesCounter" xml:space="preserve">
+    <value>{{count}} Lookup Table:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} Lookup Tables:</value>
+  </data>
+  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+    <value>Select file</value>
+  </data>
+  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+    <value>Update file</value>
+  </data>
+  <data name="SideBarMacroContent" xml:space="preserve">
+    <value>content</value>
+  </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
     <value>{{count}} Macro:</value>
   </data>
   <data name="SideBarMacroCounter_plural" xml:space="preserve">
     <value>{{count}} Macros:</value>
+  </data>
+  <data name="SideBarMacroDescription" xml:space="preserve">
+    <value>description</value>
+  </data>
+  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+    <value>Use this tab to define macro substitutions.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+    <value>To use a macro in an expression, refer to it by its {{- substitution}}</value>
+  </data>
+  <data name="SideBarMacroHideDescription" xml:space="preserve">
+    <value>hide description</value>
+  </data>
+  <data name="SideBarMacroName" xml:space="preserve">
+    <value>macro name</value>
+  </data>
+  <data name="SideBarMacroShowDescription" xml:space="preserve">
+    <value>add description</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Section:</value>
