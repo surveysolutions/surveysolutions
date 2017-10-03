@@ -53,6 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IGroup>(this.RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Error<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", string.Format(VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10, MaxNestedSubsectionsCount)),
             ErrorForTranslation<IGroup>(GroupTitleIsTooLong, "WB0260", string.Format(VerificationMessages.WB0260_GroupTitleIsTooLong, MaxTitleLength)),
+            ErrorForTranslation<IGroup>(GroupTitleIsEmpty, "WB0120", VerificationMessages.WB0120_GroupTitleIsEmpty),
             Error<IGroup>(LongMultiRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
             Error<IGroup>(LongListRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
             Error<IGroup>(LongFixedRosterCannotBeNested, "WB0081", string.Format(VerificationMessages.WB0081_LongRosterCannotBeNested, Constants.MaxRosterRowCount)),
@@ -76,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IQRBarcodeQuestion>(QRBarcodeQuestionIsPreFilledQuestion, "WB0050", VerificationMessages.WB0050_QRBarcodeQuestionIsPreFilledQuestion),
             Error<IQuestion>(QuestionHasEmptyVariableName, "WB0057", VerificationMessages.WB0057_QuestionHasEmptyVariableName),
             Error<IQuestion>(QuestionHasInvalidVariableName, "WB0077", VerificationMessages.WB0077_QuestionHasInvalidVariableName),
-            Error<IQuestion>(this.QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
+            Critical<IQuestion>(this.QuestionHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Error<IQuestion>(CategoricalQuestionHasLessThan2Options, "WB0060", string.Format(VerificationMessages.WB0060_CategoricalQuestionHasLessThan2Options, MinOptionsCount)),
             Error<IMultyOptionsQuestion>(CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, "WB0061", string.Format(VerificationMessages.WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2, MinOptionsCount)),
             Error<IMultyOptionsQuestion>(this.MultiOptionQuestionYesNoQuestionCantBeLinked, "WB0007", VerificationMessages.WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked),
@@ -84,7 +85,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IQuestion>(QuestionTypeIsNotAllowed, "WB0066", VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
             ErrorForTranslation<IQuestion>(OptionTitlesMustBeUniqueForCategoricalQuestion, "WB0072", VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
             Error<IQuestion>(OptionValuesMustBeUniqueForCategoricalQuestion, "WB0073", VerificationMessages.WB0073_OptionValuesMustBeUniqueForCategoricalQuestion),
-            Error<IQuestion>(FilteredComboboxIsLinked, "WB0074", VerificationMessages.WB0074_FilteredComboboxIsLinked),
+            Error<ICategoricalQuestion>(CategoricalQuestionIsLinked, "WB0074", VerificationMessages.WB0074_CategoricalQuestionHasOptionsAndIsLinked),
             Error<IQuestion>(FilteredComboboxContainsMoreThanMaxOptions, "WB0075", string.Format(VerificationMessages.WB0075_FilteredComboboxContainsMoreThan5000Options, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<IQuestion>(CategoricalOptionsCountMoreThanMaxOptionCount, "WB0076", string.Format(VerificationMessages.WB0076_CategoricalOptionsCountMoreThan200, MaxOptionsCountInCategoricalOptionQuestion)),
             Error<IMultimediaQuestion>(MultimediaQuestionIsInterviewersOnly, "WB0078", VerificationMessages.WB0078_MultimediaQuestionIsInterviewersOnly),
@@ -100,8 +101,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Error<IQuestion>(LinkedQuestionIsInterviewersOnly, "WB0090", VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
             Error<SingleQuestion>(CascadingQuestionHasEnablementCondition, "WB0091", VerificationMessages.WB0091_CascadingChildQuestionShouldNotContainCondition),
             Error<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
-            Error<IComposite>(this.ConditionExpresssionHasLengthMoreThan10000Characters, "WB0094", string.Format(VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
+            Error<IComposite>(this.ConditionExpressionHasLengthMoreThan10000Characters, "WB0094", string.Format(VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Error(QuestionnaireTitleHasInvalidCharacters, "WB0097", VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters),
+            Error(QuestionnaireTitleTooLong, "WB0097", string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error(QuestionnaireHasSizeMoreThan5MB, "WB0098", size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
             Error<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", string.Format(VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Error<IQuestion, IComposite>(this.CategoricalLinkedQuestionUsedInFilterExpression, "WB0109", VerificationMessages.WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion),
@@ -126,6 +128,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             Critical<IVariable>(VariableHasEmptyExpression, "WB0004", VerificationMessages.WB0004_VariableHasEmptyExpression),
             Error<IVariable>(VariableExpressionHasLengthMoreThan10000Characters, "WB0005", string.Format(VerificationMessages.WB0005_VariableExpressionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Error<IVariable>(VariableUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
+
+            //Error<IComposite>(VariableNameTooLong, "WB0121", string.Format(VerificationMessages.WB0121_VariableNameTooLong, variableLengthLimit)),
+            //Error<IComposite>(VariableNameHasSpecialCharacters, "WB0122", VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
+            //Error<IComposite>(VariableNameStartWithDigitOrUnderscore, "WB0123", VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
+            //Error<IComposite>(VariableNameEndWithUnderscore, "WB0124", VerificationMessages.WB0124_VariableNameEndWithUnderscore),
+            //Error<IComposite>(VariableNameHasConsecutiveUnderscores, "WB0125", VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
+            //Error<IComposite>(VariableNameIsKeywords, "WB0125", VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
+            //Error<IComposite>(VarialbeNameNotUnique, "WB0126", VerificationMessages.WB0126_VarialbeNameNotUnique),
+
 
             ErrorForMacro(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             ErrorForMacro(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
@@ -437,7 +448,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             };
         }
 
-        private bool ConditionExpresssionHasLengthMoreThan10000Characters(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool ConditionExpressionHasLengthMoreThan10000Characters(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
             => this.DoesExpressionExceed1000CharsLimit(questionnaire, GetCustomEnablementCondition(entity));
 
         private bool OptionFilterExpressionHasLengthMoreThan10000Characters(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
@@ -689,9 +700,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             return IsFilteredComboboxQuestion(question) && question.Answers != null && question.Answers.Count > MaxOptionsCountInFilteredComboboxQuestion;
         }
 
-        private static bool FilteredComboboxIsLinked(IQuestion question)
+        private static bool CategoricalQuestionIsLinked(ICategoricalQuestion question)
         {
-            return IsFilteredComboboxQuestion(question) && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
+            return (question.Answers?.Any() ?? false) && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
         private static bool StaticTextRefersAbsentAttachment(IStaticText staticText, MultiLanguageQuestionnaireDocument document)
@@ -1327,6 +1338,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         private static bool GroupTitleIsTooLong(IGroup group)
             => group.Title?.Length > 500;
 
+        private static bool GroupTitleIsEmpty(IGroup group)
+            => string.IsNullOrWhiteSpace(group.Title);
+        
         private static bool ValidationConditionIsEmpty(ValidationCondition validationCondition)
             => string.IsNullOrWhiteSpace(validationCondition.Expression);
 
@@ -1403,6 +1417,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
 
             return !QuestionnaireNameRegex.IsMatch(questionnaire.Title);
+        }
+
+        private static bool QuestionnaireTitleTooLong(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return questionnaire.Title.Length > MaxTitleLength;
         }
 
         private static bool QuestionHasInvalidVariableName(IQuestion question)
@@ -1751,7 +1770,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     .Select(group =>
                             QuestionnaireVerificationMessage.Error(
                                 "WB0065",
-                                VerificationMessages.WB0065_NameForAyyachmentIsNotUnique,
+                                VerificationMessages.WB0065_NameForAttachmentIsNotUnique,
                                 group.Select(e => QuestionnaireNodeReference.CreateForAttachment(e.AttachmentId)).ToArray()));
         }
 

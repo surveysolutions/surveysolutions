@@ -279,8 +279,8 @@
   <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
     <value>Option values must be unique.</value>
   </data>
-  <data name="WB0074_FilteredComboboxIsLinked" xml:space="preserve">
-    <value>Combo box cannot be linked to another question.</value>
+  <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+    <value>Categorical question cannot has options and be linked to another question.</value>
   </data>
   <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
     <value>Contains more than {0} options.</value>
@@ -468,7 +468,7 @@
   <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>Filter expression has a syntax error.</value>
   </data>
-  <data name="WB0065_NameForAyyachmentIsNotUnique" xml:space="preserve">
+  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
     <value>Another attachment with the same name already exists.</value>
   </data>
   <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
@@ -644,5 +644,29 @@
   </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>Section should not contain more than {0} questions.</value>
+  </data>
+  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+    <value>Questionnaire's title can't have more than {0} symbols.</value>
+  </data>
+  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+    <value>The titles of sections and sub-sections can not be empty or contain whitespace only.</value>
+  </data>
+  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+    <value>This element's name or ID shouldn't be longer than {0} characters.</value>
+  </data>
+  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+    <value>Valid variable or roster ID name should contain only letters, digits and underscore character</value>
+  </data>
+  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+    <value>Variable name or roster ID shouldn't start with digit or underscore</value>
+  </data>
+  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+    <value>Variable name or roster ID shouldn't end with underscore</value>
+  </data>
+  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+    <value>Variable name or roster ID shouldn't have two and more consecutive underscore characters.</value>
+  </data>
+  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+    <value>Variable name or roster ID should be unique in questionnaire's scope.</value>
   </data>
 </root>
