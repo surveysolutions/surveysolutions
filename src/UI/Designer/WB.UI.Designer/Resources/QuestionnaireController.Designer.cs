@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to List.
+        /// </summary>
+        public static string BackToList {
+            get {
+                return ResourceManager.GetString("BackToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -97,6 +106,51 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        public static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Questionnaire.
+        /// </summary>
+        public static string CopyQuestionnaire {
+            get {
+                return ResourceManager.GetString("CopyQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create New.
+        /// </summary>
+        public static string CreateNew {
+            get {
+                return ResourceManager.GetString("CreateNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create New Questionnaire.
+        /// </summary>
+        public static string CreateNewQuestionnaire {
+            get {
+                return ResourceManager.GetString("CreateNewQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -120,6 +174,15 @@ namespace WB.UI.Designer.Resources {
         public static string Deleting {
             get {
                 return ResourceManager.GetString("Deleting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire designer.
+        /// </summary>
+        public static string Designer {
+            get {
+                return ResourceManager.GetString("Designer", resourceCulture);
             }
         }
         
@@ -165,6 +228,51 @@ namespace WB.UI.Designer.Resources {
         public static string Initializing {
             get {
                 return ResourceManager.GetString("Initializing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage users.
+        /// </summary>
+        public static string ManageUsers {
+            get {
+                return ResourceManager.GetString("ManageUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to My Questionnaires.
+        /// </summary>
+        public static string MyQuestionnaires {
+            get {
+                return ResourceManager.GetString("MyQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public Questionnaires.
+        /// </summary>
+        public static string PublicQuestionnaires {
+            get {
+                return ResourceManager.GetString("PublicQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire Title.
+        /// </summary>
+        public static string QuestionnaireTitle {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore questionnaire.
+        /// </summary>
+        public static string RestoreQuestionnaire {
+            get {
+                return ResourceManager.GetString("RestoreQuestionnaire", resourceCulture);
             }
         }
         

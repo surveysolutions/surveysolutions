@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BackToList" xml:space="preserve">
+    <value>Back to List</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -129,6 +132,21 @@
   <data name="Confirmation" xml:space="preserve">
     <value>confirmation</value>
   </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="CopyQuestionnaire" xml:space="preserve">
+    <value>Copy Questionnaire</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Create New</value>
+  </data>
+  <data name="CreateNewQuestionnaire" xml:space="preserve">
+    <value>Create New Questionnaire</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -137,6 +155,9 @@
   </data>
   <data name="Deleting" xml:space="preserve">
     <value>Deleting</value>
+  </data>
+  <data name="Designer" xml:space="preserve">
+    <value>Questionnaire designer</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
     <value>Download PDF</value>
@@ -152,6 +173,21 @@
   </data>
   <data name="Initializing" xml:space="preserve">
     <value>Initializing</value>
+  </data>
+  <data name="ManageUsers" xml:space="preserve">
+    <value>Manage users</value>
+  </data>
+  <data name="MyQuestionnaires" xml:space="preserve">
+    <value>My Questionnaires</value>
+  </data>
+  <data name="PublicQuestionnaires" xml:space="preserve">
+    <value>Public Questionnaires</value>
+  </data>
+  <data name="QuestionnaireTitle" xml:space="preserve">
+    <value>Questionnaire Title</value>
+  </data>
+  <data name="RestoreQuestionnaire" xml:space="preserve">
+    <value>Restore questionnaire</value>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
     <value>Retry export as PDF</value>

@@ -1,6 +1,7 @@
 ﻿@using System.Web.Configuration
 @using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership
 @using WB.UI.Designer
+@using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
 @{
     IMembershipUserService userHelper = ViewBag.UserHelper;
@@ -35,32 +36,32 @@
 <div class="container-wb-list">
     <div class="header-wb-list">
         <header>
-            @Html.ActionLink("Designer", "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })
+            @Html.ActionLink(QuestionnaireController.Designer, "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })
             <ul class="nav nav-tabs">
 
-                <li role="presentation">@Html.MenuActionLink("My Questionnaires", "Index", "Questionnaire")</li>
-                <li role="presentation">@Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")</li>
+                <li role="presentation">@Html.MenuActionLink(QuestionnaireController.MyQuestionnaires, "Index", "Questionnaire")</li>
+                <li role="presentation">@Html.MenuActionLink(QuestionnaireController.PublicQuestionnaires, "Public", "Questionnaire")</li>
                 @if (userHelper.WebUser.IsAdmin)
                 {
-                    <li role="presentation">@Html.MenuActionLink("Manage users", "Index", "Admin")</li>
+                    <li role="presentation">@Html.MenuActionLink(QuestionnaireController.ManageUsers, "Index", "Admin")</li>
                 }
-                <li role="presentation" class="create">@Html.ActionLink("Create New", "Create", "Questionnaire", null, new { @class = "btn" })</li>
+                <li role="presentation" class="create">@Html.ActionLink(QuestionnaireController.CreateNew, "Create", "Questionnaire", null, new { @class = "btn" })</li>
             </ul>
             <nav>
-                <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">Help</a>
+                <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">@AccountResources.Help</a>
                 @if (userHelper.WebUser.IsAdmin)
                 {
-                    <a class="btn btn-default" href="@Url.Action("RestoreQuestionnaire", "Admin")">Restore questionnaire</a>
+                    <a class="btn btn-default" href="@Url.Action("RestoreQuestionnaire", "Admin")">@QuestionnaireController.RestoreQuestionnaire</a>
                 }
                 <div class="btn-group">
                     <a class="btn btn-default">Hi, @userHelper.WebUser.UserName</a>
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
+                        <span class="sr-only"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li>@Html.ActionLink("Change password", "Manage", "Account")</li>
-                        <li>@Html.ActionLink("Log out", "LogOff", "Account")</li>
+                        <li>@Html.ActionLink(AccountResources.ChangePassword, "Manage", "Account")</li>
+                        <li>@Html.ActionLink(AccountResources.Logout, "LogOff", "Account")</li>
                     </ul>
                 </div>
                 
