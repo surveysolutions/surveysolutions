@@ -129,6 +129,9 @@
   <data name="ChangePassword" xml:space="preserve">
     <value>Изменить пароль</value>
   </data>
+  <data name="ClickHere" xml:space="preserve">
+    <value>нажмите сюда</value>
+  </data>
   <data name="Compile" xml:space="preserve">
     <value>Компилировать</value>
   </data>
@@ -187,6 +190,30 @@
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>добавить Макрос</value>
   </data>
+  <data name="SideBarAttachmentsCounter" xml:space="preserve">
+    <value>{{count}} Вложение (итого {{bytes}})</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_1" xml:space="preserve">
+    <value>{{count}} Вложения (итого {{bytes}})</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_2" xml:space="preserve">
+    <value>{{count}} Вложений (итого {{bytes}})</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+    <value>Используйте вкладку для загрузки мультимедиа файлов, которые можно использовать в опроснике.</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+    <value>Для избежания медленной синхронизации рекомендовано не превышать 2МБ общего объёма вложений. Для информации о поддерживаемых типах файлов, форматов и размеров </value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>Для использования вложения в опроснике добавьте статический текст и укажите {{- name}} в его свойстве вложения.</value>
+  </data>
+  <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+    <value>Оценка времени скачивания: {{timeString}} используя {{downloadSpeed}}Кб/сек (EDGE)</value>
+  </data>
+  <data name="SideBarAttachmentsUpload" xml:space="preserve">
+    <value>Загрузить новый</value>
+  </data>
   <data name="SideBarLookupEmptyLine1" xml:space="preserve">
     <value>Используйте вкладку для определения справочных таблиц.</value>
   </data>
@@ -212,7 +239,7 @@
     <value>{{count}} Справочная таблица:</value>
   </data>
   <data name="SideBarLookupTablesCounter_1" xml:space="preserve">
-    <value>{{count}} Справочная таблицы:</value>
+    <value>{{count}} Справочные таблицы:</value>
   </data>
   <data name="SideBarLookupTablesCounter_2" xml:space="preserve">
     <value>{{count}} Справочных таблиц:</value>
@@ -267,6 +294,9 @@
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Показать дропдаун</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>имя</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}} предупреждение</value>

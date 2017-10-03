@@ -97,6 +97,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to click here.
+        /// </summary>
+        internal static string ClickHere {
+            get {
+                return ResourceManager.GetString("ClickHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compile.
         /// </summary>
         internal static string Compile {
@@ -264,6 +273,69 @@ namespace WB.UI.Designer.Resources {
         internal static string SideBarAddMacro {
             get {
                 return ResourceManager.GetString("SideBarAddMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} File Attachment ({{bytes}} total).
+        /// </summary>
+        internal static string SideBarAttachmentsCounter {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Files Attachments ({{bytes}} total).
+        /// </summary>
+        internal static string SideBarAttachmentsCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this tab to upload multimedia files that may be referenced in the questionnaire..
+        /// </summary>
+        internal static string SideBarAttachmentsEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsEmptyLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB. For supported file types, formats, and dimensions.
+        /// </summary>
+        internal static string SideBarAttachmentsEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsEmptyLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{- name}} in its attachment property.
+        /// </summary>
+        internal static string SideBarAttachmentsEmptyLine3 {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsEmptyLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Est. loading time: {{timeString}} at {{downloadSpeed}}Kb/s (EDGE).
+        /// </summary>
+        internal static string SideBarAttachmentsEstimate {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsEstimate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload new.
+        /// </summary>
+        internal static string SideBarAttachmentsUpload {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsUpload", resourceCulture);
             }
         }
         
@@ -480,6 +552,15 @@ namespace WB.UI.Designer.Resources {
         internal static string ToggleDropdown {
             get {
                 return ResourceManager.GetString("ToggleDropdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to name.
+        /// </summary>
+        internal static string VariableName {
+            get {
+                return ResourceManager.GetString("VariableName", resourceCulture);
             }
         }
         
