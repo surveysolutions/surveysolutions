@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
             catch (Exception ex)
             {
-                this.logger.Error("Fail valiation preloading", ex);
+                this.logger.Error("Fail validation preloading", ex);
                 this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile });
                 FinishImportProcess();
             }
@@ -218,26 +218,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             try
             {
-                var browseItem = this.questionnaireBrowseItemStorage.GetById(new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString());
-                if (browseItem == null || browseItem.IsDeleted == true)
+                if (!IsExistsQuestionnaire(questionnaireIdentity, out var questionnaireDocument))
                 {
                     this.Status.State.Errors.Add(new InterviewImportError
                     {
                         ErrorMessage = Interviews.ImportInterviews_QuestionaireNotFound
                     });
+
                     return;
                 }
 
-                var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-                if (questionnaireDocument == null)
-                {
-                    this.Status.State.Errors.Add(new InterviewImportError
-                    {
-                        ErrorMessage = Interviews.ImportInterviews_QuestionaireNotFound
-                    });
-                    return;
-                }
-                
                 this.Status.QuestionnaireTitle = questionnaireDocument.Title;
 
                 if (records == null)
@@ -290,6 +280,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 FinishImportProcess();
             }
+        }
+
+        private bool IsExistsQuestionnaire(QuestionnaireIdentity questionnaireIdentity, out IQuestionnaire questionnaireDocument)
+        {
+            questionnaireDocument = null;
+            var questionnaireId = new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString();
+            var browseItem = plainTransactionManagerProvider.GetPlainTransactionManager()
+                .ExecuteInQueryTransaction(() => this.questionnaireBrowseItemStorage.GetById(questionnaireId));
+            if (browseItem == null || browseItem.IsDeleted)
+                return false;
+
+            questionnaireDocument = plainTransactionManagerProvider.GetPlainTransactionManager()
+                .ExecuteInQueryTransaction(() => this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null));
+            return questionnaireDocument != null;
         }
 
         private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
