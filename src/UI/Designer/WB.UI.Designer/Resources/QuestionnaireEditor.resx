@@ -129,6 +129,9 @@
   <data name="ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
+  <data name="ClickHere" xml:space="preserve">
+    <value>click here</value>
+  </data>
   <data name="Compile" xml:space="preserve">
     <value>Compile</value>
   </data>
@@ -186,6 +189,27 @@
   </data>
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>add new Macro</value>
+  </data>
+  <data name="SideBarAttachmentsCounter" xml:space="preserve">
+    <value>{{count}} File Attachment ({{bytes}} total)</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Files Attachments ({{bytes}} total)</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+    <value>Use this tab to upload multimedia files that may be referenced in the questionnaire.</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+    <value>To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB. For supported file types, formats, and dimensions</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>To refer to an attachment in the questionnaire add a static text element and specify the attachment {{- name}} in its attachment property</value>
+  </data>
+  <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+    <value>Est. loading time: {{timeString}} at {{downloadSpeed}}Kb/s (EDGE)</value>
+  </data>
+  <data name="SideBarAttachmentsUpload" xml:space="preserve">
+    <value>Upload new</value>
   </data>
   <data name="SideBarLookupEmptyLine1" xml:space="preserve">
     <value>Use this tab to define lookup tables.</value>
@@ -258,6 +282,9 @@
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Toggle Dropdown</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>name</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}} warning</value>

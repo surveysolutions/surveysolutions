@@ -224,30 +224,29 @@
                 <perfect-scrollbar class="scroller">
                     <div class="panel-header clearfix">
                         <div class="title pull-left">
-                            <h3 ng-pluralize
-                                count="attachments.length"
-                                when="{
-                            '0': 'No Files Attachment to questionnaire',
-                            '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
-                            'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
-                            <p class="estimated-download-time">
-                                Est. loading time: <span>{{formatSeconds(estimatedLoadingTime())}}</span> at {{benchmarkDownloadSpeed}}Kb/s (EDGE)
+                            <h3 ng-i18next="[i18next]({count: attachments.length, bytes: formatBytes(totalSize())})SideBarAttachmentsCounter" />
+                            <p class="estimated-download-time"
+                               ng-i18next="[i18next]({timeString: formatSeconds(estimatedLoadingTime()), downloadSpeed: benchmarkDownloadSpeed})SideBarAttachmentsEstimate">
                             </p>
 
                         </div>
-                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
+                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" 
+                                ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" 
+                                ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser"
+                                ngf-drop-disabled="isReadOnlyForUser"
+                                ng-i18next="SideBarAttachmentsUpload">
                             Upload new
                         </button>
                     </div>
                     <div class="empty-list" ng-show="attachments.length == 0">
-                        <p>Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
+                        <p ng-i18next="SideBarAttachmentsEmptyLine1">Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
                         <p>
-                            To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB.
-                            For supported file types, formats, and dimensions <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/multimedia_formats.pdf" target="_blank">click here</a>
+                            <span ng-i18next="SideBarAttachmentsEmptyLine2"></span>
+                            <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/multimedia_formats.pdf" target="_blank" ng-i18next="ClickHere">
+                                click here
+                            </a>
                         </p>
-                        <p>
-                            To refer to an attachment in the questionnaire add a static text element and
-                            specify the attachment <span class="variable-name">name</span> in its attachment property.
+                        <p ng-i18next="[html]({name: attachmentNameSubtitutionHtml})SideBarAttachmentsEmptyLine3">
                         </p>
                     </div>
                     <form role="form" name="attachmentsForm" novalidate>
