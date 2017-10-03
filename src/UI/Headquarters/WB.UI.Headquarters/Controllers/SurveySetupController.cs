@@ -185,6 +185,9 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
+            this.interviewImportService.Status.QuestionnaireTitle = questionnaireInfo.Title;
+
+
 
             return this.RedirectToAction("InterviewVerificationProgress", new { id = interviewImportProcessId });
         }
@@ -417,9 +420,11 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
-            this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
-
             QuestionnaireBrowseItem questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+
+            this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
+            this.interviewImportService.Status.QuestionnaireTitle = questionnaireInfo.Title;
+            
             if (!this.ModelState.IsValid)
             {
                 model.QuestionnaireTitle = questionnaireInfo.Title;
