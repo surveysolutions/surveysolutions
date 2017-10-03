@@ -126,6 +126,9 @@
   <data name="AppName" xml:space="preserve">
     <value>Questionnaire Designer</value>
   </data>
+  <data name="Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
@@ -159,8 +162,17 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>Password reset</value>
+  </data>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Enter the login or email and we will send you a link for password reset</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
   </data>
   <data name="StaySignedIn" xml:space="preserve">
     <value>Stay logged in for a day</value>
