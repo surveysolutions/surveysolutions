@@ -5,13 +5,7 @@ namespace WB.UI.Designer.Models
 {
     public class QuestionnaireListViewModel : ActionItem
     {
-        public override bool CanPreview
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CanPreview => false;
 
         [Key]
         public string Id { get; set; }

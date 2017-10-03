@@ -173,14 +173,14 @@ namespace WB.UI.Designer.Controllers
             {
                 if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
                 {
-                    this.Error("You don't  have permissions to delete this questionnaire.");
+                    this.Error(Resources.QuestionnaireController.ForbiddenDelete);
                 }
                 else
                 {
                     var command = new DeleteQuestionnaire(model.PublicKey, UserHelper.WebUser.UserId);
                     this.commandService.Execute(command);
 
-                    this.Success($"Questionnaire \"{model.Title}\" successfully deleted");
+                    this.Success(string.Format(Resources.QuestionnaireController.SuccessDeleteMessage, model.Title));
                 }
             }
             return this.Redirect(this.Request.UrlReferrer.ToString());
@@ -194,7 +194,7 @@ namespace WB.UI.Designer.Controllers
             bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.UserHelper.WebUser.UserId);
             if (!hasAccess)
             {
-                this.Error("You don't  have permissions to restore operation for this questionnaire.");
+                this.Error(Resources.QuestionnaireController.ForbiddenRevert);
                 return this.RedirectToAction("Index");
             }
 
@@ -213,17 +213,12 @@ namespace WB.UI.Designer.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult Index(int? p, string sb, int? so, string f)
-        {
-            return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f));
-        }
+        public ActionResult Index(int? p, string sb, int? so, string f) 
+            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: false));
 
         [ValidateInput(false)]
-        public ActionResult Public(int? p, string sb, int? so, string f)
-        {
-            var questionnairePublicListViewModels = this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f);
-            return this.View(questionnairePublicListViewModels);
-        }
+        public ActionResult Public(int? p, string sb, int? so, string f) 
+            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: true));
 
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
@@ -469,20 +464,6 @@ namespace WB.UI.Designer.Controllers
 
         #endregion
 
-        private IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            int? pageIndex, string sortBy, int? sortOrder, string searchFor)
-        {
-            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
-
-            return this.questionnaireHelper.GetPublicQuestionnaires(
-                pageIndex: pageIndex,
-                sortBy: sortBy,
-                sortOrder: sortOrder,
-                searchFor: searchFor,
-                viewerId: UserHelper.WebUser.UserId,
-                isAdmin: UserHelper.WebUser.IsAdmin);
-        }
-
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
@@ -501,7 +482,7 @@ namespace WB.UI.Designer.Controllers
             return questionnaire;
         }
 
-        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor)
+        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, bool showPublic)
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
 
@@ -511,7 +492,8 @@ namespace WB.UI.Designer.Controllers
                 sortOrder: sortOrder,
                 searchFor: searchFor,
                 viewerId: UserHelper.WebUser.UserId,
-                isAdmin: UserHelper.WebUser.IsAdmin);
+                isAdmin: UserHelper.WebUser.IsAdmin,
+                showPublic: showPublic);
         }
         
         private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor)
@@ -529,7 +511,7 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult LackOfPermits()
         {
-            this.Error("You don't have permission to edit this questionnaire");
+            this.Error(Resources.QuestionnaireController.Forbidden);
             return this.RedirectToAction("Index");
         }
     }
