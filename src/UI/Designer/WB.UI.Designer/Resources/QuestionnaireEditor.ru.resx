@@ -117,8 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddNewSection" xml:space="preserve">
+    <value>Добавить секцию</value>
+  </data>
   <data name="Backup" xml:space="preserve">
     <value>Сохранить</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Изменить пароль</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>Компилировать</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Копировать</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="ErrorsCounter" xml:space="preserve">
+    <value>{{count}} ошибка</value>
+  </data>
+  <data name="ErrorsCounter_1" xml:space="preserve">
+    <value>{{count}} ошибки</value>
+  </data>
+  <data name="ErrorsCounter_2" xml:space="preserve">
+    <value>{{count}} ошибок</value>
   </data>
   <data name="HellowMessageBtn" xml:space="preserve">
     <value>Здравствуйте, {{currentUserName}}</value>
@@ -129,7 +153,56 @@
   <data name="History" xml:space="preserve">
     <value>История</value>
   </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="PasteAfter" xml:space="preserve">
+    <value>Вставить после</value>
+  </data>
+  <data name="QuestionnaireSummary" xml:space="preserve">
+    <value>({{questionsCount}}В, {{groupsCount}}С, {{rostersCount}}Р)</value>
+    <comment>Q, S, R are the first letters of the Question, Section and Roster. Keep values that are in {{}} without changes</comment>
+  </data>
+  <data name="ReadOnly" xml:space="preserve">
+    <value>Только чтение</value>
+  </data>
+  <data name="SavedAtTimestamp" xml:space="preserve">
+    <value>сохранено в {{dateTime, H:mm}}</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>
+  </data>
+  <data name="SideBarMacroCounter" xml:space="preserve">
+    <value>{{count}} Макрос:</value>
+  </data>
+  <data name="SideBarMacroCounter_1" xml:space="preserve">
+    <value>{{count}} Макроса:</value>
+  </data>
+  <data name="SideBarMacroCounter_2" xml:space="preserve">
+    <value>{{count}} Макросов:</value>
+  </data>
+  <data name="SideBarSectionsCounter" xml:space="preserve">
+    <value>{{count}} Секция:</value>
+  </data>
+  <data name="SideBarSectionsCounter_1" xml:space="preserve">
+    <value>{{count}} Секции:</value>
+  </data>
+  <data name="SideBarSectionsCounter_2" xml:space="preserve">
+    <value>{{count}} Секций:</value>
+  </data>
+  <data name="ToggleDropdown" xml:space="preserve">
+    <value>Показать дропдаун</value>
+  </data>
+  <data name="WarningsCounter" xml:space="preserve">
+    <value>{{count}} предупреждение</value>
+  </data>
+  <data name="WarningsCounter_1" xml:space="preserve">
+    <value>{{count}} предупреждения</value>
+  </data>
+  <data name="WarningsCounter_2" xml:space="preserve">
+    <value>{{count}} предупреждений</value>
   </data>
 </root>
