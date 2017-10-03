@@ -1,0 +1,5 @@
+{{#with htmlWebpackPlugin.files}}
+{{#each chunks}}
+<script type="text/javascript" src='@Url.Content("~/HqApp/dist/{{entry}}")'></script>
+{{/each}}
+{{/with}}

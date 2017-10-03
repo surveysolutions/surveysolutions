@@ -46,6 +46,11 @@
             "type": "npm",
             "script": "production",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "watch",
+            "problemMatcher": []
         }
     ]
 }
