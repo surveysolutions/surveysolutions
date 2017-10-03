@@ -786,9 +786,6 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="..\WB.UI.Headquarters.Interview\_IndexTemplate.cshtml">
-      <Link>Views\WebInterview\_IndexTemplate.cshtml</Link>
-    </Content>
     <EmbeddedResource Include="Resources\Archived.fr.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
@@ -1521,6 +1518,8 @@
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <Content Include="Views\Assignments\index.cshtml" />
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
+    <Content Include="Views\Shared\_MainLayoutWebInterview.cshtml" />
+    <Content Include="Views\WebInterview\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

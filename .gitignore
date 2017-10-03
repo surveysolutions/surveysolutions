@@ -89,3 +89,5 @@ src/UI/Designer/WB.UI.Designer/questionnaire/build/*.css
 
 src/Tools/k6/k6.exe
 /src/UI/Designer/WB.UI.Designer/questionnaire/build/resources/*.*
+/src/UI/Headquarters/WB.UI.Headquarters/Views/Shared/partial.hq.cshtml
+/src/UI/Headquarters/WB.UI.Headquarters/Views/Shared/partial.webInterview.cshtml
