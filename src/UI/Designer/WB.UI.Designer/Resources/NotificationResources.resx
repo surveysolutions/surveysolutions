@@ -129,6 +129,18 @@
   <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
     <value>Hello {0}, &lt;br&gt;  {1} has invited {2} to {3} your questionnaire: </value>
   </data>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>Hello {0}, <br/><br/>  To complete the registration process click on this link: </value>
+  </data>
+  <data name="CompleteRegistration" xml:space="preserve">
+    <value>complete registration</value>
+  </data>
+  <data name="ResetPasswordEmail" xml:space="preserve">
+    <value>Hello {0},<br/><br/> To complete the password reset process click on this link:</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>reset password</value>
+  </data>
   <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
     <value>view</value>
   </data>
