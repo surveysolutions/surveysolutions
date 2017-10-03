@@ -70,6 +70,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attachment preview.
+        /// </summary>
+        internal static string AttachmentPreview {
+            get {
+                return ResourceManager.GetString("AttachmentPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup.
         /// </summary>
         internal static string Backup {
@@ -214,6 +223,186 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to search.
+        /// </summary>
+        internal static string FindReplaceBackToSearch {
+            get {
+                return ResourceManager.GetString("FindReplaceBackToSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string FindReplaceDone {
+            get {
+                return ResourceManager.GetString("FindReplaceDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find all.
+        /// </summary>
+        internal static string FindReplaceFindAll {
+            get {
+                return ResourceManager.GetString("FindReplaceFindAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find what:.
+        /// </summary>
+        internal static string FindReplaceFindWhat {
+            get {
+                return ResourceManager.GetString("FindReplaceFindWhat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        internal static string FindReplaceInAll {
+            get {
+                return ResourceManager.GetString("FindReplaceInAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to in {{count}} found entity?.
+        /// </summary>
+        internal static string FindReplaceInAllFound {
+            get {
+                return ResourceManager.GetString("FindReplaceInAllFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to in {{count}} found entities?.
+        /// </summary>
+        internal static string FindReplaceInAllFound_plural {
+            get {
+                return ResourceManager.GetString("FindReplaceInAllFound_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match case.
+        /// </summary>
+        internal static string FindReplaceMatchCase {
+            get {
+                return ResourceManager.GetString("FindReplaceMatchCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Matching lines: {{count}}.
+        /// </summary>
+        internal static string FindReplaceMatchingLines {
+            get {
+                return ResourceManager.GetString("FindReplaceMatchingLines", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Match whole word.
+        /// </summary>
+        internal static string FindReplaceMatchWord {
+            get {
+                return ResourceManager.GetString("FindReplaceMatchWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next.
+        /// </summary>
+        internal static string FindReplaceNext {
+            get {
+                return ResourceManager.GetString("FindReplaceNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Previous.
+        /// </summary>
+        internal static string FindReplacePrevious {
+            get {
+                return ResourceManager.GetString("FindReplacePrevious", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace all ({{count}}).
+        /// </summary>
+        internal static string FindReplaceReplaceAll {
+            get {
+                return ResourceManager.GetString("FindReplaceReplaceAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace all .
+        /// </summary>
+        internal static string FindReplaceReplaceAllConfirm {
+            get {
+                return ResourceManager.GetString("FindReplaceReplaceAllConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to with.
+        /// </summary>
+        internal static string FindReplaceReplaceAllConfirmWith {
+            get {
+                return ResourceManager.GetString("FindReplaceReplaceAllConfirmWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace with:.
+        /// </summary>
+        internal static string FindReplaceReplaceWith {
+            get {
+                return ResourceManager.GetString("FindReplaceReplaceWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find and replace.
+        /// </summary>
+        internal static string FindReplaceTitle {
+            get {
+                return ResourceManager.GetString("FindReplaceTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use regular expression.
+        /// </summary>
+        internal static string FindReplaceUseRegex {
+            get {
+                return ResourceManager.GetString("FindReplaceUseRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to were replaced with.
+        /// </summary>
+        internal static string FindReplaceWereReplaced {
+            get {
+                return ResourceManager.GetString("FindReplaceWereReplaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please confirm action..
+        /// </summary>
+        internal static string FindReplaceСonfirm {
+            get {
+                return ResourceManager.GetString("FindReplaceСonfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hi, {{currentUserName}}.
         /// </summary>
         internal static string HellowMessageBtn {
@@ -246,6 +435,24 @@ namespace WB.UI.Designer.Resources {
         internal static string LogOut {
             get {
                 return ResourceManager.GetString("LogOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation.
+        /// </summary>
+        internal static string ModalConfirm {
+            get {
+                return ResourceManager.GetString("ModalConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        internal static string ModalInfo {
+            get {
+                return ResourceManager.GetString("ModalInfo", resourceCulture);
             }
         }
         

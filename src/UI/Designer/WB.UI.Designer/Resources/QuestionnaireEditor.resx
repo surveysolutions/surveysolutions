@@ -379,7 +379,76 @@
   <data name="SideBarTranslationsUploadNew" xml:space="preserve">
     <value>Upload new translation</value>
   </data>
+  <data name="AttachmentPreview" xml:space="preserve">
+    <value>Attachment preview</value>
+  </data>
+  <data name="FindReplaceFindWhat" xml:space="preserve">
+    <value>Find what:</value>
+  </data>
+  <data name="FindReplaceMatchCase" xml:space="preserve">
+    <value>Match case</value>
+  </data>
+  <data name="FindReplaceMatchWord" xml:space="preserve">
+    <value>Match whole word</value>
+  </data>
+  <data name="FindReplaceReplaceWith" xml:space="preserve">
+    <value>Replace with:</value>
+  </data>
+  <data name="FindReplaceTitle" xml:space="preserve">
+    <value>Find and replace</value>
+  </data>
+  <data name="FindReplaceUseRegex" xml:space="preserve">
+    <value>Use regular expression</value>
+  </data>
+  <data name="FindReplaceСonfirm" xml:space="preserve">
+    <value>Please confirm action.</value>
+  </data>
+  <data name="ModalConfirm" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>Info</value>
+  </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
     <value>Move to another sub-section:</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+    <value>Replace all </value>
+  </data>
+  <data name="FindReplaceBackToSearch" xml:space="preserve">
+    <value>Back to search</value>
+  </data>
+  <data name="FindReplaceDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="FindReplaceFindAll" xml:space="preserve">
+    <value>Find all</value>
+  </data>
+  <data name="FindReplaceInAll" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="FindReplaceInAllFound" xml:space="preserve">
+    <value>in {{count}} found entity?</value>
+  </data>
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>in {{count}} found entities?</value>
+  </data>
+  <data name="FindReplaceMatchingLines" xml:space="preserve">
+    <value>Matching lines: {{count}}</value>
+  </data>
+  <data name="FindReplaceNext" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="FindReplacePrevious" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="FindReplaceReplaceAll" xml:space="preserve">
+    <value>Replace all ({{count}})</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+    <value>with</value>
+  </data>
+  <data name="FindReplaceWereReplaced" xml:space="preserve">
+    <value>were replaced with</value>
   </data>
 </root>
