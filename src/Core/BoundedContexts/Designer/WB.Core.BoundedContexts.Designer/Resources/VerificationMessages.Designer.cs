@@ -641,9 +641,9 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Another attachment with the same name already exists..
         /// </summary>
-        public static string WB0065_NameForAyyachmentIsNotUnique {
+        public static string WB0065_NameForAttachmentIsNotUnique {
             get {
-                return ResourceManager.GetString("WB0065_NameForAyyachmentIsNotUnique", resourceCulture);
+                return ResourceManager.GetString("WB0065_NameForAttachmentIsNotUnique", resourceCulture);
             }
         }
         
@@ -720,11 +720,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Combo box cannot be linked to another question..
+        ///   Looks up a localized string similar to Categorical question cannot has options and be linked to another question..
         /// </summary>
-        public static string WB0074_FilteredComboboxIsLinked {
+        public static string WB0074_CategoricalQuestionHasOptionsAndIsLinked {
             get {
-                return ResourceManager.GetString("WB0074_FilteredComboboxIsLinked", resourceCulture);
+                return ResourceManager.GetString("WB0074_CategoricalQuestionHasOptionsAndIsLinked", resourceCulture);
             }
         }
         
@@ -1112,6 +1112,78 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0118_ExpressionReferencingForbiddenDateTimeProperies {
             get {
                 return ResourceManager.GetString("WB0118_ExpressionReferencingForbiddenDateTimeProperies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire&apos;s title can&apos;t have more than {0} symbols..
+        /// </summary>
+        public static string WB0119_QuestionnaireTitleTooLong {
+            get {
+                return ResourceManager.GetString("WB0119_QuestionnaireTitleTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The titles of sections and sub-sections can not be empty or contain whitespace only..
+        /// </summary>
+        public static string WB0120_GroupTitleIsEmpty {
+            get {
+                return ResourceManager.GetString("WB0120_GroupTitleIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This element&apos;s name or ID shouldn&apos;t be longer than {0} characters..
+        /// </summary>
+        public static string WB0121_VariableNameTooLong {
+            get {
+                return ResourceManager.GetString("WB0121_VariableNameTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid variable or roster ID name should contain only letters, digits and underscore character.
+        /// </summary>
+        public static string WB0122_VariableNameHasSpecialCharacters {
+            get {
+                return ResourceManager.GetString("WB0122_VariableNameHasSpecialCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name or roster ID shouldn&apos;t start with digit or underscore.
+        /// </summary>
+        public static string WB0123_VariableNameStartWithDigitOrUnderscore {
+            get {
+                return ResourceManager.GetString("WB0123_VariableNameStartWithDigitOrUnderscore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name or roster ID shouldn&apos;t end with underscore.
+        /// </summary>
+        public static string WB0124_VariableNameEndWithUnderscore {
+            get {
+                return ResourceManager.GetString("WB0124_VariableNameEndWithUnderscore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name or roster ID shouldn&apos;t have two and more consecutive underscore characters..
+        /// </summary>
+        public static string WB0125_VariableNameHasConsecutiveUnderscores {
+            get {
+                return ResourceManager.GetString("WB0125_VariableNameHasConsecutiveUnderscores", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name or roster ID should be unique in questionnaire&apos;s scope..
+        /// </summary>
+        public static string WB0126_VarialbeNameNotUnique {
+            get {
+                return ResourceManager.GetString("WB0126_VarialbeNameNotUnique", resourceCulture);
             }
         }
         

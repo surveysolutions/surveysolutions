@@ -164,7 +164,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void CreateQuestionnaire(Guid publicKey, string title, Guid? createdBy, bool isPublic)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(title);
 
             this.innerDocument = new QuestionnaireDocument
             {
@@ -181,7 +181,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public void CloneQuestionnaire(string title, bool isPublic, Guid createdBy, Guid publicKey, IQuestionnaireDocument source)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(title);
 
             var document = source as QuestionnaireDocument;
             if (document == null)
@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!command.IsResponsibleAdmin) 
                 this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(command.Title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(command.Title);
 
             this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(command.Title);
             this.innerDocument.IsPublic = command.IsPublic;
@@ -679,8 +679,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
 
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
-
             this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName, DefaultVariableLengthLimit);
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
@@ -746,8 +744,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
-
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(title);
 
             this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName, DefaultVariableLengthLimit);
 
@@ -985,7 +981,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     parentGroup: targetGroup);
             }
             
-            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(question.Featured, targetGroup);
             this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(question, targetGroup);
 
             this.ThrowDomainExceptionIfQuestionIsRosterSizeAndItsMovedToIncorrectGroup(question, targetGroup);
@@ -1191,7 +1186,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
             this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToEntityId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-            this.ThrowIfCascadingQuestionHasConditionOrValidation(questionId, cascadeFromQuestionId, validationConditions, enablementCondition);
 
             if (!isFilteredCombobox && !cascadeFromQuestionId.HasValue)
             {
@@ -1629,7 +1623,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
-            this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
             
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
@@ -1653,7 +1646,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
-            this.ThrowDomainExceptionIfStaticTextIsEmpty(command.Text);
 
             var oldStaticText = this.innerDocument.Find<IStaticText>(command.EntityId);
             var newStaticText = new StaticText(publicKey: command.EntityId,
@@ -1973,8 +1965,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName, variableLengthLimit);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, isPrefilled, parentGroup);
-            
-            this.ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(isPrefilled, parentGroup);
 
             if (parentGroup != null)
             {
@@ -2148,42 +2138,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfQuestionIsPrefilledAndParentGroupIsRoster(bool isPrefilled, IGroup parentGroup)
-        {
-            if (isPrefilled && IsRosterOrInsideRoster(parentGroup))
-                throw new QuestionnaireException("Question inside roster sub-section cannot have Identifying scope");
-        }
-
-        private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespacesOrTooLong(string title)
-        {
-            if (string.IsNullOrWhiteSpace(title))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.GroupTitleRequired,
-                    "The titles of sections and sub-sections can not be empty or contain whitespace only");
-            }
-
-            if (title.Length > MaxTitleLength)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.TitleIsTooLarge,
-                    string.Format("The titles of sections and sub-sections can't have more than {0} symbols", MaxTitleLength));
-            }
-        }
-
-        private void ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespacesOrTooLong(string title)
+        private void ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionnaireTitleRequired,
                     "Questionnaire's title can not be empty or contains whitespace only");
-            }
-            if (title.Length > MaxTitleLength)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.TitleIsTooLarge, 
-                    string.Format("Questionnaire's title can't have more than {0} symbols", MaxTitleLength));
             }
         }
 
@@ -2224,87 +2185,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("sub-section with public key {0} can't be found", groupPublicKey));
             }
         }
-
-        private void ThrowDomainExceptionIfStaticTextIsEmpty(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                throw new QuestionnaireException(DomainExceptionType.StaticTextIsEmpty, "Static text is empty");
-        }
-
-        private void ThrowDomainExceptionIfVariableNameIsInvalid(Guid questionPublicKey, string variable, int variableLengthLimit)
-        {
-            if (string.IsNullOrEmpty(variable))
-            {
-                return;
-            }
-            
-            bool isTooLong = variable.Length > variableLengthLimit;
-            if (isTooLong)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameMaxLength, string.Format("This element's name or ID shouldn't be longer than {0} characters.", variableLengthLimit));
-            }
-
-            bool containsInvalidCharacters = variable.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
-            if (containsInvalidCharacters)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameSpecialCharacters,
-                    "Valid variable or roster ID name should contain only letters, digits and underscore character");
-            }
-
-            bool startsWithDigitOrUnderscore = Char.IsDigit(variable[0]) || variable[0] == '_';
-            if (startsWithDigitOrUnderscore)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameStartWithDigit, "Variable name or roster ID shouldn't start with digit or underscore");
-            }
-
-            bool endsWithUnderscore = variable[variable.Length-1] == '_';
-            if (endsWithUnderscore)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameEndsWithUnderscore, "Variable name or roster ID shouldn't end with underscore");
-            }
-
-            bool hasConsecutiveUnderscore = variable.Contains("__");
-            if (hasConsecutiveUnderscore)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameHasConsecutiveUnderscores, "Variable name or roster ID shouldn't have two and more consecutive underscore characters.");
-            }
-
-            var captions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
-                .Where(q => q.PublicKey != questionPublicKey)
-                .Select(q => q.StataExportCaption);
-
-            bool isNotUnique = captions.Contains(variable);
-            if (isNotUnique)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.VarialbeNameNotUnique, "Variable name or roster ID should be unique in questionnaire's scope");
-            }
-            
-            if(this.variableNameValidator.IsReservedKeyword(variable))
-            { 
-                throw new QuestionnaireException(
-                    DomainExceptionType.VariableNameShouldNotMatchWithKeywords,
-                    variable + " is a keyword. Variable name or roster ID shouldn't match with keywords");
-            }
-        }
-
-        private void ThrowIfCascadingQuestionHasConditionOrValidation(Guid questionId, Guid? cascadeFromQuestionId, IList<ValidationCondition> validationExpression, string enablementCondition)
-        {
-            if (!cascadeFromQuestionId.HasValue )
-            {
-                return;
-            }
-            
-            if (!string.IsNullOrWhiteSpace(enablementCondition))
-            {
-                throw new QuestionnaireException(ExceptionMessages.CascadingCantHaveConditionExpression);
-            }
-        }
+       
         private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToEntityId, bool isFeatured, bool? isFilteredCombobox, QuestionScope scope, Guid? cascadeFromQuestionId)
         {
             bool entityIsLinked = linkedToEntityId.HasValue;
