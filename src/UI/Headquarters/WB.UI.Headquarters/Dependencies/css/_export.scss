@@ -129,10 +129,6 @@
 		}
 	}
 }
-.cancel{
-	$cross-height: 24px;
-	@include cancel($cross-height);
-}
 .footer{
 	@include transition(padding, 0.3s);
 }
