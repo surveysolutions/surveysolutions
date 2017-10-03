@@ -263,7 +263,7 @@
                                         <div class="attachment-content">
                                             <input focus-on-out="focusAttachment{{attachment.attachmentId}}"
                                                    required=""
-                                                   placeholder="attachment name"
+                                                   ng-i18next="[placeholder]SideBarAttachmentName"
                                                    maxlength="32"
                                                    spellcheck="false"
                                                    ng-model="attachment.name"
@@ -271,20 +271,20 @@
                                                    class="form-control table-name"
                                                    type="text" />
                                             <div class="divider"></div>
-                                            <div class="drop-box">
+                                            <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
                                                 Drop File here
                                             </div>
                                             <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
                                             <div class="actions clearfix" ng-class="{dirty: attachment.form.$dirty }">
                                                 <div ng-show="attachment.form.$dirty" class="pull-left">
-                                                    <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()">Save</button>
-                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()">Cancel</button>
+                                                    <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()" ng-i18next>Save</button>
+                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()" ng-i18next>Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
                                                     <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
-                                                        <span>Update</span>
+                                                        <span ng-i18next>Update</span>
                                                     </button>
-                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
+                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
                                                 </div>
                                             </div>
                                         </div>

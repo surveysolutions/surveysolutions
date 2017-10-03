@@ -277,6 +277,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to attachment name.
+        /// </summary>
+        internal static string SideBarAttachmentName {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} File Attachment ({{bytes}} total).
         /// </summary>
         internal static string SideBarAttachmentsCounter {
@@ -552,6 +561,15 @@ namespace WB.UI.Designer.Resources {
         internal static string ToggleDropdown {
             get {
                 return ResourceManager.GetString("ToggleDropdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        internal static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
             }
         }
         
