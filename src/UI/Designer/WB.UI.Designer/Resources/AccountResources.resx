@@ -135,6 +135,12 @@
   <data name="CompanyName" xml:space="preserve">
     <value>The World Bank Group</value>
   </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
   <data name="ForgotPassword" xml:space="preserve">
     <value>Forgot Password?</value>
   </data>
@@ -153,6 +159,9 @@
   <data name="LoginMessage" xml:space="preserve">
     <value>Please log in or</value>
   </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>Login</value>
+  </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>Login or email</value>
   </data>
@@ -168,8 +177,14 @@
   <data name="PasswordResetDescription" xml:space="preserve">
     <value>Enter the login or email and we will send you a link for password reset</value>
   </data>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>New password (min 10 symbols, numbers AND letters)</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Repeat password</value>
   </data>
   <data name="Restore" xml:space="preserve">
     <value>Restore</value>
