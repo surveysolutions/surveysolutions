@@ -1,4 +1,5 @@
-﻿<form id="frmSearch" class="form-inline">
+﻿@using WB.UI.Designer.Resources
+<form id="frmSearch" class="form-inline">
     <div class="input-group">
         <input id="txtFilter" type="text" class="form-control" name="f" value="@ViewBag.Filter" />
         <span class="input-group-btn">
@@ -10,5 +11,5 @@
             </button>
         </span>
     </div>
-    <button type="button" title="Cancel search" class="btn clear-search" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); "></button>
+    <button type="button" title="@QuestionnaireController.CancelSearch" class="btn clear-search" onclick=" $('#txtFilter').val(''); $('#frmSearch').submit(); "></button>
 </form>
