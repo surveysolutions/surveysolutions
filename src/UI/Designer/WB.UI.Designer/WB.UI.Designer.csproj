@@ -555,9 +555,7 @@
     <Content Include="questionnaire\details\views\treegroup.html" />
     <Content Include="questionnaire\details\views\treequestion.html" />
     <Content Include="questionnaire\details\views\treestatictext.html" />
-    <Content Include="questionnaire\build\*.js" />
-    <Content Include="questionnaire\build\*.css" />
-    <Content Include="questionnaire\build\resources\*.js" />
+    <Content Include="questionnaire\build\**\*" />
     <Content Include="questionnaire\details\scripts\app.js" />
     <Content Include="questionnaire\details\scripts\controllers\chapters.js" />
     <Content Include="questionnaire\details\scripts\controllers\confirm.js" />
