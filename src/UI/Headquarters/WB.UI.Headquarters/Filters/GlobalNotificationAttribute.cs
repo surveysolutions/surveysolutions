@@ -2,13 +2,12 @@
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Headquarters.API;
 
 namespace WB.UI.Headquarters.Filters
 {
     public class GlobalNotificationAttribute : ActionFilterAttribute
     {
-        private IPlainKeyValueStorage<GlobalNotice> NoticeStorage => 
+        private IPlainKeyValueStorage<GlobalNotice> AppSettingsStorage => 
             ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<GlobalNotice>>();
 
         public override void OnResultExecuting(ResultExecutingContext filterContext)
@@ -19,7 +18,7 @@ namespace WB.UI.Headquarters.Filters
 
             if (viewResult != null)
             {
-                var globalNotice = this.NoticeStorage.GetById(AdminSettingsController.settingsKey);
+                var globalNotice = this.AppSettingsStorage.GetById(GlobalNotice.GlobalNoticeKey);
                 viewResult.ViewBag.GlobalNotice = string.IsNullOrEmpty(globalNotice?.Message) ? null : globalNotice.Message;
             }
         }

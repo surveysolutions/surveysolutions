@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
@@ -29,10 +30,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.IsItemsLoaded = false;
 
-            var newItems = this.GetUiItems();
-            this.UiItems.ReplaceWith(newItems);
-
-            this.IsItemsLoaded = true;
+            try
+            {
+                var newItems = this.GetUiItems().ToList();
+                this.UiItems.ReplaceWith(newItems);
+            }
+            finally
+            {
+                this.IsItemsLoaded = true;
+            }
             
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
         });

@@ -170,4 +170,43 @@
   <data name="ClientKeyTitle" xml:space="preserve">
     <value>Key that was generated on device, but was changed due to the collision with existing interview on server</value>
   </data>
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve">
+    <value>Assignment ID. Click in the field to type the full ID number.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further.</value>
+  </data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+    <value>Status of interview. Select a status to see all interviews with that status. Select “All statuses” to see interviews with any status.</value>
+  </data>
+  <data name="Tooltip_Table_Assignment" xml:space="preserve">
+    <value>Identifier for the assignment to which this interview belongs. Click on the sort icon to sort by assignment number.</value>
+  </data>
+  <data name="Tooltip_Table_HasErrors" xml:space="preserve">
+    <value>Indicator for whether the interview has at least one validation error. “Yes” indicates at least one error; “-” indicates no error. Click on the sort icon to sort by the presence of errors.</value>
+  </data>
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
+    <value>Click here to hide or show the identifying questions. Hiding identifying questions may provide more space for other information. Showing identifying questions may provide details for differentiating between interviews.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Information that identifies each assignment. These are the answers to questions marked as identifying in Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
+    <value>Short case identifier that appears throughout the system--in Headquarters, Supervisor, and Interviewer. Consider using this ID  when communicating with field team, rather than a large set of identifying question.</value>
+  </data>
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
+    <value>When changes to the interview were last posted to the server. Click on the sort icon to sort by time.</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
+    <value>Indicator for whether the interview has been downloaded onto the interviewer’s tablet. Click on the sort icon to sort by receipt by the interviewer.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>User currently responsible for the assignment. Click sort icon to sort user name.</value>
+  </data>
+  <data name="Tooltip_Table_Status" xml:space="preserve">
+    <value>Status of the interview in the survey workflow. Click on the sort icon to sort by status.</value>
+  </data>
 </root>

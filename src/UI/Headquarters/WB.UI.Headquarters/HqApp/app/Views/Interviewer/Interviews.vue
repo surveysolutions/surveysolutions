@@ -1,43 +1,57 @@
 <template>
-    <Layout :title="title" :hasFilter="true">
+    <Layout :title="title"
+            :hasFilter="true">
         <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.Template')">
-                <select class="selectpicker" v-model="questionnaireId">
-                    <option :value="null">{{ $t('Common.Any') }}</option>
-                    <option v-for="questionnaire in questionnaires" :key="questionnaire.key" :value="questionnaire.key">
-                        {{ questionnaire.value }}
-                    </option>
-                </select>
+            <FilterBlock :title="$t('Pages.Questionnaire')">
+                <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
+                           :values="questionnaires"
+                           :value="questionnaireId"
+                           noSearch
+                           @selected="selectQuestionnaire" />
             </FilterBlock>
             <FilterBlock :title="$t('Pages.Filters_Assignment')">
                 <div class="input-group">
-                    <input class="form-control with-clear-btn" :placeholder="$t('Common.Any')" type="text" v-model="assignmentId" />
-                    <div class="input-group-btn" @click="clearAssignmentFilter">
+                    <input class="form-control with-clear-btn"
+                           :placeholder="$t('Common.AllAssignments')"
+                           type="text"
+                           v-model="assignmentId" />
+                    <div class="input-group-btn"
+                         @click="clearAssignmentFilter">
                         <div class="btn btn-default">
-                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-remove"
+                                  aria-hidden="true"></span>
                         </div>
                     </div>
                 </div>
             </FilterBlock>
         </Filters>
-    
-        <DataTables ref="table" :tableOptions="tableOptions" :addParamsToRequest="addFilteringParams" :contextMenuItems="contextMenuItems"></DataTables>
-    
-        <Confirm ref="confirmRestart" id="restartModal" slot="modals">
+
+        <DataTables ref="table"
+                    :tableOptions="tableOptions"
+                    :addParamsToRequest="addFilteringParams"
+                    :contextMenuItems="contextMenuItems"></DataTables>
+
+        <Confirm ref="confirmRestart"
+                 id="restartModal"
+                 slot="modals">
             {{ $t("Pages.InterviewerHq_RestartConfirm") }}
             <FilterBlock>
                 <div class="form-group ">
                     <div class="field">
-                        <input class="form-control with-clear-btn" type="text" v-model="restart_comment" />
+                        <input class="form-control with-clear-btn"
+                               type="text"
+                               v-model="restart_comment" />
                     </div>
                 </div>
             </FilterBlock>
         </Confirm>
-    
-        <Confirm ref="confirmDiscard" id="discardConfirm" slot="modals">
+
+        <Confirm ref="confirmDiscard"
+                 id="discardConfirm"
+                 slot="modals">
             {{ $t("Pages.InterviewerHq_DiscardConfirm") }}
         </Confirm>
-    
+
     </Layout>
 </template>
 
@@ -51,21 +65,25 @@ export default {
             assignmentId: null
         }
     },
+
     watch: {
-        questionnaireId: function () {
+        questionnaireId: function() {
             this.reload();
         },
         assignmentId: function() {
             this.reload();
         }
     },
+
     computed: {
         statuses() {
             return this.config.statuses
         },
+
         questionnaires() {
             return this.config.questionnaires
         },
+
         title() {
             return this.config.title;
         },
@@ -82,8 +100,7 @@ export default {
                 columns: this.getTableColumns(),
                 ajax: {
                     url: this.config.allInterviews,
-                    type: "GET",
-                    contentType: 'application/json'
+                    type: "GET"
                 },
                 select: {
                     style: 'multi',
@@ -95,6 +112,10 @@ export default {
     },
 
     methods: {
+        selectQuestionnaire(value) {
+            this.questionnaireId = value;
+        },
+
         reload() {
             this.$refs.table.reload();
         },
@@ -165,10 +186,10 @@ export default {
             data.statuses = this.statuses;
 
             if (this.questionnaireId) {
-                data.questionnaireId = this.questionnaireId;
+                data.questionnaireId = this.questionnaireId.key;
             }
 
-             if (this.assignmentId) {
+            if (this.assignmentId) {
                 data.assignmentId = this.assignmentId;
             }
         },
@@ -211,7 +232,8 @@ export default {
 
             return columns
         },
-        clearAssignmentFilter: function() {
+
+        clearAssignmentFilter() {
             this.assignmentId = null;
         }
     },

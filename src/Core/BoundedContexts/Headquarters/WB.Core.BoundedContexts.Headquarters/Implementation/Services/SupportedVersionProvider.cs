@@ -6,30 +6,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
     public class SupportedVersionProvider : ISupportedVersionProvider
     {
-        private readonly IPlainStorageAccessor<SupportedQuestionnaireVersion> supportedVersionStorage;
-        private const string id = "MinVersion";
+        private readonly IPlainKeyValueStorage<QuestionnaireVersion> appSettingsStorage;
         private static bool versionRemembered;
 
-        public SupportedVersionProvider(IPlainStorageAccessor<SupportedQuestionnaireVersion> supportedVersionStorage)
+        public SupportedVersionProvider(IPlainKeyValueStorage<QuestionnaireVersion> appSettingsStorage)
         {
-            this.supportedVersionStorage = supportedVersionStorage;
+            this.appSettingsStorage = appSettingsStorage;
         }
 
         public int GetSupportedQuestionnaireVersion() => ApiVersion.MaxQuestionnaireVersion;
-        public int? GetMinVerstionSupportedByInterviewer() => this.supportedVersionStorage.GetById(id)?.MinQuestionnaireVersionSupportedByInterviewer;
+        public int? GetMinVerstionSupportedByInterviewer() => this.appSettingsStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey)?.MinQuestionnaireVersionSupportedByInterviewer;
 
         public void RememberMinSupportedVersion()
         {
             if (!versionRemembered)
             {
-                var supportedQuestionnaireVersion = this.supportedVersionStorage.GetById(id);
+                var supportedQuestionnaireVersion = this.appSettingsStorage.GetById(QuestionnaireVersion.QuestionnaireVersionKey);
                 if (supportedQuestionnaireVersion == null)
                 {
-                    this.supportedVersionStorage.Store(new SupportedQuestionnaireVersion
+                    this.appSettingsStorage.Store(new QuestionnaireVersion
                     {
-                        Id = id,
                         MinQuestionnaireVersionSupportedByInterviewer = this.GetSupportedQuestionnaireVersion()
-                    }, id);
+                    }, QuestionnaireVersion.QuestionnaireVersionKey);
                 }
 
                 versionRemembered = true;

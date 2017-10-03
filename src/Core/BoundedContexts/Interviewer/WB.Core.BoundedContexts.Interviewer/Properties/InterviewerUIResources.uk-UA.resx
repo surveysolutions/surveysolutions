@@ -132,10 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Завершено ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Cтворити 
-iнтервью</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Нові ({0})</value>
   </data>
@@ -158,7 +154,7 @@ iнтервью</value>
     <value>Відхилені ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Ви дійсно бажаєте видалити це інтерв'ю "{0}" ?</value>
+    <value>Ви дійсно бажаєте видалити це інтерв'ю #{0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Розпочаті ({0})</value>

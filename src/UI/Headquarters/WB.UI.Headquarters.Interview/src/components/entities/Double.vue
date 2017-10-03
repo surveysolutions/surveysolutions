@@ -37,7 +37,7 @@
             answerDoubleQuestion(evnt) {
                 const answerString = $(evnt.target).autoNumeric('get');
                 if (answerString.replace(/[^0-9]/g, "").length > 15) {
-                    this.markAnswerAsNotSavedWithMessage($("DecimalTooBig"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("DecimalTooBig"))
                     return
                 }
 

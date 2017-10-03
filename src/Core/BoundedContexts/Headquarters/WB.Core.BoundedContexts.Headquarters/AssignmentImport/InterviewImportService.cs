@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -40,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly SampleImportSettings sampleImportSettings;
         private readonly IInterviewImportDataParsingService interviewImportDataParsingService;
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
 
         private readonly object lockStart = new object();
 
@@ -64,7 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IUserViewFactory userViewFactory, 
             IInterviewTreeBuilder interviewTreeBuilder, 
             IPreloadedDataRepository preloadedDataRepository, 
-            IPreloadedDataVerifier preloadedDataVerifier)
+            IPreloadedDataVerifier preloadedDataVerifier,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
         {
             this.commandService = commandService;
             this.logger = logger;
@@ -79,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.interviewTreeBuilder = interviewTreeBuilder;
             this.preloadedDataRepository = preloadedDataRepository;
             this.preloadedDataVerifier = preloadedDataVerifier;
+            this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
 
         public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName)
@@ -90,30 +94,47 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.Status.Stage = AssignmentImportStage.FileVerification;
             this.Status.VerificationState.FileName = fileName;
 
-            PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
-
-            this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
-
-            void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
+            try
             {
-                var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(), questionnaire);
-                if (!result.Status)
-                    throw new InterviewException(result.ErrorMessage);
+                PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
+
+                this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
+
+                void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
+                {
+                    var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(), questionnaire);
+                    if (!result.Status)
+                        throw new InterviewException(result.ErrorMessage);
+                }
+
+                if (this.Status.VerificationState.Errors.Any())
+                {
+                    FinishImportProcess();
+                    return;
+                }
+
+                this.Status.ProcessedCount = 0;
+                this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
+                this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
+
+                AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
+
+                if (assignmentImportData == null)
+                {
+                    FinishImportProcess();
+                    return;
+                }
+
+                RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
             }
-
-            if (this.Status.VerificationState.Errors.Any())
+            catch (Exception ex)
             {
+                this.logger.Error("Fail validation preloading", ex);
+                this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile });
                 FinishImportProcess();
-                return;
             }
-
-            this.Status.ProcessedCount = 0;
-            this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
-            this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
-
-            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
-            RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
         }
+
         public AssignmentVerificationResult VerifyAssignment(List<InterviewAnswer>[] answersGroupedByLevels, IQuestionnaire questionnaire)
         {
             try
@@ -197,7 +218,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             try
             {
-                var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+                if (!IsExistsQuestionnaire(questionnaireIdentity, out var questionnaireDocument))
+                {
+                    this.Status.State.Errors.Add(new InterviewImportError
+                    {
+                        ErrorMessage = Interviews.ImportInterviews_QuestionaireNotFound
+                    });
+
+                    return;
+                }
+
                 this.Status.QuestionnaireTitle = questionnaireDocument.Title;
 
                 if (records == null)
@@ -244,12 +274,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         this.Status.EstimatedTime = this.Status.TimePerItem * this.Status.TotalCount;
                     });
 
-                this.logger.Info($"Imported {this.Status.TotalCount:N0} of interviews. Took {elapsedTime.Elapsed:c} to complete");
+                this.logger.Info($"Imported {this.Status.TotalCount:N0} of assignments for questionnaire {questionnaireIdentity}. Took {elapsedTime.Elapsed:c} to complete");
             }
             finally
             {
                 FinishImportProcess();
             }
+        }
+
+        private bool IsExistsQuestionnaire(QuestionnaireIdentity questionnaireIdentity, out IQuestionnaire questionnaireDocument)
+        {
+            questionnaireDocument = null;
+            var questionnaireId = new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString();
+            var browseItem = plainTransactionManagerProvider.GetPlainTransactionManager()
+                .ExecuteInQueryTransaction(() => this.questionnaireBrowseItemStorage.GetById(questionnaireId));
+            if (browseItem == null || browseItem.IsDeleted)
+                return false;
+
+            questionnaireDocument = plainTransactionManagerProvider.GetPlainTransactionManager()
+                .ExecuteInQueryTransaction(() => this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null));
+            return questionnaireDocument != null;
         }
 
         private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
@@ -313,13 +357,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private UserView GetUserById(Guid userId)
         {
-            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                var user = this.userViewFactory.GetUser(new UserViewInputModel(userId));
-                if (user == null || user.IsArchived)
-                    return null;
-                return user;
-            });
+            var user = this.userViewFactory.GetUser(new UserViewInputModel(userId));
+            if (user == null || user.IsArchived)
+                return null;
+            return user;
         }
     }
 }

@@ -67,6 +67,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
             Assert.That(item, Has.Property(nameof(item.CanDelete)).EqualTo(false));
         }
 
+        [Test]
+        public void when_interview_assigned_to_supervisor_and_was_completed_should_not_allow_to_delete_it()
+        {
+            var interviewSummaryStorage = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
+            interviewSummaryStorage.Store(Create.Entity.InterviewSummary(status: InterviewStatus.SupervisorAssigned, wasCompleted: true), Id.g1);
+
+            AllInterviewsFactory interviewsFactory = Create.Service.AllInterviewsFactory(interviewSummaryStorage);
+
+            var interviews = interviewsFactory.Load(new AllInterviewsInputModel());
+
+            var item = interviews.Items.First();
+
+            Assert.That(item, Has.Property(nameof(item.CanDelete)).EqualTo(false));
+        }
+
         [TestCase]
         public void When_loading_interviews_without_prefilled_questions()
         {

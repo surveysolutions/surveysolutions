@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
         {
-            var result = this.nodesIdCache.GetOrEmpty(nodeId) ?? WarmNodesIdCache(nodeId);
+            var result = this.nodesIdCache.GetOrNull(nodeId) ?? WarmNodesIdCache(nodeId);
             return result;
         }
 

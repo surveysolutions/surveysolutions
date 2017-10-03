@@ -7,7 +7,7 @@
 @{
     ViewBag.Title = MainMenu.CreateNew;
     ViewBag.ActivePage = MenuItem.CreateNew;
-    Layout = @"~/Views/Shared/_MainLayout.cshtml";
+    Layout = @"~/Views/Shared/_MainLayoutHq.cshtml";
 }
 
 <div id="vueApp" configuration="@JsonConvert.SerializeObject(
@@ -20,6 +20,3 @@ new {
     authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),
     resources = new[] {MainMenu.ResourceManager, Assignments.ResourceManager, Common.ResourceManager, Pages.ResourceManager}.Translations()
 })"></div>
-
-@Html.StaticScipt(@"~/HqApp/dist/vendor.bundle.js")
-@Html.StaticScipt(@"~/HqApp/dist/app.bundle.js")

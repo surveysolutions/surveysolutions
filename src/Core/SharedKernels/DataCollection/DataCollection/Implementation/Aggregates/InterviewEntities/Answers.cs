@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -71,7 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static NumericRealAnswer FromDecimal(decimal value) => new NumericRealAnswer((double)value);
 
-        public override string ToString() => Value.ToString();
+        public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -130,9 +131,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<int> ToInts() => this.CheckedValues;
 
-        public static CategoricalFixedMultiOptionAnswer FromInts(int[] checkedValues)
-            => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues);
 
+        public static CategoricalFixedMultiOptionAnswer Convert(object obj)
+        {
+            switch (obj)
+            {
+                case int[] answerAsIntArray:
+                    return answerAsIntArray.Any() 
+                        ? new CategoricalFixedMultiOptionAnswer(answerAsIntArray) 
+                        : null;
+                case decimal[] answerAsDecimalArray:
+                    return answerAsDecimalArray.Any()
+                        ? new CategoricalFixedMultiOptionAnswer(answerAsDecimalArray.Select(value => (int) value))
+                        : null;
+                case HashSet<decimal> answerAsHashSet:
+                    return answerAsHashSet.Any() 
+                        ? new CategoricalFixedMultiOptionAnswer(answerAsHashSet.Select(value => (int)value)) 
+                        : null;
+            }
+
+            return null;
+        }
+        
         public static CategoricalFixedMultiOptionAnswer FromDecimalArray(decimal[] checkedValues)
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int)value));
 

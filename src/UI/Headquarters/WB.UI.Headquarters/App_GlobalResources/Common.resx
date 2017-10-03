@@ -166,7 +166,7 @@
     <value>Interview Key</value>
   </data>
   <data name="LastUpdate" xml:space="preserve">
-    <value>Last Update</value>
+    <value>Updated on</value>
   </data>
   <data name="НasErrors" xml:space="preserve">
     <value>Нas Errors</value>
@@ -180,8 +180,8 @@
   <data name="Any" xml:space="preserve">
     <value>Any</value>
   </data>
-  <data name="AllQuestionnaires" xml:space="preserve">
-    <value>All Questionnaires</value>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>All assignments</value>
   </data>
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>
@@ -267,25 +267,22 @@
   <data name="ShowStatusHistory" xml:space="preserve">
     <value>Show Status History</value>
   </data>
-  <data name="AllInterviewers" xml:space="preserve">
-    <value>All interviewers</value>
-  </data>
-  <data name="AllTeams" xml:space="preserve">
-    <value>All teams</value>
-  </data>
   <data name="AllStatuses" xml:space="preserve">
-    <value>All Statuses</value>
+    <value>All statuses</value>
   </data>
   <data name="AllSupervisors" xml:space="preserve">
-    <value>All Supervisors</value>
+    <value>All supervisors</value>
   </data>
   <data name="AllResponsible" xml:space="preserve">
-    <value>All Responsibles</value>
+    <value>All responsibles</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>All questionnaires</value>
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Open responsible's profile</value>
   </data>
-  <data name="Confirm">
+  <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
 </root>

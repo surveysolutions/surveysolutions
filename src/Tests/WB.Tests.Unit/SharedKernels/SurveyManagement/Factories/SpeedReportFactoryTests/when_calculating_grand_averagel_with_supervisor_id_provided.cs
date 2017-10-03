@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SpeedReportFact
             var supervisorId = Id.g1;
             var input = CreateSpeedByInterviewersReportInputModel(supervisorId: supervisorId, from: new DateTime(2010, 6, 10, 0, 0, 0, DateTimeKind.Utc), period: "d", columnCount: 1);
 
-            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
             var averageForTargetSupervisor = 20;
             interviewStatuses.Store(
-                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {

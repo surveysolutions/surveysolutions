@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_DateTimeQuestionAnswered_event = () =>
             interview
                 .GetAnswerAsString(Create.Entity.Identity(questionId, RosterVector.Empty), new CultureInfo("ru-RU"))
-                .ShouldEqual(dateAnswer.ToLocalTime().ToString(new CultureInfo("ru-RU")));
+                .ShouldEqual(dateAnswer.ToString(new CultureInfo("ru-RU")));
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

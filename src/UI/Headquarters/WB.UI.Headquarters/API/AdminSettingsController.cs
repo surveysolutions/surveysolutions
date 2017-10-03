@@ -10,23 +10,21 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator")]
     public class AdminSettingsController : ApiController
     {
-        internal const string settingsKey = "settings";
-
         public class GlobalNoticeModel
         {
             public string Message { get; set; }
         }
 
-        private readonly IPlainKeyValueStorage<GlobalNotice> noticeStorage;
-        public AdminSettingsController(IPlainKeyValueStorage<GlobalNotice> noticeStorage)
+        private readonly IPlainKeyValueStorage<GlobalNotice> appSettingsStorage;
+        public AdminSettingsController(IPlainKeyValueStorage<GlobalNotice> appSettingsStorage)
         {
-            if (noticeStorage == null) throw new ArgumentNullException(nameof(noticeStorage));
-            this.noticeStorage = noticeStorage;
+            if (appSettingsStorage == null) throw new ArgumentNullException(nameof(appSettingsStorage));
+            this.appSettingsStorage = appSettingsStorage;
         }
 
         public HttpResponseMessage Get()
         {
-            var globalNotice = this.noticeStorage.GetById(settingsKey);
+            var globalNotice = this.appSettingsStorage.GetById(GlobalNotice.GlobalNoticeKey);
             if (globalNotice == null)
             {
                 return Request.CreateResponse(new GlobalNoticeModel());
@@ -39,13 +37,13 @@ namespace WB.UI.Headquarters.API
         {
             if (string.IsNullOrEmpty(message?.Message))
             {
-                this.noticeStorage.Remove(settingsKey);
+                this.appSettingsStorage.Remove(GlobalNotice.GlobalNoticeKey);
             }
             else
             {
-                var globalNotice = this.noticeStorage.GetById(settingsKey) ?? new GlobalNotice();
+                var globalNotice = this.appSettingsStorage.GetById(GlobalNotice.GlobalNoticeKey) ?? new GlobalNotice();
                 globalNotice.Message = message.Message.Length > 1000 ? message.Message.Substring(0, 1000) : message.Message;
-                this.noticeStorage.Store(globalNotice, settingsKey);
+                this.appSettingsStorage.Store(globalNotice, GlobalNotice.GlobalNoticeKey);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, new {sucess = true});

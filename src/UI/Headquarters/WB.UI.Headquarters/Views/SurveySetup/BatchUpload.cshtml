@@ -101,7 +101,7 @@
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
                             @Html.HiddenFor(x => x.QuestionnaireVersion)
-
+                            @Html.Partial("ClientTimezoneOffset")
                             <label class="btn btn-success btn-file">
                                 @BatchUpload.UploadTabFile
                                 @Html.TextBoxFor(m => m.File, new {type = "file", accept = ".tab, .txt, .zip", onchange = "this.form.submit()"})
@@ -124,7 +124,7 @@
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
                             @Html.HiddenFor(x => x.QuestionnaireVersion)
-
+                            @Html.Partial("ClientTimezoneOffset")
                             <label class="btn btn-success btn-file">
                                 @BatchUpload.UploadZipFile
                                 @Html.TextBoxFor(m => m.File, new {type = "file", accept = ".zip", onchange = "this.form.submit()"})

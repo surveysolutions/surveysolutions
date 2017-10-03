@@ -13,7 +13,7 @@ Vue.directive("dateTimeFormatting", {
                 timeElement.innerHTML =  format(dateTime, DateFormats.dateTime)
             }
             else {
-                const date = new Date(timeElement.getAttribute("date"))
+                const date = timeElement.getAttribute("date")
                 timeElement.innerHTML =  format(date, DateFormats.date)
             }
         })

@@ -131,7 +131,11 @@
                 else {
                     try {
                         var json = $.parseJSON(jqXhr.responseText);
-                        self.ShowError(json.Message);
+                        if (json.hasOwnProperty('Message')) {
+                            self.ShowError(json.Message);
+                        } else {
+                            self.ShowError(json);
+                        }
                     }
                     catch (err) {
                         self.ShowError(jqXhr.responseText);
@@ -272,3 +276,12 @@
         return users;
     }
 };
+
+function formatNumber(value) {
+    if (value == null || value == undefined)
+        return value;
+    var language = navigator.languages && navigator.languages[0] || // Chrome / Firefox
+        navigator.language ||   // All browsers
+        navigator.userLanguage; // IE <= 10
+    return value.toLocaleString(language);
+}

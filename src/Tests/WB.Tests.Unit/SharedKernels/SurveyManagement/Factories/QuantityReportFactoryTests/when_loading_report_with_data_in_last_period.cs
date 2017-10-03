@@ -18,9 +18,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
 
             var input = CreateQuantityBySupervisorsReportInputModel(period: "d", columnCount: 1, from: reportStartDate);
 
-            var interviewStatuses = new TestInMemoryWriter<InterviewStatuses>();
+            var interviewStatuses = new TestInMemoryWriter<InterviewSummary>();
             interviewStatuses.Store(
-                Create.Entity.InterviewStatuses(questionnaireId: input.QuestionnaireId,
+                Create.Entity.InterviewSummary(questionnaireId: input.QuestionnaireId,
                     questionnaireVersion: input.QuestionnaireVersion,
                     statuses: new[]
                     {

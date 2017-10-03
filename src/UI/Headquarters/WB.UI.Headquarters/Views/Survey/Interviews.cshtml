@@ -1,7 +1,9 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters
+@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
+@using Interviews = WB.UI.Headquarters.Resources.Interviews
 
 @model DocumentFilter
 
@@ -113,11 +115,11 @@
                     <h4>@Pages.FilterTitle</h4>
 
                     <div class="block-filter">
-                        <h5>@Common.Questionnaire</h5>
+                        <h5 title="@Interviews.Tooltip_Filter_Questionnaire">@Common.Questionnaire</h5>
                         <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker">
                             @if (Model.Templates.Count() > 1)
                             {
-                                <option value="">@Common.AllQuestionnaires</option>
+                                <option value="">@Strings.AllQuestionnaires</option>
                             }
                             @foreach (var item in Model.Templates)
                             {
@@ -127,7 +129,7 @@
                     </div>
 
                     <div class="block-filter">
-                        <h5>@Common.Status</h5>
+                        <h5 title="@Interviews.Tooltip_Filter_Status">@Common.Status</h5>
                         <select data-bind="value: SelectedStatus" class="selectpicker">
                             <option value="">@Common.AllStatuses</option>
                             @foreach (var item in Model.Statuses)
@@ -138,7 +140,7 @@
                     </div>
 
                     <div class="block-filter">
-                        <h5>@Pages.Survey_ResponsibleTitle</h5>
+                        <h5 title="@Interviews.Tooltip_Filter_Responsible">@Pages.Survey_ResponsibleTitle</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
                                 <input class="form-control with-clear-btn" placeholder="@Common.AllResponsible" data-bind="typeahead: SelectedResponsible, typeaheadOptions: {source: Responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'" type="text" />
@@ -151,7 +153,7 @@
                     </div>
 
                     <div class="block-filter">
-                        <h5>@Interviews.Assignment</h5>
+                        <h5 title="@Interviews.Tooltip_Filter_Assignment">@Interviews.Assignment</h5>
                         <p class="list-group-item-text">
                             <div class="input-group">
                                 <input class="form-control with-clear-btn" placeholder="@Assignments.AllAssignments" data-bind="numeric, textInput: AssignmentId" type="text" />
@@ -192,12 +194,13 @@
                                                     </label>
                                                 </th>
                                             }
-                                            <th class="sorting_disabled interview-id  title-row">
+                                            <th class="sorting_disabled interview-id  title-row" title="@Interviews.Tooltip_Table_InterviewKey">
                                                 @Common.InterviewKey
-                                                <a href="javascript:void(0);" class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
+                                                <a href="javascript:void(0);" title="@Interviews.Tooltip_Table_HideShowIdentifying"
+                                                   class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
-                                            <th class="sorting_disabled prefield-column first-identifying last-identifying" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
+                                            <th title="@Interviews.Tooltip_Table_IdentifyingQuestions" class="sorting_disabled prefield-column first-identifying last-identifying" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
                                             <!-- /ko -->
                                             <!-- ko ifnot:SelectedTemplate() == '' -->
                                             <!-- ko if:Items().length > 0-->
@@ -206,12 +209,12 @@
                                             <!-- /ko -->
                                             <!-- /ko -->
                                             <!-- /ko -->
-                                            <th data-bind='sortby: "ResponsibleName"'>@Pages.Survey_ResponsibleTitle</th>
-                                            <th class="date last-update" data-bind='sortby: "UpdateDate"'>@Pages.Survey_LastUpdateTitle</th>
-                                            <th class="errors" data-bind='sortby: "HasErrors"'>@Pages.Survey_HasErrorsTitle</th>
-                                            <th class="status" data-bind='sortby: "Status"'>@Pages.Survey_StatusTitle</th>
-                                            <th class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Pages.Survey_ReceivedByInterviewerTitle</th>
-                                            <th data-bind='sortby: "AssignmentId"'>@Common.Assignment</th>
+                                            <th title="@Interviews.Tooltip_Table_Responsible" data-bind='sortby: "ResponsibleName"'>@Pages.Survey_ResponsibleTitle</th>
+                                            <th title="@Interviews.Tooltip_Table_LastUpdate" class="date last-update" data-bind='sortby: "UpdateDate"'>@Pages.Survey_LastUpdateTitle</th>
+                                            <th title="@Interviews.Tooltip_Table_HasErrors" class="errors" data-bind='sortby: "HasErrors"'>@Pages.Survey_HasErrorsTitle</th>
+                                            <th title="@Interviews.Tooltip_Table_Status" class="status" data-bind='sortby: "Status"'>@Pages.Survey_StatusTitle</th>
+                                            <th title="@Interviews.Tooltip_Table_ReceivedByInterviewer" class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Pages.Survey_ReceivedByInterviewerTitle</th>
+                                            <th title="@Interviews.Tooltip_Table_Assignment" data-bind='sortby: "AssignmentId"'>@Common.Assignment</th>
                                         </tr>
                                     </thead>
                                     <tbody>

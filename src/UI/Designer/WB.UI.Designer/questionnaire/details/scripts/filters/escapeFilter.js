@@ -7,6 +7,6 @@
             });
             return html;
         }
-        return input;
+        return input || '';
     };
 });

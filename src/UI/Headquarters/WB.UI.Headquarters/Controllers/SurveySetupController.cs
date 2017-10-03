@@ -283,6 +283,14 @@ namespace WB.UI.Headquarters.Controllers
             var questionnaireId = status.QuestionnaireId.QuestionnaireId;
             var version = status.QuestionnaireId.Version;
 
+            var title = status.QuestionnaireTitle;
+
+            if (String.IsNullOrWhiteSpace(title))
+            {
+                var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+                title = questionnaireInfo?.Title;
+            }
+
             if (status.IsInProgress)
             {
                 return RedirectToAction("InterviewImportIsInProgress", new { questionnaireId = questionnaireId, version = version });
@@ -299,7 +307,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.View("InterviewImportVerificationErrors", new ImportDataParsingErrorsView(
                     questionnaireId,
                     version,
-                    status.QuestionnaireTitle,
+                    title,
                     verificationState.Errors.ToArray(),
                     status.State.Errors.ToArray(),
                     verificationState.WasResponsibleProvided,

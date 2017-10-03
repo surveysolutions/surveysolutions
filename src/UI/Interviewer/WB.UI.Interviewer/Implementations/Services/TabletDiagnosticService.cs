@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.Services;
@@ -25,18 +27,21 @@ namespace WB.UI.Interviewer.Implementations.Services
         private readonly ISynchronizationService synchronizationService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IArchivePatcherService archivePatcherService;
+        private readonly ILogger logger;
 
         public TabletDiagnosticService(IFileSystemAccessor fileSystemAccessor,
             IPermissions permissions,
             ISynchronizationService synchronizationService,
             IInterviewerSettings interviewerSettings,
-            IArchivePatcherService archivePatcherService)
+            IArchivePatcherService archivePatcherService,
+            ILogger logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
             this.synchronizationService = synchronizationService;
             this.interviewerSettings = interviewerSettings;
             this.archivePatcherService = archivePatcherService;
+            this.logger = logger;
         }
 
         private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
@@ -49,7 +54,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.CurrentActivity.StartActivity(Intent.CreateChooser(shareIntent, title));
         }
 
-        public async Task UpdateTheApp(CancellationToken cancellationToken)
+        public async Task UpdateTheApp(CancellationToken cancellationToken, Action<Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
@@ -62,7 +67,6 @@ namespace WB.UI.Interviewer.Implementations.Services
             string pathToPatch = this.fileSystemAccessor.CombinePath(downloadFolder, "interviewer.patch");
             string pathToNewApk = this.fileSystemAccessor.CombinePath(downloadFolder, "interviewer.apk");
             string pathToOldApk = this.interviewerSettings.InstallationFilePath;
-            
 
             if (this.fileSystemAccessor.IsFileExists(pathToPatch))
             {
@@ -78,13 +82,12 @@ namespace WB.UI.Interviewer.Implementations.Services
             {
                 this.fileSystemAccessor.CreateDirectory(downloadFolder);
             }
-
-
+            
             byte[] patchOrFullApkBytes = null;
 
             try
             {
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken);
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationPatchAsync(cancellationToken, onDownloadProgressChanged);
             }
             catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
             {
@@ -93,19 +96,38 @@ namespace WB.UI.Interviewer.Implementations.Services
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (patchOrFullApkBytes != null)
+            async Task UpdateWithFullApk()
             {
-                this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchOrFullApkBytes);
+                cancellationToken.ThrowIfCancellationRequested();
+                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken, onDownloadProgressChanged);
                 cancellationToken.ThrowIfCancellationRequested();
 
-                this.archivePatcherService.ApplyPath(pathToOldApk, pathToPatch, pathToNewApk);
+                if (this.fileSystemAccessor.IsFileExists(pathToNewApk))
+                {
+                    this.fileSystemAccessor.DeleteFile(pathToNewApk);
+                }
+
+                this.fileSystemAccessor.WriteAllBytes(pathToNewApk, patchOrFullApkBytes);
+            }
+
+            if (patchOrFullApkBytes != null)
+            {
+                try
+                {
+                    this.fileSystemAccessor.WriteAllBytes(pathToPatch, patchOrFullApkBytes);
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    this.archivePatcherService.ApplyPath(pathToOldApk, pathToPatch, pathToNewApk);
+                }
+                catch(Exception e)
+                {
+                    this.logger.Error("Were not able to apply delta patch. ", e);
+                    await UpdateWithFullApk();
+                }
             }
             else
             {
-                patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken);
-                cancellationToken.ThrowIfCancellationRequested();
-
-                this.fileSystemAccessor.WriteAllBytes(pathToNewApk, patchOrFullApkBytes);
+                await UpdateWithFullApk();
             }
 
             cancellationToken.ThrowIfCancellationRequested();

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -63,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
         }
 
-        public AnsweringViewModel Answering { get; private set; }
+        public AnsweringViewModel Answering { get; }
 
         public byte[] Answer
         {
@@ -156,9 +154,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     }
                 }
             }
-            catch (MissingPermissionsException e)
+            catch (MissingPermissionsException mpe)
             {
-                switch (e.Permission)
+                switch (mpe.Permission)
                 {
                     case Permission.Camera:
                         this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
@@ -167,7 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
                         break;
                     default:
-                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(e.Message);
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
                         break;
                 }
             }

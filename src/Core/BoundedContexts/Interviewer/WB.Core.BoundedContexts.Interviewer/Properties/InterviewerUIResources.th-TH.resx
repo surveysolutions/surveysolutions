@@ -132,9 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>เสร็จสมบูรณ์ : ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>สร้างการสัมภาษณ์</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>งานใหม่ : ({0})</value>
   </data>
@@ -157,7 +154,7 @@
     <value>ถูกปฏิเสธ : ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>ต้องการลบข้อมูลการสัมภาษณ์ของ "{0}" หรือไม่</value>
+    <value>ต้องการลบข้อมูลการสัมภาษณ์ของ #{0} หรือไม่</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>เริ่มสัมภาษณ์ : ({0})</value>

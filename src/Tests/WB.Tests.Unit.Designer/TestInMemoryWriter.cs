@@ -45,6 +45,11 @@ namespace WB.Tests.Unit.Designer
             }
         }
 
+        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
+        {
+            return this.storage.Keys.Where(k => k.StartsWith(beginingOfId)).ToList();
+        }
+
         public void Remove(T view)
         {
             var keyOfItemToRemove = this.storage.FirstOrDefault(item => item.Value == view).Key;

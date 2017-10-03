@@ -1,4 +1,4 @@
-using NHibernate.Mapping.ByCode;
+﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
@@ -20,11 +20,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 clm.Column("TimeSpan");
             });
-            ManyToOne(x => x.InterviewStatusTimeSpans, mto =>
+            ManyToOne(x => x.InterviewSummary, mto =>
             {
-                mto.Index("InterviewStatusTimeSpans_TimeSpansBetweenStatuses");
+                mto.Column("InterviewId");
                 mto.Cascade(Cascade.None);
-                mto.ForeignKey("FK_InterviewStatusTimeSpans_TimeSpanBetweenStatuses");
+                mto.ForeignKey("FK_InterviewSummary_TimeSpansBetweenStatuses");
             });
         }
     }

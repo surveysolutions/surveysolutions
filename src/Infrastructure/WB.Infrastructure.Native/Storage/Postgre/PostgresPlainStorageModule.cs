@@ -52,14 +52,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<Func<PlainPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<PlainPostgresTransactionManager>());
             this.Kernel.Bind<Func<NoTransactionPlainPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<NoTransactionPlainPostgresTransactionManager>());
 
-            this.Kernel.Bind<RebuildReadSidePlainPostgresTransactionManagerWithSessions>().ToSelf();
-
             this.Kernel
                 .Bind<PlainTransactionManagerProvider>()
                 .ToConstructor(constructor => new PlainTransactionManagerProvider(
                     constructor.Inject<Func<PlainPostgresTransactionManager>>(),
-                    constructor.Inject<Func<NoTransactionPlainPostgresTransactionManager>>(),
-                    constructor.Inject<RebuildReadSidePlainPostgresTransactionManagerWithSessions>()))
+                    constructor.Inject<Func<NoTransactionPlainPostgresTransactionManager>>()))
                 .InSingletonScope();
 
             this.Kernel.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
@@ -40,7 +41,8 @@ namespace ASP
             return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
         }
 
-        public static IHtmlString StaticScipt(this HtmlHelper html, string uri)
+        [Localizable(false)]
+        public static IHtmlString StaticScript(this HtmlHelper html, string uri)
         {
             var tag = new TagBuilder(@"script");
 
@@ -52,7 +54,6 @@ namespace ASP
             tag.Attributes.Add("src", Url.Content(uri) + "?v=" + new FileInfo(file).LastWriteTimeUtc.ToBinary());
 
             return html.Raw(tag.ToString(TagRenderMode.Normal));
-
         }
 
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(
@@ -114,7 +115,7 @@ namespace ASP
                 case MenuItem.Rejected: return MainMenu.Rejected;
                 case MenuItem.Completed: return MainMenu.Completed;
                 case MenuItem.SurveyAndStatuses: return MainMenu.SurveysAndStatuses;
-                case MenuItem.CountDaysOfInterviewInStatus: return MainMenu.CountDaysOfInterviewInStatus;
+                case MenuItem.StatusDuration: return MainMenu.StatusDuration;
                 case MenuItem.DevicesInterviewers: return MainMenu.DevicesInterviewers;
                 default: return String.Empty;
             }

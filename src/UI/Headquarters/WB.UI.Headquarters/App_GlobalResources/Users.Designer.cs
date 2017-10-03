@@ -223,7 +223,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account creation date.
+        ///   Looks up a localized string similar to Account created on.
         /// </summary>
         internal static string CreationDate {
             get {

@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -22,14 +23,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 switch (questionType)
                 {
                     case QuestionType.DateTime:
-                        DateTime dateTimeAnswer = answer is string
-                            ? DateTime.Parse((string) answer)
+                        DateTime dateTimeAnswer = answer is string dataTimeAnswerAsString
+                            ? DateTime.Parse(dataTimeAnswerAsString)
                             : (DateTime) answer;
                         var isTimestamp = questionnaire.IsTimestampQuestion(questionId);
-                        var localTime = dateTimeAnswer.ToLocalTime();
                         answer = isTimestamp
-                            ? localTime.ToString(CultureInfo.CurrentCulture)
-                            : localTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+                            ? dateTimeAnswer.ToString(DateTimeFormat.DateWithTimeFormat)
+                            : dateTimeAnswer.ToString(DateTimeFormat.DateFormat);
                         break;
 
                     case QuestionType.MultyOption:
@@ -56,17 +56,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         break;
 
                     case QuestionType.Numeric:
-                        decimal answerTyped = answer is string
-                            ? decimal.Parse((string) answer, CultureInfo.InvariantCulture)
-                            : System.Convert.ToDecimal(answer);
+                        decimal answerTyped = answer is string namericAnswerAsString
+                            ? decimal.Parse(namericAnswerAsString, CultureInfo.InvariantCulture)
+                            : System.Convert.ToDecimal(answer, CultureInfo.CurrentCulture);
                         answer = questionnaire.ShouldUseFormatting(questionId)
                             ? answerTyped.FormatDecimal()
                             : answerTyped.ToString(CultureInfo.CurrentCulture);
                         break;
 
                     case QuestionType.GpsCoordinates:
-                        var gps = answer is string
-                            ? GeoPosition.FromString((string) answer)
+                        var gps = answer is string gpsAnswerAsString
+                            ? GeoPosition.FromString(gpsAnswerAsString)
                             : (GeoPosition) answer;
                         answer = $"{gps.Latitude}, {gps.Longitude}";
                         break;

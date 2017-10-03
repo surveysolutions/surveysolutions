@@ -1,9 +1,13 @@
 ﻿using System;
 using Machine.Specifications;
+using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using NHibernate;
+using Npgsql;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -40,13 +44,20 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 DateTime.UtcNow,
                 new AccountConfirmed()));
 
+            var sessionProvider = new Mock<ISessionProvider>();
+            npgsqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            npgsqlConnection.Open();
+            sessionProvider.Setup(x => x.GetSession())
+                .Returns(Mock.Of<ISession>(i => i.Connection == npgsqlConnection));
+
             eventStore = new PostgresEventStore(
                 new PostgreConnectionSettings
                 {
                     ConnectionString = connectionStringBuilder.ConnectionString,
                     SchemaName = schemaName
                 },
-                eventTypeResolver);
+                eventTypeResolver,
+                sessionProvider.Object);
 
             eventStore.Store(initialStoredStream);
 
@@ -64,8 +75,11 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
         It should_throw_invalid_operation_exception = () => exception.Message.ShouldContain("Unexpected stream version");
 
+        Cleanup c = () => npgsqlConnection?.Dispose();
+
         static PostgresEventStore eventStore;
         static UncommittedEventStream appendStream;
         static Exception exception;
+        static NpgsqlConnection npgsqlConnection;
     }
 }

@@ -14,11 +14,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public string[] ReferencedNames { get; set; }
         public bool IsTextListScope { get; set; }
 
-        public IDictionary<Guid, ExportedHeaderItem> HeaderItems { get; set; }
+        public IDictionary<Guid, IExportedHeaderItem> HeaderItems { get; set; }
         
         public HeaderStructureForLevel()
         {
-            this.HeaderItems = new Dictionary<Guid, ExportedHeaderItem>();
+            this.HeaderItems = new Dictionary<Guid, IExportedHeaderItem>();
         }
 
         public bool ContainsQuestion(Guid questionId)

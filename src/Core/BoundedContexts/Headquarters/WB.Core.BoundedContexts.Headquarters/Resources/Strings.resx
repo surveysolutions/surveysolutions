@@ -207,4 +207,22 @@
   <data name="Days" xml:space="preserve">
     <value>Days</value>
   </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Assignments</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Interviews</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>All teams</value>
+  </data>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>All periods</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>All questionnaires</value>
+  </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>All interviewers</value>
+  </data>
 </root>
