@@ -472,4 +472,67 @@
   <data name="FindReplaceСonfirm" xml:space="preserve">
     <value>Подтвердите действие.</value>
   </data>
+  <data name="EnablingCondition" xml:space="preserve">
+    <value>Условие</value>
+  </data>
+  <data name="GroupTitle" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="HideIfDisabled" xml:space="preserve">
+    <value>Скрывать если выключен</value>
+  </data>
+  <data name="AddValidationRule" xml:space="preserve">
+    <value>Добавить проверку</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Сообщение об ошибке</value>
+  </data>
+  <data name="QuestionAddInstruction" xml:space="preserve">
+    <value>Добавить инструкцию для интервьюера</value>
+  </data>
+  <data name="QuestionClickReload" xml:space="preserve">
+    <value>нажмите обновить</value>
+  </data>
+  <data name="QuestionFilter" xml:space="preserve">
+    <value>Фильтр</value>
+  </data>
+  <data name="QuestionGpsNavigation" xml:space="preserve">
+    <value>Вопрос будет использован для GPS навигации Интервьюером</value>
+  </data>
+  <data name="QuestionHideInstruction" xml:space="preserve">
+    <value>Скрыть инструкцию</value>
+  </data>
+  <data name="QuestionInstruction" xml:space="preserve">
+    <value>Инструкция</value>
+  </data>
+  <data name="QuestionLinkedDescr" xml:space="preserve">
+    <value>Связать со списком, либо вопросом из ростера</value>
+  </data>
+  <data name="QuestionMustBeBound" xml:space="preserve">
+    <value>Необходимо связать вопрос</value>
+  </data>
+  <data name="QuestionQuestionType" xml:space="preserve">
+    <value>Тип вопроса</value>
+  </data>
+  <data name="QuestionScope" xml:space="preserve">
+    <value>Область видимости</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Текст вопроса</value>
+  </data>
+  <data name="QuestionToUpdateOptions" xml:space="preserve">
+    <value>Для обновления опций</value>
+  </data>
+  <data name="QuestionVariableLabel" xml:space="preserve">
+    <value>Тег переменной</value>
+  </data>
+  <data name="QuestionVariableName" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Выбрать вопрос</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Проверка</value>
+  </data>
 </root>

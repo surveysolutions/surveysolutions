@@ -451,4 +451,67 @@
   <data name="FindReplaceWereReplaced" xml:space="preserve">
     <value>were replaced with</value>
   </data>
+  <data name="EnablingCondition" xml:space="preserve">
+    <value>Enabling condition</value>
+  </data>
+  <data name="GroupTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="HideIfDisabled" xml:space="preserve">
+    <value>Hide if disabled</value>
+  </data>
+  <data name="AddValidationRule" xml:space="preserve">
+    <value>Add new validation rule</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Error message</value>
+  </data>
+  <data name="QuestionAddInstruction" xml:space="preserve">
+    <value>Add Interviewer Instruction</value>
+  </data>
+  <data name="QuestionClickReload" xml:space="preserve">
+    <value>click reload</value>
+  </data>
+  <data name="QuestionFilter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="QuestionGpsNavigation" xml:space="preserve">
+    <value>This question will be treated as GPS navigation question for Interviewer</value>
+  </data>
+  <data name="QuestionHideInstruction" xml:space="preserve">
+    <value>Hide instruction</value>
+  </data>
+  <data name="QuestionInstruction" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
+  <data name="QuestionLinkedDescr" xml:space="preserve">
+    <value>Bind to list question or question from roster group</value>
+  </data>
+  <data name="QuestionMustBeBound" xml:space="preserve">
+    <value>You must bind this question</value>
+  </data>
+  <data name="QuestionQuestionType" xml:space="preserve">
+    <value>Question type</value>
+  </data>
+  <data name="QuestionScope" xml:space="preserve">
+    <value>Question scope</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Question text</value>
+  </data>
+  <data name="QuestionToUpdateOptions" xml:space="preserve">
+    <value>To update options</value>
+  </data>
+  <data name="QuestionVariableLabel" xml:space="preserve">
+    <value>Variable label</value>
+  </data>
+  <data name="QuestionVariableName" xml:space="preserve">
+    <value>Variable name</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Select question</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Validation condition</value>
+  </data>
 </root>

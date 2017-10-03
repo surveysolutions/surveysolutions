@@ -1,6 +1,6 @@
 ﻿<form role="form" id="question-editor" name="questionForm" unsaved-warning-form ng-show="activeQuestion">
     <div id="show-reload-details-promt" class="ng-cloak" ng-show="activeQuestion.shouldUserSeeReloadDetailsPromt">
-        <div class="inner">Click <a ng-click="loadQuestion();" href="javascript:void(0);">reload</a> to update options</div>
+        <div class="inner">{{'QuestionToUpdateOptions' | i18next}} <a ng-click="loadQuestion();" href="javascript:void(0);" ng-i18next="QuestionClickReload"></a></div>
     </div>
     <div class="form-holder">
 
@@ -10,7 +10,7 @@
 
         <div class="row">
             <div class="form-group col-xs-6">
-                <label class="wb-label">Question type</label><br>
+                <label class="wb-label" ng-i18next="QuestionQuestionType"></label><br>
                 <div class="btn-group type-container-dropdown" uib-dropdown>
                     <button id="questionTypeBtn" class="btn btn-default form-control" uib-dropdown-toggle type="button">
                         <i class="icon {{answerTypeClass[activeQuestion.type]}}"></i>
@@ -32,7 +32,7 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-5 pull-right">
-                <label for="edit-question-variable-name" class="wb-label">Variable name<help key="variableName" placement="left" /></label><br />
+                <label for="edit-question-variable-name" class="wb-label">{{'QuestionVariableName' | i18next }}<help key="variableName" placement="left" /></label><br />
                 <input id="edit-question-variable-name" type="text" 
                        ng-model="activeQuestion.variable" 
                        spellcheck="false"
@@ -40,17 +40,16 @@
             </div>
         </div>
         <div class="form-group" ng-show="activeQuestion.type=='GpsCoordinates' && activeQuestion.questionScope == 'Identifying'">
-            <span class="edit-question-note">
-                This question will be treated as GPS navigation question for Interviewer
+            <span class="edit-question-note" ng-i18next="QuestionGpsNavigation">
             </span>
         </div>
         <div class="form-group">
-            <label for="edit-variable-label" class="wb-label">Variable label<help key="variableLabel" /></label><br>
+            <label for="edit-variable-label" class="wb-label">{{'QuestionVariableLabel' | i18next}}<help key="variableLabel" /></label><br>
             <input id="edit-variable-label" type="text" ng-model="activeQuestion.variableLabel" class="form-control" maxlength="80">
         </div>
 
         <div class="form-group">
-            <label for="edit-question-title" class="wb-label">Question text</label><br>
+            <label for="edit-question-title" class="wb-label" ng-i18next="QuestionText"></label><br>
             <div class="pseudo-form-control">
                 <div id="edit-question-title-highlight"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.title"></div>
@@ -67,15 +66,15 @@
             </div>
         </div>
         <div class="form-group" ng-show="!((showInstruction===undefined && initialQuestion.instructions) || showInstruction)">
-            <button type="button" class="btn btn-lg btn-link" ng-click="showInstruction=true">Add Interviewer Instruction</button>
+            <button type="button" class="btn btn-lg btn-link" ng-click="showInstruction=true" ng-i18next="QuestionAddInstruction"></button>
         </div>
 
         <div class="row" ng-show="(showInstruction===undefined && initialQuestion.instructions) || showInstruction">
             <div class="form-group col-xs-11">
-                <label for="edit-question-instructions">Instruction <help key="instruction" /></label>
+                <label for="edit-question-instructions"> {{'QuestionInstruction' | i18next}} <help key="instruction" /></label>
 
                 <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions" />
-                <label for="cb-hide-instructions"><span></span>Hide instruction <help key="hideInstructions" /></label>
+                <label for="cb-hide-instructions"><span></span>{{'QuestionHideInstruction' | i18next}} <help key="hideInstructions" /></label>
 
                 <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
             </div>
@@ -88,10 +87,10 @@
 
         <div class="form-group enabling-group" ng-hide="!doesQuestionSupportEnablementConditions()">
             <div class="enabling-group-marker"></div>
-            <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
+            <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 
             <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideIfDisabled" />
-            <label for="cb-hideIfDisabled"><span></span>Hide if disabled <help key="hideIfDisabled" /></label>
+            <label for="cb-hideIfDisabled"><span></span>{{'HideIfDisabled' | i18next}} <help key="hideIfDisabled" /></label>
 
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" 
@@ -101,7 +100,7 @@
 
         <div class="form-group validation-group" ng-if="doesQuestionSupportValidations()" ng-repeat="validation in activeQuestion.validationConditions" id="validationCondition{{$index}}">
             <div class="validation-group-marker"></div>
-            <label>Validation condition {{$index + 1}} <help key="validationExpression" /></label>
+            <label>{{'ValidationCondition' | i18next}} {{$index + 1}} <help key="validationExpression" /></label>
 
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
@@ -112,19 +111,19 @@
                      ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
 
-            <label for="validationMessage{{$index}}" class="validation-message">Error message <help key="validationMessage"/></label>
+            <label for="validationMessage{{$index}}" class="validation-message">{{'ErrorMessage' | i18next}} <help key="validationMessage"/></label>
             <div class="pseudo-form-control">
                 <div ng-attr-id="{{'validation-message-' + $index}}" ng-attr-tabindex="{{$index + 1}}"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="validation.message"></div>
             </div>
         </div>
         <div class="form-group" ng-if="doesQuestionSupportValidations() && activeQuestion.validationConditions.length < 10">
-            <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()">Add new validation rule</button>
+            <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()" ng-i18next="AddValidationRule"></button>
         </div>
 
     <div class="form-group">
         <div class="form-group pull-right">
-            <label for="Question-scope">Question scope&nbsp;</label>
+            <label for="Question-scope">{{'QuestionScope' | i18next }}&nbsp;</label>
             <div class="btn-group dropup " uib-dropdown>
                 <button class="btn dropdown-toggle" id="Question-scope" uib-dropdown-toggle type="button">
                     {{ activeQuestion.questionScope }}
@@ -144,7 +143,7 @@
 
     <script type="text/ng-template" id="categorical-filter-expression">
         <div class="form-group" ng-if="!activeQuestion.isLinked && !activeQuestion.isCascade">
-            <label class="wb-label" for="optionsFilterExpression">Filter</label>
+            <label class="wb-label" for="optionsFilterExpression" ng-i18next="QuestionFilter"></label>
             <div class="pseudo-form-control">
                 <div id="optionsFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.optionsFilterExpression"></div>
             </div>
@@ -154,10 +153,10 @@
     <script type="text/ng-template" id="linkTemplate.html">
         <div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
             <input type="hidden" name="linkedToEntity" ng-model="activeQuestion.linkedToEntity" ng-required="true" />
-            <label for="linkedEntitySource">Bind to list question or question from roster group</label>
+            <label for="linkedEntitySource" ng-i18next="QuestionLinkedDescr"></label>
             <div class="btn-group" uib-dropdown>
                 <button class="btn dropdown-toggle" uib-dropdown-toggle id="linkedEntitySource" type="button">
-                    <span class="select-placeholder" ng-if="(activeQuestion.linkedToEntity.title || '') == ''">Select question</span>
+                    <span class="select-placeholder" ng-if="(activeQuestion.linkedToEntity.title || '') == ''" ng-i18next="SelectQuestion"></span>
 
                     <span class="selected-item" ng-if="(activeQuestion.linkedToEntity.title || '') !== ''">
                         <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
@@ -208,11 +207,10 @@
                     </li>
                 </ul>
             </div>
-            <p class="help-block ng-cloak" ng-show="questionForm.linkedToEntity.$error.required">
-                You must bind this question
+            <p class="help-block ng-cloak" ng-show="questionForm.linkedToEntity.$error.required" ng-i18next="QuestionMustBeBound">
             </p>
             <hr />
-            <label for="optionsFilterExpression">Filter</label>
+            <label for="optionsFilterExpression" ng-i18next>QuestionFilter</label>
 
             <div class="pseudo-form-control">
                 <div id="optionsFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
@@ -222,11 +220,11 @@
     </div>
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button" class="btn btn-lg " ng-class="{ 'btn-primary': questionForm.$dirty }" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid">Save</button>
-            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelQuestion()">Cancel</button>
+            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button" class="btn btn-lg " ng-class="{ 'btn-primary': questionForm.$dirty }" unsaved-warning-clear ng-click="saveQuestion()" ng-disabled="!questionForm.$valid" ng-i18next>Save</button>
+            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelQuestion()" ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
-            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)" unsaved-warning-clear>Delete</button>
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)" unsaved-warning-clear ng-i18next>Delete</button>
             <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
         </div>
     </div>
