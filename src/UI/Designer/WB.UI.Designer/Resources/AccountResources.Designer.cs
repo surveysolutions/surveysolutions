@@ -61,11 +61,173 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Rights Reserved..
+        /// </summary>
+        public static string AllRights {
+            get {
+                return ResourceManager.GetString("AllRights", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This is a tool for creating surveys for The&amp;nbsp;World&amp;nbsp;Bank’s CAPI platform with collaboration capabilities and export to PDF..
+        /// </summary>
+        public static string AppDescription {
+            get {
+                return ResourceManager.GetString("AppDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire Designer.
+        /// </summary>
+        public static string AppName {
+            get {
+                return ResourceManager.GetString("AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The World Bank Group.
+        /// </summary>
+        public static string CompanyName {
+            get {
+                return ResourceManager.GetString("CompanyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forgot Password?.
+        /// </summary>
+        public static string ForgotPassword {
+            get {
+                return ResourceManager.GetString("ForgotPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string Help {
+            get {
+                return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your password reset link invalid or expired. Please try again.
         /// </summary>
         public static string InvalidResetPasswordLink {
             get {
                 return ResourceManager.GetString("InvalidResetPasswordLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legal.
+        /// </summary>
+        public static string Legal {
+            get {
+                return ResourceManager.GetString("Legal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string Login {
+            get {
+                return ResourceManager.GetString("Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please log in or.
+        /// </summary>
+        public static string LoginMessage {
+            get {
+                return ResourceManager.GetString("LoginMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login or email.
+        /// </summary>
+        public static string LoginOrEmail {
+            get {
+                return ResourceManager.GetString("LoginOrEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are using an outdated browser.
+        /// </summary>
+        public static string OutdatedBrowserMessage {
+            get {
+                return ResourceManager.GetString("OutdatedBrowserMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register.
+        /// </summary>
+        public static string Register {
+            get {
+                return ResourceManager.GetString("Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stay logged in for a day.
+        /// </summary>
+        public static string StaySignedIn {
+            get {
+                return ResourceManager.GetString("StaySignedIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install Survey Solutions Questionnaire Tester on an Android tablet to test questionnaires you develop on Designer..
+        /// </summary>
+        public static string TesterApp {
+            get {
+                return ResourceManager.GetString("TesterApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get it on Google Play.
+        /// </summary>
+        public static string TesterAppImageDescription {
+            get {
+                return ResourceManager.GetString("TesterAppImageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please &lt;a href=&quot;http://browsehappy.com/&quot;&gt;upgrade your browser&lt;/a&gt; to use designer application..
+        /// </summary>
+        public static string UpgradeYourBrowser {
+            get {
+                return ResourceManager.GetString("UpgradeYourBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome to Survey Solutions.
+        /// </summary>
+        public static string Welcome {
+            get {
+                return ResourceManager.GetString("Welcome", resourceCulture);
             }
         }
     }
