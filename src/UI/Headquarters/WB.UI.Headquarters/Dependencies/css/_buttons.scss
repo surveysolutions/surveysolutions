@@ -176,6 +176,8 @@ a.disabled{
 }
 .cancel{
 	border: none;
+	$cross-height: 24px;
+	@include cancel($cross-height);
 }
 .button-flag{
 	display: inline-block;
@@ -185,6 +187,7 @@ a.disabled{
     background-size: 75px 22px;
     background-position: -38px 0;  
 	border: none;
+	outline: none;
 	&:hover, &:focus{
 		background-position: -57px 0;
 	}

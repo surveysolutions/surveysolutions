@@ -5837,7 +5837,7 @@ button.close {
   letter-spacing: 1px;
   text-transform: uppercase; }
 
-.filters, .content {
+.filters, .content, .filters-results {
   height: 100%;
   top: 0;
   left: 0;
@@ -5879,7 +5879,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   opacity: 1;
   filter: alpha(opacity=100); }
 
-.btn-clear, .search .btn-clear, .aside-menu .dropdown-menu, .dataTables_wrapper .dataTables_filter label input, .question:after, .question.hidden-by-filter.disabled-question:after, .unit-section.hidden-by-filter .question:after {
+.btn-clear, .search .btn-clear, .aside-menu .dropdown-menu, .dataTables_wrapper .dataTables_filter label input, .question:after {
   opacity: 0;
   filter: alpha(opacity=0);
   visibility: hidden; }
@@ -6170,7 +6170,43 @@ a.disabled {
   display: none; }
 
 .cancel {
-  border: none; }
+  border: none;
+  background-color: transparent;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  margin: 0;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  display: block;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+  .cancel:before, .cancel:after {
+    display: block;
+    content: "";
+    width: 24px;
+    height: 2px;
+    background-color: #a6a8a9;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: relative;
+    top: 11px;
+    -webkit-transition: background 0.2s linear 0s;
+    -moz-transition: background 0.2s linear 0s;
+    -ms-transition: background 0.2s linear 0s;
+    -o-transition: background 0.2s linear 0s;
+    transition: background 0.2s linear 0s; }
+  .cancel:after {
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    top: 9px; }
+  .cancel:hover:before, .cancel:hover:after, .cancel:focus:before, .cancel:focus:after, .cancel:active:before, .cancel:active:after {
+    background-color: #595c5d; }
 
 .button-flag, .flag:before {
   display: inline-block;
@@ -6179,7 +6215,8 @@ a.disabled {
   background: transparent url("../img/flags.png") no-repeat;
   background-size: 75px 22px;
   background-position: -38px 0;
-  border: none; }
+  border: none;
+  outline: none; }
   @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
     .button-flag, .flag:before {
       /* on retina, use image that's scaled by 2 */
@@ -8032,14 +8069,30 @@ span.image-zoom-box, span.image-option {
   margin-bottom: 10px; }
 .filters input.checkbox-filter ~ label {
   padding-left: 30px;
-  font-weight: normal; }
+  font-weight: normal;
+  color: #a6a8a9; }
+  .filters input.checkbox-filter ~ label:hover, .filters input.checkbox-filter ~ label:focus {
+    color: #6b6b6b; }
   .filters input.checkbox-filter ~ label .tick {
     left: -5px; }
+.filters input.checkbox-filter:checked ~ label {
+  color: #3f3f3f; }
 
 .filters-container {
   color: #3f3f3f;
-  border-bottom: 3px solid #ececec;
   padding: 0 15px 20px 15px; }
+  .filters-container h2 {
+    margin-bottom: 10px; }
+  .filters-container .about-questionnaire {
+    font-size: 14px;
+    line-height: 16px; }
+    .filters-container .about-questionnaire li {
+      padding-bottom: 3px; }
+      .filters-container .about-questionnaire li b a {
+        font-weight: bold; }
+
+.filter-actions-block {
+  margin-bottom: 10px; }
 
 .block-filter {
   margin-bottom: 15px; }
@@ -8053,10 +8106,10 @@ span.image-zoom-box, span.image-option {
     .block-filter select option {
       width: 200px; }
   .block-filter .form-group {
-    margin-bottom: 10px; }
+    margin-bottom: 5px; }
     .block-filter .form-group label {
       font-size: 14px;
-      line-height: 16px;
+      line-height: 20px;
       font-family: inherit;
       font-family: inherit;
       margin: 0; }
@@ -8102,13 +8155,11 @@ span.image-zoom-box, span.image-option {
       background-size: 21px 20px; } }
 
 .preset-filters-container {
+  border-top: 3px solid #ececec;
   padding: 30px 15px 20px 15px; }
   .preset-filters-container a, .preset-filters-container .export-queue {
     color: #2a81cb;
     display: block; }
-
-.filters-container .flagged-questions, .filters-container .reset-filters {
-  margin: 0; }
 
 .filters .help-block {
   margin-top: 10px; }
@@ -9515,6 +9566,14 @@ main.hidden.display-block {
   text-align: right;
   clear: both; }
 
+.pointer {
+  cursor: pointer; }
+
+.short-row {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; }
+
 @media (max-width: 1210px) {
   html body {
     padding-top: 70px; }
@@ -9651,14 +9710,9 @@ main.hidden.display-block {
     word-wrap: break-word;
     overflow-wrap: break-word; }
 
-.filters-container .flagged-questions, .filters-container .reset-filters {
-  padding-top: 0; }
-.filters-container .separate-filters-group {
-  margin: 0; }
-.filters-container .reset-filters {
-  margin: 15px 5px; }
-  .filters-container .reset-filters a {
-    color: #3f3f3f; }
+.reset-filters {
+  font-size: 14px;
+  line-height: 16px; }
 
 .separate-filters-group {
   background-image: -webkit-linear-gradient(left, #dbdfe2 0%, #dbdfe2 100%);
@@ -9669,7 +9723,7 @@ main.hidden.display-block {
   background-repeat: no-repeat;
   background-size: 65px 1px;
   background-position: 10px 100%;
-  padding: 15px 0; }
+  padding: 0 0 15px 0; }
 
 .bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.button-flag, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.flag:before, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.flag:before {
   padding-left: 35px; }
@@ -9679,15 +9733,6 @@ main.hidden.display-block {
 
 .quotes {
   color: #3f3f3f; }
-
-.pink-text {
-  color: #e3008b; }
-
-.light-blue-text {
-  color: #5fd3c6; }
-
-label.inactive {
-  color: #a6a8a9; }
 
 .preset-filters-container .block-filter {
   margin-bottom: 20px; }
@@ -9699,29 +9744,90 @@ label.inactive {
   .preset-filters-container .block-filter .dropdown-menu li a {
     margin: 0; }
 
-.content {
+.content, .filters-results {
   border-right: 3px solid #ececec;
+  width: 510px; }
+
+.content {
+  z-index: 4;
   left: 12px;
-  width: 570px;
   -webkit-box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
-  z-index: 4; }
-  .content .questionnaire-content {
-    padding: 25px 0 5px 30px;
-    border-bottom: 3px solid #ececec; }
-    .content .questionnaire-content .breadcrumb {
-      margin-bottom: 5px; }
-    .content .questionnaire-content div {
-      overflow: hidden; }
-      .content .questionnaire-content div h2 {
-        margin: 0 20px 10px 0;
-        line-height: 36px;
-        float: left; }
-      .content .questionnaire-content div button {
-        float: right;
-        margin-right: 5px; }
-        .content .questionnaire-content div button:first-of-type {
-          margin-right: 15px; }
+  box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+
+.filters-results {
+  -webkit-transition: all 0.3s linear 0s;
+  -moz-transition: all 0.3s linear 0s;
+  -ms-transition: all 0.3s linear 0s;
+  -o-transition: all 0.3s linear 0s;
+  transition: all 0.3s linear 0s;
+  left: -510px;
+  z-index: 5;
+  background-color: #ececec;
+  border-right-color: #dfdfdf; }
+  .filters-results.active {
+    left: 342px; }
+  .filters-results h2 {
+    margin: 0;
+    padding: 30px 40px 25px 30px;
+    color: #000; }
+  .filters-results .breadcrumb {
+    padding: 10px 30px;
+    margin-bottom: 0; }
+    .filters-results .breadcrumb a {
+      color: #2a81cb; }
+  .filters-results .close-btn {
+    position: absolute;
+    top: 75px;
+    right: 0px; }
+  .filters-results .unit-section {
+    border-top: 2px solid #2a81cb; }
+    .filters-results .unit-section .question {
+      font: 14px/16px "RobotoRegular";
+      display: block;
+      color: #3f3f3f;
+      border: none;
+      padding: 12px 30px;
+      border-top: 1px solid #fff; }
+      .filters-results .unit-section .question:hover, .filters-results .unit-section .question:focus, .filters-results .unit-section .question.active, .filters-results .unit-section .question:active {
+        background-color: #f3f3f3;
+        text-decoration: none; }
+
+.web-interview-for-supervisor.filters-results-are-shown .filters .foldback-button {
+  display: block; }
+.web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters {
+  left: -342px;
+  overflow: visible;
+  box-shadow: none; }
+  .web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters .foldback-button {
+    right: -50px;
+    background-color: #dbdfe2;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px; }
+    .web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters .foldback-button span.arrow {
+      right: 2px;
+      -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      -o-transform: rotate(-45deg);
+      transform: rotate(-45deg); }
+      .web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg); }
+    .web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters .foldback-button .glyphicon {
+      display: inline-block; }
+  .web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters .foldback-button {
+    right: -50px; }
+.web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters-results.active {
+  left: 12px;
+  width: 330px; }
+  .web-interview-for-supervisor.filters-results-are-shown.fullscreen-hidden-filters .filters-results.active h2 {
+    padding-left: 45px; }
+.web-interview-for-supervisor .filters {
+  width: 330px;
+  z-index: 6;
+  -webkit-box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
 
 .complete-link {
   display: block;
@@ -9745,8 +9851,11 @@ label.inactive {
   position: relative; }
 
 .details-interview.questionnaire {
-  margin-left: 570px;
-  width: calc(100% - 570px); }
+  margin-left: 510px;
+  width: calc(100% - 510px); }
+
+.structured-content > .panel-default:first-of-type > .panel-heading h3 > a {
+  padding-right: 30px; }
 
 .questionnaire {
   background-color: #f8f8f8;
@@ -9920,38 +10029,6 @@ label.inactive {
   background-color: #a6a8a9;
   background-image: none; }
 
-.question.hidden-by-filter {
-  background: #f8f8f8;
-  padding: 2px; }
-  .question.hidden-by-filter > .question-editor, .question.hidden-by-filter > h5, .preset-filters-container .question.hidden-by-filter > a, .preset-filters-container .question.hidden-by-filter > .export-queue, .question.hidden-by-filter > .dropdown {
-    display: none; }
-
-.hidden-by-filter {
-  min-height: auto; }
-  .hidden-by-filter .question.disabled-question, .hidden-by-filter.question.disabled-question {
-    min-height: auto; }
-
-.unit-section.hidden-by-filter .unit-title .breadcrumb, .unit-section.hidden-by-filter .unit-title h3 {
-  display: none; }
-.unit-section.hidden-by-filter .question {
-  padding: 2px 0;
-  background: #f8f8f8; }
-  .unit-section.hidden-by-filter .question * {
-    display: none; }
-.unit-section.hidden-by-filter .unit-title {
-  padding: 2px 0;
-  box-shadow: none;
-  border-bottom: 2px solid #dbdfe2;
-  z-index: 1; }
-.unit-section.hidden-by-filter .unit-title {
-  background-color: #cce2f5; }
-.unit-section.hidden-by-filter.section-with-error > .unit-title,
-.unit-section.hidden-by-filter .has-error > .unit-title {
-  background-color: #fbe2dc; }
-.unit-section.hidden-by-filter.complete-section > .unit-title,
-.unit-section.hidden-by-filter .complete-section > .unit-title {
-  background-color: #d1f6c5; }
-
 .question-editor {
   position: relative;
   max-width: 445px; }
@@ -10118,11 +10195,8 @@ label.inactive {
 .content .humburger-foldback-button {
   display: none; }
 
-.web-interview .content .questionnaire-content div button.btn-history {
-  margin-right: 10px; }
-
 .fullscreen-hidden-content .content {
-  left: -570px;
+  left: -510px;
   box-shadow: none; }
   .fullscreen-hidden-content .content .humburger-foldback-button {
     top: 65px;
@@ -10149,7 +10223,7 @@ label.inactive {
 .web-interview-for-supervisor.fullscreen-hidden-content .content,
 .web-interview-for-supervisor.fullscreen-hidden-filters .content,
 .web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters .content {
-  left: 282px; }
+  left: 342px; }
 .web-interview-for-supervisor .details-interview.questionnaire,
 .web-interview-for-supervisor.fullscreen-hidden-content .details-interview.questionnaire,
 .web-interview-for-supervisor.fullscreen-hidden-filters .details-interview.questionnaire,
@@ -10283,12 +10357,25 @@ label.inactive {
     .web-interview-for-supervisor .filters .foldback-button {
       top: 65px; }
   .web-interview-for-supervisor .filters {
+    width: 270px;
     padding-top: 115px; }
+    .web-interview-for-supervisor .filters .filter-actions-block .btn-link {
+      margin-top: 15px; }
     .web-interview-for-supervisor .filters .foldback-button {
       top: 75px; }
     .web-interview-for-supervisor .filters .preset-filters-container, .web-interview-for-supervisor .filters .filters-container {
       padding-left: 10px;
       padding-right: 15px; }
+  .web-interview-for-supervisor .filters-results {
+    width: 330px; }
+    .web-interview-for-supervisor .filters-results.active {
+      left: 282px; }
+  .web-interview-for-supervisor .content {
+    left: 522px; }
+  .web-interview-for-supervisor.fullscreen-hidden-filters.filters-results-are-shown .filters-results.active {
+    width: 270px; }
+  .web-interview-for-supervisor.fullscreen-hidden-filters.filters-results-are-shown .filters {
+    left: -282px; }
 
   .content {
     width: 330px;
@@ -10310,6 +10397,7 @@ label.inactive {
   .web-interview-for-supervisor.fullscreen-hidden-content .content,
   .web-interview-for-supervisor.fullscreen-hidden-filters .content,
   .web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters .content {
+    left: 282px;
     box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
   .web-interview-for-supervisor .details-interview.questionnaire,
   .web-interview-for-supervisor.fullscreen-hidden-content .details-interview.questionnaire,
@@ -10321,10 +10409,13 @@ label.inactive {
   .web-interview-for-supervisor .details-interview.questionnaire {
     margin-left: 600px;
     width: calc(100% - 600px); }
+  .web-interview-for-supervisor .filters-results.active {
+    -webkit-box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
   .web-interview-for-supervisor.fullscreen-hidden-content .content {
     left: -330px;
     box-shadow: none;
-    z-index: 5;
+    z-index: 6;
     overflow: visible; }
     .web-interview-for-supervisor.fullscreen-hidden-content .content .foldback-button {
       right: -50px;
@@ -10352,6 +10443,9 @@ label.inactive {
   .web-interview-for-supervisor.fullscreen-hidden-content .filters {
     overflow: auto;
     box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+  .web-interview-for-supervisor.fullscreen-hidden-content.filters-results-are-shown .details-interview.questionnaire {
+    margin-left: 600px;
+    width: calc(100% - 600px); }
   .web-interview-for-supervisor.fullscreen-hidden-filters .filters {
     left: -282px;
     overflow: visible; }
@@ -10375,10 +10469,13 @@ label.inactive {
         display: inline-block; }
     .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button {
       right: -50px; }
+  .web-interview-for-supervisor.fullscreen-hidden-filters.filters-results-are-shown .content {
+    left: 282px; }
+  .web-interview-for-supervisor.fullscreen-hidden-filters.filters-results-are-shown .details-interview.questionnaire {
+    margin-left: 600px;
+    width: calc(100% - 600px); }
   .web-interview-for-supervisor.fullscreen-hidden-filters .content {
     left: 12px; }
-    .web-interview-for-supervisor.fullscreen-hidden-filters .content .questionnaire-content {
-      padding-left: 45px; }
   .web-interview-for-supervisor.fullscreen-hidden-filters .details-interview.questionnaire {
     margin-left: 330px;
     width: calc(100% - 330px); }
@@ -10392,12 +10489,13 @@ label.inactive {
       top: 125px; }
   .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .details-interview.questionnaire {
     margin-left: 0px;
-    width: calc(100% - 0px); } }
+    width: calc(100% - 0px); }
+  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content.filters-results-are-shown .details-interview.questionnaire {
+    margin-left: 270px;
+    width: calc(100% - 270px); } }
 @media (max-width: 1210px) {
   .content {
     padding-top: 70px; }
-    .content .questionnaire-content .breadcrumb {
-      margin-right: 30px; }
 
   .wide-navbar .content {
     padding-top: 60px; }
@@ -10410,95 +10508,103 @@ label.inactive {
   .questionnaire .unit-title.is_stuck {
     top: 70px !important; }
 
+  .web-interview-for-supervisor .filters, .web-interview-for-supervisor .content {
+    overflow: visible; }
+    .web-interview-for-supervisor .filters .foldback-button, .web-interview-for-supervisor .content .foldback-button {
+      right: -50px;
+      background-color: #dbdfe2;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px; }
+      .web-interview-for-supervisor .filters .foldback-button span.arrow, .web-interview-for-supervisor .content .foldback-button span.arrow {
+        right: 2px;
+        -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg); }
+        .web-interview-for-supervisor .filters .foldback-button span.arrow:first-of-type, .web-interview-for-supervisor .content .foldback-button span.arrow:first-of-type {
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          -o-transform: rotate(45deg);
+          transform: rotate(45deg); }
+      .web-interview-for-supervisor .filters .foldback-button .glyphicon, .web-interview-for-supervisor .content .foldback-button .glyphicon {
+        display: inline-block; }
   .web-interview-for-supervisor .filters {
-    padding-top: 105px;
     left: -282px;
     box-shadow: none; }
+    .web-interview-for-supervisor .filters .foldback-button {
+      top: 65px; }
   .web-interview-for-supervisor .content {
-    left: 12px; }
+    left: -330px;
+    box-shadow: none; }
     .web-interview-for-supervisor .content .foldback-button {
-      top: 65px; }
-  .web-interview-for-supervisor .questionnaire.details-interview {
+      top: 115px; }
+  .web-interview-for-supervisor .details-interview.questionnaire {
+    margin-left: 0px;
+    width: calc(100% - 0px); }
+    .web-interview-for-supervisor .details-interview.questionnaire .unit-title {
+      padding-left: 60px; }
+  .web-interview-for-supervisor.filters-results-are-shown .filters-results h2 {
+    padding-left: 40px; }
+  .web-interview-for-supervisor.filters-results-are-shown .filters-results.active {
+    left: 12px; }
+  .web-interview-for-supervisor.filters-results-are-shown .details-interview.questionnaire {
     margin-left: 330px;
     width: calc(100% - 330px); }
-  .web-interview-for-supervisor .questionnaire .unit-title {
-    padding-left: 60px; }
-  .web-interview-for-supervisor.fullscreen-hidden-content .content {
-    left: -330px;
-    box-shadow: none; }
-  .web-interview-for-supervisor.fullscreen-hidden-content .questionnaire.details-interview {
+  .web-interview-for-supervisor.filters-results-are-shown .content {
+    z-index: 6; }
+  .web-interview-for-supervisor.show-filters .content {
+    z-index: 7; }
+    .web-interview-for-supervisor.show-filters .content .foldback-button {
+      top: 65px; }
+  .web-interview-for-supervisor.show-filters .questionnaire.details-interview {
     margin-left: 270px;
     width: calc(100% - 270px); }
-  .web-interview-for-supervisor.fullscreen-hidden-content .filters {
-    left: 0;
+  .web-interview-for-supervisor.show-filters .filters {
     overflow: auto;
-    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-    .web-interview-for-supervisor.fullscreen-hidden-content .filters .foldback-button {
-      top: 65px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters .filters {
-    overflow: auto;
-    left: 0;
-    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-    .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button {
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+    left: 0; }
+    .web-interview-for-supervisor.show-filters .filters .foldback-button {
       right: 10px;
       background-color: transparent; }
-      .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button span.arrow {
+      .web-interview-for-supervisor.show-filters .filters .foldback-button span.arrow {
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         -o-transform: rotate(45deg);
         transform: rotate(45deg); }
-        .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button span.arrow:first-of-type {
+        .web-interview-for-supervisor.show-filters .filters .foldback-button span.arrow:first-of-type {
           -webkit-transform: rotate(-45deg);
           -ms-transform: rotate(-45deg);
           -o-transform: rotate(-45deg);
           transform: rotate(-45deg); }
-      .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button .glyphicon {
+      .web-interview-for-supervisor.show-filters .filters .foldback-button .glyphicon {
         display: none; }
-    .web-interview-for-supervisor.fullscreen-hidden-filters .filters .foldback-button {
-      top: 65px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire.details-interview {
-    margin-left: 270px;
-    width: calc(100% - 270px); }
-  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .unit-title {
-    padding-left: 60px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .button-flag, .web-interview-for-supervisor.fullscreen-hidden-filters .questionnaire .flag:before {
-    left: -20px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters .content {
-    left: -330px;
-    box-shadow: none; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content {
+  .web-interview-for-supervisor.show-filters.filters-results-are-shown .questionnaire.details-interview {
+    margin-left: 330px;
+    width: calc(100% - 330px); }
+  .web-interview-for-supervisor.show-content .content {
     left: 12px;
-    overflow: auto;
-    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
-    .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
+    box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+    z-index: 5; }
+    .web-interview-for-supervisor.show-content .content .foldback-button {
       right: 10px;
       background-color: transparent; }
-      .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow {
+      .web-interview-for-supervisor.show-content .content .foldback-button span.arrow {
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         -o-transform: rotate(45deg);
         transform: rotate(45deg); }
-        .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+        .web-interview-for-supervisor.show-content .content .foldback-button span.arrow:first-of-type {
           -webkit-transform: rotate(-45deg);
           -ms-transform: rotate(-45deg);
           -o-transform: rotate(-45deg);
           transform: rotate(-45deg); }
-      .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button .glyphicon {
+      .web-interview-for-supervisor.show-content .content .foldback-button .glyphicon {
         display: none; }
-    .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .questionnaire-content {
-      padding-left: 50px; }
-    .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .content .foldback-button {
+    .web-interview-for-supervisor.show-content .content .foldback-button {
       top: 65px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire.details-interview {
+  .web-interview-for-supervisor.show-content .details-interview.questionnaire {
     margin-left: 330px;
     width: calc(100% - 330px); }
-  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .button-flag, .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .flag:before {
-    left: -20px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .questionnaire .unit-title {
-    padding-left: 60px; }
-  .web-interview-for-supervisor.fullscreen-hidden-filters.fullscreen-hidden-content .filters {
-    box-shadow: none;
-    left: -282px; }
 
   .modal-img {
     top: 60px; } }
@@ -10510,6 +10616,18 @@ label.inactive {
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle; }
+  .web-interview.web-interview-for-supervisor .content .foldback-button {
+    top: 115px; }
+  .web-interview.filters-results-are-shown .filters-results.active {
+    width: 100%;
+    left: 0; }
+    .web-interview.filters-results-are-shown .filters-results.active .close-btn {
+      right: 10px; }
+  .web-interview.filters-results-are-shown .content, .web-interview.filters-results-are-shown .filters {
+    display: none; }
+  .web-interview.filters-results-are-shown .questionnaire.details-interview {
+    margin-left: 0px;
+    width: calc(100% - 0px); }
   .web-interview .content {
     box-shadow: none;
     left: -330px;
@@ -10538,18 +10656,23 @@ label.inactive {
     padding-left: 60px; }
   .web-interview .filters .foldback-button {
     top: 65px; }
-  .web-interview.fullscreen-hidden-filters .content, .web-interview.fullscreen-hidden-filters .questionnaire {
+  .web-interview.fullscreen-hidden-filters .content, .web-interview.fullscreen-hidden-filters .questionnaire, .web-interview.show-filters .content, .web-interview.show-filters .questionnaire {
     display: none; }
-  .web-interview.fullscreen-hidden-filters .filters {
+  .web-interview.fullscreen-hidden-filters .filters, .web-interview.show-filters .filters {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
     width: 100%; }
-  .web-interview.fullscreen-hidden-content .filters, .web-interview.fullscreen-hidden-content .questionnaire {
+  .web-interview.show-filters .filters {
+    margin-left: 0; }
+    .web-interview.show-filters .filters .filters-container, .web-interview.show-filters .filters .preset-filters-container {
+      width: 330px;
+      margin: 0 auto; }
+  .web-interview.fullscreen-hidden-content .filters, .web-interview.fullscreen-hidden-content .questionnaire, .web-interview.show-content .filters, .web-interview.show-content .questionnaire {
     display: none; }
-  .web-interview.fullscreen-hidden-content .content {
+  .web-interview.fullscreen-hidden-content .content, .web-interview.show-content .content {
     overflow: auto;
     position: absolute;
     top: 0;
@@ -10558,30 +10681,25 @@ label.inactive {
     left: 0;
     width: 100%;
     border: none; }
-    .web-interview.fullscreen-hidden-content .content .foldback-button {
+    .web-interview.fullscreen-hidden-content .content .foldback-button, .web-interview.show-content .content .foldback-button {
       right: 10px;
       background-color: transparent; }
-      .web-interview.fullscreen-hidden-content .content .foldback-button span.arrow {
+      .web-interview.fullscreen-hidden-content .content .foldback-button span.arrow, .web-interview.show-content .content .foldback-button span.arrow {
         -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         -o-transform: rotate(45deg);
         transform: rotate(45deg); }
-        .web-interview.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type {
+        .web-interview.fullscreen-hidden-content .content .foldback-button span.arrow:first-of-type, .web-interview.show-content .content .foldback-button span.arrow:first-of-type {
           -webkit-transform: rotate(-45deg);
           -ms-transform: rotate(-45deg);
           -o-transform: rotate(-45deg);
           transform: rotate(-45deg); }
-      .web-interview.fullscreen-hidden-content .content .foldback-button .glyphicon {
+      .web-interview.fullscreen-hidden-content .content .foldback-button .glyphicon, .web-interview.show-content .content .foldback-button .glyphicon {
         display: none; }
-    .web-interview.fullscreen-hidden-content .content .foldback-button {
+    .web-interview.fullscreen-hidden-content .content .foldback-button, .web-interview.show-content .content .foldback-button {
       top: 65px; }
-    .web-interview.fullscreen-hidden-content .content .humburger-foldback-button {
+    .web-interview.fullscreen-hidden-content .content .humburger-foldback-button, .web-interview.show-content .content .humburger-foldback-button {
       display: block; }
-  .web-interview.fullscreen-hidden-content.fullscreen-hidden-filters .content {
-    left: 0;
-    display: block; }
-    .web-interview.fullscreen-hidden-content.fullscreen-hidden-filters .content .foldback-button {
-      top: 65px; }
   .web-interview .structured-content > .panel-default:first-of-type > .panel-heading h3 > a {
     margin-right: 65px; }
 
@@ -10606,8 +10724,6 @@ label.inactive {
     width: 100%;
     margin-left: 0; } }
 @media only screen and (max-width: 615px) {
-  .web-interview .content .questionnaire-content div h2 {
-    float: none; }
   .web-interview .questionnaire .question {
     padding-left: 35px; }
   .web-interview .questionnaire .unit-title {
@@ -10621,11 +10737,11 @@ label.inactive {
   .web-interview .questionnaire .modal-img .modal-img-content {
     max-width: 60% !important; }
   .web-interview .questionnaire .options-group .badge {
-    left: -27px; }
+    left: -35px; }
   .web-interview .action-container, .web-interview .wrapper-info {
     padding-left: 45px; }
   .web-interview .lock {
-    left: -17px; } }
+    left: -25px; } }
 @media (max-width: 481px) {
   .web-interview .action-container, .web-interview .wrapper-info {
     padding-left: 25px;
@@ -10636,6 +10752,10 @@ label.inactive {
   .web-interview .questionnaire .unit-title {
     padding-left: 35px;
     padding-right: 10px; }
+  .web-interview .questionnaire .options-group .badge {
+    left: -28px; }
+  .web-interview .lock {
+    left: -17px; }
 
   .web-interview.web-interview-for-supervisor .aside-menu {
     right: 0;
