@@ -14,8 +14,10 @@
         useLocalStorage: false,
         interpolation: {
             format: function(value, format, lng) {
-                if (format === 'uppercase') return value.toUpperCase();
-                if(value instanceof Date) return moment(value).format(format);
+                if (format === 'uppercase') 
+                    return value.toUpperCase();
+                if(moment.isDate(value) || moment.isMoment(value)) 
+                    return moment(value).format(format);
                 return value;
             }
         }

@@ -283,6 +283,33 @@
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
     <value>{{count}} Sections:</value>
   </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>Download xlsx</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>Get Template for </value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>translation name</value>
+  </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>{{count}} Translation</value>
+  </data>
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>{{count}} Translations</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>Use this tab to manage questionnaire translations.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>You may download and update translations to different languages.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.</value>
+  </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Toggle Dropdown</value>
   </data>
@@ -297,5 +324,62 @@
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} warnings</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="CompilationErrorsCounter" xml:space="preserve">
+    <value>{{count}} error found</value>
+  </data>
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} errors found</value>
+  </data>
+  <data name="CompilationLabel" xml:space="preserve">
+    <value>Compilation:</value>
+  </data>
+  <data name="CompilationWarningsCounter" xml:space="preserve">
+    <value>{{count}} warning found</value>
+  </data>
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} warnings found</value>
+  </data>
+  <data name="MoveTo" xml:space="preserve">
+    <value>Move to</value>
+  </data>
+  <data name="Recompile" xml:space="preserve">
+    <value>Recompile</value>
+  </data>
+  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+    <value>format: {{- type}}</value>
+  </data>
+  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+    <value>{{width}} × {{height}}px</value>
+  </data>
+  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+    <value>size: {{size}}</value>
+  </data>
+  <data name="SideBarAttachmentsTitle" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="SideBarAttachmentUploaded" xml:space="preserve">
+    <value>uploaded: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+  </data>
+  <data name="SideBarLookupTitle" xml:space="preserve">
+    <value>Lookup tables</value>
+  </data>
+  <data name="SideBarMacroTitle" xml:space="preserve">
+    <value>Macros</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>Sections</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>Translations</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>Upload new translation</value>
+  </data>
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>Move to another sub-section:</value>
   </data>
 </root>

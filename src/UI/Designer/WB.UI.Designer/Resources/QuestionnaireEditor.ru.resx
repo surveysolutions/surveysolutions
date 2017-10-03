@@ -295,6 +295,24 @@
   <data name="SideBarSectionsCounter_2" xml:space="preserve">
     <value>{{count}} Секций:</value>
   </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>{{count}} Перевод</value>
+  </data>
+  <data name="SideBarTranslationsCounter_1" xml:space="preserve">
+    <value>{{count}} Перевода</value>
+  </data>
+  <data name="SideBarTranslationsCounter_2" xml:space="preserve">
+    <value>{{count}} Переводов</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>Используйте вкладку для управления переводами.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>Вы можете скачать и обновить переводы на разные языки.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>Перевод переопределит оригинальный текст. Поддерживаются пустые строки для отображения оригинального текста.</value>
+  </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Показать дропдаун</value>
   </data>
@@ -312,5 +330,77 @@
   </data>
   <data name="WarningsCounter_2" xml:space="preserve">
     <value>{{count}} предупреждений</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="CompilationErrorsCounter" xml:space="preserve">
+    <value>{{count}} ошибка найдена</value>
+  </data>
+  <data name="CompilationErrorsCounter_1" xml:space="preserve">
+    <value>{{count}} ошибки найдено</value>
+  </data>
+  <data name="CompilationErrorsCounter_2" xml:space="preserve">
+    <value>{{count}} ошибок найдено</value>
+  </data>
+  <data name="CompilationLabel" xml:space="preserve">
+    <value>Компиляция:</value>
+  </data>
+  <data name="CompilationWarningsCounter" xml:space="preserve">
+    <value>{{count}} предупреждение найдено</value>
+  </data>
+  <data name="CompilationWarningsCounter_1" xml:space="preserve">
+    <value>{{count}} предупреждения найдено</value>
+  </data>
+  <data name="CompilationWarningsCounter_2" xml:space="preserve">
+    <value>{{count}} предупреждений найдено</value>
+  </data>
+  <data name="MoveTo" xml:space="preserve">
+    <value>Перенести</value>
+  </data>
+  <data name="Recompile" xml:space="preserve">
+    <value>Перекомпилировать</value>
+  </data>
+  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+    <value>формат: {{- type}}</value>
+  </data>
+  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+    <value>{{width}} × {{height}}px</value>
+  </data>
+  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+    <value>размер: {{size}}</value>
+  </data>
+  <data name="SideBarAttachmentsTitle" xml:space="preserve">
+    <value>Вложения</value>
+  </data>
+  <data name="SideBarAttachmentUploaded" xml:space="preserve">
+    <value>загружено: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+  </data>
+  <data name="SideBarLookupTitle" xml:space="preserve">
+    <value>Справочные таблицы</value>
+  </data>
+  <data name="SideBarMacroTitle" xml:space="preserve">
+    <value>Макросы</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>Секции</value>
+  </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>Скачать xlsx</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>Получить шаблон для </value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>Переводы</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>Загрузить новый перевод</value>
+  </data>
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>Переместить в другую подсекцию:</value>
   </data>
 </root>

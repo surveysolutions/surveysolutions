@@ -6,7 +6,6 @@ angular.module('designerApp')
 
             $scope.macroSubtitutionHtml = "<span class=\"variable-name\">$"+ $i18next.t('VariableName') + "</span>";
             $scope.attachmentNameSubtitutionHtml = "<span class=\"variable-name\">"+ $i18next.t('VariableName') + "</span>"
-
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,
