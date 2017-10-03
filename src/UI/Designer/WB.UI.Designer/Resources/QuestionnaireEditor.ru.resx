@@ -484,8 +484,14 @@
   <data name="AddValidationRule" xml:space="preserve">
     <value>Добавить проверку</value>
   </data>
+  <data name="EnteredMoreThanAllowed" xml:space="preserve">
+    <value>Введено больше чем разшенное максимальное количество {{max}}</value>
+  </data>
   <data name="ErrorMessage" xml:space="preserve">
     <value>Сообщение об ошибке</value>
+  </data>
+  <data name="OptionsListError" xml:space="preserve">
+    <value>Ввод не верен. Каждая строка должна следовать следующему формату: "Текст...Значение". 'Текст' должен содержать символы или цифры. 'Значение' должно быть целочисленным. Пустые строки не разрешены.</value>
   </data>
   <data name="QuestionAddInstruction" xml:space="preserve">
     <value>Добавить инструкцию для интервьюера</value>
@@ -529,8 +535,71 @@
   <data name="QuestionVariableName" xml:space="preserve">
     <value>Имя переменной</value>
   </data>
+  <data name="RosterAddItem" xml:space="preserve">
+    <value>Добавить </value>
+  </data>
+  <data name="RosterName" xml:space="preserve">
+    <value>Имя ростера</value>
+  </data>
+  <data name="RosterShowStrings" xml:space="preserve">
+    <value>Показать строки</value>
+  </data>
+  <data name="RosterSource" xml:space="preserve">
+    <value>Тип источника ростера</value>
+  </data>
+  <data name="RosterSourceFixed" xml:space="preserve">
+    <value>Фиксированный список:</value>
+  </data>
+  <data name="RosterSourceNumericQuestion" xml:space="preserve">
+    <value>Ответ, определяющий количетво строк:</value>
+  </data>
+  <data name="RosterSourceNumericTitles" xml:space="preserve">
+    <value>Ответ, определяющий имена строк:</value>
+  </data>
+  <data name="RosterSourceQuestion" xml:space="preserve">
+    <value>Источник (ответ, определяющий имена и количество строк ростера):</value>
+  </data>
+  <data name="RosterVariableName" xml:space="preserve">
+    <value>Ростер ID</value>
+  </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Выбрать вопрос</value>
+  </data>
+  <data name="SettingsCan" xml:space="preserve">
+    <value>Может </value>
+  </data>
+  <data name="SettingsInviteCollaborators" xml:space="preserve">
+    <value>Пригласить участников по e-mail:</value>
+  </data>
+  <data name="SettingsOwner" xml:space="preserve">
+    <value>владелец</value>
+  </data>
+  <data name="SettingsPrivate" xml:space="preserve">
+    <value>Личным</value>
+  </data>
+  <data name="SettingsPublic" xml:space="preserve">
+    <value>Общим</value>
+  </data>
+  <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+    <value>Сделать опросник </value>
+  </data>
+  <data name="SettingsRevokeAccess" xml:space="preserve">
+    <value>Отменить доступ</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Настройки опросника</value>
+  </data>
+  <data name="SettingsVisibleToEveryone" xml:space="preserve">
+    <value>видим всем в режиме только чтение</value>
+  </data>
+  <data name="SettingsVisibleToOwner" xml:space="preserve">
+    <value>видим только для владельца</value>
+  </data>
+  <data name="SettingsWhoHasAccess" xml:space="preserve">
+    <value>У кого есть доступ:</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+    <value>Показать список</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Проверка</value>
