@@ -70,6 +70,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new validation rule.
+        /// </summary>
+        internal static string AddValidationRule {
+            get {
+                return ResourceManager.GetString("AddValidationRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachment preview.
         /// </summary>
         internal static string AttachmentPreview {
@@ -201,6 +210,24 @@ namespace WB.UI.Designer.Resources {
         internal static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling condition.
+        /// </summary>
+        internal static string EnablingCondition {
+            get {
+                return ResourceManager.GetString("EnablingCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error message.
+        /// </summary>
+        internal static string ErrorMessage {
+            get {
+                return ResourceManager.GetString("ErrorMessage", resourceCulture);
             }
         }
         
@@ -403,6 +430,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        internal static string GroupTitle {
+            get {
+                return ResourceManager.GetString("GroupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hi, {{currentUserName}}.
         /// </summary>
         internal static string HellowMessageBtn {
@@ -417,6 +453,15 @@ namespace WB.UI.Designer.Resources {
         internal static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide if disabled.
+        /// </summary>
+        internal static string HideIfDisabled {
+            get {
+                return ResourceManager.GetString("HideIfDisabled", resourceCulture);
             }
         }
         
@@ -502,11 +547,137 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Interviewer Instruction.
+        /// </summary>
+        internal static string QuestionAddInstruction {
+            get {
+                return ResourceManager.GetString("QuestionAddInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to click reload.
+        /// </summary>
+        internal static string QuestionClickReload {
+            get {
+                return ResourceManager.GetString("QuestionClickReload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        internal static string QuestionFilter {
+            get {
+                return ResourceManager.GetString("QuestionFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This question will be treated as GPS navigation question for Interviewer.
+        /// </summary>
+        internal static string QuestionGpsNavigation {
+            get {
+                return ResourceManager.GetString("QuestionGpsNavigation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide instruction.
+        /// </summary>
+        internal static string QuestionHideInstruction {
+            get {
+                return ResourceManager.GetString("QuestionHideInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instruction.
+        /// </summary>
+        internal static string QuestionInstruction {
+            get {
+                return ResourceManager.GetString("QuestionInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bind to list question or question from roster group.
+        /// </summary>
+        internal static string QuestionLinkedDescr {
+            get {
+                return ResourceManager.GetString("QuestionLinkedDescr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must bind this question.
+        /// </summary>
+        internal static string QuestionMustBeBound {
+            get {
+                return ResourceManager.GetString("QuestionMustBeBound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R).
         /// </summary>
         internal static string QuestionnaireSummary {
             get {
                 return ResourceManager.GetString("QuestionnaireSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question type.
+        /// </summary>
+        internal static string QuestionQuestionType {
+            get {
+                return ResourceManager.GetString("QuestionQuestionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question scope.
+        /// </summary>
+        internal static string QuestionScope {
+            get {
+                return ResourceManager.GetString("QuestionScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question text.
+        /// </summary>
+        internal static string QuestionText {
+            get {
+                return ResourceManager.GetString("QuestionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To update options.
+        /// </summary>
+        internal static string QuestionToUpdateOptions {
+            get {
+                return ResourceManager.GetString("QuestionToUpdateOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable label.
+        /// </summary>
+        internal static string QuestionVariableLabel {
+            get {
+                return ResourceManager.GetString("QuestionVariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name.
+        /// </summary>
+        internal static string QuestionVariableName {
+            get {
+                return ResourceManager.GetString("QuestionVariableName", resourceCulture);
             }
         }
         
@@ -543,6 +714,15 @@ namespace WB.UI.Designer.Resources {
         internal static string SavedAtTimestamp {
             get {
                 return ResourceManager.GetString("SavedAtTimestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select question.
+        /// </summary>
+        internal static string SelectQuestion {
+            get {
+                return ResourceManager.GetString("SelectQuestion", resourceCulture);
             }
         }
         
@@ -1029,6 +1209,15 @@ namespace WB.UI.Designer.Resources {
         internal static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition.
+        /// </summary>
+        internal static string ValidationCondition {
+            get {
+                return ResourceManager.GetString("ValidationCondition", resourceCulture);
             }
         }
         
