@@ -1,17 +1,18 @@
-﻿<div class="modal fade" id="mExportPdf">
+﻿@using WB.UI.Designer.Resources
+<div class="modal fade" id="mExportPdf">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Generating pdf for "<span id="export-pdf-modal-questionnaire-title">?</span>"</h4>
+                <h4 class="modal-title">@Html.Raw(string.Format(QuestionnaireController.GeneratingPdf, "<span id=\"export-pdf-modal-questionnaire-title\">?</span>"))</h4>
             </div>
             <div class="modal-body">
-                <pre id="export-pdf-modal-status">Initializing...</pre>
+                <pre id="export-pdf-modal-status">@QuestionnaireController.Initializing...</pre>
             </div>
             <div class="modal-footer">
-                <button id="pdfDownloadButton" class="btn btn-primary pull-left">Download PDF</button>
-                <button id="pdfRetryGenerate" class="btn btn-primary" onclick="questionnaireActionModel.retryPdfExport()">Retry export as PDF</button>
-                <button id="pdfCancelButton" class="btn pull-right" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                <button id="pdfDownloadButton" class="btn btn-primary pull-left">@QuestionnaireController.DownloadPdf</button>
+                <button id="pdfRetryGenerate" class="btn btn-primary" onclick="questionnaireActionModel.retryPdfExport()">@QuestionnaireController.RetryExportPDF</button>
+                <button id="pdfCancelButton" class="btn pull-right" data-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
             </div>
         </div>
     </div>
