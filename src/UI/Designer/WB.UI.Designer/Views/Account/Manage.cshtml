@@ -33,7 +33,7 @@
             @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "help-inline" })
         </div>
         <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="Change"/>
+            <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Change"/>
             @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
         </div>
     }
