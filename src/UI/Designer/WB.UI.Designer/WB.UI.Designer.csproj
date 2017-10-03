@@ -888,7 +888,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\QuestionnaireController.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
