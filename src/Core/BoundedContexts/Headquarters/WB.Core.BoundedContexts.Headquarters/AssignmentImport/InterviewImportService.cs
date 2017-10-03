@@ -127,11 +127,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                this.logger.Error("Fail valiation preloading", ex);
+                this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile });
                 FinishImportProcess();
-                logger.Error("Fail validation preloading", e);
-                throw;
             }
         }
 
