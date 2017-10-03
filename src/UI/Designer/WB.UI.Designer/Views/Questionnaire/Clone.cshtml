@@ -1,4 +1,5 @@
-﻿@using WB.UI.Shared.Web.Extensions
+﻿@using WB.UI.Designer.Resources
+@using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Models.QuestionnaireCloneModel
 <div id="edit-form">
     @if (TempData.ContainsKey(Alerts.SUCCESS))
@@ -9,13 +10,13 @@
     {
 
         @Html.AntiForgeryToken()
-        <h1>Copy Questionnaire</h1>
+        <h1>@QuestionnaireController.CopyQuestionnaire</h1>
         if (TempData.ContainsKey(Alerts.ERROR))
         {
             <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
         }
         <div class="form-group">
-            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = "Questionnaire Title" })
+            @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = QuestionnaireController.QuestionnaireTitle })
             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "help-inline" })
         </div>
         @*<div class="form-group">
@@ -26,9 +27,9 @@
         </div>*@
         @Html.HiddenFor(x => x.Id)
         <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="Copy" id="inputCloneQuestionnaire"/>
-            @Html.ActionLink("Cancel", "Index", "Questionnaire", null, new { @class = "btn " })
-            @Html.ActionLink("Back to List", "Index", "Questionnaire", null, new { @class = "btn " })
+            <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Copy" id="inputCloneQuestionnaire"/>
+            @Html.ActionLink(QuestionnaireController.Cancel, "Index", "Questionnaire", null, new { @class = "btn " })
+            @Html.ActionLink(QuestionnaireController.BackToList, "Index", "Questionnaire", null, new { @class = "btn " })
         </div>
     }
 </div>

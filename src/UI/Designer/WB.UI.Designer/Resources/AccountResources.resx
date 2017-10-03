@@ -121,7 +121,7 @@
     <value>All Rights Reserved.</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>This is a tool for creating surveys for The&#160;World&#160;Bank’s CAPI platform with collaboration capabilities and export to PDF.</value>
+    <value>This is a tool for creating surveys for The World Bank’s CAPI platform with collaboration capabilities and export to PDF.</value>
   </data>
   <data name="AppName" xml:space="preserve">
     <value>Questionnaire Designer</value>
@@ -173,6 +173,9 @@
   </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>Login or email</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Log out</value>
   </data>
   <data name="OutdatedBrowserMessage" xml:space="preserve">
     <value>You are using an outdated browser</value>
