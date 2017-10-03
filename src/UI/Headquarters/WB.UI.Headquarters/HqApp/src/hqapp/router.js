@@ -5,14 +5,14 @@ import views from "./views"
 
 Vue.use(VueRouter)
 
-const routes = _(views).chain().map("routes").concat({
-    path: "*", component: {
-        render:  (h) => h('h2', 
-            "Route not found. Base path is window.input.settings.config.basePath: "
-            + window.input.settings.config.basePath)
-        }
+const routes = _.chain(views).flattenDeep().map("routes").flatten().value();
+
+routes.push({path: "*", component: {
+    render:  (h) => h('h2', 
+        "Route not found. Base path is window.input.settings.config.basePath: "
+        + window.input.settings.config.basePath)
     }
-).flatten().value();
+})
 
 export default new VueRouter({
     base: window.input.settings.config.basePath,
