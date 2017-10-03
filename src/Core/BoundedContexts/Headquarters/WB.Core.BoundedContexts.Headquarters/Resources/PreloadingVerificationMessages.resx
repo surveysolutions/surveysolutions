@@ -232,4 +232,7 @@
   <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
     <value>Audio question cannot be preloaded.</value>
   </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>File with questionnaire level data is missing.</value>
+  </data>
 </root>

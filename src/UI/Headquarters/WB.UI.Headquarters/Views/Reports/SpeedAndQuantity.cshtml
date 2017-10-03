@@ -1,10 +1,14 @@
 ﻿@using System.Web.Optimization
+@using WB.Core.BoundedContexts.Headquarters.Resources
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.UI.Headquarters.Resources
 @model WB.Core.BoundedContexts.Headquarters.Views.Reposts.PeriodicStatusReportModel
 @{
     ViewBag.Title = Model.ReportName;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var isSpeedReport = ViewBag.ActivePage == MenuItem.SpeedOfCompletingInterviews;
+    var isSupervisor = ServiceLocator.Current.GetInstance<IAuthorizedUser>().IsSupervisor;
 }
 
 @section scripts
@@ -66,7 +70,7 @@
                     <div class="block-filter">
                         <h5>@PeriodicStatusReport.Questionnaire</h5>
                         <select id="questionnaireSelector" data-bind="value: SelectedQuestionnaire, selectPicker: {}">
-                            <option value="" selected="selected">@Common.AllQuestionnaires</option>
+                            <option value="" selected="selected">@Strings.AllQuestionnaires</option>
                             @foreach (var item in Model.Questionnaires)
                             {
                                 <option value='{"questionnaireId": "@item.TemplateId","questionnaireVersion": "@item.TemplateVersion"}'>(@PeriodicStatusReport.Version @item.TemplateVersion) @item.TemplateName</option>
@@ -146,7 +150,7 @@
                             @if (Model.TotalRowPresent)
                             {
                                 <tr class="total-row">
-                                    <td><span><b>@(isSpeedReport? PeriodicStatusReport.Average: PeriodicStatusReport.Total)</b></span></td>
+                                    <td><span><b>@(isSupervisor ? Strings.AllInterviewers : Strings.AllTeams)</b></span></td>
                                     <!-- ko foreach: ((TotalRow() || {}).@(Model.ReportName)ByPeriod || []) -->
                                     <td class="type-numeric"><span data-bind='text: $root.Format@(Model.ReportName)Period($data)'></span></td>
                                     <!-- /ko -->

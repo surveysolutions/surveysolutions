@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Archive with binary data (e.g., pictures).
+        ///   Looks up a localized string similar to Archive with binary data (e.g., pictures, audio).
         /// </summary>
         internal static string BinaryDescription {
             get {
@@ -250,7 +250,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last generated.
+        ///   Looks up a localized string similar to Generated on.
         /// </summary>
         internal static string LastGeneratedTitle {
             get {

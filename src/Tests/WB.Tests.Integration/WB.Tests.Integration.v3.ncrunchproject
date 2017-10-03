@@ -84,6 +84,12 @@
       <FixtureTestSelector>
         <FixtureName>WB.Tests.Integration.AssignmentsDeletionServiceTests.AssignmetnsDeletionServiceTests</FixtureName>
       </FixtureTestSelector>
+      <NamedTestSelector>
+        <TestName>WB.Tests.Integration.ResourcesTranslationTests.ResourcesTranslationTests.when_checking_that_translated_resources_have_same_property_names_in_format_elements_as_original</TestName>
+      </NamedTestSelector>
+      <NamedTestSelector>
+        <TestName>WB.Tests.Integration.ResourcesTranslationTests.when_checking_all_translations.should_not_contain_empty_strings</TestName>
+      </NamedTestSelector>
     </IgnoredTests>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
     <RunPostBuildEvents>True</RunPostBuildEvents>

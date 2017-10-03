@@ -74,15 +74,24 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             );
 
         private static StartedInterviewsViewModel DashboardStartedInterviewsViewModel()
-            => new StartedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
-                Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
+            => new StartedInterviewsViewModel(
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
+                Substitute.For<IPrincipal>());
 
         private static CompletedInterviewsViewModel DashboardCompletedInterviewsViewModel()
-            => new CompletedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
-                Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
+            => new CompletedInterviewsViewModel(
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
+                Substitute.For<IPrincipal>());
 
         private static RejectedInterviewsViewModel DashboardRejectedInterviewsViewModel()
-            => new RejectedInterviewsViewModel(Substitute.For<IPlainStorage<InterviewView>>(),
-                Substitute.For<IInterviewViewModelFactory>(), Substitute.For<IPrincipal>());
+            => new RejectedInterviewsViewModel(
+                Substitute.For<IPlainStorage<InterviewView>>(),
+                Substitute.For<IInterviewViewModelFactory>(),
+                Substitute.For<IPlainStorage<PrefilledQuestionView>>(),
+                Substitute.For<IPrincipal>());
     }
 }

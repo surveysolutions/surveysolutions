@@ -27,9 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             var questionType = questionnaire.GetQuestionType(result.Identity.Id);
             if (questionType == QuestionType.SingleOption)
             {
-                int singleOptionAnswer;
-
-                if (!int.TryParse(answer, out singleOptionAnswer))
+                if (!int.TryParse(answer, out var singleOptionAnswer))
                 {
                     throw new ArgumentException($@"Incorrect answer type for SingleOption question: '{result.VariableName}' => '{answer}'", nameof(answer));
                 }

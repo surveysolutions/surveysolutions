@@ -247,6 +247,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Complete(Guid userId, string comment, DateTime completeTime)
         {
+            Complete(userId, comment, completeTime, true);
+        }
+
+        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTime completeTime)
+        {
+            Complete(userId, comment, completeTime, false);
+        }
+
+        private void Complete(Guid userId, string comment, DateTime completeTime, bool isNeedFirePassiveEvents)
+        {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
@@ -255,9 +265,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
-            var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
-
-            this.ApplyPassiveEvents(treeDifference);
+            if (isNeedFirePassiveEvents)
+            {
+                var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);
+                this.ApplyPassiveEvents(treeDifference);
+            }
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
@@ -396,11 +408,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int GetGroupsInGroupCount(Identity group) => this.GetGroupsAndRostersInGroup(group).Count();
 
-        private IEnumerable<InterviewTreeQuestion> GetEnabledQuestions()
-            => this.Tree.FindQuestions().Where(question => !question.IsDisabled());
+        private IEnumerable<InterviewTreeQuestion> GetEnabledNotHiddenQuestions() 
+            => this.Tree.FindQuestions().Where(question => !question.IsDisabled() && !question.IsHidden);
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledInterviewerQuestions()
-            => this.GetEnabledQuestions().Where(question =>
+            => this.GetEnabledNotHiddenQuestions().Where(question =>
                 question.IsInterviewer && !question.IsReadonly);
 
         public int CountActiveAnsweredQuestionsInInterview()
@@ -408,15 +420,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int CountActiveQuestionsInInterview() => this.GetEnabledInterviewerQuestions().Count();
 
+        public int CountAllEnabledUnansweredQuestions()
+            => this.GetEnabledNotHiddenQuestions().Count(question => !question.IsAnswered());
+
         public int CountAllEnabledAnsweredQuestions()
-            => this.GetEnabledQuestions().Count(question => question.IsAnswered());
-        public int CountAllEnabledQuestions() => this.GetEnabledQuestions().Count();
+            => this.GetEnabledNotHiddenQuestions().Count(question => question.IsAnswered());
+        public int CountAllEnabledQuestions() => this.GetEnabledNotHiddenQuestions().Count();
         public int CountAllInvalidEntities() => this.GetAllInvalidEntitiesInInterview().Count();
 
         public int CountEnabledSupervisorQuestions()
-            => this.GetEnabledQuestions().Count(question => question.IsSupervisors);
+            => this.GetEnabledNotHiddenQuestions().Count(question => question.IsSupervisors);
 
-        public int CountEnabledHiddenQuestions() => this.GetEnabledQuestions().Count(question => question.IsHidden);
+        public int CountEnabledHiddenQuestions() => 
+            this.Tree.FindQuestions().Where(question => !question.IsDisabled()).Count(question => question.IsHidden);
 
         public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
 
@@ -733,10 +749,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            return new InterviewSynchronizationDto(
+            var interviewSynchronizationDto = new InterviewSynchronizationDto(
                 id: Id,
                 status: Status,
-                comments: SupervisorRejectComment,
+                comments: Status == InterviewStatus.RejectedBySupervisor ? SupervisorRejectComment : null,
                 rejectDateTime:  this.properties.RejectDateTime,
                 interviewerAssignedDateTime : this.properties.InterviewerAssignedDateTime,
                 userId: CurrentResponsibleId,
@@ -759,6 +775,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledVariables: disabledVariables,
                 wasCompleted: this.properties.WasCompleted,
                 createdOnClient: true);
+            interviewSynchronizationDto.InterviewKey = GetInterviewKey();
+            interviewSynchronizationDto.AssignmentId = GetAssignmentId();
+
+            return interviewSynchronizationDto;
         }
 
         public bool IsReadOnlyQuestion(Identity identity)

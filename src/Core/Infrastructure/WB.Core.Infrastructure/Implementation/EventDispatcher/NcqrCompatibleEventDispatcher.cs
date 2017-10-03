@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Ncqrs;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -14,9 +13,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 {
@@ -29,7 +26,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
 
-        public ITransactionManagerProvider TransactionManager { get; set; }
 
         public NcqrCompatibleEventDispatcher(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger)
         {
@@ -67,7 +63,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             if (occurredExceptions.Count > 0)
                 throw new AggregateException(
-                    string.Format("{0} handler(s) failed to handle published event '{1}' by event source '{2}' with sequence '{3}'.", occurredExceptions.Count, eventMessage.EventIdentifier, eventMessage.EventSourceId, eventMessage.EventSequence),
+                    $"{occurredExceptions.Count} handler(s) failed to handle published event '{eventMessage.EventIdentifier}' by event source '{eventMessage.EventSourceId}' with sequence '{eventMessage.EventSequence}'.",
                     occurredExceptions);
         }
 
@@ -93,15 +89,13 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             foreach (var functionalEventHandler in functionalHandlers)
             {
-                var handler = (IFunctionalEventHandler) functionalEventHandler.Handler;
+                var handler = (IFunctionalEventHandler)functionalEventHandler.Handler;
 
                 functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;
                 try
                 {
-                    this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
                     handler.Handle(events, firstEventSourceId);
-                    this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
                 }
                 catch (Exception exception)
                 {
@@ -126,8 +120,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     {
                         errorsDuringHandling.Add(eventHandlerException);
                     }
-
-                    this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
                 }
                 finally
                 {
@@ -140,26 +132,21 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 foreach (var handler in oldStyleHandlers)
                 {
-                    if(!handler.Bus.CanHandleEvent(publishableEvent))
+                    if (!handler.Bus.CanHandleEvent(publishableEvent))
                         continue;
-					
-                    handler.Bus.OnCatchingNonCriticalEventHandlerException +=
-                        this.OnCatchingNonCriticalEventHandlerException;
+
+                    handler.Bus.OnCatchingNonCriticalEventHandlerException += this.OnCatchingNonCriticalEventHandlerException;
                     try
                     {
-                        this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
                         handler.Bus.Publish(publishableEvent);
-                        this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
                     }
                     catch (Exception exception)
                     {
                         errorsDuringHandling.Add(exception);
-                        this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
                     }
                     finally
                     {
-                        handler.Bus.OnCatchingNonCriticalEventHandlerException -=
-                            this.OnCatchingNonCriticalEventHandlerException;
+                        handler.Bus.OnCatchingNonCriticalEventHandlerException -= this.OnCatchingNonCriticalEventHandlerException;
                     }
                 }
             }
@@ -210,14 +197,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             bus.OnCatchingNonCriticalEventHandlerException += this.OnCatchingNonCriticalEventHandlerException;
             try
             {
-                this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
                 bus.Publish(eventMessage);
-                this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
             }
             catch (Exception exception)
             {
                 occurredExceptions.Add(exception);
-                this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
             }
             finally
             {
@@ -239,8 +223,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 inProcessBus.RegisterHandler(handler, ieventHandler.GenericTypeArguments[0]);
             }
 
-            var functionalDenormalizer = handler as IFunctionalEventHandler;
-            if (functionalDenormalizer != null)
+            if (handler is IFunctionalEventHandler functionalDenormalizer)
             {
                 functionalDenormalizer.RegisterHandlersInOldFashionNcqrsBus(inProcessBus);
             }
@@ -261,7 +244,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private static bool IsIEventHandlerInterface(Type type)
         {
             var typeInfo = type.GetTypeInfo();
-            return typeInfo.IsInterface && typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof (IEventHandler<>);
+            return typeInfo.IsInterface && typeInfo.IsGenericType && typeInfo.GetGenericTypeDefinition() == typeof(IEventHandler<>);
         }
     }
 }

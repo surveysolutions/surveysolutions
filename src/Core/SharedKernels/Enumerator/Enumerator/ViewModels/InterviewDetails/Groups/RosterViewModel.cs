@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
+using MvvmCross.Platform.Platform;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -61,25 +64,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private void UpdateFromInterview()
         {
-            var statefulInterview = this.interviewRepository.Get(this.interviewId);
-
-            var interviewRosterInstances =
-                statefulInterview.GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id).ToList();
-
-            var rosterIdentitiesByViewModels = this.RosterInstances.Select(viewModel => viewModel.Identity).ToList();
-
-            var notChangedRosterInstances = rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
-
             this.mainThreadDispatcher.RequestMainThreadAction(
-                () => this.UpdateViewModels(rosterIdentitiesByViewModels, notChangedRosterInstances, interviewRosterInstances));
+                () =>
+                {
+                    var statefulInterview = this.interviewRepository.Get(this.interviewId);
+
+                    var interviewRosterInstances =
+                        statefulInterview.GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id).ToList();
+
+                    var rosterIdentitiesByViewModels = this.RosterInstances.Select(viewModel => viewModel.Identity).ToList();
+                    var notChangedRosterInstances = rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
+
+                    var removedRosterInstances = rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
+                    var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
+
+                    this.UpdateViewModels(removedRosterInstances, addedRosterInstances, interviewRosterInstances);
+                });
         }
 
-        private void UpdateViewModels(List<Identity> rosterIdentitiesByViewModels, List<Identity> notChangedRosterInstances,
+        private void UpdateViewModels(List<Identity> removedRosterInstances, List<Identity> addedRosterInstances,
             List<Identity> interviewRosterInstances)
         {
-            var removedRosterInstances = rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
-            var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
-
             foreach (var removedRosterInstance in removedRosterInstances)
             {
                 var rosterInstanceViewModel = this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(removedRosterInstance));

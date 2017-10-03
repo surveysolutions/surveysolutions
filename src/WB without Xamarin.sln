@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6B97CFA4-4A98-412B-80E8-10511E781DCE}"
 EndProject
@@ -34,11 +34,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernels.DataC
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BoundedContexts", "BoundedContexts", "{E3404571-E3D0-47E8-94FC-001982D11D59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.BoundedContexts.Designer", "Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj", "{DCBFC3F0-8E8C-4529-B474-B6A79225450E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Designer", "Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj", "{DCBFC3F0-8E8C-4529-B474-B6A79225450E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Headquarters", "Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj", "{3017EC6D-AE4A-4C19-A653-352999592A7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj", "{D3EFCC0C-4A50-484D-A9FF-252DC7916ECD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3464F3AE-094C-4DEC-8725-59506328E597} = {3464F3AE-094C-4DEC-8725-59506328E597}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernels.DataCollection.Portable", "Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj", "{553B4FC2-5FC7-4256-B14D-82758D64A3BD}"
 EndProject

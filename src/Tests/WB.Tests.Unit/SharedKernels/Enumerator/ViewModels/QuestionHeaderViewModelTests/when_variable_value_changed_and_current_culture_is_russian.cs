@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
         Because of = () => viewModel.Init("interview", substitutionTargetQuestionIdentity);
 
-        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Your first variable is 31.01.2016 and second is 7,77");
+        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Your first variable is 2016-01-31 and second is 7,77");
 
         Cleanup cleanup = () => changedCulture.Dispose();
 

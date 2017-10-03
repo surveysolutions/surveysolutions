@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
-using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -15,7 +14,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
@@ -172,8 +170,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [NoTransaction]
-        public ActionResult ReadSide() => this.View();
-
         public ActionResult RepeatLastInterviewStatus(Guid? interviewId)
         {
             if (!interviewId.HasValue)

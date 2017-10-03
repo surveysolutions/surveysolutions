@@ -41,9 +41,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 .Returns(new HeaderStructureForLevel()
                 {
                     HeaderItems =
-                        new Dictionary<Guid, ExportedHeaderItem>
+                        new Dictionary<Guid, IExportedHeaderItem>
                         {
-                            { Guid.NewGuid(), new ExportedHeaderItem() { VariableName = "q1", ColumnNames = new[] { "q1" } } }
+                            { Guid.NewGuid(), new ExportedQuestionHeaderItem() { VariableName = "q1", ColumnNames = new[] { "q1" } } }
                         }
                 });
 

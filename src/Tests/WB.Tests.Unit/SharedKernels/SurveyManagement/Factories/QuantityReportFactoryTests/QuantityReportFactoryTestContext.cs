@@ -6,21 +6,16 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportFactoryTests
 {
     [Subject(typeof(QuantityReportFactory))]
     internal class QuantityReportFactoryTestContext
     {
-        protected static QuantityReportFactory CreateQuantityReportFactory(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatuses = null,
-            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage=null)
+        protected static QuantityReportFactory CreateQuantityReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null)
         {
             return new QuantityReportFactory(
-                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewStatuses>>(), interviewStatusTimeSpansStorage??new TestInMemoryWriter<InterviewStatusTimeSpans>());
+                interviewStatuses ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
         protected static QuantityByInterviewersReportInputModel CreateQuantityByInterviewersReportInputModel(

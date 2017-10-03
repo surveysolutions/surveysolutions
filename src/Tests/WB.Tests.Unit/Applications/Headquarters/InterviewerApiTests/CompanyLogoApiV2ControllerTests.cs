@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         {
             CompanyLogo logo = Create.Entity.HqCompanyLogo();
             IPlainKeyValueStorage<CompanyLogo> logoStorage = new InMemoryKeyValueStorage<CompanyLogo>();
-            logoStorage.Store(logo, CompanyLogo.StorageKey);
+            logoStorage.Store(logo, CompanyLogo.CompanyLogoStorageKey);
 
             var controller = this.GetController(logoStorage);
 
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         {
             CompanyLogo logo = Create.Entity.HqCompanyLogo();
             IPlainKeyValueStorage<CompanyLogo> logoStorage = new InMemoryKeyValueStorage<CompanyLogo>();
-            logoStorage.Store(logo, CompanyLogo.StorageKey);
+            logoStorage.Store(logo, CompanyLogo.CompanyLogoStorageKey);
 
             var controller = this.GetController(logoStorage, requestEtag: $"\"{logo.GetEtagValue()}\"");
 

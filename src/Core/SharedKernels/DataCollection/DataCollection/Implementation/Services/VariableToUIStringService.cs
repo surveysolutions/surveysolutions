@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
@@ -24,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                     variableAsString = b.ToString();
                     break;
                 case DateTime dt:
-                    variableAsString = dt.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+                    variableAsString = dt.ToString(DateTimeFormat.DateFormat);
                     break;
             }
 

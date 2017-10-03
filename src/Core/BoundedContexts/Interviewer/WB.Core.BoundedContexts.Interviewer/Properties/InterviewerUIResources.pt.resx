@@ -132,9 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>({0}) concluído</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Criar entrevista</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Nova ({0})</value>
   </data>
@@ -157,7 +154,7 @@
     <value>({0}) rejeitado</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Tem certeza que deseja excluir esta entrevista "{0}" ?</value>
+    <value>Tem certeza que deseja excluir esta entrevista #{0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Começou ({0})</value>

@@ -1,5 +1,6 @@
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using NHibernate.Criterion;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Transactions;
 
@@ -11,12 +12,22 @@ namespace WB.UI.Shared.Web.Filters
         
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            this.TransactionManager.GetTransactionManager().BeginQueryTransaction();
+            this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            this.TransactionManager.GetTransactionManager().RollbackQueryTransaction();
+            if (this.TransactionManager.GetTransactionManager().TransactionStarted)
+            {
+                if (actionExecutedContext.Exception != null)
+                {
+                    this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
+                }
+                else
+                {
+                    this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
+                }
+            }
         }
     }
 }

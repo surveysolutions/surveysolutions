@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,14 +7,34 @@ using System.Text;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
+    public static class ThreadHelper
+    {
+        public static int MainThreadId { get; private set; }
+
+        public static void Initialize(int mainThreadId)
+        {
+            MainThreadId = mainThreadId;
+        }
+
+        public static bool IsOnMainThread => Environment.CurrentManagedThreadId == MainThreadId;
+    }
+
     public static class GlobalStopwatcher
     {
+        private const string DebugTag = "WBDEBUG";
+
         public class StopwatchScope : IDisposable
         {
+            public string Category { get; }
+            public string Name { get; }
             private readonly StopwatchWrapper stopwatch;
 
-            internal StopwatchScope(StopwatchWrapper stopwatch)
+            internal StopwatchScope(StopwatchWrapper stopwatch, string category, string name)
             {
+                Debug.WriteLine($"[{(ThreadHelper.IsOnMainThread ? "MT" : "  ")}] Start scope {category} => {name}",
+                    DebugTag);
+                Category = category;
+                Name = name;
                 this.stopwatch = stopwatch;
                 this.stopwatch.Start();
             }
@@ -21,6 +42,8 @@ namespace WB.Core.GenericSubdomains.Portable
             public void Dispose()
             {
                 this.stopwatch.Stop();
+                Debug.WriteLine($"[{(ThreadHelper.IsOnMainThread ? "MT" : "  ")}] Stop scope {Category} => {Name}",
+                    DebugTag);
             }
         }
 
@@ -48,21 +71,25 @@ namespace WB.Core.GenericSubdomains.Portable
 
         private class StopwatchesCategory
         {
-            public Dictionary<string, StopwatchWrapper> Stopwatches { get; } = new Dictionary<string, StopwatchWrapper>();
+            public ConcurrentDictionary<string, StopwatchWrapper> Stopwatches { get; } = new ConcurrentDictionary<string, StopwatchWrapper>();
         }
 
-        private static readonly Dictionary<string, StopwatchesCategory> categories = new Dictionary<string, StopwatchesCategory>();
+        private static readonly ConcurrentDictionary<string, StopwatchesCategory> Categories = new ConcurrentDictionary<string, StopwatchesCategory>();
 
         public static StopwatchScope Scope(string name) => Scope("$global", name);
 
-        public static StopwatchScope Scope(string category, string name) => new StopwatchScope(GetStopwatch(category, name));
+        public static StopwatchScope Scope(string category, string name)
+        {
+            return new StopwatchScope(GetStopwatch(category, name), category, name);
+        }
 
         private static StopwatchWrapper GetStopwatch(string category, string name)
-            => categories.GetOrUpdate(category, () => new StopwatchesCategory()).Stopwatches.GetOrUpdate(name, () => new StopwatchWrapper());
+            => Categories.GetOrAdd(category, 
+                _ => new StopwatchesCategory()).Stopwatches.GetOrAdd(name, _ => new StopwatchWrapper());
 
         public static void Reset()
         {
-            categories.Clear();
+            Categories.Clear();
         }
 
         public static void DumpToDebug()
@@ -78,7 +105,7 @@ namespace WB.Core.GenericSubdomains.Portable
             detailsBuilder.AppendLine("=====   Start of Global Stopwatcher Dump   =====");
             detailsBuilder.AppendLine();
 
-            foreach (var stopwatchesCategory in categories.OrderBy(category => category.Key))
+            foreach (var stopwatchesCategory in Categories.OrderBy(category => category.Key))
             {
                 detailsBuilder.AppendLine($"---     category: {stopwatchesCategory.Key}     ---");
 

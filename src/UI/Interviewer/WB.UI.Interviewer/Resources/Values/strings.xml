@@ -14,4 +14,5 @@
   <string name = "filepicker_create_folder_error_already_exists">The selected folder already exists</string>
   <string name = "filepicker_create_folder_error">Could not create folder</string>
   <string name = "filepicker_up_label">Up</string>
+  <string name="vertical_ellipsis">&#8942;</string>
 </resources>

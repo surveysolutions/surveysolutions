@@ -12,6 +12,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -112,6 +113,24 @@ namespace WB.Tests.Abc.TestFactories
             {
                 action.Invoke();
                 return true;
+            }
+        }
+        
+
+        public ServiceLocatorBuilder ServiceLocator()
+        {
+            return new ServiceLocatorBuilder();
+        }
+
+        internal class ServiceLocatorBuilder
+        {
+            private readonly Mock<IServiceLocator> mock = new Mock<IServiceLocator>();
+            public IServiceLocator Object => mock.Object;
+
+            public ServiceLocatorBuilder With<T>(T item)
+            {
+                mock.Setup(sl => sl.GetInstance<T>()).Returns(item);
+                return this;
             }
         }
     }

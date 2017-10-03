@@ -23,5 +23,5 @@
             "autoFix": true
         }     
     ],
-    "vetur.format.html.wrap_attributes": "force-aligned"    
+    "vetur.format.html.wrap_attributes": "force-aligned" 
 }

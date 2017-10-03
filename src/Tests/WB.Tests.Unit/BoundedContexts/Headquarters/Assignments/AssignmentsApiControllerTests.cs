@@ -1,5 +1,6 @@
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -24,7 +25,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IAuthorizedUser>(au => au.IsInterviewer == true && au.Id == Id.gA),
                 Mock.Of<IPlainStorageAccessor<Assignment>>(),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IInterviewCreatorFromAssignment>()
+                Mock.Of<IInterviewCreatorFromAssignment>(),
+                Mock.Of<IInterviewImportService>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

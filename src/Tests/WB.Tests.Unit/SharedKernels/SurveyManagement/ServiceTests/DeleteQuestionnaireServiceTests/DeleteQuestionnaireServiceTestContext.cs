@@ -1,13 +1,13 @@
 ﻿using System;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -28,7 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 new DeleteQuestionnaireService(
                     factory,
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
-                    Mock.Of<ITranslationManagementService>());
+                    Mock.Of<ITranslationManagementService>(),
+                    Mock.Of<IInterviewImportService>(_ => _.Status== new AssignmentImportStatus()));
         }
     }
 }

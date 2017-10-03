@@ -151,7 +151,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created at.
+        ///   Looks up a localized string similar to Created on.
         /// </summary>
         public static string CreatedAt {
             get {
@@ -183,6 +183,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewsNeeded {
             get {
                 return ResourceManager.GetString("InterviewsNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Size field must be -1 or more..
+        /// </summary>
+        public static string InvalidSize {
+            get {
+                return ResourceManager.GetString("InvalidSize", resourceCulture);
             }
         }
         
@@ -241,6 +250,96 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Indicator of whether the assignment is active or has been archived..
+        /// </summary>
+        public static string Tooltip_Filter_ArchivedStatus {
+            get {
+                return ResourceManager.GetString("Tooltip_Filter_ArchivedStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire..
+        /// </summary>
+        public static string Tooltip_Filter_Questionnaire {
+            get {
+                return ResourceManager.GetString("Tooltip_Filter_Questionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further..
+        /// </summary>
+        public static string Tooltip_Filter_Responsible {
+            get {
+                return ResourceManager.GetString("Tooltip_Filter_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews currently submitted for this assignment. More interviews may have been created but not synced. Click on any cell to view the associated interviews. Click on the sort icon to sort by count..
+        /// </summary>
+        public static string Tooltip_Table_Count {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When the assignment was initially created. Click on the sort icon to sort by time..
+        /// </summary>
+        public static string Tooltip_Table_CreatedAt {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_CreatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information that identifies each assignment. These are the answers to questions marked as identifying in Designer..
+        /// </summary>
+        public static string Tooltip_Table_IdentifyingQuestions {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_IdentifyingQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of interviews needed to complete this assignment..
+        /// </summary>
+        public static string Tooltip_Table_InterviewsNeeded {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_InterviewsNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User currently responsible for the assignment. Click sort icon to sort user name..
+        /// </summary>
+        public static string Tooltip_Table_Responsible {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum number of interviews that may be conducted for this assignment. Click on any cell to change this number. Click on the sort icon to sort by size..
+        /// </summary>
+        public static string Tooltip_Table_Size {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When the assignment was last updated. Click on the sort icon to sort by time..
+        /// </summary>
+        public static string Tooltip_Table_UpdatedAt {
+            get {
+                return ResourceManager.GetString("Tooltip_Table_UpdatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unarchive.
         /// </summary>
         public static string Unarchive {
@@ -259,7 +358,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updated at.
+        ///   Looks up a localized string similar to Updated on.
         /// </summary>
         public static string UpdatedAt {
             get {

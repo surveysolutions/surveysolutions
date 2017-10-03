@@ -46,11 +46,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private int QueryInterviewsCount()
         {
-            var shouldUseOwnTransaction = !this.TransactionManagerProvider.GetTransactionManager().IsQueryTransactionStarted;
+            var shouldUseOwnTransaction = !this.TransactionManagerProvider.GetTransactionManager().TransactionStarted;
 
             if (shouldUseOwnTransaction)
             {
-                this.TransactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
+                this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
             }
             try
             {
@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 if (shouldUseOwnTransaction)
                 {
-                    this.TransactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
+                    this.TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
                 }
             }
         }

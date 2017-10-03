@@ -66,22 +66,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         public void when_substitution_question_contains_non_existing_question_should_not_fail()
         {
             var targetEntityId = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Create.Entity.RosterVector(1));
-            
+
             var substitutedVariableId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             SubstitutionText text = CreateSubstitutionText(targetEntityId, "%rostertitle% %question% %variable%",
-                ByQuestions: new List<SubstitutionVariable>
+                new SubstitutionVariable
                 {
-                    new SubstitutionVariable
-                    {
-                        Id = substitutedVariableId,
-                        Name = "question"
-                    }
+                    Id = substitutedVariableId,
+                    Name = "question"
                 }
             );
-            
+
             var variableRawValue = "<b>variable value</b>";
-            
+
             var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
             {
                 Create.Entity.InterviewTreeVariable(Create.Entity.Identity(substitutedVariableId), value: variableRawValue)
@@ -105,29 +102,27 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             SubstitutionText text = CreateSubstitutionText(targetEntityId,
                 "%rostertitle% %question% %variable%",
-                new List<SubstitutionVariable>
+                new SubstitutionVariable
                 {
-                    new SubstitutionVariable
-                    {
-                        Id = substitutedQuestionId, 
-                        Name = "question"
-                    }
+                    Id = substitutedQuestionId,
+                    Name = "question"
                 },
-                new SubstitutionVariable()
+                new SubstitutionVariable
                 {
                     Id = substitutedRosterId,
                     Name = "rostertitle"
-                }.ToEnumerable().ToList(),
-                new SubstitutionVariable()
+                },
+                new SubstitutionVariable
                 {
                     Id = substitutedVariableId,
                     Name = "variable"
-                }.ToEnumerable().ToList()
+                }
             );
 
             var questionRawAnswer = "<b>question answer</b>";
             var variableRawValue = "<b>variable value</b>";
             var rosterRawValue = "<b>roster</b>";
+
             var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
             {
                 Create.Entity.InterviewTreeRoster(Create.Entity.Identity(substitutedRosterId, new decimal[] {1}),
@@ -136,6 +131,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(substitutedQuestionId), answer: questionRawAnswer),
                 Create.Entity.InterviewTreeVariable(Create.Entity.Identity(substitutedVariableId), value: variableRawValue)
             });
+
             var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
             text.SetTree(tree);
 
@@ -158,18 +154,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
         private SubstitutionText CreateSubstitutionText(
             Identity id,
             string template,
-            List<SubstitutionVariable> ByQuestions,
-            List<SubstitutionVariable> ByRosters = null,
-            List<SubstitutionVariable> ByVariables = null)
+            params SubstitutionVariable[] variables)
         {
             SubstitutionText text = new SubstitutionText(id,
                 template,
-                new SubstitutionVariables
-                {
-                    ByQuestions = ByQuestions,
-                    ByRosters = ByRosters ?? new List<SubstitutionVariable>(),
-                    ByVariables = ByVariables ?? new List<SubstitutionVariable>()
-                },
+                variables.ToList(),
                 Create.Service.SubstitutionService(),
                 Create.Service.VariableToUIStringService());
 

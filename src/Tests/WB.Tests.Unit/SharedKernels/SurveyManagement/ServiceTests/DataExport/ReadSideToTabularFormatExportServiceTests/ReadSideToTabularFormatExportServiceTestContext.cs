@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
     {
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(
             string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null,
-            IEnumerable<ExportedHeaderItem> headerItems = null)
+            IEnumerable<IExportedHeaderItem> headerItems = null)
         {
             return new HeaderStructureForLevel
             {
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
                 HeaderItems = headerItems?.ToDictionary(item => item.PublicKey, item => item)
-                    ?? new Dictionary<Guid, ExportedHeaderItem>
+                    ?? new Dictionary<Guid, IExportedHeaderItem>
                     {
                         { Guid.NewGuid(), CreateExportedHeaderItem() },
                         { Guid.NewGuid(), CreateExportedHeaderItem(QuestionType.Numeric, new[] { "a" }) }
@@ -90,9 +90,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             };
         }
 
-        protected static ExportedHeaderItem CreateExportedHeaderItem(
+        protected static ExportedQuestionHeaderItem CreateExportedHeaderItem(
             QuestionType type = QuestionType.Text, string[] columnNames = null, string variableName = "varname")
-            => new ExportedHeaderItem
+            => new ExportedQuestionHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
                 ColumnNames = columnNames ?? new[] { "1" },

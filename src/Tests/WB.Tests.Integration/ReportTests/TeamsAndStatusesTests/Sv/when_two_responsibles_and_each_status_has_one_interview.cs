@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             reportFactory = CreateSvTeamsAndStatusesReport(repository);
         };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamsAndStatusesInputModel
+        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
         {
             Order = "CompletedCount ASC"
         }));
@@ -62,7 +62,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
 
         It should_count_3_interviews_for_second_responsible = () => report.Items.ToArray()[1].CompletedCount.ShouldEqual(3);
 
-        static SupervisorTeamsAndStatusesReport reportFactory;
+        static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;
         static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         static Guid questionnaire1Id = Guid.Parse("22222222222222222222222222222222");

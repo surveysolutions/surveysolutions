@@ -132,9 +132,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>已完成({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>创建调查</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>新({0})</value>
   </data>
@@ -157,7 +154,7 @@
     <value>驳回({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>您确定要删除这个调查“{0}”吗？</value>
+    <value>您确定要删除这个调查#{0}吗？</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>已开始({0})</value>

@@ -255,10 +255,21 @@ namespace WB.UI.Headquarters.Controllers
             var interview = this.statefulInterviewRepository.Get(id);
             var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
 
-            if (this.IsAuthorizedUser(interview.CurrentResponsibleId) 
-                && interview.Status == InterviewStatus.Completed)
+            var isAuthorizedUser = this.IsAuthorizedUser(interview.CurrentResponsibleId);
+
+
+            if (isAuthorizedUser && interview.Status == InterviewStatus.Completed)
             {
                 return RedirectToAction("Completed", "InterviewerHq");
+            }
+
+            if (!isAuthorizedUser)
+            {
+                if (!webInterviewConfig.Started)
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+
+                if(interview.Status == InterviewStatus.Completed)
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
             }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))

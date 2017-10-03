@@ -11,10 +11,12 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -32,7 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                                         new ExportQuestionService(),
                                         Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) && 
                                                                             _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                                        new RosterStructureService())
+                                        new RosterStructureService(),
+                                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
                       .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
 
             var questionnaireRosterScopes = (questionnaireDocument == null

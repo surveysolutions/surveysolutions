@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
     {
         void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel;
         void NavigateTo<TViewModel>(object parameters) where TViewModel : IMvxViewModel;
-        Task NavigateToDashboard(Guid? interviewId = null);
+        Task NavigateToDashboard(string interviewId = null);
         void NavigateToSettings();
         void SignOutAndNavigateToLogin();
         void NavigateToLogin();

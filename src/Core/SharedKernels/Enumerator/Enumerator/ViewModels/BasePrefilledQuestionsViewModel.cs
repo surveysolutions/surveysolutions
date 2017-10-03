@@ -110,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void NavigateToPreviousViewModel()
         {
-            this.viewModelNavigationService.NavigateToDashboard(Guid.Parse(this.interviewId));
+            this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
         }
 
         public override void Dispose()

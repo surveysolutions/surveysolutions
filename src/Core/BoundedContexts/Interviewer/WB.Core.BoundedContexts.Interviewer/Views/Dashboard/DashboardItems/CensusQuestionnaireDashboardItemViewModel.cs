@@ -11,49 +11,68 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class CensusQuestionnaireDashboardItemViewModel : IDashboardItem
+    public class CensusQuestionnaireDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IInterviewUniqueKeyGenerator keyGenerator;
 
         public CensusQuestionnaireDashboardItemViewModel(
             ICommandService commandService,
             IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMvxMessenger messenger,
-            IPlainStorage<InterviewView> interviewViewRepository)
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IInterviewUniqueKeyGenerator keyGenerator)
         {
             this.commandService = commandService;
             this.principal = principal;
             this.viewModelNavigationService = viewModelNavigationService;
             this.messenger = messenger;
             this.interviewViewRepository = interviewViewRepository;
+            this.keyGenerator = keyGenerator;
         }
 
         private QuestionnaireIdentity questionnaireIdentity;
+        private string subTitle;
 
         public void Init(QuestionnaireView questionnaire)
         {
             this.questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaire.Id);
-            this.QuestionnaireName = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, this.questionnaireIdentity.Version);
+            this.Title = string.Format(InterviewerUIResources.DashboardItem_Title, questionnaire.Title, this.questionnaireIdentity.Version);
 
-            var interviewsByQuestionnareCount = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaire.Id);
-
-            this.Comment = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
+            UpdateSubtitle();
         }
 
-        public DashboardInterviewStatus Status => DashboardInterviewStatus.New;
-        public string QuestionnaireName { get; set; }
-        public string Comment { get; set; }
+        public void UpdateSubtitle()
+        {
+            var questionnaireId = this.questionnaireIdentity.ToString();
+            var interviewsByQuestionnareCount = this.interviewViewRepository.Count(interview => interview.QuestionnaireId == questionnaireId);
+            this.SubTitle = InterviewerUIResources.DashboardItem_CensusModeComment.FormatString(interviewsByQuestionnareCount);
+        }
 
+        public DashboardInterviewStatus Status => DashboardInterviewStatus.Assignment;
+        public string Title { get; set; }
+
+        public string SubTitle
+        {
+            get => subTitle;
+            set
+            {
+                if (value == subTitle) return;
+                subTitle = value;
+                RaisePropertyChanged(() => SubTitle);
+            }
+        }
 
         public IMvxCommand CreateNewInterviewCommand => new MvxAsyncCommand(this.CreateNewInterviewAsync);
 
@@ -70,7 +89,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var createInterviewCommand = new CreateInterview(interviewId,
                 interviewerIdentity.UserId, this.questionnaireIdentity, new List<InterviewAnswer>(), DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
-                interviewerIdentity.UserId, null, null);
+                interviewerIdentity.UserId, keyGenerator.Get(), null);
             await this.commandService.ExecuteAsync(createInterviewCommand);
             this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
         }

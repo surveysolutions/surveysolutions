@@ -12,6 +12,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     internal class ResourcesTranslationTestsContext
     {
 
+        private static readonly Regex UiStringFormatParameterRegex = new Regex(@"{(?!{{)\S+?}}", RegexOptions.Compiled);
         private static readonly Regex StringFormatParameterRegex = new Regex(@"{(?!{)\S+?}", RegexOptions.Compiled);
 
         protected static IEnumerable<string> GetStringResourceNamesFromResX(string relativePathToResX)
@@ -48,6 +49,16 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 throw new Exception($"Resouce loading error for file {fullPathToResX}", exc);
             }
             
+        }
+
+        protected static string GetUiStringFormatEntriesAsString(string value)
+        {
+            return string.Join(",", GetUiStringFormatEntries(value).OrderBy(_ => _));
+        }
+
+        private static IEnumerable<string> GetUiStringFormatEntries(string value)
+        {
+            return UiStringFormatParameterRegex.Matches(value).Cast<Match>().Select(match => match.Value);
         }
 
         protected static string GetStringFormatEntriesAsString(string value)

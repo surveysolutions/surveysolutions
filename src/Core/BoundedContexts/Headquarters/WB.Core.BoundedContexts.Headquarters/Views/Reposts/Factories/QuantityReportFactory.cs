@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -21,15 +20,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
     public class QuantityReportFactory : IQuantityReportFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage;
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
 
-        public QuantityReportFactory(
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage,
-            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
+        public QuantityReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
         {
-            this.interviewstatusStorage = interviewstatusStorage;
-            this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
+            this.interviewSummaryStorage = interviewSummaryStorage;
         }
 
         private QuantityByResponsibleReportView Load<T>(
@@ -45,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             Expression<Func<T, UserAndTimestamp>> selectUserAndTimestamp)
         {
             var ranges = ReportHelpers.BuildColumns(reportStartDate, period, columnCount, timezoneAdjastmentMins,
-                questionnaire, this.interviewstatusStorage);
+                questionnaire, this.interviewSummaryStorage);
 
             var interviewStatusesByDateRange = queryInterviewStatusesByDateRange(ranges.FromUtc, ranges.ToUtc);
 
@@ -111,13 +106,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
 
             var quantityTotalRow =
-                this.CreateQuantityTotalRow(interviewStatusesByDateRange, ranges.ColumnRangesLocal, timezoneAdjastmentMins, selectUserAndTimestamp);
+                this.CreateQuantityTotalRow(interviewStatusesByDateRange, ranges.ColumnRangesUtc, selectUserAndTimestamp);
 
             return new QuantityByResponsibleReportView(list, quantityTotalRow, ranges.ColumnRangesLocal, responsibleUsersCount);
         }
 
         
-        private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges, int timezoneAdjastmentMins,
+        private QuantityTotalRow CreateQuantityTotalRow<T>(IQueryable<T> interviews, DateTimeRange[] dateTimeRanges,
             Expression<Func<T, UserAndTimestamp>> userIdSelector)
         {
             var allInterviewsInStatus = interviews.Select(userIdSelector)
@@ -127,8 +122,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             foreach (var dateTimeRange in dateTimeRanges)
             {
-                var fromDate = dateTimeRange.From.AddMinutes(timezoneAdjastmentMins);
-                var toDate = dateTimeRange.To.AddMinutes(timezoneAdjastmentMins);
+                var fromDate = dateTimeRange.From;
+                var toDate = dateTimeRange.To;
                 var count = allInterviewsInStatus.Count(d => d >= fromDate && d < toDate);
                 quantityByPeriod.Add(count);
             }
@@ -144,14 +139,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             if (questionnaireId != Guid.Empty)
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewSummaryStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to && ics.EndStatus == InterviewExportedAction.Completed));
             }
             else
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewSummaryStorage.Query(_ =>
                         _.SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics => ics.EndStatusTimestamp >= from && ics.EndStatusTimestamp < to && ics.EndStatus == InterviewExportedAction.Completed));
 
@@ -167,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             if (questionnaireId != Guid.Empty)
             {
-                return this.interviewstatusStorage.Query(
+                return this.interviewSummaryStorage.Query(
                     _ =>
                         _.Where(x => x.QuestionnaireId == questionnaireId &&
                                      x.QuestionnaireVersion == questionnaireVersion)
@@ -178,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             else
             {
-                return this.interviewstatusStorage.Query(
+                return this.interviewSummaryStorage.Query(
                     _ =>
                         _.SelectMany(x => x.InterviewCommentedStatuses)
                             .Where(ics =>
@@ -263,41 +258,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         public ReportView GetReport(QuantityByInterviewersReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), false);
 
         public ReportView GetReport(QuantityBySupervisorsReportInputModel model) 
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), true);
 
-        private ReportView GetReportView(QuantityByResponsibleReportView view)
+        private ReportView GetReportView(QuantityByResponsibleReportView view, bool forAdminOrHq)
             => new ReportView
             {
                 Headers = ToReportHeader(view).ToArray(),
-                Data = ToDataView(view) 
+                Data = ToDataView(view, forAdminOrHq) 
             };
 
         private IEnumerable<string> ToReportHeader(QuantityByResponsibleReportView view)
         {
             yield return Report.COLUMN_TEAM_MEMBER;
 
-            foreach (var date in view.DateTimeRanges.Select(y => y.From.ToString("yyyy-MM-dd")))
+            foreach (var date in view.DateTimeRanges.Select(y => y.To.ToString("yyyy-MM-dd")))
                 yield return date;
 
             yield return Report.COLUMN_AVERAGE;
             yield return Report.COLUMN_TOTAL;
         }
 
-        private object[][] ToDataView(QuantityByResponsibleReportView view)
+        private object[][] ToDataView(QuantityByResponsibleReportView view, bool forAdminOrHq)
         {
-            var data = new List<object[]> {ToReportRow(view.TotalRow).ToArray()};
+            var data = new List<object[]> {ToReportRow(view.TotalRow, forAdminOrHq).ToArray()};
 
             data.AddRange(view.Items.Select(ToReportRow).Select(item => item.ToArray()));
 
             return data.ToArray();
         }
 
-        private IEnumerable<object> ToReportRow(QuantityTotalRow totalRow)
+        private IEnumerable<object> ToReportRow(QuantityTotalRow totalRow, bool forAdminOrHq)
         {
-            yield return Report.COLUMN_TOTAL;
+            yield return forAdminOrHq ? Strings.AllTeams : Strings.AllInterviewers;
             foreach (var total in totalRow.QuantityByPeriod)
             {
                 yield return total;

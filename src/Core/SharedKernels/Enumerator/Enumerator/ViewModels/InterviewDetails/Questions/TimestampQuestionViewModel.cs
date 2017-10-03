@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendAnswer()
         {
-            var currentTime = DateTime.UtcNow;
+            var currentTime = DateTime.Now;
             try
             {
                 var command = new AnswerDateTimeQuestionCommand(
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void SetToView(DateTime answerValue)
         {
-            this.Answer = answerValue.ToLocalTime().ToString(answerFormatString);
+            this.Answer = answerValue.ToString(answerFormatString);
         }
 
         private string answer;
