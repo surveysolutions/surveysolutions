@@ -122,9 +122,9 @@
                         <span ng-i18next="[i18next]({count: macros.length})SideBarMacroCounter"></span>
                     </h3>
                     <div class="empty-list" ng-show="macros.length == 0">
-                        <p>Use this tab to define macro substitutions.</p>
-                        <p>A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content. </p>
-                        <p>To use a macro in an expression, refer to it by its <span class="variable-name">$macroname</span></p>
+                        <p ng-i18next>SideBarMacroEmptyLine1</p>
+                        <p ng-i18next>SideBarMacroEmptyLine2</p>
+                        <p ng-i18next="[html]({substitution: macroSubtitutionHtml})SideBarMacroEmptyLine3"> </p>
                     </div>
                     <form role="form" name="macrosForm" novalidate>
                         <ul ng-model="macros">
@@ -133,18 +133,20 @@
                                     <a href ng-click="deleteMacro($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
-                                        <input focus-on-out="focusMacro{{macro.itemId}}" placeholder="macro name" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
+                                        <input focus-on-out="focusMacro{{macro.itemId}}" ng-i18next="[placeholder]SideBarMacroName" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
                                     </div>
                                     <div class="divider"></div>
-                                    <input placeholder="content" ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" class="form-control" type="text" />
+                                    <input ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" class="form-control" type="text" />
                                     <div ng-show="macro.isDescriptionVisible">
                                         <div class="divider"></div>
-                                        <textarea placeholder="description" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
+                                        <textarea ng-i18next="[placeholder]SideBarMacroDescription" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
                                     </div>
                                     <div class="actions" ng-show="macro.form.$dirty">
-                                        <button type="submit" ng-disabled="macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)">Save</button>
-                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macro)">Cancel</button>
-                                        <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)" type="button" ng-click="toggleDescription(macro)">{{ macro.isDescriptionVisible? "hide" : "add" }} description</button>
+                                        <button type="submit" ng-disabled="macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)" ng-i18next>Save</button>
+                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macro)" ng-i18next>Cancel</button>
+                                        <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)" type="button" ng-click="toggleDescription(macro)" 
+                                                ng-i18next="{{macro.isDescriptionVisible ? 'SideBarMacroHideDescription' : 'SideBarMacroShowDescription'}}">
+                                        </button>
                                     </div>
                                 </ng-form>
                             </li>
@@ -152,7 +154,7 @@
 
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW Macro" ng-click="addNewMacro()">
+                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarAddMacro" value="ADD NEW Macro" ng-click="addNewMacro()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -167,38 +169,36 @@
             <div class="lookup-tables">
                 <perfect-scrollbar class="scroller">
                     <h3>
-                        <span ng-show="lookupTables.length!=0">{{lookupTables.length}}</span> Lookup Table<span ng-show="lookupTables.length!=1">s</span>:
+                        <span ng-i18next="[i18next]({count: lookupTables.length})SideBarLookupTablesCounter"></span>
                     </h3>
-                    <div class="empty-list" ng-show="lookupTables.length == 0">
-                        <p>Use this tab to define lookup tables.</p>
-                        <p>A lookup table provides reference information that may be queried by a key and used in enabling conditions and validation expressions.</p>
-                        <p>A lookup table consists of a name and the lookup file, which may contain multiple tab-delimited columns of numeric values.</p>
+                    <div class="empty-list" ng-show="lookupTables.length === 0">
+                        <p ng-i18next>SideBarLookupEmptyLine1</p>
+                        <p ng-i18next>SideBarLookupEmptyLine2</p>
+                        <p ng-i18next>SideBarLookupEmptyLine3</p>
                     </div>
                     <form role="form" name="lookupTablesForm" novalidate>
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="table.form">
                                     <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" class="btn delete-btn" tabindex="-1"></a>
-                                    <input focus-on-out="focusLookupTable{{table.itemId}}" required="" placeholder="table name" 
+                                    <input focus-on-out="focusLookupTable{{table.itemId}}" required="" ng-i18next="[placeholder]SideBarLookupTableName" 
                                            maxlength="32" spellcheck="false" autocomplete="off" 
                                            ng-model="table.name" name="name" class="form-control table-name" type="text" />
                                     <div class="divider"></div>
-                                    <input placeholder="file name" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
+                                    <input ng-i18next="[placeholder]SideBarLookupTableFileName" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
 
-                                    <div class="drop-box">
-                                        Drop File here
-                                    </div>
+                                    <div class="drop-box" ng-i18next>SideBarLookupTableDropFile</div>
 
                                     <div class="actions clearfix" ng-class="{dirty: table.form.$dirty }">
                                         <div ng-show="table.form.$dirty" class="pull-left">
-                                            <button type="submit" ng-disabled="table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()">Save</button>
-                                            <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()">Cancel</button>
+                                            <button type="submit" ng-disabled="table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()" ng-i18next>Save</button>
+                                            <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()" ng-i18next>Cancel</button>
                                         </div>
                                         <div class="permanent-actions clearfix">
-                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
+                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
                                             <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">
-                                                <span ng-hide="table.hasUploadedFile">Select file</span>
-                                                <span ng-show="table.hasUploadedFile">Update file</span>
+                                                <span ng-hide="table.hasUploadedFile" ng-i18next="SideBarLookupTableSelectFile">Select file</span>
+                                                <span ng-show="table.hasUploadedFile" ng-i18next="SideBarLookupTableUpdateFile">Update file</span>
                                             </button>
                                         </div>
                                     </div>
@@ -207,7 +207,7 @@
                         </ul>
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
+                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
                     </div>
                 </perfect-scrollbar>
             </div>
