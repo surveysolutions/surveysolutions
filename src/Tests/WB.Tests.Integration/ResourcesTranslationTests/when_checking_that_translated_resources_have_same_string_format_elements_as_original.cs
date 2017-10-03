@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using Machine.Specifications;
 using NUnit.Framework;
 
@@ -10,11 +8,17 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 {
     internal class when_checking_that_translated_resources_have_same_string_format_elements_as_original : ResourcesTranslationTestsContext
     {
+        private static readonly List<string> fileNamesToExculde = new List<string>()
+        {
+            "QuestionnaireEditor"
+        };
+
         [OneTimeSetUp]
         public void Context()
         {
             var csproj = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.csproj");
-            translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains("."));
+            translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains("."))
+                .Where(file => !fileNamesToExculde.Any(x => Path.GetFileName(file).Contains(x)));
 
             this.Because();
         }
