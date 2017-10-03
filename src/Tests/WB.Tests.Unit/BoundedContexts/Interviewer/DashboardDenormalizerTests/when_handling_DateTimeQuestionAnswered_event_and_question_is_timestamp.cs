@@ -8,6 +8,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Abc;
@@ -56,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         public void should_set_formatted_date_to_specified_answer_view() =>
             prefilledQuestions.Where(x => x.QuestionId == dateTimeQuestionIdentity.Id)
                 .First()
-                .Answer.ShouldEqual(answer.ToLocalTime().ToString(CultureInfo.CurrentCulture.DateTimeFormat));
+                .Answer.ShouldEqual(answer.ToString(DateTimeFormat.DateWithTimeFormat));
 
         static InterviewerDashboardEventHandler denormalizer;
         static IPublishedEvent<DateTimeQuestionAnswered> @event;

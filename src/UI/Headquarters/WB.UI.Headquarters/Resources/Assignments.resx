@@ -140,7 +140,7 @@
     <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
-    <value>Created at</value>
+    <value>Created on</value>
   </data>
   <data name="IdentifyingQuestions" xml:space="preserve">
     <value>Identifying Questions</value>
@@ -173,7 +173,7 @@
     <value>Start new interview</value>
   </data>
   <data name="UpdatedAt" xml:space="preserve">
-    <value>Updated at</value>
+    <value>Updated on</value>
   </data>
   <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
     <value>Fill all or some of the identifying fields</value>
@@ -186,5 +186,38 @@
   </data>
   <data name="AllAssignments" xml:space="preserve">
     <value>All Assignments</value>
-  </data>  
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Indicator of whether the assignment is active or has been archived.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Number of interviews currently submitted for this assignment. More interviews may have been created but not synced. Click on any cell to view the associated interviews. Click on the sort icon to sort by count.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>When the assignment was initially created. Click on the sort icon to sort by time.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Information that identifies each assignment. These are the answers to questions marked as identifying in Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Number of interviews needed to complete this assignment.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>User currently responsible for the assignment. Click sort icon to sort user name.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Maximum number of interviews that may be conducted for this assignment. Click on any cell to change this number. Click on the sort icon to sort by size.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>When the assignment was last updated. Click on the sort icon to sort by time.</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>The Size field must be -1 or more.</value>
+  </data>
 </root>

@@ -34,7 +34,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;$(Constants)</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;EXCLUDEEXTENSIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
@@ -170,6 +170,12 @@
     </Reference>
     <Reference Include="MvvmCross.Plugins.Visibility.Droid, Version=5.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Visibility.5.1.1\lib\MonoAndroid\MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Plugins.WebBrowser, Version=5.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.5.1.1\lib\MonoAndroid\MvvmCross.Plugins.WebBrowser.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Plugins.WebBrowser.Droid, Version=5.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.5.1.1\lib\MonoAndroid\MvvmCross.Plugins.WebBrowser.Droid.dll</HintPath>
     </Reference>
     <Reference Include="MWBarcodeScanner">
       <HintPath>..\..\..\..\libs\android\MWBarcodeScanner.dll</HintPath>
@@ -334,7 +340,10 @@
     <Compile Include="Bootstrap\PictureChooserPluginBootstrap.cs" />
     <Compile Include="Bootstrap\ResourceLoaderPluginBootstrap.cs" />
     <Compile Include="Bootstrap\VisibilityPluginBootstrap.cs" />
+    <Compile Include="Bootstrap\WebBrowserPluginBootstrap.cs" />
     <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="Converters\InterviewStatusToButtonConverter.cs" />
+    <Compile Include="Converters\InterviewStatusToDrawableConverter.cs" />
     <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
     <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
     <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
@@ -359,10 +368,12 @@
     <Compile Include="App.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerLoggingModule.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\BackupRestoreService.cs" />
+    <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
+    <Compile Include="Services\CheckForVersionUriProvider.cs" />
     <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
     <Compile Include="Services\SyncServiceConnection.cs" />
     <Compile Include="Services\SyncBgService.cs" />
@@ -383,71 +394,68 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\Layout\ActionBar.axml">
+    <AndroidResource Include="Resources\layout\ActionBar.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\Login.axml">
+    <AndroidResource Include="Resources\layout\Login.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\Diagnostics.axml">
+    <AndroidResource Include="Resources\layout\Diagnostics.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\diagnostics__tabletinformation.axml">
+    <AndroidResource Include="Resources\layout\diagnostics__tabletinformation.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\SyncLogin.axml">
+    <AndroidResource Include="Resources\layout\SyncLogin.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\InterviewActionBar.axml">
+    <AndroidResource Include="Resources\layout\InterviewActionBar.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\splash.axml">
+    <AndroidResource Include="Resources\layout\splash.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Values\styles.xml">
+    <AndroidResource Include="Resources\values\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_interview_item.axml">
+    <AndroidResource Include="Resources\layout\dashboard_interview_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard.axml">
+    <AndroidResource Include="Resources\layout\dashboard.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\relink.axml">
+    <AndroidResource Include="Resources\layout\relink.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_census_questionnare_item.axml" />
-    <AndroidResource Include="Resources\Layout\synchronization_panel.axml">
+    <AndroidResource Include="Resources\layout\dashboard_census_questionnare_item.axml" />
+    <AndroidResource Include="Resources\layout\synchronization_panel.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_item_prefilled_question.axml">
+    <AndroidResource Include="Resources\layout\dashboard_item_prefilled_question.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\finish_installation.axml">
+    <AndroidResource Include="Resources\layout\finish_installation.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\filepicker_createfolder.axml" />
-    <AndroidResource Include="Resources\Layout\filepicker_fragment.axml" />
-    <AndroidResource Include="Resources\Layout\filepicker_listitem.axml" />
-    <AndroidResource Include="Resources\Layout\filepicker_mainactivity.axml" />
-    <AndroidResource Include="Resources\Layout\diagnostics__check_new_version.axml" />
-    <AndroidResource Include="Resources\Layout\diagnostics__backup_restore.axml" />
-    <AndroidResource Include="Resources\Layout\diagnostics__test_bandwidth_to_server.axml" />
-    <AndroidResource Include="Resources\Layout\loading.axml">
+    <AndroidResource Include="Resources\layout\filepicker_createfolder.axml" />
+    <AndroidResource Include="Resources\layout\filepicker_fragment.axml" />
+    <AndroidResource Include="Resources\layout\filepicker_listitem.axml" />
+    <AndroidResource Include="Resources\layout\filepicker_mainactivity.axml" />
+    <AndroidResource Include="Resources\layout\diagnostics__check_new_version.axml" />
+    <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />
+    <AndroidResource Include="Resources\layout\diagnostics__test_bandwidth_to_server.axml" />
+    <AndroidResource Include="Resources\layout\loading.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\fragment_dashboard_tab.axml">
+    <AndroidResource Include="Resources\layout\fragment_dashboard_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_assignment_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\fragment_dashboard_assignments_tab.axml">
+    <AndroidResource Include="Resources\layout\fragment_dashboard_assignments_tab.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Layout\ErrorScreen.axml">
+    <AndroidResource Include="Resources\layout\ErrorScreen.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -457,23 +465,23 @@
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\Drawable\dashboardquestionnaire.xml">
+    <AndroidResource Include="Resources\drawable\dashboardquestionnaire.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\SurveyShape.xml" />
-    <AndroidResource Include="Resources\Drawable\SurveyTableHeader.xml" />
-    <AndroidResource Include="Resources\Values\Themes.xml">
+    <AndroidResource Include="Resources\drawable\SurveyShape.xml" />
+    <AndroidResource Include="Resources\drawable\SurveyTableHeader.xml" />
+    <AndroidResource Include="Resources\values\Themes.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\interview.xml" />
-    <AndroidResource Include="Resources\Values\settings.xml">
+    <AndroidResource Include="Resources\values\settings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\CounterRoundShape.xml" />
-    <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
-    <AndroidResource Include="Resources\Drawable\infowarningstyle.xml" />
-    <AndroidResource Include="Resources\Values\Colors.xml" />
-    <AndroidResource Include="Resources\Values\dimensions.xml">
+    <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
+    <AndroidResource Include="Resources\drawable\errorwarningstyle.xml" />
+    <AndroidResource Include="Resources\drawable\infowarningstyle.xml" />
+    <AndroidResource Include="Resources\values\colors.xml" />
+    <AndroidResource Include="Resources\values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\login.xml">
@@ -489,45 +497,45 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
-    <AndroidResource Include="Resources\Drawable\icon.png" />
-    <AndroidResource Include="Resources\Drawable\login_logo.png" />
-    <AndroidResource Include="Resources\Drawable\capi_splash.png" />
-    <AndroidResource Include="Resources\Values\dashboard.xml">
+    <AndroidResource Include="Resources\drawable\icon.png" />
+    <AndroidResource Include="Resources\drawable\login_logo.png" />
+    <AndroidResource Include="Resources\drawable\capi_splash.png" />
+    <AndroidResource Include="Resources\values\dashboard.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
-    <AndroidResource Include="Resources\Drawable\ic_download.png" />
-    <AndroidResource Include="Resources\Drawable\ic_synchronization_fail.png" />
-    <AndroidResource Include="Resources\Drawable\ic_synchronization_success.png" />
-    <AndroidResource Include="Resources\Drawable\ic_upload.png" />
-    <AndroidResource Include="Resources\Values\login.xml" />
-    <AndroidResource Include="Resources\Drawable\textedit_invalid.xml" />
-    <AndroidResource Include="Resources\Drawable\textedit_valid.xml" />
+    <AndroidResource Include="Resources\drawable\ic_download.png" />
+    <AndroidResource Include="Resources\drawable\ic_synchronization_fail.png" />
+    <AndroidResource Include="Resources\drawable\ic_synchronization_success.png" />
+    <AndroidResource Include="Resources\drawable\ic_upload.png" />
+    <AndroidResource Include="Resources\values\login.xml" />
+    <AndroidResource Include="Resources\drawable\textedit_invalid.xml" />
+    <AndroidResource Include="Resources\drawable\textedit_valid.xml" />
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\synchronization_fail_process_indicator.xml">
+    <AndroidResource Include="Resources\drawable\synchronization_fail_process_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\synchronization_success_process_indicator.xml">
+    <AndroidResource Include="Resources\drawable\synchronization_success_process_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\synchronization_upload_indicator.xml">
+    <AndroidResource Include="Resources\drawable\synchronization_upload_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\synchronization_download_indicator.xml">
+    <AndroidResource Include="Resources\drawable\synchronization_download_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_sync_icon.png" />
-    <AndroidResource Include="Resources\Drawable\dashboard_sync_icon_small.png" />
-    <AndroidResource Include="Resources\Drawable\dashboard_item_layout_border.xml" />
-    <AndroidResource Include="Resources\Values\diagnostics.xml" />
-    <AndroidResource Include="Resources\Values\relink.xml">
+    <AndroidResource Include="Resources\drawable\dashboard_sync_icon.png" />
+    <AndroidResource Include="Resources\drawable\dashboard_sync_icon_small.png" />
+    <AndroidResource Include="Resources\drawable\dashboard_item_layout_border.xml" />
+    <AndroidResource Include="Resources\values\diagnostics.xml" />
+    <AndroidResource Include="Resources\values\relink.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\troubleshooting.xml" />
@@ -535,21 +543,21 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\finish.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_item_pressed.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_item_default.xml" />
-    <AndroidResource Include="Resources\Drawable\location_icon.png" />
-    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon_pressed.xml">
+    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_item_default.xml" />
+    <AndroidResource Include="Resources\drawable\location_icon.png" />
+    <AndroidResource Include="Resources\drawable\dashboard_remove_icon_pressed.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\dashboard_remove_icon.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\menu\filepicker_menu.xml" />
-    <AndroidResource Include="Resources\Values\strings.xml" />
-    <AndroidResource Include="Resources\Drawable\borderless_button.xml" />
-    <AndroidResource Include="Resources\Drawable\filepicker_file.png" />
-    <AndroidResource Include="Resources\Drawable\filepicker_folder.png" />
-    <AndroidResource Include="Resources\Drawable\filepicker_new_folder.png" />
-    <AndroidResource Include="Resources\Drawable\filepicker_previous.png" />
+    <AndroidResource Include="Resources\values\strings.xml" />
+    <AndroidResource Include="Resources\drawable\borderless_button.xml" />
+    <AndroidResource Include="Resources\drawable\filepicker_file.png" />
+    <AndroidResource Include="Resources\drawable\filepicker_folder.png" />
+    <AndroidResource Include="Resources\drawable\filepicker_new_folder.png" />
+    <AndroidResource Include="Resources\drawable\filepicker_previous.png" />
     <AndroidResource Include="Resources\drawable-hdpi\filepicker_file.png" />
     <AndroidResource Include="Resources\drawable-hdpi\filepicker_folder.png" />
     <AndroidResource Include="Resources\drawable-hdpi\filepicker_new_folder.png" />
@@ -559,7 +567,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
     <AndroidResource Include="Resources\menu\diagnostics.xml" />
-    <AndroidResource Include="Resources\Drawable\diagnostics_section_default.xml" />
+    <AndroidResource Include="Resources\drawable\diagnostics_section_default.xml" />
     <AndroidResource Include="Resources\xml\file_paths.xml" />
     <AndroidResource Include="Resources\values-small\dimensions.xml">
       <SubType>Designer</SubType>
@@ -567,14 +575,14 @@
     <AndroidResource Include="Resources\values-large\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Drawable\dashboard_expand_handle.xml">
+    <AndroidResource Include="Resources\drawable\dashboard_expand_handle.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\dashboard_tab_subtitle.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_interview_status_rejected.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_interview_status_completed.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_interview_status_inprogress.xml" />
-    <AndroidResource Include="Resources\Drawable\dashboard_interview_status_new.xml" />
+    <AndroidResource Include="Resources\layout\dashboard_tab_subtitle.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_interview_status_rejected.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_interview_status_completed.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_interview_status_inprogress.xml" />
+    <AndroidResource Include="Resources\drawable\dashboard_interview_status_new.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -626,6 +634,24 @@
   </Choose>
   <ItemGroup>
     <Folder Include="Assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\ic_action_more_vert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-mdpi\ic_action_more_vert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\ic_action_more_vert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_action_more_vert.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ic_action_more_vert.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

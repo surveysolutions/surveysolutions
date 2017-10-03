@@ -1029,7 +1029,7 @@
   <data name="GetEsriExtraDescription" xml:space="preserve">
     <value>Она нужна только если вы пользуетесь функциональностью ESRI GIS. Включение этой фунции значительно увеличит размер приложения и время загрузки.</value>
   </data>
-  <data name="CountDaysOfInterviewInStatus" xml:space="preserve">
+  <data name="StatusDuration" xml:space="preserve">
     <value>Длительность статусов</value>
   </data>
   <data name="ExportToExcel" xml:space="preserve">
@@ -1057,7 +1057,7 @@
   <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
     <value>Посмотреть интервью</value>
   </data>
-  <data name="CountDaysOfInterviewInStatusDescription" xml:space="preserve">
+  <data name="StatusDurationDescription" xml:space="preserve">
     <value>Количество дней когда интервью находятся в их текущем статусе</value>
     <comment>Количество дней когда интервью находятся в их текущем статусе</comment>
   </data>

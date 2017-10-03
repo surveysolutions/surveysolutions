@@ -16,13 +16,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     internal class ApiBasicAuthAttributeTestsContext
     {
         protected static ApiBasicAuthAttribute CreateApiBasicAuthAttribute(Func<string, string, bool> isUserValid = null, 
-            IUserStore<HqUser, Guid> userStore = null, IReadSideStatusService readSideStatusService = null)
+            IUserStore<HqUser, Guid> userStore = null)
         {
             var hqUserManager = Create.Storage.HqUserManager(userStore);
             var auth = new Mock<IAuthenticationManager>();
             var hqSignInManager = new HqSignInManager(hqUserManager, auth.Object);
             Setup.InstanceToMockedServiceLocator(hqSignInManager);
-            Setup.InstanceToMockedServiceLocator(readSideStatusService ?? Mock.Of<IReadSideStatusService>());
 
             return new ApiBasicAuthAttribute(UserRoles.Interviewer);
         }

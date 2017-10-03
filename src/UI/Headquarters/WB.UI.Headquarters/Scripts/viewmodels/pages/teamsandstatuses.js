@@ -1,5 +1,5 @@
 ﻿Supervisor.VM.TeamsAndStatuses = function (listViewUrl, $interviewsUrl) {
-    Supervisor.VM.TeamsAndStatuses.superclass.constructor.apply(this, arguments);
+    Supervisor.VM.TeamsAndStatuses.superclass.constructor.apply(this, [listViewUrl, undefined, true]);
     
     var self = this;
     self.Url = new Url(window.location.href);
@@ -30,7 +30,7 @@
     self.onDataTableDataReceived = function (data) {
         if (data.data.length > 0) {
             var totalRow = data.totalRow;
-            totalRow.responsible = $totalTitle;
+            totalRow.responsible = $allTeams;
             totalRow.DT_RowClass = totalRowClass;
             data.data.unshift(totalRow);
         }
@@ -50,8 +50,10 @@
         self.reloadDataTable();
     };
 
-    self.getLinkToInterviews = function(data, row, interviewStatus, templateId, templateVersion) {
-        if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + data + "</span>";
+    self.getLinkToInterviews = function (data, row, interviewStatus, templateId, templateVersion) {
+        var formatedNumber = formatNumber(data);
+
+        if (data === 0 || row.DT_RowClass === totalRowClass) return "<span>" + formatedNumber + "</span>";
 
         var queryObject = {};
 
@@ -72,7 +74,7 @@
 
         var linkUrl = $interviewsUrl + (queryString ? "?" + queryString : "");
 
-        return "<a href=\"" + linkUrl + "\">" + data + "</a>";
+        return "<a href=\"" + linkUrl + "\">" + formatedNumber + "</a>";
     }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.TeamsAndStatuses, Supervisor.VM.ListView);

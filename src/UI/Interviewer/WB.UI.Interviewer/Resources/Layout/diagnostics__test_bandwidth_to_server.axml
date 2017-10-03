@@ -4,10 +4,26 @@
   <LinearLayout style="@style/Diagnostics_TitleSection">
     <TextView
        style="@style/Diagnostics_Section_Title"
-       local:MvxBind="Text  Localization('Diagnostics_TestConnection_Title'); UnderlinePressed . ; Click BandwidthTest.TestConnectionCommand" />
+       local:MvxBind="Text Localization('Diagnostics_TestConnection_Title'); UnderlinePressed . ; Click BandwidthTest.TestConnectionCommand" />
     <TextView
               style="@style/Diagnostics_Section_Description"
               local:MvxBind="Html Localization('Diagnostics_TestConnection_Description')" />
+    <LinearLayout android:layout_height="wrap_content"
+                  android:layout_width="match_parent"
+                android:orientation="horizontal">
+      <TextView
+        style="@style/Diagnostics_Section_Description"
+        android:textAllCaps="false"
+        android:layout_width="wrap_content"
+        local:MvxBind="Text Localization('Diagnostics_ServerUrl')" />
+      <TextView
+        style="@style/Diagnostics_Section_Description"
+        android:textAllCaps="false"
+        android:textColor="@color/btn_default"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        local:MvxBind="Text BandwidthTest.ServerUrl; UnderlinePressed .; Click BandwidthTest.OpenSyncEndPointCommand" />
+    </LinearLayout>
   </LinearLayout>
 
   <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible And(BandwidthTest.IsConnectionAbsent, BandwidthTest.IsBandwidthTested);" >

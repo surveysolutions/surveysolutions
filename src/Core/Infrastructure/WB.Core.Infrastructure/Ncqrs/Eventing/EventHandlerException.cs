@@ -8,7 +8,7 @@ namespace Ncqrs.Domain
         public Type EventType { get; private set; }
         public bool IsCritical { get; private set; }
         public EventHandlerException(Type eventHandlerType, Type eventType, bool isCritical, Exception innerException)
-            : base(string.Empty, innerException)
+            : base("EventHandlerException: " + innerException?.Message ?? "", innerException)
         {
             this.EventHandlerType = eventHandlerType;
             this.EventType = eventType;

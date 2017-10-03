@@ -27,8 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
         Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
 
-        Task<byte[]> GetApplicationAsync(CancellationToken token);
-        Task<byte[]> GetApplicationPatchAsync(CancellationToken token);
+        Task<byte[]> GetApplicationAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null);
+        Task<byte[]> GetApplicationPatchAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
         Task SendBackupAsync(string filePath, CancellationToken token);
 

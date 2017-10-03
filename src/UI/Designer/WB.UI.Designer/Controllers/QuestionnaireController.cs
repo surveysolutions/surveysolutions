@@ -28,6 +28,7 @@ using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Resources;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -64,6 +65,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
         }
 
+        [NoCache]
         public ActionResult Details(Guid id, Guid? chapterId, string entityType, Guid? entityid)
         {
             return (UserHelper.WebUser.IsAdmin || this.UserHasAccessToEditOrViewQuestionnaire(id)) 

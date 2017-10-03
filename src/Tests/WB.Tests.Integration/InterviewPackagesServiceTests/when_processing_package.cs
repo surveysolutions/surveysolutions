@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 {
     internal class when_processing_package : with_postgres_db
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
@@ -48,6 +48,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
+            transactionManager = new Mock<ITransactionManager>();
             interviewPackagesService = new InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
@@ -56,7 +57,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 brokenInterviewPackageStorage: Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
-                interviews: new TestInMemoryWriter<InterviewSummary>());
+                interviews: new TestInMemoryWriter<InterviewSummary>(),
+                transactionManager: transactionManager.Object);
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
@@ -104,6 +106,9 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             actualCommand.SynchronizedEvents.ShouldEachConformTo(x=>expectedCommand.SynchronizedEvents.Any(y=>y.GetType() == x.GetType()));
         };
 
+        It should_commit_transaction = () => transactionManager.Verify(x => x.CommitCommandTransaction(), Times.Once);
+        It should_begin_transaction = () => transactionManager.Verify(x => x.BeginCommandTransaction(), Times.Once);
+
         Cleanup things = () => { pgSqlConnection.Close(); };
 
         private static SynchronizeInterviewEventsCommand expectedCommand;
@@ -114,5 +119,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         private static PlainPostgresTransactionManager plainPostgresTransactionManager;
         static NpgsqlConnection pgSqlConnection;
         private static string origin;
+        private static Mock<ITransactionManager> transactionManager;
     }
 }

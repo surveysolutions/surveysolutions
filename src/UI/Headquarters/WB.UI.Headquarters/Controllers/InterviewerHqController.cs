@@ -87,7 +87,6 @@ namespace WB.UI.Headquarters.Controllers
             return new InterviewerHqModel
             {
                 Title = title.ToUiString(),
-                BasePath = Url.Content(@"~/"),
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),
@@ -172,7 +171,9 @@ namespace WB.UI.Headquarters.Controllers
                     filter = filter.Where(summary => interviewStatuses.Contains(summary.Status));
                 }
 
-                return filter.Select(s => new
+                return filter
+                    .OrderBy(s => s.QuestionnaireTitle).ThenBy(s => s.QuestionnaireVersion)
+                    .Select(s => new
                     {
                         s.QuestionnaireTitle,
                         s.QuestionnaireId,

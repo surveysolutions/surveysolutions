@@ -3,9 +3,7 @@
      xmlns:local="http://schemas.android.com/apk/res-auto"
      style="@style/Dashboard_InterviewItem_PrefilledQuestion">
   <TextView style="@style/Dashboard_InterviewItem_PrefilledQuestion_Question"
-     local:MvxBind="Html Question;" />
-  <TextView style="@style/Dashboard_InterviewItem_PrefilledQuestion_Delimiter"
-     android:text=": " />
+     local:MvxBind="Html Format('{0}:', Question);" />
   <TextView style="@style/Dashboard_InterviewItem_PrefilledQuestion_Answer"
      local:MvxBind="Text Answer;" />
 </LinearLayout>

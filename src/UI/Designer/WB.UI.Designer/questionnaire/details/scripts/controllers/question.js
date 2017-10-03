@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService) {
+        function ($rootScope, $scope, $state, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, alertService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
 
@@ -302,7 +302,15 @@
                     modalInstance.result.then(function (confirmResult) {
                         if (confirmResult === 'ok') {
                             $scope.saveQuestion(function () {
-                                openOptionsEditor();
+                                var alertInstance = alertService.open({
+                                    title: "It was saved successfully. The window for file upload will be opened.",
+                                    okButtonTitle: "OK",
+                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                                });
+
+                                alertInstance.result.then(function(confirmResult) {
+                                    openOptionsEditor();
+                                });
                             });
                         }
                     });
@@ -324,7 +332,15 @@
                     modalInstance.result.then(function (confirmResult) {
                         if (confirmResult === 'ok') {
                             $scope.saveQuestion(function () {
-                                openCascadeOptionsEditor();
+                                var alertInstance = alertService.open({
+                                    title: "It was saved successfully. The window for file upload will be opened.",
+                                    okButtonTitle: "OK",
+                                    isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                                });
+
+                                alertInstance.result.then(function (confirmResult) {
+                                    openCascadeOptionsEditor();
+                                });
                             });
                         }
                     });
@@ -337,14 +353,14 @@
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                  "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=500, left=100, top=100", true);
             };
 
             var openCascadeOptionsEditor = function () {
                 $scope.activeQuestion.shouldUserSeeReloadDetailsPromt = true;
 
                 window.open("../../questionnaire/editcascadingoptions/" + $state.params.questionnaireId + "?questionid=" + $scope.activeQuestion.itemId,
-                  "", "scrollbars=yes, center=yes, modal=yes, width=960", true);
+                    "", "scrollbars=yes, center=yes, modal=yes, width=960, height=500, left=100, top=100", true);
             };
 
             $scope.removeOption = function (index) {

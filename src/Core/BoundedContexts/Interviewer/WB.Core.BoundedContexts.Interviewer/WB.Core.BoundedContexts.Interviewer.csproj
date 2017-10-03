@@ -13,6 +13,7 @@
     <PackageReference Include="MvvmCross.Plugin.File" Version="5.1.1" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.1.1" />
     <PackageReference Include="MvvmCross.Plugin.Network" Version="5.1.1" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="5.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.7" />

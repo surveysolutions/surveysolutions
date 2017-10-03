@@ -6,6 +6,7 @@ using Npgsql;
 using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using System.Linq;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
@@ -23,7 +24,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.logger = logger;
             this.serializer = serializer;
 
-            tableName = typeof(TEntity).Name.Pluralize();
+            
+            tableName = typeof(TEntity).GetInterfaces().Contains(typeof(IStorableEntity))?
+                typeof(TEntity).BaseType.Name.Pluralize() : 
+                typeof(TEntity).Name.Pluralize();
+
             if (!string.IsNullOrWhiteSpace(schemaName))
                 tableName = schemaName + "." + tableName;
 

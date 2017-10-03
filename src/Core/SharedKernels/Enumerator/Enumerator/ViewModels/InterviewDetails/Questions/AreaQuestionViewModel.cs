@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
         private readonly QuestionStateViewModel<AreaQuestionAnswered> questionState;
-        private IUserInteractionService userInteractionService;
+        private readonly IUserInteractionService userInteractionService;
 
         public AreaQuestionViewModel(
             IPrincipal principal,
@@ -128,10 +128,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         answerArea.DistanceToEditor);
                 }
             }
-            catch (MissingPermissionsException)
-            {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
-            }
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
@@ -143,6 +139,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             catch (NotSupportedException)
             {
                 userInteractionService.ShowToast(UIResources.Device_Does_Not_Support);
+            }
+            catch (MissingPermissionsException e)
+            {
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
             }
             finally
             {

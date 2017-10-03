@@ -96,8 +96,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
             }
 
-            var groupNavigationViewModel = forItemObject as GroupNavigationViewModel;
-            if (groupNavigationViewModel != null)
+            if (forItemObject is GroupNavigationViewModel groupNavigationViewModel)
             {
                 var groupViewModel = groupNavigationViewModel;
                 if (groupViewModel.NavigationGroupType == NavigationGroupType.ToParentGroup)
@@ -117,22 +116,14 @@ namespace WB.UI.Shared.Enumerator.CustomControls
 
         private EnablementViewModel GetEnablementViewModel(object item)
         {
-            var questionHeaderViewModel = item as QuestionHeaderViewModel;
-            if (questionHeaderViewModel != null)
+            switch (item)
             {
-                return questionHeaderViewModel.Enablement;
-            }
-
-            var groupViewModel = item as GroupViewModel;
-            if (groupViewModel != null)
-            {
-                return groupViewModel.Enablement;
-            }
-
-            var staticTextViewModel = item as StaticTextViewModel;
-            if (staticTextViewModel != null)
-            {
-                return staticTextViewModel.QuestionState.Enablement;
+                case QuestionHeaderViewModel questionHeaderViewModel:
+                    return questionHeaderViewModel.Enablement;
+                case GroupViewModel groupViewModel:
+                    return groupViewModel.Enablement;
+                case StaticTextViewModel staticTextViewModel:
+                    return staticTextViewModel.QuestionState.Enablement;
             }
 
             return null;

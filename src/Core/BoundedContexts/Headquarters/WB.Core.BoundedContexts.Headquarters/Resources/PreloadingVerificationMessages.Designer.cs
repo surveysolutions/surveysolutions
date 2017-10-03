@@ -401,5 +401,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0039_UnsupportedAudioQuestion", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File with questionnaire level data is missing..
+        /// </summary>
+        public static string PL0040_QuestionnaireDataIsNotFound {
+            get {
+                return ResourceManager.GetString("PL0040_QuestionnaireDataIsNotFound", resourceCulture);
+            }
+        }
     }
 }

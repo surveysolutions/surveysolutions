@@ -4,7 +4,6 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -23,8 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.MapReportDenormalizerTest
                 Create.Entity.GpsCoordinateQuestion(variable: gpsVariable1),
                 Create.Entity.GpsCoordinateQuestion(variable: gpsVariable2),
             });
+            
 
-            IReadSideKeyValueStorage<InterviewReferences> interviewReferencesStorage = Setup.ReadSideKeyValueStorageWithSameEntityForAnyGet(Create.Entity.InterviewReferences());
+            var interviewReferencesStorage = new TestInMemoryWriter<InterviewSummary>();
+            interviewReferencesStorage.Store(Create.Entity.InterviewSummary(@event.EventSourceId), "1");
 
             mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId1, 1, 3), markerId1);
             mapReportPointStorage.Store(Create.Entity.MapReportPoint(markerId2, 2, 4), markerId2);

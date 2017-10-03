@@ -294,12 +294,16 @@
                     var movedItem = event.source.nodeScope.item;
                     var destItem = event.dest.nodesScope.item;
                     var destGroupId = destItem ? destItem.itemId : $state.params.chapterId;
-                    var putItem = function (item, parent, index) {
-                        var dropFrom = item.getParentItem() || $scope;
+                    var rollbackMoveAction = function (item, parent, index, destEvent) {
+                        var dropFrom = item.getParentItem() || $scope.currentChapter;
 
-                        dropFrom.items.splice(_.indexOf(dropFrom.items, item), 1);
+                        var indexOfItem = _.indexOf(dropFrom.items, item);
+                        if (indexOfItem >= 0)
+                            dropFrom.items.splice(indexOfItem, 1);
                         var itemsToAddTo = _.isNull(parent) ? $scope.items : parent.items;
                         itemsToAddTo.splice(index, 0, item);
+
+                        destEvent.nodesScope.item.items.splice(destEvent.index, 1);
 
                         connectTree();
                     };
@@ -312,7 +316,7 @@
                                         $rootScope.$emit('questionMoved', movedItem.itemId);
                                     },
                                     function () {
-                                        putItem(movedItem, me.draggedFrom, event.source.index);
+                                        rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
                                     });
                         } else if ($scope.isStaticText(movedItem)) {
                             questionnaireService.moveStaticText(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
@@ -320,7 +324,7 @@
                                     $rootScope.$emit('staticTextMoved', movedItem.itemId);
                                 },
                                 function () {
-                                    putItem(movedItem, me.draggedFrom, event.source.index);
+                                    rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
                                 });
                             
                         }
@@ -330,7 +334,7 @@
                                     $rootScope.$emit('variableMoved', movedItem.itemId);
                                 },
                                 function () {
-                                    putItem(movedItem, me.draggedFrom, event.source.index);
+                                    rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
                                 });
                         }
                         else {
@@ -339,7 +343,7 @@
                                     $rootScope.$emit('groupMoved', movedItem.itemId);
                                 },
                                 function () {
-                                    putItem(movedItem, me.draggedFrom, event.source.index);
+                                    rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
                                 });
                         }
                     }

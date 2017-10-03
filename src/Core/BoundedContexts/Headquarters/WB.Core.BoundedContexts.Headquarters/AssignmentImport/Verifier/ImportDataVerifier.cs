@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Main.Core.Entities.SubEntities;
@@ -158,6 +159,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (data == null || !data.Any())
             {
                 status.VerificationState.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
+                return;
+            }
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, version);
+
+            var isExistsTopLevelData = data.Any(d => Path.GetFileNameWithoutExtension(d.FileName) == questionnaire.Title);
+            if (!isExistsTopLevelData)
+            {
+                status.VerificationState.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0040", PreloadingVerificationMessages.PL0040_QuestionnaireDataIsNotFound) };
                 return;
             }
 
@@ -469,7 +479,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<PanelImportVerificationError> ErrorsByGpsQuestions(
             HeaderStructureForLevel level,
-            ExportedHeaderItem gpsExportedQuestion,
+            ExportedQuestionHeaderItem gpsExportedQuestion,
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
@@ -532,7 +542,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<PanelImportVerificationError> ErrorsByNumericQuestions(
             HeaderStructureForLevel level,
-            ExportedHeaderItem numericExportedQuestion,
+            ExportedQuestionHeaderItem numericExportedQuestion,
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
@@ -790,7 +800,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         }
 
         private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
-            Func<HeaderStructureForLevel,ExportedHeaderItem, PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> exportedQuestionVerifier,
+            Func<HeaderStructureForLevel,ExportedQuestionHeaderItem, PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> exportedQuestionVerifier,
             QuestionType questionType)
         {
             return (datas, preloadedDataService) =>
@@ -803,8 +813,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (levelExportStructure == null)
                         continue;
 
-                    var exportedQuestions =
-                        levelExportStructure.HeaderItems.Values.Where(h => h.QuestionType == questionType);
+                    var exportedQuestions = levelExportStructure.HeaderItems.Values
+                        .OfType<ExportedQuestionHeaderItem>()
+                        .Where(h => h.QuestionType == questionType);
 
                     foreach (var exportedQuestion in exportedQuestions)
                     {

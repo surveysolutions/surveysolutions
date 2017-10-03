@@ -53,6 +53,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
+            transactionManagerMock = new Mock<ITransactionManager>();
+
             interviewPackagesService = new InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
@@ -61,7 +63,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 brokenInterviewPackageStorage: brokenPackagesStorage,
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
-                interviews: new TestInMemoryWriter<InterviewSummary>());
+                interviews: new TestInMemoryWriter<InterviewSummary>(),
+                transactionManager: transactionManagerMock.Object);
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
@@ -114,6 +117,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedPackage.PackageSize.ShouldEqual(expectedEventsString.Length);
         };
 
+        It should_rollback_transaction = () => transactionManagerMock.Verify(x => x.BeginCommandTransaction(), Times.Once);
+
         Cleanup things = () => { pgSqlConnection.Close(); };
 
         private static SynchronizeInterviewEventsCommand expectedCommand;
@@ -126,5 +131,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         private static string origin;
         private static InterviewException expectedException;
         private static string expectedEventsString;
+        private static Mock<ITransactionManager> transactionManagerMock;
     }
 }

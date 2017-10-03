@@ -140,4 +140,8 @@
   <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
     <value>Воспрос измерения площади не может быть загружен.</value>
   </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>Файл с данными лпросника не найден</value>
+    <comment>Файл с данными лпросника не найден</comment>
+  </data>
 </root>

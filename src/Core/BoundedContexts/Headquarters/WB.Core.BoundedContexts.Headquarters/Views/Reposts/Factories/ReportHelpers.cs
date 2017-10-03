@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             int columnCount,
             int timezoneAdjastmentMins,
             QuestionnaireIdentity identity,
-            IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage)
         {
             var localTo = from.Date.AddDays(1);
             var localFrom = AddPeriod(localTo, period, -columnCount);
@@ -42,12 +42,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 Enumerable.Range(0, columnCount)
                     .Select(i => new DateTimeRange(AddPeriod(localFrom, period, i), AddPeriod(localFrom, period, i + 1)))
                     .Where(i => localMinDate.HasValue && i.To >= localMinDate)
+                    .Select(i => new DateTimeRange(i.From.AddDays(-1), i.To.AddDays(-1)))
                     .ToArray();
 
-
-
             DateTimeRange[] dateTimeRangesUtc =
-                dateTimeRangesLocal.Select(x => new DateTimeRange(x.From.AddMinutes(timezoneAdjastmentMins), x.To.AddMinutes(timezoneAdjastmentMins)))
+                Enumerable.Range(0, columnCount)
+                    .Select(i => new DateTimeRange(AddPeriod(utcFrom, period, i), AddPeriod(utcFrom, period, i + 1)))
+                    .Where(i => utcMinDate.HasValue && i.To >= utcMinDate)
                     .ToArray();
 
             return new ReportTimeline
@@ -75,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             throw new ArgumentException($"period '{period}' can't be recognized");
         }
 
-        private static DateTime? GetFirstInterviewCreatedDate(QuestionnaireIdentity questionnaire, IQueryableReadSideRepositoryReader<InterviewStatuses> interviewstatusStorage)
+        private static DateTime? GetFirstInterviewCreatedDate(QuestionnaireIdentity questionnaire, IQueryableReadSideRepositoryReader<InterviewSummary> interviewstatusStorage)
         {
             DateTime? minDate;
             if (questionnaire != null && questionnaire.QuestionnaireId != Guid.Empty)

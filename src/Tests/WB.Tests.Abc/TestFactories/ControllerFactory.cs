@@ -28,7 +28,7 @@ namespace WB.Tests.Abc.TestFactories
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 teamUsersAndQuestionnairesFactory ?? Mock.Of<ITeamUsersAndQuestionnairesFactory>(),
-                new TestInMemoryWriter<InterviewStatuses>());
+                new TestInMemoryWriter<InterviewSummary>());
         }
     }
 }

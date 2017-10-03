@@ -159,9 +159,8 @@
   <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
     <value>Create New</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Create
-interview</value>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Start new interview</value>
   </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>New ({0})</value>
@@ -187,7 +186,7 @@ for further instructions</value>
     <value>Rejected ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Are you sure you want to delete this interview "{0}" ?</value>
+    <value>Are you sure you want to delete this interview #{0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Started ({0})</value>
@@ -501,6 +500,9 @@ for further instructions</value>
   <data name="Diagnostics_Title" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>Server URL: </value>
+  </data>
   <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
@@ -580,7 +582,7 @@ for further instructions</value>
     <value>Connection is &lt;font color="red"&gt;not good&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;No connection with our server&lt;/font&gt;</value>
+    <value>&lt;font color="red"&gt;No connection with server&lt;/font&gt;</value>
   </data>
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
     <value>Folder '{0}' is empty. Please put the backup you want to restore in the folder.</value>
@@ -645,32 +647,47 @@ your next synchronization</value>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>You can create new interviews using assignments</value>
   </data>
-  <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
-    <value>№ {0}: {1}</value>
-    <comment>{0} - Assignment id
-    {1} - number of interviews to be created</comment>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>To collect: {0} interview(s)</value>
+    <comment>{0} - number of interviews created
+    {1} - number of interviewer to be created by assignment</comment>
   </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown" xml:space="preserve">
-    <value>{0} interview(s)</value>
-    <comment>{0} - number of interviews to be created</comment>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Failed to create interview. Reason: {0}</value>
   </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited" xml:space="preserve">
-    <value>Unlimited</value>
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Single interview assignment</value>
   </data>
-  <data name="Dashboard_InterviewCard_Title" xml:space="preserve">
-    <value>№ {0}, interview {1}</value>
-    <comment>{0} - Assignment id, {1} - interview key</comment>
-  </data>
-  <data name="Dashboard_ShowLocation" xml:space="preserve">
-    <value>Show location</value>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>To collect: unlimited</value>
+    <comment>{0} - number of interviews created</comment>
   </data>
   <data name="Dashboard_Open" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>View Issues</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Reopen</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Show location</value>
+  </data>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Discard</value>
   </data>
-  <data name="FailedToCreateInterview" xml:space="preserve">
-    <value>Failed to create interview. Reason: {0}</value>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat">
+    <value>{0} question(s) answered</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat">
+    <value>Assignment {0}</value>
+    <comment>{0} - is an assignment id</comment>
+  </data>
+  <data name="Dashboard_No_InterviewKey">
+    <value>No interview key</value>
+  </data>
+  <data name="Dashboard_CensusAssignment">
+    <value>Census</value>
   </data>
 </root>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NHibernate;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
@@ -17,7 +18,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate
@@ -31,18 +31,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
 
+        private readonly IInterviewImportService importService;
+
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
 
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
             ILogger logger, 
-            ITranslationManagementService translations)
+            ITranslationManagementService translations,
+            IInterviewImportService importService)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
             this.logger = logger;
             this.translations = translations;
+            this.importService = importService;
         }
 
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -89,14 +93,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             }
             try
             {
+                var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+
                 this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
-                this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
 
-                IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-                plainTransactionManager.ExecuteInPlainTransaction(() =>
-                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
-                        userId)));
+                var isAssignmentImportIsGoing = importService.Status.IsInProgress &&
+                                                importService.Status.QuestionnaireId.Equals(questionnaireIdentity);
+
+                if (!isAssignmentImportIsGoing)
+                {
+                    this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
+
+                    IPlainTransactionManager plainTransactionManager = ServiceLocator.Current
+                        .GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+                    plainTransactionManager.ExecuteInPlainTransaction(() =>
+                        this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
+                            userId)));
+                }
             }
             catch (Exception e)
             {
@@ -129,32 +143,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var exceptionsDuringDelete = new List<Exception>();
 
             IInterviewsToDeleteFactory toDeleteFactory = this.interviewsToDeleteFactory.Invoke();
-            ITransactionManager cqrsTransactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            List<InterviewSummary> listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() => 
+            ITransactionManager transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+            List<InterviewSummary> listOfInterviews = transactionManager.ExecuteInQueryTransaction(() => 
                                                             toDeleteFactory.Load(questionnaireId, questionnaireVersion));
             do
             {
-                foreach (var interviewSummary in listOfInterviews)
+                try
                 {
-                    try
+                    transactionManager.BeginCommandTransaction();
+
+                    foreach (var interviewSummary in listOfInterviews)
                     {
-                        IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-                        plainTransactionManager.ExecuteInPlainTransaction(() =>
-                                this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId, userId ?? interviewSummary.ResponsibleId)));
+                        this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
+                            userId ?? interviewSummary.ResponsibleId));
                     }
-                    catch (Exception e)
-                    {
-                       this.logger.Error(e.Message, e);
-                       exceptionsDuringDelete.Add(e);
-                    }
+
+                    transactionManager.CommitCommandTransaction();
                 }
-                listOfInterviews = cqrsTransactionManager.ExecuteInQueryTransaction(() =>
+                catch (Exception e)
+                {
+                    transactionManager.RollbackCommandTransaction();
+                    this.logger.Error(e.Message, e);
+                    exceptionsDuringDelete.Add(e);
+                }
+
+                listOfInterviews = transactionManager.ExecuteInQueryTransaction(() =>
                                                             toDeleteFactory.Load(questionnaireId, questionnaireVersion));
 
-            } while (listOfInterviews.Any());
+            } while (
+                exceptionsDuringDelete.Count == 0 && 
+                listOfInterviews.Any());
 
             if(exceptionsDuringDelete.Count>0)
-                throw new AggregateException(string.Format("interview delete process failed for questionnaire {0} v. {1}", questionnaireId.FormatGuid(),questionnaireVersion), exceptionsDuringDelete);
+                throw new AggregateException(
+                    $"interview delete process failed for questionnaire {questionnaireId.FormatGuid()} v. {questionnaireVersion}", exceptionsDuringDelete);
         }
     }
 }

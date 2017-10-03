@@ -103,7 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
                     if (input.ShowQuestionnaireTitle)
                     {
-                        row.QuestionnaireTitle = x.Questionnaire.Title;
+                        row.QuestionnaireTitle = x.Questionnaire?.Title;
                     }
 
                     return row;

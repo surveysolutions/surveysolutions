@@ -64,7 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 command.AllowCensusMode, 
                 command.QuestionnaireContentVersion,
                 command.QuestionnaireVersion,
-                isSupportAssignments: true
+                isSupportAssignments: true,
+                isSupportExportVariables: true
                 );
         }
 
@@ -90,7 +91,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
                 questionnaireBrowseItem.AllowCensusMode, 
                 questionnaireBrowseItem.QuestionnaireContentVersion,
                 command.NewQuestionnaireVersion,
-                questionnaireBrowseItem.AllowAssignments
+                questionnaireBrowseItem.AllowAssignments,
+                questionnaireBrowseItem.AllowExportVariables
                 );
         }
 
@@ -118,7 +120,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             bool isCensus, 
             long questionnaireContentVersion, 
             long questionnaireVersion,
-            bool isSupportAssignments)
+            bool isSupportAssignments,
+            bool isSupportExportVariables)
         {
             var identity = new QuestionnaireIdentity(this.Id, questionnaireVersion);
             
@@ -129,7 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             string projectionId = GetProjectionId(identity);
 
             this.questionnaireBrowseItemStorage.Store(
-                new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion, isSupportAssignments),
+                new QuestionnaireBrowseItem(questionnaireDocument, identity.Version, isCensus, questionnaireContentVersion, isSupportAssignments, isSupportExportVariables),
                 projectionId);
 
             this.questionnaireQuestionsInfoStorage.Store(

@@ -109,8 +109,6 @@ namespace WB.Tests.Integration.InterviewTests
             questionnaireDocument.IsUsingExpressionStorage = true;
             questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
-          
-
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
@@ -129,6 +127,36 @@ namespace WB.Tests.Integration.InterviewTests
                 questionnaireRepository: questionnaireRepository);
 
             ApplyAllEvents(interview, events);
+
+            return interview;
+        }
+
+
+        protected static StatefulInterview SetupStatefullInterviewWithExpressionStorageWithoutCreate(
+            QuestionnaireDocument questionnaireDocument,
+            QuestionnaireIdentity questionnaireIdentity = null,
+            IQuestionnaireStorage questionnaireStorage = null)
+        {
+            questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
+            questionnaireDocument.IsUsingExpressionStorage = true;
+            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+
+            var state = GetLatestExpressionStorage(questionnaireDocument);
+
+            var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
+
+            var questionnaireRepository = questionnaireStorage ?? Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                                              questionnaireIdentity.QuestionnaireId,
+                                              Create.Entity.PlainQuestionnaire(questionnaireDocument),
+                                              questionnaireIdentity.Version);
+
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+
+            var interview = new StatefulInterview(
+                questionnaireRepository,
+                statePrototypeProvider,
+                Create.Service.SubstitutionTextFactory(),
+                Create.Service.InterviewTreeBuilder());
 
             return interview;
         }

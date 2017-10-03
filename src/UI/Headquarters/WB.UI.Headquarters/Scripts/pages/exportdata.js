@@ -211,7 +211,7 @@
         return self.exportFromats[runningExport.Format()];
     }
     self.formatDate=function(date) {
-        return moment(date).format("YYYY-MM-DD HH:mm:ss");
+        return moment(date).format("MMM DD, YYYY HH:mm");
     }
 
     self.exportFormatProgress = function (progress) {

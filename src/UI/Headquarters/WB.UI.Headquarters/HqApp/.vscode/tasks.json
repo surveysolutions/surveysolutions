@@ -33,6 +33,12 @@
             "type": "npm",
             "script": "vendor",
             "problemMatcher": []
+        },
+        {
+            "label": "rebuild",
+            "type": "npm",
+            "script": "rebuild",
+            "problemMatcher": []
         }
     ]
 }

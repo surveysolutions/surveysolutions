@@ -141,10 +141,6 @@
   <data name="Dashboard_CompletedLinkText" xml:space="preserve">
     <value>Законченные ({0})</value>
   </data>
-  <data name="Dashboard_CreateInterview" xml:space="preserve">
-    <value>Создать
-интервью</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>Новые ({0})</value>
   </data>
@@ -228,7 +224,7 @@
     <value>Выход</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить интервью "{0}"?</value>
+    <value>Вы уверены, что хотите удалить интервью #{0}?</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
     <value>Невозможно подключиться к вашему серверу. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
@@ -567,6 +563,9 @@
   <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
     <value>Пинг:</value>
   </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>Адрес сервера: </value>
+  </data>
   <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
     <value>&lt;font color="red"&gt;Соединение с нашим сервером отсутствует&lt;/font&gt;</value>
   </data>
@@ -633,11 +632,23 @@
 Вам необходимо учесть замечания супервизора на обложке интервью</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Завершенные интервью, будут загружены на сервер
+    <value>Завершенные интервью будут загружены на сервер
 при следующей синхронизации</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
     <value>Вы можете создать новое интервью используя пустой опросник</value>
+  </data>
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Не удалось создать интервью. Причина: {0}</value>
+  </data>
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Показать на карте</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
     <value>{0} интервью</value>
@@ -647,35 +658,39 @@
     <value>Создано интервью: {0}</value>
     <comment>Создано интервью: {0}</comment>
   </data>
-  <data name="Dashboard_Assignment_CardTitle" xml:space="preserve">
-    <value>№ {0}: {1}</value>
-    <comment>{0} - Assignment id</comment>
-  </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown" xml:space="preserve">
-    <value>{0} интервью</value>
-    <comment>{0} - number of interviews to be created</comment>
-  </data>
-  <data name="Dashboard_AssignmentCard_TitleCountdown_Unlimited" xml:space="preserve">
-    <value>Не ограничено</value>
-  </data>
-  <data name="Dashboard_InterviewCard_Title" xml:space="preserve">
-    <value>№ {0}, интервью {1}</value>
-    <comment>{0} - Assignment id, {1} - interview key</comment>
-  </data>
-  <data name="Dashboard_ShowLocation" xml:space="preserve">
-    <value>Показать на карте</value>
-  </data>
-  <data name="Dashboard_Open" xml:space="preserve">
-    <value>Открыть</value>
-  </data>
-  <data name="Dashboard_Discard" xml:space="preserve">
-    <value>Удалить</value>
-  </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
     <value>Синхронизация {0} из {1} заданий</value>
     <comment>Синхронизация {0} из {1} заданий</comment>
   </data>
-  <data name="FailedToCreateInterview" xml:space="preserve">
-    <value>Не удалось создать интервью. Причина: {0}</value>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>Необходимо собрать: {0} интервью</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Задача с единственным интервью</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>Необходимо собрать: неограниченное</value>
+  </data>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} вопросов(а) отвечено</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>Задача {0}</value>
+  </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Без ключа</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Цензус</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Переоткрыть</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Просмотреть
+проблемы</value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Начать новое интервью</value>
   </data>
 </root>

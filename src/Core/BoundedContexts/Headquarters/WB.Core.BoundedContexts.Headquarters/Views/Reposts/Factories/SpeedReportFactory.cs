@@ -27,15 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
     public class SpeedReportFactory: ISpeedReportFactory
     {
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage;
 
-        private readonly IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage;
-
-        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewStatuses> interviewStatusesStorage, 
-            IQueryableReadSideRepositoryReader<InterviewStatusTimeSpans> interviewStatusTimeSpansStorage)
+        public SpeedReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatusesStorage)
         {
             this.interviewStatusesStorage = interviewStatusesStorage;
-            this.interviewStatusTimeSpansStorage = interviewStatusTimeSpansStorage;
         }
 
         private class StatusChangeRecord
@@ -147,7 +143,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             if (questionnaireId != Guid.Empty)
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewStatusesStorage.Query(_ =>
                     _.Where(x => x.QuestionnaireId == questionnaireId && x.QuestionnaireVersion == questionnaireVersion)
                         .SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics =>
@@ -158,7 +154,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             }
             else
             {
-                return this.interviewStatusTimeSpansStorage.Query(_ =>
+                return this.interviewStatusesStorage.Query(_ =>
                     _.SelectMany(x => x.TimeSpansBetweenStatuses)
                         .Where(ics =>
                             ics.EndStatusTimestamp >= from &&
@@ -310,47 +306,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         public ReportView GetReport(SpeedByInterviewersReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), false);
 
         public ReportView GetReport(SpeedBySupervisorsReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), true);
 
         public ReportView GetReport(SpeedBetweenStatusesByInterviewersReportInputModel model)
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), false);
 
         public ReportView GetReport(SpeedBetweenStatusesBySupervisorsReportInputModel model) 
-            => GetReportView(this.Load(model));
+            => GetReportView(this.Load(model), true);
 
-        private ReportView GetReportView(SpeedByResponsibleReportView view)
+        private ReportView GetReportView(SpeedByResponsibleReportView view, bool forAdminOrHq)
             => new ReportView
             {
                 Headers = ToReportHeader(view).ToArray(),
-                Data = ToDataView(view)
+                Data = ToDataView(view, forAdminOrHq)
             };
 
         private IEnumerable<string> ToReportHeader(SpeedByResponsibleReportView view)
         {
             yield return Report.COLUMN_TEAM_MEMBER;
 
-            foreach (var date in view.DateTimeRanges.Select(y => y.From.ToString("yyyy-MM-dd")))
+            foreach (var date in view.DateTimeRanges.Select(y => y.To.ToString("yyyy-MM-dd")))
                 yield return date;
 
             yield return Report.COLUMN_AVERAGE;
             yield return Report.COLUMN_TOTAL;
         }
 
-        private object[][] ToDataView(SpeedByResponsibleReportView view)
+        private object[][] ToDataView(SpeedByResponsibleReportView view, bool forAdminOrHq)
         {
-            var data = new List<object[]> { ToReportRow(view.TotalRow).ToArray() };
+            var data = new List<object[]> { ToReportRow(view.TotalRow, forAdminOrHq).ToArray() };
 
             data.AddRange(view.Items.Select(ToReportRow).Select(item => item.ToArray()));
 
             return data.ToArray();
         }
 
-        private IEnumerable<object> ToReportRow(SpeedByResponsibleTotalRow totalRow)
+        private IEnumerable<object> ToReportRow(SpeedByResponsibleTotalRow totalRow, bool forAdminOrHq)
         {
-            yield return Report.COLUMN_AVERAGE;
+            yield return forAdminOrHq ? Strings.AllTeams : Strings.AllInterviewers;
             foreach (var total in totalRow.SpeedByPeriod)
             {
                 yield return ToSpecDaysFormat(total);

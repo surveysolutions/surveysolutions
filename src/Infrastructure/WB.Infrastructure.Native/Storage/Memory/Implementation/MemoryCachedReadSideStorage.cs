@@ -88,6 +88,11 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
             }
         }
 
+        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
+        {
+            return this.storage.GetIdsStartWith(beginingOfId);
+        }
+
         public void Store(TEntity view, string id)
         {
             if (this.isCacheEnabled)

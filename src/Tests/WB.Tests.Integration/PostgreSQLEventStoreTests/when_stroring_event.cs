@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
+using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using NHibernate;
+using Npgsql;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using It = Machine.Specifications.It;
@@ -46,13 +49,20 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 DateTime.UtcNow,
                 new AccountLocked()));
 
+            var sessionProvider = new Mock<ISessionProvider>();
+            npgsqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            npgsqlConnection.Open();
+            sessionProvider.Setup(x => x.GetSession())
+                .Returns(Mock.Of<ISession>(i => i.Connection == npgsqlConnection));
+
             eventStore = new PostgresEventStore(
                 new PostgreConnectionSettings
                 {
                     ConnectionString = connectionStringBuilder.ConnectionString,
                     SchemaName = schemaName
                 }, 
-                eventTypeResolver);
+                eventTypeResolver,
+                sessionProvider.Object);
         };
 
         Because of = () => eventStore.Store(events);
@@ -95,8 +105,11 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             eventsAfterPosition[1].Payload.ShouldBeOfExactType(typeof(AccountLocked));
         };
 
+        Cleanup c = () => npgsqlConnection?.Dispose();
+
         static PostgresEventStore eventStore;
         static UncommittedEventStream events;
         static Guid eventSourceId;
+        static NpgsqlConnection npgsqlConnection;
     }
 }

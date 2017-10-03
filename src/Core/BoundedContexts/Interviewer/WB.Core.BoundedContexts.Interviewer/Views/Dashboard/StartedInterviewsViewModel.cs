@@ -20,8 +20,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public event EventHandler<InterviewRemovedArgs> OnInterviewRemoved;
 
         public StartedInterviewsViewModel(IPlainStorage<InterviewView> interviewViewRepository, 
-            IInterviewViewModelFactory viewModelFactory, 
-            IPrincipal principal) : base(viewModelFactory, interviewViewRepository)
+            IInterviewViewModelFactory viewModelFactory,
+            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo,
+            IPrincipal principal) : base(viewModelFactory, interviewViewRepository, identifyingQuestionsRepo)
         {
             this.principal = principal;
         }

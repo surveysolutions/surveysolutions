@@ -8,27 +8,37 @@ var VueI18Next = {
             fallbackLng: 'en'
         }, options))
 
+        function translate(key, options) {
+            if(_.isArray(options)) {
+                const res = i18next.t(key);
+
+                // js will not replace all occurences, and we have resources with several {0} in one string
+                return res
+                    .replace("{0}", options[0])
+                    .replace("{0}", options[0])
+                    .replace("{0}", options[0])
+                    .replace("{1}", options[1])
+                    .replace("{1}", options[1])
+                    .replace("{1}", options[1])
+                    .replace("{2}", options[2])
+                    .replace("{3}", options[3])
+                    .replace("{4}", options[4])
+            } else {
+                return i18next.t(key, options);
+            }
+        }
+
         // /*  expose a global API method  */
         Object.defineProperty(Vue, '$t', {
             get() {
-                return (key, options) => {
-                    //var opts = { resources: locale }
-
-                    // for now we will not support language change on the fly
-                    //Vue.util.extend(opts, options)
-                    return i18next.t(key, options)
-                }
+                return translate
             }
         })
 
         /*  expose a local API method  */
         Object.defineProperty(Vue.prototype, '$t', {
             get() {
-                return (key, options) => {
-                    //var opts = { resources: locale }
-                    //Vue.util.extend(opts, options)
-                    return i18next.t(key, options)
-                }
+                return translate
             }
         })
     }

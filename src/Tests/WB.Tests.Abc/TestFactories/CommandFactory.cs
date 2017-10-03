@@ -311,7 +311,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new AssignResponsibleCommand(interviewId ?? Guid.NewGuid(),
                 userId ?? Guid.NewGuid(),
-                interviewerId ?? Guid.NewGuid(),
+                interviewerId,
                 supervisorId ?? Guid.NewGuid(),
                 assignTime ?? DateTime.UtcNow);
         }

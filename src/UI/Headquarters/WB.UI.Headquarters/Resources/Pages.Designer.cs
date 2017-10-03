@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Pages {
@@ -309,24 +309,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string ConfirmationNeededTitle {
             get {
                 return ResourceManager.GetString("ConfirmationNeededTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Status Duration.
-        /// </summary>
-        public static string CountDaysOfInterviewInStatus {
-            get {
-                return ResourceManager.GetString("CountDaysOfInterviewInStatus", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Number of days that interviews have stayed in their current status.
-        /// </summary>
-        public static string CountDaysOfInterviewInStatusDescription {
-            get {
-                return ResourceManager.GetString("CountDaysOfInterviewInStatusDescription", resourceCulture);
             }
         }
         
@@ -2406,6 +2388,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Duration.
+        /// </summary>
+        public static string StatusDuration {
+            get {
+                return ResourceManager.GetString("StatusDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of days that assignments and interviews have stayed in their current status.
+        /// </summary>
+        public static string StatusDurationDescription {
+            get {
+                return ResourceManager.GetString("StatusDurationDescription", resourceCulture);
             }
         }
         

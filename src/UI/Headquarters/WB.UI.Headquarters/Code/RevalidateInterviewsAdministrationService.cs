@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Ncqrs;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -100,27 +99,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
 
                 areInterviewsBeingRevalidatingNow = true;
 
-                List<InterviewSummary> interviews;
-                try
+                List<InterviewSummary> interviews = new List<InterviewSummary>();
+                transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
                 {
-                    this.transactionManagerProvider.GetTransactionManager().BeginQueryTransaction();
                     interviews = this.interviewsReader.Query(_ => _.Where(interview =>
-                         interview.Status == InterviewStatus.Completed
-                         || interview.Status == InterviewStatus.RejectedBySupervisor
-                         || interview.Status == InterviewStatus.ApprovedBySupervisor
-                         || interview.Status == InterviewStatus.ApprovedByHeadquarters
-                         || interview.Status == InterviewStatus.RejectedByHeadquarters).ToList());
-                }
-                finally
-                {
-                    this.transactionManagerProvider.GetTransactionManager().RollbackQueryTransaction();
-                }
+                        interview.Status == InterviewStatus.Completed
+                        || interview.Status == InterviewStatus.RejectedBySupervisor
+                        || interview.Status == InterviewStatus.ApprovedBySupervisor
+                        || interview.Status == InterviewStatus.ApprovedByHeadquarters
+                        || interview.Status == InterviewStatus.RejectedByHeadquarters).ToList());
+                });
+                
 
                 UpdateStatusMessage("Determining count of interview to be revalidated.");
 
                 ThrowIfShouldStopViewsRebuilding();
 
-                int allInterviewsCount = interviews.Count();
+                int allInterviewsCount = interviews.Count;
 
                 int processedInterviewsCount = 0;
 
@@ -129,14 +124,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 int totalPages = (int)Math.Ceiling(allInterviewsCount / (double)pageSize);
 
                 string revalidationgDetails = "<<NO DETAILS>>";
-
+                int failedInterviewsCount = 0;
                 DateTime revalidationStarted = DateTime.Now;
 
                 try
                 {
                     for (int i = 0; i < totalPages; i++)
                     {
-                        UpdateStatusMessage("Acquiring portion of interviews to be revalidated. " + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
+                        UpdateStatusMessage("Acquiring portion of interviews to be revalidated. " + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, failedInterviewsCount));
 
                         var interviewItemIds = interviews.Skip(i * pageSize).Take(pageSize).ToList();
 
@@ -144,9 +139,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                         {
                             ThrowIfShouldStopViewsRebuilding();
 
-                            UpdateStatusMessage(string.Format("Revalidated interviews {0}. ", processedInterviewsCount + 1) + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, 0));
+                            UpdateStatusMessage(string.Format("Revalidated interviews {0}. ", processedInterviewsCount + 1) + GetReadableRevalidationgDetails(revalidationStarted, processedInterviewsCount, allInterviewsCount, failedInterviewsCount));
 
-                            this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
+                            try
+                            {
+                                this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
+                                this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
+                                this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
+                            }
+                            catch (Exception e)
+                            {
+                                this.logger.Error($"Failed to revalidate interview {interviewItemId}", e);
+                                this.transactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
+                                failedInterviewsCount++;
+                            }
 
                             processedInterviewsCount++;
                         }
@@ -169,7 +175,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             {
                 areInterviewsBeingRevalidatingNow = false;
             }
-
         }
 
         private static string GetReadableRevalidationgDetails(DateTime revalidatingStarted, int processedInterviewsCount, int allInterviewsCount, int failedInterviewsCount)

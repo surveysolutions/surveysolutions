@@ -24,17 +24,15 @@ namespace WB.UI.Interviewer.CustomControls
         }
 
         private readonly Context _context;
-        private readonly ViewPager _viewPager;
         private readonly List<ViewPagerItem> _fragments = new List<ViewPagerItem>();
 
         public MvxFragmentStatePagerAdapter(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer) { }
 
-        public MvxFragmentStatePagerAdapter(Context context, ViewPager pager, FragmentManager fm)
+        public MvxFragmentStatePagerAdapter(Context context, FragmentManager fm)
             : base(fm)
         {
             this._context = context;
-            this._viewPager = pager;
         }
 
         public override Fragment GetItem(int position)
@@ -94,8 +92,6 @@ namespace WB.UI.Interviewer.CustomControls
             this._fragments.RemoveAt(position);
 
             this.NotifyDataSetChanged();
-
-            this._viewPager.SetCurrentItem(position - 1, true);
         }
 
         public void RemoveFragmentByViewModel(MvxViewModel viewModel)

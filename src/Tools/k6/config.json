@@ -1,6 +1,9 @@
 {
-    "interviewer": "int",
-    "interviewer_pass": "1",
-    "baseUri" : "http://localhost/headquarters",
-    "interviewerApi" : "api/interviewer/v2"
+    "baseUri": "http://localhost/headquarters",
+    "interviewers": [
+        {"name": "inter", "pass": "Qwerty1234", "assignment": "4"}
+    ],
+    "questionnaireIdentity": "6158dd07-4d64-498f-8a50-e5e9828fda23$1",
+    "questionnaireId": "6158dd07-4d64-498f-8a50-e5e9828fda23",
+    "questionnaireVersion": 1
 }

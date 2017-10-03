@@ -6,7 +6,7 @@
         {
             "taskName": "k6 run",
             "type": "shell",
-            "command": "k6",
+            "command": ".\\k6.exe",
             "args": [
                 "run",
                 "interview.js"
@@ -26,11 +26,11 @@
         {
             "taskName": "k6 big run",
             "type": "shell",
-            "command": "k6",
+            "command": ".\\k6.exe",
             "args": [
                 "run",
-                "-u 10",
-                "-i 400",
+                "-u", "100",
+                "-i", "1000",
                 "interview.js"
             ],
             "presentation": {
