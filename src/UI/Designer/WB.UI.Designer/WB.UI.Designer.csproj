@@ -378,7 +378,6 @@
     <Compile Include="Models\VerificationMessage.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
-    <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\QuestionnaireCloneModel.cs" />
@@ -751,6 +750,7 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\CompilationVersions.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
+    <Content Include="Views\Shared\QuestionnairesList.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
