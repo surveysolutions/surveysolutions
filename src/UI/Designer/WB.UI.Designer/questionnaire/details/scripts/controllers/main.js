@@ -1,10 +1,11 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
+        function ($rootScope, $scope, $state, $i18next, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
-            $scope.macroSubtitutionHtml = "<span class=\"variable-name\">$macroname</span>";
+            $scope.macroSubtitutionHtml = "<span class=\"variable-name\">$"+ $i18next.t('VariableName') + "</span>";
+            $scope.attachmentNameSubtitutionHtml = "<span class=\"variable-name\">"+ $i18next.t('VariableName') + "</span>"
 
             $scope.verificationStatus = {
                 errors: null,
