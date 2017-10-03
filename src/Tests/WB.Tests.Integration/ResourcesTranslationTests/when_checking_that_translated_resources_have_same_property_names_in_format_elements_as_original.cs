@@ -8,11 +8,18 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     [TestFixture]
     internal class ResourcesTranslationTests : ResourcesTranslationTestsContext
     {
+        private static List<string> fileNamesToExculde = new List<string>()
+        {
+            "QuestionnaireEditor"
+        };
+
         [Test]
         public void when_checking_that_translated_resources_have_same_property_names_in_format_elements_as_original()
         {
             var csproj = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.csproj");
-            var translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains(".")).ToList();
+            var translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains("."))
+                .Where(file => !fileNamesToExculde.Any(x => Path.GetFileName(file).Contains(x)))
+                .ToList();
 
             var translatedResourceStringsNotCorrespondingToOriginal =
                 from translatedResourceFile in translatedResourceFiles

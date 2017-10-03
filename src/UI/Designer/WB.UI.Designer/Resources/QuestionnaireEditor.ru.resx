@@ -190,6 +190,9 @@
   <data name="SideBarAddMacro" xml:space="preserve">
     <value>добавить Макрос</value>
   </data>
+  <data name="SideBarAttachmentName" xml:space="preserve">
+    <value>имя вложения</value>
+  </data>
   <data name="SideBarAttachmentsCounter" xml:space="preserve">
     <value>{{count}} Вложение (итого {{bytes}})</value>
   </data>
@@ -294,6 +297,9 @@
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
     <value>Показать дропдаун</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Обновить</value>
   </data>
   <data name="VariableName" xml:space="preserve">
     <value>имя</value>
