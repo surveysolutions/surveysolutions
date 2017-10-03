@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('MacrosCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService) {
+    function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService) {
             'use strict';
 
             var hideMacrosPane = 'ctrl+m';
@@ -93,7 +93,7 @@
             };
 
             $scope.aceLoaded = function (editor) {
-                var expressionEditorPlaceholder = "content";
+                var expressionEditorPlaceholder = $i18next.t('SideBarMacroContent');
 
                 // Editor part
                 var renderer = editor.renderer;

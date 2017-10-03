@@ -123,6 +123,9 @@
   <data name="Backup" xml:space="preserve">
     <value>Сохранить</value>
   </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
   <data name="ChangePassword" xml:space="preserve">
     <value>Изменить пароль</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Удалить</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Скачать</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}} ошибка</value>
@@ -169,11 +175,56 @@
   <data name="ReadOnly" xml:space="preserve">
     <value>Только чтение</value>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
   <data name="SavedAtTimestamp" xml:space="preserve">
     <value>сохранено в {{dateTime, H:mm}}</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>
+  </data>
+  <data name="SideBarAddMacro" xml:space="preserve">
+    <value>добавить Макрос</value>
+  </data>
+  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+    <value>Используйте вкладку для определения справочных таблиц.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+    <value>Справочная таблица предоставляет каталог, который можно использовать в условиях и проверках как хранилище ключ-значение.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+    <value>Справочная таблица состоит из имени и справочного файла. Файл может содержать числовые данные разделённые на колонки используя табуляцию.</value>
+  </data>
+  <data name="SideBarLookupTableAdd" xml:space="preserve">
+    <value>Добавить таблицу</value>
+  </data>
+  <data name="SideBarLookupTableDropFile" xml:space="preserve">
+    <value>Поместите файл</value>
+  </data>
+  <data name="SideBarLookupTableFileName" xml:space="preserve">
+    <value>Имя файла</value>
+  </data>
+  <data name="SideBarLookupTableName" xml:space="preserve">
+    <value>Имя таблицы</value>
+  </data>
+  <data name="SideBarLookupTablesCounter" xml:space="preserve">
+    <value>{{count}} Справочная таблица:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_1" xml:space="preserve">
+    <value>{{count}} Справочная таблицы:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_2" xml:space="preserve">
+    <value>{{count}} Справочных таблиц:</value>
+  </data>
+  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+    <value>Выбрать файл</value>
+  </data>
+  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+    <value>Обновить файл</value>
+  </data>
+  <data name="SideBarMacroContent" xml:space="preserve">
+    <value>содержимое</value>
   </data>
   <data name="SideBarMacroCounter" xml:space="preserve">
     <value>{{count}} Макрос:</value>
@@ -183,6 +234,27 @@
   </data>
   <data name="SideBarMacroCounter_2" xml:space="preserve">
     <value>{{count}} Макросов:</value>
+  </data>
+  <data name="SideBarMacroDescription" xml:space="preserve">
+    <value>описание</value>
+  </data>
+  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+    <value>Используйте вкладку для определения макросов.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>Макрос это именованное выражение, которое можно использовать в условиях и проверках. Он состоит из имени и содержимого.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+    <value>Для использования макроса используйте {{- substitution}}</value>
+  </data>
+  <data name="SideBarMacroHideDescription" xml:space="preserve">
+    <value>cкрыть описание</value>
+  </data>
+  <data name="SideBarMacroName" xml:space="preserve">
+    <value>имя макроса</value>
+  </data>
+  <data name="SideBarMacroShowDescription" xml:space="preserve">
+    <value>добавить описание</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
     <value>{{count}} Секция:</value>

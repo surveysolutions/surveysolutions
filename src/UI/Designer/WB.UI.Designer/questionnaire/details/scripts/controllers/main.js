@@ -4,6 +4,8 @@ angular.module('designerApp')
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
+            $scope.macroSubtitutionHtml = "<span class=\"variable-name\">$macroname</span>";
+
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,
