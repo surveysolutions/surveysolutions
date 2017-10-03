@@ -6702,7 +6702,43 @@ a.disabled {
   display: none; }
 
 .cancel {
-  border: none; }
+  border: none;
+  background-color: transparent;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  margin: 0;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+  display: block;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box; }
+  .cancel:before, .cancel:after {
+    display: block;
+    content: "";
+    width: 24px;
+    height: 2px;
+    background-color: #a6a8a9;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: relative;
+    top: 11px;
+    -webkit-transition: background 0.2s linear 0s;
+    -moz-transition: background 0.2s linear 0s;
+    -ms-transition: background 0.2s linear 0s;
+    -o-transition: background 0.2s linear 0s;
+    transition: background 0.2s linear 0s; }
+  .cancel:after {
+    -webkit-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    top: 9px; }
+  .cancel:hover:before, .cancel:hover:after, .cancel:focus:before, .cancel:focus:after, .cancel:active:before, .cancel:active:after {
+    background-color: #595c5d; }
 
 .button-flag, .flag:before {
   display: inline-block;
@@ -6711,7 +6747,8 @@ a.disabled {
   background: transparent url("../img/flags.png") no-repeat;
   background-size: 75px 22px;
   background-position: -38px 0;
-  border: none; }
+  border: none;
+  outline: none; }
   @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
     .button-flag, .flag:before {
       /* on retina, use image that's scaled by 2 */
@@ -8607,14 +8644,30 @@ span.image-zoom-box {
   margin-bottom: 10px; }
 .filters input.checkbox-filter ~ label {
   padding-left: 30px;
-  font-weight: normal; }
+  font-weight: normal;
+  color: #a6a8a9; }
+  .filters input.checkbox-filter ~ label:hover, .filters input.checkbox-filter ~ label:focus {
+    color: #6b6b6b; }
   .filters input.checkbox-filter ~ label .tick {
     left: -5px; }
+.filters input.checkbox-filter:checked ~ label {
+  color: #3f3f3f; }
 
 .filters-container {
   color: #3f3f3f;
-  border-bottom: 3px solid #ececec;
   padding: 0 15px 20px 15px; }
+  .filters-container h2 {
+    margin-bottom: 10px; }
+  .filters-container .about-questionnaire {
+    font-size: 14px;
+    line-height: 16px; }
+    .filters-container .about-questionnaire li {
+      padding-bottom: 3px; }
+      .filters-container .about-questionnaire li b a {
+        font-weight: bold; }
+
+.filter-actions-block {
+  margin-bottom: 10px; }
 
 .block-filter {
   margin-bottom: 15px; }
@@ -8628,10 +8681,10 @@ span.image-zoom-box {
     .block-filter select option {
       width: 200px; }
   .block-filter .form-group {
-    margin-bottom: 10px; }
+    margin-bottom: 5px; }
     .block-filter .form-group label {
       font-size: 14px;
-      line-height: 16px;
+      line-height: 20px;
       font-family: inherit;
       font-family: inherit;
       margin: 0; }
@@ -8677,13 +8730,11 @@ span.image-zoom-box {
       background-size: 21px 20px; } }
 
 .preset-filters-container {
+  border-top: 3px solid #ececec;
   padding: 30px 15px 20px 15px; }
   .preset-filters-container a, .preset-filters-container .export-queue {
     color: #2a81cb;
     display: block; }
-
-.filters-container .flagged-questions {
-  margin: 0; }
 
 .filters .help-block {
   margin-top: 10px; }
@@ -9562,6 +9613,14 @@ main.hidden.display-block {
   text-align: right;
   clear: both; }
 
+.pointer {
+  cursor: pointer; }
+
+.short-row {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; }
+
 @media (max-width: 1210px) {
   html body {
     padding-top: 70px; }
@@ -9702,10 +9761,6 @@ main.hidden.display-block {
         text-decoration: underline; }
         .questionnaire-statistics ul li a:hover, .questionnaire-statistics ul li a:focus {
           text-decoration: none; }
-    .questionnaire-statistics ul .questionnaire-content li {
-      float: left;
-      margin-right: 10px;
-      margin-bottom: 0; }
 
 .import-questionnaire-form .form-group {
   margin-bottom: 0; }
@@ -10297,44 +10352,6 @@ img#placeholder {
       width: 19%;
       border-left: 1px solid #f2f4f4;
       border-right: 1px solid #f2f4f4; }
-
-.cancel {
-  background-color: transparent;
-  width: 24px;
-  height: 24px;
-  position: relative;
-  margin: 0;
-  opacity: 0.5;
-  filter: alpha(opacity=50);
-  display: block;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box; }
-  .cancel:before, .cancel:after {
-    display: block;
-    content: "";
-    width: 24px;
-    height: 2px;
-    background-color: #a6a8a9;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    -o-transform: rotate(45deg);
-    transform: rotate(45deg);
-    position: relative;
-    top: 11px;
-    -webkit-transition: background 0.2s linear 0s;
-    -moz-transition: background 0.2s linear 0s;
-    -ms-transition: background 0.2s linear 0s;
-    -o-transition: background 0.2s linear 0s;
-    transition: background 0.2s linear 0s; }
-  .cancel:after {
-    -webkit-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-    transform: rotate(-45deg);
-    top: 9px; }
-  .cancel:hover:before, .cancel:hover:after, .cancel:focus:before, .cancel:focus:after, .cancel:active:before, .cancel:active:after {
-    background-color: #595c5d; }
 
 .footer {
   -webkit-transition: padding 0.3s linear 0s;

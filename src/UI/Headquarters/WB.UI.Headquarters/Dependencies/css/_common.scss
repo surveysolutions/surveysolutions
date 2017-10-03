@@ -137,11 +137,6 @@ h5{
 	}
 	.neighbor-block-to-search{
 		padding-right: 365px; 
-		// &:after{
-		// 	display: table;
-		// 	content: "";
-		// 	clear: both;
-		// }
 		&.row-without-padding{
 			padding-right: 0;
 		}
@@ -151,7 +146,6 @@ h5{
 		h1{
 			float: left;
 			margin-right: 30px;
-			// margin-bottom: 15px;
 		}
 		.btn{
 			float: left;
@@ -266,7 +260,7 @@ h5{
         }
  	}
 }
-table.dataTable span.highlight {
+.table .highlight{
   background-color: $highlight-color;
   color: $gray_text;
   border-radius: 0.28571429rem;
@@ -510,6 +504,14 @@ main.hidden.display-block{
 	text-align: right;
 	clear: both;
 }
+.pointer {
+	cursor: pointer;
+}
+.short-row{
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
 @media (max-width: $screen-md-min){
 	html body {
 		padding-top: 70px;
@@ -556,7 +558,6 @@ main.hidden.display-block{
 		padding-right: 0;
 	}
 	.screen-small-resolution{
-		//padding: 15px;
 		display: block;
 		font: 14px/16px Arial, sans-serif;
 		.row-unit{
@@ -675,7 +676,4 @@ main.hidden.display-block{
 	.main-information-no-filter{
 		padding: 0 5px;
 	}	
-}
-.pointer {
-    cursor: pointer;
 }

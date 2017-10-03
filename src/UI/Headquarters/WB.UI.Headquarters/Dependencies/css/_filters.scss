@@ -29,17 +29,39 @@
 		& ~ label{
 	  		padding-left: 30px;
 			font-weight: normal;
+			color: $gray_light;
+			&:hover, &:focus{
+				color: $gray-highlight-font;
+			}
 	  		.tick {
 	  			left: -5px;
 	  		}
-	  	}
+		}
+		&:checked ~ label{
+			color: $gray_text;
+		}
 	}
 }
 .filters-container {
+	h2{
+		margin-bottom: 10px;
+	}
+	.about-questionnaire{
+		font-size: 14px;
+		line-height: 16px;
+		li{
+			padding-bottom: 3px;
+			b a{
+				font-weight: bold;
+			}
+		}
+	}
 	color: $gray_text;
-	border-bottom: 3px solid $gray-super-light;
 	padding: 0 15px 20px 15px; 
 	@extend %filter-indent;
+}
+.filter-actions-block{
+	margin-bottom: 10px;
 }
 .block-filter{
 	h5{
@@ -57,9 +79,9 @@
 		}
 	}
 	.form-group{
-		margin-bottom: 10px;
+		margin-bottom: 5px;
 		label{
-			@include font(14px, 16px);
+			@include font(14px, 20px);
 			font-family: inherit;
 			margin: 0;
 		}
@@ -107,6 +129,7 @@
 	@include image-2x("#{$assetsPath}/img/calendar2k.png", 21px, 20px);
 }
 .preset-filters-container{
+	border-top: 3px solid $gray-super-light;
 	padding: 30px 15px 20px 15px;
 	@extend %filter-indent;	
 	a, .export-queue{
@@ -114,9 +137,6 @@
 		color: $blue;
 		display: block;
 	}
-}
-.filters-container .flagged-questions{
-	margin: 0;
 }
 .filters{
 	.help-block{

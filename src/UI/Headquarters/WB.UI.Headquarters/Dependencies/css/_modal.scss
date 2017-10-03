@@ -151,7 +151,6 @@ body > .ui-pnotify{
 	.title-row{
 		font-size: 16px;
 		line-height: 18px;
-		//margin-right: 10px; 
 		@extend %hover;
 	}
 	.interviewer{
@@ -165,14 +164,10 @@ body > .ui-pnotify{
   display: inline-block;
   text-align: left;
   vertical-align: middle;
-  //max-height: 85%;
   width: 660px;
-  //overflow-y: auto;
-//   @extend %modal-window;
 }
 .modal-content{
 	padding: 20px;
-    //overflow: hidden;
     border: none;
     box-shadow: none;
     h3{
