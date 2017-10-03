@@ -24,5 +24,7 @@ namespace Main.Core.Entities.Composite
         void Insert(int index, IComposite itemToInsert, Guid? parent);
 
         void RemoveChild(Guid child);
+
+        string VariableName { get; }
     }
 }
