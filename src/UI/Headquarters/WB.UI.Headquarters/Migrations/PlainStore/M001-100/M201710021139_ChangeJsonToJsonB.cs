@@ -9,15 +9,24 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
     {
         public override void Up()
         {
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.appsettings", "value"));
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.assignments", "answers"));
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.questionnairedocuments", "value"));
+            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore", "appsettings", "value"));
+            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore", "assignments", "answers"));
+            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore", "questionnairedocuments", "value"));
 
-            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore.webinterviewconfigs", "value"));
+            Execute.Sql(GetScriptToChangeJsonToJsonb("plainstore", "webinterviewconfigs", "value"));
         }
 
-        private static string GetScriptToChangeJsonToJsonb(string tableName, string columnName)
-            => $"alter table {tableName} alter column {columnName} type jsonb using {columnName}::text::jsonb;";
+        private static string GetScriptToChangeJsonToJsonb(string schema, string tableName, string columnName)
+            => $@"DO $$
+                DECLARE 
+                    doesTableExists integer;
+                BEGIN
+                    SELECT count(tablename) FROM pg_tables WHERE schemaname = '{schema}' AND tablename = '{tableName}' INTO doesTableExists;
+                    IF doesTableExists > 0 THEN
+                        alter table {schema}.{tableName} alter column {columnName} type jsonb using {columnName}::text::jsonb;
+                END IF;
+                END
+                $$"; 
 
         public override void Down()
         {
