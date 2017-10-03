@@ -126,6 +126,9 @@
   <data name="AppName" xml:space="preserve">
     <value>Questionnaire Designer</value>
   </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
   <data name="CompanyName" xml:space="preserve">
     <value>The World Bank Group</value>
   </data>
