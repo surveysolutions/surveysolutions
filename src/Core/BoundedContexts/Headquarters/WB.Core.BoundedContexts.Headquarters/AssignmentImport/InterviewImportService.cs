@@ -87,9 +87,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName)
         {
-            if (StartImportProcess(questionnaireIdentity, interviewImportProcessId, AssignmentImportType.Assignments)) return;
-
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            if (StartImportProcess(questionnaireIdentity, questionnaire.Title, interviewImportProcessId, AssignmentImportType.Assignments)) return;
 
             this.Status.Stage = AssignmentImportStage.FileVerification;
             this.Status.VerificationState.FileName = fileName;
@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            if (StartImportProcess(questionnaireIdentity, interviewImportProcessId, AssignmentImportType.Assignments)) return;
+            if (StartImportProcess(questionnaireIdentity, questionnaire.Title, interviewImportProcessId, AssignmentImportType.Assignments)) return;
             this.Status.Stage = AssignmentImportStage.AssignmentCreation;
             RunImportProcess(assignmentImportData, questionnaireIdentity, ImportAction);
         }
@@ -296,7 +296,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return questionnaireDocument != null;
         }
 
-        private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId,
+        private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle , string interviewImportProcessId,
             AssignmentImportType assignmentImportType)
         {
             lock (lockStart)
@@ -307,6 +307,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 this.Status = new AssignmentImportStatus
                 {
                     QuestionnaireId = questionnaireIdentity,
+                    QuestionnaireTitle = questionnaireTitle,
                     InterviewImportProcessId = interviewImportProcessId,
                     StartedDateTime = DateTime.Now,
                     ProcessedCount = 0,
