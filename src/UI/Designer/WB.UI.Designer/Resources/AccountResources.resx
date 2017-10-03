@@ -121,7 +121,7 @@
     <value>All Rights Reserved.</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>This is a tool for creating surveys for The&amp;nbsp;World&amp;nbsp;Bank’s CAPI platform with collaboration capabilities and export to PDF.</value>
+    <value>This is a tool for creating surveys for The&#160;World&#160;Bank’s CAPI platform with collaboration capabilities and export to PDF.</value>
   </data>
   <data name="AppName" xml:space="preserve">
     <value>Questionnaire Designer</value>
