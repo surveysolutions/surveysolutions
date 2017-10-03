@@ -2,6 +2,7 @@
     "plugins": [
         [
             "transform-async-to-generator",
+            "syntax-dynamic-import",
             "transform-runtime",
             {
                 "polyfill": true,
@@ -21,6 +22,6 @@
                     ]
                 }
             }
-        ]
+        ], "stage-2"
     ]
 }
