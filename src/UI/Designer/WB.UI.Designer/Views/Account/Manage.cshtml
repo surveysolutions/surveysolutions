@@ -4,7 +4,7 @@
 @model WB.UI.Designer.Models.LocalPasswordModel
 
 @{
-    ViewBag.Title = "Change Password";
+    ViewBag.Title = AccountResources.ChangePassword;
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 <div id="edit-form">
@@ -21,15 +21,15 @@
             <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
         }
         <div class="form-group">
-            @Html.PasswordFor(x => x.OldPassword, new { @class = "form-control", placeholder = "Current password" })
+            @Html.PasswordFor(x => x.OldPassword, new { @class = "form-control", placeholder = AccountResources.CurrentPassword })
             @Html.ValidationMessageFor(x => x.OldPassword, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
-            @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "New password (min 10 symbols, numbers AND letters)" })
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = AccountResources.PasswordWatermark })
             @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
-            @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", placeholder = "Repeat password" })
+            @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", placeholder = AccountResources.RepeatPassword })
             @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "help-inline" })
         </div>
         <div class="form-actions">
