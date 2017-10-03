@@ -61,11 +61,74 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new section.
+        /// </summary>
+        internal static string AddNewSection {
+            get {
+                return ResourceManager.GetString("AddNewSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backup.
         /// </summary>
         internal static string Backup {
             get {
                 return ResourceManager.GetString("Backup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        internal static string ChangePassword {
+            get {
+                return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compile.
+        /// </summary>
+        internal static string Compile {
+            get {
+                return ResourceManager.GetString("Compile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy.
+        /// </summary>
+        internal static string Copy {
+            get {
+                return ResourceManager.GetString("Copy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        internal static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} error.
+        /// </summary>
+        internal static string ErrorsCounter {
+            get {
+                return ResourceManager.GetString("ErrorsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} errors.
+        /// </summary>
+        internal static string ErrorsCounter_plural {
+            get {
+                return ResourceManager.GetString("ErrorsCounter_plural", resourceCulture);
             }
         }
         
@@ -97,11 +160,137 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log out.
+        /// </summary>
+        internal static string LogOut {
+            get {
+                return ResourceManager.GetString("LogOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        internal static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paste after.
+        /// </summary>
+        internal static string PasteAfter {
+            get {
+                return ResourceManager.GetString("PasteAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R).
+        /// </summary>
+        internal static string QuestionnaireSummary {
+            get {
+                return ResourceManager.GetString("QuestionnaireSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read Only.
+        /// </summary>
+        internal static string ReadOnly {
+            get {
+                return ResourceManager.GetString("ReadOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to saved at {{dateTime, H:mm}}.
+        /// </summary>
+        internal static string SavedAtTimestamp {
+            get {
+                return ResourceManager.GetString("SavedAtTimestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Macro:.
+        /// </summary>
+        internal static string SideBarMacroCounter {
+            get {
+                return ResourceManager.GetString("SideBarMacroCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Macros:.
+        /// </summary>
+        internal static string SideBarMacroCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarMacroCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Section:.
+        /// </summary>
+        internal static string SideBarSectionsCounter {
+            get {
+                return ResourceManager.GetString("SideBarSectionsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Sections:.
+        /// </summary>
+        internal static string SideBarSectionsCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarSectionsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Dropdown.
+        /// </summary>
+        internal static string ToggleDropdown {
+            get {
+                return ResourceManager.GetString("ToggleDropdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} warning.
+        /// </summary>
+        internal static string WarningsCounter {
+            get {
+                return ResourceManager.GetString("WarningsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} warnings.
+        /// </summary>
+        internal static string WarningsCounter_plural {
+            get {
+                return ResourceManager.GetString("WarningsCounter_plural", resourceCulture);
             }
         }
     }

@@ -13,14 +13,13 @@
                     <a class="btn btn-default" ng-i18next="[i18next]({currentUserName: '{{ currentUserName }}' })HellowMessageBtn"></a>
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
+                        <span class="sr-only" ng-i18next>ToggleDropdown</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="../../account/manage">Change password</a></li>
-                        <li><a href="../../account/logoff">Log out</a></li>
+                        <li><a href="../../account/manage" ng-i18next>ChangePassword</a></li>
+                        <li><a href="../../account/logoff" ng-i18next>LogOut</a></li>
                     </ul>
                 </div>
-
             </div>
         </div>
         <div class="questionnarie-title">
@@ -29,37 +28,31 @@
                     {{questionnaire.title}}
                 </div>
                 <div class="questionnarie-title-buttons">
-                    <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}S, {{questionnaire.rostersCount}}R)</span>
-                    <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()" />
+                    <span class="text-muted" ng-i18next="[i18next]({questionsCount: '{{questionnaire.questionsCount}}', 
+                                                                    groupsCount: '{{questionnaire.groupsCount}}',
+                                                                    rostersCount: '{{questionnaire.rostersCount}}' })QuestionnaireSummary">
+                        
+                    </span>
+                    <input id="verification-btn" type="button" class="btn" ng-i18next="[value]Compile" value="COMPILE" ng-click="verify()" />
                     <span ng-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
                         <span data-toggle="modal" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message ng-hide" ng-class="{'no-errors': verificationStatus.errors.length == 0}">
                             <a href="javascript:void(0);"
                                ng-click="showVerificationErrors()"
-                               ng-pluralize
-                               count="verificationStatus.errors.length"
-                               when="{
-                               '0': 'No errors',
-                               '1': '{} error',
-                              '100' : '{}+ errors',
-                              'other': '{} errors'}">
+                               ng-i18next="[i18next]({count: verificationStatus.errors.length})ErrorsCounter">
                             </a>
                         </span>
                         <span data-toggle="modal" ng-show="verificationStatus.warnings.length > 0" class="warning-message ng-hide">
                             <a href="javascript:void(0);"
                                ng-click="showVerificationWarnings()"
-                               ng-pluralize
-                               count="verificationStatus.warnings.length"
-                               when="{
-                                '1': '{} warning',
-                                '100' : '{}+ warnings',
-                                'other': '{} warnings'}">
+                               ng-i18next="[i18next]({count: verificationStatus.warnings.length})WarningsCounter"
+                               >
                             </a>
                         </span>
-                        <span class="text-success" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0">OK</span>
+                        <span class="text-success" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0" ng-i18next>Ok</span>
 
-                        <span class="text-success"><em>saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
+                        <span class="text-success"><em ng-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
                     </span>
-                    <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser">Read Only</span>
+                    <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
 
                 </div>
             </div>
@@ -81,7 +74,9 @@
             <div class="ul-holder">
                 <div class="chapters">
                     <perfect-scrollbar class="scroller">
-                        <h3><span ng-show="questionnaire.chapters.length!=0">{{questionnaire.chapters.length}}</span> Section<span ng-show="questionnaire.chapters.length!=1">s</span>:</h3>
+                        <h3>
+                            <span ng-i18next="[i18next]({count: questionnaire.chapters.length})SideBarSectionsCounter"></span>
+                        </h3>
                         <ul ui-tree-nodes ng-model="questionnaire.chapters" class="chapters-list">
                             <li class="chapter-panel-item"
                                     ng-repeat="chapter in questionnaire.chapters"
@@ -97,18 +92,18 @@
                                 </div>
                                 <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a ng-click="editChapter(chapter);">Open</a></li>
-                                        <li><a ng-click="copyRef(chapter);">Copy</a></li>
+                                        <li><a ng-click="editChapter(chapter);" ng-i18next>Open</a></li>
+                                        <li><a ng-click="copyRef(chapter);" ng-i18next>Copy</a></li>
                                         <li>
-                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser">Paste after</a>
+                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>PasteAfter</a>
                                         </li>
-                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser">Delete</a></li>
+                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>Delete</a></li>
                                     </ul>
                                 </div>
                             </li>
                         </ul>
                         <div class="button-holder">
-                            <input type="button" class="btn lighter-hover" value="ADD NEW SECTION" ng-click="addNewChapter()" ng-if="!questionnaire.isReadOnlyForUser">
+                            <input type="button" class="btn lighter-hover" ng-i18next="[value]AddNewSection" value="ADD NEW SECTION" ng-click="addNewChapter()" ng-if="!questionnaire.isReadOnlyForUser">
                         </div>
                     </perfect-scrollbar>
                 </div>
@@ -124,7 +119,7 @@
             <div class="macroses">
                 <perfect-scrollbar class="scroller">
                     <h3>
-                        <span ng-show="macros.length!=0">{{macros.length}}</span> Macro<span ng-show="macros.length!=1">s</span>:
+                        <span ng-i18next="[i18next]({count: macros.length})SideBarMacroCounter"></span>
                     </h3>
                     <div class="empty-list" ng-show="macros.length == 0">
                         <p>Use this tab to define macro substitutions.</p>

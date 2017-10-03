@@ -11,7 +11,14 @@
             loadPath: '../build/resources/QuestionnaireEditor.{{lng}}.json'
         },
         useCookie: false,
-        useLocalStorage: false
+        useLocalStorage: false,
+        interpolation: {
+            format: function(value, format, lng) {
+                if (format === 'uppercase') return value.toUpperCase();
+                if(value instanceof Date) return moment(value).format(format);
+                return value;
+            }
+        }
     }, function (err, t) {
         console.log('resources loaded');
     });
