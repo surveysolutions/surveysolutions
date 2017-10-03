@@ -400,7 +400,76 @@
   <data name="SideBarTranslationsUploadNew" xml:space="preserve">
     <value>Загрузить новый перевод</value>
   </data>
+  <data name="AttachmentPreview" xml:space="preserve">
+    <value>Просмотр вложения</value>
+  </data>
+  <data name="FindReplaceFindWhat" xml:space="preserve">
+    <value>Найти:</value>
+  </data>
+  <data name="FindReplaceMatchCase" xml:space="preserve">
+    <value>Учитывать регистр</value>
+  </data>
+  <data name="FindReplaceMatchWord" xml:space="preserve">
+    <value>По словам</value>
+  </data>
+  <data name="FindReplaceTitle" xml:space="preserve">
+    <value>Поиск и замена</value>
+  </data>
+  <data name="FindReplaceUseRegex" xml:space="preserve">
+    <value>Регулярное выражение</value>
+  </data>
+  <data name="ModalConfirm" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>Инфо</value>
+  </data>
   <data name="MoveToAnotherSubSection" xml:space="preserve">
     <value>Переместить в другую подсекцию:</value>
+  </data>
+  <data name="FindReplaceBackToSearch" xml:space="preserve">
+    <value>Назад к поиску</value>
+  </data>
+  <data name="FindReplaceDone" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="FindReplaceFindAll" xml:space="preserve">
+    <value>Найти все</value>
+  </data>
+  <data name="FindReplaceInAll" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="FindReplaceInAllFound" xml:space="preserve">
+    <value>в найденном {{count}} объекте?</value>
+  </data>
+  <data name="FindReplaceInAllFound_1" xml:space="preserve">
+    <value>во всех найденных {{count}} объектах?</value>
+  </data>
+  <data name="FindReplaceInAllFound_2" xml:space="preserve">
+    <value>во всех найденных {{count}} объектах?</value>
+  </data>
+  <data name="FindReplaceMatchingLines" xml:space="preserve">
+    <value>Найденные строки: {{count}}</value>
+  </data>
+  <data name="FindReplaceNext" xml:space="preserve">
+    <value>Следующее</value>
+  </data>
+  <data name="FindReplacePrevious" xml:space="preserve">
+    <value>Предидущее</value>
+  </data>
+  <data name="FindReplaceReplaceAll" xml:space="preserve">
+    <value>Заменить все ({{count}})</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+    <value>Заменить все</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+    <value>на</value>
+  </data>
+  <data name="FindReplaceWereReplaced" xml:space="preserve">
+    <value>были заменены на</value>
+  </data>
+  <data name="FindReplaceСonfirm" xml:space="preserve">
+    <value>Подтвердите действие.</value>
   </data>
 </root>
