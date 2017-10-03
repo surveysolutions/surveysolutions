@@ -54,11 +54,6 @@ namespace WB.UI.Interviewer.Implementations.Services
             base.RestartApp(typeof(SplashActivity));
         }
 
-        public void NavigateToSplashScreen()
-        {
-            base.RestartApp(typeof(SplashActivity));
-        }
-
         public void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity)
             => this.NavigateTo<InterviewViewModel>(new
             {
