@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using FluentMigrator;
 
-namespace WB.UI.Headquarters.Migrations.ReadSide
+namespace WB.UI.Headquarters.Migrations.PlainStore
 {
     [Localizable(false)]
     [Migration(201710021139)]
