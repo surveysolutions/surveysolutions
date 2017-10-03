@@ -106,6 +106,60 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        internal static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} error found.
+        /// </summary>
+        internal static string CompilationErrorsCounter {
+            get {
+                return ResourceManager.GetString("CompilationErrorsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} errors found.
+        /// </summary>
+        internal static string CompilationErrorsCounter_plural {
+            get {
+                return ResourceManager.GetString("CompilationErrorsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compilation:.
+        /// </summary>
+        internal static string CompilationLabel {
+            get {
+                return ResourceManager.GetString("CompilationLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} warning found.
+        /// </summary>
+        internal static string CompilationWarningsCounter {
+            get {
+                return ResourceManager.GetString("CompilationWarningsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} warnings found.
+        /// </summary>
+        internal static string CompilationWarningsCounter_plural {
+            get {
+                return ResourceManager.GetString("CompilationWarningsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Compile.
         /// </summary>
         internal static string Compile {
@@ -196,6 +250,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move to.
+        /// </summary>
+        internal static string MoveTo {
+            get {
+                return ResourceManager.GetString("MoveTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to another sub-section:.
+        /// </summary>
+        internal static string MoveToAnotherSubSection {
+            get {
+                return ResourceManager.GetString("MoveToAnotherSubSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string Ok {
@@ -241,6 +313,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recompile.
+        /// </summary>
+        internal static string Recompile {
+            get {
+                return ResourceManager.GetString("Recompile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         internal static string Save {
@@ -273,6 +354,33 @@ namespace WB.UI.Designer.Resources {
         internal static string SideBarAddMacro {
             get {
                 return ResourceManager.GetString("SideBarAddMacro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to format: {{- type}}.
+        /// </summary>
+        internal static string SideBarAttachmentDetailsFormat {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentDetailsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{width}} × {{height}}px.
+        /// </summary>
+        internal static string SideBarAttachmentDetailsResolution {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentDetailsResolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to size: {{size}}.
+        /// </summary>
+        internal static string SideBarAttachmentDetailsSize {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentDetailsSize", resourceCulture);
             }
         }
         
@@ -340,11 +448,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attachments.
+        /// </summary>
+        internal static string SideBarAttachmentsTitle {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload new.
         /// </summary>
         internal static string SideBarAttachmentsUpload {
             get {
                 return ResourceManager.GetString("SideBarAttachmentsUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to uploaded: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}.
+        /// </summary>
+        internal static string SideBarAttachmentUploaded {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentUploaded", resourceCulture);
             }
         }
         
@@ -448,6 +574,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup tables.
+        /// </summary>
+        internal static string SideBarLookupTitle {
+            get {
+                return ResourceManager.GetString("SideBarLookupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to content.
         /// </summary>
         internal static string SideBarMacroContent {
@@ -538,6 +673,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Macros.
+        /// </summary>
+        internal static string SideBarMacroTitle {
+            get {
+                return ResourceManager.GetString("SideBarMacroTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} Section:.
         /// </summary>
         internal static string SideBarSectionsCounter {
@@ -552,6 +696,114 @@ namespace WB.UI.Designer.Resources {
         internal static string SideBarSectionsCounter_plural {
             get {
                 return ResourceManager.GetString("SideBarSectionsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sections.
+        /// </summary>
+        internal static string SideBarSectionsTitle {
+            get {
+                return ResourceManager.GetString("SideBarSectionsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download xlsx.
+        /// </summary>
+        internal static string SideBarTranslationDownloadXlsx {
+            get {
+                return ResourceManager.GetString("SideBarTranslationDownloadXlsx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get Template for .
+        /// </summary>
+        internal static string SideBarTranslationGetTemplate {
+            get {
+                return ResourceManager.GetString("SideBarTranslationGetTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel (xlsx).
+        /// </summary>
+        internal static string SideBarTranslationGetTemplateLinkTextXlsx {
+            get {
+                return ResourceManager.GetString("SideBarTranslationGetTemplateLinkTextXlsx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to translation name.
+        /// </summary>
+        internal static string SideBarTranslationName {
+            get {
+                return ResourceManager.GetString("SideBarTranslationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Translation.
+        /// </summary>
+        internal static string SideBarTranslationsCounter {
+            get {
+                return ResourceManager.GetString("SideBarTranslationsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Translations.
+        /// </summary>
+        internal static string SideBarTranslationsCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarTranslationsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use this tab to manage questionnaire translations..
+        /// </summary>
+        internal static string SideBarTranslationsEmptyLine1 {
+            get {
+                return ResourceManager.GetString("SideBarTranslationsEmptyLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You may download and update translations to different languages..
+        /// </summary>
+        internal static string SideBarTranslationsEmptyLine2 {
+            get {
+                return ResourceManager.GetString("SideBarTranslationsEmptyLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations..
+        /// </summary>
+        internal static string SideBarTranslationsEmptyLine3 {
+            get {
+                return ResourceManager.GetString("SideBarTranslationsEmptyLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translations.
+        /// </summary>
+        internal static string SideBarTranslationsTitle {
+            get {
+                return ResourceManager.GetString("SideBarTranslationsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload new translation.
+        /// </summary>
+        internal static string SideBarTranslationsUploadNew {
+            get {
+                return ResourceManager.GetString("SideBarTranslationsUploadNew", resourceCulture);
             }
         }
         
