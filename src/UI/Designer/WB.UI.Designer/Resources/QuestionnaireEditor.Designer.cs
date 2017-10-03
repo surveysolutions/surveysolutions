@@ -223,6 +223,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You entered more than maximum allowed {{max}}.
+        /// </summary>
+        internal static string EnteredMoreThanAllowed {
+            get {
+                return ResourceManager.GetString("EnteredMoreThanAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error message.
         /// </summary>
         internal static string ErrorMessage {
@@ -538,6 +547,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You entered an invalid input. Each line should follow the format: &quot;Title...Value&quot;. &apos;Value&apos; must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed..
+        /// </summary>
+        internal static string OptionsListError {
+            get {
+                return ResourceManager.GetString("OptionsListError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste after.
         /// </summary>
         internal static string PasteAfter {
@@ -700,6 +718,87 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add item.
+        /// </summary>
+        internal static string RosterAddItem {
+            get {
+                return ResourceManager.GetString("RosterAddItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster name.
+        /// </summary>
+        internal static string RosterName {
+            get {
+                return ResourceManager.GetString("RosterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show strings.
+        /// </summary>
+        internal static string RosterShowStrings {
+            get {
+                return ResourceManager.GetString("RosterShowStrings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster source.
+        /// </summary>
+        internal static string RosterSource {
+            get {
+                return ResourceManager.GetString("RosterSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed set of items:.
+        /// </summary>
+        internal static string RosterSourceFixed {
+            get {
+                return ResourceManager.GetString("RosterSourceFixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source question for number of rows:.
+        /// </summary>
+        internal static string RosterSourceNumericQuestion {
+            get {
+                return ResourceManager.GetString("RosterSourceNumericQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source question for names of rows:.
+        /// </summary>
+        internal static string RosterSourceNumericTitles {
+            get {
+                return ResourceManager.GetString("RosterSourceNumericTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source question (answer determines both the number and the name of roster rows):.
+        /// </summary>
+        internal static string RosterSourceQuestion {
+            get {
+                return ResourceManager.GetString("RosterSourceQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster ID.
+        /// </summary>
+        internal static string RosterVariableName {
+            get {
+                return ResourceManager.GetString("RosterVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         internal static string Save {
@@ -732,6 +831,123 @@ namespace WB.UI.Designer.Resources {
         internal static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can .
+        /// </summary>
+        internal static string SettingsCan {
+            get {
+                return ResourceManager.GetString("SettingsCan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invite collaborators by e-mail:.
+        /// </summary>
+        internal static string SettingsInviteCollaborators {
+            get {
+                return ResourceManager.GetString("SettingsInviteCollaborators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to owner.
+        /// </summary>
+        internal static string SettingsOwner {
+            get {
+                return ResourceManager.GetString("SettingsOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Private.
+        /// </summary>
+        internal static string SettingsPrivate {
+            get {
+                return ResourceManager.GetString("SettingsPrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Public.
+        /// </summary>
+        internal static string SettingsPublic {
+            get {
+                return ResourceManager.GetString("SettingsPublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire name:.
+        /// </summary>
+        internal static string SettingsQuestionnaireName {
+            get {
+                return ResourceManager.GetString("SettingsQuestionnaireName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make this questionnaire.
+        /// </summary>
+        internal static string SettingsQuestionnaireSharing {
+            get {
+                return ResourceManager.GetString("SettingsQuestionnaireSharing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revoke access.
+        /// </summary>
+        internal static string SettingsRevokeAccess {
+            get {
+                return ResourceManager.GetString("SettingsRevokeAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire settings.
+        /// </summary>
+        internal static string SettingsTitle {
+            get {
+                return ResourceManager.GetString("SettingsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to visible to everyone in read only mode.
+        /// </summary>
+        internal static string SettingsVisibleToEveryone {
+            get {
+                return ResourceManager.GetString("SettingsVisibleToEveryone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to visible to owner only.
+        /// </summary>
+        internal static string SettingsVisibleToOwner {
+            get {
+                return ResourceManager.GetString("SettingsVisibleToOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Who has access:.
+        /// </summary>
+        internal static string SettingsWhoHasAccess {
+            get {
+                return ResourceManager.GetString("SettingsWhoHasAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show list.
+        /// </summary>
+        internal static string ShowList {
+            get {
+                return ResourceManager.GetString("ShowList", resourceCulture);
             }
         }
         

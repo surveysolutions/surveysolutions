@@ -5,7 +5,7 @@
         </div>
         <div class="row">
             <div class="form-group col-xs-6">
-                <label for="edit-group-title" class="wb-label">Roster source</label><br>
+                <label for="edit-group-title" class="wb-label" ng-i18next="RosterSource"></label><br>
                 <div class="btn-group type-container-dropdown" uib-dropdown>
                     <button id="rosterTypeBtn" class="btn btn-default dropdown-toggle form-control" uib-dropdown-toggle type="button">
                         {{activeRoster.getTitleForRosterType()}}
@@ -20,13 +20,13 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-5 pull-right">
-                <label for="edit-group-variableName" class="wb-label">Roster ID <help key="variableName" placement="left" /></label><br>
+                <label for="edit-group-variableName" class="wb-label">{{'RosterVariableName' | i18next}} <help key="variableName" placement="left" /></label><br>
                 <input id="edit-group-variableName" type="text" class="wb-input bg-white width-auto" ng-model="activeRoster.variableName" maxlength="32" spellcheck="false">
             </div>
         </div>
 
         <div class="form-group">
-            <label for="edit-roster-title-highlight" class="wb-label">Roster name</label><br>
+            <label for="edit-roster-title-highlight" class="wb-label" ng-i18next="RosterName"></label><br>
             <div class="pseudo-form-control">
                 <div id="edit-roster-title-highlight"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeRoster.title"></div>
@@ -37,9 +37,9 @@
 
         <div class="form-group enabling-group">
             <div class="enabling-group-marker"></div>
-            <label for="edit-group-condition">Enabling condition <help key="conditionExpression"/></label>
+            <label for="edit-group-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression"/></label>
             <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeRoster.hideIfDisabled" />
-            <label for="cb-hideIfDisabled"><span></span>Hide if disabled <help key="hideIfDisabled" /></label>
+            <label for="cb-hideIfDisabled"><span></span>{{'HideIfDisabled'| i18next}} <help key="hideIfDisabled" /></label>
             <br>
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeRoster.enablementCondition"></div>
@@ -49,11 +49,11 @@
 
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': editRosterForm.$dirty }" ng-click="saveRoster()" unsaved-warning-clear ng-disabled="!editRosterForm.$valid">Save</button>
-            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelRoster()">Cancel</button>
+            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-roster-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': editRosterForm.$dirty }" ng-click="saveRoster()" unsaved-warning-clear ng-disabled="!editRosterForm.$valid" ng-i18next>Save</button>
+            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelRoster()" ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
-            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="deleteRoster()" unsaved-warning-clear>Delete</button>
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="deleteRoster()" unsaved-warning-clear ng-i18next>Delete</button>
             <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
         </div>
     </div>
@@ -61,10 +61,10 @@
 <script type="text/ng-template" id="List-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Source question (answer determines both the number and the name of roster rows): </label>
+            <label>{{'RosterSourceQuestion' | i18next}} </label>
             <div class="btn-group" uib-dropdown>
                 <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
-                    <span class="select-placeholder" ng-if="selectedListQuestion == null">Select question</span>
+                    <span class="select-placeholder" ng-if="selectedListQuestion == null">{{ 'SelectQuestion' | i18next}}</span>
                     <span class="selected-item" ng-if="selectedListQuestion !== null">
                         <span class="path">{{selectedListQuestion.breadcrumbs}}</span>
                         <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title}}
@@ -101,10 +101,10 @@
 <script type="text/ng-template" id="Numeric-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Source question for number of rows:</label>
+            <label ng-i18next="RosterSourceNumericQuestion"></label>
             <div class="btn-group" uib-dropdown>
                 <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
-                    <span class="select-placeholder" ng-if="selectedNumericQuestion == null">Select question</span>
+                    <span class="select-placeholder" ng-if="selectedNumericQuestion == null">{{'SelectQuestion'|i18next}}</span>
                     <span class="selected-item" ng-if="selectedNumericQuestion !== null">
                         <span class="path">{{selectedNumericQuestion.breadcrumbs}}</span>
                         <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title}}
@@ -137,10 +137,10 @@
         </div>
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Source question for names of rows:</label>
+            <label ng-i18next="RosterSourceNumericTitles"></label>
             <div class="btn-group" uib-dropdown>
                 <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
-                    <span class="select-placeholder" ng-if="selectedTitleQuestion == null">Select question</span>
+                    <span class="select-placeholder" ng-if="selectedTitleQuestion == null" ng-i18next="SelectQuestion"></span>
                     <span class="selected-item" ng-if="selectedTitleQuestion !== null">
                         <span class="path">{{selectedTitleQuestion.breadcrumbs}}</span>
                         <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title}}
@@ -177,7 +177,7 @@
 <script type="text/ng-template" id="Fixed-template.html">
 
         <div class="form-group">
-            <label for="edit-fixed-roster-title" class="wb-label">Fixed set of items: <help key="fixedTitles" /></label>
+            <label for="edit-fixed-roster-title" class="wb-label">{{'RosterSourceFixed' | i18next}} <help key="fixedTitles" /></label>
             <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
             <div class="singleOption">
                 <div ng-if="activeRoster.useListAsRosterTitleEditor" class="form-group">
@@ -196,8 +196,8 @@
                         </div>
                     </div>
                     <p>
-                        <button class="btn btn-link" ng-hide="wasTitlesLimitReached()" ng-click="addFixedTitle()">Add item</button>
-                        <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>                        
+                        <button class="btn btn-link" ng-hide="wasTitlesLimitReached()" ng-click="addFixedTitle()" ng-i18next="RosterAddItem"></button>
+                        <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()" ng-i18next="RosterShowStrings"></button>
                     </p>
                 </div>
                 <div ng-if="!activeRoster.useListAsRosterTitleEditor">
@@ -209,13 +209,12 @@
                                   max-options-count
                                   msd-elastic></textarea>
                         <p class="help-block">
-                            <input class="btn btn-link" type="button" value="Show list" ng-click="showRosterTitlesInList()" ng-disabled="!editRosterForm.stringifiedRosterTitles.$valid" />
+                            <input class="btn btn-link" type="button" ng-i18next="[value]ShowList" ng-click="showRosterTitlesInList()" ng-disabled="!editRosterForm.stringifiedRosterTitles.$valid" />
                         </p>
-                        <p class="help-block ng-cloak" ng-show="editRosterForm.stringifiedRosterTitles.$error.matchOptionsPattern">
-                            You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. No empty lines are allowed.
+                        <p class="help-block ng-cloak" ng-show="editRosterForm.stringifiedRosterTitles.$error.matchOptionsPattern" ng-i18next="OptionsListError">
                         </p>
-                        <p class="help-block ng-cloak" ng-show="editRosterForm.stringifiedRosterTitles.$error.maxOptionsCount">
-                            You entered more than maximum allowed 200
+                        <p class="help-block ng-cloak" ng-show="editRosterForm.stringifiedRosterTitles.$error.maxOptionsCount" 
+                           ng-i18next="({max: 200})EnteredMoreThanAllowed">
                         </p>
                     </div>
                 </div>
@@ -226,10 +225,10 @@
 <script type="text/ng-template" id="Multi-template.html">
 
         <div class="dropdown-with-breadcrumbs-and-icons">
-            <label>Source question (answer determines both the number and the name of roster rows): </label>
+            <label ng-i18next="RosterSourceQuestion"></label>
             <div class="btn-group" uib-dropdown>
                 <button class="btn dropdown-toggle" uib-dropdown-toggle type="button">
-                    <span class="select-placeholder" ng-if="selectedMultiQuestion == null">Select question</span>
+                    <span class="select-placeholder" ng-if="selectedMultiQuestion == null" ng-i18next="SelectQuestion"></span>
                     <span class="selected-item" ng-if="selectedMultiQuestion !== null">
                         <span class="path">{{selectedMultiQuestion.breadcrumbs}}</span>
                         <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title}}

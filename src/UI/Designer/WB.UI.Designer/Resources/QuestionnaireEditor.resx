@@ -463,8 +463,14 @@
   <data name="AddValidationRule" xml:space="preserve">
     <value>Add new validation rule</value>
   </data>
+  <data name="EnteredMoreThanAllowed" xml:space="preserve">
+    <value>You entered more than maximum allowed {{max}}</value>
+  </data>
   <data name="ErrorMessage" xml:space="preserve">
     <value>Error message</value>
+  </data>
+  <data name="OptionsListError" xml:space="preserve">
+    <value>You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
   </data>
   <data name="QuestionAddInstruction" xml:space="preserve">
     <value>Add Interviewer Instruction</value>
@@ -508,8 +514,74 @@
   <data name="QuestionVariableName" xml:space="preserve">
     <value>Variable name</value>
   </data>
+  <data name="RosterAddItem" xml:space="preserve">
+    <value>Add item</value>
+  </data>
+  <data name="RosterName" xml:space="preserve">
+    <value>Roster name</value>
+  </data>
+  <data name="RosterShowStrings" xml:space="preserve">
+    <value>Show strings</value>
+  </data>
+  <data name="RosterSource" xml:space="preserve">
+    <value>Roster source</value>
+  </data>
+  <data name="RosterSourceFixed" xml:space="preserve">
+    <value>Fixed set of items:</value>
+  </data>
+  <data name="RosterSourceNumericQuestion" xml:space="preserve">
+    <value>Source question for number of rows:</value>
+  </data>
+  <data name="RosterSourceNumericTitles" xml:space="preserve">
+    <value>Source question for names of rows:</value>
+  </data>
+  <data name="RosterSourceQuestion" xml:space="preserve">
+    <value>Source question (answer determines both the number and the name of roster rows):</value>
+  </data>
+  <data name="RosterVariableName" xml:space="preserve">
+    <value>Roster ID</value>
+  </data>
   <data name="SelectQuestion" xml:space="preserve">
     <value>Select question</value>
+  </data>
+  <data name="SettingsCan" xml:space="preserve">
+    <value>Can </value>
+  </data>
+  <data name="SettingsInviteCollaborators" xml:space="preserve">
+    <value>Invite collaborators by e-mail:</value>
+  </data>
+  <data name="SettingsOwner" xml:space="preserve">
+    <value>owner</value>
+  </data>
+  <data name="SettingsPrivate" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="SettingsPublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="SettingsQuestionnaireName" xml:space="preserve">
+    <value>Questionnaire name:</value>
+  </data>
+  <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+    <value>Make this questionnaire</value>
+  </data>
+  <data name="SettingsRevokeAccess" xml:space="preserve">
+    <value>Revoke access</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Questionnaire settings</value>
+  </data>
+  <data name="SettingsVisibleToEveryone" xml:space="preserve">
+    <value>visible to everyone in read only mode</value>
+  </data>
+  <data name="SettingsVisibleToOwner" xml:space="preserve">
+    <value>visible to owner only</value>
+  </data>
+  <data name="SettingsWhoHasAccess" xml:space="preserve">
+    <value>Who has access:</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+    <value>Show list</value>
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Validation condition</value>
