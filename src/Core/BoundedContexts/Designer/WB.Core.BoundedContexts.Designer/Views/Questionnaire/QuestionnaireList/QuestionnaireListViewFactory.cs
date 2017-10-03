@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     .Take(input.PageSize)
                     .ToList());
 
-            records.ForEach(x => x.Owner = x.CreatedBy == input.ViewerId ? "you" : x.CreatorName);
+            
             return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
                 items: records,
                 order: input.Order);
