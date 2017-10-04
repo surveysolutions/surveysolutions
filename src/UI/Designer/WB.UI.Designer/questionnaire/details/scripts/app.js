@@ -4,7 +4,7 @@
         .use(window.i18nextXHRBackend)
         .use(window.i18nextBrowserLanguageDetector);
     window.i18next.init({
-        debug: true,
+        debug: false,
         //lng: 'de', // If not given, i18n will detect the browser language.
         fallbackLng: 'en', // Default is dev
         backend: {
