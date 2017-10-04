@@ -46,11 +46,9 @@
 
                     <input type="text" ng-pattern="/^([a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*)$/" class="form-control share-with-email"
                            name="shareWithInput" ng-model="viewModel.shareWith" />
-                    <p class="help-block ng-cloak" ng-show="viewModel.doesUserExist == false">
-                        Provide email of existing user
+                    <p class="help-block ng-cloak" ng-show="viewModel.doesUserExist == false" ng-i18next="SettingsProvideExistingEmail">
                     </p>
-                    <p class="help-block ng-cloak" ng-show="viewModel.shareForm.shareWithInput.$error.pattern">
-                        Provide a valid email
+                    <p class="help-block ng-cloak" ng-show="viewModel.shareForm.shareWithInput.$error.pattern" ng-i18next="SettingsProvideValidEmail">
                     </p>
                 </div>
                 <div class="form-group vertical-top">
@@ -69,7 +67,7 @@
                         </ul>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith">Invite</button>
+                        <button class="btn btn-primary btn-lg invite-button" ng-click="invite()" ng-disabled="!viewModel.shareWith" ng-i18next>SettingsInvite</button>
                     </div>
                 </div>
             </div>

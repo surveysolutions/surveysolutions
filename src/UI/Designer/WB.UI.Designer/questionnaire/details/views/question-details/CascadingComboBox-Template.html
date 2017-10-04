@@ -1,9 +1,9 @@
 ﻿<div id="sourceOfLinkedEntity" class="dropdown-with-breadcrumbs-and-icons">
     <input type="hidden" name="cascadeFromQuestionId" ng-model="activeQuestion.cascadeFromQuestionId" ng-update-hidden ng-required="true" />
-    <label for="singleOptionQuestionSource">Select parent question</label>
+    <label for="singleOptionQuestionSource" ng-i18next="SelectParentQuestion"></label>
     <div class="btn-group dropdown" uib-dropdown>
         <button class="btn dropdown-toggle" uib-dropdown-toggle id="singleOptionQuestionSource" type="button">
-            <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''">Select question</span>
+            <span class="select-placeholder" ng-if="(activeQuestion.cascadeFromQuestion.title || '') == ''" ng-i18next="SelectQuestion"></span>
 
             <div class="selected-item" ng-if="(activeQuestion.cascadeFromQuestion.title || '') !== ''">
                 <span class="path">{{activeQuestion.cascadeFromQuestion.breadcrumbs}}</span>
@@ -39,7 +39,6 @@
             </li>
         </ul>
     </div>
-    <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestionId.$error.required">
-        You must select the parent question
+    <p class="help-block ng-cloak" ng-show="questionForm.cascadeFromQuestionId.$error.required" ng-i18next="SelectParentQuestionError">
     </p>
 </div>

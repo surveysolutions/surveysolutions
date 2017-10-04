@@ -1,8 +1,12 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
+        function ($rootScope, $scope, $state, $i18next, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
             'use strict';
             var me = this;
+
+            $scope.emptySectionAddQuestion = "<button class='btn' disabled type='button'>"+ $i18next.t('AddQuestion') +" </button>";
+            $scope.emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">"+ $i18next.t('AddSubsection') +" </button>";
+            $scope.emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + $i18next.t('Settings') + " </button>";
 
             var scrollMode = {
                 makeVisible: "makeVisible",

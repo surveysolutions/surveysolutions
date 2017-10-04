@@ -266,7 +266,7 @@
     <value>A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
-    <value>To use a macro in an expression, refer to it by its {{- substitution}}</value>
+    <value>To use a macro in an expression, refer to it by its {{-substitution}}</value>
   </data>
   <data name="SideBarMacroHideDescription" xml:space="preserve">
     <value>hide description</value>
@@ -585,5 +585,140 @@
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Validation condition</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Add question</value>
+  </data>
+  <data name="AddRoster" xml:space="preserve">
+    <value>Add roster</value>
+  </data>
+  <data name="AddStaticText" xml:space="preserve">
+    <value>Add static text</value>
+  </data>
+  <data name="AddSubsection" xml:space="preserve">
+    <value>Add sub-section</value>
+  </data>
+  <data name="AddVariable" xml:space="preserve">
+    <value>Add variable</value>
+  </data>
+  <data name="EmptySectionLine1" xml:space="preserve">
+    <value>This section is empty.</value>
+  </data>
+  <data name="EmptySectionLine2" xml:space="preserve">
+    <value>You can start by using {{-addQuestionBtn}} and {{-addSubsectionBtn}} buttons</value>
+  </data>
+  <data name="EmptySectionLine3" xml:space="preserve">
+    <value>on top of this block or manage sections with {{-panel}} left panel</value>
+  </data>
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>Language of survey, device types, collaboration and other options</value>
+  </data>
+  <data name="EmptySectionLine5" xml:space="preserve">
+    <value>can be found at {{-settingsBtn}} panel (top right corner)</value>
+  </data>
+  <data name="NothingFound" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="QuestionCurrentTime" xml:space="preserve">
+    <value>Current time</value>
+  </data>
+  <data name="QuestionDecimalPlaces" xml:space="preserve">
+    <value>Number of decimal places</value>
+  </data>
+  <data name="QuestionInteger" xml:space="preserve">
+    <value>Integer</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
+    <value>Is linked</value>
+  </data>
+  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+    <value>Max number of answers</value>
+  </data>
+  <data name="QuestionOnlyInts" xml:space="preserve">
+    <value>Only integers are allowed</value>
+  </data>
+  <data name="QuestionOptionsCut" xml:space="preserve">
+    <value>As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to {{count}}</value>
+  </data>
+  <data name="QuestionOrdered" xml:space="preserve">
+    <value>Record answer order</value>
+  </data>
+  <data name="QuestionUseSeparator" xml:space="preserve">
+    <value>Use 1000 separator</value>
+  </data>
+  <data name="QuestionYesNoMode" xml:space="preserve">
+    <value>Yes/No mode</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SelectParentQuestion" xml:space="preserve">
+    <value>Select parent question</value>
+  </data>
+  <data name="SelectParentQuestionError" xml:space="preserve">
+    <value>You must select the parent question</value>
+  </data>
+  <data name="SettingsInvite" xml:space="preserve">
+    <value>Invite</value>
+  </data>
+  <data name="SettingsProvideExistingEmail" xml:space="preserve">
+    <value>Provide email of existing user</value>
+  </data>
+  <data name="SettingsProvideValidEmail" xml:space="preserve">
+    <value>Provide a valid email</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Static text</value>
+  </data>
+  <data name="StaticTextAttachmentName" xml:space="preserve">
+    <value>Attachment name</value>
+  </data>
+  <data name="ToggleSearch" xml:space="preserve">
+    <value>Toggle Search</value>
+  </data>
+  <data name="TreeAddQuestion" xml:space="preserve">
+    <value>Add question</value>
+  </data>
+  <data name="TreeAddQuestionAfter" xml:space="preserve">
+    <value>Add question after</value>
+  </data>
+  <data name="TreeAddRoster" xml:space="preserve">
+    <value>Add roster</value>
+  </data>
+  <data name="TreeAddRosterAfter" xml:space="preserve">
+    <value>Add roster after</value>
+  </data>
+  <data name="TreeAddSection" xml:space="preserve">
+    <value>Add sub-section</value>
+  </data>
+  <data name="TreeAddSectionAfter" xml:space="preserve">
+    <value>Add sub-section after</value>
+  </data>
+  <data name="TreeAddStaticText" xml:space="preserve">
+    <value>Add static text</value>
+  </data>
+  <data name="TreeAddStaticTextAfter" xml:space="preserve">
+    <value>Add static text after</value>
+  </data>
+  <data name="TreeAddVariable" xml:space="preserve">
+    <value>Add variable</value>
+  </data>
+  <data name="TreeAddVariableAfter" xml:space="preserve">
+    <value>Add variable after</value>
+  </data>
+  <data name="TreeRoster" xml:space="preserve">
+    <value>roster:</value>
+  </data>
+  <data name="VariableExpression" xml:space="preserve">
+    <value>Expression</value>
+  </data>
+  <data name="VariableLabel" xml:space="preserve">
+    <value>Variable label</value>
+  </data>
+  <data name="VariableType" xml:space="preserve">
+    <value>Variable type</value>
   </data>
 </root>

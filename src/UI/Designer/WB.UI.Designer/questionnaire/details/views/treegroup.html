@@ -10,7 +10,7 @@
         <div class="item-text">
             <button type="button" ng-class="{'btn-expand': collapsed, 'btn-collapse': !collapsed}" data-nodrag ng-click="toggle(this)"
                     ng-mouseenter="is_highlighted = true" ng-mouseleave="is_highlighted = false"></button>
-            <span class="roster-marker" ng-show="item.isRoster">roster:</span>
+            <span class="roster-marker" ng-show="item.isRoster" ng-i18next="TreeRoster"></span>
             <span ng-bind-html="item.title | escape | highlight:search.searchText"></span>
         </div>
         <div class="qname-block">
@@ -23,25 +23,25 @@
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a ng-click="addQuestion(item)" ng-if="!questionnaire.isReadOnlyForUser">Add question</a>
+                <a ng-click="addQuestion(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddQuestion">Add question</a>
             </li>
             <li>
-                <a ng-click="addGroup(item)" ng-if="!questionnaire.isReadOnlyForUser">Add sub-section</a>
+                <a ng-click="addGroup(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddSection">Add sub-section</a>
             </li>
             <li>
-                <a ng-click="addRoster(item)" ng-if="!questionnaire.isReadOnlyForUser">Add roster</a>
+                <a ng-click="addRoster(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddRoster">Add roster</a>
             </li>
             <li>
-                <a ng-click="addStaticText(item)" ng-if="!questionnaire.isReadOnlyForUser">Add static text</a>
+                <a ng-click="addStaticText(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddStaticText">Add static text</a>
             </li>
             <li>
-                <a ng-click="addVariable(item)" ng-if="!questionnaire.isReadOnlyForUser">Add variable</a>
+                <a ng-click="addVariable(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddVariable">Add variable</a>
             </li>
             <li><a ng-click="copyRef(item)">Copy</a></li>
             <li >
-                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Paste after</a>
+                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="PasteAfter"></a>
             </li>
-            <li><a ng-click="deleteGroup(item)" ng-if="!questionnaire.isReadOnlyForUser">Delete</a></li>
+            <li><a ng-click="deleteGroup(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>Delete</a></li>
         </ul>
     </div>
 </div>

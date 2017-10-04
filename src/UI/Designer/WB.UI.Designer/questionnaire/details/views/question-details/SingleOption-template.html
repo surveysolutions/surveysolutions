@@ -1,5 +1,7 @@
 ﻿<div class="singleOption">
-    <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated">As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to 200</div>
+    <div class="well well-sm" ng-if="!(activeQuestion.isCascade || activeQuestion.isFilteredCombobox) && !activeQuestion.isLinked && activeQuestion.wereOptionsTruncated"
+        ng-i18next="({count: 200})QuestionOptionsCut">
+    </div>
     <div ng-if="!activeQuestion.isFilteredCombobox && !activeQuestion.isLinked && !activeQuestion.isCascade">
         <div ng-if="activeQuestion.useListAsOptionsEditor">
             <div class="table-holder">
@@ -24,8 +26,8 @@
                 </div>
             </div>
             <p>
-                <button class="btn btn-link" ng-hide="activeQuestion.optionsCount >= MAX_OPTIONS_COUNT" ng-click="addOption()">Add Option</button>
-                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                <button class="btn btn-link" ng-hide="activeQuestion.optionsCount >= MAX_OPTIONS_COUNT" ng-click="addOption()" ng-i18next="AddOption"></button>
+                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()" ng-i18next="ShowStrings"></button>
             </p>
         </div>
         <div ng-if="!activeQuestion.useListAsOptionsEditor">

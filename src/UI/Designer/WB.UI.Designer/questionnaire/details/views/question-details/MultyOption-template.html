@@ -26,8 +26,8 @@
                 </div>
             </div>
             <p>
-                <button class="btn btn-link" ng-if="!activeQuestion.isLinked" ng-hide="activeQuestion.optionsCount >= MAX_OPTIONS_COUNT" id="edit-question-save-button" ng-click="addOption()">Add Option</button>
-                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()">Show strings</button>
+                <button class="btn btn-link" ng-if="!activeQuestion.isLinked" ng-hide="activeQuestion.optionsCount >= MAX_OPTIONS_COUNT" id="edit-question-save-button" ng-click="addOption()" ng-i18next="AddOption"></button>
+                <button class="btn btn-link pull-right" ng-click="showOptionsInTextarea()" ng-i18next="ShowStrings"></button>
             </p>
         </div>
         <div ng-if="!activeQuestion.useListAsOptionsEditor">
@@ -39,13 +39,11 @@
                           max-options-count
                           msd-elastic></textarea>
                 <p class="help-block">
-                    <input class="btn btn-link" type="button" value="Show list" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
+                    <input class="btn btn-link" type="button" ng-i18next="[value]ShowList" ng-click="showOptionsInList()" ng-disabled="!questionForm.stringifiedOptions.$valid" />
                 </p>
-                <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern">
-                    You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer or decimal number. Title must be an alpha-numeric string. No empty lines are allowed.
+                <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.matchOptionsPattern" ng-i18next="OptionsListError">
                 </p>
-                <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount">
-                    You entered more than maximum allowed 200
+                <p class="help-block ng-cloak" ng-show="questionForm.stringifiedOptions.$error.maxOptionsCount" ng-i18next="({max: 200})EnteredMoreThanAllowed">
                 </p>
             </div>
         </div>
@@ -57,15 +55,14 @@
         <div class="col-xs-5">
             <div class="checkbox checkbox-in-column">
                 <input id="cb-is-ordered" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.areAnswersOrdered" />
-                <label for="cb-is-ordered"><span></span>Record answer order</label>
+                <label for="cb-is-ordered"><span></span>{{'QuestionOrdered' | i18next}}</label>
             </div>
         </div>
         <div class="col-xs-6">
             <div class="form-group singleline-group checkbox-in-column" ng-class="{'has-error': !questionForm.editQuestionMaxAnswersNumber.$valid}">
-                <label for="edit-question-max-answers-number">Max number of answers</label>
-                <input maxlength="9" name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers">
-                <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern">
-                    Only integers are allowed
+                <label for="edit-question-max-answers-number" ng-i18next="QuestionMaxNumberOfAnswers"></label>
+                <input maxlength="9" name="editQuestionMaxAnswersNumber" ng-pattern="/^\d+$/" id="edit-question-max-answers-number" type="text" class="form-control small-numeric-input" ng-model="activeQuestion.maxAllowedAnswers"/>
+                <p class="help-block ng-cloak" ng-show="questionForm.editQuestionMaxAnswersNumber.$error.pattern" ng-i18next="QuestionOnlyInts">
                 </p>
             </div>
         </div>
@@ -74,7 +71,7 @@
         <div class="col-xs-4">
             <div class="checkbox checkbox-in-column" ng-show="!activeQuestion.isLinked">
                 <input id="cb-multyoption-yes-no-view" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.yesNoView" />
-                <label for="cb-multyoption-yes-no-view"><span></span>Yes/No mode</label>
+                <label for="cb-multyoption-yes-no-view"><span></span>{{'QuestionYesNoMode' | i18next}}</label>
             </div>
         </div>
     </div>
@@ -82,7 +79,7 @@
         <div class="col-xs-4" ng-show="!activeQuestion.yesNoView">
             <div class="checkbox checkbox-in-column">
                 <input id="cb-multyoption-is-linked" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isLinked" />
-                <label for="cb-multyoption-is-linked"><span></span>Is linked</label>
+                <label for="cb-multyoption-is-linked"><span></span>{{'QuestionIsLinked' | i18next}}</label>
             </div>
         </div>
     </div>
