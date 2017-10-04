@@ -311,9 +311,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                         ms.Write(buffer, 0, read);
 
                         if (onDownloadProgressChanged == null) continue;
+                        
+                        if (contentLength != null)
+                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal) (100 * ms.Length) / contentLength.Value);
 
                         downloadProgressChangedEventArgs.BytesReceived = ms.Length;
-                        downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal)(100 * ms.Length) / contentLength.Value);
                         onDownloadProgressChanged(downloadProgressChangedEventArgs);
                     }
                     responseContent = ms.ToArray();
