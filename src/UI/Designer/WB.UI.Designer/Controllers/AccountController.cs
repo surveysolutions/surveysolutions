@@ -122,7 +122,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (!Membership.EnablePasswordReset)
             {
-                throw new Exception("Password reset is not allowed");
+                throw new Exception(ErrorMessages.PasswordResetNotAllowed);
             }
 
             return this.View(new ResetPasswordModel());
@@ -136,7 +136,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (!Membership.EnablePasswordReset)
             {
-                throw new Exception("Password reset is not allowed");
+                throw new Exception(ErrorMessages.PasswordResetNotAllowed);
             }
 
             if (this.ModelState.IsValid)
@@ -250,7 +250,7 @@ namespace WB.UI.Designer.Controllers
             if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
              {
                 this.captchaService.RegisterFailedLogin(model.UserName);
-                this.Error("User name or password is empty.");
+                this.Error(ErrorMessages.EmptyUserNameOrPassword);
                 model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
                 return this.View(model);
              }
@@ -269,7 +269,7 @@ namespace WB.UI.Designer.Controllers
              {
                 this.captchaService.RegisterFailedLogin(model.UserName);
 
-                this.Error("Login or password is incorrect. Please try again.");
+                this.Error(ErrorMessages.IncorrectUserNameOrPassword);
                 model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
                 return this.View(model);
              }
@@ -277,17 +277,14 @@ namespace WB.UI.Designer.Controllers
              if (user.IsLockedOut)
              {
                 this.captchaService.RegisterFailedLogin(model.UserName);
-                this.Error("Your account is blocked. Contact the administrator to unblock your account.");
+                this.Error(ErrorMessages.AccountBlocked);
                 model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
                 return this.View(model);
              }
 
             if (!user.IsConfirmed)
             {
-                var message = "Please, confirm your account first. " +
-                              $"We've sent a confirmation link to {user.Email}. " +
-                              "Didn't get it? " +
-                              $"<a href='{GlobalHelper.GenerateUrl("ResendConfirmation", "Account", new {id = user.UserName})}'>Request another one.</a>";
+                var message = string.Format(ErrorMessages.ConfirmAccount, user.Email, GlobalHelper.GenerateUrl("ResendConfirmation", "Account", new { id = user.UserName }));
 
                 this.Error(message);
                 model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
@@ -307,7 +304,7 @@ namespace WB.UI.Designer.Controllers
             if (!userIsAuthorized)
             {
                 this.captchaService.RegisterFailedLogin(model.UserName);
-                this.Error("Login or password is incorrect. Please try again.");
+                this.Error(ErrorMessages.IncorrectUserNameOrPassword);
                 model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
                 return this.View(model);
             }
