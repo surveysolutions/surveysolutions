@@ -1,6 +1,6 @@
 // tslint:disable-next-line:max-line-length
-import { appVersion, audioUploadUri, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "../config"
-
+//import { appVersion, audioUploadUri, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "../config"
+import Vue from 'vue'
 import * as $script from "scriptjs"
 import "signalr"
 import store from "../store"
@@ -15,7 +15,7 @@ const wrap = (jqueryPromise) => {
 }
 
 const scriptIncludedPromise = new Promise(resolve =>
-    $script(signalrPath, () => {
+    $script(Vue.$config.signalrPath, () => {
         // $.connection.hub.logging = true
         const interviewProxy = $.connection.interview
 
@@ -59,7 +59,7 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
 
             return $.ajax({
-                url: imageUploadUri,
+                url: Vue.$config.imageUploadUri,
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
@@ -86,7 +86,7 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
 
             return $.ajax({
-                url: audioUploadUri,
+                url: Vue.$config.audioUploadUri,
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
@@ -110,8 +110,8 @@ const scriptIncludedPromise = new Promise(resolve =>
 )
 
 async function hubStarter() {
-    if (signalrUrlOverride) {
-        $.connection.hub.url = signalrUrlOverride
+    if (Vue.$config.signalrUrlOverride) {
+        $.connection.hub.url = Vue.$config.signalrUrlOverride
     }
 
     $.connection.hub.qs = queryString
@@ -138,7 +138,7 @@ async function hubStarter() {
 
 export const queryString = {
     interviewId: null,
-    appVersion
+    appVersion: Vue.$config.appVersion
 }
 
 export async function getInstance() {

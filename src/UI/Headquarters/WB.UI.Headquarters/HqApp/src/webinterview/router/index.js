@@ -1,6 +1,5 @@
 import Vue from "vue"
 import VueRouter from "vue-router"
-import { virtualPath } from "./../config"
 
 Vue.use(VueRouter)
 
@@ -12,7 +11,7 @@ import SideBar from "../components/Sidebar"
 import store from "../store"
 
 const router = new VueRouter({
-    base: virtualPath + "/",
+    base: Vue.$config.virtualPath + "/",
     mode: "history",
     routes: [
         {

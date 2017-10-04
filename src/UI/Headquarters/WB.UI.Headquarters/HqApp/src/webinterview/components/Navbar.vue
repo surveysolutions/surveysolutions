@@ -44,7 +44,6 @@
 </template>
 <script lang="js">
     import modal from "shared/modal"
-       import { hqLink } from "../config"
 
     export default {
         name: 'navbar',
@@ -98,7 +97,7 @@
                 return this.$store.state.interviewKey || this.$t("WebInterview");
             },
             hqLink() {
-                return hqLink
+                return this.$config.hqLink
             }
         },
         methods: {

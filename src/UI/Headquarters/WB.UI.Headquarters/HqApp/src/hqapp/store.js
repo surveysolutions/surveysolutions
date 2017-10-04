@@ -4,13 +4,10 @@ import PNotify from 'pnotify'
 
 Vue.use(Vuex)
 
-const config = JSON.parse(window.vueApp.getAttribute('configuration'))
-
 const store = new Vuex.Store({
     state: {
         pendingHandle: null,
         pendingProgress: false,
-        config,
         exportUrls: {
             excel: "",
             csv: "",
@@ -21,7 +18,7 @@ const store = new Vuex.Store({
         createInterview({ rootState, dispatch }, assignmentId) {
             dispatch("showProgress", true);
 
-            $.post(rootState.config.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
+            $.post(Vue.$config.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
                 dispatch("showProgress", true);
                 window.location = response;
             })
@@ -47,11 +44,11 @@ const store = new Vuex.Store({
         },
         openInterview(context, interviewId) {
             context.dispatch("showProgress", true);
-            window.location = context.rootState.config.interviewerHqEndpoint + "/OpenInterview/" + interviewId
+            window.location = Vue.$config.interviewerHqEndpoint + "/OpenInterview/" + interviewId
         },
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
-                url: context.rootState.config.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,
+                url: Vue.$config.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,
                 type: 'DELETE',
                 success: callback
             })
