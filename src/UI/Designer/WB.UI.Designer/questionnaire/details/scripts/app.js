@@ -24,6 +24,9 @@
     }, function (err, t) {
         //console.log('resources loaded');
     });
+    i18next.on('languageChanged', function(lng) {
+        moment.locale(lng);
+    });
 
     angular.module('designerApp', [
         'ngCookies',
