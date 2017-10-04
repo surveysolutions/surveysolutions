@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account is blocked. Contact the administrator to unblock your account..
+        /// </summary>
+        internal static string AccountBlocked {
+            get {
+                return ResourceManager.GetString("AccountBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application update required..
         /// </summary>
         internal static string ApplicationUpdateRequired {
@@ -79,11 +88,38 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string ConfirmAccount {
+            get {
+                return ResourceManager.GetString("ConfirmAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected translation file is empty.
         /// </summary>
         internal static string EmptyTranslationFile {
             get {
                 return ResourceManager.GetString("EmptyTranslationFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name or password is empty..
+        /// </summary>
+        internal static string EmptyUserNameOrPassword {
+            get {
+                return ResourceManager.GetString("EmptyUserNameOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login or password is incorrect. Please try again..
+        /// </summary>
+        internal static string IncorrectUserNameOrPassword {
+            get {
+                return ResourceManager.GetString("IncorrectUserNameOrPassword", resourceCulture);
             }
         }
         
@@ -139,6 +175,15 @@ namespace WB.UI.Designer.Resources {
             get {
                 return ResourceManager.GetString("Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_" +
                         "case_character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password reset is not allowed.
+        /// </summary>
+        internal static string PasswordResetNotAllowed {
+            get {
+                return ResourceManager.GetString("PasswordResetNotAllowed", resourceCulture);
             }
         }
         
