@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Resources;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using Newtonsoft.Json;
 
 namespace ASP
 {
@@ -119,6 +120,11 @@ namespace ASP
                 case MenuItem.DevicesInterviewers: return MainMenu.DevicesInterviewers;
                 default: return String.Empty;
             }
+        }
+
+        public static IHtmlString AsJsonValue(this object obj)
+        {
+            return new HtmlString(JsonConvert.SerializeObject(obj));
         }
     }
 }
