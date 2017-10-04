@@ -3,11 +3,11 @@
          ui-sref="questionnaire.chapter.group({ chapterId: currentChapter.itemId, itemId: currentChapter.itemId})">
         <div ng-click="$event.stopPropagation()" class="search-box" ng-switch-when="search">
             <div class="input-group">
-                <span class="input-group-addon glyphicon glyphicon-search" title="Search"></span>
+                <span class="input-group-addon glyphicon glyphicon-search" ng-i18next="[title]Search"></span>
                 <input type="text" ng-model="search.searchText" ng-model-options="{debounce: 300}" focus-on-out="focusSearch" hotkey="{esc: hideSearch}" hotkey-allow-in="INPUT" />
-                <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer" title="More" ng-click="showFindReplaceDialog()"></span>
+                <span class="input-group-addon glyphicon glyphicon-option-horizontal pointer" ng-i18next="[title]FindReplaceTitle" ng-click="showFindReplaceDialog()"></span>
             </div>
-            <button ng-click="hideSearch();$event.stopPropagation()" title="Cancel search" type="button"></button>
+            <button ng-click="hideSearch();$event.stopPropagation()" ng-i18next="[title]Cancel" type="button"></button>
         </div>
 
         <div ng-switch-when="default" class="chapter-name">
@@ -16,7 +16,7 @@
             </a>
             <ul class="controls-right">
                 <li>
-                    <a href="javascript:void(0);" ng-click="showSearch();$event.stopPropagation()" class="search" title="Toggle Search"></a>
+                    <a href="javascript:void(0);" ng-click="showSearch();$event.stopPropagation()" class="search" ng-i18next="[title]ToggleSearch"></a>
                 </li>
             </ul>
         </div>
@@ -30,40 +30,42 @@
                 </div>
                 <div class="section item" ng-if="filtersBoxMode == 'search' && results.length === 0">
                     <div class="item-text">
-                        <span>Nothing found</span>
+                        <span ng-i18next="NothingFound"></span>
                     </div>
                 </div>
                 <div class="chapter-level-buttons" ng-show="!search.searchText">
                     <div class="btn-group">
-                        <button type="button" class="btn lighter-hover" ng-click="addQuestion(currentChapter)" ng-if="!questionnaire.isReadOnlyForUser" >ADD QUESTION</button>
+                        <button type="button" class="btn lighter-hover" ng-click="addQuestion(currentChapter)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="AddQuestion"></button>
                         <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ng-if="!questionnaire.isReadOnlyForUser">
                             <span class="caret"></span>
-                            <span class="sr-only">Toggle Dropdown</span>
+                            <span class="sr-only" ng-i18next="ToggleDropdown"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:void(0);" ng-click="addGroup(currentChapter)">ADD SUB-SECTION</a></li>
-                            <li><a href="javascript:void(0);" ng-click="addRoster(currentChapter)">ADD ROSTER</a></li>
-                            <li><a href="javascript:void(0);" ng-click="addStaticText(currentChapter)">ADD STATIC TEXT</a></li>
-                            <li><a href="javascript:void(0);" ng-click="addVariable(currentChapter)">ADD VARIABLE</a></li>
+                            <li><a href="javascript:void(0);" ng-click="addGroup(currentChapter)" ng-i18next="AddSubsection"></a></li>
+                            <li><a href="javascript:void(0);" ng-click="addRoster(currentChapter)" ng-i18next="AddRoster"></a></li>
+                            <li><a href="javascript:void(0);" ng-click="addStaticText(currentChapter)" ng-i18next="AddStaticText"></a></li>
+                            <li><a href="javascript:void(0);" ng-click="addVariable(currentChapter)" ng-i18next="AddVariable"></a></li>
                         </ul>
                     </div>
 
-                    <input type="button" class="btn lighter-hover pull-right" ng-disabled="!readyToPaste" ng-if="!questionnaire.isReadOnlyForUser" value="PASTE" ng-click="pasteItemInto(currentChapter)" />
+                    <input type="button" class="btn lighter-hover pull-right" ng-disabled="!readyToPaste" ng-if="!questionnaire.isReadOnlyForUser"
+                           ng-i18next="[value]Paste" ng-click="pasteItemInto(currentChapter)" />
                 </div>
             </div>
 
             <div class="start-box" ng-if="showStartScreen()">
-
-                <p>This section is empty.</p>
-
+                <p ng-i18next="EmptySectionLine1"></p>
                 <p>
-                    You can start by using <button class="btn" disabled type="button">ADD QUESTION</button> and <button type="button" class="btn" disabled>ADD SUB-SECTION</button> buttons<br />
-                    on top of this block or manage sections with <span class="left-panel-glyph"></span> left panel
+                    <span ng-i18next="[html]({addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml})EmptySectionLine2">
+                    </span>
+                    <br />
+                    <span ng-i18next="[html]({panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;'})EmptySectionLine3"></span>
                 </p>
-
+                
                 <p>
-                    Language of survey, device types, collaboration and other options<br />
-                    can be found at <button class="btn" type="button" disabled>SETTINGS</button> panel (top right corner)
+                    <span ng-i18next="EmptySectionLine4"></span>
+                    <br />
+                    <span ng-i18next="[html]({settingsBtn: emptySectionSettingsHtml})EmptySectionLine5"></span>
                 </p>
             </div>
         </div>
