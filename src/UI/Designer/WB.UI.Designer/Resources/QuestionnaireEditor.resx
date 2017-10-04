@@ -790,4 +790,61 @@
   <data name="HelpVariableName" xml:space="preserve">
     <value>Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>
   </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>Condition or cascading depended items might be broken</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Close lookup tables panel</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Close macros panel</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Close translations panel</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Focus title field in editor</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Focus questionnaire tree</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Close attachments panel</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Close sections</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Navigate to previous sibling</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Navigate to next sibling</value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Open item in editor</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Open section</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Search for sub-sections and questions in section</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>One or more questions/sub-sections depend on</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>You don't have permissions for changing this questionnaire</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>Chosen file is not image</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>To open options editor all unsaved changes must be saved. Should we save them now?</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>It was saved successfully. The window for file upload will be opened.</value>
+  </data>
 </root>

@@ -232,6 +232,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Condition or cascading depended items might be broken.
+        /// </summary>
+        internal static string ConditionMightBeBroken {
+            get {
+                return ResourceManager.GetString("ConditionMightBeBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         internal static string Copy {
@@ -718,6 +727,123 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close lookup tables panel.
+        /// </summary>
+        internal static string HotkeysCloseLookup {
+            get {
+                return ResourceManager.GetString("HotkeysCloseLookup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close macros panel.
+        /// </summary>
+        internal static string HotkeysCloseMacros {
+            get {
+                return ResourceManager.GetString("HotkeysCloseMacros", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close translations panel.
+        /// </summary>
+        internal static string HotkeysCloseTranslations {
+            get {
+                return ResourceManager.GetString("HotkeysCloseTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus title field in editor.
+        /// </summary>
+        internal static string HotkeysFocusTitle {
+            get {
+                return ResourceManager.GetString("HotkeysFocusTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus questionnaire tree.
+        /// </summary>
+        internal static string HotkeysFocusTree {
+            get {
+                return ResourceManager.GetString("HotkeysFocusTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close attachments panel.
+        /// </summary>
+        internal static string HotkeysHideAttachments {
+            get {
+                return ResourceManager.GetString("HotkeysHideAttachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close sections.
+        /// </summary>
+        internal static string HotkeysHideSections {
+            get {
+                return ResourceManager.GetString("HotkeysHideSections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate to previous sibling.
+        /// </summary>
+        internal static string HotkeysNavigateToPrevSibling {
+            get {
+                return ResourceManager.GetString("HotkeysNavigateToPrevSibling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate to next sibling.
+        /// </summary>
+        internal static string HotkeysNavigateToSibling {
+            get {
+                return ResourceManager.GetString("HotkeysNavigateToSibling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open item in editor.
+        /// </summary>
+        internal static string HotkeysOpenItem {
+            get {
+                return ResourceManager.GetString("HotkeysOpenItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open section.
+        /// </summary>
+        internal static string HotkeysOpenSection {
+            get {
+                return ResourceManager.GetString("HotkeysOpenSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print.
+        /// </summary>
+        internal static string HotkeysPrint {
+            get {
+                return ResourceManager.GetString("HotkeysPrint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for sub-sections and questions in section.
+        /// </summary>
+        internal static string HotkeysSearch {
+            get {
+                return ResourceManager.GetString("HotkeysSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log out.
         /// </summary>
         internal static string LogOut {
@@ -759,6 +885,33 @@ namespace WB.UI.Designer.Resources {
         internal static string MoveToAnotherSubSection {
             get {
                 return ResourceManager.GetString("MoveToAnotherSubSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more questions/sub-sections depend on.
+        /// </summary>
+        internal static string MultipleDependencies {
+            get {
+                return ResourceManager.GetString("MultipleDependencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
+        /// </summary>
+        internal static string NoPermissions {
+            get {
+                return ResourceManager.GetString("NoPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chosen file is not image.
+        /// </summary>
+        internal static string NotAnImage {
+            get {
+                return ResourceManager.GetString("NotAnImage", resourceCulture);
             }
         }
         
@@ -984,6 +1137,24 @@ namespace WB.UI.Designer.Resources {
         internal static string QuestionOnlyInts {
             get {
                 return ResourceManager.GetString("QuestionOnlyInts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To open options editor all unsaved changes must be saved. Should we save them now?.
+        /// </summary>
+        internal static string QuestionOpenEditorConfirm {
+            get {
+                return ResourceManager.GetString("QuestionOpenEditorConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It was saved successfully. The window for file upload will be opened..
+        /// </summary>
+        internal static string QuestionOpenEditorSaved {
+            get {
+                return ResourceManager.GetString("QuestionOpenEditorSaved", resourceCulture);
             }
         }
         

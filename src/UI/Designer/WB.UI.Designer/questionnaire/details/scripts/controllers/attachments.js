@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('AttachmentsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
+        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../attachments';
@@ -17,7 +17,7 @@
                 hotkeys.del(hideAttachmentsPane);
             }
 
-            hotkeys.add(hideAttachmentsPane, 'Close attachments panel', function (event) {
+            hotkeys.add(hideAttachmentsPane, $i18next.t('HotkeysHideAttachments'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
@@ -114,7 +114,7 @@
                 }
 
                 if ($scope.isReadOnlyForUser) {
-                    notificationService.notice("You don't have permissions for changing this questionnaire");
+                    notificationService.notice($i18next.t('NoPermissions'));
                     return;
                 }
 
@@ -167,7 +167,7 @@
                         }
                     })
                     .catch(function() {
-                        notificationService.error('Chosen file is not image');
+                        notificationService.error($i18next.t('NotAnImage'));
                     });
             }
 

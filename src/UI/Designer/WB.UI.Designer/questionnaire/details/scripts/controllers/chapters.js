@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('ChaptersCtrl', 
-        function ($rootScope, $scope, $state, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
+        function ($rootScope, $scope, $state, $i18next, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
             'use strict';
 
             var hideChaptersPane = 'right';
@@ -8,7 +8,7 @@
             if (hotkeys.get(hideChaptersPane) !== false) {
                 hotkeys.del(hideChaptersPane);
             }
-            hotkeys.add(hideChaptersPane, 'Close sections', function (event) {
+            hotkeys.add(hideChaptersPane, $i18next.t('HotkeysHideSections'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });

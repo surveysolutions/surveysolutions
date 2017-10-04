@@ -37,7 +37,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+p',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Print',
+                description: $i18next.t('HotkeysPrint'),
                 callback: function (event) {
                     
                     var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
@@ -53,7 +53,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+b',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Compile',
+                description: $i18next.t('Compile'),
                 callback: function (event) {
                     $scope.verify();
                     event.preventDefault();
@@ -74,7 +74,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: focusTreePane,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Focus questionnaire tree',
+                description: $i18next.t('HotkeysFocusTree'),
                 callback: function (event) {
                     event.preventDefault();
                     document.activeElement.blur();
@@ -87,7 +87,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: focusEditorPane,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Focus title field in editor',
+                description: $i18next.t('HotkeysFocusTitle'),
                 callback: function (event) {
                     event.preventDefault();
                     $($(".question-editor textarea").get(0)).focus();
@@ -97,7 +97,7 @@ angular.module('designerApp')
             if (hotkeys.get(openChaptersPane) !== false) {
                 hotkeys.del(openChaptersPane);
             }
-            hotkeys.add(openChaptersPane, 'Open section', function (event) {
+            hotkeys.add(openChaptersPane, $i18next.t('OpenSection'), function (event) {
                 event.preventDefault();
                 $scope.$broadcast("openChaptersList", "");
             });
@@ -105,7 +105,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+h',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Find and replace',
+                description: $i18next.t('FindReplaceTitle'),
                 callback: function (event) {
                     event.preventDefault();
                     $scope.showFindReplaceDialog();
