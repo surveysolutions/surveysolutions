@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, alertService) {
+        function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, alertService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
 
@@ -20,7 +20,7 @@
             hotkeys.bindTo($scope)
                 .add({
                     combo: saveQuestion,
-                    description: 'Save changes',
+                    description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
                         if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
@@ -293,9 +293,9 @@
             $scope.editFilteredComboboxOptions = function () {
                 if ($scope.questionForm.$dirty) {
                     var modalInstance = confirmService.open({
-                        title: "To open options editor all unsaved changes must be saved. Should we save them now?",
-                        okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later",
+                        title: $i18next.t('QuestionOpenEditorConfirm'),
+                        okButtonTitle: $i18next.t('Save'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
                         isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
@@ -303,8 +303,8 @@
                         if (confirmResult === 'ok') {
                             $scope.saveQuestion(function () {
                                 var alertInstance = alertService.open({
-                                    title: "It was saved successfully. The window for file upload will be opened.",
-                                    okButtonTitle: "OK",
+                                    title: $i18next.t('QuestionOpenEditorSaved'),
+                                    okButtonTitle: $i18next.t('Ok'),
                                     isReadOnly: $scope.questionnaire.isReadOnlyForUser
                                 });
 
@@ -323,9 +323,9 @@
                 var wasCascadeFromQuestionIdChanged = ($scope.activeQuestion.cascadeFromQuestionId != $scope.initialQuestion.cascadeFromQuestionId);
                 if ($scope.questionForm.$dirty || wasCascadeFromQuestionIdChanged) {
                     var modalInstance = confirmService.open({
-                        title: "To open options editor all unsaved changes must be saved. Should we save them now?",
-                        okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later",
+                        title: $i18next.t('QuestionOpenEditorConfirm'),
+                        okButtonTitle: $i18next.t('Save'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
                         isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
@@ -333,8 +333,8 @@
                         if (confirmResult === 'ok') {
                             $scope.saveQuestion(function () {
                                 var alertInstance = alertService.open({
-                                    title: "It was saved successfully. The window for file upload will be opened.",
-                                    okButtonTitle: "OK",
+                                    title: $i18next.t('QuestionOpenEditorSaved'),
+                                    okButtonTitle: $i18next.t('Ok'),
                                     isReadOnly: $scope.questionnaire.isReadOnlyForUser
                                 });
 

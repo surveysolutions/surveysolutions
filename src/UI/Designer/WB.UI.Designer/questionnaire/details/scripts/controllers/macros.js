@@ -9,7 +9,7 @@
                 hotkeys.del(hideMacrosPane);
             }
 
-            hotkeys.add(hideMacrosPane, 'Close macros panel', function (event) {
+            hotkeys.add(hideMacrosPane, $i18next.t('HotkeysCloseMacros'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });

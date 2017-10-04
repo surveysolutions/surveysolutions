@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('LookupTablesCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService) {
+        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService) {
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../Questionnaire/ExportLookupTable/';
@@ -10,7 +10,7 @@
                 hotkeys.del(hideLookupTablesPane);
             }
 
-            hotkeys.add(hideLookupTablesPane, 'Close lookup tables panel', function (event) {
+            hotkeys.add(hideLookupTablesPane, $i18next.t('HotkeysCloseLookup'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
