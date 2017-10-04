@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('GroupCtrl',
-        function ($rootScope, $scope, $state, $timeout, questionnaireService, commandService, hotkeys, utilityService) {
+        function ($rootScope, $scope, $state, $i18next, $timeout, questionnaireService, commandService, hotkeys, utilityService) {
             $scope.currentChapterId = $state.params.chapterId;
 
             var saveGroup = 'ctrl+s';
@@ -11,7 +11,7 @@
             hotkeys.bindTo($scope)
                 .add({
                     combo: saveGroup,
-                    description: 'Save changes',
+                    description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
                         if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {

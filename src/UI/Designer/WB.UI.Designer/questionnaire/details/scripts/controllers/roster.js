@@ -3,7 +3,7 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl',
-            function ($rootScope, $scope, $state, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, optionsService) {
+            function ($rootScope, $scope, $state, $i18next, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, optionsService) {
                 $scope.currentChapterId = $state.params.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
@@ -20,7 +20,7 @@
                 hotkeys.bindTo($scope)
                     .add({
                         combo: saveRoster,
-                        description: 'Save changes',
+                        description: $i18next.t('Save'),
                         allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                         callback: function (event) {
                             if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {

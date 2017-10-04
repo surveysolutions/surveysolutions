@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('StaticTextCtrl',
-        function ($rootScope, $scope, $state, utilityService, questionnaireService, commandService, hotkeys) {
+        function ($rootScope, $scope, $state, $i18next, utilityService, questionnaireService, commandService, hotkeys) {
             "use strict";
 
             $scope.currentChapterId = $state.params.chapterId;
@@ -20,7 +20,7 @@
             hotkeys.bindTo($scope)
                 .add({
                     combo: saveStaticText,
-                    description: 'Save changes',
+                    description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
                         if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {

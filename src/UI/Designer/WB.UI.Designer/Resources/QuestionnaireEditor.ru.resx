@@ -808,4 +808,61 @@
   <data name="HelpVariableName" xml:space="preserve">
     <value>Имена переменных и ростеров могут быть от {{minLength}} до {{maxLength}} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
   </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>Условия на каскадном списке может быть сломано</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Закрыть панель справочных таблиц</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Закрыть панель макросов</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Закрыть панель переводов</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Перейти к имени в редакторе</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Перейти к дереву опросника</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Закрыть панель вложения</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Закрыть секции</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Перейти к предидущему</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Перейти к следующему </value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Открыть редактор элемента</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Открыть секцию</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Печать</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Поиск в подсекциях и вопросах в секции</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>Один или более вопросов/подсекций зависит от </value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>У вас не достаточно прав для изменения опросника</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>Выбранный файн должен быть картинкой</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>Для открытия редактора необходимо сохранить текущие изменения. Сохранить?</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>Сохранено. Окно для загрузки файла теперь будет открыто.</value>
+  </data>
 </root>
