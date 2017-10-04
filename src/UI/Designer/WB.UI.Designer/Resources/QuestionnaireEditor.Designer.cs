@@ -556,6 +556,150 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A logical expression that activates(deactivates) the current item depending on the answers on the other questions..
+        /// </summary>
+        internal static string HelpConditionExpression {
+            get {
+                return ResourceManager.GetString("HelpConditionExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A logical expression that is calculated depending on the answers on the other questions..
+        /// </summary>
+        internal static string HelpExpression {
+            get {
+                return ResourceManager.GetString("HelpExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line..
+        /// </summary>
+        internal static string HelpFixedTitles {
+            get {
+                return ResourceManager.GetString("HelpFixedTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet..
+        /// </summary>
+        internal static string HelpHideIfDisabled {
+            get {
+                return ResourceManager.GetString("HelpHideIfDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By default, an instruction text is shown on a tablet. Checking this option will show only the first line of instructions. Tapping on that line will show the complete text..
+        /// </summary>
+        internal static string HelpHideInstructions {
+            get {
+                return ResourceManager.GetString("HelpHideInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instruction text that will be attached to the question..
+        /// </summary>
+        internal static string HelpInstruction {
+            get {
+                return ResourceManager.GetString("HelpInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This option allows the user to stamp the current time on tablet.
+        /// </summary>
+        internal static string HelpIsTimestamp {
+            get {
+                return ResourceManager.GetString("HelpIsTimestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formatted entry for alpha-numerical values: phone numbers, ID codes, etc. Examples:&quot;~&quot; - Represents an alpha character (A-Z,a-z), &quot;#&quot; - Represents a numeric character (0-9), &quot;*&quot; - Represents an alphanumeric character (A-Z,a-z,0-9). &quot;##/##/####&quot; - date, &quot;(###) ###-####&quot; - phone number, &quot;AA####&quot; - flight number operated by American AirLines or &quot;~*-###-~###&quot;.
+        /// </summary>
+        internal static string HelpMask {
+            get {
+                return ResourceManager.GetString("HelpMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source question (answer generates number of rows).
+        /// </summary>
+        internal static string HelpSourceQuestion {
+            get {
+                return ResourceManager.GetString("HelpSourceQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titles of rows..
+        /// </summary>
+        internal static string HelpTitles {
+            get {
+                return ResourceManager.GetString("HelpTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When checked, the numeric field on the tablet will be formatted as: d,ddd,ddd.dd, &quot;d&quot; represents digits (0-9), “,”(comma) is a thousand separator, and &quot;.&quot; (dot) is a decimal point symbol.  Thousand separator and the decimal point symbol may vary for tablets with different cultures..
+        /// </summary>
+        internal static string HelpUseFormatting {
+            get {
+                return ResourceManager.GetString("HelpUseFormatting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A logical expression that validates an answer to the current question. Might include values of other questions..
+        /// </summary>
+        internal static string HelpValidationExpression {
+            get {
+                return ResourceManager.GetString("HelpValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error message is shown when validation condition evaluates to &quot;False&quot; or error occurres during expression evaluation..
+        /// </summary>
+        internal static string HelpValidationMessage {
+            get {
+                return ResourceManager.GetString("HelpValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text that will be shown next to a variable for testing purposes.
+        /// </summary>
+        internal static string HelpVariableDescription {
+            get {
+                return ResourceManager.GetString("HelpVariableDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A text up to 80 characters that will be attached to the exported variable..
+        /// </summary>
+        internal static string HelpVariableLabel {
+            get {
+                return ResourceManager.GetString("HelpVariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _..
+        /// </summary>
+        internal static string HelpVariableName {
+            get {
+                return ResourceManager.GetString("HelpVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide if disabled.
         /// </summary>
         internal static string HideIfDisabled {
@@ -678,6 +822,15 @@ namespace WB.UI.Designer.Resources {
         internal static string QuestionAddInstruction {
             get {
                 return ResourceManager.GetString("QuestionAddInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add option.
+        /// </summary>
+        internal static string QuestionAddOption {
+            get {
+                return ResourceManager.GetString("QuestionAddOption", resourceCulture);
             }
         }
         
@@ -876,6 +1029,15 @@ namespace WB.UI.Designer.Resources {
         internal static string QuestionScope {
             get {
                 return ResourceManager.GetString("QuestionScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show strings.
+        /// </summary>
+        internal static string QuestionShowStrings {
+            get {
+                return ResourceManager.GetString("QuestionShowStrings", resourceCulture);
             }
         }
         
