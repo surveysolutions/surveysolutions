@@ -115,11 +115,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select yes/no question can&apos;t be linked.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        public static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
+        public static string WB0007_ {
             get {
-                return ResourceManager.GetString("WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked", resourceCulture);
+                return ResourceManager.GetString("WB0007_", resourceCulture);
             }
         }
         
@@ -1071,11 +1071,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single select question supports only integer values in range from {0} to {1}.
+        ///   Looks up a localized string similar to Categorical question supports only integer values in range from {0} to {1}.
         /// </summary>
-        public static string WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues {
+        public static string WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues {
             get {
-                return ResourceManager.GetString("WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
+                return ResourceManager.GetString("WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
             }
         }
         
