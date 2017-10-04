@@ -14,7 +14,7 @@ Vue.use(VeeValidate);
 
 import store from "./store"
 
-import config from "./config"
+import config from "shared/config"
 
 Vue.use(config)
 
@@ -28,7 +28,8 @@ Vue.use(Vuei18n, {
 
 import './components'
 
-const router = require("./router").default
+import router from "./router"
+//const router = require("./router").default
 
 export default new Vue({
     el: "#vueApp",

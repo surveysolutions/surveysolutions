@@ -2649,13 +2649,12 @@ jquery-highlight@^3.4.0:
   resolved "https://registry.yarnpkg.com/jquery-highlight/-/jquery-highlight-3.4.0.tgz#05cc0e765477838a98c60f542e3d5dc319742f87"
   dependencies:
     jquery ">= 1.0.0"
+
 jquery-mask-plugin@^1.14.11:
   version "1.14.11"
   resolved "https://registry.yarnpkg.com/jquery-mask-plugin/-/jquery-mask-plugin-1.14.11.tgz#57ba598416af6ea7ba9336eacb2a1bf0edbba1db"
 
-jquery@>=1.6.0, jquery@>=1.6.4, jquery@>=1.7, jquery@>=1.8, jquery@^3.2.1:
-
-"jquery@>= 1.0.0", jquery@>=1.6.0, jquery@>=1.7, jquery@>=1.8, jquery@^3.2.1:
+"jquery@>= 1.0.0", jquery@>=1.6.0, jquery@>=1.6.4, jquery@>=1.7, jquery@>=1.8, jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -4099,9 +4098,9 @@ slice-ansi@1.0.0:
   dependencies:
     is-fullwidth-code-point "^2.0.0"
 
-smoothscroll-polyfill@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/smoothscroll-polyfill/-/smoothscroll-polyfill-0.4.0.tgz#dcda9fe6e9f5d660b886b79be043d40c68fe57d2"
+smoothscroll-polyfill@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/smoothscroll-polyfill/-/smoothscroll-polyfill-0.3.6.tgz#492be845195157cdc2fc529a95d89e7a71509172"
 
 sntp@1.x.x:
   version "1.0.9"

@@ -1,4 +1,4 @@
-const config = JSON.parse(window.vueApp.getAttribute('configuration'))
+const config = window.CONFIG;
 
 /*  the Plugin */
 const configuration  = {
