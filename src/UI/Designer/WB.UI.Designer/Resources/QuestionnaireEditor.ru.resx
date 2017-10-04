@@ -374,7 +374,7 @@
     <value>Вложения</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>загружено: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+    <value>загружено: {{-lastUpdate, MMMM DD[,] YYYY [в] k:mm}}</value>
   </data>
   <data name="SideBarLookupTitle" xml:space="preserve">
     <value>Справочные таблицы</value>
