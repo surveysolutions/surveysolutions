@@ -1,8 +1,3 @@
-echo Build WB.UI.Headquarters.Interview
-pushd src\UI\Headquarters\WB.UI.Headquarters.Interview
-call yarn && call yarn run production
-popd
-
 echo Build WB.UI.Headquarters\Dependencies
 pushd src\UI\Headquarters\WB.UI.Headquarters\Dependencies
 call yarn 
