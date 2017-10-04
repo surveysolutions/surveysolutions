@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('TranslationsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
+        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
             'use strict';
 
             $scope.downloadBaseUrl = '../../translations';
@@ -13,7 +13,7 @@
                 hotkeys.del(hideTranslationsPane);
             }
 
-            hotkeys.add(hideTranslationsPane, 'Close translations panel', function (event) {
+            hotkeys.add(hideTranslationsPane, $i18next.t('HotkeysCloseTranslations'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
@@ -70,7 +70,7 @@
                 }
 
                 if ($scope.isReadOnlyForUser) {
-                    notificationService.notice("You don't have permissions for changing this questionnaire");
+                    notificationService.notice($i18next.t('NoPermissions'));
                     return;
                 }
 

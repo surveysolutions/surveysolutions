@@ -275,7 +275,7 @@
     <value>Макрос это именованное выражение, которое можно использовать в условиях и проверках. Он состоит из имени и содержимого.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
-    <value>Для использования макроса используйте {{- substitution}}</value>
+    <value>Для использования макроса используйте {{-substitution}}</value>
   </data>
   <data name="SideBarMacroHideDescription" xml:space="preserve">
     <value>cкрыть описание</value>
@@ -374,7 +374,7 @@
     <value>Вложения</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
-    <value>загружено: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
+    <value>загружено: {{-lastUpdate, MMMM DD[,] YYYY [в] k:mm}}</value>
   </data>
   <data name="SideBarLookupTitle" xml:space="preserve">
     <value>Справочные таблицы</value>
@@ -603,5 +603,266 @@
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Проверка</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Добавить вопрос</value>
+  </data>
+  <data name="AddRoster" xml:space="preserve">
+    <value>Добавить ростер</value>
+  </data>
+  <data name="AddStaticText" xml:space="preserve">
+    <value>Добавить статический текст</value>
+  </data>
+  <data name="AddSubsection" xml:space="preserve">
+    <value>Добавить подсекцию</value>
+  </data>
+  <data name="AddVariable" xml:space="preserve">
+    <value>Добавить переменную</value>
+  </data>
+  <data name="EmptySectionLine1" xml:space="preserve">
+    <value>Секция пустая.</value>
+  </data>
+  <data name="EmptySectionLine2" xml:space="preserve">
+    <value>Начать следует используя кнопки {{-addQuestionBtn}} и {{-addSubsectionBtn}}</value>
+  </data>
+  <data name="EmptySectionLine3" xml:space="preserve">
+    <value>вверху этого блока или изменить секции используя {{-panel}} панель слева</value>
+  </data>
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>Язык обследования, типы устройств, взаимодействия и другие опции </value>
+  </data>
+  <data name="EmptySectionLine5" xml:space="preserve">
+    <value>можно изменить используя {{-settingsBtn}} панель (вверху справа)</value>
+  </data>
+  <data name="NothingFound" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Вставить</value>
+  </data>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>Добавить опцию</value>
+  </data>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>Поле с каскадным списком</value>
+  </data>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>Поле со списком</value>
+  </data>
+  <data name="QuestionCurrentTime" xml:space="preserve">
+    <value>Текущее время</value>
+  </data>
+  <data name="QuestionDecimalPlaces" xml:space="preserve">
+    <value>Размер дробной части</value>
+  </data>
+  <data name="QuestionInteger" xml:space="preserve">
+    <value>Целочисленный</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
+    <value>Связанный вопрос</value>
+  </data>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>Максимальное количество</value>
+  </data>
+  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+    <value>Количество ответов</value>
+  </data>
+  <data name="QuestionOnlyInts" xml:space="preserve">
+    <value>Разрешены только цифры</value>
+  </data>
+  <data name="QuestionOptionsCut" xml:space="preserve">
+    <value>Т.к. вопрос был отмечен как "Поле со списком" or "Каскадное поле со списком" во время сохранения и содержал больше опций чем разрешено, их количество было уменьшено до {{count}}</value>
+  </data>
+  <data name="QuestionOrdered" xml:space="preserve">
+    <value>Сохранять порядок ответов</value>
+  </data>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>Маска</value>
+  </data>
+  <data name="QuestionShowStrings" xml:space="preserve">
+    <value>Показать строки</value>
+  </data>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>Загрузить опции</value>
+  </data>
+  <data name="QuestionUseSeparator" xml:space="preserve">
+    <value>Использовать 1000 разделитель</value>
+  </data>
+  <data name="QuestionYesNoMode" xml:space="preserve">
+    <value>Да/Нет режим</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
+  <data name="SelectParentQuestion" xml:space="preserve">
+    <value>Выберите родительский вопрос</value>
+  </data>
+  <data name="SelectParentQuestionError" xml:space="preserve">
+    <value>Необходимо выбрать родительский вопрос</value>
+  </data>
+  <data name="SettingsInvite" xml:space="preserve">
+    <value>Пригласить</value>
+  </data>
+  <data name="SettingsProvideExistingEmail" xml:space="preserve">
+    <value>Предоставьте email зарегистрированного пользователя</value>
+  </data>
+  <data name="SettingsProvideValidEmail" xml:space="preserve">
+    <value>Предоставьте правильный email</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Статический текст</value>
+  </data>
+  <data name="StaticTextAttachmentName" xml:space="preserve">
+    <value>Имя вложения</value>
+  </data>
+  <data name="ToggleSearch" xml:space="preserve">
+    <value>Переключить поиск</value>
+  </data>
+  <data name="TreeAddQuestion" xml:space="preserve">
+    <value>Добавить вопрос</value>
+  </data>
+  <data name="TreeAddQuestionAfter" xml:space="preserve">
+    <value>Добавить вопрос после</value>
+  </data>
+  <data name="TreeAddRoster" xml:space="preserve">
+    <value>Добавить ростер</value>
+  </data>
+  <data name="TreeAddRosterAfter" xml:space="preserve">
+    <value>Добавить подсекцию после</value>
+  </data>
+  <data name="TreeAddSection" xml:space="preserve">
+    <value>Добавить подсекцию</value>
+  </data>
+  <data name="TreeAddSectionAfter" xml:space="preserve">
+    <value>Добавить ростер после</value>
+  </data>
+  <data name="TreeAddStaticText" xml:space="preserve">
+    <value>Добавить статический текст</value>
+  </data>
+  <data name="TreeAddStaticTextAfter" xml:space="preserve">
+    <value>Добавить статический текст после</value>
+  </data>
+  <data name="TreeAddVariable" xml:space="preserve">
+    <value>Добавить переменную</value>
+  </data>
+  <data name="TreeAddVariableAfter" xml:space="preserve">
+    <value>Добавить переменную после</value>
+  </data>
+  <data name="TreeRoster" xml:space="preserve">
+    <value>ростер:</value>
+  </data>
+  <data name="VariableExpression" xml:space="preserve">
+    <value>Выражение</value>
+  </data>
+  <data name="VariableLabel" xml:space="preserve">
+    <value>Тег</value>
+  </data>
+  <data name="VariableType" xml:space="preserve">
+    <value>Тип переменной</value>
+  </data>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>Логическое выражение, которое включает (выключает) текущий объект в зависимости от ответов на другие вопросы.</value>
+  </data>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>Логическое выражение, вычисляемое на основании ответов на другие вопросы.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>Количество элементов определяет размер ростера. Каждый элемент в списке соответствует названию строки ростера. Каждый элемент списка необходимо расположить на новой строке.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>По умолчанию, выключенный элемент видим на экране. Включение этой опции полностью скроет элемент с экрана, если он выключен.</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+    <value>По умолчанию, инструкция полностью отображается на устройстве. Включение данной опции будет показывать только первую строку инструкции. Нажатие на неё покажет полный текст.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+    <value>Текст инструкции, который будет показан рядом с текстом вопроса.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+    <value>Эта опция позволяет пользователю записать текущее время на планшете.</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+    <value>Форматированный ввод для числового и символьного ввода: телефонные номера, идентификационные коды и т.д. Примеры:"~" - Представляет букву (А-Я,а-я), "#" - Представляет цифру (0-9), "*" - Представляет цифру либо букву (А-Я,а-я,0-9). "##/##/####" - дата, "(###) ###-####" - номер телефона, "AA####" - номер перелёта American AirLines или "~*-###-~###"</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+    <value>Вопрос источник (ответ генерирует соответствующее количество строк)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+    <value>Имена строк.</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+    <value>Когда включено, числовой вопрос на планшете будет отформатирован как: d,ddd,ddd.dd, "d" представляет из себя цифры (0-9), “,”(запятая) это разделитель тысячных, and "." (точка) разделитель дробной части. Разделители могут отличаться в зависимости от настроек планшета.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>Логическое выражение, которое проверяет ответ на текущий вопрос. Так же может использовать ответы на другие вопросы.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Сообщение об ошибке, которое отображается если результат вычисления условия дал результат "False" или возникла ошибка во время вычисления.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Текст, отображаемый во время тестирования опросника</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>Текст до {{maxLength}} символов, который будет использован для экспорта переменной.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Имена переменных и ростеров могут быть от {{minLength}} до {{maxLength}} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
+  </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>Условия на каскадном списке может быть сломано</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Закрыть панель справочных таблиц</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Закрыть панель макросов</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Закрыть панель переводов</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Перейти к имени в редакторе</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Перейти к дереву опросника</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Закрыть панель вложения</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Закрыть секции</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Перейти к предидущему</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Перейти к следующему </value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Открыть редактор элемента</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Открыть секцию</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Печать</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Поиск в подсекциях и вопросах в секции</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>Один или более вопросов/подсекций зависит от </value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>У вас не достаточно прав для изменения опросника</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>Выбранный файн должен быть картинкой</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>Для открытия редактора необходимо сохранить текущие изменения. Сохранить?</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>Сохранено. Окно для загрузки файла теперь будет открыто.</value>
   </data>
 </root>

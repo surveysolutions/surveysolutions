@@ -342,5 +342,13 @@ namespace WB.Tests.Abc.TestFactories
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(), 
                 virbationService ?? Mock.Of<IVirbationService>());
+
+        public SingleOptionQuestionOptionViewModel SingleOptionQuestionOptionViewModel(int? value = null)
+        {
+            return new SingleOptionQuestionOptionViewModel()
+            {
+                Value = value ?? 0
+            };
+        }
     }
 }

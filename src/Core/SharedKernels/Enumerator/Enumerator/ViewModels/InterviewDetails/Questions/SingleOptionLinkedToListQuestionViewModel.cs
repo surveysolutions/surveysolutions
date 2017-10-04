@@ -153,7 +153,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         internal async Task OptionSelectedAsync(object sender)
         {
+            var question = interview.GetSingleOptionLinkedToListQuestion(this.Identity);
             var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
+            if (question.IsAnswered() && question.GetAnswer().SelectedValue == selectedOption.Value)
+                return;
+
             var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
 
             var command = new AnswerSingleOptionQuestionCommand(

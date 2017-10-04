@@ -1,11 +1,15 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, $i18next, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
+        function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
 
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
-            $scope.macroSubtitutionHtml = "<span class=\"variable-name\">$"+ $i18next.t('VariableName') + "</span>";
-            $scope.attachmentNameSubtitutionHtml = "<span class=\"variable-name\">"+ $i18next.t('VariableName') + "</span>"
+            var macroSubtitutionHtml = "<span class=\"variable-name\">$"+ $i18next.t('VariableName') + "</span>";
+            $scope.macroHtml = $sce.trustAsHtml($i18next.t('SideBarMacroEmptyLine3', {substitution: macroSubtitutionHtml}))
+
+            var attachmentNameSubtitutionHtml = "<span class=\"variable-name\">"+ $i18next.t('VariableName') + "</span>"
+            $scope.attachmentHtml = $sce.trustAsHtml($i18next.t('SideBarAttachmentsEmptyLine3', {name: attachmentNameSubtitutionHtml}))
+
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,
@@ -37,7 +41,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+p',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Print',
+                description: $i18next.t('HotkeysPrint'),
                 callback: function (event) {
                     
                     var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
@@ -53,7 +57,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+b',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Compile',
+                description: $i18next.t('Compile'),
                 callback: function (event) {
                     $scope.verify();
                     event.preventDefault();
@@ -74,7 +78,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: focusTreePane,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Focus questionnaire tree',
+                description: $i18next.t('HotkeysFocusTree'),
                 callback: function (event) {
                     event.preventDefault();
                     document.activeElement.blur();
@@ -87,7 +91,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: focusEditorPane,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Focus title field in editor',
+                description: $i18next.t('HotkeysFocusTitle'),
                 callback: function (event) {
                     event.preventDefault();
                     $($(".question-editor textarea").get(0)).focus();
@@ -97,7 +101,7 @@ angular.module('designerApp')
             if (hotkeys.get(openChaptersPane) !== false) {
                 hotkeys.del(openChaptersPane);
             }
-            hotkeys.add(openChaptersPane, 'Open section', function (event) {
+            hotkeys.add(openChaptersPane, $i18next.t('OpenSection'), function (event) {
                 event.preventDefault();
                 $scope.$broadcast("openChaptersList", "");
             });
@@ -105,7 +109,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+h',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Find and replace',
+                description: $i18next.t('FindReplaceTitle'),
                 callback: function (event) {
                     event.preventDefault();
                     $scope.showFindReplaceDialog();
