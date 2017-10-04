@@ -12,7 +12,7 @@
 </template>
 
 <script lang="js">
-    // import "toastr/build/toastr.css"
+    import "toastr/build/toastr.css"
     import idle from "./IdleTimeout"
 
     export default {

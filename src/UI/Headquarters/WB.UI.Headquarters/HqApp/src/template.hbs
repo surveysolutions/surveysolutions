@@ -1,4 +1,7 @@
 {{#with htmlWebpackPlugin.files}}
+{{#each css}}
+ <link href='@Url.Content("~/HqApp/dist/{{this}}")' rel="stylesheet" lazyload="1" />
+{{/each}}
 {{#each chunks}}
 <script type="text/javascript" src='@Url.Content("~/HqApp/dist/{{entry}}")'></script>
 {{/each}}

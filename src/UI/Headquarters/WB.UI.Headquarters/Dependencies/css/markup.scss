@@ -1,6 +1,6 @@
 @import "variables";
-$icon-font-path: '../vendor/bootstrap-sass/assets/fonts/bootstrap/';
-@import "../vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+$icon-font-path: '../fonts/';
+@import "../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
 @import "mixins";
 @import "tables";
