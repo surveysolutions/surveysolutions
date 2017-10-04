@@ -847,4 +847,10 @@
   <data name="QuestionOpenEditorSaved" xml:space="preserve">
     <value>It was saved successfully. The window for file upload will be opened.</value>
   </data>
+  <data name="SettingsShareEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="SettingsShareView" xml:space="preserve">
+    <value>View</value>
+  </data>
 </root>
