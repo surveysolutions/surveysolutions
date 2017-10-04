@@ -7,21 +7,6 @@
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
   </Target>
-  <!-- HQ APP -->
-  <!--<Target Name="RestoreHqAppDeps" BeforeTargets="RunWebpackDev" Condition=" '$(NCrunch)' != '1' And '$(Configuration)' == 'Debug' ">
-    <Message Importance="high" Text="Restoring HQ App npm deps" />
-    <Exec Command="yarn --version" ContinueOnError="true">
-      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
-    </Exec>
-    <Exec Command="yarn --ignore-scripts" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
-    <Exec Command="npm install" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' != '0'" />
-  </Target>-->
-  
-  <!--<Target Name="RunWebpackDev" AfterTargets="AfterBuild" Condition="  '$(NCrunch)' != '1' And '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\app.bundle.js') ">
-    <Message Importance="high" Text="Performing dev Webpack build..." />
-    <Exec Command="npm run dev -- --no-color" WorkingDirectory="HqApp" />
-  </Target>-->
-  <!-- /HQ APP -->
  
   <Target Name="CollecHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
@@ -45,14 +30,7 @@
       
     </ItemGroup>
   </Target>
-  <!-- <Target Name="CollectWebInterviewAppFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <ItemGroup>
-      <CollectWebInterviewAppFiles_CustomFiles Include="InterviewApp\**\*" />
-      <FilesForPackagingFromProject Include="%(CollectWebInterviewAppFiles_CustomFiles.Identity)">
-        <DestinationRelativePath>InterviewApp\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target> -->
+
   <Target Name="CustomCollectFilesToExternals" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
       <CustomCollectFilesToExternals_CustomFiles Include="Externals\**\*" />
