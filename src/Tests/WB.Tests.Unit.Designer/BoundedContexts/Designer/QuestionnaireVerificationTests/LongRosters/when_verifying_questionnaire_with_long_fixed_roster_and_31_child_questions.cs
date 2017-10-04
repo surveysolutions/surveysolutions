@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.LongRosters
 {

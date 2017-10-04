@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -218,6 +219,91 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public string GetVariable(IGroup group)
         {
             return !string.IsNullOrEmpty(group.VariableName) ? group.VariableName : "subsection_" + group.PublicKey.FormatGuid();
+        }
+
+        public bool IsPreFilledQuestion(IQuestion question)
+        {
+            return question.Featured;
+        }
+
+        public bool IsRosterSizeQuestion(IQuestion question)
+        {
+            return this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).Any();
+        }
+
+        public bool IsSupervisorQuestion(IQuestion question)
+        {
+            return question.QuestionScope == QuestionScope.Supervisor;
+        }
+
+        public IComposite GetEntityByVariable(string variableName)
+        {
+            return this.Find<IComposite>(x => x.VariableName == variableName).FirstOrDefault();
+        }
+
+        public bool IsQuestionAllowedToBeRosterSizeSource(IQuestion question) => IsNumericRosterSizeQuestion(question) ||
+                                                                                 IsCategoricalRosterSizeQuestion(question) ||
+                                                                                 IsTextListQuestion(question);
+        public bool IsTextListQuestion(IQuestion question) => question.QuestionType == QuestionType.TextList;
+
+        public  bool IsNumericRosterSizeQuestion(IQuestion question)
+        {
+            var numericQuestion = question as NumericQuestion;
+            return numericQuestion != null && numericQuestion.IsInteger;
+        }
+
+        public bool IsCategoricalRosterSizeQuestion(IQuestion question)
+        {
+            return IsCategoricalMultiAnswersQuestion(question) && !(question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
+        }
+
+        public bool IsCategoricalMultiAnswersQuestion(IQuestion question)
+        {
+            return question is MultyOptionsQuestion;
+        }
+
+        public  bool IsCategoricalSingleAnswerQuestion(IQuestion question)
+        {
+            return question is SingleQuestion;
+        }
+
+        public bool IsFilteredComboboxQuestion(IQuestion question)
+        {
+            return IsCategoricalSingleAnswerQuestion(question) && question.IsFilteredCombobox.HasValue && question.IsFilteredCombobox.Value;
+        }
+
+        public bool IsFixedRoster(IGroup group) => group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles;
+
+        public bool IsRosterByQuestion(IGroup @group) => group.IsRoster && @group.RosterSizeSource == RosterSizeSourceType.Question;
+
+        public bool IsNumericRoster(IGroup @group)
+        {
+            IQuestion question = GetRosterSizeQuestion(@group);
+            if (question == null) return false;
+            return IsNumericRosterSizeQuestion(question);
+        }
+
+        public bool IsListRoster(IGroup @group)
+        {
+            IQuestion question = GetRosterSizeQuestion(@group);
+            if (question == null) return false;
+            return IsTextListQuestion(question);
+        }
+
+        public bool IsMultiRoster(IGroup @group)
+        {
+            IQuestion question = GetRosterSizeQuestion(@group);
+            if (question == null) return false;
+            return IsCategoricalRosterSizeQuestion(question);
+        }
+
+        public IQuestion GetRosterSizeQuestion(IGroup @group)
+        {
+            if (!IsRoster(@group)) return null;
+            if (!IsRosterByQuestion(@group)) return null;
+            Guid? rosterSizeQuestionId = @group.RosterSizeQuestionId;
+            if (!rosterSizeQuestionId.HasValue) return null;
+            return this.Find<IQuestion>(rosterSizeQuestionId.Value);
         }
     }
 }
