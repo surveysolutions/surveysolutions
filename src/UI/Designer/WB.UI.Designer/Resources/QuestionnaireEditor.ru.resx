@@ -640,6 +640,12 @@
   <data name="Paste" xml:space="preserve">
     <value>Вставить</value>
   </data>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>Поле с каскадным списком</value>
+  </data>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>Поле со списком</value>
+  </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
     <value>Текущее время</value>
   </data>
@@ -652,6 +658,9 @@
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Связанный вопрос</value>
   </data>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>Максимальное количество</value>
+  </data>
   <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
     <value>Количество ответов</value>
   </data>
@@ -663,6 +672,12 @@
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Сохранять порядок ответов</value>
+  </data>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>Маска</value>
+  </data>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>Загрузить опции</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>Использовать 1000 разделитель</value>
