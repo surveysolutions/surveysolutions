@@ -1,5 +1,5 @@
 ﻿<div class="form-group" ng-class="{'has-error': !questionForm.maxAnswerCount.$valid}">
-    <label for="edit-question-max-answers-number">Maximum number of list elements</label>
+    <label for="edit-question-max-answers-number" ng-i18next="QuestionMaxListCount"></label>
     <input id="edit-question-max-answers-number"
            maxlength="9"
            name="maxAnswerCount"
@@ -7,7 +7,6 @@
            ng-pattern="/^\d+$/"
            ng-model="activeQuestion.maxAnswerCount"
            class="form-control" />
-    <p class="help-block ng-cloak" ng-show="questionForm.maxAnswerCount.$error.pattern">
-        Only integers are allowed
+    <p class="help-block ng-cloak" ng-show="questionForm.maxAnswerCount.$error.pattern" ng-i18next="QuestionOnlyInts">
     </p>
 </div>

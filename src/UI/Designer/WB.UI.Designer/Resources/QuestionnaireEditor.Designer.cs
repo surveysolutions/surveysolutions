@@ -682,11 +682,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cascading combo box.
+        /// </summary>
+        internal static string QuestionCascading {
+            get {
+                return ResourceManager.GetString("QuestionCascading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to click reload.
         /// </summary>
         internal static string QuestionClickReload {
             get {
                 return ResourceManager.GetString("QuestionClickReload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combo box.
+        /// </summary>
+        internal static string QuestionComboBox {
+            get {
+                return ResourceManager.GetString("QuestionComboBox", resourceCulture);
             }
         }
         
@@ -772,6 +790,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum number of list elements.
+        /// </summary>
+        internal static string QuestionMaxListCount {
+            get {
+                return ResourceManager.GetString("QuestionMaxListCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max number of answers.
         /// </summary>
         internal static string QuestionMaxNumberOfAnswers {
@@ -826,6 +853,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pattern.
+        /// </summary>
+        internal static string QuestionPattern {
+            get {
+                return ResourceManager.GetString("QuestionPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question type.
         /// </summary>
         internal static string QuestionQuestionType {
@@ -858,6 +894,15 @@ namespace WB.UI.Designer.Resources {
         internal static string QuestionToUpdateOptions {
             get {
                 return ResourceManager.GetString("QuestionToUpdateOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload new options.
+        /// </summary>
+        internal static string QuestionUploadOptions {
+            get {
+                return ResourceManager.GetString("QuestionUploadOptions", resourceCulture);
             }
         }
         
