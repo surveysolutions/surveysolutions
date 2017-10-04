@@ -1537,6 +1537,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        internal static string SettingsShareEdit {
+            get {
+                return ResourceManager.GetString("SettingsShareEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View.
+        /// </summary>
+        internal static string SettingsShareView {
+            get {
+                return ResourceManager.GetString("SettingsShareView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire settings.
         /// </summary>
         internal static string SettingsTitle {
