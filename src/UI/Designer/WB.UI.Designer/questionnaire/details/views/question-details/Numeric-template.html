@@ -2,20 +2,19 @@
     <div class="col-md-5">
         <div class="checkbox checkbox-in-column">
             <input id="cb-is-integer" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isInteger" ng-change="isIntegerChange()" />
-            <label for="cb-is-integer"><span></span>Integer</label>
+            <label for="cb-is-integer"><span></span>{{'QuestionInteger' | i18next}}</label>
         </div>
     </div>
     <div class="col-md-5 inline-inputs">
         <div class="form-group checkbox-in-column" ng-show="!activeQuestion.isInteger" ng-class="{'has-error': !questionForm.countOfDecimalPlaces.$valid}">
-            <label for="edit-question-count-decimal">Number of decimal places</label>
+            <label for="edit-question-count-decimal" ng-i18next="QuestionDecimalPlaces"></label>
             <input id="edit-question-count-decimal" type="text"
                    maxlength="15"
                    name="countOfDecimalPlaces"
                    ng-pattern="/^\d+$/"
                    ng-model="activeQuestion.countOfDecimalPlaces"
                    class="form-control small-numeric-input">
-            <p class="help-block ng-cloak" ng-show="questionForm.countOfDecimalPlaces.$error.pattern">
-                Only integers are allowed
+            <p class="help-block ng-cloak" ng-show="questionForm.countOfDecimalPlaces.$error.pattern" ng-i18next="QuestionOnlyInts">
             </p>
         </div>
     </div>
@@ -24,7 +23,7 @@
     <div class="col-md-5 inline-inputs">
         <div class="checkbox checkbox-in-column">
             <input id="cb-use-formatting" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.useFormatting" />
-            <label for="cb-use-formatting"><span></span>Use 1000 separator</label>
+            <label for="cb-use-formatting"><span></span>{{'QuestionUseSeparator' | i18next}}</label>
             <help key="useFormatting"></help>
         </div>
     </div>

@@ -70,11 +70,56 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add question.
+        /// </summary>
+        internal static string AddQuestion {
+            get {
+                return ResourceManager.GetString("AddQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add roster.
+        /// </summary>
+        internal static string AddRoster {
+            get {
+                return ResourceManager.GetString("AddRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add static text.
+        /// </summary>
+        internal static string AddStaticText {
+            get {
+                return ResourceManager.GetString("AddStaticText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add sub-section.
+        /// </summary>
+        internal static string AddSubsection {
+            get {
+                return ResourceManager.GetString("AddSubsection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add new validation rule.
         /// </summary>
         internal static string AddValidationRule {
             get {
                 return ResourceManager.GetString("AddValidationRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add variable.
+        /// </summary>
+        internal static string AddVariable {
+            get {
+                return ResourceManager.GetString("AddVariable", resourceCulture);
             }
         }
         
@@ -187,6 +232,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Condition or cascading depended items might be broken.
+        /// </summary>
+        internal static string ConditionMightBeBroken {
+            get {
+                return ResourceManager.GetString("ConditionMightBeBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         internal static string Copy {
@@ -210,6 +264,51 @@ namespace WB.UI.Designer.Resources {
         internal static string Download {
             get {
                 return ResourceManager.GetString("Download", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This section is empty..
+        /// </summary>
+        internal static string EmptySectionLine1 {
+            get {
+                return ResourceManager.GetString("EmptySectionLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can start by using {{-addQuestionBtn}} and {{-addSubsectionBtn}} buttons.
+        /// </summary>
+        internal static string EmptySectionLine2 {
+            get {
+                return ResourceManager.GetString("EmptySectionLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to on top of this block or manage sections with {{-panel}} left panel.
+        /// </summary>
+        internal static string EmptySectionLine3 {
+            get {
+                return ResourceManager.GetString("EmptySectionLine3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language of survey, device types, collaboration and other options.
+        /// </summary>
+        internal static string EmptySectionLine4 {
+            get {
+                return ResourceManager.GetString("EmptySectionLine4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to can be found at {{-settingsBtn}} panel (top right corner).
+        /// </summary>
+        internal static string EmptySectionLine5 {
+            get {
+                return ResourceManager.GetString("EmptySectionLine5", resourceCulture);
             }
         }
         
@@ -466,6 +565,150 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A logical expression that activates(deactivates) the current item depending on the answers on the other questions..
+        /// </summary>
+        internal static string HelpConditionExpression {
+            get {
+                return ResourceManager.GetString("HelpConditionExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A logical expression that is calculated depending on the answers on the other questions..
+        /// </summary>
+        internal static string HelpExpression {
+            get {
+                return ResourceManager.GetString("HelpExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line..
+        /// </summary>
+        internal static string HelpFixedTitles {
+            get {
+                return ResourceManager.GetString("HelpFixedTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet..
+        /// </summary>
+        internal static string HelpHideIfDisabled {
+            get {
+                return ResourceManager.GetString("HelpHideIfDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By default, an instruction text is shown on a tablet. Checking this option will show only the first line of instructions. Tapping on that line will show the complete text..
+        /// </summary>
+        internal static string HelpHideInstructions {
+            get {
+                return ResourceManager.GetString("HelpHideInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instruction text that will be attached to the question..
+        /// </summary>
+        internal static string HelpInstruction {
+            get {
+                return ResourceManager.GetString("HelpInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This option allows the user to stamp the current time on tablet.
+        /// </summary>
+        internal static string HelpIsTimestamp {
+            get {
+                return ResourceManager.GetString("HelpIsTimestamp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Formatted entry for alpha-numerical values: phone numbers, ID codes, etc. Examples:&quot;~&quot; - Represents an alpha character (A-Z,a-z), &quot;#&quot; - Represents a numeric character (0-9), &quot;*&quot; - Represents an alphanumeric character (A-Z,a-z,0-9). &quot;##/##/####&quot; - date, &quot;(###) ###-####&quot; - phone number, &quot;AA####&quot; - flight number operated by American AirLines or &quot;~*-###-~###&quot;.
+        /// </summary>
+        internal static string HelpMask {
+            get {
+                return ResourceManager.GetString("HelpMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source question (answer generates number of rows).
+        /// </summary>
+        internal static string HelpSourceQuestion {
+            get {
+                return ResourceManager.GetString("HelpSourceQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titles of rows..
+        /// </summary>
+        internal static string HelpTitles {
+            get {
+                return ResourceManager.GetString("HelpTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When checked, the numeric field on the tablet will be formatted as: d,ddd,ddd.dd, &quot;d&quot; represents digits (0-9), “,”(comma) is a thousand separator, and &quot;.&quot; (dot) is a decimal point symbol.  Thousand separator and the decimal point symbol may vary for tablets with different cultures..
+        /// </summary>
+        internal static string HelpUseFormatting {
+            get {
+                return ResourceManager.GetString("HelpUseFormatting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A logical expression that validates an answer to the current question. Might include values of other questions..
+        /// </summary>
+        internal static string HelpValidationExpression {
+            get {
+                return ResourceManager.GetString("HelpValidationExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error message is shown when validation condition evaluates to &quot;False&quot; or error occurres during expression evaluation..
+        /// </summary>
+        internal static string HelpValidationMessage {
+            get {
+                return ResourceManager.GetString("HelpValidationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text that will be shown next to a variable for testing purposes.
+        /// </summary>
+        internal static string HelpVariableDescription {
+            get {
+                return ResourceManager.GetString("HelpVariableDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A text up to 80 characters that will be attached to the exported variable..
+        /// </summary>
+        internal static string HelpVariableLabel {
+            get {
+                return ResourceManager.GetString("HelpVariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _..
+        /// </summary>
+        internal static string HelpVariableName {
+            get {
+                return ResourceManager.GetString("HelpVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide if disabled.
         /// </summary>
         internal static string HideIfDisabled {
@@ -480,6 +723,123 @@ namespace WB.UI.Designer.Resources {
         internal static string History {
             get {
                 return ResourceManager.GetString("History", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close lookup tables panel.
+        /// </summary>
+        internal static string HotkeysCloseLookup {
+            get {
+                return ResourceManager.GetString("HotkeysCloseLookup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close macros panel.
+        /// </summary>
+        internal static string HotkeysCloseMacros {
+            get {
+                return ResourceManager.GetString("HotkeysCloseMacros", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close translations panel.
+        /// </summary>
+        internal static string HotkeysCloseTranslations {
+            get {
+                return ResourceManager.GetString("HotkeysCloseTranslations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus title field in editor.
+        /// </summary>
+        internal static string HotkeysFocusTitle {
+            get {
+                return ResourceManager.GetString("HotkeysFocusTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus questionnaire tree.
+        /// </summary>
+        internal static string HotkeysFocusTree {
+            get {
+                return ResourceManager.GetString("HotkeysFocusTree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close attachments panel.
+        /// </summary>
+        internal static string HotkeysHideAttachments {
+            get {
+                return ResourceManager.GetString("HotkeysHideAttachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close sections.
+        /// </summary>
+        internal static string HotkeysHideSections {
+            get {
+                return ResourceManager.GetString("HotkeysHideSections", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate to previous sibling.
+        /// </summary>
+        internal static string HotkeysNavigateToPrevSibling {
+            get {
+                return ResourceManager.GetString("HotkeysNavigateToPrevSibling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate to next sibling.
+        /// </summary>
+        internal static string HotkeysNavigateToSibling {
+            get {
+                return ResourceManager.GetString("HotkeysNavigateToSibling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open item in editor.
+        /// </summary>
+        internal static string HotkeysOpenItem {
+            get {
+                return ResourceManager.GetString("HotkeysOpenItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open section.
+        /// </summary>
+        internal static string HotkeysOpenSection {
+            get {
+                return ResourceManager.GetString("HotkeysOpenSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print.
+        /// </summary>
+        internal static string HotkeysPrint {
+            get {
+                return ResourceManager.GetString("HotkeysPrint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for sub-sections and questions in section.
+        /// </summary>
+        internal static string HotkeysSearch {
+            get {
+                return ResourceManager.GetString("HotkeysSearch", resourceCulture);
             }
         }
         
@@ -529,6 +889,42 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One or more questions/sub-sections depend on.
+        /// </summary>
+        internal static string MultipleDependencies {
+            get {
+                return ResourceManager.GetString("MultipleDependencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
+        /// </summary>
+        internal static string NoPermissions {
+            get {
+                return ResourceManager.GetString("NoPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chosen file is not image.
+        /// </summary>
+        internal static string NotAnImage {
+            get {
+                return ResourceManager.GetString("NotAnImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing found.
+        /// </summary>
+        internal static string NothingFound {
+            get {
+                return ResourceManager.GetString("NothingFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string Ok {
@@ -556,6 +952,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paste.
+        /// </summary>
+        internal static string Paste {
+            get {
+                return ResourceManager.GetString("Paste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paste after.
         /// </summary>
         internal static string PasteAfter {
@@ -574,11 +979,56 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add option.
+        /// </summary>
+        internal static string QuestionAddOption {
+            get {
+                return ResourceManager.GetString("QuestionAddOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cascading combo box.
+        /// </summary>
+        internal static string QuestionCascading {
+            get {
+                return ResourceManager.GetString("QuestionCascading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to click reload.
         /// </summary>
         internal static string QuestionClickReload {
             get {
                 return ResourceManager.GetString("QuestionClickReload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combo box.
+        /// </summary>
+        internal static string QuestionComboBox {
+            get {
+                return ResourceManager.GetString("QuestionComboBox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current time.
+        /// </summary>
+        internal static string QuestionCurrentTime {
+            get {
+                return ResourceManager.GetString("QuestionCurrentTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of decimal places.
+        /// </summary>
+        internal static string QuestionDecimalPlaces {
+            get {
+                return ResourceManager.GetString("QuestionDecimalPlaces", resourceCulture);
             }
         }
         
@@ -619,11 +1069,47 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Integer.
+        /// </summary>
+        internal static string QuestionInteger {
+            get {
+                return ResourceManager.GetString("QuestionInteger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is linked.
+        /// </summary>
+        internal static string QuestionIsLinked {
+            get {
+                return ResourceManager.GetString("QuestionIsLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bind to list question or question from roster group.
         /// </summary>
         internal static string QuestionLinkedDescr {
             get {
                 return ResourceManager.GetString("QuestionLinkedDescr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum number of list elements.
+        /// </summary>
+        internal static string QuestionMaxListCount {
+            get {
+                return ResourceManager.GetString("QuestionMaxListCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max number of answers.
+        /// </summary>
+        internal static string QuestionMaxNumberOfAnswers {
+            get {
+                return ResourceManager.GetString("QuestionMaxNumberOfAnswers", resourceCulture);
             }
         }
         
@@ -646,6 +1132,60 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only integers are allowed.
+        /// </summary>
+        internal static string QuestionOnlyInts {
+            get {
+                return ResourceManager.GetString("QuestionOnlyInts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To open options editor all unsaved changes must be saved. Should we save them now?.
+        /// </summary>
+        internal static string QuestionOpenEditorConfirm {
+            get {
+                return ResourceManager.GetString("QuestionOpenEditorConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It was saved successfully. The window for file upload will be opened..
+        /// </summary>
+        internal static string QuestionOpenEditorSaved {
+            get {
+                return ResourceManager.GetString("QuestionOpenEditorSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to As the question was marked as &quot;Combo box&quot; or &quot;Cascading combo box&quot; while uploading question&apos;s details and contained many options, it&apos;s value was reduced up to {{count}}.
+        /// </summary>
+        internal static string QuestionOptionsCut {
+            get {
+                return ResourceManager.GetString("QuestionOptionsCut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Record answer order.
+        /// </summary>
+        internal static string QuestionOrdered {
+            get {
+                return ResourceManager.GetString("QuestionOrdered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pattern.
+        /// </summary>
+        internal static string QuestionPattern {
+            get {
+                return ResourceManager.GetString("QuestionPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question type.
         /// </summary>
         internal static string QuestionQuestionType {
@@ -660,6 +1200,15 @@ namespace WB.UI.Designer.Resources {
         internal static string QuestionScope {
             get {
                 return ResourceManager.GetString("QuestionScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show strings.
+        /// </summary>
+        internal static string QuestionShowStrings {
+            get {
+                return ResourceManager.GetString("QuestionShowStrings", resourceCulture);
             }
         }
         
@@ -682,6 +1231,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload new options.
+        /// </summary>
+        internal static string QuestionUploadOptions {
+            get {
+                return ResourceManager.GetString("QuestionUploadOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use 1000 separator.
+        /// </summary>
+        internal static string QuestionUseSeparator {
+            get {
+                return ResourceManager.GetString("QuestionUseSeparator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Variable label.
         /// </summary>
         internal static string QuestionVariableLabel {
@@ -696,6 +1263,15 @@ namespace WB.UI.Designer.Resources {
         internal static string QuestionVariableName {
             get {
                 return ResourceManager.GetString("QuestionVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes/No mode.
+        /// </summary>
+        internal static string QuestionYesNoMode {
+            get {
+                return ResourceManager.GetString("QuestionYesNoMode", resourceCulture);
             }
         }
         
@@ -817,6 +1393,33 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        internal static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select parent question.
+        /// </summary>
+        internal static string SelectParentQuestion {
+            get {
+                return ResourceManager.GetString("SelectParentQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select the parent question.
+        /// </summary>
+        internal static string SelectParentQuestionError {
+            get {
+                return ResourceManager.GetString("SelectParentQuestionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select question.
         /// </summary>
         internal static string SelectQuestion {
@@ -844,6 +1447,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invite.
+        /// </summary>
+        internal static string SettingsInvite {
+            get {
+                return ResourceManager.GetString("SettingsInvite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invite collaborators by e-mail:.
         /// </summary>
         internal static string SettingsInviteCollaborators {
@@ -867,6 +1479,24 @@ namespace WB.UI.Designer.Resources {
         internal static string SettingsPrivate {
             get {
                 return ResourceManager.GetString("SettingsPrivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide email of existing user.
+        /// </summary>
+        internal static string SettingsProvideExistingEmail {
+            get {
+                return ResourceManager.GetString("SettingsProvideExistingEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provide a valid email.
+        /// </summary>
+        internal static string SettingsProvideValidEmail {
+            get {
+                return ResourceManager.GetString("SettingsProvideValidEmail", resourceCulture);
             }
         }
         
@@ -1240,7 +1870,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To use a macro in an expression, refer to it by its {{- substitution}}.
+        ///   Looks up a localized string similar to To use a macro in an expression, refer to it by its {{-substitution}}.
         /// </summary>
         internal static string SideBarMacroEmptyLine3 {
             get {
@@ -1411,11 +2041,137 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Static text.
+        /// </summary>
+        internal static string StaticText {
+            get {
+                return ResourceManager.GetString("StaticText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment name.
+        /// </summary>
+        internal static string StaticTextAttachmentName {
+            get {
+                return ResourceManager.GetString("StaticTextAttachmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle Dropdown.
         /// </summary>
         internal static string ToggleDropdown {
             get {
                 return ResourceManager.GetString("ToggleDropdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle Search.
+        /// </summary>
+        internal static string ToggleSearch {
+            get {
+                return ResourceManager.GetString("ToggleSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add question.
+        /// </summary>
+        internal static string TreeAddQuestion {
+            get {
+                return ResourceManager.GetString("TreeAddQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add question after.
+        /// </summary>
+        internal static string TreeAddQuestionAfter {
+            get {
+                return ResourceManager.GetString("TreeAddQuestionAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add roster.
+        /// </summary>
+        internal static string TreeAddRoster {
+            get {
+                return ResourceManager.GetString("TreeAddRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add roster after.
+        /// </summary>
+        internal static string TreeAddRosterAfter {
+            get {
+                return ResourceManager.GetString("TreeAddRosterAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add sub-section.
+        /// </summary>
+        internal static string TreeAddSection {
+            get {
+                return ResourceManager.GetString("TreeAddSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add sub-section after.
+        /// </summary>
+        internal static string TreeAddSectionAfter {
+            get {
+                return ResourceManager.GetString("TreeAddSectionAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add static text.
+        /// </summary>
+        internal static string TreeAddStaticText {
+            get {
+                return ResourceManager.GetString("TreeAddStaticText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add static text after.
+        /// </summary>
+        internal static string TreeAddStaticTextAfter {
+            get {
+                return ResourceManager.GetString("TreeAddStaticTextAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add variable.
+        /// </summary>
+        internal static string TreeAddVariable {
+            get {
+                return ResourceManager.GetString("TreeAddVariable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add variable after.
+        /// </summary>
+        internal static string TreeAddVariableAfter {
+            get {
+                return ResourceManager.GetString("TreeAddVariableAfter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to roster:.
+        /// </summary>
+        internal static string TreeRoster {
+            get {
+                return ResourceManager.GetString("TreeRoster", resourceCulture);
             }
         }
         
@@ -1438,11 +2194,38 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expression.
+        /// </summary>
+        internal static string VariableExpression {
+            get {
+                return ResourceManager.GetString("VariableExpression", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable label.
+        /// </summary>
+        internal static string VariableLabel {
+            get {
+                return ResourceManager.GetString("VariableLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to name.
         /// </summary>
         internal static string VariableName {
             get {
                 return ResourceManager.GetString("VariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable type.
+        /// </summary>
+        internal static string VariableType {
+            get {
+                return ResourceManager.GetString("VariableType", resourceCulture);
             }
         }
         

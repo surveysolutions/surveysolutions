@@ -1,8 +1,13 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
+        function ($rootScope, $scope, $state, $sce, $i18next, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
             'use strict';
             var me = this;
+            var emptySectionAddQuestion = "<button class='btn' disabled type='button'>"+ $i18next.t('AddQuestion') +" </button>";
+            var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">"+ $i18next.t('AddSubsection') +" </button>";
+            var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + $i18next.t('Settings') + " </button>";
+            $scope.emptySectionHtmlLine1 = $sce.trustAsHtml($i18next.t('EmptySectionLine2', {addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml}));
+            $scope.emptySectionHtmlLine2 = $sce.trustAsHtml($i18next.t('EmptySectionLine5', {settingsBtn: emptySectionSettingsHtml}))
 
             var scrollMode = {
                 makeVisible: "makeVisible",
@@ -43,7 +48,7 @@
             if (hotkeys.get(scrollDown) !== false) {
                 hotkeys.del(scrollDown);
             }
-            hotkeys.add(scrollDown, 'Navigate to next sibling', function (event) {
+            hotkeys.add(scrollDown, $i18next.t('HotkeysNavigateToSibling'), function (event) {
                 event.preventDefault();
                 $scope.goToNextItem();
             });
@@ -51,7 +56,7 @@
             if (hotkeys.get(scrollUp) !== false) {
                 hotkeys.del(scrollUp);
             }
-            hotkeys.add(scrollUp, 'Navigate to previous sibling', function (event) {
+            hotkeys.add(scrollUp,  $i18next.t('HotkeysNavigateToPrevSibling'), function (event) {
                 event.preventDefault();
                 $scope.goToPrevItem();
             });
@@ -61,7 +66,7 @@
             }
             hotkeys.add({
                 combo: focusSearchField,
-                description: 'Search for sub-sections and questions in section',
+                description: $i18next.t('HotkeysSearch'),
                 callback: function (event) {
                     event.preventDefault();
                     $scope.showSearch();
@@ -73,7 +78,7 @@
             }
             hotkeys.add({
                 combo: openTreeItemInEditor,
-                description: 'Open item in editor',
+                description: $i18next.t('HotkeysOpenItem'),
                 callback: function (event) {
                     event.preventDefault();
                     if ($scope.isSearchInFocus) {
@@ -425,8 +430,8 @@
                                     }, "");
 
                                     notificationService.notify({
-                                        title: 'Condition or cascading depended items might be broken',
-                                        text: '<div class="broken-links"><p>One or more questions/sub-sections depend on<p>' + links + '</div>',
+                                        title: $i18next.t('ConditionMightBeBroken'),
+                                        text: '<div class="broken-links"><p>'+ $i18next.t('MultipleDependencies') +'<p>' + links + '</div>',
                                         hide: false,
                                         confirm: { confirm: true },
                                         history: { history: false },

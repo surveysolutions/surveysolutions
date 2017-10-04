@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Properties;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
@@ -32,10 +33,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static readonly SelectOption[] AllQuestionScopeOptions =
         {
-            new SelectOption { Value = "Interviewer", Text = "Interviewer" },
-            new SelectOption { Value = "Supervisor", Text = "Supervisor" },
-            new SelectOption { Value = "Hidden", Text = "Hidden" },
-            new SelectOption { Value = "Identifying", Text = "Identifying" }
+            new SelectOption { Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer },
+            new SelectOption { Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor },
+            new SelectOption { Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden },
+            new SelectOption { Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying }
         };
 
         private static readonly HashSet<QuestionType> QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new HashSet<QuestionType>
@@ -78,58 +79,58 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = "SingleOption",
-                Text = "Categorical: Single-select"
+                Text = QuestionnaireEditor.QuestionTypeSingleSelect
             },
             new SelectOption
             {
                 Value = "MultyOption",
-                Text = "Categorical: Multi-select"
+                Text = QuestionnaireEditor.QuestionTypeMultiSelect
             },
             new SelectOption
             {
                 Value = "Numeric",
-                Text = "Numeric"
+                Text = QuestionnaireEditor.QuestionTypeNumeric
             },
             new SelectOption
             {
                 Value = "DateTime",
-                Text = "Date"
+                Text = QuestionnaireEditor.QuestionTypeDate
             },
             new SelectOption
             {
                 Value = "Text",
-                Text = "Text"
+                Text = QuestionnaireEditor.QuestionTypeText
             },
             new SelectOption
             {
                 Value = "GpsCoordinates",
-                Text = "GPS"
+                Text = QuestionnaireEditor.QuestionTypeGPS
             }
             ,
             new SelectOption
             {
                 Value = "TextList",
-                Text = "List"
+                Text = QuestionnaireEditor.QuestionTypeList
             },
             new SelectOption
             {
                 Value = "QRBarcode",
-                Text = "Barcode"
+                Text = QuestionnaireEditor.QuestionTypeBarcode
             },
             new SelectOption
             {
                 Value = "Multimedia",
-                Text = "Picture"
+                Text = QuestionnaireEditor.QuestionTypePicture
             },
             new SelectOption
             {
                 Value = "Audio",
-                Text = "Audio"
+                Text = QuestionnaireEditor.QuestionTypeAudio
             },
             new SelectOption
             {
                 Value = "Area",
-                Text = "Area"
+                Text = QuestionnaireEditor.QuestionTypeArea
             }
         };
 
@@ -434,7 +435,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
             questionView.RosterScopeIds = new Guid[0];
             questionView.ParentGroupsIds = new Guid[0];
-
 
             switch (question.QuestionType)
             {

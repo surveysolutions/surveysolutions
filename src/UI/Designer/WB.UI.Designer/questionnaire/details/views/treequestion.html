@@ -18,28 +18,28 @@
     <div class="dropdown position-fixed" id="context-menu-{{ item.itemId }}">
         <ul class="dropdown-menu" role="menu">
             <li>
-                <a ng-click="addQuestionAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add question after</a>
+                <a ng-click="addQuestionAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddQuestionAfter"></a>
             </li>
             <li>
-                <a ng-click="addRosterAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add roster after</a>
+                <a ng-click="addRosterAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddRosterAfter">Add roster after</a>
             </li>
             <li>
-                <a ng-click="addGroupAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add sub-section after</a>
+                <a ng-click="addGroupAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddSectionAfter">Add sub-section after</a>
             </li>
             <li>
-                <a ng-click="addStaticTextAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add static text after</a>
+                <a ng-click="addStaticTextAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddStaticTextAfter">Add static text after</a>
             </li>
             <li>
-                <a ng-click="addVariableAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Add variable after</a>
+                <a ng-click="addVariableAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddVariableAfter">Add variable after</a>
             </li>
             <li>
-                <a ng-click="copyRef(item)">Copy</a>
+                <a ng-click="copyRef(item)" ng-i18next>Copy</a>
             </li>
             <li>
-                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)" ng-if="!questionnaire.isReadOnlyForUser">Paste after</a>
+                <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="PasteAfter">Paste after</a>
             </li>
             <li>
-                <a ng-click="deleteQuestion(item)" ng-if="!questionnaire.isReadOnlyForUser">Delete</a>
+                <a ng-click="deleteQuestion(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>Delete</a>
             </li>
         </ul>
     </div>

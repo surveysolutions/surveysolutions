@@ -259,8 +259,8 @@ th {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.eot');
-  src: url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../vendor/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot');
+  src: url('../node_modules/bootstrap/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('../node_modules/bootstrap/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../node_modules/bootstrap/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../node_modules/bootstrap/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -7105,6 +7105,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .share-window.modal {
   overflow: auto;
+}
+.share-window.modal .modal-dialog {
+  width: 650px;
 }
 .modal {
   overflow-y: inherit;
