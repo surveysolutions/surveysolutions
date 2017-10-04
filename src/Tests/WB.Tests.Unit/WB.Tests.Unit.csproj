@@ -633,6 +633,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\MultiOptionLinkedToRosterQuestionViewModelTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\QuestionHeaderViewModelTests\when_answered_datetime_question_used_in_substitution_title.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SidebarSectionsViewModelTests.cs" />
+    <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_recive_event_with_same_answer.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\SingleOptionLinkedToListQuestionViewModelTests\when_text_list_item_removed.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\TextQuestionViewModelTests\when_textQuestion_answer_removed_by_roster_changes.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefulInterview.CreateInterviewOnClient.Tests.cs" />
