@@ -4,7 +4,7 @@
         .use(window.i18nextXHRBackend)
         .use(window.i18nextBrowserLanguageDetector);
     window.i18next.init({
-        debug: true,
+        debug: false,
         //lng: 'de', // If not given, i18n will detect the browser language.
         fallbackLng: 'en', // Default is dev
         backend: {
@@ -22,7 +22,10 @@
             }
         }
     }, function (err, t) {
-        console.log('resources loaded');
+        //console.log('resources loaded');
+    });
+    i18next.on('languageChanged', function(lng) {
+        moment.locale(lng);
     });
 
     angular.module('designerApp', [

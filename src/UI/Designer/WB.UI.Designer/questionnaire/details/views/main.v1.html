@@ -124,7 +124,7 @@
                     <div class="empty-list" ng-show="macros.length == 0">
                         <p ng-i18next>SideBarMacroEmptyLine1</p>
                         <p ng-i18next>SideBarMacroEmptyLine2</p>
-                        <p ng-i18next="[html]({substitution: macroSubtitutionHtml})SideBarMacroEmptyLine3"> </p>
+                        <p ng-bind-html="macroHtml"> </p>
                     </div>
                     <form role="form" name="macrosForm" novalidate>
                         <ul ng-model="macros">
@@ -246,7 +246,7 @@
                                 click here
                             </a>
                         </p>
-                        <p ng-i18next="[html]({name: attachmentNameSubtitutionHtml})SideBarAttachmentsEmptyLine3">
+                        <p ng-bind-html="attachmentHtml">
                         </p>
                     </div>
                     <form role="form" name="attachmentsForm" novalidate>

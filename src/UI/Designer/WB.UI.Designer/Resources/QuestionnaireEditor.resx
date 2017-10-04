@@ -266,7 +266,7 @@
     <value>A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
-    <value>To use a macro in an expression, refer to it by its {{- substitution}}</value>
+    <value>To use a macro in an expression, refer to it by its {{-substitution}}</value>
   </data>
   <data name="SideBarMacroHideDescription" xml:space="preserve">
     <value>hide description</value>
@@ -585,5 +585,266 @@
   </data>
   <data name="ValidationCondition" xml:space="preserve">
     <value>Validation condition</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Add question</value>
+  </data>
+  <data name="AddRoster" xml:space="preserve">
+    <value>Add roster</value>
+  </data>
+  <data name="AddStaticText" xml:space="preserve">
+    <value>Add static text</value>
+  </data>
+  <data name="AddSubsection" xml:space="preserve">
+    <value>Add sub-section</value>
+  </data>
+  <data name="AddVariable" xml:space="preserve">
+    <value>Add variable</value>
+  </data>
+  <data name="EmptySectionLine1" xml:space="preserve">
+    <value>This section is empty.</value>
+  </data>
+  <data name="EmptySectionLine2" xml:space="preserve">
+    <value>You can start by using {{-addQuestionBtn}} and {{-addSubsectionBtn}} buttons</value>
+  </data>
+  <data name="EmptySectionLine3" xml:space="preserve">
+    <value>on top of this block or manage sections with {{-panel}} left panel</value>
+  </data>
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>Language of survey, device types, collaboration and other options</value>
+  </data>
+  <data name="EmptySectionLine5" xml:space="preserve">
+    <value>can be found at {{-settingsBtn}} panel (top right corner)</value>
+  </data>
+  <data name="NothingFound" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>Add option</value>
+  </data>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>Cascading combo box</value>
+  </data>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>Combo box</value>
+  </data>
+  <data name="QuestionCurrentTime" xml:space="preserve">
+    <value>Current time</value>
+  </data>
+  <data name="QuestionDecimalPlaces" xml:space="preserve">
+    <value>Number of decimal places</value>
+  </data>
+  <data name="QuestionInteger" xml:space="preserve">
+    <value>Integer</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
+    <value>Is linked</value>
+  </data>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>Maximum number of list elements</value>
+  </data>
+  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+    <value>Max number of answers</value>
+  </data>
+  <data name="QuestionOnlyInts" xml:space="preserve">
+    <value>Only integers are allowed</value>
+  </data>
+  <data name="QuestionOptionsCut" xml:space="preserve">
+    <value>As the question was marked as "Combo box" or "Cascading combo box" while uploading question's details and contained many options, it's value was reduced up to {{count}}</value>
+  </data>
+  <data name="QuestionOrdered" xml:space="preserve">
+    <value>Record answer order</value>
+  </data>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>Pattern</value>
+  </data>
+  <data name="QuestionShowStrings" xml:space="preserve">
+    <value>Show strings</value>
+  </data>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>Upload new options</value>
+  </data>
+  <data name="QuestionUseSeparator" xml:space="preserve">
+    <value>Use 1000 separator</value>
+  </data>
+  <data name="QuestionYesNoMode" xml:space="preserve">
+    <value>Yes/No mode</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="SelectParentQuestion" xml:space="preserve">
+    <value>Select parent question</value>
+  </data>
+  <data name="SelectParentQuestionError" xml:space="preserve">
+    <value>You must select the parent question</value>
+  </data>
+  <data name="SettingsInvite" xml:space="preserve">
+    <value>Invite</value>
+  </data>
+  <data name="SettingsProvideExistingEmail" xml:space="preserve">
+    <value>Provide email of existing user</value>
+  </data>
+  <data name="SettingsProvideValidEmail" xml:space="preserve">
+    <value>Provide a valid email</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Static text</value>
+  </data>
+  <data name="StaticTextAttachmentName" xml:space="preserve">
+    <value>Attachment name</value>
+  </data>
+  <data name="ToggleSearch" xml:space="preserve">
+    <value>Toggle Search</value>
+  </data>
+  <data name="TreeAddQuestion" xml:space="preserve">
+    <value>Add question</value>
+  </data>
+  <data name="TreeAddQuestionAfter" xml:space="preserve">
+    <value>Add question after</value>
+  </data>
+  <data name="TreeAddRoster" xml:space="preserve">
+    <value>Add roster</value>
+  </data>
+  <data name="TreeAddRosterAfter" xml:space="preserve">
+    <value>Add roster after</value>
+  </data>
+  <data name="TreeAddSection" xml:space="preserve">
+    <value>Add sub-section</value>
+  </data>
+  <data name="TreeAddSectionAfter" xml:space="preserve">
+    <value>Add sub-section after</value>
+  </data>
+  <data name="TreeAddStaticText" xml:space="preserve">
+    <value>Add static text</value>
+  </data>
+  <data name="TreeAddStaticTextAfter" xml:space="preserve">
+    <value>Add static text after</value>
+  </data>
+  <data name="TreeAddVariable" xml:space="preserve">
+    <value>Add variable</value>
+  </data>
+  <data name="TreeAddVariableAfter" xml:space="preserve">
+    <value>Add variable after</value>
+  </data>
+  <data name="TreeRoster" xml:space="preserve">
+    <value>roster:</value>
+  </data>
+  <data name="VariableExpression" xml:space="preserve">
+    <value>Expression</value>
+  </data>
+  <data name="VariableLabel" xml:space="preserve">
+    <value>Variable label</value>
+  </data>
+  <data name="VariableType" xml:space="preserve">
+    <value>Variable type</value>
+  </data>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>A logical expression that activates(deactivates) the current item depending on the answers on the other questions.</value>
+  </data>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>A logical expression that is calculated depending on the answers on the other questions.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet.</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+    <value>By default, an instruction text is shown on a tablet. Checking this option will show only the first line of instructions. Tapping on that line will show the complete text.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+    <value>Instruction text that will be attached to the question.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+    <value>This option allows the user to stamp the current time on tablet</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+    <value>Formatted entry for alpha-numerical values: phone numbers, ID codes, etc. Examples:"~" - Represents an alpha character (A-Z,a-z), "#" - Represents a numeric character (0-9), "*" - Represents an alphanumeric character (A-Z,a-z,0-9). "##/##/####" - date, "(###) ###-####" - phone number, "AA####" - flight number operated by American AirLines or "~*-###-~###"</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+    <value>Source question (answer generates number of rows)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+    <value>Titles of rows.</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+    <value>When checked, the numeric field on the tablet will be formatted as: d,ddd,ddd.dd, "d" represents digits (0-9), “,”(comma) is a thousand separator, and "." (dot) is a decimal point symbol.  Thousand separator and the decimal point symbol may vary for tablets with different cultures.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>A logical expression that validates an answer to the current question. Might include values of other questions.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Error message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Text that will be shown next to a variable for testing purposes</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>A text up to 80 characters that will be attached to the exported variable.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>
+  </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>Condition or cascading depended items might be broken</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Close lookup tables panel</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Close macros panel</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Close translations panel</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Focus title field in editor</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Focus questionnaire tree</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Close attachments panel</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Close sections</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Navigate to previous sibling</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Navigate to next sibling</value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Open item in editor</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Open section</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Print</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Search for sub-sections and questions in section</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>One or more questions/sub-sections depend on</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>You don't have permissions for changing this questionnaire</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>Chosen file is not image</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>To open options editor all unsaved changes must be saved. Should we save them now?</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>It was saved successfully. The window for file upload will be opened.</value>
   </data>
 </root>
