@@ -865,4 +865,10 @@
   <data name="QuestionOpenEditorSaved" xml:space="preserve">
     <value>Сохранено. Окно для загрузки файла теперь будет открыто.</value>
   </data>
+  <data name="SettingsShareEdit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="SettingsShareView" xml:space="preserve">
+    <value>Просматривать</value>
+  </data>
 </root>

@@ -1,18 +1,24 @@
 ﻿angular.module('designerApp').controller('shareCtrl',
-    function ($scope, $log, $uibModalInstance, questionnaire, shareService) {
+    function ($scope, $log, $i18next, $uibModalInstance, questionnaire, shareService) {
         "use strict";
 
         $scope.questionnaire = questionnaire;
         $scope.questionnaire.editedTitle = questionnaire.title;
 
+        $scope.shareTypeOptions = [{ text: $i18next.t('SettingsShareEdit'), name: "Edit" }, { name: "View", text: $i18next.t('SettingsShareView') }];
+        
         $scope.viewModel = {
             shareWith: '',
             shareForm: {},
-            shareType: 'Edit',
+            shareType: $scope.shareTypeOptions[0],
             doesUserExist: true
         };
-
-        $scope.shareTypeOptions = [{ name: "Edit" }, { name: "View" }];
+        $scope.getShareType = function(type) {
+            if (type === 'Edit' || type === 'View') 
+                return _.find($scope.shareTypeOptions, {name: type});
+            else
+                return _.find($scope.shareTypeOptions, {name: type.name});
+        }
 
         $scope.cancel = function () {
             $uibModalInstance.close();
@@ -25,7 +31,7 @@
                 $scope.viewModel.doesUserExist = data.doesUserExist;
 
                 if (data.doesUserExist) {
-                    var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType);
+                    var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType.name);
                     shareRequest.then(function () {
                         if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
                             $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, shareType: $scope.viewModel.shareType });
@@ -62,7 +68,7 @@
             });
         };
         $scope.changeShareType = function (shareType) {
-            $scope.viewModel.shareType = shareType.name;
+            $scope.viewModel.shareType = shareType;
         };
     }
 );
