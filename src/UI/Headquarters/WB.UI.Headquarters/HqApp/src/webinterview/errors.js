@@ -1,16 +1,14 @@
 import * as toastr from "toastr"
 import Vue from "vue"
-import { verboseMode } from "./config"
 
-/* tslint:disable:no-console */
-
+/* eslint:disable:no-console */
 Vue.config.errorHandler = (error, vm) => {
     console.error(error, vm)
     toastr.error(error)
 }
 
 function toastErr(err, message) {
-    if (verboseMode) {
+    if (this.$config.verboseMode) {
         console.error(message, err)
     }
 
@@ -23,7 +21,7 @@ function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
     return function() {
         try {
-            if (verboseMode && !(window ).NODEBUG) {
+            if (Vue.$config.verboseMode && !(window ).NODEBUG) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
                 console.debug("call", section, name, argument) // , new Error().stack)

@@ -3,6 +3,7 @@ const path = require('path')
 const baseAppPath = "../"
 const baseDir = path.resolve(__dirname, baseAppPath);
 const devMode = process.env.NODE_ENV != 'production'; 
+var WebpackNotifierPlugin = require('webpack-notifier');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -86,6 +87,8 @@ module.exports = {
         devMode ? null : new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
+
+        devMode ? new WebpackNotifierPlugin({alwaysNotify: true}) : null,
 
         devMode ? null : new BundleAnalyzerPlugin({
             analyzerMode: 'static',
