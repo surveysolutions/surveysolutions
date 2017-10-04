@@ -622,6 +622,12 @@
   <data name="Paste" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>Cascading combo box</value>
+  </data>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>Combo box</value>
+  </data>
   <data name="QuestionCurrentTime" xml:space="preserve">
     <value>Current time</value>
   </data>
@@ -634,6 +640,9 @@
   <data name="QuestionIsLinked" xml:space="preserve">
     <value>Is linked</value>
   </data>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>Maximum number of list elements</value>
+  </data>
   <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
     <value>Max number of answers</value>
   </data>
@@ -645,6 +654,12 @@
   </data>
   <data name="QuestionOrdered" xml:space="preserve">
     <value>Record answer order</value>
+  </data>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>Pattern</value>
+  </data>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>Upload new options</value>
   </data>
   <data name="QuestionUseSeparator" xml:space="preserve">
     <value>Use 1000 separator</value>
