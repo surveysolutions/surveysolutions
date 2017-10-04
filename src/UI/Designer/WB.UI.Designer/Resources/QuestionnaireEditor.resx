@@ -622,6 +622,9 @@
   <data name="Paste" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>Add option</value>
+  </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Cascading combo box</value>
   </data>
@@ -657,6 +660,9 @@
   </data>
   <data name="QuestionPattern" xml:space="preserve">
     <value>Pattern</value>
+  </data>
+  <data name="QuestionShowStrings" xml:space="preserve">
+    <value>Show strings</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
     <value>Upload new options</value>
@@ -735,5 +741,53 @@
   </data>
   <data name="VariableType" xml:space="preserve">
     <value>Variable type</value>
+  </data>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>A logical expression that activates(deactivates) the current item depending on the answers on the other questions.</value>
+  </data>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>A logical expression that is calculated depending on the answers on the other questions.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>Number of items determines the roster size. Each element of the list corresponds to a title of the roster row. Each element of the list should be placed on a separate line.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>By default, a disabled item is greyed-out. Checking this option will hide a disabled question or section on a tablet.</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+    <value>By default, an instruction text is shown on a tablet. Checking this option will show only the first line of instructions. Tapping on that line will show the complete text.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+    <value>Instruction text that will be attached to the question.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+    <value>This option allows the user to stamp the current time on tablet</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+    <value>Formatted entry for alpha-numerical values: phone numbers, ID codes, etc. Examples:"~" - Represents an alpha character (A-Z,a-z), "#" - Represents a numeric character (0-9), "*" - Represents an alphanumeric character (A-Z,a-z,0-9). "##/##/####" - date, "(###) ###-####" - phone number, "AA####" - flight number operated by American AirLines or "~*-###-~###"</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+    <value>Source question (answer generates number of rows)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+    <value>Titles of rows.</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+    <value>When checked, the numeric field on the tablet will be formatted as: d,ddd,ddd.dd, "d" represents digits (0-9), “,”(comma) is a thousand separator, and "." (dot) is a decimal point symbol.  Thousand separator and the decimal point symbol may vary for tablets with different cultures.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>A logical expression that validates an answer to the current question. Might include values of other questions.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Error message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Text that will be shown next to a variable for testing purposes</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>A text up to 80 characters that will be attached to the exported variable.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>
   </data>
 </root>

@@ -640,6 +640,9 @@
   <data name="Paste" xml:space="preserve">
     <value>Вставить</value>
   </data>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>Добавить опцию</value>
+  </data>
   <data name="QuestionCascading" xml:space="preserve">
     <value>Поле с каскадным списком</value>
   </data>
@@ -675,6 +678,9 @@
   </data>
   <data name="QuestionPattern" xml:space="preserve">
     <value>Маска</value>
+  </data>
+  <data name="QuestionShowStrings" xml:space="preserve">
+    <value>Показать строки</value>
   </data>
   <data name="QuestionUploadOptions" xml:space="preserve">
     <value>Загрузить опции</value>
@@ -753,5 +759,53 @@
   </data>
   <data name="VariableType" xml:space="preserve">
     <value>Тип переменной</value>
+  </data>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>Логическое выражение, которое включает (выключает) текущий объект в зависимости от ответов на другие вопросы.</value>
+  </data>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>Логическое выражение, вычисляемое на основании ответов на другие вопросы.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>Количество элементов определяет размер ростера. Каждый элемент в списке соответствует названию строки ростера. Каждый элемент списка необходимо расположить на новой строке.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>По умолчанию, выключенный элемент видим на экране. Включение этой опции полностью скроет элемент с экрана, если он выключен.</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+    <value>По умолчанию, инструкция полностью отображается на устройстве. Включение данной опции будет показывать только первую строку инструкции. Нажатие на неё покажет полный текст.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+    <value>Текст инструкции, который будет показан рядом с текстом вопроса.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+    <value>Эта опция позволяет пользователю записать текущее время на планшете.</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+    <value>Форматированный ввод для числового и символьного ввода: телефонные номера, идентификационные коды и т.д. Примеры:"~" - Представляет букву (А-Я,а-я), "#" - Представляет цифру (0-9), "*" - Представляет цифру либо букву (А-Я,а-я,0-9). "##/##/####" - дата, "(###) ###-####" - номер телефона, "AA####" - номер перелёта American AirLines или "~*-###-~###"</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+    <value>Вопрос источник (ответ генерирует соответствующее количество строк)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+    <value>Имена строк.</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+    <value>Когда включено, числовой вопрос на планшете будет отформатирован как: d,ddd,ddd.dd, "d" представляет из себя цифры (0-9), “,”(запятая) это разделитель тысячных, and "." (точка) разделитель дробной части. Разделители могут отличаться в зависимости от настроек планшета.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>Логическое выражение, которое проверяет ответ на текущий вопрос. Так же может использовать ответы на другие вопросы.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Сообщение об ошибке, которое отображается если результат вычисления условия дал результат "False" или возникла ошибка во время вычисления.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Текст, отображаемый во время тестирования опросника</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>Текст до {{maxLength}} символов, который будет использован для экспорта переменной.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Имена переменных и ростеров могут быть от {{minLength}} до {{maxLength}} символов и должны содержать только следующие символы: a-z, A-Z, _, или 0-9.  Первый символ не может быть 0-9 или _ и последний символ не может быть _.</value>
   </data>
 </root>
