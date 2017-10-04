@@ -94,7 +94,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             var clientGroupIdentity = this.GetClientGroupIdentity(questionIdentity, interview);
 
-            this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
+            if(clientGroupIdentity != null)
+                this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
         }
 
         public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
@@ -148,10 +149,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private string GetClientGroupIdentity(Identity identity, IStatefulInterview interview)
         {
-            return this.IsQuestionPrefield(identity, interview)
-                ? WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid())
-                : WebInterview.GetConnectedClientSectionKey(this.GetParentIdentity(identity, interview).ToString(),
-                    interview.Id.FormatGuid());
+            if(this.IsQuestionPrefield(identity, interview))
+            {
+                return WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid());
+            }
+
+            var parentIdentity = this.GetParentIdentity(identity, interview);
+
+            if (parentIdentity == null) return null;
+
+            return WebInterview.GetConnectedClientSectionKey(parentIdentity.ToString(), interview.Id.FormatGuid());            
         }
 
         private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
@@ -254,7 +261,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             var clientQuestionIdentity = this.GetClientGroupIdentity(question, interview);
 
-            this.webInterviewHubContext.Clients.Group(clientQuestionIdentity).refreshComment(question.ToString());
+            if (clientQuestionIdentity != null)
+                this.webInterviewHubContext.Clients
+                    .Group(clientQuestionIdentity).refreshComment(question.ToString());
         }
 
         public void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
