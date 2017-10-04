@@ -1,12 +1,13 @@
 ﻿angular.module('designerApp')
     .controller('TreeCtrl',
-        function ($rootScope, $scope, $state, $i18next, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
+        function ($rootScope, $scope, $state, $sce, $i18next, questionnaireService, commandService, verificationService, utilityService, confirmService, hotkeys, notificationService, $timeout) {
             'use strict';
             var me = this;
-
-            $scope.emptySectionAddQuestion = "<button class='btn' disabled type='button'>"+ $i18next.t('AddQuestion') +" </button>";
-            $scope.emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">"+ $i18next.t('AddSubsection') +" </button>";
-            $scope.emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + $i18next.t('Settings') + " </button>";
+            var emptySectionAddQuestion = "<button class='btn' disabled type='button'>"+ $i18next.t('AddQuestion') +" </button>";
+            var emptySectionAddSubsectionHtml = "<button class=\"btn\" disabled type=\"button\">"+ $i18next.t('AddSubsection') +" </button>";
+            var emptySectionSettingsHtml = "<button class=\"btn\" type=\"button\" disabled>" + $i18next.t('Settings') + " </button>";
+            $scope.emptySectionHtmlLine1 = $sce.trustAsHtml($i18next.t('EmptySectionLine2', {addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml}));
+            $scope.emptySectionHtmlLine2 = $sce.trustAsHtml($i18next.t('EmptySectionLine5', {settingsBtn: emptySectionSettingsHtml}))
 
             var scrollMode = {
                 makeVisible: "makeVisible",

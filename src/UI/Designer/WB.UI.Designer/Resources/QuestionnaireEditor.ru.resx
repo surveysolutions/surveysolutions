@@ -275,7 +275,7 @@
     <value>Макрос это именованное выражение, которое можно использовать в условиях и проверках. Он состоит из имени и содержимого.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
-    <value>Для использования макроса используйте {{substitution}}</value>
+    <value>Для использования макроса используйте {{-substitution}}</value>
   </data>
   <data name="SideBarMacroHideDescription" xml:space="preserve">
     <value>cкрыть описание</value>

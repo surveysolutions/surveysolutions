@@ -22,7 +22,7 @@
             }
         }
     }, function (err, t) {
-        console.log('resources loaded');
+        //console.log('resources loaded');
     });
 
     angular.module('designerApp', [
