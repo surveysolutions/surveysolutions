@@ -38,8 +38,8 @@
             }
         },
         methods: {
-            async answerIntegerQuestion(evnt) {
-                const answerString = await numerics().get($(evnt.target))
+            answerIntegerQuestion(evnt) {
+                const answerString = numerics.get($(evnt.target))
                 const answer = answerString != undefined && answerString != ''
                     ? parseInt(answerString)
                     : null
@@ -90,8 +90,8 @@
                     }
                 });
             },
-            removeAnswer() {
 
+            removeAnswer() {
                 if (!this.$me.isAnswered) {
                     return
                 }

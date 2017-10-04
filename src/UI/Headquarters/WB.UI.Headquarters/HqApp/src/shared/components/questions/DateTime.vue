@@ -27,7 +27,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import flatPickr from './ui/vue-flatpickr'
-    // import 'flatpickr/dist/flatpickr.css'
+    import 'flatpickr/dist/flatpickr.css'
     import * as format from "date-fns/format"
     import * as isSame from "date-fns/is_equal"
     import { DateFormats } from "../questions"

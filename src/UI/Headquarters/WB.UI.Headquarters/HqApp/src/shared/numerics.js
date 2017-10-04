@@ -1,4 +1,5 @@
 import "autonumeric"
+
 export default {
     init(el, settings) {
         $(el).autoNumeric("init", settings)

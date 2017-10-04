@@ -5,7 +5,7 @@ const baseDir = path.resolve(__dirname, baseAppPath);
 const devMode = process.env.NODE_ENV != 'production'; 
 var WebpackNotifierPlugin = require('webpack-notifier');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
-
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const merge = require('webpack-merge')
 
@@ -41,7 +41,13 @@ module.exports = {
                 test: /\.js$/,
                 include: path.resolve(baseDir, "src"),
                 use: ['babel-loader']
-            }
+            }, {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                  use: "css-loader"
+                })
+              }
+
             // , {
             //     test: /\.(js|vue)$/,
             //     loader: 'eslint-loader',
@@ -64,6 +70,8 @@ module.exports = {
         devMode ? null : new cleanWebpackPlugin(["dist/*.*"], {
             root: path.resolve(__dirname, baseAppPath)
         }),
+
+        new ExtractTextPlugin("styles.css"),
         
         devMode ? null : new webpack.optimize.CommonsChunkPlugin({
             name: 'common',
