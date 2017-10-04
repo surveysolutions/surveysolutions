@@ -50,6 +50,7 @@
         {
             "type": "npm",
             "script": "watch",
+            "isBackground": true,
             "problemMatcher": []
         }
     ]
