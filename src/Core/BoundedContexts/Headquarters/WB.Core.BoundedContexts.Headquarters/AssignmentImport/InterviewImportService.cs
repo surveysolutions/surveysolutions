@@ -218,7 +218,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             try
             {
-                if (!IsExistsQuestionnaire(questionnaireIdentity, out var questionnaireDocument))
+                var questionnaireId = new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString();
+                var browseItem = plainTransactionManagerProvider.GetPlainTransactionManager()
+                    .ExecuteInQueryTransaction(() => this.questionnaireBrowseItemStorage.GetById(questionnaireId));
+                var isQuestionnaireRemoved = browseItem == null || browseItem.IsDeleted;
+
+                if (isQuestionnaireRemoved)
                 {
                     this.Status.State.Errors.Add(new InterviewImportError
                     {
@@ -228,7 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     return;
                 }
 
-                this.Status.QuestionnaireTitle = questionnaireDocument.Title;
+                this.Status.QuestionnaireTitle = browseItem.Title;
 
                 if (records == null)
                 {
@@ -280,20 +285,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 FinishImportProcess();
             }
-        }
-
-        private bool IsExistsQuestionnaire(QuestionnaireIdentity questionnaireIdentity, out IQuestionnaire questionnaireDocument)
-        {
-            questionnaireDocument = null;
-            var questionnaireId = new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString();
-            var browseItem = plainTransactionManagerProvider.GetPlainTransactionManager()
-                .ExecuteInQueryTransaction(() => this.questionnaireBrowseItemStorage.GetById(questionnaireId));
-            if (browseItem == null || browseItem.IsDeleted)
-                return false;
-
-            questionnaireDocument = plainTransactionManagerProvider.GetPlainTransactionManager()
-                .ExecuteInQueryTransaction(() => this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null));
-            return questionnaireDocument != null;
         }
 
         private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle , string interviewImportProcessId,
