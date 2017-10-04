@@ -95,7 +95,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Properties\Roster.Designer.cs">
+    <Compile Update="Properties\Roster - Copy.Designer.cs">
+      <DependentUpon>Roster.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Properties\Roster - Copy.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Roster.resx</DependentUpon>
@@ -105,6 +110,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\VerificationMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -112,14 +122,25 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Roster.ru.resx">
+      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+      <LastGenOutput>Roster - Copy.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ExceptionMessages.resx">
       <CustomToolNamespace></CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\VerificationMessages.resx">
       <CustomToolNamespace></CustomToolNamespace>

@@ -90,7 +90,7 @@
                 $scope.activeQuestion.isInteger = (question.type === 'Numeric') ? question.isInteger : true;
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
-                $scope.activeQuestion.questionScope = question.isPreFilled ? 'Identifying' : question.questionScope;
+                $scope.activeQuestion.questionScope = _.find(question.allQuestionScopeOptions, {value: question.isPreFilled ? 'Identifying' : question.questionScope});
 
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
@@ -416,8 +416,8 @@
             }
 
             $scope.changeQuestionScope = function (scope) {
-                $scope.activeQuestion.questionScope = scope.text;
-                if ($scope.activeQuestion.questionScope === 'Identifying') {
+                $scope.activeQuestion.questionScope = scope;
+                if ($scope.activeQuestion.questionScope.value === 'Identifying') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
                 markFormAsChanged();
@@ -470,7 +470,7 @@
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
+                        if ($scope.activeQuestion.questionScope.value !== 'Interviewer' && $scope.activeQuestion.questionScope.value !== 'Hidden') {
                             $scope.activeQuestion.questionScope = 'Interviewer';
                             $scope.activeQuestion.optionsFilterExpression = null;
                         }
@@ -481,6 +481,9 @@
                 }
             });
 
+            var getQuestionScopeByValue = function(value){
+                return _.find($scope.activeQuestion.allQuestionScopeOptions, {value: value})
+            }
             $scope.$on('verifing', function () {
                 if ($scope.questionForm.$dirty)
                     $scope.saveQuestion(function() {
