@@ -56,7 +56,7 @@
             <div class="start-box" ng-if="showStartScreen()">
                 <p ng-i18next="EmptySectionLine1"></p>
                 <p>
-                    <span ng-i18next="[html]({addQuestionBtn: emptySectionAddQuestion, addSubsectionBtn: emptySectionAddSubsectionHtml})EmptySectionLine2">
+                    <span ng-bind-html="emptySectionHtmlLine1">
                     </span>
                     <br />
                     <span ng-i18next="[html]({panel: '&lt;span class=&quot;left-panel-glyph&quot;&gt;&lt;/span&gt;'})EmptySectionLine3"></span>
@@ -65,7 +65,7 @@
                 <p>
                     <span ng-i18next="EmptySectionLine4"></span>
                     <br />
-                    <span ng-i18next="[html]({settingsBtn: emptySectionSettingsHtml})EmptySectionLine5"></span>
+                    <span ng-bind-html="emptySectionHtmlLine2"></span>
                 </p>
             </div>
         </div>
