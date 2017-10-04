@@ -58,6 +58,7 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
+using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;

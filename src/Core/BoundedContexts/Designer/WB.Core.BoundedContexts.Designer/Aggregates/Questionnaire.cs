@@ -622,8 +622,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
-
             if (this.innerDocument.LookupTables.ContainsKey(command.LookupTableId))
             {
                 throw new QuestionnaireException(DomainExceptionType.LookupTableAlreadyExist, ExceptionMessages.LookupTableAlreadyExist);
@@ -639,7 +637,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateLookupTable(UpdateLookupTable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.LookupTableId, command.LookupTableName, DefaultVariableLengthLimit);
 
             if (command.OldLookupTableId.HasValue)
             {
@@ -678,8 +675,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
-
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName, DefaultVariableLengthLimit);
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
@@ -744,8 +739,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
-
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(groupId, variableName, DefaultVariableLengthLimit);
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
@@ -1690,7 +1683,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
             this.ThrowDomainExceptionIfVariableLabelContainsSubstitution(command.VariableData.Label);
 
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
@@ -1710,7 +1702,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(command.EntityId, command.VariableData.Name, DefaultVariableLengthLimit);
             this.ThrowDomainExceptionIfVariableLabelContainsSubstitution(command.VariableData.Label);
 
             var oldVariable = this.innerDocument.Find<IVariable>(command.EntityId);
@@ -1961,8 +1952,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(questionType)
                 ? DefaultRestrictedVariableLengthLimit
                 : DefaultVariableLengthLimit;
-
-            this.ThrowDomainExceptionIfVariableNameIsInvalid(questionId, variableName, variableLengthLimit);
 
             this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, isPrefilled, parentGroup);
 

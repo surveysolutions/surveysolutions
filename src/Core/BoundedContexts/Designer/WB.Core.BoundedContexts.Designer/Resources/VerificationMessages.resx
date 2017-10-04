@@ -354,8 +354,8 @@
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
     <value>Only one GPS question could be marked as identifying</value>
   </data>
-  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
-    <value>Multi select yes/no question can't be linked</value>
+  <data name="WB0007_" xml:space="preserve">
+    <value />
   </data>
   <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
     <value>Multi select question supports only integer values in range from {0} to {1}</value>
@@ -507,8 +507,8 @@
   <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
     <value>Question is too short. This might be an incomplete question.</value>
   </data>
-  <data name="WB0114_SingleOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Single select question supports only integer values in range from {0} to {1}</value>
+  <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Categorical question supports only integer values in range from {0} to {1}</value>
   </data>
   <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
     <value>Fix roster supports only integer title values</value>

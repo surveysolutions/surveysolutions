@@ -582,7 +582,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
                     Create.MultipleOptionsQuestion(questionId: Guid.Parse("11111111111111111111111111111111")),
-                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111"), children: new []
+                    Create.Roster(rosterSizeQuestionId: Guid.Parse("11111111111111111111111111111111"), rosterType: RosterSizeSourceType.Question, children: new []
                     {
                         Create.Question(enablementCondition: "@rowindex > 2"),
                     }),
