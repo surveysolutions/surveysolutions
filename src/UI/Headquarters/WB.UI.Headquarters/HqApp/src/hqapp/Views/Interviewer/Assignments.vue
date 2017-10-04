@@ -9,10 +9,7 @@
 export default {
     computed: {
         title() {
-            return this.config.title
-        },
-        config() {
-            return this.$store.state.config
+            return this.$config.title
         },
         dataTable() {
             return this.$refs.table.table
@@ -24,7 +21,7 @@ export default {
                 order: [[4, 'desc']],
                 columns: this.getTableColumns(),
                 ajax: {
-                    url: this.config.assignmentsEndpoint,
+                    url: this.$config.assignmentsEndpoint,
                     type: "GET",
                     contentType: 'application/json'
                 },
@@ -104,7 +101,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data);
-                        return date.local().format(self.config.dateFormat);
+                        return date.local().format(self.$config.dateFormat);
                     }
                 },
                 {
@@ -114,7 +111,7 @@ export default {
                     searchable: false,
                     render: function (data) {
                         var date = moment.utc(data);
-                        return date.local().format(self.config.dateFormat);
+                        return date.local().format(self.$config.dateFormat);
                     }
                 }]
 

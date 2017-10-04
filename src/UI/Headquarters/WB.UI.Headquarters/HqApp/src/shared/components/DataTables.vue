@@ -25,8 +25,7 @@ import 'datatables.net'
 import 'datatables.net-select'
 import 'jquery-contextmenu'
 import 'jquery-highlight'
-import './searchHighlight'
-import './conditionalPaging'
+import './datatable.plugins'
 
 var checkBox =
     _.template(

@@ -1,3 +1,4 @@
+
 export const virtualPath = INTERVIEW_APP_CONFIG.virtualPath
 export const imageUploadUri = INTERVIEW_APP_CONFIG.imageUploadUri
 export const audioUploadUri = INTERVIEW_APP_CONFIG.audioUploadUri

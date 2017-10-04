@@ -23,6 +23,9 @@ Vue.use(VueI18n, {
     }
 })
 
+import config from "shared/config"
+Vue.use(config)
+
 import * as poly from "smoothscroll-polyfill"
 poly.polyfill()
 
