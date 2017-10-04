@@ -27,7 +27,7 @@
                         <a href="mailto:{{s.email}}">{{s.email}}</a> -
                         <div class="btn-group">
                             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" ng-if="!s.isOwner">
-                               {{ 'SettingsCan' | i18next }} {{s.shareType}}<span class="caret"></span>
+                               {{ 'SettingsCan' | i18next }} {{ getShareType(s.shareType).text}}<span class="caret"></span>
                             </button>
                             <a href="javascript:void(0);" ng-if="s.isOwner" class="owner"><i ng-i18next="SettingsOwner"></i></a>
                             <ul class="dropdown-menu" role="menu">
@@ -54,14 +54,14 @@
                 <div class="form-group vertical-top">
                     <div class="btn-group dropup">
                         <button type="button" class="btn btn-link" data-toggle="dropdown" name="shareType" id="Share-type">
-                            {{viewModel.shareType}}
+                            {{viewModel.shareType.text}}
                             <span class="caret"></span>
                         </button>
 
                         <ul class="dropdown-menu " role="menu" aria-labelledby="dropdownMenu1">
                             <li role="presentation" ng-repeat="shareType in shareTypeOptions">
                                 <a role="menuitem" tabindex="-1" href="javascript:void(0);" ng-click="changeShareType(shareType)">
-                                    {{shareType.name}}
+                                    {{shareType.text}}
                                 </a>
                             </li>
                         </ul>
