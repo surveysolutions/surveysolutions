@@ -4,7 +4,7 @@
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Questionnaire')">
                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
-                           :values="questionnaires"
+                           :values="$config.questionnaires"
                            :value="questionnaireId"
                            noSearch
                            @selected="selectQuestionnaire" />
@@ -76,20 +76,9 @@ export default {
     },
 
     computed: {
-        statuses() {
-            return this.config.statuses
-        },
-
-        questionnaires() {
-            return this.config.questionnaires
-        },
 
         title() {
-            return this.config.title;
-        },
-
-        config() {
-            return this.$store.state.config;
+            return this.$config.title;
         },
 
         tableOptions() {
@@ -99,7 +88,7 @@ export default {
                 deferLoading: 0,
                 columns: this.getTableColumns(),
                 ajax: {
-                    url: this.config.allInterviews,
+                    url: this.$config.allInterviews,
                     type: "GET"
                 },
                 select: {
@@ -171,7 +160,7 @@ export default {
 
             self.$refs.confirmRestart.promt(ok => {
                 if (ok) {
-                    $.post(this.config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, () => {
+                    $.post(this.$config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, () => {
                         self.restart_comment = "";
                         self.$store.dispatch("openInterview", interviewId);
                     })
@@ -183,7 +172,7 @@ export default {
         },
 
         addFilteringParams(data) {
-            data.statuses = this.statuses;
+            data.statuses = this.$config.statuses;
 
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId.key;
