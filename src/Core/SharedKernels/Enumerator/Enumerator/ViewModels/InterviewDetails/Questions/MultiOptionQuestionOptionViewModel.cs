@@ -12,5 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public int Value { get; set; }
 
         public QuestionStateViewModel<MultipleOptionsQuestionAnswered> QuestionState { get; set; }
+
+        public string ItemTag => this.QuestionViewModel.QuestionIdentity + "_Opt_" + Value;
     }
 }

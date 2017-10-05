@@ -63,6 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions); }
         }
 
+        public Identity QuestionIdentity => this.Identity;
+
         IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
 
         public bool HasOptions => this.Options.Any();
