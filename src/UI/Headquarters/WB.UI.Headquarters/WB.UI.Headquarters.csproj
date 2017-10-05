@@ -788,9 +788,6 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
     <Content Include="fonts\fontawesome-webfont.woff" />
-    <Content Include="..\WB.UI.Headquarters.Interview\_IndexTemplate.cshtml">
-      <Link>Views\WebInterview\_IndexTemplate.cshtml</Link>
-    </Content>
     <EmbeddedResource Include="Resources\Archived.fr.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
@@ -1523,6 +1520,8 @@
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <Content Include="Views\Assignments\index.cshtml" />
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
+    <Content Include="Views\Shared\_MainLayoutWebInterview.cshtml" />
+    <Content Include="Views\WebInterview\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1536,6 +1535,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="webdeploy.targets" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
@@ -2100,75 +2100,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Target Name="Cleanup HqApp" BeforeTargets="BeforeRebuild" Condition="'$(NCrunch)' != '1'">
-    <Message Text="Cleaning up HQ App" />
-    <ItemGroup>
-      <FilesToDelete Include="HqApp\dist\**\*.js" />
-    </ItemGroup>
-    <Delete Files="@(FilesToDelete)" />
-  </Target>
-  <!-- HQ APP -->
-  <Target Name="RestoreHqAppDeps" BeforeTargets="RunWebpackDev" Condition=" '$(NCrunch)' != '1' And '$(Configuration)' == 'Debug' ">
-    <Message Importance="high" Text="Restoring HQ App npm deps" />
-    <Exec Command="yarn --version" ContinueOnError="true">
-      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
-    </Exec>
-    <Exec Command="yarn --ignore-scripts" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' == '0'" />
-    <Exec Command="npm install" WorkingDirectory="HqApp" Condition="'$(ErrorCode)' != '0'" />
-  </Target>
-  <Target Name="RunWebpackDev" AfterTargets="AfterBuild" Condition="  '$(NCrunch)' != '1' And '$(Configuration)' == 'Debug' And !Exists('HqApp\dist\app.bundle.js') ">
-    <Message Importance="high" Text="Performing dev Webpack build..." />
-    <Exec Command="npm run dev -- --no-color" WorkingDirectory="HqApp" />
-  </Target>
-  <!-- /HQ APP -->
-  <Target Name="CollectWebInterviewView" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <ItemGroup>
-      <CollectWebInterviewView_CustomFiles Include="Views\WebInterview\**\*" />
-      <FilesForPackagingFromProject Include="%(CollectWebInterviewView_CustomFiles.Identity)">
-        <DestinationRelativePath>Views\WebInterview\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target>
-  <Target Name="CollecHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <ItemGroup>
-      <CollecHqApp_CustomFiles Include="HqApp\dist\**\*.js" />
-      <FilesForPackagingFromProject Include="%(CollecHqApp_CustomFiles.Identity)">
-        <DestinationRelativePath>HqApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target>
-  <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <ItemGroup>
-      <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.*" />
-      <FilesForPackagingFromProject Include="%(CollecHqDeps_CustomFiles.Identity)">
-        <DestinationRelativePath>Dependencies\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target>
-  <Target Name="CollectWebInterviewAppFiles" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <ItemGroup>
-      <CollectWebInterviewAppFiles_CustomFiles Include="InterviewApp\**\*" />
-      <FilesForPackagingFromProject Include="%(CollectWebInterviewAppFiles_CustomFiles.Identity)">
-        <DestinationRelativePath>InterviewApp\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target>
-  <Target Name="CustomCollectFilesToExternals" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <ItemGroup>
-      <CustomCollectFilesToExternals_CustomFiles Include="Externals\**\*" />
-      <FilesForPackagingFromProject Include="%(CustomCollectFilesToExternals_CustomFiles.Identity)">
-        <DestinationRelativePath>Client\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target>
-  <Target Name="CollectVendorFileFonts" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
-    <ItemGroup>
-      <CollectVendorFileFonts_CustomFiles Include="Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\*" />
-      <FilesForPackagingFromProject Include="%(CollectVendorFileFonts_CustomFiles.Identity)">
-        <DestinationRelativePath>Dependencies\vendor\bootstrap-sass\assets\fonts\bootstrap\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-    </ItemGroup>
-  </Target>
+  <Import Project="webdeploy.targets" />
   <Target Name="CollectFilesFromBin_x64" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <Message Text="Copying sqlite x64" Importance="high" />
     <ItemGroup>
