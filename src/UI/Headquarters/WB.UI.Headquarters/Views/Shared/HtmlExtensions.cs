@@ -135,10 +135,16 @@ namespace ASP
         
         public static IHtmlString RenderHqConfig(this HtmlHelper helper, object model, string title = null)
         {
-            var titleString = title ?? helper.ViewBag.Title ?? null;
-            return new HtmlString($@"<script>{
-                    (string.IsNullOrWhiteSpace(titleString) ?"window.CONFIG.title=" : string.Empty)
-                }window.CONFIG.model={model.AsJsonValue() }</script>");
+            string titleString = title ?? (string) helper.ViewBag.Title?.ToString() ?? null;
+
+            string script = "";
+
+            if (!string.IsNullOrWhiteSpace(titleString))
+            {
+                script += $"window.CONFIG.title='{titleString}'";
+            }
+
+            return new HtmlString($@"<script>{script};window.CONFIG.model={ model.AsJsonValue() }</script>");
         }
     }
 }

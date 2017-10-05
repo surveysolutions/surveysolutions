@@ -4,7 +4,7 @@
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Questionnaire')">
                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
-                           :values="config.model.questionnaires"
+                           :values="$config.model.questionnaires"
                            :value="questionnaireId"
                            noSearch
                            @selected="selectQuestionnaire" />
