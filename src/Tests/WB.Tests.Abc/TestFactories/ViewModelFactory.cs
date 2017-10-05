@@ -43,6 +43,14 @@ namespace WB.Tests.Abc.TestFactories
                 interviewRepository: interviewRepository,
                 substitutionService: Create.Service.SubstitutionService());
 
+        public ErrorMessageViewModel ErrorMessageViewModel(
+            ILiteEventRegistry eventRegistry = null,
+            IStatefulInterviewRepository interviewRepository = null)
+            => new ErrorMessageViewModel(
+                eventRegistry ?? Create.Service.LiteEventRegistry(),
+                interviewRepository: interviewRepository,
+                substitutionService: Create.Service.SubstitutionService());
+
         public EnumerationStageViewModel EnumerationStageViewModel(
             IInterviewViewModelFactory interviewViewModelFactory = null,
             IQuestionnaireStorage questionnaireRepository = null,
@@ -75,6 +83,10 @@ namespace WB.Tests.Abc.TestFactories
             Mock.Get(dynamicTextViewModelFactory)
                 .Setup(factory => factory.CreateDynamicTextViewModel())
                 .Returns(() => Create.ViewModel.DynamicTextViewModel(
+                    interviewRepository: interviewRepository));
+            Mock.Get(dynamicTextViewModelFactory)
+                .Setup(factory => factory.CreateErrorMessage())
+                .Returns(() => Create.ViewModel.ErrorMessageViewModel(
                     interviewRepository: interviewRepository));
 
             return new ErrorMessagesViewModel(dynamicTextViewModelFactory);
