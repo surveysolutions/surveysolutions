@@ -9,14 +9,15 @@
     ViewBag.ActivePage = MenuItem.CreateNew;
     Layout = @"~/Views/Shared/_MainLayoutHq.cshtml";
 }
-
-<div id="vueApp" configuration="@JsonConvert.SerializeObject(
-new {
-    basePath = Url.Content(@"~/"),
-    title = @MainMenu.CreateNew,
-    dateFormat = @WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat,
-    assignmentsEndpoint = Url.Content(@"~/api/Assignments"),
-    interviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
-    authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>(),
-    resources = new[] {MainMenu.ResourceManager, Assignments.ResourceManager, Common.ResourceManager, Pages.ResourceManager}.Translations()
-})"></div>
+@section scripts {
+    <script>
+        window.CONFIG.title = '@MainMenu.CreateNew';
+        window.CONFIG.assignmentsEndpoint = '@Url.Content(@"~/api/Assignments")';
+        window.CONFIG.interviewerHqEndpoint = '@Url.Content(@"~/interviewerHq")';
+        window.CONFIG.resources = @Html.Raw(@JsonConvert.SerializeObject(
+                                 new[] { MainMenu.ResourceManager, Assignments.ResourceManager, Common.ResourceManager, Pages.ResourceManager }.Translations()
+                                 ));
+        
+    </script>
+}
+<div id="vueApp"></div>

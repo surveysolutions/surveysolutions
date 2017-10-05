@@ -60,13 +60,13 @@ try {
             Move-Item ".\dist\stats.vendor.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
         }}
 
-        BuildStaticContent "Web Interview" 'src\UI\Headquarters\WB.UI.Headquarters.Interview' | % { if (-not $_) { 
-            Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
-            Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
-            Exit
-        } else {
-            Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\stats\WebInterview.html" -ErrorAction SilentlyContinue
-        }}
+        # BuildStaticContent "Web Interview" 'src\UI\Headquarters\WB.UI.Headquarters.Interview' | % { if (-not $_) { 
+        #     Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
+        #     Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
+        #     Exit
+        # } else {
+        #     Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\stats\WebInterview.html" -ErrorAction SilentlyContinue
+        # }}
 
         Compress-Archive -Path "$artifactsFolder\stats\*.*" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal
         Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue

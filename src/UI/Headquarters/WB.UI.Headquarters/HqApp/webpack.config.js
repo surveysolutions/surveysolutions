@@ -1,83 +1,35 @@
 const webpack = require('webpack')
-const path = require('path')
-const baseAppPath = "./"
 const devMode = process.env.NODE_ENV != 'production';
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const path = require("path")
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-console.log("Building HQ UI js in " + (devMode ? "DEVELOPMENT" : "PRODUCTION") + " mode.")
+const merge = require('webpack-merge')
+const hqViewsFolder = path.resolve(__dirname, "..", "Views")
 
-var fs = require('fs');
-if (!fs.existsSync(path.join(baseAppPath, "./dist/vendor.bundle.js"))) {
-    const { execSync } = require('child_process');
-    console.log("Build missing `vendor.bundle.js`")
-    execSync('npm run vendor')
-}
+console.log(`Building HQ UI js in ${(devMode ? "DEVELOPMENT" : "PRODUCTION")} mode.`)
 
-var manifest = require("./dist/vendor.manifest.json");
+var commonConfig = require("./.build/webpack.common")
 
-module.exports = {
+var webpackConfig = merge(commonConfig, {
     entry: {
-        "app": baseAppPath + "app/main.js"
-    },
-    output: {
-        path: __dirname,
-        filename: path.join(baseAppPath, "./dist/[name].bundle.js")
-    },
-    resolve: {
-        modules: [
-            path.join(__dirname, "node_modules"),
-            path.join(__dirname, "app")
-        ],
-        extensions: ['.js', '.vue', '.json'],
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
-    },
-
-    stats: { chunks: false },
-
-    devtool: '#source-map',//  '#cheap-module-eval-source-map'
-
-    module: {
-        rules: [
-            {
-                test: /\.vue$/,
-                include: path.resolve(__dirname, "app"),
-                use: [{ loader: 'vue-loader', options: { loaders: { js: 'babel-loader' } } }]
-            }, {
-                test: /\.js$/,
-                include: path.resolve(__dirname, "app"),
-                use: ['babel-loader']
-            } , {
-                test: /\.(js|vue)$/,
-                loader: 'eslint-loader',
-                enforce: 'pre',
-                options: {
-                    formatter: require('eslint-friendly-formatter')
-                }
-            }
-        ]
+        hqapp: "./src/hqapp/main.js",        
+        webinterview: "./src/webinterview/main.js"
     },
     plugins: [
-        new webpack.DllReferencePlugin({
-            manifest
+        new HtmlWebpackPlugin({
+            inject: false,
+            filename: path.resolve(hqViewsFolder, "shared", "partial.webInterview.cshtml"),
+            excludeChunks: ["hqapp"],
+            template: '!!handlebars-loader!src/template.hbs'
         }),
 
-        new webpack.ProvidePlugin({
-            _: 'lodash',
-            '$': "jquery",
-            "jQuery": 'jquery',
-            'moment': 'moment'
-        }),
+        new HtmlWebpackPlugin({
+            inject: false,
+            filename: path.resolve(hqViewsFolder, "shared", "partial.hq.cshtml"),
+            excludeChunks: ["webinterview"],
+            template: '!!handlebars-loader!src/template.hbs'
+        })
+    ]
+})
 
-        new BundleAnalyzerPlugin({
-            analyzerMode: 'static',
-            reportFilename: 'dist/stats.html',
-            defaultSizes: 'gzip',
-            openAnalyzer: false,
-            statsOptions: { chunkModules: true, assets: true },
-        }),
-
-        new webpack.optimize.ModuleConcatenationPlugin()
-    ].filter(x => x != null)
-}
+module.exports = webpackConfig

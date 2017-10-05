@@ -10,23 +10,16 @@
             "problemMatcher": []
         },
         {
-            "type": "npm",
-            "script": "watch",
-            "isBackground": true,
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "dev",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "npm",
-            "script": "production",
+            "taskName": "Vendor: Shared",
+            "type": "process",
+            "command": "yarn",
+            "args": [
+                "run",
+                "vendor"
+            ],
+            "options": {
+                "cwd": "./src/shared"
+            },
             "problemMatcher": []
         },
         {
@@ -35,9 +28,29 @@
             "problemMatcher": []
         },
         {
-            "label": "rebuild",
             "type": "npm",
-            "script": "rebuild",
+            "script": "dev",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "production",
+            "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "watch",
+            "isBackground": true,
             "problemMatcher": []
         }
     ]
