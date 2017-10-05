@@ -15,7 +15,7 @@ const gulp = require('gulp'),
     glob = require('glob'),
     es = require('event-stream');
 
-    // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
+// error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
  * Usage:
@@ -41,44 +41,9 @@ function wrapPipe(taskFn) {
     }
 }
 
-var config = {
+const config = {
     production: !!util.env.production,
     bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
-    sourceFiles: [
-        'node_modules/jquery/dist/jquery.js',
-        'node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss',
-        'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
-        'node_modules/knockout/dist/knockout.js',
-        'node_modules/knockout-mapping/build/output/knockout.mapping-latest.js',
-        'node_modules/moment/min/moment-with-locales.min.js',
-        'node_modules/lodash/lodash.js',
-        'node_modules/datatables.net/js/jquery.dataTables.js',
-        'node_modules/datatables.net-select/js/dataTables.select.js',
-        'node_modules/pnotify/dist/pnotify.css',
-        'node_modules/pnotify/dist/pnotify.js',
-        'node_modules/pnotify/dist/pnotify.animate.js',
-        'node_modules/pnotify/dist/pnotify.brighttheme.css',
-        'node_modules/pnotify/dist/pnotify.buttons.css',
-        'node_modules/pnotify/dist/pnotify.buttons.js',
-        'node_modules/pnotify/dist/pnotify.callbacks.js',
-        'node_modules/pnotify/dist/pnotify.confirm.js',
-        'node_modules/pnotify/dist/pnotify.desktop.js',
-        'node_modules/pnotify/dist/pnotify.history.css',
-        'node_modules/pnotify/dist/pnotify.history.js',
-        'node_modules/pnotify/dist/pnotify.mobile.css',
-        'node_modules/pnotify/dist/pnotify.mobile.js',
-        'node_modules/pnotify/dist/pnotify.nonblock.js',
-        'node_modules/bootstrap-select/less/bootstrap-select.less',
-        'node_modules/bootstrap-select/dist/css/bootstrap-select.css',
-        'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
-        'node_modules/jQuery-contextMenu/dist/jquery.contextMenu.js',
-        'node_modules/jQuery-contextMenu/dist/jquery.contextMenu.css',
-        'node_modules/jquery-highlight/jquery.highlight.js',
-        'node_modules/flatpickr/dist/flatpickr.js',
-        'node_modules/flatpickr/dist/flatpickr.css',
-        'node_modules/datatables.net-responsive/js/dataTables.responsive.js',
-        'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js'
-    ],
     fontsDir: './fonts',
     buildDir: './build',
     buildDistDir: './dist',
@@ -106,7 +71,49 @@ var config = {
     cssAppInject: 'cssApp',
     cssLibsInject: 'cssLibs',
     jsLibsInject: 'jsLibs'
-};
+}
+
+config.sourceFiles = [
+    'node_modules/jquery/dist/jquery.js',
+    'node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss',
+    'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
+    config.production
+        ? 'node_modules/knockout/build/output/knockout-latest.js'
+        : 'node_modules/knockout/build/output/knockout-latest.debug.js',
+    config.production
+        ? 'node_modules/knockout-mapping/dist/knockout.mapping.min.js'
+        : 'node_modules/knockout-mapping/dist/knockout.mapping.js',
+    'node_modules/moment/min/moment-with-locales.min.js',
+    'node_modules/lodash/lodash.js',
+    'node_modules/datatables.net/js/jquery.dataTables.js',
+    config.production
+        ? 'node_modules/datatables.net-select/js/dataTables.select.min.js'
+        : 'node_modules/datatables.net-select/js/dataTables.select.js',
+    'node_modules/pnotify/dist/pnotify.css',
+    'node_modules/pnotify/dist/pnotify.js',
+    'node_modules/pnotify/dist/pnotify.animate.js',
+    'node_modules/pnotify/dist/pnotify.brighttheme.css',
+    'node_modules/pnotify/dist/pnotify.buttons.css',
+    'node_modules/pnotify/dist/pnotify.buttons.js',
+    'node_modules/pnotify/dist/pnotify.callbacks.js',
+    'node_modules/pnotify/dist/pnotify.confirm.js',
+    'node_modules/pnotify/dist/pnotify.desktop.js',
+    'node_modules/pnotify/dist/pnotify.history.css',
+    'node_modules/pnotify/dist/pnotify.history.js',
+    'node_modules/pnotify/dist/pnotify.mobile.css',
+    'node_modules/pnotify/dist/pnotify.mobile.js',
+    'node_modules/pnotify/dist/pnotify.nonblock.js',
+    'node_modules/bootstrap-select/less/bootstrap-select.less',
+    'node_modules/bootstrap-select/dist/css/bootstrap-select.css',
+    'node_modules/bootstrap-select/dist/js/bootstrap-select.js',
+    'node_modules/jQuery-contextMenu/dist/jquery.contextMenu.js',
+    'node_modules/jQuery-contextMenu/dist/jquery.contextMenu.css',
+    'node_modules/jquery-highlight/jquery.highlight.js',
+    'node_modules/flatpickr/dist/flatpickr.js',
+    'node_modules/flatpickr/dist/flatpickr.css',
+    'node_modules/datatables.net-responsive/js/dataTables.responsive.js',
+    'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js'
+];
 
 gulp.task('move-bootstrap-fonts', wrapPipe(function (success, error) {
     return gulp.src(config.bootstrapFontFiles)
@@ -137,7 +144,8 @@ gulp.task('styles.webinterview', ['move-bootstrap-fonts'], wrapPipe(function (su
 
 gulp.task('libsJs', wrapPipe((success, error) => {
     return gulp.src(config.sourceFiles)
-        .pipe(plugins.filter(['**/*.js', '!**/vue*.js', '!**/vee*.js']))
+        .pipe(plugins.filter(['**/*.js']))
+        // .pipe(debug())
         .pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
@@ -191,7 +199,7 @@ gulp.task('inject', ['styles', 'libsCss', 'libsJs'], wrapPipe(function (success,
 
         return tasks;
     }
- 
+
     return util.noop();
 }));
 

@@ -34,24 +34,14 @@
     "pnotify": "^3.2.1",
     "vinyl-source-stream": "^1.1.0"
   },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
-  },
   "scripts": {
-    "bower": "node_modules\\.bin\\bower install",
-    "bower-force": "node_modules\\.bin\\bower install --force",
-    "gulp": "node_modules\\.bin\\gulp",
-    "production": "gulp --production",
-    "preproduction": "bower install --force"
+    "gulp": "gulp",
+    "production": "gulp --production"
   },
   "dependencies": {
-    "browserify": "^14.1.0",
     "datatables.net-responsive": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-install": "^1.1.0",
-    "gulp-main-bower-files": "^1.6.0",
     "knockout": "^3.4.2",
     "knockout-mapping": "^2.6.0"
   }
