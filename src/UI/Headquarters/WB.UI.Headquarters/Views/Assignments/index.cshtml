@@ -5,4 +5,11 @@
     ViewBag.Title = Pages.Assignments_PageTitle;
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
-<div id="vueApp" configuration="@JsonConvert.SerializeObject(Model) "></div>
+@section scripts {
+    <script>
+        window.CONFIG.assignments = @Model.AsJsonValue();
+            
+    </script>
+}
+
+<div id="vueApp"></div>
