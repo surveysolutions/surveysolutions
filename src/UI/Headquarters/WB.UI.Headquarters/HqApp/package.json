@@ -5,9 +5,7 @@
   "scripts": {
     "watch": "webpack --color --watch --hide-modules",
     "dev": "webpack --color --hide-modules --progress",
-    "production": "cross-env NODE_ENV=production npm run rebuild",
-    "vendor": "webpack --config webpack.vendor.config.js --color --hide-modules",
-    "rebuild": "npm run dev"
+    "production": "cross-env NODE_ENV=production webpack --hide-modules"
   },
   "author": "World Bank Group",
   "license": "ISC",

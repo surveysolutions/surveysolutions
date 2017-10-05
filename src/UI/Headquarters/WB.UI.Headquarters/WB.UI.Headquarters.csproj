@@ -1127,8 +1127,6 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Dependencies\css\markup.scss" />
-    <Content Include="Dependencies\.bowerrc" />
-    <Content Include="Dependencies\bower.json" />
     <Content Include="Dependencies\package.json" />
     <Content Include="Dependencies\css\_add-interviews.scss" />
     <Content Include="Dependencies\css\_batch-upload.scss" />
@@ -1506,7 +1504,6 @@
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\Shared\typeahead.cshtml" />
     <Content Include="Views\Shared\_MainLayoutVue.cshtml" />
-    <Content Include="Views\Assignments\assignmentslist.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\SurveySetup\InterviewVerificationProgress.cshtml" />
