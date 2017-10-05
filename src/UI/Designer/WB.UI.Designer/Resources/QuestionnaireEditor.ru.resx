@@ -875,4 +875,7 @@
     <value>Имя опросника:</value>
     <comment>Имя опросника:</comment>
   </data>
+  <data name="DeleteConfirmQuestion" xml:space="preserve">
+    <value>Вы уверены,что хотите удалить "{{trimmedTitle}}"?</value>
+  </data>
 </root>
