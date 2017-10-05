@@ -218,9 +218,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             try
             {
-                var questionnaireId = new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version).ToString();
                 var browseItem = plainTransactionManagerProvider.GetPlainTransactionManager()
-                    .ExecuteInQueryTransaction(() => this.questionnaireBrowseItemStorage.GetById(questionnaireId));
+                    .ExecuteInQueryTransaction(() => this.questionnaireBrowseItemStorage.GetById(questionnaireIdentity.ToString()));
                 var isQuestionnaireRemoved = browseItem == null || browseItem.IsDeleted;
 
                 if (isQuestionnaireRemoved)
