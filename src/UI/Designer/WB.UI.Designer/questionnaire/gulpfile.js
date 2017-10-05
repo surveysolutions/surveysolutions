@@ -5,13 +5,13 @@ var mainBowerFiles = require('main-bower-files');
 var runSequence = require('run-sequence');
 var concat = require('gulp-concat');
 var debug = require('gulp-debug');
+var appendPrepend = require('gulp-append-prepend');
 
 var minifyHTML = require('gulp-htmlmin');
 var templateCache = require("gulp-angular-templatecache");
 
 var paths = {
   scripts: ['details/scripts/**/*.js'],
-  styles: ['content/markup.css.less'],
   htmls: ['details/views/**/*.html']
 };
 
@@ -19,9 +19,10 @@ gulp.task('clean', function	(){
 	return gulp.src('build/*')
 		.pipe(plugins.clean());
 });
-
+//@icon-font-path: "/fonts/";
 gulp.task("styles", function(){
-	return gulp.src(paths.styles)
+  return gulp.src('content/markup.css.less')
+      .pipe(appendPrepend.appendText('@icon-font-path: "/fonts/";'))
 	    .pipe(plugins.less({
 	    	relativeUrls: true
 	    }))
