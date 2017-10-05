@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
     {
         Establish context = () =>
         {
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder);
+            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             var sessionProvider = Mock.Of<ISessionProvider>(x => x.GetSession() == Mock.Of<ISession>(y => y.Transaction == Mock.Of<ITransaction>() && y.Connection == pgSqlConnection));
