@@ -1,14 +1,14 @@
 ﻿(function() {
     angular.module('designerApp').factory('confirmService', [
-        '$uibModal',
-        function ($uibModal) {
+        '$uibModal', '$i18next',
+        function ($uibModal, $i18next) {
             var confirmService = {};
 
             confirmService.open = function (item) {
                 var scopeItem = {
                     title: item.title || "",
-                    okButtonTitle: item.okButtonTitle || "DELETE",
-                    cancelButtonTitle: item.cancelButtonTitle || "BACK TO DESIGNER",
+                    okButtonTitle: item.okButtonTitle || $i18next.t("Delete"),
+                    cancelButtonTitle: item.cancelButtonTitle || $i18next.t("Cancel"),
                     isReadOnly: item.isReadOnly || false
                 };
                 return $uibModal.open({
