@@ -66,7 +66,7 @@ namespace WB.UI.Designer.Code
 
         private void SerializeToStream(object value, Type type, Stream stream, Version headquartersVersion)
         {
-            using (var writer = new StreamWriter(stream))
+            using (var writer = new StreamWriter(stream, new UTF8Encoding(false, true), 1024, true))
             using (var jsonWriter = new JsonTextWriter(writer))
             {
                 JsonSerializer.Create(CreateJsonSerializerSettings(headquartersVersion)).Serialize(jsonWriter, value, type);
