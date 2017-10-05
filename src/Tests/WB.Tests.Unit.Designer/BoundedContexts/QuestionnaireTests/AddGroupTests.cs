@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -16,27 +15,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void SetUp()
         {
             AssemblyContext.SetupServiceLocator();
-        }
-
-        [TestCase("")]
-        [TestCase("   ")]
-        [TestCase("\t")]
-        public void NewAddGroup_When_groups_title_is_empty_or_whitespaces_Then_throws_DomainException(string emptyTitle)
-        {
-            // arrange
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-
-            // act
-            TestDelegate act =
-                () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(Guid.NewGuid(), responsibleId: responsibleId, title: emptyTitle, variableName: null, rosterSizeQuestionId: null,
-                        description: null, condition: null, hideIfDisabled:false, parentGroupId: null, isRoster: false,
-                        rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupTitleRequired));
         }
 
         [Test]
@@ -168,72 +146,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // assert
             Assert.DoesNotThrow(act);
-        }
-
-        [Test]
-        [Ignore("reference validation is turned off")]
-        public void NewAddGroup_When_Group_Have_Condition_With_Reference_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
-        {
-            // arrange
-            Guid groupId = Guid.NewGuid();
-            Guid responsibleId = Guid.NewGuid();
-            string aliasForNotExistingQuestion = "q2";
-            string expression = string.Format("[{0}] > 0", aliasForNotExistingQuestion);
-
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(expression) == new[] { aliasForNotExistingQuestion });
-
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId, expressionProcessor: expressionProcessor);
-
-            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, "q1");
-
-            // act
-            TestDelegate act =
-                () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(
-                        groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null, 
-                        condition: expression, hideIfDisabled: false,
-                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference));
-        }
-
-        [Test]
-        [Ignore("reference validation is turned off")]
-        public void NewAddGroup_When_Group_Have_Condition_With_2_References_And_Second_Of_Them_To_Not_Existing_Question_Then_DomainException_should_be_thrown()
-        {
-            // arrange
-            Guid groupId = Guid.NewGuid();
-            Guid responsibleId = Guid.NewGuid();
-            string aliasForQuestion1 = "q1";
-            string aliasForNotExistingQuestion = "q2";
-            string expression = string.Format("[{0}] > 0 AND [{1}] > 1", aliasForQuestion1, aliasForNotExistingQuestion);
-
-            var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
-                => processor.GetIdentifiersUsedInExpression(expression) == new[] { aliasForQuestion1, aliasForNotExistingQuestion });
-
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(responsibleId: responsibleId,
-                groupId: groupId, expressionProcessor: expressionProcessor);
-
-            AddQuestion(questionnaire, Guid.NewGuid(), groupId, responsibleId, QuestionType.Text, aliasForQuestion1);
-
-            // act
-            TestDelegate act =
-                () =>
-                    questionnaire.AddGroupAndMoveIfNeeded(
-                        groupId: Guid.NewGuid(),
-                        responsibleId: responsibleId, title: "Title", variableName: null, rosterSizeQuestionId: null, description: null,
-                        condition: expression, hideIfDisabled: false,
-                        parentGroupId: groupId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.ExpressionContainsNotExistingQuestionOrRosterReference));
-            Assert.That(domainException.Message, Is.StringContaining(aliasForNotExistingQuestion));
         }
     }
 }

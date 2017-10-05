@@ -1,6 +1,5 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -15,27 +14,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         public void SetUp()
         {
             AssemblyContext.SetupServiceLocator();
-        }
-
-        [TestCase("")]
-        [TestCase("   ")]
-        [TestCase("\t")]
-        public void NewUpdateGroup_When_groups_new_title_is_empty_or_whitespaces_Then_throws_DomainException(string emptyTitle)
-        {
-            // arrange
-            var groupPublicKey = Guid.NewGuid();
-            Guid responsibleId = Guid.NewGuid();
-            Questionnaire questionnaire = CreateQuestionnaireWithOneGroup(questionnaireId: Guid.NewGuid(), groupId: groupPublicKey, responsibleId: responsibleId);
-
-            // act
-            TestDelegate act =
-                () =>
-                    questionnaire.UpdateGroup(groupPublicKey, responsibleId: responsibleId, title: emptyTitle, variableName: null, rosterSizeQuestionId: null,
-                        description: null, condition: null, hideIfDisabled:false, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
-
-            // assert
-            var domainException = Assert.Throws<QuestionnaireException>(act);
-            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupTitleRequired));
         }
 
         [Test]
