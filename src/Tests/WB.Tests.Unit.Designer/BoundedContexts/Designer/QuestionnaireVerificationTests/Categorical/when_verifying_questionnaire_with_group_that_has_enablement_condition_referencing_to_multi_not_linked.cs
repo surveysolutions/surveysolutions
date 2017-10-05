@@ -29,6 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 ),
                 new Group()
                 {
+                    Title = "Title",
                     PublicKey = groupWithEnablementConditionId,
                     ConditionExpression = "some condition",
                 });

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
                 Create.TextListQuestion (textListQuestionId, maxAnswerCount: 20, variable: "list" ),
-                new Group { IsRoster = true, RosterSizeSource = RosterSizeSourceType.Question,VariableName = "a", RosterSizeQuestionId = textListQuestionId, PublicKey = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA") },
+                Create.ListRoster(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), variable: "a", rosterSizeQuestionId: textListQuestionId)
             });
 
             verifier = CreateQuestionnaireVerifier();

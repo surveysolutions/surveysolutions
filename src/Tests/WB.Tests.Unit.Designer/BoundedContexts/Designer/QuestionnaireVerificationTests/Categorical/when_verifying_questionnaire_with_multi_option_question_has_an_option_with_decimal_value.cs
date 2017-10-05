@@ -29,20 +29,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_have_1_error () =>
-            resultErrors.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0008__ () =>
-        resultErrors.Single().Code.ShouldEqual("WB0008");
+        resultErrors.ShouldContainError("WB0114");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            resultErrors.Single().References.Count().ShouldEqual(1);
+            resultErrors.GetError("WB0114").References.Count().ShouldEqual(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
-            resultErrors.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            resultErrors.GetError("WB0114").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_multi_option_question () =>
-            resultErrors.Single().References.First().Id.ShouldEqual(multiOptionQuestionId);
+            resultErrors.GetError("WB0114").References.First().Id.ShouldEqual(multiOptionQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;

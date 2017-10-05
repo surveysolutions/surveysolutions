@@ -1,5 +1,6 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
