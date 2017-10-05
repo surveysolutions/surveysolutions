@@ -281,6 +281,28 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Assert.Throws(Is.TypeOf<InterviewException>().And.Message.EqualTo($"Interview has assigned on this supervisor already. InterviewId: {interview.EventSourceId.FormatGuid()}, SupervisorId: {supervisorId}"), AssignResponsible);
         }
 
+        [Test]
+        public void When_Interview_in_status_RejectedByHQ_And_interview_assigned_to_interviewer_As_result_status_should_be_RejectedBySupervisor()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewApproved(supervisorId));
+            interview.Apply(Create.Event.InterviewRejectedByHQ(headquarterId));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters));
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: interviewerId, assignTime: DateTime.UtcNow));
+
+            // assert
+            eventContext.ShouldContainEvent<InterviewRejected>();
+            eventContext.ShouldContainEvent<InterviewStatusChanged>(e => e.Status == InterviewStatus.RejectedBySupervisor);
+            eventContext.ShouldContainEvent<InterviewerAssigned>();
+        }
+
         readonly Guid interviewerId   = Guid.Parse("99999999999999999999999999999999");
         readonly Guid interviewerId2  = Guid.Parse("22222222222222222222222222222222");
         readonly Guid supervisorId    = Guid.Parse("11111111111111111111111111111111");
