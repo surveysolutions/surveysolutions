@@ -41,29 +41,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0054__ () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0054");
+            verificationMessages.ShouldContainError("WB0054");
 
         [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.GetError("WB0054").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
         
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0054").References.Count().ShouldEqual(2);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Roster () =>
-            verificationMessages.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetError("WB0054").References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_rosterId () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(rosterGroupId);
+            verificationMessages.GetError("WB0054").References.ElementAt(0).Id.ShouldEqual(rosterGroupId);
 
         [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_question () =>
-            verificationMessages.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0054").References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_of_rosterSizeQuestionId () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionId);
+            verificationMessages.GetError("WB0054").References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

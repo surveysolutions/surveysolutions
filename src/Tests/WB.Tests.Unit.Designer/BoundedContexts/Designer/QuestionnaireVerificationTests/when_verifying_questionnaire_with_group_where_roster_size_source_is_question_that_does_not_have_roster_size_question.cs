@@ -39,9 +39,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0009 () =>
             verificationMessages.ShouldContainCritical("WB0009");
 

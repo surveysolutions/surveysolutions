@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -13,10 +12,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = CreateQuestionnaireDocument(
-                Create.Roster(rosterId: Guid.NewGuid(), variable:"ros",
-                    children: new[] {Create.TextQuestion(questionId: linkedQuestionId, variable: "var2")}),
-                Create.MultyOptionsQuestion(id: multiOptionQuestionId, variable: "var",
-                    linkedToQuestionId: linkedQuestionId, yesNoView: true));
+                Create.Roster(rosterId: Guid.NewGuid(), variable:"ros", children: new[]
+                {
+                    Create.TextQuestion(questionId: linkedQuestionId, variable: "var2")
+                }),
+                Create.MultyOptionsQuestion(id: multiOptionQuestionId, variable: "var", linkedToQuestionId: linkedQuestionId, yesNoView: true));
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();

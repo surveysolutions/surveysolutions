@@ -280,7 +280,7 @@
     <value>Option values must be unique.</value>
   </data>
   <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
-    <value>Categorical question cannot has options and be linked to another question.</value>
+    <value>Categorical question cannot have options and be linked to another question.</value>
   </data>
   <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
     <value>Contains more than {0} options.</value>
@@ -354,11 +354,11 @@
   <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
     <value>Only one GPS question could be marked as identifying</value>
   </data>
-  <data name="WB0007_" xml:space="preserve">
-    <value />
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>Multi select yes/no question can't be linked</value>
   </data>
-  <data name="WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
-    <value>Multi select question supports only integer values in range from {0} to {1}</value>
+  <data name="WB0008_" xml:space="preserve">
+    <value />
   </data>
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
     <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>

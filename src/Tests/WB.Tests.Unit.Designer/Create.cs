@@ -666,6 +666,7 @@ namespace WB.Tests.Unit.Designer
         {
             var result = new QuestionnaireDocument
             {
+                Title = "Q",
                 PublicKey = questionnaireId ?? Guid.NewGuid(),
                 Children = new IComposite[]
                 {
@@ -721,6 +722,52 @@ namespace WB.Tests.Unit.Designer
                 title: title,
                 fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" },
                 fixedRosterTitles: fixedRosterTitles);
+
+        public static Group ListRoster(
+            Guid? rosterId = null,
+            string title = "Roster List",
+            string variable = "roster_list",
+            string enablementCondition = null,
+            Guid? rosterSizeQuestionId = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group roster = Create.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            roster.IsRoster = true;
+            roster.RosterSizeSource = RosterSizeSourceType.Question;
+            roster.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return roster;
+        }
+
+        public static Group NumericRoster(
+            Guid? rosterId = null,
+            string title = "Roster Numeric",
+            string variable = "roster_num",
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null,
+            Guid? rosterSizeQuestionId = null,
+            Guid? rosterTitleQuestionId = null)
+        {
+            Group roster = Create.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            roster.IsRoster = true;
+            roster.RosterSizeSource = RosterSizeSourceType.Question;
+            roster.RosterSizeQuestionId = rosterSizeQuestionId;
+            roster.RosterTitleQuestionId = rosterTitleQuestionId;
+
+            return roster;
+        }
 
         public static Group Roster(
             Guid? rosterId = null,
@@ -781,7 +828,7 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                Answers = answers ?? (answerCodes ?? new decimal[0] { }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
                 LinkedFilterExpression = linkedFilterExpression,
                 Featured = isPrefilled,
                 IsFilteredCombobox = isComboBox,

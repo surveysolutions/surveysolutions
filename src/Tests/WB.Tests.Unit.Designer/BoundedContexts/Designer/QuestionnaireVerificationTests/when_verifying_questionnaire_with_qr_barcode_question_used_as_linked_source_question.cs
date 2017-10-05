@@ -54,24 +54,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0012 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0012");
+            verificationMessages.ShouldContainError("WB0012");
 
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0012").References.Count().ShouldEqual(2);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
-            verificationMessages.Single()
+            verificationMessages.GetError("WB0012")
                 .References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_multiQuestionLinkedToQRBarcodeQuestionId () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(multiQuestionLinkedToQRBarcodeQuestionId);
+            verificationMessages.GetError("WB0012").References.ElementAt(0).Id.ShouldEqual(multiQuestionLinkedToQRBarcodeQuestionId);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_qrBarcodeQuestionId () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
+            verificationMessages.GetError("WB0012").References.ElementAt(1).Id.ShouldEqual(qrBarcodeQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

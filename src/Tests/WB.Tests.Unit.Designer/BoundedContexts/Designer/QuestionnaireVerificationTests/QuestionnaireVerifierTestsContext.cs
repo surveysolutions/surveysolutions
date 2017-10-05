@@ -50,6 +50,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         {
             return new QuestionnaireDocument
             {
+                Title = "Q",
                 Children = questionnaireChildren.ToReadOnlyCollection(),
             };
         }

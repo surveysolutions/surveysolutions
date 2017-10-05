@@ -37,14 +37,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     ConditionExpression = InvalidExpression,
                     StataExportCaption = "var2"
                 },
-                new Group { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
+                new Group("Title") { PublicKey = incorrectGroupId, ConditionExpression = InvalidExpression },
                 new NumericQuestion("text 1")
                 {
                     PublicKey = correctQuestionId,
                     ConditionExpression = ValidExpression,
                     StataExportCaption = "var3"
                 },
-                new Group { PublicKey = correctGroupId, ConditionExpression = ValidExpression }
+                new Group("Title1") { PublicKey = correctGroupId, ConditionExpression = ValidExpression }
                 );
 
             verifier = CreateQuestionnaireVerifier(expressionProcessorGenerator: CreateExpressionProcessorGenerator());
@@ -54,12 +54,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToArray();
 
-        [NUnit.Framework.Test] public void should_return_3_messages () =>
-            verificationMessages.Count().ShouldEqual(3);
-
         [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB0003__ () =>
-            verificationMessages.ShouldEachConformTo(error
-                => error.Code == "WB0003");
+            verificationMessages.ShouldContainError("WB0003");
 
         [NUnit.Framework.Test] public void should_return_messages_each_having_single_reference () =>
             verificationMessages.ShouldEachConformTo(error

@@ -59,20 +59,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0023__ () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0023");
+            verificationMessages.ShouldContainError("WB0023");
 
         [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0023").References.Count().ShouldEqual(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetError("WB0023").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroupId () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(rosterGroupId);
+            verificationMessages.GetError("WB0023").References.First().Id.ShouldEqual(rosterGroupId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

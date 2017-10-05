@@ -39,11 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     LinkedToQuestionId = linkedSourceQuestionId,
                     QuestionText = "test"
                 },
-                new Group()
-                {
-                    PublicKey = groupWithEnablementConditionId,
-                    ConditionExpression = "some condition",
-                });
+                Create.Group(groupWithEnablementConditionId, enablementCondition: "some condition"));
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { categoricalQuestionId.ToString() });

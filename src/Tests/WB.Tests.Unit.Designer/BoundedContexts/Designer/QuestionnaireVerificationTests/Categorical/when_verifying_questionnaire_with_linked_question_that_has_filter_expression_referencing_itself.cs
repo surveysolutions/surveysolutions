@@ -4,10 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -39,11 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) == new[] { "s546i" });
 
             verifier = CreateQuestionnaireVerifier(expressionProcessor);
-            BecauseOf();
-        }
-
-        private void BecauseOf() =>
             resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+        }
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
             resultErrors.Count().ShouldEqual(1);

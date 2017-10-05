@@ -21,15 +21,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             Guid rosterSizeQuestionWithThirdRosteLevelId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
             questionnaire = CreateQuestionnaireDocument(new IComposite[]
             {
-                Create.TextListQuestion(
-                    rosterSizeQuestionId,
-                    variable: "var1",
-                    maxAnswerCount: 2
-                ),
-                Create.NumericIntegerQuestion(
-                    rosterSizeQuestionForChildRoster1Id,
-                    variable: "var2"
-                ),
+                Create.TextListQuestion(rosterSizeQuestionId,variable: "var1",maxAnswerCount: 2),
+                Create.NumericIntegerQuestion(rosterSizeQuestionForChildRoster1Id, variable: "var2"),
                 new Group
                 {
                     IsRoster = true,
@@ -75,26 +68,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0054__ () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0054");
+            verificationMessages.ShouldContainError("WB0054");
 
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0054").References.Count().ShouldEqual(2);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Roster () =>
-            verificationMessages.Single().References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetError("WB0054").References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_rosterId () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
+            verificationMessages.GetError("WB0054").References.ElementAt(0).Id.ShouldEqual(groupWithInvalidRosterSizeQuestionId);
 
         [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_question () =>
-            verificationMessages.Single().References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0054").References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_of_rosterSizeQuestionWithInvalidRosterLevelId () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
+            verificationMessages.GetError("WB0054").References.ElementAt(1).Id.ShouldEqual(rosterSizeQuestionWithInvalidRosterLevelId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
