@@ -65,7 +65,6 @@ src/UI/Headquarters/WB.UI.Headquarters/Dependencies/dist/*
 
 src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/*
 src/UI/Headquarters/WB.UI.Headquarters/InterviewApp/*
-src/UI/Headquarters/WB.UI.Headquarters/Views/WebInterview/Index.cshtml
 
 # It is not possible to re-include a file if a parent directory of that file is excluded
 !src/UI/Headquarters/WB.UI.Headquarters/Dependencies/vendor/bootstrap-sass/
@@ -89,3 +88,6 @@ src/UI/Designer/WB.UI.Designer/questionnaire/build/*.css
 
 src/Tools/k6/k6.exe
 /src/UI/Designer/WB.UI.Designer/questionnaire/build/resources/*.*
+/src/UI/Headquarters/WB.UI.Headquarters/Views/Shared/partial.hq.cshtml
+/src/UI/Headquarters/WB.UI.Headquarters/Views/Shared/partial.webInterview.cshtml
+/src/UI/Shared/WB.UI.Shared.Extensions/Resources/Resource.Designer.cs

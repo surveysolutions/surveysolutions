@@ -68,6 +68,7 @@ var config = {
     ],
     cssFilesToWatch: './css/*.scss"',
     cssSource: './css/markup.scss',
+    webInterviewSource: './css/webinterview.scss',
     cssAppInject: 'cssApp',
     cssLibsInject: 'cssLibs',
     jsLibsInject: 'jsLibs'
@@ -88,6 +89,18 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         //.pipe(cssnano().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
+
+gulp.task('styles.webinterview', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
+    return gulp.src(config.webInterviewSource)
+        .pipe(sass().on('error', error))
+        .pipe(autoprefixer('last 2 version').on('error', error))
+        .pipe(gulp.dest(config.buildDir).on('error', error))
+        .pipe(rename({ suffix: '.min' }).on('error', error))
+        .pipe(plugins.rev().on('error', error))
+        //.pipe(cssnano().on('error', error))
+        .pipe(gulp.dest(config.buildDistDir));
+}));
+
 
 function mainBowerFilesFilter(filePath) {
     if (filePath.includes("\\vue")) return false;
@@ -189,6 +202,8 @@ gulp.task('clean', function () {
     return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());
 });
 
+gulp.task('css', ['styles', 'styles.webinterview']);
+
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'bowerCss', 'bowerJs', 'inject');
+    gulp.start('move-bootstrap-fonts', 'styles', 'styles.webinterview', 'bowerCss', 'bowerJs', 'inject');
 });

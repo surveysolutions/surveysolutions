@@ -4,5 +4,16 @@
     ViewBag.Title = Html.ActivePage();
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
+@section scripts {
+    <script>
+        var config = window.CONFIG;
 
-<div id="vueApp" configuration="@Model.ToString()"></div>
+        config.title = '@Model.Title';
+        config.statuses = @Model.Statuses.AsJsonValue();
+        config.allInterviews = @Model.AllInterviews.AsJsonValue();
+        config.interviewerHqEndpoint = '@Url.Content(@"~/interviewerHq")';
+        config.questionnaires = @Model.Questionnaires.AsJsonValue();
+        config.resources = @Model.Resources.AsJsonValue();
+    </script>
+}
+<div id="vueApp"></div>
