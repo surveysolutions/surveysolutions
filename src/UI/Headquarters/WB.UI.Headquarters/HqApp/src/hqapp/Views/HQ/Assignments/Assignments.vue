@@ -11,7 +11,7 @@
                            :ajax-params="questionnaireParams"
                            :value="questionnaireId"
                            v-on:selected="questionnaireSelected"
-                           :fetch-url="$config.Api.Questionnaire">
+                           :fetch-url="config.api.questionnaire">
                 </typeahead>
             </FilterBlock>
 
@@ -21,7 +21,7 @@
                            :value="responsibleId"
                            :ajax-params="responsibleParams"
                            v-on:selected="userSelected"
-                           :fetch-url="$config.Api.Responsible"></Typeahead>
+                           :fetch-url="config.api.responsible"></Typeahead>
             </FilterBlock>
 
             <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
@@ -82,7 +82,7 @@
                                :value="newResponsibleId"
                                :ajax-params="{ }"
                                @selected="newResponsibleSelected"
-                               :fetch-url="$config.Api.Responsible">
+                               :fetch-url="config.api.responsible">
                     </Typeahead>
                 </div>
             </form>
@@ -160,6 +160,9 @@ export default {
         title() {
             return this.$t("Assignments.AssignmentsHeader") + " (" + this.totalRows + ")";
         },
+        config(){
+            return this.$config.assignments;
+        },
 
         tableOptionsraw() {
             const self = this;
@@ -179,7 +182,7 @@ export default {
                     render(data, type, row) {
                         var resultString = '<span class="' + row.responsibleRole.toLowerCase() + '">';
                         if (row.responsibleRole === 'Interviewer') {
-                            resultString += '<a href="' + self.$config.Api.Profile + "/" + row.responsibleId + '">' + data + "</a>";
+                            resultString += '<a href="' + self.config.api.profile + "/" + row.responsibleId + '">' + data + "</a>";
                         } else {
                             resultString += data;
                         }
@@ -195,7 +198,7 @@ export default {
                     title: this.$t("Assignments.Size"),
                     tooltip: this.$t("Assignments.Tooltip_Table_Size"),
                     if() {
-                        return self.$config.IsHeadquarter;
+                        return self.config.isHeadquarter;
                     }
                 }, {
                     data: "interviewsCount",
@@ -206,12 +209,12 @@ export default {
                     orderable: true,
                     searchable: false,
                     render(data, type, row) {
-                        var result = "<a href='" + self.$config.Api.Interviews + "?assignmentId=" + row.id + "'>" + data + "</a>";
+                        var result = "<a href='" + self.config.api.interviews + "?assignmentId=" + row.id + "'>" + data + "</a>";
                         return result;
                     },
                     defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
                     if() {
-                        return self.$config.IsHeadquarter;
+                        return self.$config.isHeadquarter;
                     }
                 }, {
                     data: "interviewsCount",
@@ -227,7 +230,7 @@ export default {
                     },
                     defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
                     if() {
-                        return !self.$config.IsHeadquarter;
+                        return !self.config.isHeadquarter;
                     }
                 }, {
                     data: "identifyingQuestions",
@@ -266,7 +269,7 @@ export default {
         },
 
         showSelectors() {
-            return !this.$config.IsObserver && !this.$config.IsObserving;
+            return !this.config.isObserver && !this.config.isObserving;
         },
 
         tableOptions() {
@@ -281,7 +284,7 @@ export default {
                 deferLoading: 0,
                 order: [[defaultSortIndex, 'desc']],
                 columns,
-                ajax: { url: this.$config.Api.Assignments, type: "GET" },
+                ajax: { url: this.config.api.assignments, type: "GET" },
                 select: {
                     style: 'multi',
                     selector: 'td>.checkbox-filter',
@@ -361,7 +364,7 @@ export default {
         async archiveSelected() {
             await this.$http({
                 method: 'delete',
-                url: this.$config.Api.Assignments,
+                url: this.config.api.assignments,
                 data: this.selectedRows
             })
 
@@ -369,7 +372,7 @@ export default {
         },
 
         async unarchiveSelected() {
-            await this.$http.post(this.$config.Api.Assignments + "/Unarchive",
+            await this.$http.post(this.config.api.assignments + "/Unarchive",
                 this.selectedRows
             )
 
@@ -383,7 +386,7 @@ export default {
         },
 
         async assign() {
-            await this.$http.post(this.$config.Api.Assignments + "/Assign", {
+            await this.$http.post(this.config.api.assignments + "/Assign", {
                 responsibleId: this.newResponsibleId.key,
                 ids: this.selectedRows
             })
@@ -394,7 +397,7 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
-            if (columnName === 'Quantity' && this.$config.IsHeadquarter && !this.showArchive) {
+            if (columnName === 'Quantity' && this.config.IsHeadquarter && !this.showArchive) {
                 this.editedRowId = rowId;
                 this.editedQuantity = cellData;
                 this.$refs.editQuantityModal.modal('show')
@@ -408,7 +411,7 @@ export default {
                 return false;
             }
             
-            const patchQuantityUrl = this.$config.Api.Assignments + "/" + this.editedRowId + "/SetQuantity";
+            const patchQuantityUrl = this.config.api.assignments + "/" + this.editedRowId + "/SetQuantity";
 
             let targetQuantity = null;
 
@@ -448,7 +451,7 @@ export default {
                     query: this.$route.query.responsible, pageSize: 1, cache: false
                 }, this.ajaxParams);
 
-                const response = await this.$http.get(this.$config.Api.Responsible, { params: requestParams })
+                const response = await this.$http.get(this.config.api.responsible, { params: requestParams })
 
                 onDone(response.data.options.length > 0 ? response.data.options[0].key : undefined);
             } else onDone();
@@ -459,7 +462,7 @@ export default {
 
             if (this.$route.query.questionnaire != undefined) {
                 requestParams = Object.assign({ query: this.$route.query.questionnaire, pageSize: 1, cache: false }, this.ajaxParams);
-                const response = await this.$http.get(this.$config.Api.Questionnaire, { params: requestParams })
+                const response = await this.$http.get(this.config.api.questionnaire, { params: requestParams })
 
                 if (response.data.options.length > 0) {
                     onDone(response.data.options[0].key, response.data.options[0].value);
@@ -467,7 +470,7 @@ export default {
 
             } else if (this.$route.query.questionnaireId != undefined) {
                 requestParams = Object.assign({ questionnaireIdentity: this.$route.query.questionnaireId, cache: false }, this.ajaxParams);
-                const response = await this.$http.get(this.$config.Api.QuestionnaireById, { params: requestParams })
+                const response = await this.$http.get(this.config.api.questionnaireById, { params: requestParams })
 
                 if (response.data.options.length > 0) {
                     onDone(response.data.options[0].key, response.data.options[0].value);
