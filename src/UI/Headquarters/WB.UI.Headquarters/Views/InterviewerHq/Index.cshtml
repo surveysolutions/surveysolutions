@@ -1,13 +1,17 @@
-﻿@using Newtonsoft.Json
-@using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.UI.Headquarters.Utils
-@using ASP
-
+﻿@using WB.UI.Headquarters.Utils
 @{
     ViewBag.Title = MainMenu.CreateNew;
     ViewBag.ActivePage = MenuItem.CreateNew;
     Layout = @"~/Views/Shared/_MainLayoutHq.cshtml";
 }
-@Html.RenderHqConfig(Model)
+@Html.RenderHqConfig(new
+{
+    AssignmentsEndpoint = Url.Content(@"~/api/Assignments"),
+    InterviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
+    Resources = new[] {
+        MainMenu.ResourceManager,
+        Assignments.ResourceManager,
+        Common.ResourceManager,
+        Pages.ResourceManager }.Translations()
+})
 <div id="vueApp"></div>
