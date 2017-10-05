@@ -28,7 +28,7 @@ module.exports = {
 
     stats: { chunks: false },
 
-    devtool:   '#cheap-module-eval-source-map',
+    devtool: '#source-map', // '#cheap-module-eval-source-map',
     module: {
         rules: [
             {
