@@ -17,17 +17,17 @@ export default {
             }
             if (row.teamId === '00000000-0000-0000-0000-000000000000') {
                 if (facet) {
-                    return `<a href='${this.$config.interviewersBaseUrl}?Facet=${facet}'>${formatedNumber}</a>`;
+                    return `<a href='${this.$config.model.interviewersBaseUrl}?Facet=${facet}'>${formatedNumber}</a>`;
                 }
                 else {
                     return `<span>${formatedNumber}</span>`;
                 }
             }
             if(facet) {
-                return `<a href='${this.$config.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=${facet}'>${formatedNumber}</a>`;
+                return `<a href='${this.$config.model.interviewersBaseUrl}?supervisor=${row.teamName}&Facet=${facet}'>${formatedNumber}</a>`;
             }
             else {
-                 return `<a href='${this.$config.interviewersBaseUrl}?supervisor=${row.teamName}'>${formatedNumber}</a>`;
+                 return `<a href='${this.$config.model.interviewersBaseUrl}?supervisor=${row.teamName}'>${formatedNumber}</a>`;
             }
         }        ,
         formatNumber(value) {
@@ -40,6 +40,9 @@ export default {
         }
     },
     computed: {
+        config() {
+            return this.$config.model;
+        },
         tableOptions() {
             var self = this;
             return {
@@ -136,7 +139,7 @@ export default {
                     }
                 ],
                 ajax: {
-                    url: this.$config.dataUrl,
+                    url: this.$config.model.dataUrl,
                     type: "GET",
                     contentType: 'application/json'
                 },

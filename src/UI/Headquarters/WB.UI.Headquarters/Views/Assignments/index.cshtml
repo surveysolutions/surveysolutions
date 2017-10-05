@@ -1,15 +1,8 @@
-﻿@using Newtonsoft.Json
-@model WB.UI.Headquarters.Controllers.AssignmentsFilters
+﻿@model WB.UI.Headquarters.Controllers.AssignmentsFilters
 @{
     ViewBag.ActivePage = MenuItem.Assignments;
     ViewBag.Title = Pages.Assignments_PageTitle;
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
-@section scripts {
-    <script>
-        window.CONFIG.assignments = @Model.AsJsonValue();
-            
-    </script>
-}
-
+@Html.RenderHqConfig(Model)
 <div id="vueApp"></div>

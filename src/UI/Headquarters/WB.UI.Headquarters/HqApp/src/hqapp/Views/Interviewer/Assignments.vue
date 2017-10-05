@@ -21,7 +21,7 @@ export default {
                 order: [[4, 'desc']],
                 columns: this.getTableColumns(),
                 ajax: {
-                    url: this.$config.assignmentsEndpoint,
+                    url: this.$config.model.assignmentsEndpoint,
                     type: "GET",
                     contentType: 'application/json'
                 },
@@ -101,7 +101,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data);
-                        return date.local().format(self.$config.dateFormat);
+                        return date.local().format(self.$config.model.dateFormat);
                     }
                 },
                 {
@@ -111,7 +111,7 @@ export default {
                     searchable: false,
                     render: function (data) {
                         var date = moment.utc(data);
-                        return date.local().format(self.$config.dateFormat);
+                        return date.local().format(self.$config.model.dateFormat);
                     }
                 }]
 

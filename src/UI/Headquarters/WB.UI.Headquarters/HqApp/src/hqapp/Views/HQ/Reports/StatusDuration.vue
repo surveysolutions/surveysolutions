@@ -53,7 +53,7 @@ export default {
     },
     computed: {
         questionnaires() {
-            return this.$config.questionnaires
+            return this.$config.model.questionnaires
         },
         tableOptions() {
             var self = this;
@@ -145,7 +145,7 @@ export default {
                     }
                 ],
                 ajax: {
-                    url: this.$config.dataUrl,
+                    url: this.$config.model.dataUrl,
                     type: "GET",
                     contentType: 'application/json'
                 },
@@ -186,10 +186,10 @@ export default {
                 var questionnaireVersion = this.questionnaireId.key.split('$')[1];
                 var startDate = row.startDate == undefined ? '' : row.startDate;
 
-                return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${startDate}&dateEnd=${row.endDate}&questionnaireId=${questionnaireId}&version=${questionnaireVersion}&userRole=${userRole}'>${formatedNumber}</a>`;
+                return `<a href='${this.$config.model.assignmentsBaseUrl}?dateStart=${startDate}&dateEnd=${row.endDate}&questionnaireId=${questionnaireId}&version=${questionnaireVersion}&userRole=${userRole}'>${formatedNumber}</a>`;
             }
 
-            return `<a href='${this.$config.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=${userRole}'>${formatedNumber}</a>`;
+            return `<a href='${this.$config.model.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=${userRole}'>${formatedNumber}</a>`;
         },
 
         renderInterviewsUrl(row, data, status){
@@ -201,11 +201,11 @@ export default {
             var templateVersion = this.questionnaireId == undefined ? '' : this.questionnaireId.key.split('$')[1];
             
             if (row.startDate == undefined)
-                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
+                return `<a href='${this.$config.model.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
             if (row.endDate == undefined)
-                return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
+                return `<a href='${this.$config.model.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
 
-            return `<a href='${this.$config.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
+            return `<a href='${this.$config.model.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
         },
 
         formatGuid(guid){

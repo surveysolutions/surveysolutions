@@ -22,15 +22,13 @@ Vue.use(Vuei18n, {
     nsSeparator: '.',
     keySeparator: ':',
     resources: {
-        'en': Vue.$config.resources
+        'en': Vue.$config.model.resources
     }
 })
 
 import './components'
 
 import router from "./router"
-//const router = require("./router").default
-
 export default new Vue({
     el: "#vueApp",
     render: h => h('router-view'),
