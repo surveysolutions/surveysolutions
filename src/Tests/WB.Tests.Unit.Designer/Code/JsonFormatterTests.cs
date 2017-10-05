@@ -86,5 +86,18 @@ namespace WB.Tests.Unit.Designer.Code
             var package = (PagedQuestionnaireCommunicationPackage) result;
             Assert.AreEqual(package.TotalCount, 11);
         }
+
+        [Test]
+        public async Task when_WriteToStreamAsync_then_stream_should_not_be_closed()
+        {
+            var typeToSerialize = "string to serialize";
+
+            var memoryStream = new MemoryStream();
+            JsonFormatter jsonFormatter = Create.JsonFormatter(new Version(5, 21, 0));
+
+            await jsonFormatter.WriteToStreamAsync(typeToSerialize.GetType(), typeToSerialize, memoryStream, null, null);
+
+            Assert.DoesNotThrow(() => memoryStream.ReadByte());
+        }
     }
 }
