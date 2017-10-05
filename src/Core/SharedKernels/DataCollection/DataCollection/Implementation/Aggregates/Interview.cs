@@ -1598,6 +1598,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (interviewerId.HasValue)
             {
+                if (this.properties.Status == InterviewStatus.RejectedByHeadquarters)
+                {
+                    this.ApplyEvent(new InterviewRejected(userId, null, assignTime));
+                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, null));
+                }
+
                 this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, assignTime));
 
                 if (!this.properties.WasRejected && this.properties.Status == InterviewStatus.SupervisorAssigned)
