@@ -10,6 +10,7 @@ using WB.UI.Headquarters.Resources;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ASP
 {
@@ -124,7 +125,10 @@ namespace ASP
 
         public static IHtmlString AsJsonValue(this object obj)
         {
-            return new HtmlString(JsonConvert.SerializeObject(obj));
+            return new HtmlString(JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }));
         }
     }
 }
