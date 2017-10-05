@@ -1,8 +1,8 @@
 ﻿(function () {
     angular.module('designerApp')
         .factory('utilityService', [
-            '$rootScope', '$timeout',
-            function ($rootScope, $timeout) {
+            '$rootScope', '$timeout', '$i18next',
+            function ($rootScope, $timeout, $i18next) {
                 var utilityService = {};
 
                 utilityService.guid = function () {
@@ -82,11 +82,11 @@
 
                 utilityService.createQuestionForDeleteConfirmationPopup = function (title) {
                     var trimmedTitle = title.substring(0, 25) + (title.length > 25 ? "..." : "");
-                    var message = 'Are you sure you want to delete "' + trimmedTitle + '"?';
+                    var message = $i18next.t('DeleteConfirmQuestion',  {trimmedTitle: trimmedTitle});
                     return {
                         title: message,
-                        okButtonTitle: "DELETE",
-                        cancelButtonTitle: "BACK TO DESIGNER"
+                        okButtonTitle: $i18next.t("Delete"),
+                        cancelButtonTitle: $i18next.t("Cancel")
                     };
                 };
 

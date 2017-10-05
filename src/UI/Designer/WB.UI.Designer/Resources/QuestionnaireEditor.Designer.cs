@@ -259,6 +259,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete &quot;{{trimmedTitle}}&quot;?.
+        /// </summary>
+        internal static string DeleteConfirmQuestion {
+            get {
+                return ResourceManager.GetString("DeleteConfirmQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         internal static string Download {

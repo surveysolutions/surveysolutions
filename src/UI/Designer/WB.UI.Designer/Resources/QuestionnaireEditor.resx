@@ -853,4 +853,7 @@
   <data name="SettingsShareView" xml:space="preserve">
     <value>View</value>
   </data>
+  <data name="DeleteConfirmQuestion" xml:space="preserve">
+    <value>Are you sure you want to delete "{{trimmedTitle}}"?</value>
+  </data>
 </root>

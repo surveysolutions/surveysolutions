@@ -1,13 +1,13 @@
 ﻿(function() {
     angular.module('designerApp').factory('alertService', [
-        '$uibModal',
-        function ($uibModal) {
+        '$uibModal', '$i18next',
+        function ($uibModal, $i18next) {
             var alertService = {};
 
             alertService.open = function (item) {
                 var scopeItem = {
                     title: item.title || "",
-                    okButtonTitle: item.okButtonTitle || "OK",
+                    okButtonTitle: item.okButtonTitle || $i18next.t("Ok"),
                     isReadOnly: item.isReadOnly || false
                 };
                 return $uibModal.open({
