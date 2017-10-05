@@ -749,6 +749,7 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
     <Content Include="Views\Shared\QuestionnairesList.cshtml" />
+    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
