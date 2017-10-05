@@ -4,7 +4,7 @@
         <Filters slot="filters">
             <FilterBlock :title="$t('Pages.Questionnaire')">
                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
-                           :values="$config.questionnaires"
+                           :values="config.model.questionnaires"
                            :value="questionnaireId"
                            noSearch
                            @selected="selectQuestionnaire" />
@@ -88,7 +88,7 @@ export default {
                 deferLoading: 0,
                 columns: this.getTableColumns(),
                 ajax: {
-                    url: this.$config.allInterviews,
+                    url: this.$config.model.allInterviews,
                     type: "GET"
                 },
                 select: {
@@ -160,7 +160,7 @@ export default {
 
             self.$refs.confirmRestart.promt(ok => {
                 if (ok) {
-                    $.post(this.$config.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, () => {
+                    $.post(this.$config.model.interviewerHqEndpoint + "/RestartInterview/" + interviewId, { comment: self.restart_comment }, () => {
                         self.restart_comment = "";
                         self.$store.dispatch("openInterview", interviewId);
                     })
@@ -172,7 +172,7 @@ export default {
         },
 
         addFilteringParams(data) {
-            data.statuses = this.$config.statuses;
+            data.statuses = this.$config.model.statuses;
 
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId.key;

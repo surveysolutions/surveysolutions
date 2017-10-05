@@ -123,12 +123,22 @@ namespace ASP
             }
         }
 
+        private static JsonSerializerSettings asJsonValueSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
         public static IHtmlString AsJsonValue(this object obj)
         {
-            return new HtmlString(JsonConvert.SerializeObject(obj, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }));
+            return new HtmlString(JsonConvert.SerializeObject(obj, asJsonValueSettings));
+        }
+        
+        public static IHtmlString RenderHqConfig(this HtmlHelper helper, object model, string title = null)
+        {
+            var titleString = title ?? helper.ViewBag.Title ?? null;
+            return new HtmlString($@"<script>{
+                    (string.IsNullOrWhiteSpace(titleString) ?"window.CONFIG.title=" : string.Empty)
+                }window.CONFIG.model={model.AsJsonValue() }</script>");
         }
     }
 }

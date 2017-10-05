@@ -56,7 +56,7 @@
                     </label>
 
                     <button class="btn btn-lg btn-primary"
-                            v-if="showArchive && $config.IsHeadquarter"
+                            v-if="showArchive && config.isHeadquarter"
                             @click="unarchiveSelected">{{ $t("Assignments.Unarchive") }}</button>
 
                     <button class="btn btn-lg btn-primary"
@@ -64,7 +64,7 @@
                             @click="assignSelected">{{ $t("Common.Assign") }}</button>
 
                     <button class="btn btn-lg btn-danger"
-                            v-if="!showArchive && $config.IsHeadquarter"
+                            v-if="!showArchive && config.isHeadquarter"
                             @click="archiveSelected">{{ $t("Assignments.Archive") }}</button>
                 </div>
             </div>
@@ -161,7 +161,7 @@ export default {
             return this.$t("Assignments.AssignmentsHeader") + " (" + this.totalRows + ")";
         },
         config(){
-            return this.$config.assignments;
+            return this.$config.model;
         },
 
         tableOptionsraw() {
@@ -214,7 +214,7 @@ export default {
                     },
                     defaultContent: "<span>" + this.$t("Assignments.Unlimited") + "</span>",
                     if() {
-                        return self.$config.isHeadquarter;
+                        return self.config.isHeadquarter;
                     }
                 }, {
                     data: "interviewsCount",
@@ -397,7 +397,7 @@ export default {
         },
 
         cellClicked(columnName, rowId, cellData) {
-            if (columnName === 'Quantity' && this.config.IsHeadquarter && !this.showArchive) {
+            if (columnName === 'Quantity' && this.config.isHeadquarter && !this.showArchive) {
                 this.editedRowId = rowId;
                 this.editedQuantity = cellData;
                 this.$refs.editQuantityModal.modal('show')
