@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class VerificationMessages {
@@ -115,20 +115,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Multi select yes/no question can&apos;t be linked.
         /// </summary>
-        public static string WB0007_ {
+        public static string WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked {
             get {
-                return ResourceManager.GetString("WB0007_", resourceCulture);
+                return ResourceManager.GetString("WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Multi select question supports only integer values in range from {0} to {1}.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        public static string WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues {
+        public static string WB0008_ {
             get {
-                return ResourceManager.GetString("WB0008_MultiOptionQuestionSupportsOnlyIntegerPositiveValues", resourceCulture);
+                return ResourceManager.GetString("WB0008_", resourceCulture);
             }
         }
         
@@ -720,7 +720,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question cannot has options and be linked to another question..
+        ///   Looks up a localized string similar to Categorical question cannot have options and be linked to another question..
         /// </summary>
         public static string WB0074_CategoricalQuestionHasOptionsAndIsLinked {
             get {

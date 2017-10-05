@@ -31,16 +31,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_WB0028_message () =>
-            verificationMessages.ShouldContainError("WB0028");
+            verificationMessages.ShouldContainCritical("WB0028");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.GetError("WB0028").References.Count().ShouldEqual(1);
+            verificationMessages.GetCritical("WB0028").References.Count().ShouldEqual(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_question_type () =>
-            verificationMessages.GetError("WB0028").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetCritical("WB0028").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
-            verificationMessages.GetError("WB0028").References.First().Id.ShouldEqual(questionId);
+            verificationMessages.GetCritical("WB0028").References.First().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

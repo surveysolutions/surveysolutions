@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var entityToSubstituteRosterScope = questionnaire.Questionnaire.GetRosterScope(entityToSubstitute);
 
-            if (entityToSubstituteRosterScope.IsSameOrParentScopeFor(vectorOfRosterQuestionsByEntityWithSubstitutions))
+            if (!entityToSubstituteRosterScope.IsSameOrParentScopeFor(vectorOfRosterQuestionsByEntityWithSubstitutions))
             {
                 return QuestionnaireVerificationMessage.Error("WB0019",
                     VerificationMessages.WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel,

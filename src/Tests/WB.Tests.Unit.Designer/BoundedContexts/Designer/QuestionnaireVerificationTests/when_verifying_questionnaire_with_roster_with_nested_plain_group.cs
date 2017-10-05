@@ -4,11 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.GenericSubdomains.Portable;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -21,21 +17,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             var rosterSizeQiestionId = Guid.Parse("20000000000000000000000000000000");
 
             questionnaire = CreateQuestionnaireDocument(
-                Create.NumericIntegerQuestion(rosterSizeQiestionId, variable: "var" ),
-                new Group()
+                Create.NumericIntegerQuestion(rosterSizeQiestionId, variable: "var"),
+                Create.NumericRoster(rosterGroupId, "a", "a", rosterSizeQuestionId: rosterSizeQiestionId, children: new IComposite[]
                 {
-                    PublicKey = rosterGroupId,
-                    IsRoster = true,
-                    VariableName = "a",
-                    RosterSizeQuestionId = rosterSizeQiestionId,
-                    Children = new List<IComposite>()
-                    {
-                        new Group("nested field")
-                        {
-                            PublicKey = Guid.NewGuid()
-                        }
-                    }.ToReadOnlyCollection()
-                });
+                    Create.Group( Guid.NewGuid(), "nested field")
+                }));
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();

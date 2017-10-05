@@ -53,22 +53,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0019 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0019");
+            verificationMessages.ShouldContainError("WB0019");
 
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_2_references_on_questions () =>
-            verificationMessages.Single()
+            verificationMessages.GetError("WB0019")
                 .References.ToList()
                 .ForEach(question => question.Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question));
 
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_first_reference_to_question_with_substitution_text () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionsId);
+            verificationMessages.GetError("WB0019").References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionsId);
 
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_second_reference_to_question_that_used_as_substitution_question () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(underDeeperRosterLevelQuestionId);
+            verificationMessages.GetError("WB0019").References.ElementAt(1).Id.ShouldEqual(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

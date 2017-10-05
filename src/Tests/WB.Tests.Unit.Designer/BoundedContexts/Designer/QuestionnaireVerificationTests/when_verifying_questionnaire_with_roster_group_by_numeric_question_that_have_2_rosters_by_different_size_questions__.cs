@@ -53,11 +53,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_2_messages () =>
-             verificationMessages.Count().ShouldEqual(2);
 
-        [NUnit.Framework.Test] public void should_return_2_errors_with_code__WB0035__ () =>
-            verificationMessages.ShouldEachConformTo(error => error.Code == "WB0035");
+        [NUnit.Framework.Test]
+        public void should_return_2_errors_with_code__WB0035__() =>
+            verificationMessages.ShouldContainError("WB0035");
 
         [NUnit.Framework.Test] public void should_return_2_errors_with_1_references () =>
             verificationMessages.ShouldEachConformTo(error => error.References.Count() == 1);

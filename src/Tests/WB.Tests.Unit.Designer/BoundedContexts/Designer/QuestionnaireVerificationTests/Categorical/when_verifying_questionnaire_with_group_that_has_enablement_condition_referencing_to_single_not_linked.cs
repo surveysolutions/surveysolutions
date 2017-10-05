@@ -21,19 +21,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 {
                     PublicKey = categoricalQuestionId,
                     StataExportCaption = "var1",
-                    Answers =
-                        new List<Answer>()
+                    Answers = new List<Answer>()
                         {
                             new Answer() {AnswerValue = "1", AnswerText = "opt 1"},
                             new Answer() {AnswerValue = "2", AnswerText = "opt 2"}
                         },
                     QuestionText = "test"
                 },
-                new Group()
-                {
-                    PublicKey = groupWithEnablementConditionId,
-                    ConditionExpression = "some condition",
-                });
+                Create.Group(groupWithEnablementConditionId, enablementCondition: "some condition"));
 
             var expressionProcessor = Mock.Of<IExpressionProcessor>(processor
                 => processor.GetIdentifiersUsedInExpression(Moq.It.IsAny<string>()) ==

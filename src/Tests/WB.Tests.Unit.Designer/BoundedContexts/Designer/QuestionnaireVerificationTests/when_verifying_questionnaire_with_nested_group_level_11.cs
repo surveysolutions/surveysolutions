@@ -135,16 +135,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroupId () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(rosterGroupId);
+            verificationMessages.GetError("WB0101").References.First().Id.ShouldEqual(rosterGroupId);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Group () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.GetError("WB0101").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0055 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0101");
+            verificationMessages.ShouldContainError("WB0101");
     }
 }

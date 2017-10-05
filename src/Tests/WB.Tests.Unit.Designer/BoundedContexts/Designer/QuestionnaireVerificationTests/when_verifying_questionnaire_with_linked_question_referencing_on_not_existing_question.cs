@@ -4,8 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -33,20 +31,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0011__ () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0011");
+            verificationMessages.ShouldContainError("WB0074");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0074").References.Count().ShouldEqual(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
-            verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0074").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_linkedQuestionId () =>
-            verificationMessages.Single().References.Single().Id.ShouldEqual(linkedQuestionId);
+            verificationMessages.GetError("WB0074").References.Single().Id.ShouldEqual(linkedQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
