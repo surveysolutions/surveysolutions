@@ -38,7 +38,7 @@
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
-                "panel": "new"
+                "panel": "dedicated"
             },
             "problemMatcher": []
         },

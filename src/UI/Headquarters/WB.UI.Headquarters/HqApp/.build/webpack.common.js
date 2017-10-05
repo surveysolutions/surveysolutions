@@ -9,6 +9,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const merge = require('webpack-merge')
 
+const babelLoader = devMode ? "babel-loader?cacheDirectory=true" : "babel-loader"
+
 module.exports = {
     output: {
         path: path.resolve(__dirname, baseAppPath, "dist"),
@@ -26,7 +28,7 @@ module.exports = {
 
     stats: { chunks: false },
 
-    devtool: '#source-map',//  '#cheap-module-eval-source-map'
+    devtool:   '#cheap-module-eval-source-map',
     module: {
         rules: [
             {
@@ -34,13 +36,13 @@ module.exports = {
                 include: path.resolve(baseDir, "src"),
                 use: [{
                     loader: 'vue-loader', options: {
-                        loaders: { js: 'babel-loader' }
+                        loaders: { js: babelLoader }
                     }
                 }]
             }, {
                 test: /\.js$/,
                 include: path.resolve(baseDir, "src"),
-                use: ['babel-loader']
+                use: [babelLoader]
             }, {
                 test: /\.css$/,
                 use: ExtractTextPlugin.extract({
