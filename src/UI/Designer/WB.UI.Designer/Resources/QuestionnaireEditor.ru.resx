@@ -871,4 +871,8 @@
   <data name="SettingsShareView" xml:space="preserve">
     <value>Просматривать</value>
   </data>
+  <data name="SettingsQuestionnaireName" xml:space="preserve">
+    <value>Имя опросника:</value>
+    <comment>Имя опросника:</comment>
+  </data>
 </root>
