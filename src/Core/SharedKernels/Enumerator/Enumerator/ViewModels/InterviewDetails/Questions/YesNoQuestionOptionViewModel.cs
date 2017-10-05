@@ -110,5 +110,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.AnswerChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public string YesItemTag => this.QuestionViewModel.Identity + "_Opt_Yes_" + Value;
+        public string NoItemTag => this.QuestionViewModel.Identity + "_Opt_No_" + Value;
+
     }
 }

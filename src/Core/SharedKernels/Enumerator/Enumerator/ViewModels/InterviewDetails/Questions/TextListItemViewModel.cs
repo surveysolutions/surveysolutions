@@ -42,5 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void DeleteListItem() => this.ItemDeleted?.Invoke(this, EventArgs.Empty);
 
         private void OnItemEdited() => this.ItemEdited?.Invoke(this, EventArgs.Empty);
+
+        public string ItemTag => this.QuestionState.Header.Identity + "_Item_" + Value;
     }
 }
