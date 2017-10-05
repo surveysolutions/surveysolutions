@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
     {
         Establish context = () =>
         {
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder);
+            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             var sessionProvider =
