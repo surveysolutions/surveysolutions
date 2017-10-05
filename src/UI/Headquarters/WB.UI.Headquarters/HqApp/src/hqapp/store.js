@@ -18,7 +18,7 @@ const store = new Vuex.Store({
         createInterview({ rootState, dispatch }, assignmentId) {
             dispatch("showProgress", true);
 
-            $.post(Vue.$config.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
+            $.post(Vue.$config.model.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
                 dispatch("showProgress", true);
                 window.location = response;
             })
@@ -44,11 +44,11 @@ const store = new Vuex.Store({
         },
         openInterview(context, interviewId) {
             context.dispatch("showProgress", true);
-            window.location = Vue.$config.interviewerHqEndpoint + "/OpenInterview/" + interviewId
+            window.location = Vue.$config.model.interviewerHqEndpoint + "/OpenInterview/" + interviewId
         },
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
-                url: Vue.$config.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,
+                url: Vue.$config.model.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,
                 type: 'DELETE',
                 success: callback
             })

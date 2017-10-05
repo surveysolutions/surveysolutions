@@ -9,15 +9,5 @@
     ViewBag.ActivePage = MenuItem.CreateNew;
     Layout = @"~/Views/Shared/_MainLayoutHq.cshtml";
 }
-@section scripts {
-    <script>
-        window.CONFIG.title = '@MainMenu.CreateNew';
-        window.CONFIG.assignmentsEndpoint = '@Url.Content(@"~/api/Assignments")';
-        window.CONFIG.interviewerHqEndpoint = '@Url.Content(@"~/interviewerHq")';
-        window.CONFIG.resources = @Html.Raw(@JsonConvert.SerializeObject(
-                                 new[] { MainMenu.ResourceManager, Assignments.ResourceManager, Common.ResourceManager, Pages.ResourceManager }.Translations()
-                                 ));
-        
-    </script>
-}
+@Html.RenderHqConfig(Model)
 <div id="vueApp"></div>
