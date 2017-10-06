@@ -103,7 +103,7 @@ gulp.task("styles", function(){
 gulp.task("bowerCss", function () {
     return gulp.src(paths.vendor)
         .pipe(plugins.filter(['**/*.css']))
-        .pipe(debug())
+        //.pipe(debug())
         .pipe(concat('libs.css'))
         .pipe(plugins.rev())
         .pipe(gulp.dest('build'));
@@ -142,6 +142,20 @@ gulp.task('resx2json', function(){
       .pipe(gulp.dest('build/resources'));
 });
 
+gulp.task('copyFilesNeededForBundler', function(){
+  gulp.src([
+    'node_modules/perfect-scrollbar/css/perfect-scrollbar.css',
+    'node_modules/jquery/dist/jquery.min.js',
+    'node_modules/bootstrap/dist/js/bootstrap.min.js',
+    'node_modules/jquery-validation/dist/jquery.validate.js',
+    'node_modules/jquery-placeholder/jquery.placeholder.js',
+    'node_modules/jquery-mousewheel/jquery.mousewheel.js',
+    'node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js'
+  ])
+    //.pipe(debug({ title: 'copyFilesNeededForBundler task:' }))
+    .pipe(gulp.dest('../Content/plugins'));
+})
+
 gulp.task('devJs', function () {
     return gulp.src(paths.scripts)
       //.pipe(debug({ title: 'unicorn:' }))
@@ -172,7 +186,7 @@ gulp.task('index', function () {
 
 gulp.task('default', function(callback){
 	runSequence('clean', 
-		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss', 'resx2json'],
+		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss', 'resx2json', 'copyFilesNeededForBundler'],
 		'index', 
 		callback);
 });
