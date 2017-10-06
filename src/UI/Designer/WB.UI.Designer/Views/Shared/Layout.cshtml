@@ -15,9 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @Styles.Render("~/questionnaire/bootstrap/custom/css-list")
     @Styles.Render("~/Content/css-list")
-
-    <script src="~/questionnaire/vendor/jquery/dist/jquery.min.js" type="text/javascript"></script>
-    <script src="~/questionnaire/vendor/bootstrap/dist/js/bootstrap.js" type="text/javascript"></script>
+    
+    @Scripts.Render("~/simplepage")
 
     @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-designer"))
     @this.RenderSection("Styles", required: false)
