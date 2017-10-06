@@ -11,6 +11,7 @@
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType Condition="'$(TargetFramework)' != '' AND '$(TargetFramework)' != 'netcoreapp1.0'">Full</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslations.xlsx" />
@@ -48,7 +49,6 @@
     <PackageReference Include="FluentAssertions" Version="4.19.3" />
     <PackageReference Include="Iesi.Collections" Version="4.0.1.4000" />
     <PackageReference Include="Machine.Specifications" Version="0.11.0" />
-    <PackageReference Include="Machine.Specifications.Runner.VisualStudio" Version="2.3.0" />
     <PackageReference Include="Machine.Specifications.Should" Version="0.11.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
@@ -130,5 +130,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\" />
   </ItemGroup>
 </Project>
