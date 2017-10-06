@@ -104,17 +104,13 @@
     </div>
 </div>
 
+<div>
+    @Html.Partial("DeleteModalDialog")
+</div>
+<div>
+    @Html.Partial("ExportPdfModalDialog")
+</div>
 
-
-@section Modal
-{
-    <div>
-        @Html.Partial("DeleteModalDialog")
-    </div>
-    <div>
-        @Html.Partial("ExportPdfModalDialog")
-    </div>
-}
 @helper ShowTableHeaderCell(string field, string title, bool showSearch = false)
 {
 var isTableSortedByThisField = ViewBag.SortBy == field;
