@@ -17,14 +17,7 @@ import store from "./store"
 import config from "shared/config"
 
 Vue.use(config)
-
-Vue.use(Vuei18n, {
-    nsSeparator: '.',
-    keySeparator: ':',
-    resources: {
-        'en': Vue.$config.model.resources
-    }
-})
+Vue.use(Vuei18n)
 
 import './components'
 
