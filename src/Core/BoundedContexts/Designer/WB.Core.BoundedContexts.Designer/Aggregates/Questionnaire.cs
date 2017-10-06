@@ -1,5 +1,4 @@
-﻿using Main.Core.Entities;
-using Main.Core.Entities.SubEntities.Question;
+﻿using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -541,7 +540,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.ThrowDomainExceptionIfMacroIsAbsent(command.MacroId);
-            this.ThrowDomainExceptionIfMacroContentIsEmpty(command.Content);
             
             if (!innerDocument.Macros.ContainsKey(command.MacroId))
                 return;
@@ -717,7 +715,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return replacementIdDictionary.ContainsKey(id.Value) ? replacementIdDictionary[id.Value] : id;
         }
 
-
         public void UpdateGroup(Guid groupId, Guid responsibleId,
             string title,string variableName, Guid? rosterSizeQuestionId, string description, string condition, bool hideIfDisabled, 
             bool isRoster, RosterSizeSourceType rosterSizeSource, FixedRosterTitleItem[] rosterFixedTitles, Guid? rosterTitleQuestionId)
@@ -826,10 +823,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, sourceGroup.GetParent() as IGroup);
 
-            this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
-            this.ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(sourceGroup, targetGroup);
-            this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
-
             this.innerDocument.MoveItem(groupId, targetGroupId, targetIndex);
         }
 
@@ -889,7 +882,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowIfQuestionIsUsedAsCascadingParent(questionId);
 
             this.innerDocument.RemoveEntity(questionId);
            
@@ -1037,9 +1029,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, QuestionType.MultyOption, responsibleId, validationConditions);
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToEntityId, false, null, scope, null);
-            this.ThrowIfMaxAllowedAnswersInvalid(QuestionType.MultyOption, linkedToEntityId, maxAllowedAnswers, options);
-            this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
 
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
@@ -1109,12 +1098,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
 
             this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
-            this.ThrowIfCategoricalQuestionIsInvalid(questionId, options, linkedToEntityId, isPreFilled, isFilteredCombobox, scope, cascadeFromQuestionId);
-
-            if (!isFilteredCombobox && !cascadeFromQuestionId.HasValue)
-            {
-                this.ThrowIfCategoricalQuestionHasMoreThan200Options(options, linkedToEntityId.HasValue);
-            }
+         
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
 
@@ -1165,7 +1149,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfFilteredComboboxIsInvalid(questionId, options);
-            ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
             IQuestion newQuestion = CreateQuestion(questionId,
@@ -1199,13 +1182,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             ThrowDomainExceptionIfCascadingComboboxIsInvalid(questionId, options);
-            ThrowIfNotLinkedCategoricalQuestionIsInvalid(options, isCascade: true);
-
-            ThrowDomainExceptionIfOptionsHasEmptyParentValue(options);
-
-            ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(options);
-
-            ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(options);
 
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
 
@@ -1253,10 +1229,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
             this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled, QuestionType.Numeric, command.ResponsibleId, command.ValidationConditions);
-
-            this.ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(command.IsInteger, command.CountOfDecimalPlaces);
-            this.ThrowIfDecimalPlacesValueIsIncorrect(command.CountOfDecimalPlaces);
-
+          
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                 question.PublicKey,
@@ -1864,15 +1837,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Questionnaire Invariants
 
-        private void ThrowIfQuestionIsUsedAsCascadingParent(Guid questionId)
-        {
-            var usedInCascades = this.innerDocument.Find<SingleQuestion>(x => x.CascadeFromQuestionId == questionId).Any();
-            if (usedInCascades)
-            {
-                throw new QuestionnaireException(ExceptionMessages.CantRemoveParentQuestionInCascading);
-            }
-        }
-
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, string variableName, bool isPrefilled, QuestionType questionType, Guid responsibleId, IList<ValidationCondition> validationCoditions)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
@@ -1919,114 +1883,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                    string.Format(
                        "You can't move to sub-section {0} because it position {1} in not acceptable",
                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
-        }
-
-        private void ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(IGroup sourceGroup, IGroup targetGroup)
-        {
-            if (this.IsRosterOrInsideRoster(targetGroup)) return;
-
-            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(sourceGroup).Select(question => question.PublicKey);
-
-            var linkedQuestionSourcesInGroup = this.GetAllLinkedSourceQuestions().Intersect(allQuestionsIdsFromGroup);
-
-            if (linkedQuestionSourcesInGroup.Any())
-            {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "You can't move sub-section {0} to another sub-section because it contains linked source question(s): {1}",
-                        FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
-                        string.Join(Environment.NewLine,
-                            linkedQuestionSourcesInGroup.Select(
-                                questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
-            }
-        }
-
-        private void ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(IGroup sourceGroup, IGroup targetGroup)
-        {
-            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(sourceGroup).Select(question => question.PublicKey);
-
-            var rosterSizeQuestionsInGroup = this.GetAllRosterSizeQuestionIds().Intersect(allQuestionsIdsFromGroup);
-            var rosterSizeQuestionsOfTargetGroupAndUpperRosters = GetRosterSizeQuestionsOfGroupAndUpperRosters(targetGroup);
-
-            if (rosterSizeQuestionsOfTargetGroupAndUpperRosters.Intersect(rosterSizeQuestionsInGroup).Any())
-            {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "You can't move sub-section {0} to roster {1} because it contains roster source question(s): {2}",
-                        FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
-                        FormatGroupForException(targetGroup.PublicKey, this.innerDocument),
-                        string.Join(Environment.NewLine,
-                            rosterSizeQuestionsInGroup.Select(questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
-            }
-        }
-
-        private void ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(IGroup sourceGroup, IGroup targetGroup)
-        {
-            if (!IsRosterOrInsideRoster(sourceGroup) && !ContainsRoster(sourceGroup)) return;
-
-            IEnumerable<IQuestion> groupQuestions = GetAllQuestionsInGroup(sourceGroup);
-
-            var rosterTitleQuestionsWithDependentGroups =
-                from question in groupQuestions
-                let groupsWhereQuestionIsRosterTitle = this.GetGroupsByRosterTitleId(question.PublicKey, sourceGroup.PublicKey)
-                where groupsWhereQuestionIsRosterTitle.Any()
-                select new { RostertTitleQuestion = question, DependentGroups = groupsWhereQuestionIsRosterTitle };
-
-            if (rosterTitleQuestionsWithDependentGroups.All(question => !question.DependentGroups.Any())) return;
-
-            Func<Guid, IEnumerable<IGroup>, string> getWarningMessage = (rosterTitleQuestionId, invalidGroups) =>
-            {
-                return string.Format("Question {0} used as roster title question in sub-section(s):{1}{2}",
-                    this.FormatQuestionForException(rosterTitleQuestionId, this.innerDocument), Environment.NewLine,
-                    string.Join(Environment.NewLine,
-                        invalidGroups.Select(group => FormatGroupForException(@group.PublicKey, this.innerDocument))));
-            };
-
-            if (IsRosterOrInsideRoster(targetGroup))
-            {
-                var rosterForTargetGroup = GetFirstRosterParentGroupOrNull(targetGroup);
-
-                var rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion =
-                    rosterTitleQuestionsWithDependentGroups.Select(
-                        question =>
-                            new
-                            {
-                                RostertTitleQuestion = question.RostertTitleQuestion,
-                                DependentGroups =
-                                    question.DependentGroups.Where(
-                                        group => group.RosterSizeQuestionId != rosterForTargetGroup.RosterSizeQuestionId)
-                            }).Where(question => question.DependentGroups.Any());
-
-                if (!rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion.Any()) return;
-
-                var warningsForRosterTitlesNotInRostersByRosterSize =
-                    rosterTitleQuestionsWithDependentGroupsByTargetRosterSizeQuestion.Select(
-                        x => getWarningMessage(x.RostertTitleQuestion.PublicKey, x.DependentGroups));
-
-                throw new QuestionnaireException(
-                    string.Join(
-                        string.Format(
-                            "Sub-section {0} could not be moved to sub-section {1} because contains some questions that used as roster title questions in groups which have roster size question not the same as have target {1} group: ",
-                            FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
-                            FormatGroupForException(targetGroup.PublicKey, this.innerDocument)), Environment.NewLine,
-                        string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
-            }
-            else
-            {
-                if (sourceGroup.IsRoster || ContainsRoster(sourceGroup)) return;
-
-                var warningsForRosterTitlesNotInRostersByRosterSize =
-                    rosterTitleQuestionsWithDependentGroups.Select(
-                        x => getWarningMessage(x.RostertTitleQuestion.PublicKey, x.DependentGroups));
-
-                throw new QuestionnaireException(
-                    string.Join(
-                        string.Format("Sub-section {0} could not be moved to sub-section {1} because: ",
-                            FormatGroupForException(sourceGroup.PublicKey, this.innerDocument),
-                            FormatGroupForException(targetGroup.PublicKey, this.innerDocument)),
-                        Environment.NewLine,
-                        string.Join(Environment.NewLine, warningsForRosterTitlesNotInRostersByRosterSize)));
-            }
         }
 
         private void ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(string title)
@@ -2076,52 +1932,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("sub-section with public key {0} can't be found", groupPublicKey));
             }
         }
-       
-        private void ThrowIfCategoricalQuestionIsInvalid(Guid questionId, Option[] options, Guid? linkedToEntityId, bool isFeatured, bool? isFilteredCombobox, QuestionScope scope, Guid? cascadeFromQuestionId)
-        {
-            bool entityIsLinked = linkedToEntityId.HasValue;
-            bool questionHasOptions = options != null && options.Any();
-
-            if (entityIsLinked && questionHasOptions)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.ConflictBetweenLinkedQuestionAndOptions,
-                    "Categorical question cannot be with answers and linked to another question in the same time");
-            }
-
-            if (cascadeFromQuestionId.HasValue && entityIsLinked)
-            {
-                throw new QuestionnaireException(ExceptionMessages.CantBeLinkedAndCascadingAtSameTime);
-            }
-
-            if (cascadeFromQuestionId.HasValue)
-            {
-                var cascadefrom = this.innerDocument.Find<IQuestion>(x => x.PublicKey == cascadeFromQuestionId).FirstOrDefault();
-                if (cascadefrom == null)
-                {
-                    throw new QuestionnaireException(ExceptionMessages.ShouldCascadeFromExistingQuestion);
-                }
-            }
-
-            if (entityIsLinked)
-            {
-                //this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId);
-                this.ThrowIfLinkedEntityIsInvalid(linkedToEntityId, isFeatured);
-                this.ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(scope);
-            }
-            else if (isFilteredCombobox != true && !(cascadeFromQuestionId.HasValue))
-            {
-                ThrowIfNotLinkedCategoricalQuestionIsInvalid(options);
-            }
-        }
-
-        private void ThrowIfCategoricalQuestionHasMoreThan200Options(Option[] options, bool isLinkedQuestion)
-        {
-            if (!isLinkedQuestion && options.Count() > 200)
-            {
-                throw new QuestionnaireException(DomainExceptionType.CategoricalQuestionHasMoreThan200Options, ExceptionMessages.CategoricalQuestionHasMoreThan200Options);
-            }
-        }
 
         private void ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(Guid questionId, Guid? linkedToQuestionId)
         {
@@ -2138,125 +1948,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     string.Format("Linked categorical multi-select question could not be used as a roster title question in sub-section(s): {0}",
                         string.Join(Environment.NewLine,
                             rosterTitleQuestionGroups.Select(groupId => FormatGroupForException(groupId, this.innerDocument)))));
-            }
-        }
-
-        private void ThrowIfMaxAllowedAnswersInvalid(QuestionType questionType, Guid? linkedToQuestionId, int? maxAllowedAnswers,
-            Option[] options)
-        {
-            if (!maxAllowedAnswers.HasValue) return;
-
-            if (maxAllowedAnswers.Value < 2)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.MaxAllowedAnswersLessThan2,
-                    "Maximum Allowed Answers for question should be more than one");
-            }
-
-            if (!linkedToQuestionId.HasValue && maxAllowedAnswers.Value > options.Length)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.MaxAllowedAnswersMoreThanOptions,
-                    "Maximum Allowed Answers more than question's options");
-            }
-        }
-
-        private void ThrowIfLinkedEntityIsInvalid(Guid? linkedToEntityId, bool isPrefilled)
-        {
-            var linkedToQuestion =
-                this.innerDocument.Find<IQuestion>(x => x.PublicKey == linkedToEntityId).FirstOrDefault();
-
-            if (linkedToQuestion == null)
-            {
-                var linkedToRoster =
-                    this.innerDocument.Find<IGroup>(x => x.PublicKey == linkedToEntityId).FirstOrDefault();
-
-                if (linkedToRoster == null)
-                    throw new QuestionnaireException(
-                        DomainExceptionType.LinkedEntityDoesNotExist,
-                        "Entity that you are linked to does not exist");
-
-                if(!linkedToRoster.IsRoster)
-                    throw new QuestionnaireException(
-                       DomainExceptionType.GroupYouAreLinkedToIsNotRoster,
-                       "Group that you are linked to is not a roster");
-
-                return;
-            }
-
-            bool typeOfLinkedQuestionIsNotSupported = !(
-                linkedToQuestion.QuestionType == QuestionType.DateTime ||
-                    linkedToQuestion.QuestionType == QuestionType.Numeric ||
-                    linkedToQuestion.QuestionType == QuestionType.TextList ||
-                    linkedToQuestion.QuestionType == QuestionType.Text);
-
-            if (typeOfLinkedQuestionIsNotSupported)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.NotSupportedQuestionForLinkedQuestion,
-                    "Linked question can be only type of number, text or date");
-            }
-
-            if (isPrefilled)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionWithLinkedQuestionCanNotBeFeatured,
-                    "Question that linked to another question can not be identifying");
-            }
-        }
-
-        private void ThrowIfLinkedCategoricalQuestionIsNotFilledByInterviewer(QuestionScope scope)
-        {
-            if (scope == QuestionScope.Supervisor)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.LinkedCategoricalQuestionCanNotBeFilledBySupervisor,
-                    "Linked categorical questions cannot be filled by supervisor");
-            }
-        }
-
-        private static void ThrowIfNotLinkedCategoricalQuestionIsInvalid(Option[] options, bool isCascade = false)
-        {
-            if ((options == null || !options.Any() || options.Count() < 2))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.SelectorEmpty, "Question with options should have two options at least");
-            }
-
-            if (options.Any(x => string.IsNullOrEmpty(x.Value)))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.SelectorValueRequired, "Answer option value is required");
-            }
-
-            var tooLongValues = options.Where(option => option.Value.Length > 16).Select(option => option.Value).ToList();
-            if (tooLongValues.Any())
-            {
-                throw new QuestionnaireException(string.Format("Following option values are too long: {0}", string.Join(", ", tooLongValues)));
-            }
-
-            if (options.Any(x => !x.Value.IsDecimal()))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Option value should have only number characters");
-            }
-
-            if (!AreElementsUnique(options.Select(x => x.Value)))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.SelectorValueNotUnique,
-                    "Option values must be unique for categorical question");
-            }
-
-            if (options.Any(x => string.IsNullOrEmpty(x.Title)))
-            {
-                throw new QuestionnaireException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
-            }
-
-            if (!isCascade && !AreElementsUnique(options.Select(x => x.Title)))
-            {
-                throw new QuestionnaireException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
             }
         }
 
@@ -2321,43 +2012,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
         }
 
-        private void ThrowIfPrecisionSettingsAreInConflictWithDecimalPlaces(bool isInteger, int? countOfDecimalPlaces)
-        {
-            if (isInteger && countOfDecimalPlaces.HasValue)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.IntegerQuestionCantHaveDecimalPlacesSettings,
-                    "Roster size question can't have decimal places settings");
-            }
-        }
-
-        private void ThrowIfDecimalPlacesValueIsIncorrect(int? countOfDecimalPlaces)
-        {
-            if (!countOfDecimalPlaces.HasValue)
-                return;
-
-            if (countOfDecimalPlaces.Value > MaxCountOfDecimalPlaces)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
-                    string.Format("Number of decimal places '{0}' exceeded maximum '{1}'.", countOfDecimalPlaces, MaxCountOfDecimalPlaces));
-            }
-
-            if (countOfDecimalPlaces.Value < 0)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
-                    string.Format("Number of decimal places cant be negative."));
-            }
-
-            if (countOfDecimalPlaces.Value == 0)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CountOfDecimalPlacesValueIsIncorrect,
-                    string.Format("If you want number of decimal places equals to 0 please select integer."));
-            }
-        }
-
         private void ThrowDomainExceptionIfMoreThanOneGroupExists(Guid groupId)
         {
             this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IGroup>(
@@ -2399,14 +2053,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfMacroContentIsEmpty(string macroContent)
-        {
-            if (string.IsNullOrWhiteSpace(macroContent))
-            {
-                throw new QuestionnaireException(DomainExceptionType.MacroContentIsEmpty, ExceptionMessages.MacroContentIsEmpty);
-            }
-        }
-
         private void ThrowDomainExceptionIfMacroIsAbsent(Guid macroId)
         {
             if (!this.innerDocument.Macros.ContainsKey(macroId))
@@ -2428,38 +2074,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                    DomainExceptionType.DoesNotHavePermissionsForEdit,
                    "You don't have permissions for changing this questionnaire");
-            }
-        }
-
-        private void ThrowDomainExceptionIfOptionsHasEmptyParentValue(Option[] options)
-        {
-            if (options.Select(x => x.ParentValue).Any(string.IsNullOrWhiteSpace))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalCascadingOptionsCantContainsEmptyParentValueField,
-                    ExceptionMessages.CategoricalCascadingOptionsCantContainsEmptyParentValueField);
-            }
-        }
-
-        private void ThrowDomainExceptionIfOptionsHasNotDecimalParentValue(Option[] options)
-        {
-            decimal d;
-            if (options.Select(x => x.ParentValue).Any(number => !Decimal.TryParse(number, out d)))
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField,
-                    ExceptionMessages.CategoricalCascadingOptionsCantContainsNotDecimalParentValueField);
-            }
-        }
-
-        private void ThrowDomainExceptionIfOptionsHasNotUniqueTitleAndParentValuePair(Option[] options)
-        {
-
-            if (options.Select(x => x.ParentValue + "$" + x.Title).Distinct().Count() != options.Length)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair,
-                    ExceptionMessages.CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair);
             }
         }
 
@@ -2564,7 +2178,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         currentQuestion.QuestionType == QuestionType.Numeric ||
                         currentQuestion.QuestionType == QuestionType.SingleOption ||
                         currentQuestion.QuestionType == QuestionType.Text ||
-                        currentQuestion.QuestionType == QuestionType.AutoPropagate ||
                         currentQuestion.QuestionType == QuestionType.QRBarcode);
 
                     if (typeOfRefQuestionIsNotSupported)
