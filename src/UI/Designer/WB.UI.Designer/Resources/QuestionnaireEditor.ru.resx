@@ -455,7 +455,7 @@
     <value>Следующее</value>
   </data>
   <data name="FindReplacePrevious" xml:space="preserve">
-    <value>Предидущее</value>
+    <value>Предыдущее</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
     <value>Заменить все ({{count}})</value>
@@ -880,5 +880,8 @@
   </data>
   <data name="UntitledQuestion" xml:space="preserve">
     <value>Вопрос без названия</value>
+  </data>
+  <data name="FindReplaceReplaceWith" xml:space="preserve">
+    <value>Заменить на:</value>
   </data>
 </root>
