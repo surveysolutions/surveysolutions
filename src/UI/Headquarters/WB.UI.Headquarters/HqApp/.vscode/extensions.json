@@ -2,6 +2,7 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "octref.vetur",
-        "EditorConfig.editorconfig"
+        "EditorConfig.editorconfig",
+        "christian-kohler.npm-intellisense"
     ]
 }
