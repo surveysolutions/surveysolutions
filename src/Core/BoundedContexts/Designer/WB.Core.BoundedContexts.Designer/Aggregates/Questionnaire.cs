@@ -678,21 +678,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
-            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
-                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: fixedTitles,
-                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(parentGroupId));
-
             if (parentGroupId.HasValue)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroupId.Value);
                 this.ThrowIfTargetGroupHasReachedAllowedDepthLimit(parentGroupId.Value);
             }
-
-            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
-                text: title,
-                entityId: groupId,
-                variableName: variableName,
-                parentGroup: parentGroupId.HasValue ? this.innerDocument.Find<IGroup>(parentGroupId.Value) : this.innerDocument);
 
             this.AddGroup(CreateGroup(groupId, title, variableName, description, condition, hideIfDisabled),
                 parentGroupId);
@@ -742,31 +732,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var fixedTitles = GetRosterFixedTitlesOrThrow(rosterFixedTitles);
 
-            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: isRoster, rosterSizeSource: rosterSizeSource,
-                rosterSizeQuestionId: rosterSizeQuestionId, rosterFixedTitles: fixedTitles,
-                rosterTitleQuestionId: rosterTitleQuestionId, rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(groupId));
-            
             var group = this.GetGroupById(groupId);
 
             var wasGroupAndBecomeARoster = !@group.IsRoster && isRoster;
             var wasRosterAndBecomeAGroup = @group.IsRoster && !isRoster;
-
-            if (wasGroupAndBecomeARoster)
-            {
-                this.ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(group);
-            }
-            if (wasRosterAndBecomeAGroup)
-            {
-                this.ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(group);
-                this.ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(group);
-                this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(group, wasRosterAndBecomeAGroup: true);
-            }
-
-            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
-                text: title,
-                entityId: groupId,
-                variableName: variableName,
-                parentGroup: @group.GetParent() as IGroup ?? this.innerDocument);
 
             this.innerDocument.UpdateGroup(groupId,
                 title,
@@ -797,17 +766,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
-            this.ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(groupId);
 
             if (this.QuestionnaireDocument.Children.Count == 1 &&
                 this.QuestionnaireDocument.Children[0].PublicKey == groupId)
             {
                 throw new QuestionnaireException(DomainExceptionType.Undefined, "Last existing section can not be removed from questionnaire");
             }
-
-            var group = this.GetGroupById(groupId);
-
-            this.ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(group);
 
             this.innerDocument.RemoveEntity(groupId);
         }
@@ -865,22 +829,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowIfGroupFromRosterThatContainsRosterTitleQuestionMovedToAnotherGroup(sourceGroup, targetGroup);
             this.ThrowIfSourceGroupContainsInvalidRosterSizeQuestions(sourceGroup, targetGroup);
             this.ThrowIfGroupFromRosterThatContainsLinkedSourceQuestionsMovedToGroup(sourceGroup, targetGroup);
-            this.ThrowIfGroupMovedFromRosterToGroupAndContainsRosterTitleInSubstitution(sourceGroup, targetGroup);
-
-            this.ThrowIfRosterInformationIsIncorrect(groupId: groupId, isRoster: sourceGroup.IsRoster,
-                rosterSizeSource: sourceGroup.RosterSizeSource,
-                rosterSizeQuestionId: sourceGroup.RosterSizeQuestionId, rosterFixedTitles: sourceGroup.FixedRosterTitles,
-                rosterTitleQuestionId: sourceGroup.RosterTitleQuestionId,
-                rosterDepthFunc: () => GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey));
-
-            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
-                    text: sourceGroup.Title,
-                    entityId: sourceGroup.PublicKey,
-                    variableName: sourceGroup.VariableName,
-                    parentGroup: targetGroup);
 
             this.innerDocument.MoveItem(groupId, targetGroupId, targetIndex);
-            
         }
 
         #endregion
@@ -939,9 +889,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(questionId);
-            this.ThrowIfQuestionIsUsedAsRosterSize(questionId);
-            this.ThrowIfQuestionIsUsedAsRosterTitle(questionId);
             this.ThrowIfQuestionIsUsedAsCascadingParent(questionId);
 
             this.innerDocument.RemoveEntity(questionId);
@@ -961,22 +908,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var targetGroup = this.innerDocument.Find<IGroup>(targetGroupId);
 
             this.ThrowIfTargetIndexIsNotAcceptable(targetIndex, targetGroup, question.GetParent() as IGroup);
-
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(question.QuestionText, question.StataExportCaption,
-                questionId, question.Featured, targetGroup);
-
-            foreach (var validationCondition in question.ValidationConditions)
-            {
-                this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
-                    text: validationCondition.Message,
-                    entityId: questionId,
-                    variableName: question.StataExportCaption,
-                    parentGroup: targetGroup);
-            }
-            
-            this.ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(question, targetGroup);
-
-            this.ThrowDomainExceptionIfQuestionIsRosterSizeAndItsMovedToIncorrectGroup(question, targetGroup);
 
             this.innerDocument.MoveItem(questionId, targetGroupId, targetIndex);
         }
@@ -1683,7 +1614,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfEntityAlreadyExists(command.EntityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(command.ParentId);
-            this.ThrowDomainExceptionIfVariableLabelContainsSubstitution(command.VariableData.Label);
 
             this.ThrowIfChapterHasMoreThanAllowedLimit(command.ParentId);
 
@@ -1700,9 +1630,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateVariable(UpdateVariable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            
             this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
-            this.ThrowDomainExceptionIfVariableLabelContainsSubstitution(command.VariableData.Label);
 
             var oldVariable = this.innerDocument.Find<IVariable>(command.EntityId);
 
@@ -1948,28 +1876,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, string variableName, bool isPrefilled, QuestionType questionType, Guid responsibleId, IList<ValidationCondition> validationCoditions)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-
-            int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(questionType)
-                ? DefaultRestrictedVariableLengthLimit
-                : DefaultVariableLengthLimit;
-
-            this.ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(title, variableName, questionId, isPrefilled, parentGroup);
-
+        
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-
-            if (validationCoditions != null)
-            {
-                foreach (var validationCondition in validationCoditions)
-                {
-                    this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(
-                        text: validationCondition.Message,
-                        entityId: questionId,
-                        variableName: variableName,
-                        parentGroup: parentGroup);
-                }
             }
         }
 
@@ -1996,14 +1906,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         MaxGroupDepth));
                 }
             }
-        }
-
-        private void ThrowIfGroupMovedFromRosterToGroupAndContainsRosterTitleInSubstitution(IGroup sourceGroup, IGroup targetGroup)
-        {
-            if (this.IsRosterOrInsideRoster(targetGroup) || sourceGroup.IsRoster)
-                return;
-
-            this.ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(sourceGroup);
         }
 
         private void ThrowIfTargetIndexIsNotAcceptable(int targetIndex, IGroup targetGroup, IGroup parentGroup)
@@ -2561,396 +2463,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private void ThrowDomainExceptionIfVariableLabelContainsSubstitution(string variableLabel)
-        {
-            if (this.substitutionService.GetAllSubstitutionVariableNames(variableLabel).Length > 0)
-            {
-                throw new QuestionnaireException(DomainExceptionType.VariableLabelContainsSubstitutionReference,
-                    ExceptionMessages.VariableLabelContainsSubstitutionReference);
-            }
-        }
-
-        private void ThrowDomainExceptionIfQuestionTitleContainsIncorrectSubstitution(string text, string variableName,
-            Guid questionId, bool prefilled, IGroup parentGroup)
-        {
-            if (this.substitutionService.GetAllSubstitutionVariableNames(text).Length > 0  && prefilled)
-            {
-                throw new QuestionnaireException(DomainExceptionType.FeaturedQuestionTitleContainsSubstitutionReference,
-                    "It is not allowed to use substitutins in identifying question title");
-            }    
-
-            this.ThrowDomainExceptionIfTextContainsIncorrectSubstitution(text, variableName, questionId, parentGroup);
-        }
-
-        private void ThrowDomainExceptionIfTextContainsIncorrectSubstitution(string text, string variableName,
-            Guid entityId, IGroup parentGroup)
-        {
-            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(text);
-            if (substitutionReferences.Length == 0)
-                return;
-
-            List<string> unknownReferences, questionsIncorrectTypeOfReferenced, questionsIllegalPropagationScope, variablesIllegalPropagationScope, rostersIllegalPropagationScope;
-            
-            this.ValidateSubstitutionReferences(entityId, variableName, parentGroup, substitutionReferences,
-                out unknownReferences,
-                out questionsIncorrectTypeOfReferenced,
-                out questionsIllegalPropagationScope,
-                out variablesIllegalPropagationScope,
-                out rostersIllegalPropagationScope);
-
-            if (unknownReferences.Count > 0)
-                throw new QuestionnaireException(
-                    DomainExceptionType.TextContainsUnknownSubstitutionReference,
-                    "Text contains unknown substitution references: " + String.Join(", ", unknownReferences.ToArray()));
-
-            if (questionsIncorrectTypeOfReferenced.Count > 0)
-                throw new QuestionnaireException(
-                    DomainExceptionType.TextContainsSubstitutionReferenceQuestionOfInvalidType,
-                    "Text contains substitution references to questions of illegal type: " +
-                    String.Join(", ", questionsIncorrectTypeOfReferenced.ToArray()));
-
-            if (questionsIllegalPropagationScope.Count > 0)
-                throw new QuestionnaireException(
-                    DomainExceptionType.TextContainsInvalidSubstitutionReference,
-                    "Text contains illegal substitution references to questions: " +
-                    String.Join(", ", questionsIllegalPropagationScope.ToArray()));
-
-            if (variablesIllegalPropagationScope.Count > 0)
-                throw new QuestionnaireException(
-                    DomainExceptionType.TextContainsInvalidSubstitutionReference,
-                    "Text contains illegal substitution references to variables: " +
-                    String.Join(", ", variablesIllegalPropagationScope.ToArray()));
-
-            if (rostersIllegalPropagationScope.Count > 0)
-                throw new QuestionnaireException(
-                    DomainExceptionType.TextContainsInvalidSubstitutionReference,
-                    "Text contains illegal substitution references to rosters: " +
-                    String.Join(", ", rostersIllegalPropagationScope.ToArray()));
-        }
-
-        private void ThrowDomainExceptionIfQuestionUsedInConditionOrValidationOfOtherQuestionsAndGroups(Guid questionId)
-        {
-            var question = this.innerDocument.FirstOrDefault<IQuestion>(x => x.PublicKey == questionId);
-
-            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IComposite>(
-                condition:
-                    x => this.IsGroupAndHasQuestionIdInCondition(x, question) || this.IsQuestionAndHasQuestionIdInConditionOrValidation(x, question),
-                expectedCount: 0,
-                exceptionType: DomainExceptionType.QuestionOrGroupDependOnAnotherQuestion,
-                getExceptionDescription:
-                    groupsAndQuestions => string.Format("One or more questions/sub-sections depend on {0}:{1}{2}",
-                        question.QuestionText,
-                        Environment.NewLine,
-                        string.Join(Environment.NewLine, GetTitleList(groupsAndQuestions))));
-        }
-
-        private void ThrowDomainExceptionIfGroupQuestionsUsedAsRosterTitleQuestionOfOtherGroups(Guid groupId)
-        {
-            var groupQuestions = this.innerDocument.Find<IQuestion>(x => IsQuestionParent(groupId, x));
-
-            var referencedQuestions = groupQuestions.ToDictionary(question => question.PublicKey,
-                question => this.GetGroupsByRosterTitleId(question.PublicKey, groupId).Select(GetTitle));
-
-            if (referencedQuestions.Values.Count(x => x.Any()) > 0)
-            {
-                throw new QuestionnaireException(DomainExceptionType.QuestionUsedAsRosterTitleOfOtherGroup, string.Join(Environment.NewLine,
-                    referencedQuestions.Select(x => string.Format("Question {0} used as roster title question in sub-section(s):{1}{2}",
-                        FormatQuestionForException(x.Key, this.innerDocument),
-                        Environment.NewLine,
-                        string.Join(Environment.NewLine, x.Value)))));
-            }
-        }
-
-        
-        private void ThrowDomainExceptionIfQuestionIsRosterTitleAndItsMovedToIncorrectGroup(IQuestion question, IGroup targetGroup)
-        {
-
-            if (!GetGroupsByRosterTitleId(question.PublicKey).Any())
-                return;
-            
-            IGroup sourceRoster = GetFirstRosterParentGroupOrNull(question);
-            IGroup targetRoster = GetFirstRosterParentGroupOrNull(targetGroup);
-
-            if (targetRoster == null || (sourceRoster != null && targetRoster != null && sourceRoster.RosterSizeQuestionId.HasValue &&
-                targetRoster.RosterSizeQuestionId.HasValue && sourceRoster.RosterSizeQuestionId != targetRoster.RosterSizeQuestionId))
-                throw new QuestionnaireException(
-                    string.Format(
-                        "You can move a roster title question {0} only to a roster that has a roster source question {1}",
-                        this.FormatQuestionForException(question.PublicKey, this.innerDocument),
-                        this.FormatQuestionForException(sourceRoster.RosterSizeQuestionId.Value, this.innerDocument)));
-        }
-
-        private void ThrowDomainExceptionIfQuestionIsRosterSizeAndItsMovedToIncorrectGroup(AbstractQuestion question, IGroup targetGroup)
-        {
-            var groupsByRosterSizeQuestion =
-                this.GetGroupsByRosterSizeQuestion(question.PublicKey).Select(x => x.PublicKey);
-
-            if (!groupsByRosterSizeQuestion.Any())
-                return;
-
-            foreach (var groupByRosterSizeQuestion in groupsByRosterSizeQuestion)
-            {
-                if (
-                    !this.IsReferencedItemInTheSameScopeWithReferencesItem(GetQuestionnaireItemDepthAsVector(targetGroup.PublicKey),
-                        GetQuestionnaireItemDepthAsVector(groupByRosterSizeQuestion)))
-                    //   if (GetQuestionnaireItemDepth(targetGroup.PublicKey) > GetQuestionnaireItemDepth(groupByRosterSizeQuestion) - 1)
-                    throw new QuestionnaireException(string.Format(
-                        "Roster source question {0} cannot be placed deeper then roster.",
-                        FormatQuestionForException(question.PublicKey, this.innerDocument)));
-            }
-        }
-
-        private void ThrowIfRosterInformationIsIncorrect(Guid groupId, bool isRoster, RosterSizeSourceType rosterSizeSource,
-            Guid? rosterSizeQuestionId, FixedRosterTitle[] rosterFixedTitles, Guid? rosterTitleQuestionId, Func<Guid[]> rosterDepthFunc)
-        {
-            if (!isRoster) return;
-
-            switch (rosterSizeSource)
-            {
-                case RosterSizeSourceType.Question:
-                    this.ThrowIfRosterSizeQuestionIsIncorrect(groupId, rosterSizeQuestionId, rosterTitleQuestionId, rosterFixedTitles,
-                        rosterDepthFunc);
-                    break;
-                case RosterSizeSourceType.FixedTitles:
-                    this.ThrowIfRosterByFixedTitlesIsIncorrect(rosterSizeQuestionId, rosterTitleQuestionId, rosterFixedTitles);
-                    break;
-            }
-        }
-
-        private void ThrowIfRosterByFixedTitlesIsIncorrect(Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
-            FixedRosterTitle[] rosterFixedTitles)
-        {
-            if (rosterFixedTitles == null || rosterFixedTitles.Length < 2)
-            {
-                throw new QuestionnaireException("List of titles for fixed set of items roster should contain at least two items");
-            }
-            
-            if (rosterFixedTitles.Length > 250)
-            {
-                throw new QuestionnaireException("Number of titles for fixed set of items roster could not be more than 250");
-            }
-
-            if (rosterFixedTitles.Any(item => string.IsNullOrWhiteSpace(item.Title)))
-            {
-                throw new QuestionnaireException("Fixed set of items roster title could not have empty titles");
-            }
-            
-            if (rosterSizeQuestionId.HasValue)
-            {
-                throw new QuestionnaireException("Fixed set of items roster could not have roster source question");
-            }
-
-            if (rosterTitleQuestionId.HasValue)
-            {
-                throw new QuestionnaireException("Fixed set of items roster could not have roster title question");
-            }
-        }
-
-        private void ThrowIfRosterSizeQuestionIsIncorrect(Guid groupId, Guid? rosterSizeQuestionId, Guid? rosterTitleQuestionId,
-            FixedRosterTitle[] rosterFixedTitles, Func<Guid[]> rosterDepthFunc)
-        {
-            if (!rosterSizeQuestionId.HasValue)
-                throw new QuestionnaireException("Roster source question is empty");
-
-            var localRosterSizeQuestionId = rosterSizeQuestionId.Value;
-            var rosterSizeQuestion = this.innerDocument.Find<IQuestion>(localRosterSizeQuestionId);
-            if (rosterSizeQuestion == null)
-                // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
-                throw new QuestionnaireException(string.Format(
-                    "Roster source question {0} is missing in questionnaire.",
-                    rosterSizeQuestionId));
-
-            if (!RosterSizeQuestionTypes.Contains(rosterSizeQuestion.QuestionType))
-                throw new QuestionnaireException(string.Format(
-                    "Roster source question {0} should have numeric or categorical multi-select Answers or List type.",
-                    FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
-
-            if (
-                !this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(rosterSizeQuestionId),
-                    rosterDepthFunc()))
-                throw new QuestionnaireException(string.Format(
-                    "Roster source question {0} cannot be placed deeper then roster.",
-                    FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
-
-
-            if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterSizeQuestion.LinkedToQuestionId.HasValue)
-                throw new QuestionnaireException(string.Format(
-                    "Roster source question {0} should not be linked.",
-                    FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
-
-            if (rosterSizeQuestion.QuestionType == QuestionType.MultyOption && rosterTitleQuestionId.HasValue)
-                throw new QuestionnaireException(string.Format(
-                    "Roster having categorical multi-select question {0} as roster size source cannot have roster title question.",
-                    this.FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
-
-            if (rosterSizeQuestion.QuestionType == QuestionType.TextList && rosterTitleQuestionId.HasValue)
-                throw new QuestionnaireException(string.Format(
-                    "Roster having list question {0} as roster size source cannot have roster title question.",
-                    this.FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
-
-            if (rosterSizeQuestion.QuestionType == QuestionType.Numeric)
-            {
-                var numericQuestion = (INumericQuestion)rosterSizeQuestion;
-
-                if (!numericQuestion.IsInteger)
-                    throw new QuestionnaireException(string.Format(
-                        "Roster source question {0} should be Integer.",
-                        FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
-
-                if (rosterTitleQuestionId.HasValue)
-                {
-                    var rosterTitleQuestion = this.innerDocument.Find<IQuestion>(rosterTitleQuestionId.Value);
-                    if (rosterTitleQuestion == null)
-                        // TODO: Guid should be replaced, but question is missing, so title or variable name cannot be found 
-                        throw new QuestionnaireException(string.Format(
-                            "Roster title question {0} is missing in questionnaire.", rosterTitleQuestionId));
-
-                    if (
-                        !IsRosterTitleInRosterByRosterSize(rosterTitleQuestion: rosterTitleQuestion,
-                            rosterSizeQuestionId: localRosterSizeQuestionId, currentRosterId: groupId))
-                        throw new QuestionnaireException(string.Format(
-                            "Question for roster titles {0} should be placed only inside groups where roster source question is {1}",
-                            FormatQuestionForException(rosterTitleQuestionId.Value, this.innerDocument),
-                            FormatQuestionForException(localRosterSizeQuestionId, this.innerDocument)));
-                }
-            }
-
-            if (rosterFixedTitles != null && rosterFixedTitles.Any())
-            {
-                throw new QuestionnaireException(string.Format("Roster fixed items list should be empty for roster by question: {0}.",
-                    FormatGroupForException(groupId, this.innerDocument)));
-            }
-        }
-
-        private void ThrowIfQuestionIsUsedAsRosterSize(Guid questionId)
-        {
-            var referencingRoster = this.innerDocument.Find<IGroup>(group => @group.RosterSizeQuestionId == questionId).FirstOrDefault();
-
-            if (referencingRoster != null)
-                throw new QuestionnaireException(
-                    string.Format("Question {0} is referenced as roster source question by sub-section {1}.",
-                        FormatQuestionForException(questionId, this.innerDocument),
-                        FormatGroupForException(referencingRoster.PublicKey, this.innerDocument)));
-        }
-
-        private void ThrowIfQuestionIsUsedAsRosterTitle(Guid questionId)
-        {
-            var referencingRosterTitle =
-                this.innerDocument.Find<IGroup>(
-                    group =>
-                        @group.RosterTitleQuestionId == questionId && group.RosterSizeQuestionId.HasValue &&
-                            this.innerDocument.FirstOrDefault<IQuestion>(
-                                question =>
-                                    question.PublicKey == @group.RosterSizeQuestionId.Value && question.QuestionType == QuestionType.Numeric) != null)
-                    .FirstOrDefault();
-
-            if (referencingRosterTitle != null)
-                throw new QuestionnaireException(
-                    string.Format("Question {0} is referenced as roster title question by sub-section {1}.",
-                        FormatQuestionForException(questionId, this.innerDocument),
-                        FormatGroupForException(referencingRosterTitle.PublicKey, this.innerDocument)));
-        }
-
-        private void ThrowIfRosterHaveAQuestionThatUsedAsRosterTitleQuestionOfOtherGroups(IGroup group)
-        {
-            var allRosterTitleQuestions =
-                this.innerDocument.Find<IGroup>(g => g.PublicKey != group.PublicKey && g.RosterTitleQuestionId.HasValue)
-                    .Select(g => g.RosterTitleQuestionId.Value);
-
-
-            if (!allRosterTitleQuestions.Any()) return;
-
-            var allQuestionsInGroup = GetAllQuestionsInGroup(group).Select(q => q.PublicKey);
-
-            var rosterTitleQuestionsOfOtherGroups =
-                allQuestionsInGroup.Intersect(allRosterTitleQuestions);
-
-            if (!rosterTitleQuestionsOfOtherGroups.Any()) return;
-
-            throw new QuestionnaireException(
-                string.Format(
-                    "This roster can't become a sub-section because contains a roster title questions of other sub-section(s): {0}",
-                    string.Join(Environment.NewLine,
-                        rosterTitleQuestionsOfOtherGroups.Select(
-                            questionId => FormatQuestionForException(questionId, this.innerDocument)))));
-        }
-
-        private void ThrowIfGroupCantBecomeARosterBecauseOfPrefilledQuestions(IGroup group)
-        {
-            var hasAnyPrefilledQuestion = this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group).Any(question => question.Featured);
-
-            if (!hasAnyPrefilledQuestion) return;
-
-            var questionVariables = GetFilteredQuestionForException(@group, question => question.Featured);
-
-            throw new QuestionnaireException(
-                string.Format(
-                    "This sub-section can't become a roster because contains identifying questions: {0}. Toggle off identifying property for that questions to complete this operation",
-                    string.Join(Environment.NewLine, questionVariables)));
-        }
-
-        private void ThrowIfRosterCantBecomeAGroupBecauseOfReferencesOnRosterTitleInSubstitutions(IGroup group, bool wasRosterAndBecomeAGroup = false)
-        {
-            var hasAnyQuestionsWithRosterTitleInSubstitutions =
-                this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group)
-                    .Where(x => wasRosterAndBecomeAGroup || GetFirstRosterParentGroupOrNull(x, group) == null)
-                    .Any(
-                        question =>
-                            this.substitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
-                                .Contains(this.substitutionService.RosterTitleSubstitutionReference));
-
-            if (!hasAnyQuestionsWithRosterTitleInSubstitutions) return;
-
-            var questionVariables = GetFilteredQuestionForException(@group, question => this.substitutionService.GetAllSubstitutionVariableNames(question.QuestionText)
-                                .Contains(this.substitutionService.RosterTitleSubstitutionReference));
-
-            throw new QuestionnaireException(
-                string.Format(
-                    "This sub-section can't become a roster because contains questions with reference on roster title in substitution: {0}.",
-                    string.Join(Environment.NewLine, questionVariables)));
-        }
-
-        private void ThrowIfRosterCantBecomeAGroupBecauseContainsLinkedSourceQuestions(IGroup group)
-        {
-            if (GetFirstRosterParentGroupOrNull(group.GetParent()) != null)
-                return;
-
-            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(@group).Select(question => question.PublicKey);
-
-            var linkedQuestionSourcesInGroup = this.GetAllLinkedSourceQuestions().Intersect(allQuestionsIdsFromGroup);
-
-            if (linkedQuestionSourcesInGroup.Any())
-            {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "This {0} roster can't become a sub-section because contains linked source question(s): {1}",
-                        FormatGroupForException(@group.PublicKey, this.innerDocument),
-                        string.Join(Environment.NewLine,
-                            linkedQuestionSourcesInGroup.Select(
-                                questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
-            }
-        }
-
-        private void ThrowDomainExceptionIfRosterQuestionsUsedAsLinkedSourceQuestions(IGroup group)
-        {
-            if (!this.IsRosterOrInsideRoster(@group)) return;
-
-            var allQuestionsIdsFromGroup = this.GetAllQuestionsInGroup(@group).Select(question => question.PublicKey);
-
-            var linkedQuestionSourcesInGroup = this.GetAllLinkedSourceQuestions().Intersect(allQuestionsIdsFromGroup);
-
-            if (linkedQuestionSourcesInGroup.Any())
-            {
-                throw new QuestionnaireException(
-                    string.Format(
-                        "You can't delete {0} sub-section because it contains linked source question(s): {1}",
-                        FormatGroupForException(@group.PublicKey, this.innerDocument),
-                        string.Join(Environment.NewLine,
-                            linkedQuestionSourcesInGroup.Select(
-                                questionId => this.FormatQuestionForException(questionId, this.innerDocument)))));
-            }
-        }
-
         private void ThrowDomainExceptionIfFilteredComboboxIsInvalid(Guid questionId, Option[] options)
         {
             var categoricalOneAnswerQuestion = this.innerDocument.Find<SingleQuestion>(questionId);
@@ -2967,14 +2479,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionIsNotAFilteredCombobox,
                     string.Format("Question {0} is not a combo box", FormatQuestionForException(questionId, this.innerDocument)));
             }
-
-            if (options != null && options.Length > maxFilteredComboboxOptionsCount)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.FilteredComboboxQuestionOptionsMaxLength,
-                    string.Format("Combo box question {0} contains more than {1} options",
-                        FormatQuestionForException(questionId, this.innerDocument), maxFilteredComboboxOptionsCount));
-            }
         }
 
         private void ThrowDomainExceptionIfCascadingComboboxIsInvalid(Guid questionId, Option[] options)
@@ -2985,14 +2489,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionNotFound,
                     string.Format("Combo box with public key {0} can't be found", questionId));
-            }
-            
-            if (options != null && options.Length > maxCascadingComboboxOptionsCount)
-            {
-                throw new QuestionnaireException(
-                    DomainExceptionType.CategoricalCascadingQuestionOptionsMaxLength,
-                    string.Format("Combo box question {0} contains more than {1} options",
-                        FormatQuestionForException(questionId, this.innerDocument), maxCascadingComboboxOptionsCount));
             }
         }
 
