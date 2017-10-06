@@ -88,7 +88,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Please, confirm your account first. We&apos;ve sent a confirmation link to {0}. Didn&apos;t get it?.
         /// </summary>
         internal static string ConfirmAccount {
             get {
@@ -193,6 +193,15 @@ namespace WB.UI.Designer.Resources {
         internal static string Questionnaire_verification_failed {
             get {
                 return ResourceManager.GetString("Questionnaire_verification_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request another one..
+        /// </summary>
+        internal static string RequestAnotherEmail {
+            get {
+                return ResourceManager.GetString("RequestAnotherEmail", resourceCulture);
             }
         }
         
