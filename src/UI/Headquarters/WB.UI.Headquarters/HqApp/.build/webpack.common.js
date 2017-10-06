@@ -69,10 +69,6 @@ module.exports = {
             'moment': 'moment'
         }),
 
-        devMode ? null : new cleanWebpackPlugin(["dist/*.*"], {
-            root: path.resolve(__dirname, baseAppPath)
-        }),
-
         new ExtractTextPlugin("styles.css"),
         
         devMode ? null : new webpack.optimize.CommonsChunkPlugin({
