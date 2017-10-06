@@ -413,11 +413,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\PdfMessages.ru.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>PdfMessages.ru.resx</DependentUpon>
-    </Compile>
     <Compile Include="Resources\QuestionnaireController.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -840,7 +835,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
