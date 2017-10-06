@@ -87,10 +87,10 @@
                 <div class="modal-footer">
                     @using (Html.BeginForm("Revert", "Questionnaire", FormMethod.Post))
                     {
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">@QuestionnaireHistoryResources.Cancel</button>
                         @Html.Hidden("id", @Model.Id)
                         @Html.Hidden("commandId", null, new { id = "commandId" })
-                        <button type="submit" class="btn btn-primary" id="confirmRevertBtn">Revert</button>
+                        <button type="submit" class="btn btn-primary" id="confirmRevertBtn">@QuestionnaireHistoryResources.Revert</button>
                     }
                 </div>
             </div>

@@ -53,7 +53,7 @@
                     <a class="btn btn-default" href="@Url.Action("RestoreQuestionnaire", "Admin")">@QuestionnaireController.RestoreQuestionnaire</a>
                 }
                 <div class="btn-group">
-                    <a class="btn btn-default">Hi, @userHelper.WebUser.UserName</a>
+                    <a class="btn btn-default">@string.Format(QuestionnaireController.Hello, @userHelper.WebUser.UserName)</a>
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
                         <span class="sr-only"></span>

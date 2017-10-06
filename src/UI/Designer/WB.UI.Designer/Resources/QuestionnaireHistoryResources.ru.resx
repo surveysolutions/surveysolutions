@@ -118,174 +118,174 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Group" xml:space="preserve">
-    <value>Section</value>
+    <value>Секция</value>
   </data>
   <data name="Person" xml:space="preserve">
-    <value>Person</value>
+    <value>Пользователь</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>Question</value>
+    <value>Вопрос</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
+    <value>Опросник</value>
   </data>
   <data name="Roster" xml:space="preserve">
-    <value>Roster</value>
+    <value>Ростер</value>
   </data>
   <data name="StaticText" xml:space="preserve">
-    <value>Static text</value>
+    <value>Статический текст</value>
   </data>
   <data name="added" xml:space="preserve">
-    <value>added</value>
+    <value>добавлен</value>
   </data>
   <data name="created" xml:space="preserve">
-    <value>created</value>
+    <value>создан</value>
   </data>
   <data name="cloned" xml:space="preserve">
-    <value>cloned</value>
+    <value>клонирован</value>
   </data>
   <data name="deleted" xml:space="preserve">
-    <value>deleted</value>
+    <value>удален</value>
   </data>
   <data name="changed" xml:space="preserve">
-    <value>changed</value>
+    <value>изменен</value>
   </data>
   <data name="became_a_roster" xml:space="preserve">
-    <value>became a roster</value>
+    <value>стала ростером</value>
   </data>
   <data name="became_a_group" xml:space="preserve">
-    <value>became a group</value>
+    <value>стал группой</value>
   </data>
   <data name="moved" xml:space="preserve">
-    <value>moved</value>
+    <value>перемещён</value>
   </data>
   <data name="replaced" xml:space="preserve">
-    <value>replaced</value>
+    <value>заменен</value>
   </data>
   <data name="reverted" xml:space="preserve">
-    <value>Questionnaire "{0}" reverted</value>
+    <value>Откат опросника  "{0}"</value>
   </data>
   <data name="unknown" xml:space="preserve">
     <value>unknown</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Редактировать</value>
   </data>
   <data name="QuestionnaireChangeHistory" xml:space="preserve">
-    <value>Questionnaire change history</value>
+    <value>История изменений опросника</value>
   </data>
   <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
-    <value>This list does not contain any records</value>
+    <value>Нет записей</value>
   </data>
   <data name="Timestamp" xml:space="preserve">
-    <value>Timestamp</value>
+    <value>Дата изменения</value>
   </data>
   <data name="UnknownUserName" xml:space="preserve">
-    <value>&lt;&lt;UNKNOWN&gt;&gt;</value>
+    <value>&lt;&lt;НЕИЗВЕСТНЫЙ&gt;&gt;</value>
   </data>
   <data name="UserName" xml:space="preserve">
-    <value>UserName</value>
+    <value>Кто изменил</value>
   </data>
   <data name="imported" xml:space="preserve">
-    <value>imported</value>
+    <value>заимпортирован</value>
   </data>
   <data name="Change" xml:space="preserve">
-    <value>Change</value>
+    <value>Изменение</value>
   </data>
   <data name="from" xml:space="preserve">
-    <value> from</value>
+    <value>с</value>
   </data>
   <data name="to" xml:space="preserve">
     <value> to</value>
   </data>
   <data name="Macro" xml:space="preserve">
-    <value>Macro</value>
+    <value>Макрос</value>
   </data>
   <data name="Macro_EmptyMacroAdded" xml:space="preserve">
-    <value>Empty macro with no name added</value>
+    <value>Добавлен пустой макрос без имени </value>
   </data>
   <data name="Macro_Deleted" xml:space="preserve">
-    <value>Macro "{0}" deleted</value>
+    <value>Удален макрос "{0}"</value>
   </data>
   <data name="Macro_Updated" xml:space="preserve">
-    <value>Macro "{0}" updated</value>
+    <value>Обновлен макрос "{0}"</value>
   </data>
   <data name="LookupTable_EmptyTableAdded" xml:space="preserve">
-    <value>Empty lookup table with no name added</value>
+    <value>Добавлена пустая справочная таблица без имени</value>
   </data>
   <data name="LookupTable_Deleted" xml:space="preserve">
-    <value>Lookup table "{0}" updated</value>
+    <value>Обновлена справочная таблица "{0}"</value>
   </data>
   <data name="LookupTable_Updated" xml:space="preserve">
-    <value>Lookup table "{0}" updated</value>
+    <value>Обновлена справочна таблица "{0}"</value>
   </data>
   <data name="LookupTable_EmptyTableDeleted" xml:space="preserve">
-    <value>Lookup table with no name deleted</value>
+    <value>Удалена справочная таблица без имени</value>
   </data>
   <data name="LookupTable_EmptyTableUpdated" xml:space="preserve">
-    <value>Lookup table with no name updated</value>
+    <value>Обновлена справочная таблица без имени</value>
   </data>
   <data name="Macro_EmptyMacroDeleted" xml:space="preserve">
-    <value>Macro with no name deleted</value>
+    <value>Макрос без имени удален</value>
   </data>
   <data name="Macro_EmptyMacroUpdated" xml:space="preserve">
-    <value>Macro with no name updated</value>
+    <value>Обновлен макрос без имени</value>
   </data>
   <data name="LookupTable" xml:space="preserve">
-    <value>Lookup table</value>
+    <value>Справочная таблица</value>
   </data>
   <data name="Attachment_Deleted" xml:space="preserve">
-    <value>Attachment "{0}" deleted</value>
+    <value>Удалено вложение "{0}"</value>
   </data>
   <data name="Attachment_Updated" xml:space="preserve">
-    <value>Attachment "{0}" updated</value>
+    <value>Обновлено вложение "{0}"</value>
   </data>
   <data name="Variable" xml:space="preserve">
-    <value>Variable</value>
+    <value>Переменная</value>
   </data>
   <data name="VariableAdded" xml:space="preserve">
-    <value>Empty variable with no name added</value>
+    <value>Пустая переменная без имени добавлена</value>
   </data>
   <data name="VariableAddedWithName" xml:space="preserve">
-    <value>Variable "{0}" added</value>
+    <value>Добавлена переменная "{0}"</value>
   </data>
   <data name="VariableDeleted" xml:space="preserve">
-    <value>Variable with no name deleted</value>
+    <value>Удалена переменная без имени</value>
   </data>
   <data name="VariableDeletedWithName" xml:space="preserve">
-    <value>Variable "{0}" deleted</value>
+    <value>Удалена переменная "{0}"</value>
   </data>
   <data name="VariableUpdated" xml:space="preserve">
-    <value>Variable with no name updated</value>
+    <value>Обновлена переменная без имени</value>
   </data>
   <data name="VariableUpdatedWithName" xml:space="preserve">
-    <value>Variable "{0}" updated</value>
+    <value>Обновлена переменная "{0}"</value>
   </data>
   <data name="Translation_Deleted" xml:space="preserve">
-    <value>Translation "{0}" deleted</value>
+    <value>Удален перевод "{0}"</value>
   </data>
   <data name="Translation_Updated" xml:space="preserve">
-    <value>Translation "{0}" updated</value>
+    <value>Обновлен перевод "{0}"</value>
   </data>
   <data name="TextsReplaced" xml:space="preserve">
-    <value>All '{0}' were replaced with '{1}'. {2} entries affected</value>
+    <value>Все '{0}' были заменены на '{1}'. {2} изменений применено</value>
   </data>
   <data name="RevertToThisVersion" xml:space="preserve">
-    <value>Revert to this version</value>
+    <value>Откатиться до этой версии</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirm</value>
+    <value>Подтверждение</value>
   </data>
   <data name="ResetQuestionnaireToThis" xml:space="preserve">
-    <value>Reset questionnaire to version at {0}?</value>
+    <value>Откатить опросник до версии от {0}?</value>
   </data>
   <data name="reverted_to" xml:space="preserve">
-    <value>Questionnaire "{0}" reverted to version from {1}</value>
+    <value>Опросник "{0}" бы вернут к версии по состоянию на  {1}</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отмена</value>
   </data>
   <data name="Revert" xml:space="preserve">
-    <value>Revert</value>
+    <value>Откатить</value>
   </data>
 </root>

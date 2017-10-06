@@ -117,130 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
+  <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>Здравствуйте {0}, &lt;br&gt; пользователь {1} удалил Вас из списка редакторов опросника: {2}</value>
   </data>
-  <data name="BackToList" xml:space="preserve">
-    <value>Back to List</value>
+  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>Здравствуйте {0}, &lt;br&gt; пользователь {1} пригласил вас {2} следующий вопросник:</value>
   </data>
-  <data name="Backup" xml:space="preserve">
-    <value>Backup</value>
+  <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+    <value>Здравствуйте {0}, &lt;br&gt; {1} закрыл доступ для {2} к вашему опроснику: {3}</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+    <value>Здравствуйте {0}, &lt;br&gt; пользователь {1}  разрешил пользователю {2} {3} ваш опросник:</value>
   </data>
-  <data name="CancelSearch" xml:space="preserve">
-    <value>Cancel search</value>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс регистрации, нажмите на эту ссылку:</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="CompleteRegistration" xml:space="preserve">
+    <value>завершение регистрации</value>
   </data>
-  <data name="Confirmation" xml:space="preserve">
-    <value>confirmation</value>
+  <data name="ResetPasswordEmail" xml:space="preserve">
+    <value>Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс сброса пароля, нажмите на эту ссылку:</value>
   </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>сброс пароля</value>
   </data>
-  <data name="CopyQuestionnaire" xml:space="preserve">
-    <value>Copy Questionnaire</value>
+  <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
+    <value>просматривать</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Create</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_edit" xml:space="preserve">
+    <value>редактировать</value>
   </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>Created By</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
+    <value>ссылка</value>
   </data>
-  <data name="CreatedDate" xml:space="preserve">
-    <value>Created date</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
+    <value>пользователь</value>
   </data>
-  <data name="CreateNew" xml:space="preserve">
-    <value>Create New</value>
+  <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+    <value>Завершение регистрации</value>
   </data>
-  <data name="CreateNewQuestionnaire" xml:space="preserve">
-    <value>Create New Questionnaire</value>
+  <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+    <value>Уведомление о разрешении доступа к Вашему опроснику</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Уведомление о прекращении доступа к Вашему опроснику</value>
   </data>
-  <data name="DeleteConfirmationText" xml:space="preserve">
-    <value>Do you really want to delete "{0}" questionnaire?</value>
+  <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+    <value>Уведомление о разрешении доступа к опроснику</value>
   </data>
-  <data name="Deleting" xml:space="preserve">
-    <value>Deleting</value>
+  <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Уведомление о прекращении доступа к опроснику</value>
   </data>
-  <data name="Designer" xml:space="preserve">
-    <value>Questionnaire designer</value>
-  </data>
-  <data name="DownloadPdf" xml:space="preserve">
-    <value>Download PDF</value>
-  </data>
-  <data name="EmptyList" xml:space="preserve">
-    <value>This list does not contain any records</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="ErrorDescription" xml:space="preserve">
-    <value>An error occurred while processing your request</value>
-  </data>
-  <data name="ExportAsPDF" xml:space="preserve">
-    <value>Export as PDF</value>
-  </data>
-  <data name="Forbidden" xml:space="preserve">
-    <value>You don't have permission to edit this questionnaire</value>
-  </data>
-  <data name="ForbiddenDelete" xml:space="preserve">
-    <value>You don't have permissions to delete this questionnaire.</value>
-  </data>
-  <data name="ForbiddenRevert" xml:space="preserve">
-    <value>You don't  have permissions to restore operation for this questionnaire.</value>
-  </data>
-  <data name="GeneratingPdf" xml:space="preserve">
-    <value>Generating pdf for "{0}"</value>
-  </data>
-  <data name="Initializing" xml:space="preserve">
-    <value>Initializing</value>
-  </data>
-  <data name="LastModified" xml:space="preserve">
-    <value>Last modified</value>
-  </data>
-  <data name="ManageUsers" xml:space="preserve">
-    <value>Manage users</value>
-  </data>
-  <data name="MyQuestionnaires" xml:space="preserve">
-    <value>My Questionnaires</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hi, {0}</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="PublicQuestionnaires" xml:space="preserve">
-    <value>Public Questionnaires</value>
-  </data>
-  <data name="QuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire Title</value>
-  </data>
-  <data name="RestoreQuestionnaire" xml:space="preserve">
-    <value>Restore questionnaire</value>
-  </data>
-  <data name="RetryExportPDF" xml:space="preserve">
-    <value>Retry export as PDF</value>
-  </data>
-  <data name="SelectTabFile" xml:space="preserve">
-    <value>Choose tab-separated values file to upload, please</value>
-  </data>
-  <data name="SuccessDeleteMessage" xml:space="preserve">
-    <value>Questionnaire "{0}" successfully deleted</value>
-  </data>
-  <data name="TabFilesOnly" xml:space="preserve">
-    <value>Only tab-separated values files are accepted</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="You" xml:space="preserve">
-    <value>you</value>
+  <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+    <value>Завершение восстановления пароля</value>
   </data>
 </root>

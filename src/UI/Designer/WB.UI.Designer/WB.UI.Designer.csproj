@@ -310,6 +310,11 @@
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
     <Compile Include="Models\VerificationReferenceEnriched.cs" />
+    <Compile Include="Resources\PdfMessages.Designer.cs">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -407,6 +412,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PdfMessages.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PdfMessages.ru.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\QuestionnaireController.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -868,6 +878,24 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\AccountResources.ru.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfMessages.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
@@ -877,15 +905,30 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>NotificationResources.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\NotificationResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>NotificationResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireController.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireController.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireEditor.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireEditor.ru.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireHistoryResources.ru.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireHistoryResources.Designer.cs</LastGenOutput>
@@ -896,6 +939,7 @@
     <EmbeddedResource Include="Resources\QuestionnaireController.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
