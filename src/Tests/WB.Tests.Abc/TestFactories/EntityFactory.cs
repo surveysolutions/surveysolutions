@@ -1430,11 +1430,16 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
-            Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
+            Guid? cascadingParentQuestionId = null, 
+            bool isYesNo = false, 
+            bool isDecimal = false, 
+            Guid? linkedSourceId = null, 
+            Guid[] questionsUsingForSubstitution = null,
+            bool? isTimestamp = false)
         {
             var titleWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, title);
             var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
-                cascadingParentQuestionId, isYesNo,  isDecimal, false, false, linkedSourceId);
+                cascadingParentQuestionId, isYesNo,  isDecimal, false, isTimestamp ?? false, linkedSourceId);
 
             if (isDisabled) question.Disable();
             return question;
