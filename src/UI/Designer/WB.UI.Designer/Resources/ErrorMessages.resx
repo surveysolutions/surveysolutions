@@ -166,7 +166,10 @@
     <value>Password reset is not allowed</value>
   </data>
   <data name="ConfirmAccount" xml:space="preserve">
-    <value>Please, confirm your account first. We've sent a confirmation link to {0}. Didn't get it? <a href='{1}'>Request another one.</a></value>
+    <value>Please, confirm your account first. We've sent a confirmation link to {0}. Didn't get it?</value>
+  </data>
+  <data name="RequestAnotherEmail" xml:space="preserve">
+    <value>Request another one.</value>
   </data>
   <data name="Your_email_is_verified" xml:space="preserve">
     <value>Designer successfully verified your email.</value>
