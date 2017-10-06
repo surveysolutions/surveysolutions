@@ -2203,6 +2203,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Untitled question.
+        /// </summary>
+        internal static string UntitledQuestion {
+            get {
+                return ResourceManager.GetString("UntitledQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update.
         /// </summary>
         internal static string Update {

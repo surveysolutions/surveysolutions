@@ -856,4 +856,7 @@
   <data name="DeleteConfirmQuestion" xml:space="preserve">
     <value>Are you sure you want to delete "{{trimmedTitle}}"?</value>
   </data>
+  <data name="UntitledQuestion" xml:space="preserve">
+    <value>Untitled question</value>
+  </data>
 </root>
