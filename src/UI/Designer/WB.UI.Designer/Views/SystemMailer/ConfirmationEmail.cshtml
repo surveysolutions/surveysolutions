@@ -2,4 +2,4 @@
 @model WB.UI.Designer.Models.EmailConfirmationModel
 
 @Html.Raw(string.Format(NotificationResources.ConfirmationEmail, Model.UserName))
-@Html.ActionLink(NotificationResources.CompleteRegistration, "RegisterConfirmation", "Account", Request.Url.Scheme, null, null, new { token = Model.ConfirmationToken }, null))
+@Html.ActionLink(NotificationResources.CompleteRegistration, "RegisterConfirmation", "Account", Request.Url.Scheme, null, null, new { token = Model.ConfirmationToken }, null)
