@@ -52,6 +52,11 @@
             "script": "watch",
             "isBackground": true,
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "watch",
+            "problemMatcher": []
         }
     ]
 }

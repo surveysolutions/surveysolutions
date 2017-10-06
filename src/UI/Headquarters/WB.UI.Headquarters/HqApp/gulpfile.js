@@ -39,12 +39,17 @@ gulp.task('cleanup', (cb) => {
     return cb();
 })
 
-function onBuild(done) {
+function onBuild(done, onBuildMessage) {
+    const moment = require("moment")
+
     return function(err, stats) {
       if(err) {
         utils.log('Error', err);
       }
       else {
+          const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
+          utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
+          if(onBuildMessage) utils.log(onBuildMessage);
         //utils.log(stats.toString());
       }
   
@@ -77,7 +82,11 @@ gulp.task("watch", ['cleanup', 'resx2json'], (done) => {
         plugins: [new webpack.ProgressPlugin()]
     }));
     
-    const watcher = compiler.watch({}, onBuild());
+    utils.log(utils.colors.green('Building and waiting for file changes'));
+    
+    const watcher = compiler.watch({
+       ignored: ["node_modules"] 
+    }, onBuild(null, utils.colors.green("Build done. Waiting for changes")));
 
     return watcher;
 });
