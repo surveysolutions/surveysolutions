@@ -1688,7 +1688,6 @@
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
     <Compile Include="API\Filters\UnhandledExceptionFilter.cs" />
-    <Compile Include="API\Formatters\JsonNetFormatter.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
