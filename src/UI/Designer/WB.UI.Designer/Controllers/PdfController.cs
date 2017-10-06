@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Pdf;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Controllers
@@ -123,20 +124,20 @@ namespace WB.UI.Designer.Controllers
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(id, StartNewPdfGeneration);
 
             if (pdfGenerationProgress.IsFailed)
-                return this.Json(PdfStatus.Failed("Failed to generate PDF.\r\nPlease reload the page and try again or contact support@mysurvey.solutions"), JsonRequestBehavior.AllowGet);
+                return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate), JsonRequestBehavior.AllowGet);
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
             if (sizeInKb == 0)
-                return this.Json(PdfStatus.InProgress("Preparing to generate your PDF.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
+                return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate), JsonRequestBehavior.AllowGet);
 
             return this.Json(
                 pdfGenerationProgress.IsFinished
                     ? PdfStatus.Ready(
                         pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
-                            ? $"PDF document generated less than a minute ago.\r\nSize: {sizeInKb}Kb"
-                            : $"PDF document generated {(int) pdfGenerationProgress.TimeSinceFinished.TotalMinutes} minute(s) ago.\r\nSize: {sizeInKb}Kb")
-                    : PdfStatus.InProgress($"Your PDF is being generated.\r\nSize: {sizeInKb}Kb"),
+                            ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
+                            : string.Format(PdfMessages.Generate, (int)pdfGenerationProgress.TimeSinceFinished.TotalMinutes, sizeInKb))
+                    : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)),
                 JsonRequestBehavior.AllowGet);
         }
 
@@ -149,7 +150,7 @@ namespace WB.UI.Designer.Controllers
                 GeneratedPdfs.TryRemove(id);
             }
             GeneratedPdfs.GetOrAdd(id, this.StartNewPdfGeneration);
-            return this.Json(PdfStatus.InProgress("Retring export as PDF."));
+            return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
 
         private PdfGenerationProgress StartNewPdfGeneration(Guid id)

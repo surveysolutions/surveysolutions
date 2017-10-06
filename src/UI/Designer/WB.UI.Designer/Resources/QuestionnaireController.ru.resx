@@ -118,129 +118,129 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Action" xml:space="preserve">
-    <value>Action</value>
+    <value>Действие</value>
   </data>
   <data name="BackToList" xml:space="preserve">
-    <value>Back to List</value>
+    <value>Назад к списку</value>
   </data>
   <data name="Backup" xml:space="preserve">
-    <value>Backup</value>
+    <value>Резервное копирование</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отмена</value>
   </data>
   <data name="CancelSearch" xml:space="preserve">
-    <value>Cancel search</value>
+    <value>Отмена поиска</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Закрыть</value>
   </data>
   <data name="Confirmation" xml:space="preserve">
-    <value>confirmation</value>
+    <value>подтверждение</value>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Копировать</value>
   </data>
   <data name="CopyQuestionnaire" xml:space="preserve">
-    <value>Copy Questionnaire</value>
+    <value>Копировать опросник</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>Создать</value>
   </data>
   <data name="CreatedBy" xml:space="preserve">
-    <value>Created By</value>
+    <value>Кем создан</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
-    <value>Created date</value>
+    <value>Дата создания</value>
   </data>
   <data name="CreateNew" xml:space="preserve">
-    <value>Create New</value>
+    <value>Создать новый</value>
   </data>
   <data name="CreateNewQuestionnaire" xml:space="preserve">
-    <value>Create New Questionnaire</value>
+    <value>Создать новый опросник</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Удалить</value>
   </data>
   <data name="DeleteConfirmationText" xml:space="preserve">
-    <value>Do you really want to delete "{0}" questionnaire?</value>
+    <value>Вы действительно хотите удалить опросник "{0}"?</value>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Deleting</value>
+    <value>Удаление</value>
   </data>
   <data name="Designer" xml:space="preserve">
-    <value>Questionnaire designer</value>
+    <value>Дизайнер опросников</value>
   </data>
   <data name="DownloadPdf" xml:space="preserve">
-    <value>Download PDF</value>
+    <value>Скачать PDF</value>
   </data>
   <data name="EmptyList" xml:space="preserve">
-    <value>This list does not contain any records</value>
+    <value>Нет записей</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Ошибка</value>
   </data>
   <data name="ErrorDescription" xml:space="preserve">
-    <value>An error occurred while processing your request</value>
+    <value>Во время обработки Вашего запроса произошла ошибка</value>
   </data>
   <data name="ExportAsPDF" xml:space="preserve">
-    <value>Export as PDF</value>
+    <value>Экспортировать в PDF</value>
   </data>
   <data name="Forbidden" xml:space="preserve">
-    <value>You don't have permission to edit this questionnaire</value>
+    <value>У Вас нет прав на редактирование этого опросника</value>
   </data>
   <data name="ForbiddenDelete" xml:space="preserve">
-    <value>You don't have permissions to delete this questionnaire.</value>
+    <value>У Вас нет прав на удаление этого опросника.</value>
   </data>
   <data name="ForbiddenRevert" xml:space="preserve">
-    <value>You don't  have permissions to restore operation for this questionnaire.</value>
+    <value>У Вас нет прав на восстановление этого опросника.</value>
   </data>
   <data name="GeneratingPdf" xml:space="preserve">
-    <value>Generating pdf for "{0}"</value>
+    <value>Создаю pdf для "{0}"</value>
   </data>
   <data name="Initializing" xml:space="preserve">
-    <value>Initializing</value>
+    <value>Инициализация</value>
   </data>
   <data name="LastModified" xml:space="preserve">
-    <value>Last modified</value>
+    <value>Дата последнего редактирования</value>
   </data>
   <data name="ManageUsers" xml:space="preserve">
-    <value>Manage users</value>
-  </data>
-  <data name="MyQuestionnaires" xml:space="preserve">
-    <value>My Questionnaires</value>
+    <value>Управление пользователями</value>
   </data>
   <data name="Hello" xml:space="preserve">
-    <value>Hi, {0}</value>
+    <value>Здравствуйте, {0}</value>
+  </data>
+  <data name="MyQuestionnaires" xml:space="preserve">
+    <value>Мои опросники</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Открыть</value>
   </data>
   <data name="PublicQuestionnaires" xml:space="preserve">
-    <value>Public Questionnaires</value>
+    <value>Общие опросники</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire Title</value>
+    <value>Имя опросника</value>
   </data>
   <data name="RestoreQuestionnaire" xml:space="preserve">
-    <value>Restore questionnaire</value>
+    <value>Восстановить опросник</value>
   </data>
   <data name="RetryExportPDF" xml:space="preserve">
-    <value>Retry export as PDF</value>
+    <value>Повторить экспорт в PDF</value>
   </data>
   <data name="SelectTabFile" xml:space="preserve">
-    <value>Choose tab-separated values file to upload, please</value>
+    <value>Пожалуйста, выберите файл со значениями разделенными табуляцией</value>
   </data>
   <data name="SuccessDeleteMessage" xml:space="preserve">
-    <value>Questionnaire "{0}" successfully deleted</value>
+    <value>Опросник "{0}" успешно удален</value>
   </data>
   <data name="TabFilesOnly" xml:space="preserve">
-    <value>Only tab-separated values files are accepted</value>
+    <value>Принимаются только файлы со значениями разделенными табуляцией</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Название</value>
   </data>
   <data name="You" xml:space="preserve">
-    <value>you</value>
+    <value>Вы</value>
   </data>
 </root>

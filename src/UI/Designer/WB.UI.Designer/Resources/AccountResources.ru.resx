@@ -117,130 +117,112 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
+  <data name="AllRights" xml:space="preserve">
+    <value>Все права защищены.</value>
   </data>
-  <data name="BackToList" xml:space="preserve">
-    <value>Back to List</value>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Это инструмент для создания опросов на платформе КАПИ от Всемирного банка с возможностями совместной работы и экспорта в PDF.</value>
   </data>
-  <data name="Backup" xml:space="preserve">
-    <value>Backup</value>
+  <data name="AppName" xml:space="preserve">
+    <value>Дизайнер опросников</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Вернуться на страницу входа</value>
   </data>
-  <data name="CancelSearch" xml:space="preserve">
-    <value>Cancel search</value>
+  <data name="Change" xml:space="preserve">
+    <value>Изменить</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Изменить пароль</value>
   </data>
-  <data name="Confirmation" xml:space="preserve">
-    <value>confirmation</value>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Группа Всемирного банка</value>
   </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>Чтобы завершить процесс регистрации, найдите электронное письмо в своем почтовом ящике, которое содержит дополнительные инструкции</value>
   </data>
-  <data name="CopyQuestionnaire" xml:space="preserve">
-    <value>Copy Questionnaire</value>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Подтвердите пароль</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Create</value>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Текущий пароль</value>
   </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>Created By</value>
+  <data name="Email" xml:space="preserve">
+    <value>Электронная почта</value>
   </data>
-  <data name="CreatedDate" xml:space="preserve">
-    <value>Created date</value>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Забыли пароль?</value>
   </data>
-  <data name="CreateNew" xml:space="preserve">
-    <value>Create New</value>
+  <data name="Help" xml:space="preserve">
+    <value>Помощь</value>
   </data>
-  <data name="CreateNewQuestionnaire" xml:space="preserve">
-    <value>Create New Questionnaire</value>
+  <data name="InvalidResetPasswordLink" xml:space="preserve">
+    <value>Ссылка на сброс пароля недействительна или истек её срок действия. Пожалуйста, попробуйте еще раз</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+  <data name="Legal" xml:space="preserve">
+    <value>Права</value>
   </data>
-  <data name="DeleteConfirmationText" xml:space="preserve">
-    <value>Do you really want to delete "{0}" questionnaire?</value>
+  <data name="Login" xml:space="preserve">
+    <value>Войти</value>
   </data>
-  <data name="Deleting" xml:space="preserve">
-    <value>Deleting</value>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Вход или</value>
   </data>
-  <data name="Designer" xml:space="preserve">
-    <value>Questionnaire designer</value>
+  <data name="LoginName" xml:space="preserve">
+    <value>Имя пользователя</value>
   </data>
-  <data name="DownloadPdf" xml:space="preserve">
-    <value>Download PDF</value>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>Имя пользователя или пароль</value>
   </data>
-  <data name="EmptyList" xml:space="preserve">
-    <value>This list does not contain any records</value>
+  <data name="Logout" xml:space="preserve">
+    <value>Выйти</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>Вы используете устаревший браузер</value>
   </data>
-  <data name="ErrorDescription" xml:space="preserve">
-    <value>An error occurred while processing your request</value>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
   </data>
-  <data name="ExportAsPDF" xml:space="preserve">
-    <value>Export as PDF</value>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>Сбросить пароль</value>
   </data>
-  <data name="Forbidden" xml:space="preserve">
-    <value>You don't have permission to edit this questionnaire</value>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Введите имя пользователя или адрес электронной почты, и мы вышлем вам ссылку на сброс пароля</value>
   </data>
-  <data name="ForbiddenDelete" xml:space="preserve">
-    <value>You don't have permissions to delete this questionnaire.</value>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>Новый пароль (минимум 10 символов, цифры и буквы)</value>
   </data>
-  <data name="ForbiddenRevert" xml:space="preserve">
-    <value>You don't  have permissions to restore operation for this questionnaire.</value>
+  <data name="Register" xml:space="preserve">
+    <value>Регистрация</value>
   </data>
-  <data name="GeneratingPdf" xml:space="preserve">
-    <value>Generating pdf for "{0}"</value>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Ошибка регистрации</value>
   </data>
-  <data name="Initializing" xml:space="preserve">
-    <value>Initializing</value>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>Ошибка подтверждения Вашей электронной почты. Пожалуйста, попробуйте снова.</value>
   </data>
-  <data name="LastModified" xml:space="preserve">
-    <value>Last modified</value>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Повторить пароль</value>
   </data>
-  <data name="ManageUsers" xml:space="preserve">
-    <value>Manage users</value>
+  <data name="Restore" xml:space="preserve">
+    <value>Восстановить</value>
   </data>
-  <data name="MyQuestionnaires" xml:space="preserve">
-    <value>My Questionnaires</value>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>Оставаться в системе в течении 1 дня</value>
   </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hi, {0}</value>
+  <data name="TesterApp" xml:space="preserve">
+    <value>Установите Survey Solutions Questionnaire Tester на андроид планшет, чтобы тестировать опросники которые Вы создаете в дизайнере опросников.</value>
   </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>Скачать в Google Play</value>
   </data>
-  <data name="PublicQuestionnaires" xml:space="preserve">
-    <value>Public Questionnaires</value>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Спасибо</value>
   </data>
-  <data name="QuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire Title</value>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>Пожалуйста &lt;a href="http://browsehappy.com/"&gt;обновите ваш браузер&lt;/a&gt; чтобы использовать дизайнер опросников.</value>
   </data>
-  <data name="RestoreQuestionnaire" xml:space="preserve">
-    <value>Restore questionnaire</value>
-  </data>
-  <data name="RetryExportPDF" xml:space="preserve">
-    <value>Retry export as PDF</value>
-  </data>
-  <data name="SelectTabFile" xml:space="preserve">
-    <value>Choose tab-separated values file to upload, please</value>
-  </data>
-  <data name="SuccessDeleteMessage" xml:space="preserve">
-    <value>Questionnaire "{0}" successfully deleted</value>
-  </data>
-  <data name="TabFilesOnly" xml:space="preserve">
-    <value>Only tab-separated values files are accepted</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="You" xml:space="preserve">
-    <value>you</value>
+  <data name="Welcome" xml:space="preserve">
+    <value>Добро пожаловать в</value>
   </data>
 </root>

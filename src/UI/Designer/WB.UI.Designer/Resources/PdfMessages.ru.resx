@@ -117,130 +117,27 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action" xml:space="preserve">
-    <value>Action</value>
+  <data name="FailedToGenerate" xml:space="preserve">
+    <value>Ошибка генерации PDF.
+Пожалуйста, обновите страницу и попробуйте снова или обратитесь в службу поддержки support@mysurvey.solutions</value>
   </data>
-  <data name="BackToList" xml:space="preserve">
-    <value>Back to List</value>
+  <data name="Generate" xml:space="preserve">
+    <value>PDF документ сгенерирован {0} минут(ы) назад.
+Размер: {1}Kb</value>
   </data>
-  <data name="Backup" xml:space="preserve">
-    <value>Backup</value>
+  <data name="GenerateLessMinute" xml:space="preserve">
+    <value>PDF документ сгенерирован меньше минуты назад.
+Размер: {0}Kb</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="GeneratingSuccess" xml:space="preserve">
+    <value>Ваш PDF создается.
+Размер: {0}Kb</value>
   </data>
-  <data name="CancelSearch" xml:space="preserve">
-    <value>Cancel search</value>
+  <data name="PreparingToGenerate" xml:space="preserve">
+    <value>Подготовка к генерации PDF.
+Пожалуйста подождите...</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Close</value>
-  </data>
-  <data name="Confirmation" xml:space="preserve">
-    <value>confirmation</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
-  </data>
-  <data name="CopyQuestionnaire" xml:space="preserve">
-    <value>Copy Questionnaire</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Create</value>
-  </data>
-  <data name="CreatedBy" xml:space="preserve">
-    <value>Created By</value>
-  </data>
-  <data name="CreatedDate" xml:space="preserve">
-    <value>Created date</value>
-  </data>
-  <data name="CreateNew" xml:space="preserve">
-    <value>Create New</value>
-  </data>
-  <data name="CreateNewQuestionnaire" xml:space="preserve">
-    <value>Create New Questionnaire</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="DeleteConfirmationText" xml:space="preserve">
-    <value>Do you really want to delete "{0}" questionnaire?</value>
-  </data>
-  <data name="Deleting" xml:space="preserve">
-    <value>Deleting</value>
-  </data>
-  <data name="Designer" xml:space="preserve">
-    <value>Questionnaire designer</value>
-  </data>
-  <data name="DownloadPdf" xml:space="preserve">
-    <value>Download PDF</value>
-  </data>
-  <data name="EmptyList" xml:space="preserve">
-    <value>This list does not contain any records</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="ErrorDescription" xml:space="preserve">
-    <value>An error occurred while processing your request</value>
-  </data>
-  <data name="ExportAsPDF" xml:space="preserve">
-    <value>Export as PDF</value>
-  </data>
-  <data name="Forbidden" xml:space="preserve">
-    <value>You don't have permission to edit this questionnaire</value>
-  </data>
-  <data name="ForbiddenDelete" xml:space="preserve">
-    <value>You don't have permissions to delete this questionnaire.</value>
-  </data>
-  <data name="ForbiddenRevert" xml:space="preserve">
-    <value>You don't  have permissions to restore operation for this questionnaire.</value>
-  </data>
-  <data name="GeneratingPdf" xml:space="preserve">
-    <value>Generating pdf for "{0}"</value>
-  </data>
-  <data name="Initializing" xml:space="preserve">
-    <value>Initializing</value>
-  </data>
-  <data name="LastModified" xml:space="preserve">
-    <value>Last modified</value>
-  </data>
-  <data name="ManageUsers" xml:space="preserve">
-    <value>Manage users</value>
-  </data>
-  <data name="MyQuestionnaires" xml:space="preserve">
-    <value>My Questionnaires</value>
-  </data>
-  <data name="Hello" xml:space="preserve">
-    <value>Hi, {0}</value>
-  </data>
-  <data name="Open" xml:space="preserve">
-    <value>Open</value>
-  </data>
-  <data name="PublicQuestionnaires" xml:space="preserve">
-    <value>Public Questionnaires</value>
-  </data>
-  <data name="QuestionnaireTitle" xml:space="preserve">
-    <value>Questionnaire Title</value>
-  </data>
-  <data name="RestoreQuestionnaire" xml:space="preserve">
-    <value>Restore questionnaire</value>
-  </data>
-  <data name="RetryExportPDF" xml:space="preserve">
-    <value>Retry export as PDF</value>
-  </data>
-  <data name="SelectTabFile" xml:space="preserve">
-    <value>Choose tab-separated values file to upload, please</value>
-  </data>
-  <data name="SuccessDeleteMessage" xml:space="preserve">
-    <value>Questionnaire "{0}" successfully deleted</value>
-  </data>
-  <data name="TabFilesOnly" xml:space="preserve">
-    <value>Only tab-separated values files are accepted</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Title</value>
-  </data>
-  <data name="You" xml:space="preserve">
-    <value>you</value>
+  <data name="Retry" xml:space="preserve">
+    <value>Повторная попытка экспорта в формате PDF.</value>
   </data>
 </root>
