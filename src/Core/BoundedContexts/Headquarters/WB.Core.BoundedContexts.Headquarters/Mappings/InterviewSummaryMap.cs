@@ -89,6 +89,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                         });
                         cmp.Property(x => x.SupervisorName);
                         cmp.Property(x => x.InterviewerName);
+                        cmp.Property(x => x.Position, clm =>
+                        {
+                            clm.Formula("Position");
+                            clm.Access(Accessor.ReadOnly);
+                            clm.Insert(false);
+                            clm.Update(false);
+                        });
                     });
                 }
             );
