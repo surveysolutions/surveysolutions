@@ -284,7 +284,8 @@ namespace WB.UI.Designer.Controllers
 
             if (!user.IsConfirmed)
             {
-                var message = string.Format(ErrorMessages.ConfirmAccount, user.Email, GlobalHelper.GenerateUrl("ResendConfirmation", "Account", new { id = user.UserName }));
+                var message = string.Format(ErrorMessages.ConfirmAccount, user.Email) + 
+                    $" <a href='{GlobalHelper.GenerateUrl("ResendConfirmation", "Account", new { id = user.UserName })}'>{ErrorMessages.RequestAnotherEmail}</a>";
 
                 this.Error(message);
                 model.ShouldShowCaptcha = this.ShouldShowCaptchaByUserName(model.UserName);
