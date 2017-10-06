@@ -826,9 +826,11 @@
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
     <Content Include="questionnaire\package.json" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
+    <Content Include="Content\plugins\**\*" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

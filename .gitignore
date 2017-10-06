@@ -80,3 +80,4 @@ src/Tools/k6/k6.exe
 /src/UI/Headquarters/WB.UI.Headquarters/Views/Shared/partial.webInterview.cshtml
 
 /src/UI/Shared/WB.UI.Shared.Extensions/Resources/Resource.Designer.cs
+/src/UI/Designer/WB.UI.Designer/Content/plugins/*
