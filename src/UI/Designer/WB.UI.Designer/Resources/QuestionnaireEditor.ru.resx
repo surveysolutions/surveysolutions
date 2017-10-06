@@ -728,13 +728,13 @@
     <value>Добавить ростер</value>
   </data>
   <data name="TreeAddRosterAfter" xml:space="preserve">
-    <value>Добавить подсекцию после</value>
+    <value>Добавить ростер после</value>
   </data>
   <data name="TreeAddSection" xml:space="preserve">
     <value>Добавить подсекцию</value>
   </data>
   <data name="TreeAddSectionAfter" xml:space="preserve">
-    <value>Добавить ростер после</value>
+    <value>Добавить подсекцию после</value>
   </data>
   <data name="TreeAddStaticText" xml:space="preserve">
     <value>Добавить статический текст</value>
