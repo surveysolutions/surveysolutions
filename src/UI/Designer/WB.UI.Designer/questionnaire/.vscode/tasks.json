@@ -8,7 +8,7 @@
             "type": "shell",
             "command": "gulp",
             "args": [
-                "resx2json"
+                "resx2json copyFilesNeededForBundler"
             ],
             "group": {
                 "kind": "build",
