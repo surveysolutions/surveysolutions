@@ -359,7 +359,7 @@
             $scope.deleteQuestion = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title || "Untitled question"));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title || $i18next.t('UntitledQuestion')));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
