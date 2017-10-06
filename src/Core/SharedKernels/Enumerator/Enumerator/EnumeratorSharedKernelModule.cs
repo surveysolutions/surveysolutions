@@ -162,6 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<QuestionHeaderViewModel>();
             registry.Bind<QuestionInstructionViewModel>();
             registry.Bind<ValidityViewModel>();
+            registry.Bind<ErrorMessageViewModel>();
             registry.BindGeneric(typeof(QuestionStateViewModel<>));
         }
     }
