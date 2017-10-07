@@ -15,7 +15,7 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        createInterview({ rootState, dispatch }, assignmentId) {
+        createInterview({ dispatch }, assignmentId) {
             dispatch("showProgress", true);
 
             $.post(Vue.$config.model.interviewerHqEndpoint + "/StartNewInterview/" + assignmentId, response => {
@@ -68,11 +68,6 @@ const store = new Vuex.Store({
             state.exportUrls.excel = urls.excel;
             state.exportUrls.csv = urls.csv;
             state.exportUrls.tab = urls.tab;
-        }
-    },
-    getters: {
-        config: state => {
-            return state.config
         }
     }
 })

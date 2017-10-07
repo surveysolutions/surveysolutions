@@ -8,6 +8,7 @@ const plugins = require('gulp-load-plugins')();
 
 const config = {
     dist: 'dist',
+    hqViews: '../Views/Shared',
 }
 
 config.resources = {
@@ -35,29 +36,30 @@ gulp.task('resx2json', () => {
 gulp.task('cleanup', (cb) => {
     if (utils.env.production) {
         rimraf.sync(config.dist + "/**/*.*")
+        rimraf.sync(config.hqViews + "/partial.*.cshtml")
     }
     return cb();
-})
+});
 
 function onBuild(done, onBuildMessage) {
     const moment = require("moment")
 
-    return function(err, stats) {
-      if(err) {
-        utils.log('Error', err);
-      }
-      else {
-          const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
-          utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
-          if(onBuildMessage) utils.log(onBuildMessage);
-        //utils.log(stats.toString());
-      }
-  
-      if(done) {
-        done();
-      }
+    return function (err, stats) {
+        if (err) {
+            utils.log('Error', err);
+        }
+        else {
+            const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
+            utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
+            if (onBuildMessage) utils.log(onBuildMessage);
+            //utils.log(stats.toString());
+        }
+
+        if (done) {
+            done();
+        }
     }
-  }
+}
 
 gulp.task("build", (done) => {
     const opts = {
@@ -81,11 +83,11 @@ gulp.task("watch", ['cleanup', 'resx2json'], (done) => {
     const compiler = webpack(merge(require("./webpack.config.js"), {
         plugins: [new webpack.ProgressPlugin()]
     }));
-    
+
     utils.log(utils.colors.green('Building and waiting for file changes'));
-    
+
     const watcher = compiler.watch({
-       ignored: ["node_modules"] 
+        ignored: ["node_modules"]
     }, onBuild(null, utils.colors.green("Build done. Waiting for changes")));
 
     return watcher;
