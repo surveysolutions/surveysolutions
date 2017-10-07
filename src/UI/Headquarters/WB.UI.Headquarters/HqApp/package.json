@@ -4,8 +4,10 @@
   "description": "",
   "scripts": {
     "watch": "webpack --color --watch --hide-modules",
+    "watch": "gulp watch",
     "dev": "webpack --color --hide-modules --progress",
-    "production": "cross-env NODE_ENV=production webpack --hide-modules"
+    "dev": "gulp",
+    "production": "gulp --production"
   },
   "author": "World Bank Group",
   "license": "ISC",
