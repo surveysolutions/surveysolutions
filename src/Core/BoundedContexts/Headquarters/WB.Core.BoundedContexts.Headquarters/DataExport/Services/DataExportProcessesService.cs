@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -14,12 +15,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class DataExportProcessesService : IDataExportProcessesService
     {
+        private readonly IAuditLog auditLog;
         private readonly ConcurrentDictionary<string, IDataExportProcessDetails> processes = new ConcurrentDictionary<string, IDataExportProcessDetails>();
 
         private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
 
-        public DataExportProcessesService()
+        public DataExportProcessesService(IAuditLog auditLog)
         {
+            this.auditLog = auditLog;
         }
 
         public IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport()
@@ -67,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             if (this.processes.GetOrNull(newProcess.NaturalId)?.IsQueuedOrRunning() ?? false)
                 return;
 
+            this.auditLog.Append($"Export of {newProcess.Name} started. Format {newProcess.Format}");
             this.processes[newProcess.NaturalId] = newProcess;
         }
 

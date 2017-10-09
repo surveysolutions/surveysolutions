@@ -1,0 +1,38 @@
+﻿@model WB.UI.Headquarters.Controllers.AuditLogModel
+
+@{
+    ViewBag.Title = AuditLog.PageTitle;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <h1>@AuditLog.PageTitle</h1>
+            </div>
+            @Html.Partial("_alerts")
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <p>
+                    @AuditLog.ServerFilePath @Model.ServerFilePathLocation
+                </p>
+                @if (Model.Log.Length > 0)
+                {
+                    <ul>
+                        @foreach (var entry in Model.Log)
+                        {
+                            <li>@entry</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>@AuditLog.Empty</p>
+                }
+            </div>
+        </div>
+    </div>
+</main>
