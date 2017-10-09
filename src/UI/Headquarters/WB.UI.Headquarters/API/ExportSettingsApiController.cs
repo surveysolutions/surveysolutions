@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -24,6 +25,7 @@ namespace WB.UI.Headquarters.API
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+        private readonly IAuditLog auditLog;
         private readonly IParaDataAccessor paraDataAccessor;
 
         public ExportSettingsApiController(ILogger logger, 
@@ -32,6 +34,7 @@ namespace WB.UI.Headquarters.API
             IFileSystemAccessor fileSystemAccessor,
             IDataExportProcessesService dataExportProcessesService,
             IDdiMetadataAccessor ddiMetadataAccessor,
+            IAuditLog auditLog,
             IParaDataAccessor paraDataAccessor)
 
         {
@@ -40,6 +43,7 @@ namespace WB.UI.Headquarters.API
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportProcessesService = dataExportProcessesService;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
+            this.auditLog = auditLog;
             this.paraDataAccessor = paraDataAccessor;
             this.logger = logger;
         }
@@ -66,7 +70,7 @@ namespace WB.UI.Headquarters.API
                 this.ClearExportData();
             }
 
-            this.logger.Info($"Export settings were changed by {base.User.Identity.Name}. Encription changed to " + (changeSettingsState.EnableState ? "enabled" : "disabled"));
+            this.auditLog.Append($"Export settings were changed. Encription changed to '{(changeSettingsState.EnableState ? "enabled" : "disabled")}'");
 
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
             return Request.CreateResponse(newExportSettingsModel);

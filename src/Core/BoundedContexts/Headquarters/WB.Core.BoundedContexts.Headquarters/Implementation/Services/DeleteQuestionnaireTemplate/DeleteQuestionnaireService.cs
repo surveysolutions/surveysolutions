@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly ITranslationManagementService translations;
 
         private readonly IInterviewImportService importService;
+        private readonly IAuditLog auditLog;
 
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
@@ -40,24 +42,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             ICommandService commandService,
             ILogger logger, 
             ITranslationManagementService translations,
-            IInterviewImportService importService)
+            IInterviewImportService importService,
+            IAuditLog auditLog)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
             this.logger = logger;
             this.translations = translations;
             this.importService = importService;
+            this.auditLog = auditLog;
         }
 
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             this.logger.Warn($"Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user");
-
             var questionnaire =
                 this.questionnaireBrowseItemReader.GetById(new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
 
             if (questionnaire != null)
             {
+                this.auditLog.Append($"Questionnaire \"{questionnaire.Title} ver. {questionnaire.Version}\" delete was triggered");
+
                 if (!questionnaire.Disabled)
                 {
                     this.commandService.Execute(new DisableQuestionnaire(questionnaireId, questionnaireVersion,

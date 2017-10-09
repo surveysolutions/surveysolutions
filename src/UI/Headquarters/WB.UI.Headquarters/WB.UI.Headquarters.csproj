@@ -219,6 +219,9 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NLog.4.4.11\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="NLog.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NLog.Web.4.5.0\lib\net35\NLog.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Npgsql, Version=3.2.5.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Npgsql.3.2.5\lib\net451\Npgsql.dll</HintPath>
     </Reference>
@@ -823,6 +826,11 @@
     <EmbeddedResource Include="Resources\Assignments.zh.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AuditLog.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AuditLog.ru.resx" />
     <EmbeddedResource Include="Resources\DataTables.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1520,6 +1528,7 @@
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
     <Content Include="Views\Shared\_MainLayoutWebInterview.cshtml" />
     <Content Include="Views\WebInterview\Index.cshtml" />
+    <Content Include="Views\AuditLog\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1695,6 +1704,7 @@
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\AssignmentsController.cs" />
+    <Compile Include="Controllers\AuditLogController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\InterviewerHqController.cs" />
     <Compile Include="Controllers\Profile\AccountController.cs" />
@@ -1915,6 +1925,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Assignments.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AuditLog.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AuditLog.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\DataTables.Designer.cs">
       <DependentUpon>DataTables.resx</DependentUpon>
