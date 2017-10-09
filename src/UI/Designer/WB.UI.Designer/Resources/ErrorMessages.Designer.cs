@@ -97,6 +97,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Email is required.
+        /// </summary>
+        internal static string Email_required {
+            get {
+                return ResourceManager.GetString("Email_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected translation file is empty.
         /// </summary>
         internal static string EmptyTranslationFile {
@@ -120,6 +129,15 @@ namespace WB.UI.Designer.Resources {
         internal static string IncorrectUserNameOrPassword {
             get {
                 return ResourceManager.GetString("IncorrectUserNameOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not a valid email address.
+        /// </summary>
+        internal static string InvalidEmailAddress {
+            get {
+                return ResourceManager.GetString("InvalidEmailAddress", resourceCulture);
             }
         }
         
@@ -160,7 +178,16 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} must be at least {2} characters long..
+        ///   Looks up a localized string similar to Current password is required.
+        /// </summary>
+        internal static string OldPassword_required {
+            get {
+                return ResourceManager.GetString("OldPassword_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be at least {2} characters long..
         /// </summary>
         internal static string Password_must_be_at_least_characters_long {
             get {
@@ -175,6 +202,15 @@ namespace WB.UI.Designer.Resources {
             get {
                 return ResourceManager.GetString("Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_" +
                         "case_character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is required.
+        /// </summary>
+        internal static string Password_required {
+            get {
+                return ResourceManager.GetString("Password_required", resourceCulture);
             }
         }
         
@@ -319,6 +355,15 @@ namespace WB.UI.Designer.Resources {
         internal static string UserLockedOut {
             get {
                 return ResourceManager.GetString("UserLockedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login is required.
+        /// </summary>
+        internal static string UserName_required {
+            get {
+                return ResourceManager.GetString("UserName_required", resourceCulture);
             }
         }
         

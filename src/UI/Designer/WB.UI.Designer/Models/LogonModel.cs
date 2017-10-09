@@ -10,11 +10,11 @@ namespace WB.UI.Designer.Models
         public string GoogleRecaptchaSiteKey { get; set; }
         public string HomeUrl { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "UserName_required")]
         [Display(Name = "User name", Order = 1)]
         public string UserName { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_required")]
         [DataType(DataType.Password)]
         [Display(Name = "Password", Order = 2)]
         public string Password { get; set; }

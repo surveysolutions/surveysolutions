@@ -182,7 +182,6 @@
   </data>
   <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
     <value>Текущий пароль не верен/Новый пороль не соответствует требованиям системы , введите повторно.</value>
-    <comment> </comment>
   </data>
   <data name="User_already_confirmed_in_system" xml:space="preserve">
     <value>Пользователь {0} уже подтвержден в системе. Пожалуйста, введите своё имя пользователя и пароль, чтобы начать использовать дизайнер опросников.</value>
@@ -197,7 +196,7 @@
     <value>Поле пароль и поле подтверждения пароля не совпадают.</value>
   </data>
   <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
-    <value>Длина {0} должна быть не менее {2} символов.</value>
+    <value>Длина пароля должна быть не менее {2} символов.</value>
   </data>
   <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
     <value>Пароль должен содержать как минимум одно число, один символ верхнего регистра и один символ нижнего регистра.</value>
@@ -225,5 +224,20 @@
   </data>
   <data name="UserNeedToContactSupport" xml:space="preserve">
     <value>У вас нет прав на совершение данного действия. Пожалуйста, обратитесь в службу поддержки</value>
+  </data>
+  <data name="Email_required" xml:space="preserve">
+    <value>Введите адрес электронной почты</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>Недействительный адрес электронной почты</value>
+  </data>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>Введите текущий пароль</value>
+  </data>
+  <data name="Password_required" xml:space="preserve">
+    <value>Введите пароль</value>
+  </data>
+  <data name="UserName_required" xml:space="preserve">
+    <value>Введите имя пользователя</value>
   </data>
 </root>

@@ -196,7 +196,7 @@
     <value>The password and confirmation password do not match.</value>
   </data>
   <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
-    <value>The {0} must be at least {2} characters long.</value>
+    <value>Password must be at least {2} characters long.</value>
   </data>
   <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
     <value>Password must contain at least one number, one upper case character and one lower case character.</value>
@@ -224,5 +224,20 @@
   </data>
   <data name="UserNeedToContactSupport" xml:space="preserve">
     <value>You are not authorized to perform this action. Please contact support</value>
+  </data>
+  <data name="Email_required" xml:space="preserve">
+    <value>Email is required</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>Not a valid email address</value>
+  </data>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>Current password is required</value>
+  </data>
+  <data name="Password_required" xml:space="preserve">
+    <value>Password is required</value>
+  </data>
+  <data name="UserName_required" xml:space="preserve">
+    <value>Login is required</value>
   </data>
 </root>
