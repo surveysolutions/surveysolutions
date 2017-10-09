@@ -6,8 +6,10 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
+using WB.UI.Designer.Extensions;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
@@ -75,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         It should_set_title_to__3_slash_8_slash_2011__in_all_RosterRowTitleChanged_events = () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == dateAnswer.ToShortDateString()));
+                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == dateAnswer.ToString(DateTimeFormat.DateFormat)));
 
         private static EventContext eventContext;
         private static Interview interview;
