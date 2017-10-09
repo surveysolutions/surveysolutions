@@ -135,11 +135,16 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
 
             this.ViewBag.IsOwnAccoutEditing = true;
+            var manageAccountModel = GetCurrentUserModel();
+            return View(manageAccountModel);
+        }
 
-            return View(new ManageAccountModel
+        private ManageAccountModel GetCurrentUserModel()
+        {
+            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var manageAccountModel = new ManageAccountModel
             {
                 Id = currentUser.Id,
                 Email = currentUser.Email,
@@ -149,9 +154,10 @@ namespace WB.UI.Headquarters.Controllers
                 Role = currentUser.Roles.FirstOrDefault().Role.ToUiString(),
                 UpdatePasswordAction = nameof(this.UpdateOwnPassword),
                 EditAction = nameof(Manage)
-            });
+            };
+            return manageAccountModel;
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
@@ -187,6 +193,8 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> UpdateOwnPassword(ManageAccountModel model)
         {
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var resultModel = GetCurrentUserModel();
+
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
@@ -205,7 +213,7 @@ namespace WB.UI.Headquarters.Controllers
 
             model.EditAction = nameof(Manage);
             model.UpdatePasswordAction = nameof(this.UpdateOwnPassword);
-            return View("Manage", model);
+            return View("Manage", resultModel);
         }
 
         private async Task ValidateOldPassword(ManageAccountModel model, HqUser currentUser)
