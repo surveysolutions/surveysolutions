@@ -9,7 +9,7 @@
                 <input name="file" ref="uploader" v-show="false" accept="image/*" type="file"
                     @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
                 <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
-                    v-if="!$me.isAnswered && !$me.fetchState" @click="$refs.uploader.click()">{{ $t("PhotoUpload") }}</button>
+                    v-if="!$me.isAnswered && !$me.fetchState" @click="$refs.uploader.click()">{{ $t("WebInterviewUI.PhotoUpload") }}</button>
             </div>
         </div>
     </wb-question>
@@ -61,7 +61,7 @@
             createImage(file) {
                 if (file.size > imageFileSizeLimit) {
                     // Image is too big to upload. Please, choose an image less than 30 Mb
-                    this.markAnswerAsNotSavedWithMessage(this.$t("PhotoTooBig"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.PhotoTooBig"))
                     return
                 }
 
@@ -85,7 +85,7 @@
                         reader.readAsDataURL(file)
                     } else {
                         // Only image files are allowed to upload
-                        self.markAnswerAsNotSavedWithMessage(this.$t("PhotoIsNotImage") )
+                        self.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.PhotoIsNotImage") )
                     }
                 };
 

@@ -12,7 +12,7 @@
                     <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
                 <div class="action-btn-holder gps-question">
-                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">{{ $t('GPSRecord') }}</button>
+                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">{{ $t('WebInterviewUI.GPSRecord') }}</button>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
             },
             answerGpsQuestion() {
                 if (!('geolocation' in navigator)) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("GPSNotAvailable"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.GPSNotAvailable"))
                     return
                 }
 
@@ -85,13 +85,13 @@
                 // Check for known errors
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        message = this.$t("GPSPermissionDenied")//"This website does not have permission to use the Geolocation API"
+                        message = this.$t("WebInterviewUI.GPSPermissionDenied")//"This website does not have permission to use the Geolocation API"
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        message = this.$t("GPSPositionUnavailable") //"The current position could not be determined.";
+                        message = this.$t("WebInterviewUI.GPSPositionUnavailable") //"The current position could not be determined.";
                         break
                     case error.TIMEOUT:
-                        message = this.$t("GPSTimeout") //"The current position could not be determined within the specified timeout period."
+                        message = this.$t("WebInterviewUI.GPSTimeout") //"The current position could not be determined within the specified timeout period."
                         break
                 }
                 // If it is an unknown error, build a message that includes
@@ -99,7 +99,7 @@
                 // the error handler can be updated.
                 if (message == "") {
                     var strErrorCode = error.code.toString();
-                    message = this.$t("GPSError", { strErrorCode })  //"The position could not be determined due to an unknown error (Code: " + strErrorCode + ")."
+                    message = this.$t("WebInterviewUI.GPSError", { strErrorCode })  //"The position could not be determined due to an unknown error (Code: " + strErrorCode + ")."
                 }
 
                 this.markAnswerAsNotSavedWithMessage(message)

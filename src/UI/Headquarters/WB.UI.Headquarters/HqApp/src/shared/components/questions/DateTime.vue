@@ -5,7 +5,7 @@
                 <div v-if="!$me.isTimestamp" class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <flat-pickr :config="pickerOpts" :value="answer" class="field-to-fill"
-                            :placeholder="$t('EnterDate')" :title="$t('EnterDate')" />
+                            :placeholder="$t('WebInterviewUI.EnterDate')" :title="$t('WebInterviewUI.EnterDate')" />
                         <wb-remove-answer/>
                     </div>
                 </div>
@@ -16,7 +16,7 @@
                     </div>
                     <div class="action-btn-holder time-question" @click="answerDate">
                         <button type="button" class="btn btn-default btn-lg btn-action-questionnaire">
-                            {{ $t("RecordCurrentTime") }}
+                            {{ $t("WebInterviewUI.RecordCurrentTime") }}
                         </button>
                     </div>
                 </div>

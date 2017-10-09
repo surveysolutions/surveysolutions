@@ -1,7 +1,7 @@
 <template>
     <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'">
         <div class="question-unit">
-            <div class="yes-no-mark">{{ $t("Yes") }} <b>/</b> {{ $t("No")}}</div>
+            <div class="yes-no-mark">{{ $t("WebInterviewUI.Yes") }} <b>/</b> {{ $t("WebInterviewUI.No")}}</div>
             <div class="options-group">
                 <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
                     <div class="field">
@@ -101,7 +101,7 @@
                     return;
                 }
 
-                const confirmMessage = this.$t("ConfirmRosterRemove");
+                const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
 
                 modal.confirm(confirmMessage,  result => {
                     if (result) {

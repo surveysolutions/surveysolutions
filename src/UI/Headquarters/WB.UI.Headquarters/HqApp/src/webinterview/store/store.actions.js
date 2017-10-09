@@ -135,8 +135,8 @@ export default {
 
     closeInterview({ dispatch }) {
         modal.alert({
-            title: Vue.$t("CloseInterviewTitle"),
-            message: Vue.$t("CloseInterviewMessage"),
+            title: Vue.$t("WebInterviewUI.CloseInterviewTitle"),
+            message: Vue.$t("WebInterviewUI.CloseInterviewMessage"),
             callback: () => {
                 dispatch("reloadInterview")
             },
@@ -144,7 +144,7 @@ export default {
             closeButton: false,
             buttons: {
                 ok: {
-                    label: Vue.$t("Reload"),
+                    label: Vue.$t("WebInterviewUI.Reload"),
                     className: "btn-success"
                 }
             }

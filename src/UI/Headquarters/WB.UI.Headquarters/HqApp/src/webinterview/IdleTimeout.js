@@ -12,8 +12,8 @@ class IdleTimeouter {
             this.shown = true
             store.dispatch("stop")
             modal.alert({
-                title: Vue.$t("SessionTimeoutTitle"),
-                message: `<p>${Vue.$t('SessionTimeoutMessageTitle')}</p><p>${Vue.$t('SessionTimeoutMessage')}</p>`,
+                title: Vue.$t("WebInterviewUI.SessionTimeoutTitle"),
+                message: `<p>${Vue.$t('WebInterviewUI.SessionTimeoutMessageTitle')}</p><p>${Vue.$t('WebInterviewUI.SessionTimeoutMessage')}</p>`,
                 callback: () => {
                     location.reload()
                 },
@@ -21,7 +21,7 @@ class IdleTimeouter {
                 closeButton: false,
                 buttons: {
                     ok: {
-                        label: Vue.$t("Reload"),
+                        label: Vue.$t("WebInterviewUI.Reload"),
                         className: "btn-success"
                     }
                 }

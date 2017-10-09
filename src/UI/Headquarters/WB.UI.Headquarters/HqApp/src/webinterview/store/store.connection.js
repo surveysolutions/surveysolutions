@@ -11,7 +11,7 @@ const connectionStore = {
     },
     actions: {
         connectionSlow() {
-            toastr.warning(Vue.$t("SlowConnection"), Vue.$t("Network"), {
+            toastr.warning(Vue.$t("WebInterviewUI.SlowConnection"), Vue.$t("WebInterviewUI.Network"), {
                 preventDuplicates: true
             })
         },
@@ -23,8 +23,8 @@ const connectionStore = {
                 commit("IS_DISCONNECTED", true)
                 apiStop()
                 modal.alert({
-                    title: Vue.$t("Disconnected"),
-                    message: "<p>" + Vue.$t("ConnectionLostTitle") + "</p><p>" + Vue.$t("ConnectionLostMessage") + "</p>",
+                    title: Vue.$t("WebInterviewUI.Disconnected"),
+                    message: "<p>" + Vue.$t("WebInterviewUI.ConnectionLostTitle") + "</p><p>" + Vue.$t("WebInterviewUI.ConnectionLostMessage") + "</p>",
                     callback: () => {
                        location.reload()
                     },
@@ -32,7 +32,7 @@ const connectionStore = {
                     closeButton: false,
                     buttons: {
                         ok: {
-                            label: Vue.$t("Reload"),
+                            label: Vue.$t("WebInterviewUI.Reload"),
                             className: "btn-success"
                         }
                     }
