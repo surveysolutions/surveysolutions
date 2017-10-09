@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests;
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         It should_raise_DateTimeQuestionAnswered_event = () =>
             interview
                 .GetAnswerAsString(Create.Entity.Identity(questionId, RosterVector.Empty), new CultureInfo("ru-RU"))
-                .ShouldEqual(dateAnswer.ToString(new CultureInfo("ru-RU")));
+                .ShouldEqual(dateAnswer.ToString(DateTimeFormat.DateWithTimeFormat));
 
         private static EventContext eventContext;
         private static StatefulInterview interview;
