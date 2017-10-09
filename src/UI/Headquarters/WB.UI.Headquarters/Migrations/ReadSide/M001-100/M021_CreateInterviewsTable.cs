@@ -10,6 +10,8 @@ using Npgsql;
 using NpgsqlTypes;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -27,7 +29,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             Create.Table("interviews")
                 .WithColumn("id").AsInt32().Identity().PrimaryKey()
-                .WithColumn("interviewid").AsGuid().Indexed()
+                .WithColumn("interviewid").AsGuid()
                 .WithColumn("entityid").AsGuid()
                 .WithColumn("rostervector").AsCustom("int[]").Nullable()
                 .WithColumn("entitytype").AsInt32()
@@ -50,23 +52,21 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("asarea").AsCustom("json").Nullable()
                 .WithColumn("hasflag").AsBoolean().WithDefaultValue(false);
 
-            Create.Index().OnTable("interviews")
-                .OnColumn("interviewid").Ascending()
-                .OnColumn("entityid").Ascending()
-                .OnColumn("rostervector").Ascending();
-
-            Create.UniqueConstraint("uk_interview").OnTable("interviews").Columns("interviewid", "entityid", "rostervector");
-
             if (!Schema.Table("interviewdatas").Exists())
                 return;
 
             Execute.WithConnection((connection, transaction) =>
             {
+                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+
+                logger.Info("Interview data -> Interviews. Reading interview ids.");
                 var interviewIds = connection.Query<string>("SELECT id FROM \"readside\".\"interviewdatas\"", transaction).ToList();
+                logger.Info($"Interview data -> Interviews. {interviewIds.Count} interviews for processing.");
 
                 var deserializer = new EntitySerializer<InterviewData>();
                 var serializer = new EntitySerializer<object>();
 
+                int processedInterviewsCount = 0;
                 foreach (string interviewId in interviewIds)
                 {
                     string jsonInterviewData = null;
@@ -123,9 +123,18 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                             dbCommand.ExecuteNonQuery();
                         }
                     }
+                    logger.Info($"Interview data -> Interviews. Processed {processedInterviewsCount++} of {interviewIds.Count} interviews.");
                 }
 
+                logger.Info("Interview data -> Interviews. Creating index by interview id.");
+                connection.Execute("CREATE INDEX \"IX_interviews_interviewid\" ON readside.interviews USING btree (interviewid);", transaction);
+
+                logger.Info("Interview data -> Interviews. Creating index by interviewid, entityid, rostervector.");
+                connection.Execute("ALTER TABLE readside.interviews ADD CONSTRAINT uk_interview UNIQUE(interviewid, entityid, rostervector);", transaction);
+
+                logger.Info("Interview data -> Interviews. Removing interview data table.");
                 //connection.Execute("DROP TABLE \"readside\".\"interviewdatas\"", transaction);
+                logger.Info("Interview data -> Interviews. Removed interview data table.");
             });
         }
 
