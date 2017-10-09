@@ -1,5 +1,12 @@
 {
     "htmlWebpackPlugin": {
+        "options": {
+            "locales": [
+                "en",
+                "ar",
+                "ru"
+            ]
+        },
         "files": {
             "css": [
                 "main.css"
