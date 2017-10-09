@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.GetRosterTitle(Identity.Create(roster3Id, rosterVector)).ShouldEqual("Option 100");
 
         It should_set_roster_title_to_roster4 = () =>
-            interview.GetRosterTitle(Identity.Create(roster4Id, rosterVector)).ShouldEqual("11/30/2005");
+            interview.GetRosterTitle(Identity.Create(roster4Id, rosterVector)).ShouldEqual("2005-11-30");
 
         private static EventContext eventContext;
         private static InterviewSynchronizationDto synchronizationDto;

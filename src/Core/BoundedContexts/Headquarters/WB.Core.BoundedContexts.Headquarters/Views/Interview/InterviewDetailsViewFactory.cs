@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 var interviewTreeDateTimeQuestion = interviewQuestion.GetAsInterviewTreeDateTimeQuestion();
                 DateTime? dateTime = interviewTreeDateTimeQuestion.GetAnswer()?.Value;
-                return AnswerUtils.AnswerToString(dateTime, cultureInfo: null, isTimestamp: interviewTreeDateTimeQuestion.IsTimestamp);
+                return AnswerUtils.AnswerToString(dateTime, isTimestamp: interviewTreeDateTimeQuestion.IsTimestamp);
             }
 
             return interviewQuestion.GetAnswerAsString();

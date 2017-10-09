@@ -92,8 +92,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             //arrange
             var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var question = Create.Entity.DateTimeQuestion(questionId: questionId, variable: "date", preFilled: true);
-            var answer = DateTimeAnswer.FromDateTime(new DateTime(2017, 11, 11));
-            When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "11/11/2017");
+            var answer = DateTimeAnswer.FromDateTime(new DateTime(2017, 11, 15));
+            When_create_interview_with_identifier_data_Should_apply_answer(question, answer, "2017-11-15");
         }
 
         [Test]
