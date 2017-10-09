@@ -5,28 +5,26 @@ import 'bootstrap-select'
 import "babel-polyfill"
 
 import Vue from 'vue'
+import VeeValidate from 'vee-validate';
 import Vuei18n from "shared/plugins/locale"
 import http from "shared/plugins/http"
-Vue.use(http);
-
-import VeeValidate from 'vee-validate';
-Vue.use(VeeValidate);
-
-import store from "./store"
-
 import config from "shared/config"
-
-Vue.use(config)
-Vue.use(Vuei18n)
-
+import store from "./store"
 import './components'
-
 import router from "./router"
-export default new Vue({
-    el: "#vueApp",
-    render: h => h('router-view'),
-    store,
-    router
-});
-
 import './compatibility.js'
+
+export default Vuei18n.initializeAsync().then((i18n) => {
+    Vue.use(config)
+    Vue.use(http);
+    Vue.use(VeeValidate);
+    Vue.use(Vuei18n)
+    
+    new Vue({
+        el: "#vueApp",
+        render: h => h('router-view'),
+        store,
+        router,
+        i18n
+    });
+})

@@ -1005,12 +1005,6 @@
     <EmbeddedResource Include="Resources\PeriodicStatusReport.zh.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.resx">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.ru.resx">
-      <DependentUpon>Strings.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.fr.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>

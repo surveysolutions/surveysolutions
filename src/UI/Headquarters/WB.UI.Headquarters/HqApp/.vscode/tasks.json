@@ -57,6 +57,11 @@
             "type": "gulp",
             "task": "watch",
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "resx2json",
+            "problemMatcher": []
         }
     ]
 }

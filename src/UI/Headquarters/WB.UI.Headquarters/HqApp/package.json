@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "watch": "webpack --color --watch --hide-modules",
     "watch": "gulp watch",
-    "dev": "webpack --color --hide-modules --progress",
     "dev": "gulp",
     "production": "gulp --production"
   },
@@ -54,6 +52,7 @@
     "jquery-contextmenu": "^2.6.2",
     "rimraf": "^2.6.2",
     "vee-validate": "^2.0.0-rc.18",
+    "vue-i18n": "^7.3.1",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",

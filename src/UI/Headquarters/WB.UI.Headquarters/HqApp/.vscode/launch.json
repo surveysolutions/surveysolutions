@@ -16,6 +16,15 @@
         {
             "type": "node",
             "request": "launch",
+            "name": "Gulp resx2json",
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
+            "args": [
+                "resx2json"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
             "name": "Debug build",
             "program": "${workspaceRoot}/node_modules/webpack/bin/webpack.js",
             "args": [
@@ -28,7 +37,9 @@
             "name": "Debug build vendor",
             "program": "${workspaceRoot}/node_modules/webpack/bin/webpack.js",
             "args": [
-                "--color", "--config", "webpack.vendor.config.js"
+                "--color",
+                "--config",
+                "webpack.vendor.config.js"
             ]
         },
         {

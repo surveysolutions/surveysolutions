@@ -3,7 +3,7 @@ const webpack = require("webpack")
 const utils = require('gulp-util')
 const merge = require('webpack-merge');
 const rimraf = require("rimraf");
-//const debug = require('gulp-debug');
+const debug = require('gulp-debug');
 const plugins = require('gulp-load-plugins')();
 
 const config = {
@@ -13,31 +13,43 @@ const config = {
 
 config.resources = {
     source: '../',
-    dest: `${config.dist}/resources`
+    dest: "locale/.resources"
 }
 
 gulp.task('resx2json', () => {
-    const files = gulp.src(["../**/*.resx"])
-        //        .pipe(debug())
+
+    //d:\src\wb\src\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\
+    const files = gulp.src([
+        "../**/*.resx",
+        "../../../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
+    ])
+        //.pipe(debug())
         .pipe(plugins.resx2json())
-        .pipe(plugins.rename(function (filePath) {
+        .pipe(plugins.rename((filePath) => {
             filePath.extname = ".json";
             if (!filePath.basename.includes('.')) {
                 filePath.basename += ".en";
             }
         }))
-        .pipe(plugins.flatten());
+    //.pipe(plugins.flatten());
 
     return files.pipe(
         gulp.dest(config.resources.dest)
     );
 });
 
+gulp.task("localize", function(){
+    const localization = require("./.build/localization");
+    const localizationInfo = localization.buildLocalizationFiles(config);
+})
+
+
 gulp.task('cleanup', (cb) => {
-    if (utils.env.production) {
-        rimraf.sync(config.dist + "/**/*.*")
-        rimraf.sync(config.hqViews + "/partial.*.cshtml")
-    }
+    //  if (utils.env.production) {
+    rimraf.sync(config.dist + "/**/*.*")
+    rimraf.sync(config.resources.dest + "/**/*.*")
+    rimraf.sync(config.hqViews + "/partial.*.cshtml")
+    //}
     return cb();
 });
 
@@ -77,9 +89,13 @@ gulp.task("build", (done) => {
     webpack(merge(require("./webpack.config.js"), opts), onBuild(done));
 })
 
-gulp.task("default", ['cleanup', 'resx2json', 'build',]);
+gulp.task("default", ['cleanup', 'resx2json'], () => {
+    gulp.start("build");
+});
 
-gulp.task("watch", ['cleanup', 'resx2json'], (done) => {
+gulp.task("watch", (done) => {
+    gulp.start("cleanup");
+    gulp.start("resx2json");
     const compiler = webpack(merge(require("./webpack.config.js"), {
         plugins: [new webpack.ProgressPlugin()]
     }));
