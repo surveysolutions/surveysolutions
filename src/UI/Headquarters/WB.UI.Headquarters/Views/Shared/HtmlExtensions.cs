@@ -119,6 +119,8 @@ namespace ASP
                 case MenuItem.SurveyAndStatuses: return MainMenu.SurveysAndStatuses;
                 case MenuItem.StatusDuration: return MainMenu.StatusDuration;
                 case MenuItem.DevicesInterviewers: return MainMenu.DevicesInterviewers;
+                case MenuItem.Assignments: return MainMenu.Assignments;
+                case MenuItem.AuditLog: return AuditLog.PageTitle;
                 default: return String.Empty;
             }
         }
