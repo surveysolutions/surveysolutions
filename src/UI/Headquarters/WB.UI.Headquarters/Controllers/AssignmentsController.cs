@@ -34,6 +34,7 @@ namespace WB.UI.Headquarters.Controllers
         }
         
         [Localizable(false)]
+        [ActivePage(MenuItem.Assignments)]
         public ActionResult Index()
         {
             var model = new AssignmentsFilters
