@@ -148,7 +148,6 @@ gulp.task('copyFilesNeededForBundler', function(){
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/bootstrap/dist/js/bootstrap.min.js',
     'node_modules/jquery-validation/dist/jquery.validate.js',
-    'node_modules/jquery-placeholder/jquery.placeholder.js',
     'node_modules/jquery-mousewheel/jquery.mousewheel.js',
     'node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js'
   ])

@@ -30,9 +30,7 @@ namespace WB.UI.Designer
                 new ScriptBundle("~/editform").Include(
                     "~/Content/plugins/jquery.validate.js",
                     "~/Scripts/custom/jquery.validate.unobtrusive-custom-for-bootstrap.js",
-                    "~/Scripts/custom/bootstrap3-unobtrusive-hack.js",
-                    "~/Content/plugins/jquery-placeholder/jquery.placeholder.js",
-                    "~/Scripts/custom/editForm.js"));
+                    "~/Scripts/custom/bootstrap3-unobtrusive-hack.js"));
             bundles.Add(
                 new ScriptBundle("~/list").Include(
                     "~/Content/plugins/jquery.mousewheel.js",
