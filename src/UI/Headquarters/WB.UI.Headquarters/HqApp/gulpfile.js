@@ -38,40 +38,14 @@ gulp.task('resx2json', () => {
     );
 });
 
-gulp.task("localize", function(){
-    const localization = require("./.build/localization");
-    const localizationInfo = localization.buildLocalizationFiles(config);
-})
-
-
 gulp.task('cleanup', (cb) => {
-    //  if (utils.env.production) {
-    rimraf.sync(config.dist + "/**/*.*")
-    rimraf.sync(config.resources.dest + "/**/*.*")
-    rimraf.sync(config.hqViews + "/partial.*.cshtml")
-    //}
+    if (utils.env.production) {
+        rimraf.sync(config.dist + "/**/*.*")
+        rimraf.sync(config.resources.dest + "/**/*.*")
+        rimraf.sync(config.hqViews + "/partial.*.cshtml")
+    }
     return cb();
 });
-
-function onBuild(done, onBuildMessage) {
-    const moment = require("moment")
-
-    return function (err, stats) {
-        if (err) {
-            utils.log('Error', err);
-        }
-        else {
-            const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
-            utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
-            if (onBuildMessage) utils.log(onBuildMessage);
-            //utils.log(stats.toString());
-        }
-
-        if (done) {
-            done();
-        }
-    }
-}
 
 gulp.task("build", (done) => {
     const opts = {
@@ -93,9 +67,9 @@ gulp.task("default", ['cleanup', 'resx2json'], () => {
     gulp.start("build");
 });
 
-gulp.task("watch", (done) => {
-    gulp.start("cleanup");
-    gulp.start("resx2json");
+gulp.task("watch", ['resx2json'], () => {
+    //gulp.start("resx2json");
+
     const compiler = webpack(merge(require("./webpack.config.js"), {
         plugins: [new webpack.ProgressPlugin()]
     }));
@@ -108,3 +82,24 @@ gulp.task("watch", (done) => {
 
     return watcher;
 });
+
+
+function onBuild(done, onBuildMessage) {
+    const moment = require("moment")
+
+    return function (err, stats) {
+        if (err) {
+            utils.log('Error', err);
+        }
+        else {
+            const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
+            utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
+            if (onBuildMessage) utils.log(onBuildMessage);
+            //utils.log(stats.toString());
+        }
+
+        if (done) {
+            done();
+        }
+    }
+}

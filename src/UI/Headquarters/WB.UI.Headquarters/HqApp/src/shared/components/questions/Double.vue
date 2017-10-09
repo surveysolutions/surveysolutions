@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
-                            :placeholder="$t('DecimalEnter')" :title="$t('DecimalEnter')"
+                            :placeholder="$t('WebInterviewUI.DecimalEnter')" :title="$t('WebInterviewUI.DecimalEnter')"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
                             <wb-remove-answer />
@@ -37,7 +37,7 @@
             answerDoubleQuestion(evnt) {
                 const answerString = $(evnt.target).autoNumeric('get');
                 if (answerString.replace(/[^0-9]/g, "").length > 15) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("DecimalTooBig"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
                     return
                 }
 
@@ -49,7 +49,7 @@
                     return
                 }
                 if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage($t("DecimalCannotParse"))
+                    this.markAnswerAsNotSavedWithMessage($t("WebInterviewUI.DecimalCannotParse"))
                     return
                 }
 

@@ -5,7 +5,7 @@
                 data-toggle="dropdown">
             <span data-bind="label"
                   v-if="value === null"
-                  class="gray-text">{{ $t("ClickToAnswer") }}</span>
+                  class="gray-text">{{ $t("WebInterviewUI.ClickToAnswer") }}</span>
             <span data-bind="label"
                   v-else>{{value.title}}</span>
         </button>
@@ -16,7 +16,7 @@
                 <input type="text"
                        ref="searchBox"
                        :id="searchBoxId"
-                       :placeholder="$t('Search')"
+                       :placeholder="$t('WebInterviewUI.Search')"
                        @input="updateOptionsList"
                        @keyup.down="onSearchBoxDownKey"
                        v-model="searchTerm" />
@@ -29,10 +29,10 @@
                    @keydown.up="onOptionUpKey"></a>
             </li>
             <li v-if="isLoading">
-                <a>{{ $t("Loading") }}</a>
+                <a>{{ $t("WebInterviewUI.Loading") }}</a>
             </li>
             <li v-if="!isLoading && options.length === 0">
-                <a>{{ $t("NoResultsFound") }}</a>
+                <a>{{ $t("WebInterviewUI.NoResultsFound") }}</a>
             </li>
         </ul>
     </div>

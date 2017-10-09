@@ -2,7 +2,7 @@
     <div class="unit-section complete-section">
         <div class="unit-title">
             <wb-humburger></wb-humburger>
-            <h3>{{ $t("Cover")}}</h3>
+            <h3>{{ $t("WebInterviewUI.Cover")}}</h3>
         </div>
         <div class="wrapper-info">
             <div class="container-info">
@@ -12,7 +12,7 @@
 
         <div class="wrapper-info" v-if="hasSupervisorComment">
             <div class="container-info">
-                <h4 class="gray-uppercase">{{ $t("CoverSupervisorNote")}}</h4>
+                <h4 class="gray-uppercase">{{ $t("WebInterviewUI.CoverSupervisorNote")}}</h4>
                 <p>
                     <b>{{supervisorComment}}</b>
                 </p>
@@ -66,8 +66,8 @@ export default {
         },
         commentsTitle() {
             return this.$store.state.coverInfo.entitiesWithComments.length < this.$store.state.coverInfo.commentedQuestionsCount
-                ? this.$t("CoverFirstComments", { count: this.$store.state.coverInfo.entitiesWithComments.length})
-                : this.$t("CoverComments");
+                ? this.$t("WebInterviewUI.CoverFirstComments", { count: this.$store.state.coverInfo.entitiesWithComments.length})
+                : this.$t("WebInterviewUI.CoverComments");
         },
         questions() {
             return this.$store.state.coverInfo.identifyingQuestions

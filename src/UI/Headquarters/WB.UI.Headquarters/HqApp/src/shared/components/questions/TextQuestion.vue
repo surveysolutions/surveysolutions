@@ -10,13 +10,13 @@
                                autocomplete="off"
                                type="text"
                                class="field-to-fill"
-                               :placeholder="$t('TextEnterMasked', { userFriendlyMask })"
+                               :placeholder="$t('WebInterviewUI.TextEnterMasked', { userFriendlyMask })"
                                :value="$me.answer"
                                v-blurOnEnterKey
                                @blur="answerTextQuestion"
                                v-mask="$me.mask"
                                :data-mask-completed="$me.isAnswered"
-                               :title="$t('TextEnter')">
+                               :title="$t('WebInterviewUI.TextEnter')">
                         <wb-remove-answer />
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                 }
 
                 if (this.$me.mask && !target.data("maskCompleted")) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("TextRequired"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
                 }
                 else {
                     this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })

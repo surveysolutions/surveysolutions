@@ -7,21 +7,28 @@ import api from 'shared/api'
 import { browserLanguage } from "shared/helpers"
 
 export default {
-    async initializeAsync() {
+    initializeAsync() {
         const locale = browserLanguage.split('-')[0];
-        const messages = await api.resources.locale(locale)
-        
-        const options = {
-            locale,
-            fallbackLocale: 'en',
-            messages: {
-                [locale]: messages.data
-            }
-        }
+        return api.resources.locale(locale)
+            .then(messages => {
 
-        const i18n = new VueI18n(options);
-        Vue.use(i18n);
+                const options = {
+                    locale,
+                    fallbackLocale: 'en',
+                    messages: {
+                        [locale]: messages.data
+                    }
+                }
 
-        return i18n;
+                const i18n = new VueI18n(options);
+                Vue.use(i18n);
+                  // /*  expose a global API method  */
+                Object.defineProperty(Vue, '$t', {
+                    get() {
+                        return i18n.t;
+                    }
+                })
+                return i18n;
+            });
     }
 }

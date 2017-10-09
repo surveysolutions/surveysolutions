@@ -11,7 +11,7 @@
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
                         <input autocomplete="off" type="text" class="field-to-fill"
-                            :placeholder="$t('TextEnterNewItem')" :title="$t('TextEnterNewItem')" v-blurOnEnterKey @blur="addRow"/>
+                            :placeholder="$t('WebInterviewUI.TextEnterNewItem')" :title="$t('WebInterviewUI.TextEnterNewItem')" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     return
                 }
 
-                modal.confirm(this.$t('ConfirmRosterRemove'), result => {
+                modal.confirm(this.$t('WebInterviewUI.ConfirmRosterRemove'), result => {
                     if (result) {
                         this.removeRow(index)
                         return;

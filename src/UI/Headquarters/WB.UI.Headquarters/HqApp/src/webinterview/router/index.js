@@ -45,7 +45,7 @@ const router = new VueRouter({
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
-            store.dispatch("sectionRequireScroll", { id: (from.params ).sectionId })
+            store.dispatch("sectionRequireScroll", { id: (from.params).sectionId })
         } else {
             return { x: 0, y: 0 }
         }
@@ -56,9 +56,8 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
     queryString["interviewId"] = to.params["interviewId"]
 
-    hubProxy().then((proxy) => {
-        proxy.state.sectionId = to.params["sectionId"]
-    })
+    const proxy = await hubProxy()
+    proxy.state.sectionId = to.params["sectionId"]
 
     if (to.name === "section") {
         const isEnabled = await apiCaller(api => api.isEnabled(to.params["sectionId"]))

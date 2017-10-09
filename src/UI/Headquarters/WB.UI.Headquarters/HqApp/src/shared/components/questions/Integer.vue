@@ -5,8 +5,8 @@
                 <div class="form-group">
                     <div class="field answered">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
-                            :placeholder="$t('NumberEnter')"
-                            :title="$t('NumberEnter')"
+                            :placeholder="$t('WebInterviewUI.NumberEnter')"
+                            :title="$t('WebInterviewUI.NumberEnter')"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerIntegerQuestion" v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
                             <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
                             <span></span>
@@ -49,7 +49,7 @@
                 }
 
                 if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("NumberCannotParse"))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotParse"))
                     return
                 }
 
@@ -59,12 +59,12 @@
                 }
 
                 if (answer < 0) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("NumberRosterError", { answer }))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterError", { answer }))
                     return;
                 }
 
                 if (answer > this.$me.answerMaxValue) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("NumberRosterUpperBound", { answer, answerMaxValue: this.$me.answerMaxValue }))
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterUpperBound", { answer, answerMaxValue: this.$me.answerMaxValue }))
                     return;
                 }
 
@@ -78,7 +78,7 @@
 
                 const amountOfRostersToRemove = previousAnswer - answer;
 
-                const confirmMessage = this.$t("NumberRosterRemoveConfirm", { amountOfRostersToRemove })
+                const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {
@@ -101,7 +101,7 @@
                 }
 
                 const amountOfRostersToRemove = this.$me.answer;
-                const confirmMessage = this.$t("NumberRosterRemoveConfirm", { amountOfRostersToRemove })
+                const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
                 modal.confirm(confirmMessage, result => {
                     if (result) {

@@ -21,8 +21,8 @@
 </head>
 <body class="gray-background">
     <script>
-        global:CONFIG = {
-            locale: @Html.Raw(WebInterviewController.Locale()),
+        global: CONFIG = {
+            basePath: '@Url.Content("~/")',
             virtualPath: '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})',
             imageUploadUri: '@Url.RouteUrl(@"WebInterview.ImageAnswering", new { controller = "WebInterview", Action = "Image"})',
             audioUploadUri: '@Url.RouteUrl(@"WebInterview.AudioAnswering", new { controller = "WebInterview", Action = "Audio"})',

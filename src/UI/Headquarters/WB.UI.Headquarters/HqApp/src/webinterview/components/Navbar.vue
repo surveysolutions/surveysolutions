@@ -7,7 +7,7 @@
                     {{interviewKey}}
                 </router-link>
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-                    <span class="sr-only">{{ $t('ToggleNavigation') }}</span>
+                    <span class="sr-only">{{ $t('WebInterviewUI.ToggleNavigation') }}</span>
                     <span class="icon-bar top-menu"></span>
                     <span class="icon-bar mid-menu"></span>
                     <span class="icon-bar bottom-menu"></span>
@@ -34,7 +34,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('Help')">{{ $t('Help') }}</a></li>
+                    <li><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -78,7 +78,7 @@
             });
         },
         updated(){
-            document.title = `${this.$store.state.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterview")}`
+            document.title = `${this.$store.state.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterviewUI.WebInterview")}`
         },
         computed: {
             canChangeLanguage() {
@@ -94,7 +94,7 @@
                 return { name: 'section', params: { sectionId: this.$store.state.firstSectionId } }
             },
             interviewKey() {
-                return this.$store.state.interviewKey || this.$t("WebInterview");
+                return this.$store.state.interviewKey || this.$t("WebInterviewUI.WebInterview");
             },
             hqLink() {
                 return this.$config.hqLink
@@ -106,7 +106,7 @@
                 this.$store.dispatch("changeLanguage", { language: language })
 
                 modal.dialog({
-                    message: "<p>" + this.$t("SwitchingLanguage") +"</p>",
+                    message: "<p>" + this.$t("WebInterviewUI.SwitchingLanguage") +"</p>",
                     closeButton: false
                 })
             }
