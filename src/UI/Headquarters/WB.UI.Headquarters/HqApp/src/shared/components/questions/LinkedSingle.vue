@@ -11,7 +11,7 @@
                         <wb-remove-answer />
                     </div>
                 </div>
-                <div v-if="noOptions" class="options-not-available">{{ $t("OptionsAvailableAfterAnswer") }}</div>
+                <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
             </div>
         </div>
     </wb-question>

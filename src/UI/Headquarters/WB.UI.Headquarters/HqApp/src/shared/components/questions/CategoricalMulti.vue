@@ -11,7 +11,7 @@
                     </label>
                         <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
                 </div>
-                <div v-if="noOptions" class="options-not-available">{{ $t("OptionsAvailableAfterAnswer") }}</div>
+                <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
             </div>
         </div>
     </wb-question>
@@ -42,7 +42,7 @@
                         return;
                     }
 
-                    const confirmMessage = this.$t("ConfirmRosterRemove");
+                    const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
 
                     modal.confirm(confirmMessage, result => {
                         if (result) {

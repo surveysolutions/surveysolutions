@@ -4,11 +4,11 @@ import box from "bootbox"
 import "bootstrap/js/modal"
 
 box.setLocale(browserLanguage)
-box.addLocale("ar", {
-    OK: Vue.$t("Common.Ok"),
-    CANCEL: Vue.$t("Common.Cancel"),
-    CONFIRM: Vue.$t("Common.Confirm")
-})
+// box.addLocale("ar", {
+//     OK: Vue.$t("Common.Ok"),
+//     CANCEL: Vue.$t("Common.Cancel"),
+//     CONFIRM: Vue.$t("Common.Confirm")
+// })
 
 export default {
     confirm(message, callback) {

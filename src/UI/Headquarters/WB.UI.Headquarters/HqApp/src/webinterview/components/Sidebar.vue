@@ -19,7 +19,7 @@
             return {
                 coverSection: {
                     collapsed: true,
-                    title: this.$t("Cover"),
+                    title: this.$t("WebInterviewUI.Cover"),
                     to: {
                         name: 'prefilled'
                     },
@@ -45,7 +45,7 @@
             completeSection() {
                 return {
                     collapsed: true,
-                    title: this.$t("Complete"),
+                    title: this.$t("WebInterviewUI.Complete"),
                     to: {
                         name: 'complete'
                     },

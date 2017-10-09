@@ -3,16 +3,16 @@
         <div class="question-unit">
             <div class="options-group">
                 <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
-                    v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">{{ $t('AudioClickRecord')}}</button>
+                    v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
-                        <li>{{ $t("AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
+                        <li>{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
                     </ul>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
                     <button v-if="!isRecording" v-on:click="startRecording" type="button"
-                        class="btn btn-default btn-lg btn-action-questionnaire">{{ $t("AudioRecordNew") }}</button>
+                        class="btn btn-default btn-lg btn-action-questionnaire">{{ $t("WebInterviewUI.AudioRecordNew") }}</button>
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
                         <button type="button" v-on:click="cancelRecording" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true"></span>
                         </button>
-                        <h4 class="modal-title">{{ $t("AudioRecording") }}</h4>
+                        <h4 class="modal-title">{{ $t("WebInterviewUI.AudioRecording") }}</h4>
                         <h5 v-dateTimeFormatting v-html="$me.title"></h5>
                     </div>
                     <div class="modal-body">
@@ -31,8 +31,8 @@
                     </div>
                     <div class="modal-footer">
                         <div class="recordign-time">{{formattedTimer}}</div>
-                        <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">{{ $t("Done") }}</button>
-                        <button type="button" v-on:click="cancelRecording" class="btn btn-link " data-dismiss="modal">{{ $t("Cancel") }}</button>
+                        <button type="button" v-on:click="stopRecording" class="btn btn-primary" v-if="isRecording">{{ $t("WebInterviewUI.Done") }}</button>
+                        <button type="button" v-on:click="cancelRecording" class="btn btn-link " data-dismiss="modal">{{ $t("WebInterviewUI.Cancel") }}</button>
                     </div>
                 </div>
                 <!-- /.modal-content -->
@@ -124,7 +124,7 @@ export default {
                     self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
                 },
                 errorCallback: (e) => {
-                    self.markAnswerAsNotSavedWithMessage(this.$t("AudioInitializationFailed"))
+                    self.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.AudioInitializationFailed"))
                     console.log(e)
                 },
                 doneCallback: (blob) => {

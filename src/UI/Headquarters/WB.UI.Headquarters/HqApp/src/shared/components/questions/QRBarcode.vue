@@ -5,7 +5,7 @@
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <input autocomplete="off" type="text" class="field-to-fill"
-                            :placeholder="$t('TextEnter')" :title="$t('TextEnter')" :value="$me.answer"
+                            :placeholder="$t('WebInterviewUI.TextEnter')" :title="$t('WebInterviewUI.TextEnter')" :value="$me.answer"
                             v-blurOnEnterKey @blur="answerQRBarcodeQuestion">
                             <wb-remove-answer />
                     </div>
