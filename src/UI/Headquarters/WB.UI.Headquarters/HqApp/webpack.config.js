@@ -5,26 +5,41 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const merge = require('webpack-merge')
 const hqViewsFolder = path.resolve(__dirname, "..", "Views")
+const localization = require("./.build/localization")
 
 console.log(`Building HQ UI js in ${(devMode ? "DEVELOPMENT" : "PRODUCTION")} mode.`)
 
 var commonConfig = require("./.build/webpack.common")
 
-const entry = {
-    hq: "./src/hqapp/main.js",
-    test: "./src/hqapp/test.js",
-    webinterview: "./src/webinterview/main.js"
+const config = {
+    hq: {
+        entry: "./src/hqapp/main.js",
+        locales: ["Pages", "Common", "Users", "Assignments", "Strings", "Reports", "DevicesInterviewers"]
+    },
+    webinterview: {
+        entry: "./src/webinterview/main.js",
+        locales: ["WebInterview"]
+    }
 };
 
-const entryNames = Object.keys(entry)
+const localizationInfo = localization.buildLocalizationFiles(config);
+
+const entryNames = Object.keys(config)
 
 const plugins = entryNames.map((e) => {
     return new HtmlWebpackPlugin({
         inject: false,
         filename: path.resolve(hqViewsFolder, "shared", `partial.${e}.cshtml`),
         excludeChunks: entryNames.filter((name) => name !== e),
-        template: '!!handlebars-loader!src/template.hbs'
+        template: '!!handlebars-loader!src/template.hbs',
+        locales: JSON.stringify(localizationInfo[e]),
+        entry: e
     })
 });
 
-module.exports = merge(commonConfig, { entry, plugins })
+const webpackConfig = merge(commonConfig, {
+    entry: entryNames.reduce((result, key) => { result[key] = config[key].entry; return result; }, {}),
+    plugins
+})
+
+module.exports = webpackConfig

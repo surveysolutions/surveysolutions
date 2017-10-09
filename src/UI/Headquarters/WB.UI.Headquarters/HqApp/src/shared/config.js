@@ -1,8 +1,8 @@
 const config = window.CONFIG;
 
 /*  the Plugin */
-const configuration  = {
-    install: function (Vue) {
+export default Object.assign(window.CONFIG, {
+    install(Vue) {
         // /*  expose a global API method  */
         Object.defineProperty(Vue, '$config', {
             get() {
@@ -17,7 +17,4 @@ const configuration  = {
             }
         })
     }
-}
-
-/*  export API  */
-export default configuration
+});

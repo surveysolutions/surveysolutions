@@ -2,7 +2,7 @@
     <Layout :title="title"
             :hasFilter="true">
         <Filters slot="filters">
-            <FilterBlock :title="$t('Pages.Questionnaire')">
+            <FilterBlock :title="$t('Common.Questionnaire')">
                 <Typeahead :placeholder="$t('Common.AllQuestionnaires')"
                            :values="$config.model.questionnaires"
                            :value="questionnaireId"
