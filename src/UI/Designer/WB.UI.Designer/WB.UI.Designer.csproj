@@ -466,7 +466,6 @@
     <Content Include="Content\pdf.min.css">
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
@@ -728,7 +727,6 @@
     <Content Include="Views\Questionnaire\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
-    <Content Include="questionnaire\content\fonts\Roboto300.woff" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <Content Include="Views\SystemMailer\TargetPersonShareNotification.cshtml" />
@@ -756,10 +754,6 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
     <Content Include="Views\Shared\QuestionnairesList.cshtml" />
     <Content Include="questionnaire\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
