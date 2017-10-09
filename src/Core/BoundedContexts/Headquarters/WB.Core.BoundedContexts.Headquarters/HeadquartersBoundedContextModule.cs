@@ -347,6 +347,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IAssignmentViewFactory>().To<AssignmentViewFactory>();
             this.Bind<IAssignmentsService>().To<AssignmentsService>();
             this.Bind<IAssignmetnsDeletionService>().To<AssignmetnsDeletionService>();
+            this.Bind<IAuditLog>().To<AuditLog>();
+            this.Bind<IAuditLogReader>().To<AuditLogReader>();
         }
     }
 }
