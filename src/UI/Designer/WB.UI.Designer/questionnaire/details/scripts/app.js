@@ -10,6 +10,7 @@
         backend: {
             loadPath: '../build/resources/QuestionnaireEditor.{{lng}}.json'
         },
+        load: 'languageOnly',
         useCookie: false,
         useLocalStorage: false,
         interpolation: {
