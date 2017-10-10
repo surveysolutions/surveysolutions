@@ -466,6 +466,7 @@
     <Content Include="Content\pdf.min.css">
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
@@ -632,7 +633,6 @@
     <Content Include="questionnaire\content\markup.css.css.map">
       <DependentUpon>markup.css.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\details\index.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-question-list.css.css">
       <DependentUpon>wb-question-list.css.less</DependentUpon>
@@ -752,7 +752,12 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
     <Content Include="Views\Shared\QuestionnairesList.cshtml" />
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="questionnaire\content\fonts\OpenSans300.woff" />
+    <Content Include="questionnaire\content\fonts\Roboto300.woff" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -808,17 +813,12 @@
     <Content Include="questionnaire\.jscsrc" />
     <Content Include="questionnaire\.jshintrc" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="questionnaire\fonts\Roboto300.woff" />
     <Content Include="questionnaire\content\lib\controls\wb-modal.css.less" />
     <Content Include="questionnaire\content\lib\wb-customfonts.css.less" />
     <Content Include="questionnaire\content\designer-editor\wb-share.css.less" />
     <Content Include="questionnaire\content\dropdown.css.less" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="questionnaire\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />

@@ -89,7 +89,7 @@ gulp.task('clean', function	(){
 
 gulp.task("styles", function(){
   return gulp.src('content/markup.css.less')
-      .pipe(appendPrepend.appendText('@icon-font-path: "../fonts/";'))
+      .pipe(appendPrepend.appendText('@icon-font-path: "/fonts/";'))
       .pipe(plugins.less({
         relativeUrls: true
       }))
