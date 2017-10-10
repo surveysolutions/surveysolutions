@@ -37,7 +37,7 @@
             <li>
                 <a ng-click="addVariable(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="TreeAddVariable">Add variable</a>
             </li>
-            <li><a ng-click="copyRef(item)">Copy</a></li>
+            <li><a ng-click="copyRef(item)" ng-i18next>Copy</a></li>
             <li >
                 <a ng-disabled="!readyToPaste" ng-click="pasteItemAfter(item)" ng-if="!questionnaire.isReadOnlyForUser" ng-i18next="PasteAfter"></a>
             </li>
