@@ -224,7 +224,7 @@
     <value>Выход</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Вы уверены, что хотите удалить интервью #{0}?</value>
+    <value>Вы уверены, что хотите удалить интервью {0}?</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
     <value>Невозможно подключиться к вашему серверу. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
@@ -675,7 +675,7 @@
     <value>{0} вопросов(а) отвечено</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
-    <value>Задача {0}</value>
+    <value>Задача #{0}</value>
   </data>
   <data name="Dashboard_No_InterviewKey" xml:space="preserve">
     <value>Без ключа</value>
