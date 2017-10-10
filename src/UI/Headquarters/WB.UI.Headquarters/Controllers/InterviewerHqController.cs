@@ -90,7 +90,6 @@ namespace WB.UI.Headquarters.Controllers
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),
-                Resources = InterviewHqResources.Translations(),
                 Questionnaires = this.GetQuestionnaires(statuses)
             };
         }

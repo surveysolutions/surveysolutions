@@ -138,15 +138,7 @@ namespace WB.UI.Headquarters.Controllers
                     }),
                 InterviewsBaseUrl = Url.Action("Interviews", "HQ"),
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
-                Questionnaires = this.GetAllQuestionnaires(),
-
-                Resources = new[]
-                {
-                    Strings.ResourceManager,
-                    Pages.ResourceManager,
-                    CommonRes.ResourceManager,
-                    Reports.ResourceManager,
-                }.Translations()
+                Questionnaires = this.GetAllQuestionnaires()
             });
         }
 
@@ -259,12 +251,7 @@ namespace WB.UI.Headquarters.Controllers
                     controller = "ReportDataApi",
                     action = "DeviceInterviewers"
                 }),
-                InterviewersBaseUrl = Url.Action("Index", "Interviewers"),
-                Resources = new[]
-                {
-                    DevicesInterviewers.ResourceManager,
-                    Pages.ResourceManager
-                }.Translations()
+                InterviewersBaseUrl = Url.Action("Index", "Interviewers")
             });
         }
 

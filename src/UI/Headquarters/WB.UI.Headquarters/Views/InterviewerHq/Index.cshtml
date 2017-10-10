@@ -7,11 +7,6 @@
 @Html.RenderHqConfig(new
 {
     AssignmentsEndpoint = Url.Content(@"~/api/Assignments"),
-    InterviewerHqEndpoint = Url.Content(@"~/interviewerHq"),
-    Resources = new[] {
-        MainMenu.ResourceManager,
-        Assignments.ResourceManager,
-        Common.ResourceManager,
-        Pages.ResourceManager }.Translations()
+    InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
 })
 <div id="vueApp"></div>

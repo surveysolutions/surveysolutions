@@ -310,8 +310,6 @@ namespace WB.UI.Headquarters.Controllers
 
         private static readonly ResourceManager[] WebUiLocales = { WebInterviewUI.ResourceManager, global::Resources.Common.ResourceManager };
         
-        public static string Locale() => WebUiLocales.Translations().ToString();
-
         private string CreateInterview(Assignment assignment)
         {
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
