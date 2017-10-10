@@ -160,6 +160,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The external login was removed..
+        /// </summary>
+        public static string ExternalLoginRemoved {
+            get {
+                return ResourceManager.GetString("ExternalLoginRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forgot Password?.
         /// </summary>
         public static string ForgotPassword {
@@ -178,11 +187,56 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The e-mail address provided is invalid. Please check the value and try again..
+        /// </summary>
+        public static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password provided is invalid. Please enter a valid password value..
+        /// </summary>
+        public static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your password reset link invalid or expired. Please try again.
         /// </summary>
         public static string InvalidResetPasswordLink {
             get {
                 return ResourceManager.GetString("InvalidResetPasswordLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password retrieval answer provided is invalid. Please check the value and try again..
+        /// </summary>
+        public static string InvalidRetrievalAnswer {
+            get {
+                return ResourceManager.GetString("InvalidRetrievalAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The password retrieval question provided is invalid. Please check the value and try again..
+        /// </summary>
+        public static string InvalidRetrievalQuestion {
+            get {
+                return ResourceManager.GetString("InvalidRetrievalQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The user name provided is invalid. Please check the value and try again..
+        /// </summary>
+        public static string InvalidUserName {
+            get {
+                return ResourceManager.GetString("InvalidUserName", resourceCulture);
             }
         }
         
@@ -241,6 +295,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator..
+        /// </summary>
+        public static string MembershipProviderError {
+            get {
+                return ResourceManager.GetString("MembershipProviderError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are using an outdated browser.
         /// </summary>
         public static string OutdatedBrowserMessage {
@@ -259,6 +322,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your password has been changed..
+        /// </summary>
+        public static string PasswordChanged {
+            get {
+                return ResourceManager.GetString("PasswordChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password reset.
         /// </summary>
         public static string PasswordReset {
@@ -273,6 +345,15 @@ namespace WB.UI.Designer.Resources {
         public static string PasswordResetDescription {
             get {
                 return ResourceManager.GetString("PasswordResetDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your password has been set..
+        /// </summary>
+        public static string PasswordSet {
+            get {
+                return ResourceManager.GetString("PasswordSet", resourceCulture);
             }
         }
         
@@ -367,11 +448,47 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator..
+        /// </summary>
+        public static string UnknownError {
+            get {
+                return ResourceManager.GetString("UnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please &lt;a href=&quot;http://browsehappy.com/&quot;&gt;upgrade your browser&lt;/a&gt; to use designer application..
         /// </summary>
         public static string UpgradeYourBrowser {
             get {
                 return ResourceManager.GetString("UpgradeYourBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator..
+        /// </summary>
+        public static string UserCreationRequestCanceled {
+            get {
+                return ResourceManager.GetString("UserCreationRequestCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name already exists. Please enter a different user name..
+        /// </summary>
+        public static string UserNameExists {
+            get {
+                return ResourceManager.GetString("UserNameExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A user name for that e-mail address already exists. Please enter a different e-mail address..
+        /// </summary>
+        public static string UserNameForEmailExists {
+            get {
+                return ResourceManager.GetString("UserNameForEmailExists", resourceCulture);
             }
         }
         

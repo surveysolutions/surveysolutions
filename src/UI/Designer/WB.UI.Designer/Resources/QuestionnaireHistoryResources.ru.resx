@@ -193,10 +193,10 @@
     <value>Изменение</value>
   </data>
   <data name="from" xml:space="preserve">
-    <value>с</value>
+    <value> из</value>
   </data>
   <data name="to" xml:space="preserve">
-    <value> to</value>
+    <value> в</value>
   </data>
   <data name="Macro" xml:space="preserve">
     <value>Макрос</value>

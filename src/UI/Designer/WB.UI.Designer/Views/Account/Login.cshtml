@@ -31,7 +31,7 @@
         <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
     <div class="form-group">
-        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = AccountResources.LoginOrEmail })
+        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = AccountResources.LoginName })
         @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
     </div>
     <div class="form-group">
