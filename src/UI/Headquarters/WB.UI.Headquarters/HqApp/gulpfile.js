@@ -19,7 +19,7 @@ config.resources = {
 
 gulp.task("test", (done) => {
     var exec = require('child_process').exec;
-    exec('jest --ci', (err, stdout, stderr) => {
+    exec('yarn test --ci', (err, stdout, stderr) => {
         utils.log(stdout);
         utils.log(stderr);
         done(err);
@@ -68,7 +68,8 @@ gulp.task("build", (done) => {
     return webpack(merge(require("./webpack.config.js"), opts), onBuild(done));
 })
 
-gulp.task("default", ['cleanup', 'resx2json', utils.env.production ? "test" : null].filter((x) => x), () => {
+gulp.task("default", ['cleanup', 'resx2json', 
+    utils.env.production ? "test" : null].filter((x) => x), () => {
    return gulp.start("build");
 });
 
