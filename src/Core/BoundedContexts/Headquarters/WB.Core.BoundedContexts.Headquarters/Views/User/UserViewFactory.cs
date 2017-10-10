@@ -247,7 +247,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 bool? isArchivedShowed = showArchived ? (bool?)null : false;
 
                 var responsible = ApplyFilter(users, searchBy, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer)
-                    .Where(user => showLocked || !user.IsLockedByHeadquaters);
+                    .Where(user => showLocked || !user.IsLockedByHeadquaters && !user.IsLockedBySupervisor);
 
                 return responsible.Select(x => new ResponsiblesViewItem
                 {

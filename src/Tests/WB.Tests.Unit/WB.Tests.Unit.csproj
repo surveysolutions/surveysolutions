@@ -745,6 +745,7 @@
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\Factories\QuestionnaireLabelFactoryTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\MetadataExportServiceTests\when_question_title_contains_html.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_filtering_by_archived.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_searching_for_non_archived.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\ApiBasicAuthNunitBasedSpecification.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_interviewer_in_SHA1_compatibility_mode.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Web\ApiBasicAuthAttributeTests\when_authorizing_Interviewer_with_auth_based_token.cs" />
