@@ -45,16 +45,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private void BecauseOf() => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
 
-        [NUnit.Framework.Test] public void should_output_WB0084_verification_error () => verificationErrors.First().Code.ShouldEqual("WB0084");
+        [NUnit.Framework.Test] public void should_output_WB0084_verification_error () => verificationErrors.ShouldContainError("WB0084");
 
         [NUnit.Framework.Test] public void should_reference_parent_question () => 
-            verificationErrors.First().References.ShouldContain(@ref => @ref.ItemId == parentSingleOptionQuestionId.FormatGuid());
+            verificationErrors.GetError("WB0084").References.ShouldContain(@ref => @ref.ItemId == parentSingleOptionQuestionId.FormatGuid());
 
         [NUnit.Framework.Test] public void should_reference_question () =>
-            verificationErrors.First().References.ShouldContain(@ref => @ref.ItemId == childCascadedComboboxId.FormatGuid());
+            verificationErrors.GetError("WB0084").References.ShouldContain(@ref => @ref.ItemId == childCascadedComboboxId.FormatGuid());
 
         [NUnit.Framework.Test] public void should_return_error_with_referece_to_question () => 
-            verificationErrors.First().References.ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
+            verificationErrors.GetError("WB0084").References.ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;

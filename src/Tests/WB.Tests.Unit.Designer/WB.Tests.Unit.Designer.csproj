@@ -14,6 +14,11 @@
     <DebugType Condition="'$(TargetFramework)' != '' AND '$(TargetFramework)' != 'netcoreapp1.0'">Full</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+    <EmbeddedResource Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+    <None Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslations.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
@@ -130,8 +135,5 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\" />
   </ItemGroup>
 </Project>

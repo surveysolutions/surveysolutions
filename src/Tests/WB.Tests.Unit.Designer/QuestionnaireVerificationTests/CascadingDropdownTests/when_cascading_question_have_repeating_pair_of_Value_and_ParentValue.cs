@@ -58,15 +58,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             BecauseOf();
         }
 
-        private void BecauseOf() => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
+        private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-        [NUnit.Framework.Test] public void should_return_WB0089_error () => verificationErrors.First().Code.ShouldEqual("WB0089");
+        [NUnit.Framework.Test] public void should_return_WB0089_error () => verificationErrors.ShouldContainError("WB0089");
 
         [NUnit.Framework.Test] public void should_return_error_with_referece_to_wrong_question () =>
-            verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
+            verificationErrors.GetError("WB0089").References.First().Id.ShouldEqual(childCascadedComboboxId);
 
         [NUnit.Framework.Test] public void should_return_error_with_referece_to_question () => 
-            verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationErrors.GetError("WB0089").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;
