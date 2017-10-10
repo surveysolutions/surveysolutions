@@ -1,8 +1,7 @@
 echo Build WB.UI.Headquarters\Dependencies
 pushd src\UI\Headquarters\WB.UI.Headquarters\Dependencies
 call yarn 
-call node_modules\.bin\bower install
-call node_modules\.bin\gulp --production
+call node_modules\.bin\gulp
 popd
 
 echo Build WB.UI.Headquarters\HqApp

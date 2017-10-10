@@ -8,10 +8,10 @@
     <Delete Files="@(FilesToDelete)" />
   </Target>
  
-  <Target Name="CollecHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
+  <Target Name="CollectHqApp" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
-      <CollecHqApp_CustomFiles Include="HqApp\dist\**\*.js;HqApp\dist\**\*.css" />
-      <FilesForPackagingFromProject Include="%(CollecHqApp_CustomFiles.Identity)">
+      <CollectHqApp_CustomFiles Include="HqApp\dist\**\*.js;HqApp\dist\**\*.css;HqApp\dist\**\*.json" />
+      <FilesForPackagingFromProject Include="%(CollectHqApp_CustomFiles.Identity)">
         <DestinationRelativePath>HqApp\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
       </FilesForPackagingFromProject>
 
@@ -21,13 +21,13 @@
       </FilesForPackagingFromProject>
     </ItemGroup>
   </Target>
-  <Target Name="CollecHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
+  
+  <Target Name="CollectHqDepsDist" BeforeTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <ItemGroup>
-      <CollecHqDeps_CustomFiles Include="Dependencies\dist\**\*.*" />
-      <FilesForPackagingFromProject Include="%(CollecHqDeps_CustomFiles.Identity)">
+      <CollectHqDeps_CustomFiles Include="Dependencies\dist\**\*.*" />
+      <FilesForPackagingFromProject Include="%(CollectHqDeps_CustomFiles.Identity)">
         <DestinationRelativePath>Dependencies\dist\%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
-      </FilesForPackagingFromProject>
-      
+      </FilesForPackagingFromProject>      
     </ItemGroup>
   </Target>
 

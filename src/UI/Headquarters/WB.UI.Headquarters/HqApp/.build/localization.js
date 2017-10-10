@@ -104,8 +104,8 @@ module.exports = {
                 const content = JSON.stringify(entryResult[lang]);
                 const filename = 
                     process.env.NODE_ENV == "production" 
-                    ? `${key}.locale.${lang}.${getHash(content)}.json`
-                    : `${key}.locale.${lang}.json`
+                    ? `${key}/${lang}.${getHash(content)}.json`
+                    : `${key}/${lang}.json`
 
                 const jsonPath = `./dist/${filename}`;
                 
