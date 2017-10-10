@@ -12,6 +12,17 @@ describe("Custom i18n formatter", () => {
       { "type": "named", "value": "inside" },
       { "type": "text", "value": " force" }])
   });
+  
+  it('able to parse tokens with spaces inside tokens ""Enter the {{  building }} with me {{  inside   }} force""', () => {
+    const result = parse("Enter the {{building}} with me {{inside}} force");
+
+    expect(result).toEqual(
+      [{ "type": "text", "value": "Enter the " },
+      { "type": "named", "value": "building" },
+      { "type": "text", "value": " with me " },
+      { "type": "named", "value": "inside" },
+      { "type": "text", "value": " force" }])
+  });
 
   it('able to parse single token {{building}}', () => {
     const result = parse("{{building}}");

@@ -46,7 +46,7 @@
 <script lang="js">
 import { entityDetails } from "../mixins"
 import * as $ from 'jquery'
-import * as moment from "moment"
+import moment from "moment"
 const AudioRecorder = new window.AudioRecorder
 
 export default {

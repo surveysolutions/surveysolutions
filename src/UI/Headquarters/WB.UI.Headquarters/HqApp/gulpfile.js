@@ -46,11 +46,11 @@ gulp.task('resx2json', () => {
 });
 
 gulp.task('cleanup', (cb) => {
-    if (utils.env.production) {
+   // if (utils.env.production) {
         rimraf.sync(config.dist + "/**/*.*")
         rimraf.sync(config.resources.dest + "/**/*.*")
         rimraf.sync(config.hqViews + "/partial.*.cshtml")
-    }
+    //}
     return cb();
 });
 
@@ -97,8 +97,21 @@ function onBuild(done, onBuildMessage) {
         else {
             const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
             utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
-            if (onBuildMessage) utils.log(onBuildMessage);
-            //utils.log(stats.toString());
+            
+            if(stats.hasErrors()){
+                utils.log(stats.compilation.errors);
+            }
+            
+            if(stats.hasWarnings()){
+                utils.log(stats.compilation.warnings);
+            }
+
+            if (!stats.hasErrors && !stats.hasWarnings && onBuildMessage){
+                utils.log(onBuildMessage);                
+            } else {
+                utils.log(utils.colors.bgRed("Build completed with warnings"));
+            }
+
         }
 
         if (done) {
