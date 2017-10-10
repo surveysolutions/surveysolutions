@@ -896,4 +896,7 @@
   <data name="UnsavedChangesReload" xml:space="preserve">
     <value>Вы потеряете не сохранённые измененимя если обновите страницу</value>
   </data>
+  <data name="SideBarMacroNoName" xml:space="preserve">
+    <value>Макрос без имени</value>
+  </data>
 </root>
