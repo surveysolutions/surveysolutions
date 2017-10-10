@@ -202,7 +202,7 @@
 
             $scope.deleteAttachment = function (index) {
                 var attachment = $scope.attachments[index];
-                var attachmentName = attachment.name || "attachment with no name";
+                var attachmentName = attachment.name || $i18next.t('SideBarAttachmentNoName');
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(attachmentName));
 
                 modalInstance.result.then(function (confirmResult) {
