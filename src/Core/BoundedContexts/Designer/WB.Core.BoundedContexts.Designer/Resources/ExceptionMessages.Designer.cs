@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ExceptionMessages {
@@ -84,6 +84,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string CantBeLinkedAndCascadingAtSameTime {
             get {
                 return ResourceManager.GetString("CantBeLinkedAndCascadingAtSameTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can&apos;t move to sub-section {0} because it position {1} in not acceptable..
+        /// </summary>
+        public static string CantMoveSubsectionInWrongPosition {
+            get {
+                return ResourceManager.GetString("CantMoveSubsectionInWrongPosition", resourceCulture);
             }
         }
         
@@ -156,6 +165,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string CategoricalQuestionHasMoreThan200Options {
             get {
                 return ResourceManager.GetString("CategoricalQuestionHasMoreThan200Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Combo box question with public key {0} can&apos;t be found.
+        /// </summary>
+        public static string ComboboxCannotBeFound {
+            get {
+                return ResourceManager.GetString("ComboboxCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more questionnaire item(s) with same ID {0} already exists..
+        /// </summary>
+        public static string ItemWithIdExistsAlready {
+            get {
+                return ResourceManager.GetString("ItemWithIdExistsAlready", resourceCulture);
             }
         }
         
@@ -286,6 +313,78 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One or more questionnaire item(s) with same ID {0} already exists.
+        /// </summary>
+        public static string MoreThanOneQuestionnaireItemWithSameId {
+            get {
+                return ResourceManager.GetString("MoreThanOneQuestionnaireItemWithSameId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more question(s) with same ID {0} already exist:{1}{2}..
+        /// </summary>
+        public static string MoreThanOneQuestionWithSameId {
+            get {
+                return ResourceManager.GetString("MoreThanOneQuestionWithSameId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more sub-section(s) with same ID {0} already exist:{1}{2}..
+        /// </summary>
+        public static string MoreThanOneSubSectionWithSameId {
+            get {
+                return ResourceManager.GetString("MoreThanOneSubSectionWithSameId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
+        /// </summary>
+        public static string NoPremissionsToEditQuestionnaire {
+            get {
+                return ResourceManager.GetString("NoPremissionsToEditQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with public key {0} can&apos;t be found..
+        /// </summary>
+        public static string QuestionCannotBeFound {
+            get {
+                return ResourceManager.GetString("QuestionCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question {0} is not a combo box.
+        /// </summary>
+        public static string QuestionIsNotCombobox {
+            get {
+                return ResourceManager.GetString("QuestionIsNotCombobox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire item with id {0} can&apos;t be found..
+        /// </summary>
+        public static string QuestionnaireCantBeFound {
+            get {
+                return ResourceManager.GetString("QuestionnaireCantBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire&apos;s title can not be empty or contains whitespace only..
+        /// </summary>
+        public static string QuestionnaireTitleIsEmpty {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitleIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identifier &apos;{0}&apos; from expression &apos;{1}&apos; is not valid question or roster identifier. Question or roster with such an identifier is missing..
         /// </summary>
         public static string QuestionOrRosterIdentifierIsMissing {
@@ -295,11 +394,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Section cannot have more than {0} child items.
+        /// </summary>
+        public static string SectionCantHaveMoreThan_Items {
+            get {
+                return ResourceManager.GetString("SectionCantHaveMoreThan_Items", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question to cascade from should exist in questionnaire..
         /// </summary>
         public static string ShouldCascadeFromExistingQuestion {
             get {
                 return ResourceManager.GetString("ShouldCascadeFromExistingQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-section with public key {0} can&apos;t be found..
+        /// </summary>
+        public static string SubSectionCantBeFound {
+            get {
+                return ResourceManager.GetString("SubSectionCantBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-section or roster depth cannot be higher than {0}..
+        /// </summary>
+        public static string SubSectionDepthLimit {
+            get {
+                return ResourceManager.GetString("SubSectionDepthLimit", resourceCulture);
             }
         }
         

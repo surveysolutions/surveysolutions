@@ -201,4 +201,46 @@
   <data name="VariableLabelContainsSubstitutionReference" xml:space="preserve">
     <value>It is not allowed to use substitutions in variable label</value>
   </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>You can't move to sub-section {0} because it position {1} in not acceptable.</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>Combo box question with public key {0} can't be found</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>One or more questionnaire item(s) with same ID {0} already exists.</value>
+  </data>
+  <data name="MoreThanOneQuestionnaireItemWithSameId" xml:space="preserve">
+    <value>One or more questionnaire item(s) with same ID {0} already exists</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>One or more question(s) with same ID {0} already exist:{1}{2}.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>One or more sub-section(s) with same ID {0} already exist:{1}{2}.</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>You don't have permissions for changing this questionnaire</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>Question with public key {0} can't be found.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>Question {0} is not a combo box</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>Questionnaire item with id {0} can't be found.</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>Questionnaire's title can not be empty or contains whitespace only.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>Sub-section with public key {0} can't be found.</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>Sub-section or roster depth cannot be higher than {0}.</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>Section cannot have more than {0} child items</value>
+  </data>
 </root>
