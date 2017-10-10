@@ -1598,13 +1598,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (interviewerId.HasValue)
             {
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, assignTime));
+
                 if (this.properties.Status == InterviewStatus.RejectedByHeadquarters)
                 {
-                    this.ApplyEvent(new InterviewRejected(userId, null, assignTime));
-                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, null));
+                    this.ApplyEvent(new InterviewRejected(userId, comment: null, rejectTime: assignTime));
+                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment: null));
                 }
-
-                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, assignTime));
 
                 if (!this.properties.WasRejected && this.properties.Status == InterviewStatus.SupervisorAssigned)
                 {
