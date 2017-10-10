@@ -920,4 +920,13 @@
   <data name="Upload" xml:space="preserve">
     <value>Загрузить</value>
   </data>
+  <data name="SideBarLookupTableNoName" xml:space="preserve">
+    <value>справочная таблица без имени</value>
+  </data>
+  <data name="SideBarTranslationNoName" xml:space="preserve">
+    <value>перевод без имени</value>
+  </data>
+  <data name="SideBarAttachmentNoName" xml:space="preserve">
+    <value>вложение без имени</value>
+  </data>
 </root>

@@ -89,7 +89,7 @@
 
             $scope.deleteLookupTable = function(index) {
                 var lookupTable = $scope.lookupTables[index];
-                var lookupTableName = lookupTable.name || "lookup table with no name";
+                var lookupTableName = lookupTable.name || $i18next.t('SideBarLookupTableNoName');
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(lookupTableName));
 
                 modalInstance.result.then(function(confirmResult) {
