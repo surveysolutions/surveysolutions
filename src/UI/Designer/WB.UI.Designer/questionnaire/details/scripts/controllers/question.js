@@ -236,7 +236,7 @@
 
                 var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Identifying';
                 if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type === 'DateTime') {
@@ -244,19 +244,19 @@
                         return val.value !== 'Supervisor';
                     });
                     if ($scope.activeQuestion.questionScope === 'Supervisor') {
-                        $scope.activeQuestion.questionScope = 'Interviewer';
+                        $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                     }
                 }
                 if (_.contains(questionsWithOnlyInterviewerScope, type)) {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type !== "SingleOption" && type !== "MultyOption") {
@@ -481,8 +481,8 @@
                 }
             });
 
-            var getQuestionScopeByValue = function(value){
-                return _.find($scope.activeQuestion.allQuestionScopeOptions, {value: value})
+            $scope.getQuestionScopeByValue = function(value) {
+                return _.find($scope.activeQuestion.allQuestionScopeOptions, { value: value });
             }
             $scope.$on('verifing', function () {
                 if ($scope.questionForm.$dirty)
