@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using Dapper;
 using FluentMigrator;
@@ -67,6 +68,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 var serializer = new EntitySerializer<object>();
 
                 int processedInterviewsCount = 0;
+                var sw = new Stopwatch();
+                sw.Start();
                 foreach (string interviewId in interviewIds)
                 {
                     string jsonInterviewData = null;
@@ -123,18 +126,21 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                             dbCommand.ExecuteNonQuery();
                         }
                     }
-                    logger.Info($"Interview data -> Interviews. Processed {processedInterviewsCount++} of {interviewIds.Count} interviews.");
-                }
 
-                logger.Info("Interview data -> Interviews. Creating index by interview id.");
-                connection.Execute("CREATE INDEX \"IX_interviews_interviewid\" ON readside.interviews USING btree (interviewid);", transaction);
+                    if (++processedInterviewsCount % 10000 == 0)
+                    {
+                        logger.Info($"Interview data -> Interviews. " +
+                                    $"Processed {processedInterviewsCount} interviews out of {interviewIds.Count} in {sw.Elapsed}");
+                        sw.Restart();
+                    }
+                }
 
                 logger.Info("Interview data -> Interviews. Creating index by interviewid, entityid, rostervector.");
                 connection.Execute("ALTER TABLE readside.interviews ADD CONSTRAINT uk_interview UNIQUE(interviewid, entityid, rostervector);", transaction);
 
-                logger.Info("Interview data -> Interviews. Removing interview data table.");
+                //logger.Info("Interview data -> Interviews. Removing interview data table.");
                 //connection.Execute("DROP TABLE \"readside\".\"interviewdatas\"", transaction);
-                logger.Info("Interview data -> Interviews. Removed interview data table.");
+                //logger.Info("Interview data -> Interviews. Removed interview data table.");
             });
         }
 
