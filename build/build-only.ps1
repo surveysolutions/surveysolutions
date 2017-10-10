@@ -60,8 +60,8 @@ try {
             Move-Item ".\src\coverage" "$artifactsFolder\coverage" -ErrorAction SilentlyContinue
         }}
 
-        Compress-Archive -Path "$artifactsFolder\stats\*.*" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal
-        Compress-Archive -Path "$artifactsFolder\coverage\*.*" -DestinationPath "$artifactsFolder\coverage.zip" -CompressionLevel Optimal
+        Compress-Archive -Path "$artifactsFolder\stats\*.*" -DestinationPath "$artifactsFolder\stats.zip" -Recurse -CompressionLevel Optimal
+        Compress-Archive -Path "$artifactsFolder\coverage\*.*" -DestinationPath "$artifactsFolder\coverage.zip" -Recurse -CompressionLevel Optimal
 
         Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
         Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
