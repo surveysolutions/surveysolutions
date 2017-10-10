@@ -5,10 +5,10 @@ angular.module('designerApp')
             $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
 
             var macroSubtitutionHtml = "<span class=\"variable-name\">$"+ $i18next.t('VariableName') + "</span>";
-            $scope.macroHtml = $sce.trustAsHtml($i18next.t('SideBarMacroEmptyLine3', {substitution: macroSubtitutionHtml}))
+            $scope.macroHtml = $sce.trustAsHtml($i18next.t('SideBarMacroEmptyLine3', { substitution: macroSubtitutionHtml }));
 
-            var attachmentNameSubtitutionHtml = "<span class=\"variable-name\">"+ $i18next.t('VariableName') + "</span>"
-            $scope.attachmentHtml = $sce.trustAsHtml($i18next.t('SideBarAttachmentsEmptyLine3', {name: attachmentNameSubtitutionHtml}))
+            var attachmentNameSubtitutionHtml = "<span class=\"variable-name\">" + $i18next.t('VariableName') + "</span>";
+            $scope.attachmentHtml = $sce.trustAsHtml($i18next.t('SideBarAttachmentsEmptyLine3', { name: attachmentNameSubtitutionHtml }));
 
             $scope.verificationStatus = {
                 errors: null,
