@@ -54,6 +54,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
+        public void Flush()
+        {
+            this.GetSession().Flush();
+        }
+
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
             return query.Invoke(GetSession().Query<TEntity>());

@@ -159,6 +159,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         {
                             this.translations.Store(translationInstance, translationInstance);
                         }
+                        this.translations.Flush();
                     }
                 }
                 catch (COMException e)
