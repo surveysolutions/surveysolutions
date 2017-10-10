@@ -669,4 +669,10 @@
   <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
     <value>Variable name or roster ID should be unique in questionnaire's scope.</value>
   </data>
+  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
+  </data>
+  <data name="WB0128_LinkedCategoricalQuestionCanNotBeFilledBySupervisor" xml:space="preserve">
+    <value>Linked categorical questions cannot be filled by supervisor</value>
+  </data>
 </root>

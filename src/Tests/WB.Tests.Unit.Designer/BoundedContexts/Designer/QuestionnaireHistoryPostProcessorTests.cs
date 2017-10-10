@@ -302,51 +302,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(stateTracker.GroupsState.Keys.Count, Is.EqualTo(2));
             Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
-
-        [Test]
-        public void when_delete_group_it_should_remove_child_question()
-        {
-            Guid questionnaireId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            Guid removedGroupId = Guid.Parse("11111111111111111111111111111111");
-            Guid notRemovedQuestionId = Guid.Parse("33333333333333333333333333333333");
-            QuestionnaireDocument questionnaireDocument;
-            HistoryPostProcessor historyPostProcessor;
-            InMemoryKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage;
-            var questionnaire = Create.Questionnaire();
-
-            Given().ServiceLocator().
-                And.QuestionnaireChangeRecordStorage().
-                And.AccountDocumentStorage().
-                And.EntitySerializer<QuestionnaireDocument>().
-                And.QuestionnaireStateTrackerStorage(out questionnaireStateTrackerStorage).
-                And.HistoryPostProcessor(out historyPostProcessor).
-                And.QuestionnaireDocument(out questionnaireDocument, id: questionnaireId, children: new IComposite[]
-                {
-                    Create.Group(groupId: removedGroupId, children: new IComposite[]
-                    {
-                        Create.Question(),
-                    }),
-                    Create.Group(children: new IComposite[]
-                    {
-                        Create.Question(questionId: notRemovedQuestionId),
-                    }),
-                }).
-                And.QuestionnaireDocumentIsImportedByHistoryPostProcessor(questionnaire);
-
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
-
-            // when
-            historyPostProcessor.Process(questionnaire, Create.Command.DeleteGroup(questionnaireId: questionnaireId, groupId: removedGroupId));
-
-            // then
-            var questionnaireStateTracker = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
-            var questions = questionnaireStateTracker.QuestionsState.Keys;
-
-            questions.ShouldBeEquivalentTo(new[] {notRemovedQuestionId});
-        }
-
+      
         [Test]
         public void When_ImportQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {

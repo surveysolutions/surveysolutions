@@ -66,10 +66,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_WB0084_verification_error () => verificationErrors.First().Code.ShouldEqual("WB0085");
+        [NUnit.Framework.Test] public void should_return_WB0084_verification_error () => verificationErrors.ShouldContainError("WB0085");
 
         [NUnit.Framework.Test] public void should_return_error_with_reference_to_wrong_question () =>
-            verificationErrors.First().References.First().Id.ShouldEqual(childCascadedComboboxId);
+            verificationErrors.GetError("WB0085").References.First().Id.ShouldEqual(childCascadedComboboxId);
 
         static QuestionnaireDocument questionnaire;
         static Guid childCascadedComboboxId;
