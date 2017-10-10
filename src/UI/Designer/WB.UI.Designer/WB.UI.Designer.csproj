@@ -478,6 +478,7 @@
     <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
     <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
     <Content Include="questionnaire\details\scripts\services\alertService.js" />
+    <Content Include="questionnaire\details\scripts\services\translate.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
