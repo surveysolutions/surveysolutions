@@ -42,8 +42,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsSupervisor = this.currentUser.IsSupervisor,
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
-                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
-                resources = Resources.Translations()
+                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator
             };
 
             model.Api = new AssignmentsFilters.ApiEndpoints
@@ -74,7 +73,6 @@ namespace WB.UI.Headquarters.Controllers
 
     public class AssignmentsFilters
     {
-        public TranslationModel resources { get; set; }
         public bool IsHeadquarter { get; set; }
         public bool IsSupervisor { get; set; }
         public ApiEndpoints Api { get; set; }
