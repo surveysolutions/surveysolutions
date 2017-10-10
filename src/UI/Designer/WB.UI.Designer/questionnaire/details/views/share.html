@@ -16,7 +16,7 @@
         </form>
         <div class="row make-public" ng-if="questionnaire.hasViewerAdminRights">
             <button class="btn btn-link answer" ng-click="togglePublicity()">{{'SettingsQuestionnaireSharing' | i18next }}
-                 {{(questionnaire.isPublic ? 'SettingsPrivate' : 'SettingsPrivatePublic') | i18next}}
+                 {{(questionnaire.isPublic ? 'SettingsPrivate' : 'SettingsPublic') | i18next}}
             </button>
             <i class="text-muted">({{(questionnaire.isPublic ? 'SettingsVisibleToOwner' : 'SettingsVisibleToEveryone') | i18next}})</i>
         </div>
