@@ -17,6 +17,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.CommandDeserialization;
 
 namespace WB.UI.Designer.Api
@@ -232,8 +233,8 @@ namespace WB.UI.Designer.Api
 
             var storedTranslationsCount = this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
             var resultMessage = storedTranslationsCount == 1 ? 
-                $"Obtained {storedTranslationsCount} row from translation file" :
-                $"Obtained {storedTranslationsCount} rows from translation file";
+                string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount) :
+                string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
             return this.Request.CreateResponse(resultMessage);
         }
 

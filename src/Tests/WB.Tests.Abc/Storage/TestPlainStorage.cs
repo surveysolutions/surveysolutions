@@ -60,6 +60,10 @@ namespace WB.Tests.Abc.Storage
             }
         }
 
+        public void Flush()
+        {
+        }
+
         public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
         {
             return query.Invoke(this.entites.Values.AsQueryable());
