@@ -2221,6 +2221,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You will lose unsaved changes if you leave this page.
+        /// </summary>
+        internal static string UnsavedChangesLeave {
+            get {
+                return ResourceManager.GetString("UnsavedChangesLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will lose unsaved changes if you reload this page.
+        /// </summary>
+        internal static string UnsavedChangesReload {
+            get {
+                return ResourceManager.GetString("UnsavedChangesReload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Untitled question.
         /// </summary>
         internal static string UntitledQuestion {

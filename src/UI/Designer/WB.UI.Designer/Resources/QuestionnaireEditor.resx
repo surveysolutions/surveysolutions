@@ -865,4 +865,10 @@
   <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>Obtained {0} rows from translation file</value>
   </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>You will lose unsaved changes if you leave this page</value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>You will lose unsaved changes if you reload this page</value>
+  </data>
 </root>

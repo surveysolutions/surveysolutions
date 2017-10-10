@@ -890,4 +890,10 @@
   <data name="TranslationsObtained_plural" xml:space="preserve">
     <value>Получено {0} сток из файла с переводами</value>
   </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>Вы потеряете не сохранённые изменения если покините текущую страницу </value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>Вы потеряете не сохранённые измененимя если обновите страницу</value>
+  </data>
 </root>

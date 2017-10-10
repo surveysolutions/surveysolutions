@@ -150,6 +150,8 @@
     }])
     .config(['unsavedWarningsConfigProvider', function (unsavedWarningsConfigProvider) {
         unsavedWarningsConfigProvider.routeEvent = '$stateChangeStart';
+        unsavedWarningsConfigProvider.navigateMessage = 'UnsavedChangesLeave';
+        unsavedWarningsConfigProvider.reloadMessage = 'UnsavedChangesReload';
     }])
     .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
         cfpLoadingBarProvider.spinnerTemplate = '<div id="loading-logo"></div>';
