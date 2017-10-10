@@ -5,6 +5,7 @@ const merge = require('webpack-merge');
 const rimraf = require("rimraf");
 const debug = require('gulp-debug');
 const plugins = require('gulp-load-plugins')();
+const jest = require('jest-cli');
 
 const config = {
     dist: 'dist',
@@ -15,6 +16,10 @@ config.resources = {
     source: '../',
     dest: "locale/.resources"
 }
+
+gulp.task("test", () => {
+    jest.run("--coverage --forceExit --ci");
+})
 
 gulp.task('resx2json', () => {
     const files = gulp.src([
@@ -57,11 +62,11 @@ gulp.task("build", (done) => {
         process.env.NODE_ENV = 'production';
     }
 
-    webpack(merge(require("./webpack.config.js"), opts), onBuild(done));
+    return webpack(merge(require("./webpack.config.js"), opts), onBuild(done));
 })
 
-gulp.task("default", ['cleanup', 'resx2json'], () => {
-    gulp.start("build");
+gulp.task("default", ['cleanup', 'resx2json', utils.env.production ? "test" : null].filter((x) => x), () => {
+   return gulp.start("build");
 });
 
 gulp.task("watch", ['resx2json'], () => {
