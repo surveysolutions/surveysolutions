@@ -704,10 +704,10 @@
     <value>Пригласить</value>
   </data>
   <data name="SettingsProvideExistingEmail" xml:space="preserve">
-    <value>Предоставьте email зарегистрированного пользователя</value>
+    <value>Укажите email зарегистрированного пользователя</value>
   </data>
   <data name="SettingsProvideValidEmail" xml:space="preserve">
-    <value>Предоставьте правильный email</value>
+    <value>Укажите правильный email</value>
   </data>
   <data name="StaticText" xml:space="preserve">
     <value>Статический текст</value>
