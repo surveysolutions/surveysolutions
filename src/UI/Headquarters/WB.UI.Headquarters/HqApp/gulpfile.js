@@ -17,8 +17,6 @@ config.resources = {
 }
 
 gulp.task('resx2json', () => {
-
-    //d:\src\wb\src\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\
     const files = gulp.src([
         "../**/*.resx",
         "../../../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
@@ -31,7 +29,6 @@ gulp.task('resx2json', () => {
                 filePath.basename += ".en";
             }
         }))
-    //.pipe(plugins.flatten());
 
     return files.pipe(
         gulp.dest(config.resources.dest)

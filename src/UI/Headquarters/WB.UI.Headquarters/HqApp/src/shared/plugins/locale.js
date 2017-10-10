@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-
+import BaseFormatter from 'shared/localization/customFormatter'
 Vue.use(VueI18n)
 
 import api from 'shared/api'
@@ -14,6 +14,7 @@ export default {
 
                 const options = {
                     locale,
+                    formatter: new BaseFormatter(),
                     fallbackLocale: 'en',
                     messages: {
                         [locale]: messages.data
