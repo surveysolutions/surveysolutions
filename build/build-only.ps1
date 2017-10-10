@@ -57,19 +57,14 @@ try {
                 Exit 
         } else {
             Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
-            Move-Item ".\dist\stats.vendor.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
+            Move-Item ".\src\coverage" "$artifactsFolder\coverage" -ErrorAction SilentlyContinue
         }}
 
-        # BuildStaticContent "Web Interview" 'src\UI\Headquarters\WB.UI.Headquarters.Interview' | % { if (-not $_) { 
-        #     Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred in BuildStaticContent']"
-        #     Write-Host "##teamcity[buildProblem description='Failed to build Web interview application']"
-        #     Exit
-        # } else {
-        #     Move-Item "..\WB.UI.Headquarters\InterviewApp\stats.html" "$artifactsFolder\stats\WebInterview.html" -ErrorAction SilentlyContinue
-        # }}
-
         Compress-Archive -Path "$artifactsFolder\stats\*.*" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal
+        Compress-Archive -Path "$artifactsFolder\coverage\*.*" -DestinationPath "$artifactsFolder\coverage.zip" -CompressionLevel Optimal
+
         Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
