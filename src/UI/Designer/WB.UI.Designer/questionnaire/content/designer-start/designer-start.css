@@ -81,7 +81,7 @@ input.form-control {
   font-family: 'Roboto-Light';
   font-style: normal;
   font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url(../../fonts/Roboto300.woff) format('woff');
+  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto300.woff) format('woff');
 }
 .checkbox {
   padding-left: 0;
