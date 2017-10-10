@@ -1924,6 +1924,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to macro with no name.
+        /// </summary>
+        internal static string SideBarMacroNoName {
+            get {
+                return ResourceManager.GetString("SideBarMacroNoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to add description.
         /// </summary>
         internal static string SideBarMacroShowDescription {
