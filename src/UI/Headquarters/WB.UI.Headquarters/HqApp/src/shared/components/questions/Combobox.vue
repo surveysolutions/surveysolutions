@@ -44,7 +44,7 @@
             },
 
             async optionsSource(filter) {
-                return await this.$apiCaller(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 30))
+                return await this.$apiCaller(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 50))
             }
         }
     }
