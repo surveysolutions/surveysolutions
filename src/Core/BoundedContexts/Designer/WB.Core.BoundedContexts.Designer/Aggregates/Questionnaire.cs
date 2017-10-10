@@ -35,29 +35,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
     internal class Questionnaire : IPlainAggregateRoot
     {
-        private const int MaxCountOfDecimalPlaces = 15;
         private const int MaxChapterItemsCount = 400;
-        private const int MaxTitleLength = 500;
-        private const int maxFilteredComboboxOptionsCount = 15000;
-        private const int maxCascadingComboboxOptionsCount = 15000;
         private const int MaxGroupDepth = 10;
-        private const int DefaultVariableLengthLimit = 32;
-        private const int DefaultRestrictedVariableLengthLimit = 20;
-
-        private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes = 
-            new QuestionType[]
-            {
-                QuestionType.GpsCoordinates,
-                QuestionType.MultyOption,
-                QuestionType.TextList
-            };
-
-        private static readonly HashSet<QuestionType> RosterSizeQuestionTypes = new HashSet<QuestionType>
-        {
-            QuestionType.Numeric,
-            QuestionType.MultyOption,
-            QuestionType.TextList,
-        };
 
         #region State
 
@@ -126,9 +105,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private readonly ILogger logger;
         private readonly IClock clock;
-        private readonly IExpressionProcessor expressionProcessor;
-        private readonly ISubstitutionService substitutionService;
-        private readonly IKeywordsProvider variableNameValidator;
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
@@ -140,9 +116,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public Questionnaire(
             ILogger logger, 
             IClock clock, 
-            IExpressionProcessor expressionProcessor, 
-            ISubstitutionService substitutionService, 
-            IKeywordsProvider variableNameValidator, 
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
@@ -150,9 +123,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.logger = logger;
             this.clock = clock;
-            this.expressionProcessor = expressionProcessor;
-            this.substitutionService = substitutionService;
-            this.variableNameValidator = variableNameValidator;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
@@ -915,8 +885,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled,
-               QuestionType.Text, command.ResponsibleId, command.ValidationConditions);
+            Guid questionId = command.QuestionId;
+            bool isPrefilled = command.IsPreFilled;
+            QuestionType questionType = QuestionType.Text;
+            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
@@ -954,8 +932,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled, QuestionType.GpsCoordinates, 
-                command.ResponsibleId, command.ValidationConditions);
+            Guid questionId = command.QuestionId;
+            bool isPrefilled = command.IsPreFilled;
+            QuestionType questionType = QuestionType.GpsCoordinates;
+            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
@@ -992,8 +978,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled,
-                QuestionType.DateTime, command.ResponsibleId, command.ValidationConditions);
+            Guid questionId = command.QuestionId;
+            bool isPrefilled = command.IsPreFilled;
+            QuestionType questionType = QuestionType.DateTime;
+            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
@@ -1027,8 +1021,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, false, QuestionType.MultyOption, responsibleId, validationConditions);
-            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
+            QuestionType questionType = QuestionType.MultyOption;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
@@ -1089,7 +1088,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPreFilled, QuestionType.SingleOption, responsibleId, validationConditions);
+            QuestionType questionType = QuestionType.SingleOption;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
             if (isFilteredCombobox || cascadeFromQuestionId.HasValue)
             {
@@ -1097,8 +1102,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 answers = categoricalOneAnswerQuestion?.Answers.ToArray();
             }
 
-            this.ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(questionId, linkedToEntityId);
-         
             Guid? linkedRosterId;
             Guid? linkedQuestionId;
 
@@ -1228,8 +1231,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, command.IsPreFilled, QuestionType.Numeric, command.ResponsibleId, command.ValidationConditions);
-          
+            Guid questionId = command.QuestionId;
+            bool isPrefilled = command.IsPreFilled;
+            QuestionType questionType = QuestionType.Numeric;
+            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
+
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                 question.PublicKey,
@@ -1277,9 +1289,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled, 
-                QuestionType.TextList, command.ResponsibleId, command.ValidationConditions);
-            
+            Guid questionId = command.QuestionId;
+            QuestionType questionType = QuestionType.TextList;
+            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
+
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                     command.QuestionId,
@@ -1330,8 +1349,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled,
-                QuestionType.Area, command.ResponsibleId, null);
+            Guid questionId = command.QuestionId;
+            QuestionType questionType = QuestionType.Area;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
@@ -1384,8 +1409,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled,
-                QuestionType.Audio, command.ResponsibleId, null);
+            Guid questionId = command.QuestionId;
+            QuestionType questionType = QuestionType.Audio;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             AudioQuestion newQuestion = (AudioQuestion)CreateQuestion(
@@ -1434,7 +1465,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var isPrefilled = false;
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(questionId, parentGroup, title, variableName, isPrefilled, QuestionType.Multimedia, responsibleId, null);
+            QuestionType questionType = QuestionType.Multimedia;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
 
             var question = this.innerDocument.Find<AbstractQuestion>(questionId);
             IQuestion newQuestion = CreateQuestion(
@@ -1484,9 +1521,16 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var isPrefilled = false;
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
-            this.ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(command.QuestionId, parentGroup, title, variableName, isPrefilled, QuestionType.QRBarcode, 
-                command.ResponsibleId, command.ValidationConditions);
-            
+            Guid questionId = command.QuestionId;
+            QuestionType questionType = QuestionType.QRBarcode;
+            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+        
+            if (parentGroup != null)
+            {
+                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
+            }
+
             var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
             IQuestion newQuestion = CreateQuestion(
                     command.QuestionId,
@@ -1541,8 +1585,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateStaticText(UpdateStaticText command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            
-            this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
+
+            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, command.EntityId);
 
             var oldStaticText = this.innerDocument.Find<IStaticText>(command.EntityId);
             var newStaticText = new StaticText(publicKey: command.EntityId,
@@ -1558,7 +1602,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteStaticText(Guid entityId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
 
             this.innerDocument.RemoveEntity(entityId);
         }
@@ -1566,7 +1610,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void MoveStaticText(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
             this.ThrowIfChapterHasMoreThanAllowedLimit(targetEntityId);
 
@@ -1603,7 +1647,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateVariable(UpdateVariable command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
-            this.ThrowDomainExceptionIfEntityDoesNotExists(command.EntityId);
+            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, command.EntityId);
 
             var oldVariable = this.innerDocument.Find<IVariable>(command.EntityId);
 
@@ -1614,7 +1658,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void DeleteVariable(Guid entityId, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
 
             this.innerDocument.RemoveEntity(entityId);
         }
@@ -1622,7 +1666,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void MoveVariable(Guid entityId, Guid targetEntityId, int targetIndex, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-            this.ThrowDomainExceptionIfEntityDoesNotExists(entityId);
+            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
             this.ThrowDomainExceptionIfGroupDoesNotExist(targetEntityId);
             this.ThrowIfChapterHasMoreThanAllowedLimit(targetEntityId);
 
@@ -1685,7 +1729,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void PasteAfter(PasteAfter pasteAfter)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(pasteAfter.ResponsibleId);
-            this.ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.ItemToPasteAfterId);
+            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, pasteAfter.ItemToPasteAfterId);
             this.ThrowDomainExceptionIfEntityAlreadyExists(pasteAfter.EntityId);
             ThrowDomainExceptionIfEntityDoesNotExists(pasteAfter.SourceDocument, pasteAfter.SourceItemId);
             
@@ -1837,37 +1881,25 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Questionnaire Invariants
 
-        private void ThrowDomainExceptionIfGeneralQuestionSettingsAreInvalid(Guid questionId, IGroup parentGroup, string title, string variableName, bool isPrefilled, QuestionType questionType, Guid responsibleId, IList<ValidationCondition> validationCoditions)
-        {
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-        
-            if (parentGroup != null)
-            {
-                this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
-            }
-        }
-
         private void ThrowIfChapterHasMoreThanAllowedLimit(Guid itemId)
         {
             var chapter = this.innerDocument.GetChapterOfItemById(itemId);
             if (chapter.Children.TreeToEnumerable(x => x.Children).Count() >= MaxChapterItemsCount)
             {
-                throw new QuestionnaireException(string.Format("Section cannot have more than {0} child items", MaxChapterItemsCount));
+                throw new QuestionnaireException(string.Format(ExceptionMessages.SectionCantHaveMoreThan_Items, MaxChapterItemsCount));
             }
         }
 
         private void ThrowIfTargetGroupHasReachedAllowedDepthLimit(Guid itemId)
         {
-            
             var entity = innerDocument.Find<IComposite>(itemId);
             if (entity != null)
             {
                 var targetGroupDepth = this.GetAllParentGroups(entity).Count();
 
-                if ((targetGroupDepth) >= MaxGroupDepth)
+                if (targetGroupDepth >= MaxGroupDepth)
                 {
-                    throw new QuestionnaireException(string.Format("Sub-section or roster  depth cannot be higher than {0}",
-                        MaxGroupDepth));
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.SubSectionDepthLimit, MaxGroupDepth));
                 }
             }
         }
@@ -1880,18 +1912,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (targetIndex < 0 || maxAcceptableIndex < targetIndex)
                 throw new QuestionnaireException(
-                   string.Format(
-                       "You can't move to sub-section {0} because it position {1} in not acceptable",
-                       FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
+                   string.Format(ExceptionMessages.CantMoveSubsectionInWrongPosition, FormatGroupForException(targetGroup.PublicKey, this.innerDocument), targetIndex));
         }
 
         private void ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionnaireTitleRequired,
-                    "Questionnaire's title can not be empty or contains whitespace only");
+                throw new QuestionnaireException(DomainExceptionType.QuestionnaireTitleRequired, ExceptionMessages.QuestionnaireTitleIsEmpty);
             }
         }
 
@@ -1902,13 +1930,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.EntityNotFound,
-                    string.Format("Questionnaire item with id {0} can't be found", entityId));
+                    string.Format(ExceptionMessages.QuestionnaireCantBeFound, entityId));
             }
-        }
-
-        private void ThrowDomainExceptionIfEntityDoesNotExists(Guid entityId)
-        {
-            ThrowDomainExceptionIfEntityDoesNotExists(this.innerDocument, entityId);
         }
 
         private void ThrowDomainExceptionIfQuestionDoesNotExist(Guid publicKey)
@@ -1916,9 +1939,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.QuestionNotFound,
-                    string.Format("Question with public key {0} can't be found", publicKey));
+                throw new QuestionnaireException(DomainExceptionType.QuestionNotFound, string.Format(ExceptionMessages.QuestionCannotBeFound, publicKey));
             }
         }
 
@@ -1929,25 +1950,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.GroupNotFound,
-                    string.Format("sub-section with public key {0} can't be found", groupPublicKey));
-            }
-        }
-
-        private void ThrowIfQuestionIsRosterTitleLinkedCategoricalQuestion(Guid questionId, Guid? linkedToQuestionId)
-        {
-            if (!linkedToQuestionId.HasValue) return;
-
-            var rosterTitleQuestionGroups =
-                this.innerDocument.Find<IGroup>(
-                    group => group.RosterTitleQuestionId.HasValue && group.RosterTitleQuestionId.Value == questionId)
-                    .Select(group => group.PublicKey);
-
-            if (rosterTitleQuestionGroups.Any())
-            {
-                throw new QuestionnaireException(
-                    string.Format("Linked categorical multi-select question could not be used as a roster title question in sub-section(s): {0}",
-                        string.Join(Environment.NewLine,
-                            rosterTitleQuestionGroups.Select(groupId => FormatGroupForException(groupId, this.innerDocument)))));
+                    string.Format(ExceptionMessages.SubSectionCantBeFound, groupPublicKey));
             }
         }
 
@@ -1958,8 +1961,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 0,
                 exceptionType: DomainExceptionType.EntityWithSuchIdAlreadyExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more questionnaire item(s) with same ID {0} already exists",
-                        entityId));
+                    elementsWithSameId => string.Format(ExceptionMessages.ItemWithIdExistsAlready, entityId));
         }
 
         private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
@@ -1969,7 +1971,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 0,
                 exceptionType: DomainExceptionType.QuestionWithSuchIdAlreadyExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more question(s) with same ID {0} already exist:{1}{2}",
+                    elementsWithSameId => string.Format(ExceptionMessages.MoreThanOneQuestionWithSameId,
                         questionId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
@@ -1982,21 +1984,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 0,
                 exceptionType: DomainExceptionType.GroupWithSuchIdAlreadyExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more sub-section(s) with same ID {0} already exist:{1}{2}",
+                    elementsWithSameId => string.Format(ExceptionMessages.MoreThanOneSubSectionWithSameId,
                         groupId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
-        }
-
-        private void ThrowDomainExceptionIfMoreThanOneEntityExists(Guid entityId)
-        {
-            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IComposite>(
-                elementId: entityId,
-                expectedCount: 1,
-                exceptionType: DomainExceptionType.MoreThanOneEntityWithSuchIdExists,
-                getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more questionnaire item(s) with same ID {0} already exists",
-                        entityId));
         }
 
         private void ThrowDomainExceptionIfMoreThanOneQuestionExists(Guid questionId)
@@ -2006,7 +1997,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 1,
                 exceptionType: DomainExceptionType.MoreThanOneQuestionsWithSuchIdExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more question(s) with same ID {0} already exist:{1}{2}",
+                    elementsWithSameId => string.Format(ExceptionMessages.MoreThanOneQuestionWithSameId,
                         questionId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
@@ -2019,7 +2010,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 expectedCount: 1,
                 exceptionType: DomainExceptionType.MoreThanOneGroupsWithSuchIdExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("One or more sub-section(s) with same ID {0} already exist:{1}{2}",
+                    elementsWithSameId => string.Format(ExceptionMessages.MoreThanOneSubSectionWithSameId,
                         groupId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
@@ -2066,14 +2057,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (this.innerDocument.CreatedBy != viewerId && !this.SharedUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.DoesNotHavePermissionsForEdit,
-                    "You don't have permissions for changing this questionnaire");
+                    DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
             }
             if (this.ReadOnlyUsersIds.Contains(viewerId))
             {
                 throw new QuestionnaireException(
-                   DomainExceptionType.DoesNotHavePermissionsForEdit,
-                   "You don't have permissions for changing this questionnaire");
+                   DomainExceptionType.DoesNotHavePermissionsForEdit, ExceptionMessages.NoPremissionsToEditQuestionnaire);
             }
         }
 
@@ -2084,14 +2073,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.FilteredComboboxQuestionNotFound,
-                    string.Format("Combo box with public key {0} can't be found", questionId));
+                    string.Format(ExceptionMessages.ComboboxCannotBeFound, questionId));
             }
 
             if (!categoricalOneAnswerQuestion.IsFilteredCombobox.HasValue || !categoricalOneAnswerQuestion.IsFilteredCombobox.Value)
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionIsNotAFilteredCombobox,
-                    string.Format("Question {0} is not a combo box", FormatQuestionForException(questionId, this.innerDocument)));
+                    string.Format(ExceptionMessages.QuestionIsNotCombobox, FormatQuestionForException(questionId, this.innerDocument)));
             }
         }
 
@@ -2102,7 +2091,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionNotFound,
-                    string.Format("Combo box with public key {0} can't be found", questionId));
+                    string.Format(ExceptionMessages.ComboboxCannotBeFound, questionId));
             }
         }
 
@@ -2116,94 +2105,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             title = title?.Trim();
         }
 
-        private void ValidateSubstitutionReferences(Guid entityId, string variableName, IGroup parentGroup, string[] substitutionReferences,
-            out List<string> unknownReferences, 
-            out List<string> questionsIncorrectTypeOfReferenced,
-            out List<string> questionsIllegalPropagationScope,
-            out List<string> variablesIllegalPropagationScope,
-            out List<string> rostersIllegalPropagationScope)
-        {
-            unknownReferences = new List<string>();
-            questionsIncorrectTypeOfReferenced = new List<string>();
-            questionsIllegalPropagationScope = new List<string>();
-            variablesIllegalPropagationScope = new List<string>();
-            rostersIllegalPropagationScope = new List<string>();
-
-            var questions = this.innerDocument.GetEntitiesByType<AbstractQuestion>()
-                .Where(q => q.PublicKey != entityId)
-                .Where(q => !string.IsNullOrEmpty(q.StataExportCaption))
-                .GroupBy(q => q.StataExportCaption, StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
-
-            var variables = this.innerDocument.GetEntitiesByType<Variable>()
-                .Where(v => v.PublicKey != entityId && !string.IsNullOrEmpty(v.Name))
-                .GroupBy(v => v.Name, StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
-
-            var rosters = this.innerDocument.GetEntitiesByType<Group>()
-                .Where(r => r.PublicKey != entityId && !string.IsNullOrEmpty(r.VariableName) && r.IsRoster)
-                .GroupBy(r => r.VariableName, StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(g => g.Key, g => g.First(), StringComparer.OrdinalIgnoreCase);
-
-
-            var rosterVectorOfEntity = GetQuestionnaireItemDepthAsVector(parentGroup.PublicKey);
-
-            foreach (var substitutionReference in substitutionReferences)
-            {
-                if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
-                {
-                    if (rosterVectorOfEntity.Length > 0)
-                        continue;
-                }
-                //extract validity of variable name to separate method and make check validity of substitutionReference  
-                if (substitutionReference.Length > 32)
-                {
-                    unknownReferences.Add(substitutionReference);
-                    continue;
-                }
-
-                bool isQuestionReference = questions.ContainsKey(substitutionReference);
-                bool isVariableReference = variables.ContainsKey(substitutionReference);
-                bool isRosterReference = rosters.ContainsKey(substitutionReference);
-                bool isSelfReference = string.Compare(substitutionReference, variableName, StringComparison.OrdinalIgnoreCase) == 0;
-
-                if (!isQuestionReference && !isVariableReference && !isRosterReference && !isSelfReference)
-                {
-                    unknownReferences.Add(substitutionReference);
-                }
-                else if (isQuestionReference)
-                {
-                    var currentQuestion = questions[substitutionReference];
-                    bool typeOfRefQuestionIsNotSupported = !(currentQuestion.QuestionType == QuestionType.DateTime ||
-                        currentQuestion.QuestionType == QuestionType.Numeric ||
-                        currentQuestion.QuestionType == QuestionType.SingleOption ||
-                        currentQuestion.QuestionType == QuestionType.Text ||
-                        currentQuestion.QuestionType == QuestionType.QRBarcode);
-
-                    if (typeOfRefQuestionIsNotSupported)
-                        questionsIncorrectTypeOfReferenced.Add(substitutionReference);
-
-                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentQuestion.PublicKey), rosterVectorOfEntity))
-                        questionsIllegalPropagationScope.Add(substitutionReference);
-                }
-                else if (isVariableReference)
-                {
-                    var currentVariable = variables[substitutionReference];
-
-                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(this.GetQuestionnaireItemDepthAsVector(currentVariable.PublicKey), rosterVectorOfEntity))
-                        variablesIllegalPropagationScope.Add(substitutionReference);
-                }
-                else if (isRosterReference)
-                {
-                    var referencedRoster = rosters[substitutionReference];
-
-                    var rosterRosterVector = this.GetQuestionnaireItemDepthAsVector(referencedRoster.PublicKey);
-                    if (!this.IsReferencedItemInTheSameScopeWithReferencesItem(rosterRosterVector, rosterVectorOfEntity))
-                        rostersIllegalPropagationScope.Add(substitutionReference);
-                }
-            }
-        }
-
+        
         private static Answer[] ConvertOptionsToAnswers(Option[] options)
         {
             if (options == null)
@@ -2223,222 +2125,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
         }
 
-        private IEnumerable<Guid> GetRosterSizeQuestionsOfGroupAndUpperRosters(IGroup group)
-        {
-            var targerGroup = @group;
-            while (targerGroup != null)
-            {
-                if (targerGroup.IsRoster && targerGroup.RosterSizeQuestionId.HasValue)
-                    yield return targerGroup.RosterSizeQuestionId.Value;
-
-                targerGroup = targerGroup.GetParent() as IGroup;
-            }
-        }
-
-        private IEnumerable<IQuestion> GetAllCategoricalLinkedQuestions()
-        {
-            return this.innerDocument.Find<IQuestion>(question => question.LinkedToQuestionId.HasValue);
-        }
-
-        private IEnumerable<Guid> GetAllLinkedSourceQuestions()
-        {
-            return this.GetAllCategoricalLinkedQuestions().Select(question => question.LinkedToQuestionId.Value);
-        }
-
-        private IEnumerable<Guid> GetAllRosterSizeQuestionIds()
-        {
-            return
-                this.innerDocument.Find<IGroup>(group => group.RosterSizeQuestionId.HasValue)
-                    .Select(group => group.RosterSizeQuestionId.Value);
-        }
-
-        private bool IsUnderPropagatableGroup(IComposite item)
-        {
-            return this.GetFirstRosterParentGroupOrNull(item) != null;
-        }
-
-        private IGroup GetFirstRosterParentGroupOrNull(IComposite item, IGroup stopGroup = null)
-        {
-            while (item != null)
-            {
-                var parentGroup = item as IGroup;
-                if (stopGroup != null && parentGroup != null && parentGroup == stopGroup)
-                {
-                    return parentGroup.IsRoster ? parentGroup : (IGroup) null;
-                }
-                if (parentGroup != null && parentGroup.IsRoster)
-                    return parentGroup;
-
-                item = item.GetParent();
-            }
-            return null;
-        }
-
-        private Guid GetScopeOrRoster(IGroup entityAsGroup)
-        {
-            if (entityAsGroup.RosterSizeSource == RosterSizeSourceType.FixedTitles)
-                return entityAsGroup.PublicKey;
-
-            if (!entityAsGroup.RosterSizeQuestionId.HasValue)
-                return entityAsGroup.PublicKey;
-
-            var rosterSizeQuestion = innerDocument.Find<IQuestion>(entityAsGroup.RosterSizeQuestionId.Value);
-            if (rosterSizeQuestion == null)
-                return entityAsGroup.PublicKey;
-
-            return rosterSizeQuestion.PublicKey;
-        }
-
-        private Guid[] GetQuestionnaireItemDepthAsVector(Guid? itemId)
-        {
-            if (!itemId.HasValue)
-                return new Guid[0];
-
-            var entity = innerDocument.Find<IComposite>(itemId.Value);
-            if (entity == null)
-                return new Guid[0];
-
-            var scopeIds = new List<Guid>();
-
-            var entityAsGroup = entity as IGroup;
-            if (entityAsGroup != null && entityAsGroup.IsRoster)
-            {
-                scopeIds.Add(GetScopeOrRoster(entityAsGroup));
-            }
-            
-            var currentParent = (IGroup)entity.GetParent();
-            while (currentParent != null)
-            {
-                if (currentParent.IsRoster)
-                    scopeIds.Add(GetScopeOrRoster(currentParent));
-
-                currentParent = (IGroup)currentParent.GetParent();
-            }
-            return scopeIds.ToArray();
-        }
-
-        public IQuestion GetQuestionByStataCaption(string stataCaption)
-        {
-            return this.innerDocument.FirstOrDefault<IQuestion>(q => q.StataExportCaption == stataCaption);
-        }
-
         private IQuestion GetQuestion(Guid questionId)
         {
             return this.innerDocument.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
-        }
-
-        private static bool IsExpressionDefined(string expression)
-        {
-            return !string.IsNullOrWhiteSpace(expression);
-        }
-
-        private IEnumerable<IGroup> GetGroupsByRosterTitleId(Guid questionId, params Guid[] exceptGroups)
-        {
-            return this.innerDocument.Find<IGroup>(
-                group => !exceptGroups.Contains(group.PublicKey) && (group.RosterTitleQuestionId == questionId));
-        }
-
-        private bool IsRosterOrInsideRoster(IGroup group)
-        {
-            while (group != null)
-            {
-                if (group.IsRoster)
-                    return true;
-
-                group = (IGroup)group.GetParent();
-            }
-
-            return false;
-        }
-
-        private bool ContainsRoster(IGroup group)
-        {
-            if (group != null)
-            {
-                foreach (var subGroup in group.Children.OfType<IGroup>())
-                {
-                    if (subGroup.IsRoster || ContainsRoster(subGroup))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        private static bool AreElementsUnique(IEnumerable<string> elements)
-        {
-            return elements.Distinct().Count() == elements.Count();
-        }
-
-        private bool IsReferencedItemInTheSameScopeWithReferencesItem(Guid[] referencedItemRosterVector, Guid[] referencesItemRosterVector)
-        {
-            if (referencedItemRosterVector.Length > referencesItemRosterVector.Length)
-                return false;
-
-            return referencedItemRosterVector.All(referencesItemRosterVector.Contains);
-        }
-
-        private bool IsRosterTitleInRosterByRosterSize(IQuestion rosterTitleQuestion, Guid rosterSizeQuestionId, Guid currentRosterId)
-        {
-            var groupsByRosterSizeQuestion =
-                this.GetGroupsByRosterSizeQuestion(rosterSizeQuestionId).Select(x => x.PublicKey).ToHashSet();
-            groupsByRosterSizeQuestion.Add(currentRosterId);
-
-            var parentForRosterTitleQuestion = rosterTitleQuestion.GetParent();
-            while (parentForRosterTitleQuestion != null)
-            {
-                if (groupsByRosterSizeQuestion.Contains(parentForRosterTitleQuestion.PublicKey))
-                    return true;
-                var parentGroup = parentForRosterTitleQuestion as IGroup;
-                if (parentGroup != null && parentGroup.IsRoster)
-                    break;
-
-                parentForRosterTitleQuestion = parentForRosterTitleQuestion.GetParent();
-            }
-
-            return false;
-        }
-
-        private IGroup GetRosterByrVariableName(string rosterName)
-        {
-            return this.innerDocument.Find<IGroup>(group => group.VariableName == rosterName && group.IsRoster).FirstOrDefault();
-        }
-
-        private IEnumerable<IGroup> GetGroupsByRosterSizeQuestion(Guid rosterSizeQuestionId)
-        {
-            return this.innerDocument.Find<IGroup>(
-                group => group.RosterSizeQuestionId == rosterSizeQuestionId);
-        }
-
-        private IEnumerable<IQuestion> GetAllQuestionsInGroup(IGroup group)
-        {
-            var questionsInGroup = new List<IQuestion>();
-
-            foreach (var groupItem in group.Children)
-            {
-                var itemAsGroup = groupItem as IGroup;
-                if (itemAsGroup != null)
-                {
-                    questionsInGroup.AddRange(GetAllQuestionsInGroup(itemAsGroup));
-                }
-
-                var itemAsQuestion = groupItem as IQuestion;
-                if (itemAsQuestion != null)
-                {
-                    questionsInGroup.Add(itemAsQuestion);
-                }
-            }
-            return questionsInGroup;
-        }
-
-        private string[] GetFilteredQuestionForException(IGroup @group, Func<AbstractQuestion, bool> filter)
-        {
-            return this.innerDocument.GetEntitiesByType<AbstractQuestion>(@group)
-                .Where(filter)
-                .Select(question => string.Format("'{0}', [{1}]", question.QuestionText, question.StataExportCaption))
-                .ToArray();
         }
 
         private string FormatQuestionForException(Guid questionId, QuestionnaireDocument document)
@@ -2460,85 +2149,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        private bool IsQuestionParent(Guid groupId, IQuestion question)
-        {
-            return GetAllParentGroups(question).Any(x => x.PublicKey == groupId);
-        }
-
         private IGroup GetGroupById(Guid groupId)
         {
             return this.innerDocument.Find<IGroup>(groupId);
-        }
-
-        private static string[] GetTitleList(IEnumerable<IComposite> groupsAndQuestions)
-        {
-            return groupsAndQuestions.Select(GetTitle).ToArray();
-        }
-
-        private static string GetTitle(IComposite composite)
-        {
-            var question = composite as IQuestion;
-            var group = composite as IGroup;
-            if (group != null)
-            {
-                return group.Title;
-            }
-            if (question != null)
-            {
-                return question.QuestionText;
-            }
-            return "<untitled>";
-        }
-
-        private bool IsQuestionAndHasQuestionIdInConditionOrValidation(IComposite composite, IQuestion sourceQuestion)
-        {
-            var question = composite as IQuestion;
-            bool isSelfReferenceIsChecking = composite.PublicKey == sourceQuestion.PublicKey;
-
-            if (isSelfReferenceIsChecking)
-            {
-                // we should allow do delete questions that reference itself in condition or validation expression
-                return false;
-            }
-
-            if (question != null)
-            {
-                string questionId = sourceQuestion.PublicKey.ToString();
-                string alias = sourceQuestion.StataExportCaption;
-
-                IEnumerable<string> conditionIds = new List<string>();
-                if (IsExpressionDefined(question.ConditionExpression))
-                {
-                    conditionIds = this.expressionProcessor.GetIdentifiersUsedInExpression(question.ConditionExpression);
-                }
-
-                List<string> validationIds = new List<string>();
-                foreach (var validationCondition in question.ValidationConditions)
-                {
-                    if (IsExpressionDefined(validationCondition.Expression))
-                    {
-                        validationIds.AddRange(this.expressionProcessor.GetIdentifiersUsedInExpression(validationCondition.Expression));
-                    }
-                }
-
-                return validationIds.Contains(questionId) || validationIds.Contains(alias) ||
-                    conditionIds.Contains(questionId) || conditionIds.Contains(alias);
-            }
-            return false;
-        }
-
-        private bool IsGroupAndHasQuestionIdInCondition(IComposite composite, IQuestion question)
-        {
-            var group = composite as IGroup;
-            if (group != null && IsExpressionDefined(group.ConditionExpression))
-            {
-                string alias = question.StataExportCaption;
-
-                IEnumerable<string> conditionIds = this.expressionProcessor.GetIdentifiersUsedInExpression(group.ConditionExpression).ToList();
-               
-                return conditionIds.Contains(alias);
-            }
-            return false;
         }
 
         private static string FormatGroupForException(Guid groupId, QuestionnaireDocument questionnaireDocument)
@@ -2553,30 +2166,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             return @group != null
                 ? @group.Title ?? "<<NO GROUP TITLE>>"
                 : "<<MISSING GROUP>>";
-        }
-
-        private static void UpdateCustomMappingsWithContextQuestion(Dictionary<string, string> customMappings, IQuestion contextQuestion)
-        {
-            customMappings["this"] = contextQuestion.StataExportCaption;
-        }
-
-        private Dictionary<string, string> BuildCustomMappingsFromIdsToIdentifiers()
-        {
-            return this.innerDocument
-                .Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.StataExportCaption))
-                .SelectMany(question => new []
-                {
-                    new KeyValuePair<string, string>(question.PublicKey.ToString(), question.StataExportCaption),
-                    new KeyValuePair<string, string>(question.PublicKey.FormatGuid(), question.StataExportCaption),
-                })
-                .ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value);
-        }
-
-        private static bool HasEnablementCondition(IGroup group)
-        {
-            return !string.IsNullOrWhiteSpace(@group.ConditionExpression);
         }
 
         

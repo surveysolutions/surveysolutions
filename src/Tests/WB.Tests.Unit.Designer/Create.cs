@@ -558,9 +558,6 @@ namespace WB.Tests.Unit.Designer
             return new Questionnaire(
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
-                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                Create.SubstitutionService(),
-                Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
@@ -573,9 +570,6 @@ namespace WB.Tests.Unit.Designer
             var questionnaire = new Questionnaire(
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
-                Mock.Of<IExpressionProcessor>(),
-                Create.SubstitutionService(),
-                Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
