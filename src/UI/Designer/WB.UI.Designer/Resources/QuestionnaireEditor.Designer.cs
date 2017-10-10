@@ -2104,6 +2104,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Obtained {0} row from translation file.
+        /// </summary>
+        internal static string TranslationsObtained {
+            get {
+                return ResourceManager.GetString("TranslationsObtained", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Obtained {0} rows from translation file.
+        /// </summary>
+        internal static string TranslationsObtained_plural {
+            get {
+                return ResourceManager.GetString("TranslationsObtained_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add question.
         /// </summary>
         internal static string TreeAddQuestion {

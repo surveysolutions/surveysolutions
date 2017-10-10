@@ -884,4 +884,10 @@
   <data name="FindReplaceReplaceWith" xml:space="preserve">
     <value>Заменить на:</value>
   </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>Получено {0} строка из файла с переводами</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>Получено {0} сток из файла с переводами</value>
+  </data>
 </root>

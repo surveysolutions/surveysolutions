@@ -859,4 +859,10 @@
   <data name="UntitledQuestion" xml:space="preserve">
     <value>Untitled question</value>
   </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>Obtained {0} row from translation file</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>Obtained {0} rows from translation file</value>
+  </data>
 </root>
