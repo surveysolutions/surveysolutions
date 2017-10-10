@@ -154,7 +154,7 @@
     <value>Rechazado ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Está seguro que desea eliminar esta entrevista #{0}?</value>
+    <value>Está seguro que desea eliminar esta entrevista {0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Comenzó ({0})</value>
