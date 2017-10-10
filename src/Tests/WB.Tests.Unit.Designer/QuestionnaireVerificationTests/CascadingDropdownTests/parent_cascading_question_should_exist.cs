@@ -34,13 +34,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private void BecauseOf() => verificationErrors = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
 
-        [NUnit.Framework.Test] public void should_return_WB0086_verification_error () => verificationErrors.First().Code.ShouldEqual("WB0086");
+        [NUnit.Framework.Test] public void should_return_WB0086_verification_error () => verificationErrors.ShouldContainError("WB0086");
 
         [NUnit.Framework.Test] public void should_return_reference_to_question () => 
-            verificationErrors.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationErrors.GetError("WB0086").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_reference_with_id_of_question () =>
-            verificationErrors.First().References.First().Id.ShouldEqual(questionId);
+            verificationErrors.GetError("WB0086").References.First().Id.ShouldEqual(questionId);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

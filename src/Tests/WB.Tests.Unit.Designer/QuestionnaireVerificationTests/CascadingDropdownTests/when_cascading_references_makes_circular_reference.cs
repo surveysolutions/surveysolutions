@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private void BecauseOf() => verificationErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_WB0087_error () => verificationErrors.First().Code.ShouldEqual("WB0087");
+        [NUnit.Framework.Test] public void should_return_WB0087_error () => verificationErrors.ShouldContainError("WB0087");
 
         [NUnit.Framework.Test] public void should_return_references_to_cycled_entities () => 
             verificationErrors.SelectMany(x => x.References).ShouldEachConformTo(x =>

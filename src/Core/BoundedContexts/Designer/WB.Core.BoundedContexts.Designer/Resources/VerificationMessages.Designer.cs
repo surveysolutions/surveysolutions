@@ -1188,6 +1188,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
+        /// </summary>
+        public static string WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
+            get {
+                return ResourceManager.GetString("WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Linked categorical questions cannot be filled by supervisor.
+        /// </summary>
+        public static string WB0128_LinkedCategoricalQuestionCanNotBeFilledBySupervisor {
+            get {
+                return ResourceManager.GetString("WB0128_LinkedCategoricalQuestionCanNotBeFilledBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         public static string WB0200_LargeNumberOfRostersIsCreated {
