@@ -17,8 +17,13 @@ config.resources = {
     dest: "locale/.resources"
 }
 
-gulp.task("test", () => {
-    jest.run("--coverage --forceExit --ci");
+gulp.task("test", (done) => {
+    var exec = require('child_process').exec;
+    exec('jest --ci', (err, stdout, stderr) => {
+        utils.log(stdout);
+        utils.log(stderr);
+        done(err);
+      });
 })
 
 gulp.task('resx2json', () => {
@@ -55,9 +60,7 @@ gulp.task("build", (done) => {
     }
 
     if (!utils.env.production) {
-        opts.plugins.push(
-            new webpack.ProgressPlugin()
-        );
+        opts.plugins.push(new webpack.ProgressPlugin());
     } else {
         process.env.NODE_ENV = 'production';
     }
@@ -70,8 +73,6 @@ gulp.task("default", ['cleanup', 'resx2json', utils.env.production ? "test" : nu
 });
 
 gulp.task("watch", ['resx2json'], () => {
-    //gulp.start("resx2json");
-
     const compiler = webpack(merge(require("./webpack.config.js"), {
         plugins: [new webpack.ProgressPlugin()]
     }));
@@ -84,7 +85,6 @@ gulp.task("watch", ['resx2json'], () => {
 
     return watcher;
 });
-
 
 function onBuild(done, onBuildMessage) {
     const moment = require("moment")
