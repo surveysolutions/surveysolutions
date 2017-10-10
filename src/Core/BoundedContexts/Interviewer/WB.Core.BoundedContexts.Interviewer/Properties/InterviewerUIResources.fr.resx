@@ -154,7 +154,7 @@
     <value>Rejeté(s) ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer cet entretien #{0}?</value>
+    <value>Êtes-vous sûr de vouloir supprimer cet entretien {0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Entamé(s) ({0})</value>

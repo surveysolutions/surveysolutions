@@ -186,7 +186,7 @@ for further instructions</value>
     <value>Rejected ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Are you sure you want to delete this interview #{0}?</value>
+    <value>Are you sure you want to delete this interview {0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Started ({0})</value>
@@ -681,7 +681,7 @@ your next synchronization</value>
     <value>{0} question(s) answered</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat">
-    <value>Assignment {0}</value>
+    <value>Assignment #{0}</value>
     <comment>{0} - is an assignment id</comment>
   </data>
   <data name="Dashboard_No_InterviewKey">
