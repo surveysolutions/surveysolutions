@@ -73,7 +73,7 @@
 
             $scope.deleteMacro = function (index) {
                 var macro = $scope.macros[index];
-                var macroName = macro.name || "macro with no name";
+                var macroName = macro.name || $i18next.t("SideBarMacroNoName");
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(macroName));
 
                 modalInstance.result.then(function (confirmResult) {
