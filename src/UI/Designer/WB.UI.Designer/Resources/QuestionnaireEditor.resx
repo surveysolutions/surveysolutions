@@ -871,7 +871,28 @@
   <data name="UnsavedChangesReload" xml:space="preserve">
     <value>You will lose unsaved changes if you reload this page</value>
   </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="OptionsCloseWindow" xml:space="preserve">
+    <value>Close Window?</value>
+  </data>
+  <data name="OptionsUploadApply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="OptionsUploadLimit" xml:space="preserve">
+    <value>No options. Choose tab separated file. The file can contain up to {0} options.</value>
+  </data>
+  <data name="OptionsUploadTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="OptionsUploadValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
   <data name="SideBarMacroNoName" xml:space="preserve">
     <value>macro with no name</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
   </data>
 </root>
