@@ -143,7 +143,7 @@ function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
 #
 # to execute pre build step - use script with name `preproduction`
 ##############################
-function BuildStaticContent($blockName, $targetLocation) {
+function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
     return RunBlock "Building static files: $blockName" $targetLocation -block {
         Write-Host "Running npm install"
 
@@ -152,51 +152,17 @@ function BuildStaticContent($blockName, $targetLocation) {
         
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run yarn']"
             return $wasBuildSuccessfull
         }
 
-        if (Test-Path "bower.json") {
-            Write-Host "Running bower install --force"
+        Write-Host "Running gulp --production"
+        &node_modules\.bin\gulp --production | Write-Host
 
-            if(Test-Path ".bowerrc") {
-                
-                $bowerSettings =Get-Content -Raw -Path ".bowerrc" | ConvertFrom-Json
-                Write-Host "Cleaning up bower_components folder - $($bowerSettings.directory)"
-                Remove-Item $bowerSettings.directory -Recurse -ErrorAction SilentlyContinue
-            } else {
-                Remove-Item "bower_components" -Recurse -ErrorAction SilentlyContinue
-            }
-
-            &node_modules\.bin\bower install | Write-Host
-
-            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-            if (-not $wasBuildSuccessfull) {
-                Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install --force']"
-                return $wasBuildSuccessfull
-            }
-        }
-
-        if (Test-Path "gulpfile.js") {
-            Write-Host "Running gulp --production"
-            &node_modules\.bin\gulp --production | Write-Host
-
-            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-            if (-not $wasBuildSuccessfull) {
-                Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
-                return $wasBuildSuccessfull
-            }
-        }
-        else {
-            Write-Host "Running npm run production"
-            #will execute script gulpfile.js in target folder
-            &yarn run production | Write-Host
-
-            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-            if (-not $wasBuildSuccessfull) {
-                Write-Host "##teamcity[message status='ERROR' text='Failed to run &npm run production']"
-                return $wasBuildSuccessfull
-            }
+        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+        if (-not $wasBuildSuccessfull) {
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
+            return $wasBuildSuccessfull
         }
 
         return $true
