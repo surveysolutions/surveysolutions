@@ -6781,13 +6781,13 @@ body {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
-  src: local('Roboto Light'), local('Roboto-Light'), url(../fonts/Roboto300.woff) format('woff');
+  src: local('Roboto Light'), local('Roboto-Light'), url(content/fonts/Roboto300.woff) format('woff');
 }
 @font-face {
   font-family: 'Open Sans Light';
   font-style: normal;
   font-weight: 300;
-  src: local('Open Sans Light'), local('OpenSans-Light'), url(../fonts/OpenSans300.woff) format('woff');
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(content/fonts/OpenSans300.woff) format('woff');
 }
 /**
  * WorldBank Designer
