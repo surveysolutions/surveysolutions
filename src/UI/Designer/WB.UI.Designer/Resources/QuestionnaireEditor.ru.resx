@@ -896,7 +896,28 @@
   <data name="UnsavedChangesReload" xml:space="preserve">
     <value>Вы потеряете не сохранённые измененимя если обновите страницу</value>
   </data>
+  <data name="Export" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="OptionsCloseWindow" xml:space="preserve">
+    <value>Закрыть?</value>
+  </data>
+  <data name="OptionsUploadApply" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="OptionsUploadLimit" xml:space="preserve">
+    <value>Опции не найдены. Выберите файл разделённый табуляцией. Файл может содержать до {0} опций.</value>
+  </data>
+  <data name="OptionsUploadTitle" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="OptionsUploadValue" xml:space="preserve">
+    <value>Значение</value>
+  </data>
   <data name="SideBarMacroNoName" xml:space="preserve">
     <value>Макрос без имени</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Загрузить</value>
   </data>
 </root>
