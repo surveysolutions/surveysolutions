@@ -149,7 +149,7 @@
 
             $scope.deleteTranslation = function (index) {
                 var translation = $scope.translations[index];
-                var translationName = translation.name || "translation with no name";
+                var translationName = translation.name || $i18next.t('SideBarTranslationNoName');
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(translationName));
 
                 modalInstance.result.then(function (confirmResult) {

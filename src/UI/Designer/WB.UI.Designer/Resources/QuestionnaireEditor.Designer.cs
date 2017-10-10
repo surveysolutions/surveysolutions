@@ -1708,6 +1708,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to attachment with no name.
+        /// </summary>
+        public static string SideBarAttachmentNoName {
+            get {
+                return ResourceManager.GetString("SideBarAttachmentNoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} File Attachment ({{bytes}} total).
         /// </summary>
         public static string SideBarAttachmentsCounter {
@@ -1848,6 +1857,15 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarLookupTableName {
             get {
                 return ResourceManager.GetString("SideBarLookupTableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to lookup table with no name.
+        /// </summary>
+        public static string SideBarLookupTableNoName {
+            get {
+                return ResourceManager.GetString("SideBarLookupTableNoName", resourceCulture);
             }
         }
         
@@ -2064,6 +2082,15 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarTranslationName {
             get {
                 return ResourceManager.GetString("SideBarTranslationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to translation with no name.
+        /// </summary>
+        public static string SideBarTranslationNoName {
+            get {
+                return ResourceManager.GetString("SideBarTranslationNoName", resourceCulture);
             }
         }
         
