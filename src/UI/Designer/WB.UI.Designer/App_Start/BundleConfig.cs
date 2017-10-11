@@ -18,7 +18,7 @@ namespace WB.UI.Designer
                     "~/Content/designer-list.css"));
 
             bundles.Add(
-                new StyleBundle("~/questionnaire/bootstrap/custom/css-list").Include(
+                new StyleBundle("~/questionnaire/content/designer-start/css-list").Include(
                     "~/Content/plugins/perfect-scrollbar.css",
                     "~/questionnaire/content/designer-start/bootstrap-custom.css"
                     ));
