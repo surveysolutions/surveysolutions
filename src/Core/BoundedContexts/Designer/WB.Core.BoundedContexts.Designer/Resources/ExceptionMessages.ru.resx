@@ -117,88 +117,88 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="LookupTableAlreadyExist" xml:space="preserve">
-    <value>Lookup table with such id already exist.</value>
-  </data>
-  <data name="LookupTableIsAbsent" xml:space="preserve">
-    <value>Lookup table with such id is absent.</value>
-  </data>
-  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
-    <value>File with no data can not be loaded</value>
-  </data>
-  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
-    <value>Value {0} can not be parsed as decimal number. Column {1}, row {2}.</value>
-  </data>
-  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
-    <value>Empty or invalid headers are not allowed</value>
-  </data>
-  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
-    <value>Mandatory rowcode column is missing</value>
-  </data>
-  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
-    <value>Rowcode values must be unique</value>
-  </data>
-  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
-    <value>Value {0} can not be parsed as long integer number. Column {1}, row {2}.</value>
-  </data>
-  <data name="LookupTables_too_many_columns" xml:space="preserve">
-    <value>Too many columns in uploaded file. Max columns count is {0}</value>
-  </data>
-  <data name="LookupTables_too_many_rows" xml:space="preserve">
-    <value>Max rows count limit ({0} rows) was exceeded.</value>
-  </data>
-  <data name="MacroAlreadyExist" xml:space="preserve">
-    <value>Macro with such is is already exist.</value>
-  </data>
-  <data name="MacroIsAbsent" xml:space="preserve">
-    <value>Macro with such is is absent.</value>
-  </data>
-  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
-    <value>Headers with the same name are not allowed</value>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>Данные в загруженном формате не поддерживаются</value>
   </data>
   <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
-    <value>Uploaded file is not an image</value>
-  </data>
-  <data name="Attachments_Unsupported_content" xml:space="preserve">
-    <value>Uploaded content is not supported</value>
+    <value>Загруженный файл не является изображением</value>
   </data>
   <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
-    <value>You can't move to sub-section {0} because it position {1} in not acceptable.</value>
+    <value>Нельзя переместить группу {0} в неправильную позицию {1}.</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
-    <value>Combo box question with public key {0} can't be found</value>
+    <value>Комбобокс вопрос с ключом {0} не найден.</value>
   </data>
   <data name="ItemWithIdExistsAlready" xml:space="preserve">
-    <value>One or more questionnaire item(s) with same ID {0} already exists.</value>
+    <value>Один или болеее элементов с ключом {0} уже существуют в опроснике.</value>
   </data>
-  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
-    <value>One or more sub-section(s) with same ID {0} already exist:{1}{2}.</value>
+  <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>Таблица поиска с таким ключом уже существует</value>
   </data>
-  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
-    <value>You don't have permissions for changing this questionnaire</value>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>Таблица поиска с таким ключом отсутсвует</value>
   </data>
-  <data name="QuestionCannotBeFound" xml:space="preserve">
-    <value>Question with public key {0} can't be found.</value>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>Пустой файл не может быть сохранен</value>
   </data>
-  <data name="QuestionIsNotCombobox" xml:space="preserve">
-    <value>Question {0} is not a combo box</value>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>Значение {0} не может быть прочитано как вещественное число. Колонка {1}, строка {2}.</value>
   </data>
-  <data name="QuestionnaireCantBeFound" xml:space="preserve">
-    <value>Questionnaire item with id {0} can't be found.</value>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>Заголовки с одинаковым название запрещены</value>
   </data>
-  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
-    <value>Questionnaire's title can not be empty or contains whitespace only.</value>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>Заголовки с пустым или неверным названием запрещены</value>
   </data>
-  <data name="SubSectionCantBeFound" xml:space="preserve">
-    <value>Sub-section with public key {0} can't be found.</value>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>Обязательная колонка rowcode отсутсвует</value>
   </data>
-  <data name="SubSectionDepthLimit" xml:space="preserve">
-    <value>Sub-section or roster depth cannot be higher than {0}.</value>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>Значения колонки rowcode должны быть уникальны</value>
   </data>
-  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
-    <value>Section cannot have more than {0} child items</value>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>Значение {0} не может быть прочитано как длинное целое число. Колонка {1}, строка {2}.</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}.</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>Превышена максимальная граница ({0}) колочества строк.</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>Макро с таким ключом уже существует</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>Макро с таким ключом отсутствует</value>
   </data>
   <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
-    <value>One or more question(s) with same ID {0} already exist:{1}{2}.</value>
+    <value>Один или более вопросов с одинаковым ключом {0} уже существуют:{1}{2}.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>Одна или более секций с одинаковым ключом {0} уже существуют:{1}{2}.</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>У вас недостаточно прав для изменения опросника</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>Вопрос с ключом {0} не найден.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>Вопрос {0} не является комбобоксом.</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>Опросник с ключом {0} не найден.</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>Заголовок вопросника не может быть пустым.</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>Секция не может содержать более {0} дочерних элементов.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>Группа с ключом {0} не может быть найдена.</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>Вложенность групп и ростеров не может быть больше чем {0}.</value>
   </data>
 </root>
