@@ -1940,7 +1940,13 @@ jquery-contextmenu@^2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/jquery-contextmenu/-/jquery-contextmenu-2.6.2.tgz#83c7ba45c67c814cc4095b19551fd12e5d71da7e"
 
-jquery@>=1.6.0, jquery@>=1.7, jquery@>=1.8:
+jquery-highlight@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/jquery-highlight/-/jquery-highlight-3.4.0.tgz#05cc0e765477838a98c60f542e3d5dc319742f87"
+  dependencies:
+    jquery ">= 1.0.0"
+
+"jquery@>= 1.0.0", jquery@>=1.6.0, jquery@>=1.7, jquery@>=1.8:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 

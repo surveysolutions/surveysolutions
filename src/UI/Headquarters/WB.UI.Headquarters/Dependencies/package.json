@@ -30,6 +30,7 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.7",
     "jquery-contextmenu": "^2.6.2",
+    "jquery-highlight": "^3.4.0",
     "moment": "^2.18.1",
     "pnotify": "^3.2.1",
     "vinyl-source-stream": "^1.1.0"
