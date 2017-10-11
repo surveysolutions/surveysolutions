@@ -1,21 +1,30 @@
 ﻿<template>
-    <wb-question :question="$me" :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'">
+    <wb-question :question="$me"
+                 :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'">
         <div class="question-unit">
             <div class="options-group">
-                <div v-if="!$me.isTimestamp" class="form-group">
-                    <div class="field" :class="{answered: $me.isAnswered}">
-                        <flat-pickr :config="pickerOpts" :value="answer" class="field-to-fill"
-                            :placeholder="$t('WebInterviewUI.EnterDate')" :title="$t('WebInterviewUI.EnterDate')" />
+                <div v-if="!$me.isTimestamp"
+                     class="form-group">
+                    <div class="field"
+                         :class="{answered: $me.isAnswered}">
+                        <flat-pickr :config="pickerOpts"
+                                    :value="answer"
+                                    class="field-to-fill"
+                                    :placeholder="$t('WebInterviewUI.EnterDate')"
+                                    :title="$t('WebInterviewUI.EnterDate')" />
                         <wb-remove-answer/>
                     </div>
                 </div>
                 <div v-else>
-                    <div class="field" :class="{answered: $me.isAnswered}">
+                    <div class="field"
+                         :class="{answered: $me.isAnswered}">
                         <div class="block-with-data">{{ answer }}</div>
                         <wb-remove-answer />
                     </div>
-                    <div class="action-btn-holder time-question" @click="answerDate">
-                        <button type="button" class="btn btn-default btn-lg btn-action-questionnaire">
+                    <div class="action-btn-holder time-question"
+                         @click="answerDate">
+                        <button type="button"
+                                class="btn btn-default btn-lg btn-action-questionnaire">
                             {{ $t("WebInterviewUI.RecordCurrentTime") }}
                         </button>
                     </div>
@@ -30,7 +39,7 @@
     import 'flatpickr/dist/flatpickr.css'
     import * as format from "date-fns/format"
     import * as isSame from "date-fns/is_equal"
-    import { DateFormats } from "../questions"
+    import { DateFormats } from "shared/helpers"
 
     const parseUTC = date => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
 
@@ -73,7 +82,10 @@
                         }
                     }
                     else {
-                        this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: new Date().toLocaleString() })
+                        this.$store.dispatch('answerDateQuestion', { 
+                                identity: this.$me.id,
+                                date: format(new Date(), DateFormats.dateTime)
+                                });
                     }
                 }
             }

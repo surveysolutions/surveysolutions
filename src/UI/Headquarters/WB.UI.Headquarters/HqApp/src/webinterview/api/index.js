@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-//import { appVersion, audioUploadUri, imageUploadUri, signalrPath, signalrUrlOverride, supportedTransports } from "../config"
+import config from "shared/config"
 import Vue from 'vue'
 import * as $script from "scriptjs"
 import "signalr"
@@ -117,7 +117,9 @@ async function hubStarter() {
     $.connection.hub.qs = queryString
 
     // { transport: supportedTransports }
-    await wrap($.signalR.hub.start())
+    await wrap($.signalR.hub.start({
+        transport: config.supportedTransports
+    }))
     // await wrap($.signalR.hub.start({ transport: "longPolling" }))
     $.connection.hub.connectionSlow(() => {
         store.dispatch("connectionSlow")
