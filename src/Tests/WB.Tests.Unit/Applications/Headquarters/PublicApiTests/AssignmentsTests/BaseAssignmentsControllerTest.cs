@@ -51,6 +51,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 this.userManager.Object,
                 this.logger.Object,
                 this.questionnaireStorage.Object,
+                Mock.Of<IAuditLog>(),
                 Mock.Of<IInterviewCreatorFromAssignment>(),
                 this.interviewImportService.Object);
 

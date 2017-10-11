@@ -11,6 +11,7 @@ using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -37,6 +38,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IMapper mapper;
         private readonly HqUserManager userManager;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IAuditLog auditLog;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IInterviewImportService importService;
 
@@ -47,6 +49,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             HqUserManager userManager,
             ILogger logger,
             IQuestionnaireStorage questionnaireStorage,
+            IAuditLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IInterviewImportService importService) : base(logger)
         {
@@ -55,6 +58,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.mapper = mapper;
             this.userManager = userManager;
             this.questionnaireStorage = questionnaireStorage;
+            this.auditLog = auditLog;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.importService = importService;
         }
@@ -333,8 +337,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             var assignment = assignmentsStorage.GetById(id) ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
             assignment.UpdateQuantity(quantity);
-
             assignmentsStorage.Store(assignment, id);
+            this.auditLog.Append($"Assignment {id} size changed to {(quantity == null ? -1 : quantity.Value)} using public API");
 
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
         }

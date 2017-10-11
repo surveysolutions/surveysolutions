@@ -3,19 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
@@ -35,6 +31,7 @@ namespace WB.UI.Headquarters.API
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
+        private readonly IAuditLog auditLog;
         private readonly IInterviewImportService interviewImportService;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
@@ -42,6 +39,7 @@ namespace WB.UI.Headquarters.API
             IPlainStorageAccessor<Assignment> assignmentsStorage,
             IQuestionnaireStorage questionnaireStorage,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
+            IAuditLog auditLog,
             IInterviewImportService interviewImportService)
         {
             this.assignmentViewFactory = assignmentViewFactory;
@@ -49,6 +47,7 @@ namespace WB.UI.Headquarters.API
             this.assignmentsStorage = assignmentsStorage;
             this.questionnaireStorage = questionnaireStorage;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
+            this.auditLog = auditLog;
             this.interviewImportService = interviewImportService;
         }
         
@@ -167,6 +166,7 @@ namespace WB.UI.Headquarters.API
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
 
             assignment.UpdateQuantity(request.Quantity);
+            this.auditLog.Append($"Assignment {id} size changed to {(request.Quantity == null ? -1 : request.Quantity.Value)}");
             return this.Ok();
         }
 
