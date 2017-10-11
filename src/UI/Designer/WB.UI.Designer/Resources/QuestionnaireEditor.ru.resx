@@ -209,7 +209,7 @@
     <value>Для избежания медленной синхронизации рекомендовано не превышать 2МБ общего объёма вложений. Для информации о поддерживаемых типах файлов, форматов и размеров </value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>Для использования вложения в опроснике добавьте статический текст и укажите {{- name}} в его свойстве вложения.</value>
+    <value>для использования вложения в опроснике добавьте статический текст и укажите имя в его свойстве Имя вложения.</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>Оценка времени скачивания: {{timeString}} используя {{downloadSpeed}}Кб/сек (EDGE)</value>
@@ -275,7 +275,7 @@
     <value>Макрос это именованное выражение, которое можно использовать в условиях и проверках. Он состоит из имени и содержимого.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
-    <value>Для использования макроса используйте {{-substitution}}</value>
+    <value>может быть использовано в выражениях как ссылка на макрос.</value>
   </data>
   <data name="SideBarMacroHideDescription" xml:space="preserve">
     <value>cкрыть описание</value>
@@ -888,7 +888,7 @@
     <value>Получено {0} строка из файла с переводами</value>
   </data>
   <data name="TranslationsObtained_plural" xml:space="preserve">
-    <value>Получено {0} сток(и) из файла с переводами</value>
+    <value>Получено {0} строк(и) из файла с переводами</value>
   </data>
   <data name="UnsavedChangesLeave" xml:space="preserve">
     <value>Вы потеряете не сохранённые изменения если покините текущую страницу </value>
