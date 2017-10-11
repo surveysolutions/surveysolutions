@@ -997,6 +997,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parent value.
+        /// </summary>
+        public static string OptionsUploadParent {
+            get {
+                return ResourceManager.GetString("OptionsUploadParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string OptionsUploadTitle {
