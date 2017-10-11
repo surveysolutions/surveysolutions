@@ -1,9 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
         function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
-
-            $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
-
             var macroSubtitutionHtml = "<span class=\"variable-name\">$"+ $i18next.t('VariableName') + "</span>";
             $scope.macroHtml = $sce.trustAsHtml($i18next.t('SideBarMacroEmptyLine3', { substitution: macroSubtitutionHtml }));
 
