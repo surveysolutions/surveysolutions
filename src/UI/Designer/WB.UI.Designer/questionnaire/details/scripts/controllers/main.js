@@ -1,12 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
         function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
-            var macroSubtitutionHtml = "<span class=\"variable-name\">$"+ $i18next.t('VariableName') + "</span>";
-            $scope.macroHtml = $sce.trustAsHtml($i18next.t('SideBarMacroEmptyLine3', { substitution: macroSubtitutionHtml }));
-
-            var attachmentNameSubtitutionHtml = "<span class=\"variable-name\">" + $i18next.t('VariableName') + "</span>";
-            $scope.attachmentHtml = $sce.trustAsHtml($i18next.t('SideBarAttachmentsEmptyLine3', { name: attachmentNameSubtitutionHtml }));
-
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,

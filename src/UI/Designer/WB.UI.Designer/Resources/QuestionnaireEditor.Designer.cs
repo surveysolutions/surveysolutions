@@ -1753,7 +1753,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To refer to an attachment in the questionnaire add a static text element and specify the attachment {{- name}} in its attachment property.
+        ///   Looks up a localized string similar to can be used to use an attachment in the questionnaire add a static text element and specify the name in its attachment property.
         /// </summary>
         public static string SideBarAttachmentsEmptyLine3 {
             get {
@@ -1969,7 +1969,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To use a macro in an expression, refer to it by its {{-substitution}}.
+        ///   Looks up a localized string similar to can be used in an expression, to refer to macro..
         /// </summary>
         public static string SideBarMacroEmptyLine3 {
             get {

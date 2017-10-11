@@ -206,7 +206,7 @@
     <value>To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB. For supported file types, formats, and dimensions</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>To refer to an attachment in the questionnaire add a static text element and specify the attachment {{- name}} in its attachment property</value>
+    <value>can be used to use an attachment in the questionnaire add a static text element and specify the name in its attachment property</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>Est. loading time: {{timeString}} at {{downloadSpeed}}Kb/s (EDGE)</value>
@@ -266,7 +266,7 @@
     <value>A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
-    <value>To use a macro in an expression, refer to it by its {{-substitution}}</value>
+    <value>can be used in an expression, to refer to macro.</value>
   </data>
   <data name="SideBarMacroHideDescription" xml:space="preserve">
     <value>hide description</value>
