@@ -80,6 +80,7 @@
     "ng-i18next": "^1.0.5",
     "perfect-scrollbar": "^0.8.1",
     "pnotify": "^3.2.1",
+    "roboto-fontface": "^0.8.0",
     "underscore": "^1.8.3",
     "xss": "^0.3.4"
   }
