@@ -1,7 +1,7 @@
 import * as forEach from "lodash/foreach"
 import Vue from "vue"
 import * as format from "date-fns/format"
-import { DateFormats } from "shared/components/questions"
+import { DateFormats } from "shared/helpers"
 
 Vue.directive("dateTimeFormatting", {
     update: (el) => {
