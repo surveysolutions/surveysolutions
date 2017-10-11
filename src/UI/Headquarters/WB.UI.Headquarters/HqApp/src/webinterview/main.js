@@ -25,7 +25,9 @@ export default Vuei18n.initializeAsync().then((i18n) => {
     const router = require("./router").default;
     const store = require("./store").default;
     const App = require("./App").default;
-
+    const installApi = require("./api").install
+    installApi(Vue)
+    
     box.addLocale("ar", {
         OK: i18n.t("Common.Ok"),
         CANCEL: i18n.t("Common.Cancel"),
