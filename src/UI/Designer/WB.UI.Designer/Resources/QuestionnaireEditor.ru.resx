@@ -888,7 +888,7 @@
     <value>Получено {0} строка из файла с переводами</value>
   </data>
   <data name="TranslationsObtained_plural" xml:space="preserve">
-    <value>Получено {0} сток из файла с переводами</value>
+    <value>Получено {0} сток(и) из файла с переводами</value>
   </data>
   <data name="UnsavedChangesLeave" xml:space="preserve">
     <value>Вы потеряете не сохранённые изменения если покините текущую страницу </value>
@@ -924,9 +924,12 @@
     <value>справочная таблица без имени</value>
   </data>
   <data name="SideBarTranslationNoName" xml:space="preserve">
-    <value>перевод без имени</value>
+    <value>перевод без названия</value>
   </data>
   <data name="SideBarAttachmentNoName" xml:space="preserve">
     <value>вложение без имени</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>название перевода</value>
   </data>
 </root>
