@@ -84,11 +84,11 @@
     "vue-router": "^2.7.0",
     "vuex": "^2.4.1"
   },
-  "jest":{ 
+  "jest": {
     "rootDir": "src",
-    "testMatch": [ "**/?(*.)(spec|test).js" ],
     "coverageDirectory": "../.coverage",
     "collectCoverage": true,
+    "modulePaths": ["<rootDir>"],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
     }

@@ -31,7 +31,7 @@ export default {
         * @param {*} path path to content
         */
         async locale(locale) {
-            let localizationFile = config.locale.locales[locale];
+            let localizationFile = (config.locale || {}).locales[locale];
 
             if (localizationFile == null) {
                 localizationFile = config.locale.locales['en'];
