@@ -82,26 +82,26 @@ gulp.task("watch", ['resx2json'], () => {
 
     const watcher = compiler.watch({
         ignored: ["node_modules"]
-    }, onBuild(null, utils.colors.green("Build done. Waiting for changes")));
+    }, onBuild(null, utils.colors.green("Build done. Waiting for changes"), false));
 
     return watcher;
 });
 
-function onBuild(done, onBuildMessage) {
+function onBuild(done, onBuildMessage, exitOnError = true) {
     const moment = require("moment")
 
     return function (err, stats) {
         if (err) {
             utils.log('Error', err);
-            throw "Build has failed"
+            if(exitOnError) throw "Build has failed"
         }
         else {
             const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
             utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
 
             if (stats.hasErrors()) {
-                utils.log(stats.compilation.errors);
-                throw "Build has failed"
+                utils.log(stats.toString());
+                if(exitOnError) throw "Build has failed"
             }
 
             if (stats.hasWarnings()) {
