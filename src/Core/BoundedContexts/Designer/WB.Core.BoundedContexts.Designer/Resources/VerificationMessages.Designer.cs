@@ -1196,7 +1196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Number of decimal places is not in range from {0} to {1}..
         /// </summary>
         public static string WB0128_CountOfDecimalPlacesIsNotInRange {
             get {
