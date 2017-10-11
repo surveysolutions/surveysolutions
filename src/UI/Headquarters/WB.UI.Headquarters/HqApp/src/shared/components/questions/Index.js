@@ -63,7 +63,3 @@ export const ButtonType = {
     Complete: 3
 }
 
-export const DateFormats = {
-    dateTime: 'YYYY-MM-DD HH:mm:ss',
-    date: 'YYYY-MM-DD'
-}
