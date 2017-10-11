@@ -885,10 +885,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            Guid questionId = command.QuestionId;
-            bool isPrefilled = command.IsPreFilled;
-            QuestionType questionType = QuestionType.Text;
-            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -932,10 +928,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            Guid questionId = command.QuestionId;
-            bool isPrefilled = command.IsPreFilled;
-            QuestionType questionType = QuestionType.GpsCoordinates;
-            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -978,10 +970,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-            Guid questionId = command.QuestionId;
-            bool isPrefilled = command.IsPreFilled;
-            QuestionType questionType = QuestionType.DateTime;
-            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1021,7 +1009,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            QuestionType questionType = QuestionType.MultyOption;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
         
             if (parentGroup != null)
@@ -1088,7 +1075,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            QuestionType questionType = QuestionType.SingleOption;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
         
             if (parentGroup != null)
@@ -1228,13 +1214,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-
-            Guid questionId = command.QuestionId;
-            bool isPrefilled = command.IsPreFilled;
-            QuestionType questionType = QuestionType.Numeric;
-            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1284,14 +1264,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-
-            var isPrefilled = false;
-
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-
-            Guid questionId = command.QuestionId;
-            QuestionType questionType = QuestionType.TextList;
-            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1345,12 +1318,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
 
-            var isPrefilled = false;
-
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-
-            Guid questionId = command.QuestionId;
-            QuestionType questionType = QuestionType.Area;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1404,13 +1372,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-
-            var isPrefilled = false;
-
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-
-            Guid questionId = command.QuestionId;
-            QuestionType questionType = QuestionType.Audio;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
@@ -1461,13 +1423,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
-            var isPrefilled = false;
             IGroup parentGroup = this.innerDocument.GetParentById(questionId);
 
-            QuestionType questionType = QuestionType.Multimedia;
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
-        
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
@@ -1517,13 +1476,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
             this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
-
-            var isPrefilled = false;
             IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
-
-            Guid questionId = command.QuestionId;
-            QuestionType questionType = QuestionType.QRBarcode;
-            IList<ValidationCondition> validationCoditions = command.ValidationConditions;
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
         
             if (parentGroup != null)
