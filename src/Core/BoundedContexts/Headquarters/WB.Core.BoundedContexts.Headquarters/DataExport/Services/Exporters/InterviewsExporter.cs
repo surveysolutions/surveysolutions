@@ -239,7 +239,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
 
                     recordsByLevel.Add(string.Join(stringSeparator,
-                            parametersToConcatenate.Select(v => v.Replace(stringSeparator, ""))));
+                            parametersToConcatenate.Select(v => v?.Replace(stringSeparator, ""))));
                 }
 
                 interviewData.Add(interviewDataExportLevelView.LevelName, recordsByLevel.ToArray());
