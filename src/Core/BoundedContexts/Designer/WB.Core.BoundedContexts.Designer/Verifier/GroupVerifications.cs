@@ -21,22 +21,22 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
-            Critical<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion, "WB0009", VerificationMessages.WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion),
+            Critical<IGroup>(WB0009_RosterSizeQuestionIsMissing, "WB0009", VerificationMessages.WB0009_RosterSizeQuestionIsMissing),
             Error<IGroup>(RosterSizeSourceQuestionTypeIsIncorrect, "WB0023", VerificationMessages.WB0023_RosterSizeSourceQuestionTypeIsIncorrect),
-            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
-            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
-            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion),
-            Error<IGroup>(GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion),
-            Error<IGroup>(GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion),
-            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
-            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues, "WB0041", VerificationMessages.WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues),
-            Error<IGroup>(GroupWhereRosterSizeSourceIsFixedTitlesValuesHaveNonIntegerValues, "WB0115", VerificationMessages.WB0115_FixRosterSupportsOnlyIntegerTitleValues),
-            Error<IGroup>(RosterFixedTitlesHaveMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxLongRosterRowCount)),
+            Error<IGroup>(QuestionTriggeredRosterHasFixedTitles, "WB0032", VerificationMessages.WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles),
+            Error<IGroup>(FixedRosterHasRosterSizeQuestion, "WB0033", VerificationMessages.WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion),
+            Error<IGroup>(FixedRosterHasRosterTitleQuestion, "WB0034", VerificationMessages.WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion),
+            Error<IGroup>(QuestionTriggeredRosterHasInvalidRosterTitleQuestion, "WB0035", VerificationMessages.WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion),
+            Error<IGroup>(ListOrMultiRostersHaveRosterTitleQuestion, "WB0036", VerificationMessages.WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion),
+            Error<IGroup>(FixedRosterTitlesHasEmptyTitles, "WB0037", VerificationMessages.WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles),
+            Error<IGroup>(FixedRosterHasDuplicateValues, "WB0041", VerificationMessages.WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues),
+            Error<IGroup>(FixedRosterHasNonIntegerValues, "WB0115", VerificationMessages.WB0115_FixRosterSupportsOnlyIntegerTitleValues),
+            Error<IGroup>(FixedRosterHasMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxLongRosterRowCount)),
             Error<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
-            Error<IGroup>(RosterHasRosterLevelMoreThan4, "WB0055", string.Format(VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4, MaxNestedRostersCount)),
+            Error<IGroup>(RosterLevelIsMoreThan4, "WB0055", string.Format(VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4, MaxNestedRostersCount)),
             Error<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
             Error<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
-            Error<IGroup>(this.RosterHasVariableNameEqualToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
+            Error<IGroup>(RostersVariableEqualsToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
             Error<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", string.Format(VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10, MaxNestedSubsectionsCount)),
             ErrorForTranslation<IGroup>(GroupTitleIsTooLong, "WB0260", string.Format(VerificationMessages.WB0260_GroupTitleIsTooLong, MaxTitleLength)),
             ErrorForTranslation<IGroup>(GroupTitleIsEmpty, "WB0120", VerificationMessages.WB0120_GroupTitleIsEmpty),
@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return !IsVariableNameValid(group.VariableName);
         }
 
-        private bool RosterHasVariableNameEqualToQuestionnaireTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool RostersVariableEqualsToQuestionnaireTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!group.IsRoster)
                 return false;
@@ -256,16 +256,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return new EntityVerificationResult<IComposite> { HasErrors = false };
         }
 
-        private static bool GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool ListOrMultiRostersHaveRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsRosterByQuestion(group))
                 return false;
-            if (!questionnaire.Questionnaire.IsMultiRoster(group))
-                return false;
-            return group.RosterTitleQuestionId.HasValue;
+
+            if (questionnaire.Questionnaire.IsMultiRoster(group))
+                return group.RosterTitleQuestionId.HasValue;
+
+            if (questionnaire.Questionnaire.IsListRoster(group))
+                return group.RosterTitleQuestionId.HasValue;
+
+            return false;
         }
 
-        private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool FixedRosterTitlesHasEmptyTitles(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsFixedRoster(group))
                 return false;
@@ -278,7 +283,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return group.FixedRosterTitles.Any(title => string.IsNullOrWhiteSpace(title.Title));
         }
 
-        private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool FixedRosterHasDuplicateValues(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsFixedRoster(group))
                 return false;
@@ -289,7 +294,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return group.FixedRosterTitles.Select(x => x.Value).Distinct().Count() != group.FixedRosterTitles.Length;
         }
 
-        private static bool GroupWhereRosterSizeSourceIsFixedTitlesValuesHaveNonIntegerValues(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool FixedRosterHasNonIntegerValues(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsFixedRoster(group))
                 return false;
@@ -309,7 +314,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return false;
         }
 
-        private static bool RosterFixedTitlesHaveMoreThanAllowedItems(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool FixedRosterHasMoreThanAllowedItems(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsFixedRoster(group))
                 return false;
@@ -317,14 +322,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return group.FixedRosterTitles.Length > Constants.MaxLongRosterRowCount;
         }
 
-        private static bool RosterHasRosterLevelMoreThan4(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool RosterLevelIsMoreThan4(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsRoster(roster))
                 return false;
 
             return questionnaire.Questionnaire.GetRosterScope(roster).Length > 4;
         }
-        private static bool GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool WB0009_RosterSizeQuestionIsMissing(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire.Questionnaire.IsRosterByQuestion(group) && questionnaire.Questionnaire.GetRosterSizeQuestion(group) == null;
         }
@@ -405,22 +410,22 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return findInGroup.Any(x => questionnaire.Questionnaire.IsRoster(x));
         }
 
-        private static bool GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool QuestionTriggeredRosterHasFixedTitles(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire.Questionnaire.IsRosterByQuestion(group) && group.FixedRosterTitles.Any();
         }
 
-        private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool FixedRosterHasRosterSizeQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire.Questionnaire.IsFixedRoster(group) && group.RosterSizeQuestionId.HasValue;
         }
 
-        private static bool GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool FixedRosterHasRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire.Questionnaire.IsFixedRoster(group) && group.RosterTitleQuestionId.HasValue;
         }
 
-        private static bool GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool QuestionTriggeredRosterHasInvalidRosterTitleQuestion(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!questionnaire.Questionnaire.IsRosterByQuestion(group))
                 return false;

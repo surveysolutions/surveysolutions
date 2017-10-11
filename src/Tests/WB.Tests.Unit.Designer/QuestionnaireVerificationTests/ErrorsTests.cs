@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -13,6 +15,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         private static readonly Guid Id1 = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
+
+        [Test]
+        public void categorical_question_with_long_option()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.SingleQuestion(Id1, variable: "q2", options: new List<Answer>{ Create.Option(1, "A".PadLeft(300, 'A'))})
+                })
+                .ExpectError("WB0129");
+
+        [TestCase(0)]
+        [TestCase(16)]
+        public void real_question_with_decimal_places_not_in_range_1_15(int countOfDecimalPlaces)
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.NumericRealQuestion(Id2, variable: "q1", decimalPlaces: countOfDecimalPlaces),
+                })
+                .ExpectError("WB0128");
+
+        [Test]
+        public void identifying_question_with_sunstitution()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(Id1, variable: "q2"),
+                    Create.NumericIntegerQuestion(Id2, variable: "q1", variableLabel: "%q2%"),
+                })
+                .ExpectError("WB0008");
 
         [Test]
         public void question_with_validation_uses_forbidden_DateTime_properties()

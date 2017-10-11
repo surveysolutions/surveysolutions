@@ -55,30 +55,47 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             var foundErrors = new List<QuestionnaireVerificationMessage>();
 
-            var entitiesSupportingSubstitutions =
-                questionnaire.FindWithTranslations<IComposite>(SupportsSubstitutions)
-                    .ToList();
+            var entitiesSupportingSubstitutions = questionnaire.FindWithTranslations<IComposite>(SupportsSubstitutions).ToList();
 
             foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
                 foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
 
-                var entityAsValidatable = translatedEntity.Entity as IValidatable;
-
-                if (entityAsValidatable != null)
+                if (translatedEntity.Entity is IValidatable entityAsValidatable)
                 {
                     var validationConditions = entityAsValidatable.ValidationConditions;
 
                     for (int validationConditionIndex = 0; validationConditionIndex < validationConditions.Count; validationConditionIndex++)
                     {
                         var validationCondition = validationConditions[validationConditionIndex];
-                        foundErrors.AddRange(this.GetErrorsBySubstitutionsInValidationCondition(
-                            translatedEntity, validationCondition.Message, validationConditionIndex, questionnaire));
+                        foundErrors.AddRange(this.GetErrorsBySubstitutionsInValidationCondition(translatedEntity, validationCondition.Message, validationConditionIndex, questionnaire));
                     }
+                }
+
+                if (translatedEntity.Entity is IQuestion entityAsQuestion)
+                {
+                    var variableLabel= entityAsQuestion.VariableLabel;
+                    if (string.IsNullOrWhiteSpace(variableLabel))
+                        continue;
+                    foundErrors.AddRange(GetErrorsBySubstitutionsInVariableLabel(translatedEntity, variableLabel, questionnaire));
                 }
             }
 
             return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInVariableLabel(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string variableLabel, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(variableLabel);
+
+            if (substitutionReferences.Any())
+            {
+                return QuestionnaireVerificationMessage.Error("WB0008",
+                    VerificationMessages.WB0008_SubstitutionsInVariableLableAreProhibited,
+                    translatedEntity.TranslationName,
+                    CreateReference(translatedEntity.Entity)).ToEnumerable();
+            }
+            return Enumerable.Empty<QuestionnaireVerificationMessage>();
         }
 
         private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInValidationCondition(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string validationCondition, int validationConditionIndex, MultiLanguageQuestionnaireDocument questionnaire)
@@ -129,10 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             bool isTitle = validationConditionIndex == null;
             var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
 
-            var question = traslatedEntityWithSubstitution.Entity as IQuestion;
-            if (question != null &&
-                isTitle &&
-                substitutionReference == question.StataExportCaption)
+            if (traslatedEntityWithSubstitution.Entity is IQuestion question && isTitle && substitutionReference == question.StataExportCaption)
             {
                 return QuestionnaireVerificationMessage.Error("WB0016",
                     VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,

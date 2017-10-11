@@ -198,9 +198,6 @@
   <data name="Attachments_Unsupported_content" xml:space="preserve">
     <value>Uploaded content is not supported</value>
   </data>
-  <data name="VariableLabelContainsSubstitutionReference" xml:space="preserve">
-    <value>It is not allowed to use substitutions in variable label</value>
-  </data>
   <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
     <value>You can't move to sub-section {0} because it position {1} in not acceptable.</value>
   </data>

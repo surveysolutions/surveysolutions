@@ -24,9 +24,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         protected const int ManyQuestionsByFewSectionsCount = 100;
         protected const int MaxQuestionsCountInQuestionnaire = 1000;
         protected const int MaxQuestionsCountInSubSection = 200;
-
+        protected const int MaxCountOfDecimalPlaces = 15;
         protected const int MaxTitleLength = 500;
         protected const int MaxValidationMessageLength = 250;
+        protected const int MaxOptionLength = 250;
         protected const int MaxNestedSubsectionsCount = 10;
         protected const int MaxRosterSizeAnswer = 200;
         protected const int MaxQuestionnaireSizeInMb = 5;
@@ -120,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var multioptionQuestion = question as MultyOptionsQuestion;
             if (multioptionQuestion != null)
             {
-                questionMaxAnswersCount = multioptionQuestion.MaxAllowedAnswers ?? multioptionQuestion.Answers.Count;
+                questionMaxAnswersCount = multioptionQuestion.MaxAllowedAnswers ?? multioptionQuestion.Answers?.Count ?? 0;
             }
             var textListTrigger = question as TextListQuestion;
             if (textListTrigger?.MaxAnswerCount != null)
