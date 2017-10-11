@@ -3,6 +3,7 @@ const source = require("vinyl-source-stream");
 
 const gulp = require('gulp'),
     streamify = require('gulp-streamify'),
+    fs = require('fs'),
     plugins = require('gulp-load-plugins')(),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -143,6 +144,11 @@ gulp.task('styles.webinterview', ['move-bootstrap-fonts'], wrapPipe(function (su
 }));
 
 gulp.task('libsJs', wrapPipe((success, error) => {
+
+    config.sourceFiles.forEach((f) => {
+        fs.statSync(f);
+    });
+    
     return gulp.src(config.sourceFiles)
         .pipe(plugins.filter(['**/*.js']))
         // .pipe(debug())
@@ -155,6 +161,10 @@ gulp.task('libsJs', wrapPipe((success, error) => {
 }));
 
 gulp.task('libsCss', wrapPipe(function (success, error) {
+    config.sourceFiles.forEach((f) => {
+        fs.statSync(f); // ensure that all files are existing
+    });
+
     return gulp.src(config.sourceFiles)
         .pipe(plugins.filter('**/*.css'))
         .pipe(autoprefixer('last 2 version').on('error', error))

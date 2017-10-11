@@ -14,13 +14,6 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new ScriptBundle("~/js/assignments").Include(
-                "~/Dependencies/build/vue-libs.js",
-                "~/Dependencies/vendor/vee-validate/dist/vee-validate.min.js",
-                "~/Dependencies/js/dataTables.conditionalPaging.js",
-                "~/Dependencies/js/searchHighlight.js"
-            ));
-
             bundles.Add(new ScriptBundle("~/js/app/assignments").Include(
                 "~/Dependencies/build/vendor.bundle.js",
                 "~/Dependencies/build/assignments.bundle.js"
