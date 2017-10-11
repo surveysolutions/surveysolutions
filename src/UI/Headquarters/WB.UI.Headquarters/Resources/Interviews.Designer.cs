@@ -119,6 +119,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No responsible chosen for some interview(s). Please choose a responsible supervisor or interviewer..
+        /// </summary>
+        public static string ChooseResponsible {
+            get {
+                return ResourceManager.GetString("ChooseResponsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No responsible chosen for some interview(s). Please choose a responsible interviewer..
         /// </summary>
         public static string ChooseResponsibleInterviewer {
