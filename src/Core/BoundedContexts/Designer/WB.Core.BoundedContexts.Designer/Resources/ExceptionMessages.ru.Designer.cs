@@ -22,14 +22,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public class ExceptionMessages {
+    public class ExceptionMessages_ru1 {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ExceptionMessages() {
+        internal ExceptionMessages_ru1() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.ExceptionMessages", typeof(ExceptionMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Designer.Resources.ExceptionMessages.ru1", typeof(ExceptionMessages_ru1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uploaded content is not supported.
+        ///   Looks up a localized string similar to Данные в загруженном формате не поддерживаются.
         /// </summary>
         public static string Attachments_Unsupported_content {
             get {
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uploaded file is not an image.
+        ///   Looks up a localized string similar to Загруженный файл не является изображением.
         /// </summary>
         public static string Attachments_uploaded_file_is_not_image {
             get {
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can&apos;t move to sub-section {0} because it position {1} in not acceptable..
+        ///   Looks up a localized string similar to Нельзя переместить группу {0} в неправильную позицию {1}..
         /// </summary>
         public static string CantMoveSubsectionInWrongPosition {
             get {
@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Combo box question with public key {0} can&apos;t be found.
+        ///   Looks up a localized string similar to Комбобокс вопрос с ключом {0} не найден..
         /// </summary>
         public static string ComboboxCannotBeFound {
             get {
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or more questionnaire item(s) with same ID {0} already exists..
+        ///   Looks up a localized string similar to Один или болеее элементов с ключом {0} уже существуют в опроснике..
         /// </summary>
         public static string ItemWithIdExistsAlready {
             get {
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table with such id already exist..
+        ///   Looks up a localized string similar to Таблица поиска с таким ключом уже существует.
         /// </summary>
         public static string LookupTableAlreadyExist {
             get {
@@ -115,7 +115,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table with such id is absent..
+        ///   Looks up a localized string similar to Таблица поиска с таким ключом отсутсвует.
         /// </summary>
         public static string LookupTableIsAbsent {
             get {
@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File with no data can not be loaded.
+        ///   Looks up a localized string similar to Пустой файл не может быть сохранен.
         /// </summary>
         public static string LookupTables_cant_has_empty_content {
             get {
@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value {0} can not be parsed as decimal number. Column {1}, row {2}..
+        ///   Looks up a localized string similar to Значение {0} не может быть прочитано как вещественное число. Колонка {1}, строка {2}..
         /// </summary>
         public static string LookupTables_data_value_cannot_be_parsed {
             get {
@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Headers with the same name are not allowed.
+        ///   Looks up a localized string similar to Заголовки с одинаковым название запрещены.
         /// </summary>
         public static string LookupTables_duplicating_headers_are_not_allowed {
             get {
@@ -151,7 +151,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty or invalid headers are not allowed.
+        ///   Looks up a localized string similar to Заголовки с пустым или неверным названием запрещены.
         /// </summary>
         public static string LookupTables_empty_or_invalid_header_are_not_allowed {
             get {
@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mandatory rowcode column is missing.
+        ///   Looks up a localized string similar to Обязательная колонка rowcode отсутсвует.
         /// </summary>
         public static string LookupTables_rowcode_column_is_mandatory {
             get {
@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value {0} can not be parsed as long integer number. Column {1}, row {2}..
+        ///   Looks up a localized string similar to Значение {0} не может быть прочитано как длинное целое число. Колонка {1}, строка {2}..
         /// </summary>
         public static string LookupTables_rowcode_value_cannot_be_parsed {
             get {
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Rowcode values must be unique.
+        ///   Looks up a localized string similar to Значения колонки rowcode должны быть уникальны.
         /// </summary>
         public static string LookupTables_rowcode_values_must_be_unique {
             get {
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Too many columns in uploaded file. Max columns count is {0}.
+        ///   Looks up a localized string similar to Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}..
         /// </summary>
         public static string LookupTables_too_many_columns {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max rows count limit ({0} rows) was exceeded..
+        ///   Looks up a localized string similar to Превышена максимальная граница ({0}) колочества строк..
         /// </summary>
         public static string LookupTables_too_many_rows {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with such is is already exist..
+        ///   Looks up a localized string similar to Макро с таким ключом уже существует.
         /// </summary>
         public static string MacroAlreadyExist {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with such is is absent..
+        ///   Looks up a localized string similar to Макро с таким ключом отсутствует.
         /// </summary>
         public static string MacroIsAbsent {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or more question(s) with same ID {0} already exist:{1}{2}..
+        ///   Looks up a localized string similar to Один или более вопросов с одинаковым ключом {0} уже существуют:{1}{2}..
         /// </summary>
         public static string MoreThanOneQuestionWithSameId {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to One or more sub-section(s) with same ID {0} already exist:{1}{2}..
+        ///   Looks up a localized string similar to Одна или более секций с одинаковым ключом {0} уже существуют:{1}{2}..
         /// </summary>
         public static string MoreThanOneSubSectionWithSameId {
             get {
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
+        ///   Looks up a localized string similar to У вас недостаточно прав для изменения опросника.
         /// </summary>
         public static string NoPremissionsToEditQuestionnaire {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with public key {0} can&apos;t be found..
+        ///   Looks up a localized string similar to Вопрос с ключом {0} не найден..
         /// </summary>
         public static string QuestionCannotBeFound {
             get {
@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question {0} is not a combo box.
+        ///   Looks up a localized string similar to Вопрос {0} не является комбобоксом..
         /// </summary>
         public static string QuestionIsNotCombobox {
             get {
@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire item with id {0} can&apos;t be found..
+        ///   Looks up a localized string similar to Опросник с ключом {0} не найден..
         /// </summary>
         public static string QuestionnaireCantBeFound {
             get {
@@ -277,7 +277,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire&apos;s title can not be empty or contains whitespace only..
+        ///   Looks up a localized string similar to Заголовок вопросника не может быть пустым..
         /// </summary>
         public static string QuestionnaireTitleIsEmpty {
             get {
@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section cannot have more than {0} child items.
+        ///   Looks up a localized string similar to Секция не может содержать более {0} дочерних элементов..
         /// </summary>
         public static string SectionCantHaveMoreThan_Items {
             get {
@@ -295,7 +295,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sub-section with public key {0} can&apos;t be found..
+        ///   Looks up a localized string similar to Группа с ключом {0} не может быть найдена..
         /// </summary>
         public static string SubSectionCantBeFound {
             get {
@@ -304,7 +304,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sub-section or roster depth cannot be higher than {0}..
+        ///   Looks up a localized string similar to Вложенность групп и ростеров не может быть больше чем {0}..
         /// </summary>
         public static string SubSectionDepthLimit {
             get {
