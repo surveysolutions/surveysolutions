@@ -1,6 +1,5 @@
 // tslint:disable-next-line:max-line-length
 import config from "shared/config"
-import Vue from 'vue'
 import * as $script from "scriptjs"
 import "signalr"
 import store from "../store"
@@ -15,7 +14,7 @@ const wrap = (jqueryPromise) => {
 }
 
 const scriptIncludedPromise = new Promise(resolve =>
-    $script(Vue.$config.signalrPath, () => {
+    $script(config.signalrPath, () => {
         // $.connection.hub.logging = true
         const interviewProxy = $.connection.interview
 
@@ -59,7 +58,7 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
 
             return $.ajax({
-                url: Vue.$config.imageUploadUri,
+                url: config.imageUploadUri,
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
@@ -86,7 +85,7 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
 
             return $.ajax({
-                url: Vue.$config.audioUploadUri,
+                url: config.audioUploadUri,
                 xhr() {
                     const xhr = $.ajaxSettings.xhr()
                     xhr.upload.onprogress = (e) => {
@@ -110,8 +109,8 @@ const scriptIncludedPromise = new Promise(resolve =>
 )
 
 async function hubStarter() {
-    if (Vue.$config.signalrUrlOverride) {
-        $.connection.hub.url = Vue.$config.signalrUrlOverride
+    if (config.signalrUrlOverride) {
+        $.connection.hub.url = config.signalrUrlOverride
     }
 
     $.connection.hub.qs = queryString
@@ -140,7 +139,7 @@ async function hubStarter() {
 
 export const queryString = {
     interviewId: null,
-    appVersion: Vue.$config.appVersion
+    appVersion: config.appVersion
 }
 
 export async function getInstance() {
@@ -164,7 +163,7 @@ export async function apiCallerAndFetch(id, action) {
     try {
         return await wrap(action(hub))
     } catch (err) {
-    if (id) {
+        if (id) {
             store.dispatch("setAnswerAsNotSaved", { id, message: err.statusText })
             store.dispatch("fetch", { id, done: true })
         } else {
@@ -187,6 +186,14 @@ export async function apiCaller(action) {
     } finally {
         store.dispatch("fetchProgress", -1)
     }
+}
+
+export function install(Vue) {
+    Vue.mixin({
+        created() {
+            this.$apiCaller = apiCaller;
+        }
+    });
 }
 
 export function apiStop() {
