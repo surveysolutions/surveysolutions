@@ -593,7 +593,7 @@
     <value>видим всем в режиме только чтение</value>
   </data>
   <data name="SettingsVisibleToOwner" xml:space="preserve">
-    <value>видим только для владельца</value>
+    <value>доступен только для владельца</value>
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
     <value>У кого есть доступ:</value>
