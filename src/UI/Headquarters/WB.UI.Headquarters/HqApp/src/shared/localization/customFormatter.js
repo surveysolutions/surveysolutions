@@ -6,53 +6,80 @@ export default class BaseFormatter {
     interpolate(message, values) {
         let tokens = this._caches[message]
         if (!tokens) {
-            tokens = parse(message)
+            tokens = tokenize(message)
             this._caches[message] = tokens
         }
         return compile(tokens, values)
     }
 }
 
-const RE_TOKEN_NAMED_VALUE = /^(\w)+/
-const RE_TOKEN_OPEN = "{{"
-const RE_TOKEN_CLOSE = "}}"
+export function tokenize(str) {
+    let pos = -1;
+    let state = 'text';
+    let tokenValue = '';
 
-export function parse(format) {
-    const tokens = []
-    let start = 0, end = 0;
+    const tokens = [];
 
-    while (end != -1 && start != -1) {
-        start = format.indexOf(RE_TOKEN_OPEN, end);
-
-        if (start == -1) break;
-
-        if (start - end > 0) {
-            tokens.push({ type: 'text', value: format.substring(end, start) });
-        }
-
-        end = format.indexOf(RE_TOKEN_CLOSE, start);
-
-        if (end != -1) {
-            const text = format.substring(start + RE_TOKEN_OPEN.length, end);
-
-            const type = RE_TOKEN_NAMED_VALUE.test(text)
-                ? 'named'
-                : 'unknown'
-
-            tokens.push({ value: text, type })
-
-            end += RE_TOKEN_CLOSE.length; // advancing end pointer at the end of closing braces
-        }
+    function addToken(type, value, rx = null){
+        const valid = rx == null || rx.test(value);
+        tokens.push({type: valid ? type : 'unknown', value});
     }
 
-    // append last part of text
-    if (end != -1) {
-        const text = format.substring(end);
-        if(text.length > 0)
-            tokens.push({ type: 'text', value: text });
+    while (++pos < str.length) {
+        const char = str[pos];
+
+        switch (state) {
+            case 'text':
+                if (char == "{") {
+                    state = 'TOKEN_START';
+                } else {
+                    tokenValue += char;
+                }
+                break;
+            case 'TOKEN_START':
+                if (tokenValue != '') {
+                    addToken('text', tokenValue)
+                    tokenValue = '';
+                }
+
+                if (char == "{") {
+                    state = 'NAMED_TOKEN_START';
+                } else {
+                    state = 'LIST_TOKEN';
+                    if(char != ' ') tokenValue += char
+                }
+                break;
+            case 'NAMED_TOKEN_START':
+                if (char == "}") {
+                    if (pos + 1 < str.length && str[pos + 1] == "}") {
+                        addToken('named', tokenValue, /^(\w)+/,)
+                        pos += 1;
+                        state = "text";
+                        tokenValue = '';
+                    }
+                } else {
+                    if(char != ' ')
+                        tokenValue += char;
+                }
+                break;
+            case 'LIST_TOKEN':
+                if (char == "}") {
+                    addToken('list', tokenValue, /^(\d)+/)
+                    state = "text";
+                    tokenValue = '';
+                } else {
+                    if(char != ' ') tokenValue += char;
+                }
+                break;
+        }
+        //console.log(state, pos, tokenValue, "'" + char + "'");
     }
 
-    return tokens
+    if (tokenValue != '') {
+        addToken('text', tokenValue)
+    }
+
+    return tokens;
 }
 
 export function compile(tokens, values) {
