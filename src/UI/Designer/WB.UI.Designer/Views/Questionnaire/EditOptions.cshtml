@@ -65,7 +65,7 @@
             <div class="container">
                 <div id="uploadForm" class="navbar-form navbar-left">
                     <input type="file" title="Import" name="csvFile">
-                    <button class="btn btn-default" type="submit">@WB.UI.Designer.Resources.QuestionnaireEditor.Upload</button>
+                    <button class="btn btn-default" type="submit">@QuestionnaireEditor.Upload</button>
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">@QuestionnaireEditor.Export</a>
@@ -131,7 +131,7 @@
         <div class="container">
             <a class="btn btn-success navbar-btn" href="javascript:apply();">@QuestionnaireEditor.OptionsUploadApply</a>
             <a class="btn btn-link navbar-btn" href="@Url.Action("ResetOptions", "Questionnaire")">@QuestionnaireEditor.Cancel</a>
-            <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">@QuestionnaireEditor.clos</a>
+            <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">@QuestionnaireEditor.Close</a>
         </div>
     </nav>
 </body>
