@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from 'shared/config'
 
-function resolve() {
+export function resolve() {
     const args = Array.prototype.slice.call(arguments);
     args.unshift(config.basePath);
 
@@ -9,7 +9,7 @@ function resolve() {
         .filter((x) => x != null && x != '')
         .map((x) => trimChar(x.trim(), '/'));
 
-    return "/" + result.join('/');
+    return "/" + trimChar(result.join('/'), '/');
 }
 
 function trimChar(string, charToRemove) {
