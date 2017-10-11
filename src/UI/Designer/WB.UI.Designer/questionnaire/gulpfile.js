@@ -144,7 +144,7 @@ gulp.task('resx2json', function(){
 
 gulp.task('copyFilesNeededForBundler', function(){
   gulp.src([
-    'node_modules/perfect-scrollbar/css/perfect-scrollbar.css',
+    'node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css',
     'node_modules/jquery/dist/jquery.min.js',
     'node_modules/bootstrap/dist/js/bootstrap.min.js',
     'node_modules/jquery-validation/dist/jquery.validate.js',

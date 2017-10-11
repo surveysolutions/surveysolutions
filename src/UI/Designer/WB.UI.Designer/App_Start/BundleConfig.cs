@@ -19,7 +19,9 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new StyleBundle("~/questionnaire/bootstrap/custom/css-list").Include(
-                    "~/questionnaire/content/designer-start/bootstrap-custom.css"));
+                    "~/Content/plugins/perfect-scrollbar.css",
+                    "~/questionnaire/content/designer-start/bootstrap-custom.css"
+                    ));
 
             bundles.Add(
                 new ScriptBundle("~/simplepage").Include(
