@@ -124,20 +124,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to It is not allowed to use substitutions in variable label.
         /// </summary>
-        public static string WB0008_ {
+        public static string WB0008_SubstitutionsInVariableLableAreProhibited {
             get {
-                return ResourceManager.GetString("WB0008_", resourceCulture);
+                return ResourceManager.GetString("WB0008_SubstitutionsInVariableLableAreProhibited", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Roster size question is missing..
         /// </summary>
-        public static string WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion {
+        public static string WB0009_RosterSizeQuestionIsMissing {
             get {
-                return ResourceManager.GetString("WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion", resourceCulture);
+                return ResourceManager.GetString("WB0009_RosterSizeQuestionIsMissing", resourceCulture);
             }
         }
         
@@ -377,12 +377,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster where roster size question is categorical multi answers question could not have roster title question..
+        ///   Looks up a localized string similar to Roster where roster size question is categorical multi answers or list question could not have roster title question..
         /// </summary>
-        public static string WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion {
+        public static string WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion {
             get {
-                return ResourceManager.GetString("WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestio" +
-                        "n", resourceCulture);
+                return ResourceManager.GetString("WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion", resourceCulture);
             }
         }
         
@@ -1197,11 +1196,20 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked categorical questions cannot be filled by supervisor.
+        ///   Looks up a localized string similar to .
         /// </summary>
-        public static string WB0128_LinkedCategoricalQuestionCanNotBeFilledBySupervisor {
+        public static string WB0128_CountOfDecimalPlacesIsNotInRange {
             get {
-                return ResourceManager.GetString("WB0128_LinkedCategoricalQuestionCanNotBeFilledBySupervisor", resourceCulture);
+                return ResourceManager.GetString("WB0128_CountOfDecimalPlacesIsNotInRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer title is too long. Should be in range from {0} to {1}.
+        /// </summary>
+        public static string WB0129_AnswerTitleIsTooLong {
+            get {
+                return ResourceManager.GetString("WB0129_AnswerTitleIsTooLong", resourceCulture);
             }
         }
         

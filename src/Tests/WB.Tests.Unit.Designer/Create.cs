@@ -444,7 +444,7 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = "test")
+            string title = "test", string variableLabel = null)
         {
             return new NumericQuestion
             {
@@ -459,12 +459,13 @@ namespace WB.Tests.Unit.Designer
                 Featured = isPrefilled,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
-                QuestionText = title
+                QuestionText = title,
+                VariableLabel = variableLabel
             };
         }
 
         public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null,
-            string title = "test test")
+            string title = "test test", int? decimalPlaces = null)
         {
             return new NumericQuestion
             {
@@ -475,7 +476,8 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression,
-                QuestionText = title
+                QuestionText = title,
+                CountOfDecimalPlaces = decimalPlaces
             };
         }
 
@@ -721,6 +723,28 @@ namespace WB.Tests.Unit.Designer
             Guid? rosterId = null,
             string title = "Roster List",
             string variable = "roster_list",
+            string enablementCondition = null,
+            Guid? rosterSizeQuestionId = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group roster = Create.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            roster.IsRoster = true;
+            roster.RosterSizeSource = RosterSizeSourceType.Question;
+            roster.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return roster;
+        }
+
+        public static Group MultiRoster(
+            Guid? rosterId = null,
+            string title = "Roster Multi",
+            string variable = "roster_mul",
             string enablementCondition = null,
             Guid? rosterSizeQuestionId = null,
             IEnumerable<IComposite> children = null)

@@ -132,7 +132,7 @@
   <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
     <value>Variable expression has length more than {0} characters.</value>
   </data>
-  <data name="WB0009_GroupWhereRosterSizeSourceIsQuestionHasNoRosterSizeQuestion" xml:space="preserve">
+  <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
     <value>Roster size question is missing.</value>
   </data>
   <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
@@ -189,8 +189,8 @@
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
     <value>Roster where roster size source is question has invalid roster title question.</value>
   </data>
-  <data name="WB0036_GroupWhereRosterSizeIsCategoricalMultyAnswerQuestionHaveRosterTitleQuestion" xml:space="preserve">
-    <value>Roster where roster size question is categorical multi answers question could not have roster title question.</value>
+  <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Roster where roster size question is categorical multi answers or list question could not have roster title question.</value>
   </data>
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
     <value>Fixed set of items roster cannot have empty titles or less than two items.</value>
@@ -357,8 +357,8 @@
   <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
     <value>Multi select yes/no question can't be linked</value>
   </data>
-  <data name="WB0008_" xml:space="preserve">
-    <value />
+  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+    <value>It is not allowed to use substitutions in variable label</value>
   </data>
   <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
     <value>Following questionnaire items (question/group/static text/etc.) use same internal ID. Please delete one of them.</value>
@@ -672,7 +672,10 @@
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
   </data>
-  <data name="WB0128_LinkedCategoricalQuestionCanNotBeFilledBySupervisor" xml:space="preserve">
-    <value>Linked categorical questions cannot be filled by supervisor</value>
+  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+    <value />
+  </data>
+  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+    <value>Answer title is too long. Should be in range from {0} to {1}</value>
   </data>
 </root>
