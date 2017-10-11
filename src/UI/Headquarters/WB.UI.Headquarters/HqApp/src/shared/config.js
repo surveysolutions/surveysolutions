@@ -1,7 +1,7 @@
-const config = window.CONFIG;
+const config = global.CONFIG;
 
 /*  the Plugin */
-export default Object.assign(window.CONFIG, {
+export default Object.assign(global.CONFIG || {}, {
     install(Vue) {
         // /*  expose a global API method  */
         Object.defineProperty(Vue, '$config', {
