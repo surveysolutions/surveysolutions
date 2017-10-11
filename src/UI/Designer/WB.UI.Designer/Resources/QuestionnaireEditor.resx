@@ -889,6 +889,9 @@
   <data name="OptionsUploadValue" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="OptionsUploadParent" xml:space="preserve">
+    <value>Parent value</value>
+  </data>
   <data name="SideBarMacroNoName" xml:space="preserve">
     <value>macro with no name</value>
   </data>

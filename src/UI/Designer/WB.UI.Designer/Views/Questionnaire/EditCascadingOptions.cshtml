@@ -1,5 +1,7 @@
 ﻿@using System.Linq
+@using Microsoft.Security.Application
 @using WB.UI.Designer.BootstrapSupport
+@using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
 @model IEnumerable<Main.Core.Entities.SubEntities.Option>
 @{
@@ -13,14 +15,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="~/questionnaire/vendor/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    
+    <link href="~/questionnaire/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
+    <link href="~/questionnaire/content/designer-start/bootstrap-override.css" rel="stylesheet" />
     <link href="~/questionnaire/content/wb-options-window.css" rel="stylesheet" />
 
     @Scripts.Render("~/simplepage")
     <script type="text/javascript">
         function close_window() {
-            if (confirm("Close Window?")) {
+            if (confirm("@Encoder.JavaScriptEncode(QuestionnaireEditor.OptionsCloseWindow)")) {
                 close();
             }
         }
@@ -62,10 +65,10 @@
             <div class="container">
                 <div id="uploadForm" class="navbar-form navbar-left">
                     <input type="file" title="Import" name="csvFile">
-                    <button class="btn btn-default" type="submit">Upload</button>
+                    <button class="btn btn-default" type="submit">@QuestionnaireEditor.Upload</button>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">Export</a>
+                    <a class="btn btn-default navbar-btn" href="@Url.Action("ExportOptions", "Questionnaire")">@QuestionnaireEditor.Export</a>
                 </div>
             </div>
         </nav>
@@ -89,9 +92,9 @@
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
                     <tr class="active">
-                        <td>Value</td>
-                        <td>Title</td>
-                        <td>Parent value</td>
+                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
+                        <td>@QuestionnaireEditor.OptionsUploadParent</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -111,9 +114,9 @@
             <table class="table table-bordered table-hover table-condensed">
                 <thead>
                     <tr class="active">
-                        <td>Value</td>
-                        <td>Title</td>
-                        <td>Parent value</td>
+                        <td>@QuestionnaireEditor.OptionsUploadValue</td>
+                        <td>@QuestionnaireEditor.OptionsUploadTitle</td>
+                        <td>@QuestionnaireEditor.OptionsUploadParent</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,14 +128,14 @@
                 </tbody>
             </table>
             
-            <p>No options. Choose tab separated file. The file can contain up to 15,000 options.</p>
+            <p>@string.Format(QuestionnaireEditor.OptionsUploadLimit, 15000)</p>
         }
     </div>
     <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom" role="navigation">
         <div class="container">
-            <a class="btn btn-success navbar-btn" href="javascript:apply();">Apply</a>
-            <a class="btn btn-link navbar-btn" href="@Url.Action("ResetCascadingOptions", "Questionnaire")">Cancel</a>
-            <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">Close</a>
+            <a class="btn btn-success navbar-btn" href="javascript:apply();">@QuestionnaireEditor.OptionsUploadApply</a>
+            <a class="btn btn-link navbar-btn" href="@Url.Action("ResetCascadingOptions", "Questionnaire")">@QuestionnaireEditor.Cancel</a>
+            <a class="btn btn-link navbar-btn pull-right" href="javascript:close_window();">@QuestionnaireEditor.Close</a>
         </div>
     </nav>
 </body>
