@@ -4,6 +4,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
             @event = Create.PublishedEvent.InterviewStatusChanged(interviewId: Guid.Parse(interviewStringId), status: newStatus);
             
             var interviewReferences = Create.Entity.InterviewSummary(@event.EventSourceId, questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
-            var interviewReferencesStorage = new TestInMemoryWriter<InterviewSummary>("1", interviewReferences);
+            var interviewReferencesStorage = new TestInMemoryWriter<InterviewSummary>(@event.EventSourceId.FormatGuid(), interviewReferences);
             var cumulativeReportReader = new TestInMemoryWriter<CumulativeReportStatusChange>();
 
             denormalizer = Create.Service.CumulativeChartDenormalizer(
