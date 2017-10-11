@@ -93,6 +93,7 @@ function onBuild(done, onBuildMessage) {
     return function (err, stats) {
         if (err) {
             utils.log('Error', err);
+            throw "Build has failed"
         }
         else {
             const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
@@ -100,6 +101,7 @@ function onBuild(done, onBuildMessage) {
 
             if (stats.hasErrors()) {
                 utils.log(stats.compilation.errors);
+                throw "Build has failed"
             }
 
             if (stats.hasWarnings()) {
