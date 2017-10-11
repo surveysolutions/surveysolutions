@@ -163,4 +163,4 @@
 
     angular.module('templates', []);
 
-}(jQuery, window));
+})(jQuery, window);
