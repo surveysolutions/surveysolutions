@@ -921,7 +921,7 @@
     <value>Загрузить</value>
   </data>
   <data name="SideBarLookupTableNoName" xml:space="preserve">
-    <value>справочная таблица без имени</value>
+    <value>таблица без имени</value>
   </data>
   <data name="SideBarTranslationNoName" xml:space="preserve">
     <value>перевод без названия</value>
