@@ -201,4 +201,55 @@
   <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
     <value>One or more question(s) with same ID {0} already exist:{1}{2}.</value>
   </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>Question cannot be pasted here.</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>Last existing section can not be removed from questionnaire</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Couldn't remove user, because it doesn't exist in share list</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Trying to import template of deleted questionnaire</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Invalid title list</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Fixed set of items roster value is required</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>Only QuestionnaireDocuments are supported for now</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>Questionnire {0} of version {1} can't be found</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>Question type is not supported: {0}</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>Roster cannot be pasted here.</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>Static Text cannot be pasted here.</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Unknown item type. Paste failed.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>User {0} already exist in share list.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>User {0} is an owner of this questionnaire. Please, input another email.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>Fixed set of items roster value should have only number characters</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>Variable cannot be pasted here.</value>
+  </data>
 </root>

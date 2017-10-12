@@ -201,4 +201,52 @@
   <data name="SubSectionDepthLimit" xml:space="preserve">
     <value>Вложенность групп и ростеров не может быть больше чем {0}.</value>
   </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>Вопрос не может быть вставлен сюда.</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Нельзя удалить пользователя из списка, поскольку он в нем отсутсвует</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Неудачная попытка добавить группу {0} в группу {1}. Но группа {1} не существует в опроснике {2}</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Вы пытаетесь импортировать удаленный опросник.</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Неверный список элементов</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Все значения для фиксированного ростера обязательны.</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>Поддерживаются только QuestionnaireDocuments.</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>Опросник {0} версии {1} не найден.</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>Неподдерживаемый тип вопроса: {0}.</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>Ростер не может быть вставлен сюда.</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>Статический текст не может быть вставлен сюда.</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Элемент неизвестного типа. Вставка невозможна.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>Пользователь {0} уже присуствует в списке.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>Пользователь {0}  является владельцем опросника. Введите другой email, пожалуйста.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>Все значения для фиксированного ростера должны быть числами.</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>Переменная не может быть вставлена сюда.</value>
+  </data>
 </root>

@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 }
                 else
                 {
-                    string errorMessage = string.Format("Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}",
+                    string errorMessage = string.Format(ExceptionMessages.FailedToAddGroup,
                         newGroup.PublicKey,
                         parentId,
                         this.innerDocument.PublicKey);
@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             var document = source as QuestionnaireDocument;
             if (document == null)
-                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "only QuestionnaireDocuments are supported for now");
+                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, ExceptionMessages.OnlyQuestionnaireDocumentsAreSupported);
 
             var clonedDocument = (QuestionnaireDocument)document.Clone();
             clonedDocument.PublicKey = this.Id;
@@ -194,9 +194,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             var document = source as QuestionnaireDocument;
             if (document == null)
-                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Only QuestionnaireDocuments are supported for now");
+                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, ExceptionMessages.OnlyQuestionnaireDocumentsAreSupported);
             if (document.IsDeleted)
-                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, "Trying to import template of deleted questionnaire");
+                throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, ExceptionMessages.ImportOfDeletedQuestionnaire);
 
             document.CreatedBy = createdBy;
             
@@ -737,7 +737,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (this.QuestionnaireDocument.Children.Count == 1 &&
                 this.QuestionnaireDocument.Children[0].PublicKey == groupId)
             {
-                throw new QuestionnaireException(DomainExceptionType.Undefined, "Last existing section can not be removed from questionnaire");
+                throw new QuestionnaireException(DomainExceptionType.Undefined, ExceptionMessages.CantRemoveLastSectionInQuestionnaire);
             }
 
             this.innerDocument.RemoveEntity(groupId);
@@ -774,7 +774,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount)
                     {
-                        throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements", MaxChapterItemsCount));
+                        throw new QuestionnaireException(string.Format(ExceptionMessages.SectionCantHaveMoreThan_Items, MaxChapterItemsCount));
                     }
                 }
 
@@ -783,7 +783,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
                 {
-                    throw new QuestionnaireException($"Sub-section or roster depth cannot be higher than {MaxGroupDepth}");
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.SubSectionDepthLimit, MaxGroupDepth));
                 }
                 
             }
@@ -1642,14 +1642,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.OwnerCannotBeInShareList,
-                    string.Format("User {0} is an owner of this questionnaire. Please, input another email.", email));
+                    string.Format(ExceptionMessages.UserIsOwner, email));
             }
 
             if (this.SharedUsersIds.Contains(personId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.UserExistInShareList,
-                    string.Format("User {0} already exist in share list.", email));
+                    string.Format(ExceptionMessages.UserIsInTheList, email));
             }
 
             this.sharedPersons.Add(new SharedPerson()
@@ -1667,8 +1667,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (!this.SharedUsersIds.Contains(personId))
             {
                 throw new QuestionnaireException(
-                    DomainExceptionType.UserDoesNotExistInShareList,
-                    "Couldn't remove user, because it doesn't exist in share list");
+                    DomainExceptionType.UserDoesNotExistInShareList, ExceptionMessages.CantRemoveUserFromTheList);
             }
 
             this.sharedPersons.RemoveAll(sp => sp.UserId == personId);
@@ -1729,8 +1728,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if ((numberOfMovedItems + numberOfItemsInChapter) >= MaxChapterItemsCount - 1)
                 {
-                    throw new QuestionnaireException(string.Format("Section cannot have more than {0} elements",
-                        MaxChapterItemsCount));
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.SectionCantHaveMoreThan_Items, MaxChapterItemsCount));
                 }
 
                 var targetGroupDepthLevel = this.GetAllParentGroups(this.GetGroupById(targetToPasteIn.PublicKey)).Count();
@@ -1742,8 +1740,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                     if ((targetGroupDepthLevel + sourceGroupMaxChildNestingDepth) > MaxGroupDepth)
                     {
-                        throw new QuestionnaireException(string.Format("Sub-section or roster depth cannot be higher than {0}",
-                            MaxGroupDepth));
+                        throw new QuestionnaireException(string.Format(ExceptionMessages.SubSectionDepthLimit, MaxGroupDepth));
                     }
                 }
             }
@@ -1755,7 +1752,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (entityToInsertAsQuestion != null)
             {
                 if (targetToPasteIn.PublicKey == this.Id)
-                    throw new QuestionnaireException(string.Format("Question cannot be pasted here."));
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.CantPasteQuestion));
 
                 var question = (AbstractQuestion)entityToInsertAsQuestion.Clone();
                 question.PublicKey = pasteItemId;
@@ -1767,7 +1764,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (entityToInsertAsStaticText != null)
             {
                 if (targetToPasteIn.PublicKey == this.Id)
-                    throw new QuestionnaireException(string.Format("Static Text cannot be pasted here."));
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.StaticTextCantBePaste));
 
                 var staticText = (StaticText)entityToInsertAsStaticText.Clone();
                 staticText.PublicKey = pasteItemId;
@@ -1780,7 +1777,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 //roster as chapter is forbidden
                 if (entityToInsertAsGroup.IsRoster && (targetToPasteIn.PublicKey == this.Id))
-                    throw new QuestionnaireException(string.Format("Roster cannot be pasted here."));
+                    throw new QuestionnaireException(string.Format((ExceptionMessages.RosterCantBePaste));
 
                 //roster, group, chapter
                 Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
@@ -1818,7 +1815,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             if (entityToInsertAsVariable != null)
             {
                 if (targetToPasteIn.PublicKey == this.Id)
-                    throw new QuestionnaireException(string.Format("Variable cannot be pasted here."));
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.VariableCantBePaste));
 
                 var variable = (Variable)entityToInsertAsVariable.Clone();
                 variable.PublicKey = pasteItemId;
@@ -1827,7 +1824,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 return;
             }
 
-            throw new QuestionnaireException(string.Format("Unknown item type. Paste failed."));
+            throw new QuestionnaireException(string.Format(ExceptionMessages.UnknownTypeCantBePaste));
         }
 
         #endregion
@@ -2129,32 +2126,20 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             if (rosterFixedTitles.Any(x => x == null))
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Invalid title list");
+                throw new QuestionnaireException(DomainExceptionType.SelectorValueSpecialCharacters, ExceptionMessages.InvalidFixedTitle);
             }
 
             if (rosterFixedTitles.Any(x => String.IsNullOrWhiteSpace(x.Value)))
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Fixed set of items roster value is required");
+                throw new QuestionnaireException(DomainExceptionType.SelectorValueSpecialCharacters, ExceptionMessages.InvalidValueOfFixedTitle);
             }
 
             if (rosterFixedTitles.Any(x => !x.Value.IsDecimal()))
             {
-                throw new QuestionnaireException(
-                    DomainExceptionType.SelectorValueSpecialCharacters,
-                    "Fixed set of items roster value should have only number characters");
-            }
-
-            if (rosterFixedTitles.Select(x => x.Value).Distinct().Count() != rosterFixedTitles.Length)
-            {
-                throw new QuestionnaireException("Fixed set of items roster values must be unique");
+                throw new QuestionnaireException(DomainExceptionType.SelectorValueSpecialCharacters, ExceptionMessages.ValueOfFixedTitleCantBeParsed);
             }
 
             return rosterFixedTitles.Select(item => new FixedRosterTitle(decimal.Parse(item.Value), item.Title)).ToArray();                
-                
         }
 
         private static int GetMaxChildGroupNestingDepth(IGroup group)
@@ -2265,7 +2250,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     break;
 
                 default:
-                    throw new NotSupportedException(string.Format("Question type is not supported: {0}", questionType));
+                    throw new NotSupportedException(string.Format(ExceptionMessages.QuestionTypeIsNotSupported, questionType));
             }
 
             question.PublicKey = publicKey;
@@ -2324,7 +2309,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             var historyReferanceId = command.HistoryReferanceId;
             var questionnire = questionnireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
             if (questionnire == null)
-                throw new ArgumentException($"Questionnire {Id} of version {historyReferanceId} didn't find");
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireRevisionCantBeFound, Id, historyReferanceId));
 
             this.innerDocument = questionnire;
         }

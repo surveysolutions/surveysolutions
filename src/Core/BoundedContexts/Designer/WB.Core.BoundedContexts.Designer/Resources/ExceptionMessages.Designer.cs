@@ -88,11 +88,74 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question cannot be pasted here..
+        /// </summary>
+        public static string CantPasteQuestion {
+            get {
+                return ResourceManager.GetString("CantPasteQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last existing section can not be removed from questionnaire.
+        /// </summary>
+        public static string CantRemoveLastSectionInQuestionnaire {
+            get {
+                return ResourceManager.GetString("CantRemoveLastSectionInQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t remove user, because it doesn&apos;t exist in share list.
+        /// </summary>
+        public static string CantRemoveUserFromTheList {
+            get {
+                return ResourceManager.GetString("CantRemoveUserFromTheList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Combo box question with public key {0} can&apos;t be found.
         /// </summary>
         public static string ComboboxCannotBeFound {
             get {
                 return ResourceManager.GetString("ComboboxCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}.
+        /// </summary>
+        public static string FailedToAddGroup {
+            get {
+                return ResourceManager.GetString("FailedToAddGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trying to import template of deleted questionnaire.
+        /// </summary>
+        public static string ImportOfDeletedQuestionnaire {
+            get {
+                return ResourceManager.GetString("ImportOfDeletedQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid title list.
+        /// </summary>
+        public static string InvalidFixedTitle {
+            get {
+                return ResourceManager.GetString("InvalidFixedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed set of items roster value is required.
+        /// </summary>
+        public static string InvalidValueOfFixedTitle {
+            get {
+                return ResourceManager.GetString("InvalidValueOfFixedTitle", resourceCulture);
             }
         }
         
@@ -250,6 +313,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only QuestionnaireDocuments are supported for now.
+        /// </summary>
+        public static string OnlyQuestionnaireDocumentsAreSupported {
+            get {
+                return ResourceManager.GetString("OnlyQuestionnaireDocumentsAreSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Question with public key {0} can&apos;t be found..
         /// </summary>
         public static string QuestionCannotBeFound {
@@ -277,6 +349,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnire {0} of version {1} can&apos;t be found.
+        /// </summary>
+        public static string QuestionnaireRevisionCantBeFound {
+            get {
+                return ResourceManager.GetString("QuestionnaireRevisionCantBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire&apos;s title can not be empty or contains whitespace only..
         /// </summary>
         public static string QuestionnaireTitleIsEmpty {
@@ -286,11 +367,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question type is not supported: {0}.
+        /// </summary>
+        public static string QuestionTypeIsNotSupported {
+            get {
+                return ResourceManager.GetString("QuestionTypeIsNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster cannot be pasted here..
+        /// </summary>
+        public static string RosterCantBePaste {
+            get {
+                return ResourceManager.GetString("RosterCantBePaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Section cannot have more than {0} child items.
         /// </summary>
         public static string SectionCantHaveMoreThan_Items {
             get {
                 return ResourceManager.GetString("SectionCantHaveMoreThan_Items", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static Text cannot be pasted here..
+        /// </summary>
+        public static string StaticTextCantBePaste {
+            get {
+                return ResourceManager.GetString("StaticTextCantBePaste", resourceCulture);
             }
         }
         
@@ -309,6 +417,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string SubSectionDepthLimit {
             get {
                 return ResourceManager.GetString("SubSectionDepthLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown item type. Paste failed..
+        /// </summary>
+        public static string UnknownTypeCantBePaste {
+            get {
+                return ResourceManager.GetString("UnknownTypeCantBePaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} already exist in share list..
+        /// </summary>
+        public static string UserIsInTheList {
+            get {
+                return ResourceManager.GetString("UserIsInTheList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} is an owner of this questionnaire. Please, input another email..
+        /// </summary>
+        public static string UserIsOwner {
+            get {
+                return ResourceManager.GetString("UserIsOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed set of items roster value should have only number characters.
+        /// </summary>
+        public static string ValueOfFixedTitleCantBeParsed {
+            get {
+                return ResourceManager.GetString("ValueOfFixedTitleCantBeParsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable cannot be pasted here..
+        /// </summary>
+        public static string VariableCantBePaste {
+            get {
+                return ResourceManager.GetString("VariableCantBePaste", resourceCulture);
             }
         }
     }
