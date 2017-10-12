@@ -13,13 +13,15 @@ import store from "./store"
 import './components'
 import router from "./router"
 import './compatibility.js'
+import box from "shared/modal"
+import { browserLanguage } from "shared/helpers"
 
-export default Vuei18n.initializeAsync().then((i18n) => {
+export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     Vue.use(config)
     Vue.use(http);
     Vue.use(VeeValidate);
     Vue.use(Vuei18n)
-    
+    box.init(i18n, browserLanguage)
     new Vue({
         el: "#vueApp",
         render: h => h('router-view'),
