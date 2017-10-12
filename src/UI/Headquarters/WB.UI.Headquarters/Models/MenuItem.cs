@@ -32,6 +32,7 @@
         DevicesInterviewers = 28,
         StatusDuration = 29,
         SurveyAndStatuses = 30,
-        AuditLog = 31
+        AuditLog = 31,
+        Maps = 32
     }
 }

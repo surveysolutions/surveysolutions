@@ -195,6 +195,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IExportFileNameService>().To<ExportExportFileNameService>();
 
+            this.Bind<IMapRepository>().To<FileSystemMapRepository>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
+
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
@@ -232,6 +234,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
             this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
             this.Bind<ISampleWebInterviewService>().To<SampleWebInterviewService>();
+            this.Bind<IMapBrowseViewFactory>().To<MapBrowseViewFactory>();
+            
 
             this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
 

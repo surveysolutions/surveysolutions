@@ -88,15 +88,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Status Duration.
-        /// </summary>
-        internal static string StatusDuration {
-            get {
-                return ResourceManager.GetString("StatusDuration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Create new.
         /// </summary>
         internal static string CreateNew {
@@ -178,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        internal static string Maps {
+            get {
+                return ResourceManager.GetString("Maps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Observers.
         /// </summary>
         internal static string Observers {
@@ -246,6 +246,15 @@ namespace Resources {
         internal static string Started {
             get {
                 return ResourceManager.GetString("Started", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status Duration.
+        /// </summary>
+        internal static string StatusDuration {
+            get {
+                return ResourceManager.GetString("StatusDuration", resourceCulture);
             }
         }
         
