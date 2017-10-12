@@ -108,6 +108,7 @@
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true
                 });
+                editor.$blockScrolling = Infinity;
 
                 $scope.aceEditorUpdateMode(editor);
 
