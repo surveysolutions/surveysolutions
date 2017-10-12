@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
@@ -15,6 +15,52 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         private static readonly Guid Id1 = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
+
+        [TestCase("variableЙФЪ", "WB0122")]
+        [TestCase("1variable", "WB0123")]
+        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "WB0121")]
+        [TestCase("_variable", "WB0123")]
+        [TestCase("variable_", "WB0124")]
+        [TestCase("vari__able", "WB0125")]
+        [TestCase("a23456789012345678901", "WB0121")]
+        public void variable_variable_name_is_invalid(string variable, string errorCode)
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Variable(Id1, variableName: variable)
+                })
+                .ExpectError(errorCode);
+
+        [TestCase("variableЙФЪ", "WB0122")]
+        [TestCase("1variable", "WB0123")]
+        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "WB0121")]
+        [TestCase("_variable", "WB0123")]
+        [TestCase("variable_", "WB0124")]
+        [TestCase("vari__able", "WB0125")]
+        [TestCase("a23456789012345678901", "WB0121")]
+        public void roster_variable_name_is_invalid(string variable, string errorCode)
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.FixedRoster(Id1, variable: variable)
+                })
+                .ExpectError(errorCode);
+
+        [TestCase("variableЙФЪ", "WB0122")]
+        [TestCase("1variable", "WB0123")]
+        [TestCase("_variable", "WB0123")]
+        [TestCase("variable_", "WB0124")]
+        [TestCase("vari__able", "WB0125")]
+        [TestCase("a23456789012345678901", "WB0121")]
+        [TestCase("rowcode", "WB0058")]
+        [TestCase("rowname", "WB0058")]
+        [TestCase("rowindex", "WB0058")]
+        [TestCase("roster", "WB0058")]
+        [TestCase("Id", "WB0058")]
+        public void question_variable_name_is_invalid(string variable, string errorCode)
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.GpsCoordinateQuestion(Id1, variable: variable)
+                })
+                .ExpectError(errorCode);
 
         [Test]
         public void categorical_question_with_long_option()

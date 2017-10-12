@@ -249,4 +249,13 @@
   <data name="VariableCantBePaste" xml:space="preserve">
     <value>Переменная не может быть вставлена сюда.</value>
   </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>Опции каскадного вопроса не могу содержать пустые значения в колонке ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>Опции каскадного вопроса должны сожержать только числеднные значения в колонках Value и ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Найдена как минимум одна одинаковая пара Title + Parent Value. Список опций не должен сожержать дубликаты такого типа.</value>
+  </data>
 </root>

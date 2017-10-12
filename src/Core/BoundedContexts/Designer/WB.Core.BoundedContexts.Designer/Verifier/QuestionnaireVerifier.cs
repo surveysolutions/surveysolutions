@@ -52,10 +52,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new QuestionVerifications(),
                 new GroupVerifications(fileSystemAccessor),
                 new AttachmentVerifications(attachmentService), 
-                new ExpressionVerifications(macrosSubstitutionService, keywordsProvider, expressionProcessor, topologicalSorter), 
+                new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, topologicalSorter), 
                 new LookupVerifications(lookupTableService, keywordsProvider), 
                 new MacroVerifications(), 
-                new QuestionnaireVerifications(substitutionService), 
+                new QuestionnaireVerifications(substitutionService, keywordsProvider), 
                 new StaticTextVerifications(), 
                 new TranslationVerifications(translationService), 
                 new VariableVerifications(substitutionService)

@@ -115,6 +115,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Options in cascading question can not have empty ParentValue column..
+        /// </summary>
+        public static string CategoricalCascadingOptionsCantContainsEmptyParentValueField {
+            get {
+                return ResourceManager.GetString("CategoricalCascadingOptionsCantContainsEmptyParentValueField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options in cascading question can not have not numeric value in ParentValue column..
+        /// </summary>
+        public static string CategoricalCascadingOptionsCantContainsNotDecimalParentValueField {
+            get {
+                return ResourceManager.GetString("CategoricalCascadingOptionsCantContainsNotDecimalParentValueField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type..
+        /// </summary>
+        public static string CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair {
+            get {
+                return ResourceManager.GetString("CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Combo box question with public key {0} can&apos;t be found.
         /// </summary>
         public static string ComboboxCannotBeFound {
