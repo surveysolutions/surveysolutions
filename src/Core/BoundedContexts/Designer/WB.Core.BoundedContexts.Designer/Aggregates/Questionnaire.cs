@@ -1777,7 +1777,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 //roster as chapter is forbidden
                 if (entityToInsertAsGroup.IsRoster && (targetToPasteIn.PublicKey == this.Id))
-                    throw new QuestionnaireException(string.Format((ExceptionMessages.RosterCantBePaste));
+                    throw new QuestionnaireException(string.Format(ExceptionMessages.RosterCantBePaste));
 
                 //roster, group, chapter
                 Dictionary<Guid, Guid> replacementIdDictionary = (entityToInsert).TreeToEnumerable(x => x.Children).ToDictionary(y => y.PublicKey, y => Guid.NewGuid());
