@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Section.
+        /// </summary>
+        public static string NewSection {
+            get {
+                return ResourceManager.GetString("NewSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hidden.
         /// </summary>
         public static string QuestionScopeHidden {

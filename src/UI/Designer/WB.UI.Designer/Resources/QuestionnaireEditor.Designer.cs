@@ -250,6 +250,33 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New roster.
+        /// </summary>
+        public static string DefaultNewRoster {
+            get {
+                return ResourceManager.GetString("DefaultNewRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New static text.
+        /// </summary>
+        public static string DefaultNewStaticText {
+            get {
+                return ResourceManager.GetString("DefaultNewStaticText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New sub-section.
+        /// </summary>
+        public static string DefaultNewSubsection {
+            get {
+                return ResourceManager.GetString("DefaultNewSubsection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
