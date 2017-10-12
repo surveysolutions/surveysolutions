@@ -151,7 +151,7 @@
     <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\VarificationMessages.ru.resx">
+    <EmbeddedResource Update="Resources\VerificationMessages.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\VerificationMessages.resx">
