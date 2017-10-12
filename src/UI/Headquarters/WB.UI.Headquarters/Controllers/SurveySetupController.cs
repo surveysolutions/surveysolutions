@@ -118,6 +118,18 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
+            if (questionnaireInfo.IsDeleted)
+            {
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        model.QuestionnaireId,
+                        model.QuestionnaireVersion,
+                        questionnaireInfo?.Title,
+                        global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                        AssignmentImportType.Panel,
+                        model.File.FileName));
+            }
+
             if (".zip" != this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower())
             {
                 return this.View("InterviewImportVerificationErrors",
@@ -211,6 +223,18 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
+            if (questionnaireInfo.IsDeleted)
+            {
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        model.QuestionnaireId,
+                        model.QuestionnaireVersion,
+                        questionnaireInfo?.Title,
+                        global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                        AssignmentImportType.Panel,
+                        model.File.FileName));
+            }
+
             var extension = this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower();
             if (extension != ".tab" && extension != ".txt" && extension != ".zip")
             {
@@ -279,7 +303,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        public ActionResult InterviewImportVerificationCompleted(Guid id)
+        public ActionResult InterviewImportVerificationCompleted()
         {
             AssignmentImportStatus status = this.interviewImportService.Status;
 
@@ -301,7 +325,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var verificationState = status.VerificationState;
 
-            var interviewImportProcessId = id.FormatGuid();
+            var interviewImportProcessId = status.InterviewImportProcessId;
 
             //clean up for security reasons
             if (verificationState.Errors.Any() || status.State.Errors.Any())
