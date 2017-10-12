@@ -76,7 +76,6 @@ const paths = {
     'node_modules/angular-moment/angular-moment.js',
     'node_modules/xss/dist/xss.js',
     'node_modules/i18next/i18next.min.js',
-    'node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'node_modules/ng-i18next/dist/ng-i18next.js'
   ]  
