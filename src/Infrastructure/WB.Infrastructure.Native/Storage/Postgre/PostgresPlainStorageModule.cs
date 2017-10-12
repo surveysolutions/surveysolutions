@@ -76,7 +76,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 db.ConnectionString = this.settings.ConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
-                db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
             });
 
             cfg.AddDeserializedMapping(this.GetMappings(schemaName), "Plain");

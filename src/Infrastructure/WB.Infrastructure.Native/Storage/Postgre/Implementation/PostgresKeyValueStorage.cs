@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using Humanizer;
 using Npgsql;
 using NpgsqlTypes;
@@ -57,8 +57,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return null;
         }
 
-        protected abstract object ExecuteScalar(IDbCommand command);
-        protected abstract int ExecuteNonQuery(IDbCommand command);
+        protected abstract object ExecuteScalar(DbCommand command);
+        protected abstract int ExecuteNonQuery(DbCommand command);
         
         public virtual void Remove(string id)
         {

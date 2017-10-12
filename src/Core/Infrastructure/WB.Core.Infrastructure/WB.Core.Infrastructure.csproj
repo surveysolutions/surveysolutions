@@ -18,9 +18,4 @@
     <ProjectReference Include="..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Data">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.2\System.Data.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>
