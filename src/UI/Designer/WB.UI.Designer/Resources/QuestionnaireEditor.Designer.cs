@@ -259,6 +259,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New section.
+        /// </summary>
+        public static string DefaultNewSection {
+            get {
+                return ResourceManager.GetString("DefaultNewSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New static text.
         /// </summary>
         public static string DefaultNewStaticText {
