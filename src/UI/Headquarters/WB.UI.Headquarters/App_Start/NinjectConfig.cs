@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -55,6 +56,7 @@ using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
@@ -281,6 +283,8 @@ namespace WB.UI.Headquarters
                 .InSingletonScope();
 
             kernel.Bind<IInterviewCreatorFromAssignment>().To<InterviewCreatorFromAssignment>();
+
+            kernel.Bind<IMapPropertiesProvider>().To<MapPropertiesProvider>();
 
             return kernel;
         }

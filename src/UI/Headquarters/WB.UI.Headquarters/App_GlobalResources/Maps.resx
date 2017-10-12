@@ -117,100 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ApiUsers" xml:space="preserve">
-    <value>API Users</value>
+  <data name="Levels" xml:space="preserve">
+    <value>Levels</value>
   </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>Assignments</value>
+  <data name="MaxScale" xml:space="preserve">
+    <value>MaxScale</value>
   </data>
-  <data name="CumulativeChart" xml:space="preserve">
-    <value>Cumulative Interview Chart</value>
+  <data name="MinScale" xml:space="preserve">
+    <value>Min Scale</value>
   </data>
-  <data name="DataExport" xml:space="preserve">
-    <value>Data Export</value>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
   </data>
-  <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+  <data name="Size" xml:space="preserve">
+    <value>Size</value>
   </data>
-  <data name="Help" xml:space="preserve">
-    <value>Help</value>
-  </data>
-  <data name="Interviewers" xml:space="preserve">
-    <value>Interviewers</value>
-  </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Interviews</value>
-  </data>
-  <data name="MapReport" xml:space="preserve">
-    <value>Map Report</value>
-  </data>
-  <data name="Observers" xml:space="preserve">
-    <value>Observers</value>
-  </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Quantity</value>
-  </data>
-  <data name="SurveySetup" xml:space="preserve">
-    <value>Survey Setup</value>
-  </data>
-  <data name="Maps" xml:space="preserve">
-    <value>Maps</value>
-  </data>
-  <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Number of interviews synchronized but not yet processed</value>
-  </data>
-  <data name="Reports" xml:space="preserve">
-    <value>Reports</value>
-  </data>
-  <data name="Speed" xml:space="preserve">
-    <value>Speed</value>
-  </data>
-  <data name="StatusDuration" xml:space="preserve">
-    <value>Status Duration</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
-  </data>
-  <data name="CreateNew">
-    <value>Create new</value>
-  </data>
-  <data name="Started">
-    <value>Started</value>
-  </data>
-  <data name="Completed">
-    <value>Completed</value>
-  </data>
-  <data name="Rejected">
-    <value>Rejected</value>
-  </data>
-  <data name="SurveysAndStatuses" xml:space="preserve">
-    <value>Surveys and Statuses</value>
-  </data>
-  <data name="TeamAndRoles" xml:space="preserve">
-    <value>Team and Roles</value>
-  </data>
-  <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Team members and Statuses</value>
-  </data>
-  <data name="TeamsAndRoles" xml:space="preserve">
-    <value>Teams and Roles</value>
-  </data>
-  <data name="TeamsAndStatuses" xml:space="preserve">
-    <value>Teams and Statuses</value>
-  </data>
-  <data name="DevicesInterviewers" xml:space="preserve">
-    <value>Devices/Interviewers</value>
-  </data>
-  <data name="Troubleshooting" xml:space="preserve">
-    <value>Troubleshooting</value>
-  </data>
-  <data name="UserBatchUpload" xml:space="preserve">
-    <value>Batch User Upload</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Users</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>Questionnaires</value>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>Update Date</value>
   </data>
 </root>

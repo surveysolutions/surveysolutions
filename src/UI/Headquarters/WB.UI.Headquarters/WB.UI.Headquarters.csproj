@@ -39,6 +39,7 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
     <DocumentationFile>bin\WB.UI.Headquarters.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -105,6 +106,9 @@
     <Reference Include="EntityFramework6.Npgsql, Version=3.1.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\EntityFramework6.Npgsql.3.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Esri.ArcGISRuntime, Version=100.1.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\lib\net452\Esri.ArcGISRuntime.dll</HintPath>
     </Reference>
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
@@ -684,6 +688,11 @@
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
+    <Content Include="App_GlobalResources\Maps.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Maps.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -1268,6 +1277,7 @@
     <Content Include="Scripts\viewmodels\pages\controlpanel\synchronizationlog.js" />
     <Content Include="Scripts\viewmodels\pages\create-interviewer.js" />
     <Content Include="Scripts\viewmodels\pages\healthcheck.js" />
+    <Content Include="Scripts\viewmodels\pages\maps.js" />
     <Content Include="Scripts\viewmodels\pages\questionnaires.js" />
     <Content Include="Scripts\viewmodels\pages\interviewers.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
@@ -1527,6 +1537,7 @@
     <Content Include="Views\Shared\_MainLayoutWebInterview.cshtml" />
     <Content Include="Views\WebInterview\Index.cshtml" />
     <Content Include="Views\AuditLog\Index.cshtml" />
+    <Content Include="Views\Maps\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1550,6 +1561,11 @@
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
+    <Compile Include="App_GlobalResources\Maps.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.resx</DependentUpon>
+    </Compile>
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
@@ -1705,6 +1721,8 @@
     <Compile Include="Controllers\AuditLogController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\InterviewerHqController.cs" />
+    <Compile Include="Controllers\MapsApiController.cs" />
+    <Compile Include="Controllers\MapsController.cs" />
     <Compile Include="Controllers\Profile\AccountController.cs" />
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
@@ -1724,6 +1742,7 @@
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
+    <Compile Include="Implementation\Maps\MapPropertiesProvider.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
@@ -1731,6 +1750,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201710021139_ChangeJsonToJsonB.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709291647_RemoveQuestionnaireQuestionsInfos.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -2136,6 +2156,13 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
