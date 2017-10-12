@@ -256,4 +256,7 @@
   <data name="PoweredBy" xml:space="preserve">
     <value>Работает на</value>
   </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Нельзя модифицировать интервью полученное интервьюером на устройство</value>
+  </data>
 </root>

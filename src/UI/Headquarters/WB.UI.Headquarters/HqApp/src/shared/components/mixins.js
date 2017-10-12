@@ -35,6 +35,9 @@ export function detailsMixin(fetchMethod, defaults) {
             },
             interviewId() {
                 return this.$route.params.interviewId
+            },
+            inFetchState() {
+                return this.$me.fetchState != null && this.$me.fetching == true;
             }
         },
         props: ["id"],

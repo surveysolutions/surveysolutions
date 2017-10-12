@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using AutoMapper;
 using Microsoft.AspNet.SignalR;
@@ -6,6 +7,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -54,5 +56,27 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         [Localizable(false)]
         public static string GetConnectedClientPrefilledSectionKey(string interviewId) => $"PrefilledSectionx{interviewId}";
+        
+        public static string GetUiMessageFromException(Exception e)
+        {
+            if (e is InterviewException interviewException && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
+            {
+                switch (interviewException.ExceptionType)
+                {
+                    case InterviewDomainExceptionType.InterviewLimitReached:
+                        return Headquarters.Resources.WebInterview.ServerUnderLoad;
+                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
+                    case InterviewDomainExceptionType.InterviewHardDeleted:
+                        return Headquarters.Resources.WebInterview.Error_InterviewExpired;
+                    case InterviewDomainExceptionType.OtherUserIsResponsible:
+                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
+                        return Headquarters.Resources.WebInterview.Error_NoActionsNeeded;
+                    case InterviewDomainExceptionType.InterviewRecievedByDevice:
+                        return Headquarters.Resources.WebInterview.InterviewReceivedByInterviewer;
+                }
+            }
+
+            return e.Message;
+        }
     }
 }

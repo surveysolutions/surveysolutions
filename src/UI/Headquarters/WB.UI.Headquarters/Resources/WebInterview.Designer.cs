@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterview {
@@ -273,6 +273,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewIdFormatText {
             get {
                 return ResourceManager.GetString("InterviewIdFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot modify interview that were received on interviewer device.
+        /// </summary>
+        public static string InterviewReceivedByInterviewer {
+            get {
+                return ResourceManager.GetString("InterviewReceivedByInterviewer", resourceCulture);
             }
         }
         
