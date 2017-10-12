@@ -8,6 +8,7 @@
         InterviewHardDeleted,
         OtherUserIsResponsible,
         StatusIsNotOneOfExpected,
-        AnswerNotAccepted
+        AnswerNotAccepted,
+        InterviewRecievedByDevice
     }
 }
