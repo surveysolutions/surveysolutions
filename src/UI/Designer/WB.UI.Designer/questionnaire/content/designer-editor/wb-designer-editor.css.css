@@ -808,7 +808,6 @@
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title .questionnarie-title-text {
   max-height: 25px;
   overflow: hidden;
-  display: inline-block;
   vertical-align: top;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title .questionnarie-title-buttons {

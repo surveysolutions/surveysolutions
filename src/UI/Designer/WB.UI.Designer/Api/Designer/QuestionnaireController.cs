@@ -14,11 +14,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
 {
     [Authorize]
     [QuestionnairePermissions]
+    [ApiNoCache]
     public class QuestionnaireController : ApiController
     {
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
