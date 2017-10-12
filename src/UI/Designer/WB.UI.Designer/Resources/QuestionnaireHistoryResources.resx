@@ -117,56 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Group" xml:space="preserve">
-    <value>Section</value>
-  </data>
-  <data name="Person" xml:space="preserve">
-    <value>Person</value>
-  </data>
-  <data name="Question" xml:space="preserve">
-    <value>Question</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire</value>
-  </data>
-  <data name="Roster" xml:space="preserve">
-    <value>Roster</value>
-  </data>
-  <data name="StaticText" xml:space="preserve">
-    <value>Static text</value>
-  </data>
-  <data name="added" xml:space="preserve">
-    <value>added</value>
-  </data>
-  <data name="created" xml:space="preserve">
-    <value>created</value>
-  </data>
-  <data name="cloned" xml:space="preserve">
-    <value>cloned</value>
-  </data>
-  <data name="deleted" xml:space="preserve">
-    <value>deleted</value>
-  </data>
-  <data name="changed" xml:space="preserve">
-    <value>changed</value>
-  </data>
-  <data name="became_a_roster" xml:space="preserve">
-    <value>became a roster</value>
-  </data>
-  <data name="became_a_group" xml:space="preserve">
-    <value>became a group</value>
-  </data>
-  <data name="moved" xml:space="preserve">
-    <value>moved</value>
-  </data>
-  <data name="replaced" xml:space="preserve">
-    <value>replaced</value>
-  </data>
   <data name="reverted" xml:space="preserve">
     <value>Questionnaire "{0}" reverted</value>
-  </data>
-  <data name="unknown" xml:space="preserve">
-    <value>unknown</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
@@ -186,86 +138,47 @@
   <data name="UserName" xml:space="preserve">
     <value>UserName</value>
   </data>
-  <data name="imported" xml:space="preserve">
-    <value>imported</value>
-  </data>
   <data name="Change" xml:space="preserve">
     <value>Change</value>
   </data>
-  <data name="from" xml:space="preserve">
-    <value> from</value>
+  <data name="Macro_Delete" xml:space="preserve">
+    <value>Macro {0} deleted</value>
   </data>
-  <data name="to" xml:space="preserve">
-    <value> to</value>
+  <data name="Macro_Update" xml:space="preserve">
+    <value>Macro {0} updated</value>
   </data>
-  <data name="Macro" xml:space="preserve">
-    <value>Macro</value>
+  <data name="Macro_Add" xml:space="preserve">
+    <value>Macro {0} added</value>
   </data>
-  <data name="Macro_EmptyMacroAdded" xml:space="preserve">
-    <value>Empty macro with no name added</value>
+  <data name="LookupTable_Delete" xml:space="preserve">
+    <value>Lookup table {0} deleted</value>
   </data>
-  <data name="Macro_Deleted" xml:space="preserve">
-    <value>Macro "{0}" deleted</value>
+  <data name="LookupTable_Update" xml:space="preserve">
+    <value>Lookup table {0} updated</value>
   </data>
-  <data name="Macro_Updated" xml:space="preserve">
-    <value>Macro "{0}" updated</value>
+  <data name="LookupTable_Add" xml:space="preserve">
+    <value>Lookup table {0} added</value>
   </data>
-  <data name="LookupTable_EmptyTableAdded" xml:space="preserve">
-    <value>Empty lookup table with no name added</value>
+  <data name="Attachment_Delete" xml:space="preserve">
+    <value>Attachment {0} deleted</value>
   </data>
-  <data name="LookupTable_Deleted" xml:space="preserve">
-    <value>Lookup table "{0}" updated</value>
+  <data name="Attachment_Update" xml:space="preserve">
+    <value>Attachment {0} updated</value>
   </data>
-  <data name="LookupTable_Updated" xml:space="preserve">
-    <value>Lookup table "{0}" updated</value>
+  <data name="Variable_Add" xml:space="preserve">
+    <value>Variable {0} added</value>
   </data>
-  <data name="LookupTable_EmptyTableDeleted" xml:space="preserve">
-    <value>Lookup table with no name deleted</value>
+  <data name="Variable_Delete" xml:space="preserve">
+    <value>Variable {0} deleted</value>
   </data>
-  <data name="LookupTable_EmptyTableUpdated" xml:space="preserve">
-    <value>Lookup table with no name updated</value>
+  <data name="Variable_Update" xml:space="preserve">
+    <value>Variable {0} updated</value>
   </data>
-  <data name="Macro_EmptyMacroDeleted" xml:space="preserve">
-    <value>Macro with no name deleted</value>
+  <data name="Translation_Delete" xml:space="preserve">
+    <value>Translation {0} deleted</value>
   </data>
-  <data name="Macro_EmptyMacroUpdated" xml:space="preserve">
-    <value>Macro with no name updated</value>
-  </data>
-  <data name="LookupTable" xml:space="preserve">
-    <value>Lookup table</value>
-  </data>
-  <data name="Attachment_Deleted" xml:space="preserve">
-    <value>Attachment "{0}" deleted</value>
-  </data>
-  <data name="Attachment_Updated" xml:space="preserve">
-    <value>Attachment "{0}" updated</value>
-  </data>
-  <data name="Variable" xml:space="preserve">
-    <value>Variable</value>
-  </data>
-  <data name="VariableAdded" xml:space="preserve">
-    <value>Empty variable with no name added</value>
-  </data>
-  <data name="VariableAddedWithName" xml:space="preserve">
-    <value>Variable "{0}" added</value>
-  </data>
-  <data name="VariableDeleted" xml:space="preserve">
-    <value>Variable with no name deleted</value>
-  </data>
-  <data name="VariableDeletedWithName" xml:space="preserve">
-    <value>Variable "{0}" deleted</value>
-  </data>
-  <data name="VariableUpdated" xml:space="preserve">
-    <value>Variable with no name updated</value>
-  </data>
-  <data name="VariableUpdatedWithName" xml:space="preserve">
-    <value>Variable "{0}" updated</value>
-  </data>
-  <data name="Translation_Deleted" xml:space="preserve">
-    <value>Translation "{0}" deleted</value>
-  </data>
-  <data name="Translation_Updated" xml:space="preserve">
-    <value>Translation "{0}" updated</value>
+  <data name="Translation_Update" xml:space="preserve">
+    <value>Translation {0} updated</value>
   </data>
   <data name="TextsReplaced" xml:space="preserve">
     <value>All '{0}' were replaced with '{1}'. {2} entries affected</value>
@@ -287,5 +200,119 @@
   </data>
   <data name="Revert" xml:space="preserve">
     <value>Revert</value>
+  </data>
+  <data name="Section_Add" xml:space="preserve">
+    <value>Section {0} added</value>
+  </data>
+  <data name="Section_Delete" xml:space="preserve">
+    <value>Section {0} deleted</value>
+  </data>
+  <data name="Section_Update" xml:space="preserve">
+    <value>Section {0} updated</value>
+  </data>
+  <data name="Question_Add" xml:space="preserve">
+    <value>Question {0} added</value>
+  </data>
+  <data name="Question_Delete" xml:space="preserve">
+    <value>Question {0} deleted</value>
+  </data>
+  <data name="Question_Update" xml:space="preserve">
+    <value>Question {0} updated</value>
+  </data>
+  <data name="Roster_Add" xml:space="preserve">
+    <value>Roster {0} added</value>
+  </data>
+  <data name="Roster_Delete" xml:space="preserve">
+    <value>Roster {0} deleted</value>
+  </data>
+  <data name="Roster_Update" xml:space="preserve">
+    <value>Roster {0} updated</value>
+  </data>
+  <data name="StaticText_Add" xml:space="preserve">
+    <value>Static text {0} added</value>
+  </data>
+  <data name="StaticText_Delete" xml:space="preserve">
+    <value>Static text {0} deleted</value>
+  </data>
+  <data name="StaticText_Update" xml:space="preserve">
+    <value>Static text {0} updated</value>
+  </data>
+  <data name="NoTitle" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
+  <data name="StaticText_Clone" xml:space="preserve">
+    <value>Static text {0} cloned from static text {1}</value>
+  </data>
+  <data name="Variable_Clone" xml:space="preserve">
+    <value>Variable {0} cloned from variable {1}</value>
+  </data>
+  <data name="Question_Clone" xml:space="preserve">
+    <value>Question {0} cloned from question {1}</value>
+  </data>
+  <data name="Section_Clone" xml:space="preserve">
+    <value>Section {0} cloned from section {1}</value>
+  </data>
+  <data name="Roster_Clone" xml:space="preserve">
+    <value>Roster {0} cloned from roster {1}</value>
+  </data>
+  <data name="Questionnaire_Clone" xml:space="preserve">
+    <value>Questionnaire {0} cloned from questionnaire {1}</value>
+  </data>
+  <data name="Questionnaire_Replace" xml:space="preserve">
+    <value>Questionnaire {0} replaced</value>
+  </data>
+  <data name="Questionnaire_Import" xml:space="preserve">
+    <value>Questionnaire {0} imported</value>
+  </data>
+  <data name="Section_GroupBecameARoster" xml:space="preserve">
+    <value>Sub section {0} became a roster</value>
+  </data>
+  <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+    <value>Roster {0} became a sub section</value>
+  </data>
+  <data name="Person_Add" xml:space="preserve">
+    <value>User with email {0} added to shared persons</value>
+  </data>
+  <data name="Person_Delete" xml:space="preserve">
+    <value>User with email {0} removed from shared persons</value>
+  </data>
+  <data name="Questionnaire_Add" xml:space="preserve">
+    <value>Questionnaire {0} created</value>
+  </data>
+  <data name="Questionnaire_Update" xml:space="preserve">
+    <value>Questionnaire {0} updated</value>
+  </data>
+  <data name="Questionnaire_Delete" xml:space="preserve">
+    <value>Questionnaire {0} deleted</value>
+  </data>
+  <data name="Question_Move_To_Section" xml:space="preserve">
+    <value>Question {0} moved to section {1}</value>
+  </data>
+  <data name="Question_Move_To_Roster" xml:space="preserve">
+    <value>Question {0} moved to roster {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Section" xml:space="preserve">
+    <value>Static text {0} moved to section {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Roster" xml:space="preserve">
+    <value>Static text {0} moved to roster {1}</value>
+  </data>
+  <data name="Variable_Move_To_Section" xml:space="preserve">
+    <value>Variable {0} moved to section {1}</value>
+  </data>
+  <data name="Variable_Move_To_Roster" xml:space="preserve">
+    <value>Variable {0} moved to roster {1}</value>
+  </data>
+  <data name="Section_Move_To_Section" xml:space="preserve">
+    <value>Section {0} moved to section {1}</value>
+  </data>
+  <data name="Section_Move_To_Roster" xml:space="preserve">
+    <value>Section {0} moved to roster {1}</value>
+  </data>
+  <data name="Roster_Move_To_Section" xml:space="preserve">
+    <value>Roster {0} moved to section {1}</value>
+  </data>
+  <data name="Roster_Move_To_Roster" xml:space="preserve">
+    <value>Roster {0} moved to roster {1}</value>
   </data>
 </root>

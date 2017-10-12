@@ -61,47 +61,20 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to added.
+        ///   Looks up a localized string similar to Attachment {0} deleted.
         /// </summary>
-        public static string added {
+        public static string Attachment_Delete {
             get {
-                return ResourceManager.GetString("added", resourceCulture);
+                return ResourceManager.GetString("Attachment_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attachment &quot;{0}&quot; deleted.
+        ///   Looks up a localized string similar to Attachment {0} updated.
         /// </summary>
-        public static string Attachment_Deleted {
+        public static string Attachment_Update {
             get {
-                return ResourceManager.GetString("Attachment_Deleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Attachment &quot;{0}&quot; updated.
-        /// </summary>
-        public static string Attachment_Updated {
-            get {
-                return ResourceManager.GetString("Attachment_Updated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to became a group.
-        /// </summary>
-        public static string became_a_group {
-            get {
-                return ResourceManager.GetString("became_a_group", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to became a roster.
-        /// </summary>
-        public static string became_a_roster {
-            get {
-                return ResourceManager.GetString("became_a_roster", resourceCulture);
+                return ResourceManager.GetString("Attachment_Update", resourceCulture);
             }
         }
         
@@ -124,47 +97,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to changed.
-        /// </summary>
-        public static string changed {
-            get {
-                return ResourceManager.GetString("changed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to cloned.
-        /// </summary>
-        public static string cloned {
-            get {
-                return ResourceManager.GetString("cloned", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to created.
-        /// </summary>
-        public static string created {
-            get {
-                return ResourceManager.GetString("created", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to deleted.
-        /// </summary>
-        public static string deleted {
-            get {
-                return ResourceManager.GetString("deleted", resourceCulture);
             }
         }
         
@@ -178,173 +115,191 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  from.
+        ///   Looks up a localized string similar to Lookup table {0} added.
         /// </summary>
-        public static string from {
+        public static string LookupTable_Add {
             get {
-                return ResourceManager.GetString("from", resourceCulture);
+                return ResourceManager.GetString("LookupTable_Add", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section.
+        ///   Looks up a localized string similar to Lookup table {0} deleted.
         /// </summary>
-        public static string Group {
+        public static string LookupTable_Delete {
             get {
-                return ResourceManager.GetString("Group", resourceCulture);
+                return ResourceManager.GetString("LookupTable_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to imported.
+        ///   Looks up a localized string similar to Lookup table {0} updated.
         /// </summary>
-        public static string imported {
+        public static string LookupTable_Update {
             get {
-                return ResourceManager.GetString("imported", resourceCulture);
+                return ResourceManager.GetString("LookupTable_Update", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table.
+        ///   Looks up a localized string similar to Macro {0} added.
         /// </summary>
-        public static string LookupTable {
+        public static string Macro_Add {
             get {
-                return ResourceManager.GetString("LookupTable", resourceCulture);
+                return ResourceManager.GetString("Macro_Add", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table &quot;{0}&quot; updated.
+        ///   Looks up a localized string similar to Macro {0} deleted.
         /// </summary>
-        public static string LookupTable_Deleted {
+        public static string Macro_Delete {
             get {
-                return ResourceManager.GetString("LookupTable_Deleted", resourceCulture);
+                return ResourceManager.GetString("Macro_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty lookup table with no name added.
+        ///   Looks up a localized string similar to Macro {0} updated.
         /// </summary>
-        public static string LookupTable_EmptyTableAdded {
+        public static string Macro_Update {
             get {
-                return ResourceManager.GetString("LookupTable_EmptyTableAdded", resourceCulture);
+                return ResourceManager.GetString("Macro_Update", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table with no name deleted.
+        ///   Looks up a localized string similar to Untitled.
         /// </summary>
-        public static string LookupTable_EmptyTableDeleted {
+        public static string NoTitle {
             get {
-                return ResourceManager.GetString("LookupTable_EmptyTableDeleted", resourceCulture);
+                return ResourceManager.GetString("NoTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table with no name updated.
+        ///   Looks up a localized string similar to User with email {0} added to shared persons.
         /// </summary>
-        public static string LookupTable_EmptyTableUpdated {
+        public static string Person_Add {
             get {
-                return ResourceManager.GetString("LookupTable_EmptyTableUpdated", resourceCulture);
+                return ResourceManager.GetString("Person_Add", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lookup table &quot;{0}&quot; updated.
+        ///   Looks up a localized string similar to User with email {0} removed from shared persons.
         /// </summary>
-        public static string LookupTable_Updated {
+        public static string Person_Delete {
             get {
-                return ResourceManager.GetString("LookupTable_Updated", resourceCulture);
+                return ResourceManager.GetString("Person_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro.
+        ///   Looks up a localized string similar to Question {0} added.
         /// </summary>
-        public static string Macro {
+        public static string Question_Add {
             get {
-                return ResourceManager.GetString("Macro", resourceCulture);
+                return ResourceManager.GetString("Question_Add", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro &quot;{0}&quot; deleted.
+        ///   Looks up a localized string similar to Question {0} cloned from question {1}.
         /// </summary>
-        public static string Macro_Deleted {
+        public static string Question_Clone {
             get {
-                return ResourceManager.GetString("Macro_Deleted", resourceCulture);
+                return ResourceManager.GetString("Question_Clone", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty macro with no name added.
+        ///   Looks up a localized string similar to Question {0} deleted.
         /// </summary>
-        public static string Macro_EmptyMacroAdded {
+        public static string Question_Delete {
             get {
-                return ResourceManager.GetString("Macro_EmptyMacroAdded", resourceCulture);
+                return ResourceManager.GetString("Question_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with no name deleted.
+        ///   Looks up a localized string similar to Question {0} moved to roster {1}.
         /// </summary>
-        public static string Macro_EmptyMacroDeleted {
+        public static string Question_Move_To_Roster {
             get {
-                return ResourceManager.GetString("Macro_EmptyMacroDeleted", resourceCulture);
+                return ResourceManager.GetString("Question_Move_To_Roster", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro with no name updated.
+        ///   Looks up a localized string similar to Question {0} moved to section {1}.
         /// </summary>
-        public static string Macro_EmptyMacroUpdated {
+        public static string Question_Move_To_Section {
             get {
-                return ResourceManager.GetString("Macro_EmptyMacroUpdated", resourceCulture);
+                return ResourceManager.GetString("Question_Move_To_Section", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro &quot;{0}&quot; updated.
+        ///   Looks up a localized string similar to Question {0} updated.
         /// </summary>
-        public static string Macro_Updated {
+        public static string Question_Update {
             get {
-                return ResourceManager.GetString("Macro_Updated", resourceCulture);
+                return ResourceManager.GetString("Question_Update", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to moved.
+        ///   Looks up a localized string similar to Questionnaire {0} created.
         /// </summary>
-        public static string moved {
+        public static string Questionnaire_Add {
             get {
-                return ResourceManager.GetString("moved", resourceCulture);
+                return ResourceManager.GetString("Questionnaire_Add", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person.
+        ///   Looks up a localized string similar to Questionnaire {0} cloned from questionnaire {1}.
         /// </summary>
-        public static string Person {
+        public static string Questionnaire_Clone {
             get {
-                return ResourceManager.GetString("Person", resourceCulture);
+                return ResourceManager.GetString("Questionnaire_Clone", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question.
+        ///   Looks up a localized string similar to Questionnaire {0} deleted.
         /// </summary>
-        public static string Question {
+        public static string Questionnaire_Delete {
             get {
-                return ResourceManager.GetString("Question", resourceCulture);
+                return ResourceManager.GetString("Questionnaire_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire.
+        ///   Looks up a localized string similar to Questionnaire {0} imported.
         /// </summary>
-        public static string Questionnaire {
+        public static string Questionnaire_Import {
             get {
-                return ResourceManager.GetString("Questionnaire", resourceCulture);
+                return ResourceManager.GetString("Questionnaire_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire {0} replaced.
+        /// </summary>
+        public static string Questionnaire_Replace {
+            get {
+                return ResourceManager.GetString("Questionnaire_Replace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire {0} updated.
+        /// </summary>
+        public static string Questionnaire_Update {
+            get {
+                return ResourceManager.GetString("Questionnaire_Update", resourceCulture);
             }
         }
         
@@ -354,15 +309,6 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionnaireChangeHistory {
             get {
                 return ResourceManager.GetString("QuestionnaireChangeHistory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to replaced.
-        /// </summary>
-        public static string replaced {
-            get {
-                return ResourceManager.GetString("replaced", resourceCulture);
             }
         }
         
@@ -412,20 +358,182 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster.
+        ///   Looks up a localized string similar to Roster {0} added.
         /// </summary>
-        public static string Roster {
+        public static string Roster_Add {
             get {
-                return ResourceManager.GetString("Roster", resourceCulture);
+                return ResourceManager.GetString("Roster_Add", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Static text.
+        ///   Looks up a localized string similar to Roster {0} cloned from roster {1}.
         /// </summary>
-        public static string StaticText {
+        public static string Roster_Clone {
             get {
-                return ResourceManager.GetString("StaticText", resourceCulture);
+                return ResourceManager.GetString("Roster_Clone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster {0} deleted.
+        /// </summary>
+        public static string Roster_Delete {
+            get {
+                return ResourceManager.GetString("Roster_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster {0} moved to roster {1}.
+        /// </summary>
+        public static string Roster_Move_To_Roster {
+            get {
+                return ResourceManager.GetString("Roster_Move_To_Roster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster {0} moved to section {1}.
+        /// </summary>
+        public static string Roster_Move_To_Section {
+            get {
+                return ResourceManager.GetString("Roster_Move_To_Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster {0} became a sub section.
+        /// </summary>
+        public static string Roster_RosterBecameAGroup {
+            get {
+                return ResourceManager.GetString("Roster_RosterBecameAGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster {0} updated.
+        /// </summary>
+        public static string Roster_Update {
+            get {
+                return ResourceManager.GetString("Roster_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section {0} added.
+        /// </summary>
+        public static string Section_Add {
+            get {
+                return ResourceManager.GetString("Section_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section {0} cloned from section {1}.
+        /// </summary>
+        public static string Section_Clone {
+            get {
+                return ResourceManager.GetString("Section_Clone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section {0} deleted.
+        /// </summary>
+        public static string Section_Delete {
+            get {
+                return ResourceManager.GetString("Section_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub section {0} became a roster.
+        /// </summary>
+        public static string Section_GroupBecameARoster {
+            get {
+                return ResourceManager.GetString("Section_GroupBecameARoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section {0} moved to roster {1}.
+        /// </summary>
+        public static string Section_Move_To_Roster {
+            get {
+                return ResourceManager.GetString("Section_Move_To_Roster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section {0} moved to section {1}.
+        /// </summary>
+        public static string Section_Move_To_Section {
+            get {
+                return ResourceManager.GetString("Section_Move_To_Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section {0} updated.
+        /// </summary>
+        public static string Section_Update {
+            get {
+                return ResourceManager.GetString("Section_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static text {0} added.
+        /// </summary>
+        public static string StaticText_Add {
+            get {
+                return ResourceManager.GetString("StaticText_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static text {0} cloned from static text {1}.
+        /// </summary>
+        public static string StaticText_Clone {
+            get {
+                return ResourceManager.GetString("StaticText_Clone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static text {0} deleted.
+        /// </summary>
+        public static string StaticText_Delete {
+            get {
+                return ResourceManager.GetString("StaticText_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static text {0} moved to roster {1}.
+        /// </summary>
+        public static string StaticText_Move_To_Roster {
+            get {
+                return ResourceManager.GetString("StaticText_Move_To_Roster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static text {0} moved to section {1}.
+        /// </summary>
+        public static string StaticText_Move_To_Section {
+            get {
+                return ResourceManager.GetString("StaticText_Move_To_Section", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static text {0} updated.
+        /// </summary>
+        public static string StaticText_Update {
+            get {
+                return ResourceManager.GetString("StaticText_Update", resourceCulture);
             }
         }
         
@@ -457,38 +565,20 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  to.
+        ///   Looks up a localized string similar to Translation {0} deleted.
         /// </summary>
-        public static string to {
+        public static string Translation_Delete {
             get {
-                return ResourceManager.GetString("to", resourceCulture);
+                return ResourceManager.GetString("Translation_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Translation &quot;{0}&quot; deleted.
+        ///   Looks up a localized string similar to Translation {0} updated.
         /// </summary>
-        public static string Translation_Deleted {
+        public static string Translation_Update {
             get {
-                return ResourceManager.GetString("Translation_Deleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Translation &quot;{0}&quot; updated.
-        /// </summary>
-        public static string Translation_Updated {
-            get {
-                return ResourceManager.GetString("Translation_Updated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to unknown.
-        /// </summary>
-        public static string unknown {
-            get {
-                return ResourceManager.GetString("unknown", resourceCulture);
+                return ResourceManager.GetString("Translation_Update", resourceCulture);
             }
         }
         
@@ -511,65 +601,56 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable.
+        ///   Looks up a localized string similar to Variable {0} added.
         /// </summary>
-        public static string Variable {
+        public static string Variable_Add {
             get {
-                return ResourceManager.GetString("Variable", resourceCulture);
+                return ResourceManager.GetString("Variable_Add", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Empty variable with no name added.
+        ///   Looks up a localized string similar to Variable {0} cloned from variable {1}.
         /// </summary>
-        public static string VariableAdded {
+        public static string Variable_Clone {
             get {
-                return ResourceManager.GetString("VariableAdded", resourceCulture);
+                return ResourceManager.GetString("Variable_Clone", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable &quot;{0}&quot; added.
+        ///   Looks up a localized string similar to Variable {0} deleted.
         /// </summary>
-        public static string VariableAddedWithName {
+        public static string Variable_Delete {
             get {
-                return ResourceManager.GetString("VariableAddedWithName", resourceCulture);
+                return ResourceManager.GetString("Variable_Delete", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable with no name deleted.
+        ///   Looks up a localized string similar to Variable {0} moved to roster {1}.
         /// </summary>
-        public static string VariableDeleted {
+        public static string Variable_Move_To_Roster {
             get {
-                return ResourceManager.GetString("VariableDeleted", resourceCulture);
+                return ResourceManager.GetString("Variable_Move_To_Roster", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable &quot;{0}&quot; deleted.
+        ///   Looks up a localized string similar to Variable {0} moved to section {1}.
         /// </summary>
-        public static string VariableDeletedWithName {
+        public static string Variable_Move_To_Section {
             get {
-                return ResourceManager.GetString("VariableDeletedWithName", resourceCulture);
+                return ResourceManager.GetString("Variable_Move_To_Section", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable with no name updated.
+        ///   Looks up a localized string similar to Variable {0} updated.
         /// </summary>
-        public static string VariableUpdated {
+        public static string Variable_Update {
             get {
-                return ResourceManager.GetString("VariableUpdated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Variable &quot;{0}&quot; updated.
-        /// </summary>
-        public static string VariableUpdatedWithName {
-            get {
-                return ResourceManager.GetString("VariableUpdatedWithName", resourceCulture);
+                return ResourceManager.GetString("Variable_Update", resourceCulture);
             }
         }
     }

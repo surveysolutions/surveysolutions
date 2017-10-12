@@ -597,7 +597,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionnaireId = questionnaireId,
                 ActionType = action ?? QuestionnaireActionType.Add,
                 TargetItemId = targetId ?? Guid.NewGuid(),
-                TargetItemType = targetType ?? QuestionnaireItemType.Group,
+                TargetItemType = targetType ?? QuestionnaireItemType.Section,
                 References = reference.ToHashSet(),
                 Sequence = sequence ?? 1,
                 ResultingQuestionnaireDocument = resultingQuestionnaireDocument
@@ -611,7 +611,7 @@ namespace WB.Tests.Unit.Designer
             return new QuestionnaireChangeReference()
             {
                 ReferenceId = referenceId ?? Guid.NewGuid(),
-                ReferenceType = referenceType ?? QuestionnaireItemType.Group
+                ReferenceType = referenceType ?? QuestionnaireItemType.Section
             };
         }
 

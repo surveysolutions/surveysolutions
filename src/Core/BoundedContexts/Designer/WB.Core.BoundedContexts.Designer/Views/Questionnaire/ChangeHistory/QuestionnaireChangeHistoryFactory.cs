@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             switch (type)
             {
-                case QuestionnaireItemType.Group:
+                case QuestionnaireItemType.Section:
                 case QuestionnaireItemType.Question:
                 case QuestionnaireItemType.Roster:
                 case QuestionnaireItemType.StaticText:
