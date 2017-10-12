@@ -37,7 +37,6 @@
         });
 
         self.initDataTable(this.onDataTableDataReceived);
-        self.reloadDataTable();
     };
 
     self.setStatisticsMessage = function () {
