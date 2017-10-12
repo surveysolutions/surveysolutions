@@ -124,7 +124,7 @@
     <value>Загруженный файл не является изображением</value>
   </data>
   <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
-    <value>Нельзя переместить группу {0} в неправильную позицию {1}.</value>
+    <value>Нельзя переместить подсекцию  {0} в неправильную позицию {1}.</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>Комбобокс вопрос с ключом {0} не найден.</value>
@@ -142,13 +142,13 @@
     <value>Пустой файл не может быть сохранен</value>
   </data>
   <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
-    <value>Значение {0} не может быть прочитано как вещественное число. Колонка {1}, строка {2}.</value>
+    <value>Значение {0} не может быть прочитано как целое число. Колонка {1}, строка {2}.</value>
   </data>
   <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
-    <value>Заголовки с одинаковым название запрещены</value>
+    <value>Заголовки с одинаковым именем запрещены</value>
   </data>
   <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
-    <value>Заголовки с пустым или неверным названием запрещены</value>
+    <value>Заголовки с пустым или неверным именем запрещены</value>
   </data>
   <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
     <value>Обязательная колонка rowcode отсутсвует</value>
@@ -157,7 +157,7 @@
     <value>Значения колонки rowcode должны быть уникальны</value>
   </data>
   <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
-    <value>Значение {0} не может быть прочитано как длинное целое число. Колонка {1}, строка {2}.</value>
+    <value>Значение {0} не может быть прочитано как дробное число. Колонка {1}, строка {2}.</value>
   </data>
   <data name="LookupTables_too_many_columns" xml:space="preserve">
     <value>Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}.</value>
@@ -166,10 +166,10 @@
     <value>Превышена максимальная граница ({0}) колочества строк.</value>
   </data>
   <data name="MacroAlreadyExist" xml:space="preserve">
-    <value>Макро с таким ключом уже существует</value>
+    <value>Макрос с таким ключом уже существует</value>
   </data>
   <data name="MacroIsAbsent" xml:space="preserve">
-    <value>Макро с таким ключом отсутствует</value>
+    <value>Макрос с таким ключом отсутствует</value>
   </data>
   <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
     <value>Один или более вопросов с одинаковым ключом {0} уже существуют:{1}{2}.</value>
@@ -190,7 +190,7 @@
     <value>Опросник с ключом {0} не найден.</value>
   </data>
   <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
-    <value>Заголовок вопросника не может быть пустым.</value>
+    <value>Имя опросника не может быть пустым.</value>
   </data>
   <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
     <value>Секция не может содержать более {0} дочерних элементов.</value>
@@ -199,7 +199,7 @@
     <value>Группа с ключом {0} не может быть найдена.</value>
   </data>
   <data name="SubSectionDepthLimit" xml:space="preserve">
-    <value>Вложенность групп и ростеров не может быть больше чем {0}.</value>
+    <value>Вложенность подсекций и ростеров не может быть больше чем {0}.</value>
   </data>
   <data name="CantPasteQuestion" xml:space="preserve">
     <value>Вопрос не может быть вставлен сюда.</value>
