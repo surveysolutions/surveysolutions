@@ -12,9 +12,11 @@ import "./misc/audioRecorder.js"
 import "./misc/htmlPoly.js"
 
 import "./errors"
-import box from "bootbox"
+import box from "shared/modal"
 
-export default Vuei18n.initializeAsync().then((i18n) => {
+import { browserLanguage } from "shared/helpers"
+
+export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     Vue.use(Vuei18n)
 
     require("./components")
@@ -27,12 +29,8 @@ export default Vuei18n.initializeAsync().then((i18n) => {
     const App = require("./App").default;
     const installApi = require("./api").install
     installApi(Vue)
-    
-    box.addLocale("ar", {
-        OK: i18n.t("Common.Ok"),
-        CANCEL: i18n.t("Common.Cancel"),
-        CONFIRM: i18n.t("Common.Confirm")
-    });
+
+    box.init(i18n, browserLanguage)
 
     return new Vue({
         el: "#app",
