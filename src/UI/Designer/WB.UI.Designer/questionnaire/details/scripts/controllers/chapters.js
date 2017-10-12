@@ -40,7 +40,7 @@
                 var newId = utilityService.guid();
 
                 var newChapter = {
-                    title: 'New Section',
+                    title: $i18next.t('DefaultNewSection'),
                     itemId: newId,
                     itemType: "Chapter"
                 };
