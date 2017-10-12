@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -19,11 +20,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class QuestionnaireVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly ISubstitutionService substitutionService;
+        private readonly IKeywordsProvider keywordsProvider;
         private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
 
-        public QuestionnaireVerifications(ISubstitutionService substitutionService)
+        public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
         {
             this.substitutionService = substitutionService;
+            this.keywordsProvider = keywordsProvider;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
@@ -33,6 +36,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
             Error("WB0261", QuestionnaireHasRostersPropagationsExededLimit, VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Error<IComposite>("WB0121", VariableNameTooLong, string.Format(VerificationMessages.WB0121_VariableNameTooLong, DefaultVariableLengthLimit)),
+            Error<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
+            Error<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
+            Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
+            Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
+            Error<IComposite>("WB0058", VariableNameIsKeywords, VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
@@ -46,6 +55,67 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.Text,
             QuestionType.QRBarcode
         };
+
+        private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes =
+        {
+            QuestionType.GpsCoordinates,
+            QuestionType.MultyOption,
+            QuestionType.TextList
+        };
+
+        private static bool VariableNameTooLong(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(entity.VariableName))
+                return false;
+
+            int variableLengthLimit = DefaultVariableLengthLimit;
+            if (entity is IQuestion)
+            {
+                variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains((entity as IQuestion).QuestionType)
+                    ? DefaultRestrictedVariableLengthLimit
+                    : DefaultVariableLengthLimit;
+            }
+
+            return (entity.VariableName?.Length ?? 0) > variableLengthLimit;
+        }
+
+        private static bool VariableNameHasSpecialCharacters(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(entity.VariableName))
+                return false;
+            return entity.VariableName?.Any(c => !(c == '_' || Char.IsLetterOrDigit(c))) ?? false;
+        }
+
+        private static bool VariableNameStartWithDigitOrUnderscore(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(entity.VariableName))
+                return false;
+            var variable = entity.VariableName;
+            return Char.IsDigit(variable[0]) || variable[0] == '_';
+        }
+
+        private static bool VariableNameEndWithUnderscore(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(entity.VariableName))
+                return false;
+            var variable = entity.VariableName;
+            return variable[variable.Length - 1] == '_';
+        }
+
+        private static bool VariableNameHasConsecutiveUnderscores(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(entity.VariableName))
+                return false;
+            var variable = entity.VariableName;
+            return variable.Contains("__");
+        }
+
+        private bool VariableNameIsKeywords(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(entity.VariableName))
+                return false;
+            return keywordsProvider.IsReservedKeyword(entity.VariableName);
+        }
 
         private static bool NotShared(MultiLanguageQuestionnaireDocument questionnaire)
             => !questionnaire.SharedPersons.Any();
@@ -317,6 +387,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 hasError(questionnaire)
                     ? new[] { QuestionnaireVerificationMessage.Warning(code, message) }
                     : Enumerable.Empty<QuestionnaireVerificationMessage>();
+        }
+
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError, string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
 

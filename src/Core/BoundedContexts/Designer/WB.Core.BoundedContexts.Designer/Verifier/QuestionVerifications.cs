@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IQuestion>("WB0030", PrefilledQuestionCantBeInsideOfRoster, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
             Error<IQuestion>("WB0057", QuestionHasEmptyVariableName, VerificationMessages.WB0057_QuestionHasEmptyVariableName),
             Error<IQuestion>("WB0066", QuestionTypeIsNotAllowed, VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
-            Error<IQuestion>("WB0077", QuestionHasInvalidVariableName, VerificationMessages.WB0077_QuestionHasInvalidVariableName),
+            //Error<IQuestion>("WB0077", QuestionHasInvalidVariableName, VerificationMessages.WB0077_QuestionHasInvalidVariableName),
             Error<IQuestion>("WB0090", LinkedQuestionIsInterviewersOnly, VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
             Error<IQuestion>("WB0100", (q, document) => RosterSizeQuestionMaxValueCouldBeInRange1And60(q, document,GetMaxNumberOfAnswersForRosterSizeQuestionWhenMore200Options), string.Format(VerificationMessages.WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200,MaxRosterSizeAnswer)),
             Error<IQuestion>("WB0269", QuestionTitleEmpty, VerificationMessages.WB0269_QuestionTitleIsEmpty),
@@ -59,14 +59,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
-            //Error<IComposite>(VariableNameTooLong, "WB0121", string.Format(VerificationMessages.WB0121_VariableNameTooLong, variableLengthLimit)),
-            //Error<IComposite>(VariableNameHasSpecialCharacters, "WB0122", VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
-            //Error<IComposite>(VariableNameStartWithDigitOrUnderscore, "WB0123", VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
-            //Error<IComposite>(VariableNameEndWithUnderscore, "WB0124", VerificationMessages.WB0124_VariableNameEndWithUnderscore),
-            //Error<IComposite>(VariableNameHasConsecutiveUnderscores, "WB0125", VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
-            //Error<IComposite>(VariableNameIsKeywords, "WB0125", VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
-            //Error<IComposite>(VarialbeNameNotUnique, "WB0126", VerificationMessages.WB0126_VarialbeNameNotUnique),
-
             Warning(TooManyQuestions, "WB0205", string.Format(VerificationMessages.WB0205_TooManyQuestions, MaxQuestionsCountInQuestionnaire)),
             Warning(FewSectionsManyQuestions, "WB0206", string.Format(VerificationMessages.WB0206_FewSectionsManyQuestions, ManyQuestionsByFewSectionsCount)),
             Warning(MoreThan50PercentQuestionsWithoutValidationConditions, "WB0208", string.Format(VerificationMessages.WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions, MinValidationsInPercents)),
@@ -227,12 +219,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.TextList
         };
 
-        private static readonly QuestionType[] RestrictedVariableLengthQuestionTypes = 
-            {
-                QuestionType.GpsCoordinates,
-                QuestionType.MultyOption,
-                QuestionType.TextList
-            };
+     
 
         private static readonly HashSet<QuestionType> WhiteListOfQuestionTypes = new HashSet<QuestionType>
         {
@@ -711,21 +698,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool QuestionHasEmptyVariableName(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return string.IsNullOrEmpty(question.StataExportCaption);
-        }
-
-        private static bool QuestionHasInvalidVariableName(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            if (string.IsNullOrEmpty(question.StataExportCaption))
-                return false;
-
-            int variableLengthLimit = RestrictedVariableLengthQuestionTypes.Contains(question.QuestionType)
-                ? DefaultRestrictedVariableLengthLimit
-                : DefaultVariableLengthLimit;
-
-            if (question.StataExportCaption.Length > variableLengthLimit)
-                return true;
-
-            return !VariableNameRegex.IsMatch(question.StataExportCaption);
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TReferencedEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string message)
