@@ -83,7 +83,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (string.IsNullOrWhiteSpace(entity.VariableName))
                 return false;
-            return entity.VariableName?.Any(c => !(c == '_' || Char.IsLetterOrDigit(c))) ?? false;
+            foreach (var c in entity.VariableName)
+            {
+                if (c != '_' && !Char.IsDigit(c) && !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))
+                    return true;
+            }
+            return false;
         }
 
         private static bool VariableNameStartWithDigitOrUnderscore(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
