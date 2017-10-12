@@ -2,12 +2,11 @@
     'use strict';
     var localizationInitPromise = $.Deferred();
     window.i18next
-        .use(window.i18nextXHRBackend)
-        .use(window.i18nextBrowserLanguageDetector);
+        .use(window.i18nextXHRBackend);
     window.i18next.init({
         debug: false,
-        //lng: 'de', // If not given, i18n will detect the browser language.
-        fallbackLng: 'en', // Default is dev
+        lng: $('html').attr('lang'), 
+        fallbackLng: 'en', 
         backend: {
             loadPath: '../build/resources/QuestionnaireEditor.{{lng}}.json'
         },
