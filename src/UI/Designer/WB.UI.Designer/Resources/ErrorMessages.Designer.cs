@@ -233,6 +233,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire title is required.
+        /// </summary>
+        internal static string QuestionnaireTitle_required {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitle_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Request another one..
         /// </summary>
         internal static string RequestAnotherEmail {
