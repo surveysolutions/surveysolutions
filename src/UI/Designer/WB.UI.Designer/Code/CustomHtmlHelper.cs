@@ -46,13 +46,15 @@ namespace WB.UI.Designer
         /// <param name="controller">
         /// The controller.
         /// </param>
+        /// <param name="role"></param>
         /// <returns>
         /// The <see cref="MvcHtmlString"/>.
         /// </returns>
         public static MvcHtmlString MenuActionLink(
-            this HtmlHelper helper, string title, string action, string controller)
+            this HtmlHelper helper, string title, string action, string controller, string role = null)
         {
             var li = new TagBuilder("li");
+            if (role != null) li.Attributes.Add("role", role);
             if (action.Compare(GlobalHelper.CurrentAction) && controller.Compare(GlobalHelper.CurrentController))
             {
                 li.AddCssClass("active");
