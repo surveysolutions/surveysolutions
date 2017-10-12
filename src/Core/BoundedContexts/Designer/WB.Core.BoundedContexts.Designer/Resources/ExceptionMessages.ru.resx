@@ -258,4 +258,7 @@
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>Найдена как минимум одна одинаковая пара Title + Parent Value. Список опций не должен сожержать дубликаты такого типа.</value>
   </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>Последняя секция не может быть удалена из опросника</value>
+  </data>
 </root>
