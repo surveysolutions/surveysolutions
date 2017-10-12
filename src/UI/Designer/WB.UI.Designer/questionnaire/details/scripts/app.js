@@ -1,5 +1,6 @@
 (function ($, window) {
     'use strict';
+    var localizationInitPromise = $.Deferred();
     window.i18next
         .use(window.i18nextXHRBackend)
         .use(window.i18nextBrowserLanguageDetector);
@@ -23,9 +24,10 @@
             }
         }
     }, function (err, t) {
+        localizationInitPromise.resolve();
         //console.log('resources loaded');
     });
-    i18next.on('languageChanged', function(lng) {
+    window.i18next.on('languageChanged', function(lng) {
         moment.locale(lng);
     });
 
@@ -54,7 +56,8 @@
         'jm.i18next'
     ]);
 
-    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', '$locationProvider', function ($stateProvider, $urlRouterProvider, $rootScopeProvider, $locationProvider) {
+    angular.module('designerApp').config(['$stateProvider', '$urlRouterProvider', '$rootScopeProvider', '$locationProvider',
+        function ($stateProvider, $urlRouterProvider, $rootScopeProvider, $locationProvider) {
 
         $rootScopeProvider.digestTtl(12);
 
@@ -63,7 +66,12 @@
             {
                 url: "/{questionnaireId}",
                 templateUrl: "views/main.v1.html",
-                controller: 'MainCtrl'
+                controller: 'MainCtrl',
+                resolve: {
+                    globalization: function() {
+                        return localizationInitPromise.promise();
+                    }
+                }
             }).state('questionnaire.chapter', {
                 url: "/chapter/{chapterId}",
                 views: {
