@@ -181,7 +181,7 @@
     <value>Пользователь {0} не существует. Введите действительное имя пользователя или адрес электронной почты.</value>
   </data>
   <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
-    <value>Текущий пароль не верен/Новый пороль не соответствует требованиям системы , введите повторно.</value>
+    <value>Неверный текущий пароль.</value>
   </data>
   <data name="User_already_confirmed_in_system" xml:space="preserve">
     <value>Пользователь {0} уже подтвержден в системе. Пожалуйста, введите своё имя пользователя и пароль, чтобы начать использовать дизайнер опросников.</value>
@@ -239,5 +239,8 @@
   </data>
   <data name="UserName_required" xml:space="preserve">
     <value>Введите имя пользователя</value>
+  </data>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>Введите имя опросника</value>
   </data>
 </root>
