@@ -6894,6 +6894,7 @@ button#questionSelectBtn {
 button#questionTypeBtn {
   padding: 10px 40px 10px 50px;
   width: 380px;
+  overflow: hidden;
 }
 button#questionTypeBtn,
 button#questionSelectBtn {
