@@ -93,15 +93,7 @@ namespace WB.UI.Headquarters.Controllers
                 Questionnaires = this.GetQuestionnaires(statuses)
             };
         }
-
-        private static readonly ResourceManager[] InterviewHqResources =
-        {
-            MainMenu.ResourceManager,
-            Assignments.ResourceManager,
-            Pages.ResourceManager,
-            CommonRes.ResourceManager
-        };
-
+        
         private string CreateInterview(Assignment assignment)
         {
             var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));

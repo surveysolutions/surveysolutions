@@ -303,8 +303,6 @@ namespace WB.UI.Headquarters.Controllers
             return View();
         }
 
-        private static readonly ResourceManager[] WebUiLocales = { WebInterviewUI.ResourceManager, global::Resources.Common.ResourceManager };
-        
         private string CreateInterview(Assignment assignment)
         {
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
