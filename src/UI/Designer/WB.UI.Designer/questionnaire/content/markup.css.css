@@ -9809,6 +9809,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   left: 0;
   width: 50%;
 }
+.findReplaceModal .form-group .checkbox {
+  display: inline-block;
+}
 .findReplaceModal .modal-dialog {
   width: 650px;
 }
