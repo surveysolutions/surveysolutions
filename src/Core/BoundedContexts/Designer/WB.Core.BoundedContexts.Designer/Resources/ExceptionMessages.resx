@@ -252,4 +252,13 @@
   <data name="VariableCantBePaste" xml:space="preserve">
     <value>Variable cannot be pasted here.</value>
   </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>Options in cascading question can not have empty ParentValue column.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>Options in cascading question can not have not numeric value in ParentValue column.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
+  </data>
 </root>

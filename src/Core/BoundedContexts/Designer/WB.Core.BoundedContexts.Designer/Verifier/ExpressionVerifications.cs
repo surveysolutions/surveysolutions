@@ -20,18 +20,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     public class ExpressionVerifications : AbstractVerifier, IPartialVerifier
     {
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
-        private readonly IKeywordsProvider keywordsProvider;
         private readonly IExpressionProcessor expressionProcessor;
         private readonly ITopologicalSorter<string> topologicalSorter;
 
         public ExpressionVerifications(
             IMacrosSubstitutionService macrosSubstitutionService, 
-            IKeywordsProvider keywordsProvider, 
             IExpressionProcessor expressionProcessor, 
             ITopologicalSorter<string> topologicalSorter)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
-            this.keywordsProvider = keywordsProvider;
             this.expressionProcessor = expressionProcessor;
             this.topologicalSorter = topologicalSorter;
         }
@@ -39,9 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new []
         {
             Error<IStaticText>(EnablementUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            Error<IGroup>(RosterHasVariableNameReservedForServiceNeeds, "WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Error<IGroup>(EnablementUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
-            Critical<IQuestion>(this.QuestionHasVariableNameReservedForServiceNeeds, "WB0058",VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Error<IQuestion>(CategoricalFilterUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
             Error<IQuestion>(LinkedFilterUsesForbiddenDateTimeProperties, "WB0118",WB0118_ExpressionReferencingForbiddenDateTimeProperies),
             Error<IQuestion>(EnablementUsesForbiddenDateTimeProperties, "WB0118", WB0118_ExpressionReferencingForbiddenDateTimeProperies),
@@ -311,14 +306,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return this.DoesExpressionExceed1000CharsLimit(questionnaire, question.LinkedFilterExpression);
         }
 
-        private bool RosterHasVariableNameReservedForServiceNeeds(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            if (!questionnaire.Questionnaire.IsRoster(roster))
-                return false;
-
-            return roster.VariableName != null && keywordsProvider.IsReservedKeyword(roster.VariableName);
-        }
-
         private bool ConditionExpressionHasLengthMoreThan10000Characters(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return this.DoesExpressionExceed1000CharsLimit(questionnaire, (entity as IConditional)?.ConditionExpression);
@@ -456,12 +443,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool EnablementUsesForbiddenDateTimeProperties(IConditional conditional, MultiLanguageQuestionnaireDocument questionnaire)
             => ExpressionUsesForbiddenDateTimeProperties(conditional.ConditionExpression, questionnaire);
-
-
-        private bool QuestionHasVariableNameReservedForServiceNeeds(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return question.StataExportCaption != null && keywordsProvider.IsReservedKeyword(question.StataExportCaption);
-        }
 
         protected bool ExpressionUsesForbiddenDateTimeProperties(string expression,
             MultiLanguageQuestionnaireDocument questionnaire)
