@@ -4,7 +4,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
     {
         Questionnaire,
         Roster,
-        Group,
+        Section,
         StaticText,
         Question,
         Person,

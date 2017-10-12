@@ -169,7 +169,7 @@
     <value>Please log in or</value>
   </data>
   <data name="LoginName" xml:space="preserve">
-    <value>Login</value>
+    <value>Login or email</value>
   </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>Login or email</value>
