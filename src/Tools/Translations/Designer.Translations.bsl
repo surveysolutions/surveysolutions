@@ -22,7 +22,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantMoveSubsectionInWrongPosition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You can't move to sub-section {0} because it position {1} in not acceptable." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Нельзя переместить группу {0} в неправильную позицию {1}." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Нельзя переместить подсекцию  {0} в неправильную позицию {1}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantPasteQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -64,7 +64,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="ComboboxCannotBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Combo box question with public key {0} can't be found" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Комбобокс вопрос с ключом {0} не найден." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Комбобокс вопрос с ключом {0} не найден." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="FailedToAddGroup" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -100,13 +100,13 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTableAlreadyExist" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Lookup table with such id already exist." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Таблица поиска с таким ключом уже существует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Таблица поиска с таким ключом уже существует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTableIsAbsent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Lookup table with such id is absent." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Таблица поиска с таким ключом отсутсвует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Таблица поиска с таким ключом отсутсвует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_cant_has_empty_content" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -118,19 +118,19 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_data_value_cannot_be_parsed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Value {0} can not be parsed as decimal number. Column {1}, row {2}." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Значение {0} не может быть прочитано как вещественное число. Колонка {1}, строка {2}." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Значение {0} не может быть прочитано как целое число. Колонка {1}, строка {2}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_duplicating_headers_are_not_allowed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Headers with the same name are not allowed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Заголовки с одинаковым название запрещены" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заголовки с одинаковым именем запрещены" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_empty_or_invalid_header_are_not_allowed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Empty or invalid headers are not allowed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Заголовки с пустым или неверным названием запрещены" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заголовки с пустым или неверным именем запрещены" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_rowcode_column_is_mandatory" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -142,7 +142,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_rowcode_value_cannot_be_parsed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Value {0} can not be parsed as long integer number. Column {1}, row {2}." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Значение {0} не может быть прочитано как длинное целое число. Колонка {1}, строка {2}." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Значение {0} не может быть прочитано как дробное число. Колонка {1}, строка {2}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_rowcode_values_must_be_unique" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -154,7 +154,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_too_many_columns" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Too many columns in uploaded file. Max columns count is {0}" ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_too_many_rows" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -166,13 +166,13 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="MacroAlreadyExist" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Macro with such is is already exist." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Макро с таким ключом уже существует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Макрос с таким ключом уже существует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="MacroIsAbsent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Macro with such is is absent." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Макро с таким ключом отсутствует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Макрос с таким ключом отсутствует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="MoreThanOneQuestionWithSameId" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -208,7 +208,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionIsNotCombobox" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question {0} is not a combo box" ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Вопрос {0} не является комбобоксом." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Вопрос {0} не является комбобоксом." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionnaireCantBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -226,7 +226,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionnaireTitleIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire's title can not be empty or contains whitespace only." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Заголовок вопросника не может быть пустым." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имя опросника не может быть пустым." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionTypeIsNotSupported" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -244,7 +244,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="SectionCantHaveMoreThan_Items" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Section cannot have more than {0} child items" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Секция не может содержать более {0} дочерних элементов." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Секция не может содержать более {0} дочерних элементов." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="StaticTextCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -262,7 +262,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="SubSectionDepthLimit" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Sub-section or roster depth cannot be higher than {0}." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вложенность групп и ростеров не может быть больше чем {0}." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вложенность подсекций и ростеров не может быть больше чем {0}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="UnknownTypeCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -976,7 +976,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0098_QuestionnaireHasSizeMoreThan5MB" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than {1}MB." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Размер опросника примерно равен {0:0.##} МБ и слишком велик для правильной работы с Survey Solutions. Попытайтесь уменьшить количество данных, пока оно не будет меньше, чем {1} МБ." er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Размер опросника примерно равен {0:0.##} МБ и слишком велик для правильной работы с Survey Solutions. Попытайтесь уменьшить количество данных, пока оно не будет меньше, чем {1} МБ." er="" ts="Translated" qs="Approved" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1384,7 +1384,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0237_BitwiseAnd" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="&amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&amp; используется в выражении. Убедитесь, что вы понимаете разницу между операторами &amp; и &amp;&amp;. В большинстве случаев используйте &amp;&amp;." er="The invariant text and the locale text contain a different number of menu shortcuts (&quot;&amp;&amp;&quot;)." ts="Translated" qs="Approved" />
+            <li lc="ru" tx="&amp; используется в выражении. Убедитесь, что вы понимаете разницу между операторами &amp; и &amp;&amp;. В большинстве случаев используйте &amp;&amp;." er="" ts="Translated" qs="Approved" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0238_BitwiseOr" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
