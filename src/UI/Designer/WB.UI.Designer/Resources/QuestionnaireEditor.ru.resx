@@ -938,6 +938,9 @@
   <data name="DefaultNewRoster" xml:space="preserve">
     <value>Новый ростер</value>
   </data>
+  <data name="DefaultNewSection" xml:space="preserve">
+    <value>Новая секция</value>
+  </data>
   <data name="DefaultNewStaticText" xml:space="preserve">
     <value>Новый статический текст</value>
   </data>

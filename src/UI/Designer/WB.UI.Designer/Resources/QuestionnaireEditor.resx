@@ -910,6 +910,9 @@
   <data name="DefaultNewRoster" xml:space="preserve">
     <value>New roster</value>
   </data>
+  <data name="DefaultNewSection" xml:space="preserve">
+    <value>New section</value>
+  </data>
   <data name="DefaultNewStaticText" xml:space="preserve">
     <value>New static text</value>
   </data>
