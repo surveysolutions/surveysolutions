@@ -1087,7 +1087,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterview.ru.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterview.zh.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
@@ -1724,9 +1723,7 @@
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Controllers\WebInterviewController.Actions.cs">
-      <DependentUpon>WebInterviewController.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
