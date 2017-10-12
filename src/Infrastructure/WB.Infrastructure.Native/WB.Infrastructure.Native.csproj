@@ -24,7 +24,7 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="NHibernate" Version="4.1.1.4000" />
+    <PackageReference Include="NHibernate" Version="5.0.0" />
     <PackageReference Include="Ninject" Version="3.2.2.0" />
     <PackageReference Include="Ninject.MVC5" Version="3.2.1.0" />
     <PackageReference Include="Ninject.Web.Common" Version="3.2.3.0" />

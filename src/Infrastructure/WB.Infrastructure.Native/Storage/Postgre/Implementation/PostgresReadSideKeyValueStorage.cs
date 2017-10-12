@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using Ninject;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
@@ -24,19 +24,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.EnshureTableExists();
         }
 
-        protected override object ExecuteScalar(IDbCommand command)
+        protected override object ExecuteScalar(DbCommand command)
         {
             this.EnlistInTransaction(command);
             return command.ExecuteScalar();
         }
 
-        protected override int ExecuteNonQuery(IDbCommand command)
+        protected override int ExecuteNonQuery(DbCommand command)
         {
             this.EnlistInTransaction(command);
             return command.ExecuteNonQuery();
         }
 
-        private void EnlistInTransaction(IDbCommand command)
+        private void EnlistInTransaction(DbCommand command)
         {
             var session = this.sessionProvider.GetSession();
             command.Connection = session.Connection;
