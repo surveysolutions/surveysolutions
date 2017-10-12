@@ -43,7 +43,7 @@
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="NHibernate" Version="4.1.1.4000" />
+    <PackageReference Include="NHibernate" Version="5.0.0" />
     <PackageReference Include="Ninject" Version="3.2.2.0" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Quartz" Version="2.5.0" />

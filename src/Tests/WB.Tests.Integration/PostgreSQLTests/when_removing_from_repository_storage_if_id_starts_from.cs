@@ -22,21 +22,22 @@ namespace WB.Tests.Integration.PostgreSQLTests
     {
         Establish context = () =>
         {
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            var connectionString = connectionStringBuilder.ConnectionString;
+            pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
-                db.ConnectionString = TestConnectionString;
+                db.ConnectionString = connectionString;
                 db.Dialect<PostgreSQL91Dialect>();
-                db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
             });
             cfg.AddDeserializedMapping(CreateMapping(), "Main");
             var update = new SchemaUpdate(cfg);
             update.Execute(true, true);
             var sessionFactory = cfg.BuildSessionFactory();
-            var session = sessionFactory.OpenSession();
+            session = sessionFactory.OpenSession();
 
             var sessionProvider =
                 Mock.Of<ISessionProvider>(
@@ -58,11 +59,16 @@ namespace WB.Tests.Integration.PostgreSQLTests
 
         It should_vitaliy_value_be_not_null = () => storage.GetById("vitaliy").ShouldNotBeNull();
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        Cleanup things = () =>
+        {
+            session.Close();
+            pgSqlConnection.Close();
+        };
 
         static PostgreReadSideStorage<TestRemoveStartsFrom> storage;
         static string nastya = "nastya";
         static NpgsqlConnection pgSqlConnection;
+        private static ISession session;
 
         private static HbmMapping CreateMapping()
         {

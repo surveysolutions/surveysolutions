@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Net;
 using NHibernate;
 using NHibernate.Dialect;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 using Npgsql;
@@ -38,9 +40,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return x?.GetHashCode() ?? 0;
         }
 
-        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
-            object obj = NHibernateUtil.String.NullSafeGet(rs, names);
+            object obj = NHibernateUtil.String.NullSafeGet(rs, names, session);
             if (obj == null)
             {
                 return null;
@@ -48,15 +50,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return IPAddress.Parse(obj.ToString());
         }
 
-        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
             if (value == null)
             {
-                ((IDataParameter)cmd.Parameters[index]).Value = DBNull.Value;
+                (cmd.Parameters[index] as IDataParameter).Value = DBNull.Value;
             }
             else
             {
-                ((IDataParameter)cmd.Parameters[index]).Value = value.ToString();
+                (cmd.Parameters[index] as IDataParameter).Value = value.ToString();
             }
         }
 
@@ -91,20 +93,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
     {
         bool IUserType.Equals(object x, object y) => x.Equals(y);
         public int GetHashCode(object x) => x?.GetHashCode() ?? 0;
-
-        public virtual object NullSafeGet(IDataReader resultSet, string[] names, object owner)
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
-            var index = resultSet.GetOrdinal(names[0]);
+            var index = rs.GetOrdinal(names[0]);
 
-            if (resultSet.IsDBNull(index))
+            if (rs.IsDBNull(index))
                 return RosterVector.Empty;
-            
-            RosterVector res = resultSet.GetValue(index) as int[];
+
+            RosterVector res = rs.GetValue(index) as int[];
 
             return res == null ? RosterVector.Empty : res;
         }
 
-        public virtual void NullSafeSet(IDbCommand cmd, object value, int index)
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
             var parameter = ((IDbDataParameter)cmd.Parameters[index]);
             if (value == null)
@@ -148,7 +149,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return x?.GetHashCode() ?? 0;
         }
 
-        public virtual object NullSafeGet(IDataReader resultSet, string[] names, object owner)
+        public virtual object NullSafeGet(DbDataReader resultSet, string[] names, ISessionImplementor session, object owner)
         {
             var index = resultSet.GetOrdinal(names[0]);
 
@@ -167,7 +168,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             throw new NotImplementedException();
         }
 
-        public virtual void NullSafeSet(IDbCommand cmd, object value, int index)
+        public virtual void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
             var parameter = ((IDbDataParameter)cmd.Parameters[index]);
             if (value == null)
@@ -266,7 +267,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return x?.GetHashCode() ?? 0;
         }
 
-        public override object NullSafeGet(IDataReader resultSet, string[] names, object owner)
+        public override object NullSafeGet(DbDataReader resultSet, string[] names, ISessionImplementor session, object owner)
         {
             var index = resultSet.GetOrdinal(names[0]);
 
@@ -276,7 +277,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             }
 
             var value = resultSet.GetValue(index);
-            var res = (TResult) convertor.Convert(value);
+            var res = (TResult)convertor.Convert(value);
 
             if (res != null)
             {
@@ -286,16 +287,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             throw new NotImplementedException();
         }
 
-        public override void NullSafeSet(IDbCommand cmd, object value, int index)
+        public override void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
-            var parameter = (IDbDataParameter) cmd.Parameters[index];
+            var parameter = (IDbDataParameter)cmd.Parameters[index];
             if (value == null)
             {
                 parameter.Value = DBNull.Value;
             }
             else
             {
-                parameter.Value = (T[]) this.convertor.Convert(value);
+                parameter.Value = (T[])this.convertor.Convert(value);
             }
         }
     }
@@ -322,8 +323,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         }
 
         public int GetHashCode(object x) => x == null ? 0 : x.GetHashCode();
-
-        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
             if (names.Length != 1)
                 throw new InvalidOperationException("Only expecting one column...");
@@ -334,7 +334,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return result;
         }
 
-        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
             var expectedValue = value as T;
 
@@ -344,7 +344,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             if (expectedValue == null)
                 parameter.Value = DBNull.Value;
             else
-                parameter.Value = JsonConvert.Serialize(expectedValue);
+                parameter.Value = JsonConvert.Serialize(expectedValue); 
         }
 
         public object DeepCopy(object value)
@@ -397,8 +397,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         }
 
         public int GetHashCode(object x) => x == null ? 0 : x.GetHashCode();
-
-        public object NullSafeGet(IDataReader rs, string[] names, object owner)
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
         {
             if (names.Length != 1)
                 throw new InvalidOperationException("Only expecting one column...");
@@ -409,7 +408,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
             return result;
         }
 
-        public void NullSafeSet(IDbCommand cmd, object value, int index)
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
         {
             var parameter = (NpgsqlParameter)cmd.Parameters[index];
             parameter.NpgsqlDbType = NpgsqlDbType.Jsonb;
