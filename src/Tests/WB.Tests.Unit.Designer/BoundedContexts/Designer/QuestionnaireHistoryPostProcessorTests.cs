@@ -836,7 +836,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.UserId, Is.EqualTo(responsibleId));
             Assert.That(questionnaireHistoryItem.UserName, Is.EqualTo(responsibleUserName));
             Assert.That(questionnaireHistoryItem.Sequence, Is.EqualTo(0));
-            Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Group));
+            Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(variable));
             Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
@@ -897,7 +897,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateGroupHistoryItem.UserId, Is.EqualTo(responsibleId));
             Assert.That(updateGroupHistoryItem.UserName, Is.EqualTo(responsibleUserName));
             Assert.That(updateGroupHistoryItem.Sequence, Is.EqualTo(0));
-            Assert.That(updateGroupHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Group));
+            Assert.That(updateGroupHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(updateGroupHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(updateGroupHistoryItem.TargetItemTitle, Is.EqualTo(variable));
             Assert.That(updateGroupHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
@@ -911,7 +911,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(groupBecameARosterHistoryItem.UserId, Is.EqualTo(responsibleId));
             Assert.That(groupBecameARosterHistoryItem.UserName, Is.EqualTo(responsibleUserName));
             Assert.That(groupBecameARosterHistoryItem.Sequence, Is.EqualTo(1));
-            Assert.That(groupBecameARosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Group));
+            Assert.That(groupBecameARosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(groupBecameARosterHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(groupBecameARosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
             Assert.That(groupBecameARosterHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
@@ -1059,7 +1059,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
 
             Assert.That(newHistoryItems.Length, Is.EqualTo(4));
-            Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Group));
+            Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(newHistoryItems[1].TargetItemType, Is.EqualTo(QuestionnaireItemType.StaticText));
             Assert.That(newHistoryItems[2].TargetItemType, Is.EqualTo(QuestionnaireItemType.Variable));
             Assert.That(newHistoryItems[3].TargetItemType, Is.EqualTo(QuestionnaireItemType.Question));
@@ -1129,7 +1129,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var state = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
 
             Assert.That(newHistoryItems.Length, Is.EqualTo(1));
-            Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Group));
+            Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
 
             Assert.That(state.VariableState.ContainsKey(variableId));

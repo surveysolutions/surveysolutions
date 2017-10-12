@@ -268,7 +268,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login.
+        ///   Looks up a localized string similar to Login or email.
         /// </summary>
         public static string LoginName {
             get {

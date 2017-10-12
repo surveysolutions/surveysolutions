@@ -169,7 +169,7 @@
     <value>Вход или</value>
   </data>
   <data name="LoginName" xml:space="preserve">
-    <value>Имя пользователя</value>
+    <value>Имя пользователя или адрес электронной почты</value>
   </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>Имя пользователя или пароль</value>
