@@ -22,7 +22,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [TestCase("_variable", "WB0123")]
         [TestCase("variable_", "WB0124")]
         [TestCase("vari__able", "WB0125")]
-        [TestCase("a23456789012345678901", "WB0121")]
         public void variable_variable_name_is_invalid(string variable, string errorCode)
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
@@ -36,13 +35,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [TestCase("_variable", "WB0123")]
         [TestCase("variable_", "WB0124")]
         [TestCase("vari__able", "WB0125")]
-        [TestCase("a23456789012345678901", "WB0121")]
         public void roster_variable_name_is_invalid(string variable, string errorCode)
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
                     Create.FixedRoster(Id1, variable: variable)
                 })
                 .ExpectError(errorCode);
+
+        public void text_question_variable_name_is_too_long()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.TextQuestion(Id1, variable: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                })
+                .ExpectError("WB0121");
 
         [TestCase("variableЙФЪ", "WB0122")]
         [TestCase("1variable", "WB0123")]
