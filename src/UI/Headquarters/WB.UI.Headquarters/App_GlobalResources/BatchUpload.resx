@@ -563,4 +563,7 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
   <data name="Import_Verification_Errors" xml:space="preserve">
     <value>{0} errors</value>
   </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Questionnaire cannot be used for preloading</value>
+  </data>
 </root>
