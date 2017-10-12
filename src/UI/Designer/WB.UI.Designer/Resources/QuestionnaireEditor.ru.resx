@@ -935,4 +935,13 @@
   <data name="OptionsUploadParent" xml:space="preserve">
     <value>Родительское значение</value>
   </data>
+  <data name="DefaultNewRoster" xml:space="preserve">
+    <value>Новый ростер</value>
+  </data>
+  <data name="DefaultNewStaticText" xml:space="preserve">
+    <value>Новый статический текст</value>
+  </data>
+  <data name="DefaultNewSubsection" xml:space="preserve">
+    <value>Новая подсекция</value>
+  </data>
 </root>
