@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Resources;
 using System.Web.Mvc;
@@ -31,12 +29,9 @@ using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
 using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 using Microsoft.AspNet.Identity;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using StackExchange.Exceptional;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Headquarters.Utils;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -420,27 +415,11 @@ namespace WB.UI.Headquarters.Controllers
         protected override void OnException(ExceptionContext filterContext)
         {
             var interviewException = filterContext.Exception.GetSelfOrInnerAs<InterviewException>();
-            if (interviewException != null)
+            if (interviewException != null 
+                && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
             {
-                string errorMessage = "";
-                switch (interviewException.ExceptionType)
-                {
-                    case InterviewDomainExceptionType.InterviewLimitReached:
-                        errorMessage = WebInterview.ServerUnderLoad;
-                        break;
-
-                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
-                    case InterviewDomainExceptionType.InterviewHardDeleted:
-                        errorMessage = WebInterview.Error_InterviewExpired;
-                        break;
-                    case InterviewDomainExceptionType.OtherUserIsResponsible:
-                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
-                        errorMessage = WebInterview.Error_NoActionsNeeded;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                string errorMessage = Headquarters.API.WebInterview.WebInterview.GetUiMessageFromException(interviewException);
+                
                 this.HandleInterviewAccessError(filterContext, errorMessage);
                 return;
             }
@@ -450,8 +429,7 @@ namespace WB.UI.Headquarters.Controllers
                 return;
             }
 
-            var interviewAccessException = filterContext.Exception as WebInterviewAccessException;
-            if (interviewAccessException != null)
+            if (filterContext.Exception is WebInterviewAccessException interviewAccessException)
             {
                 if (interviewAccessException.Reason == InterviewAccessExceptionReason.UserNotAuthorised)
                 {
@@ -482,9 +460,9 @@ namespace WB.UI.Headquarters.Controllers
                 return;
             }
 
+            filterContext.Exception.Log(System.Web.HttpContext.Current);
             this.HandleInDebugMode(filterContext);
         }
-
 
         [Conditional("DEBUG")]
         private void HandleInDebugMode(ExceptionContext filterContext)
