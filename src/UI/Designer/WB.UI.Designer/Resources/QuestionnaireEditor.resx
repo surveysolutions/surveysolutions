@@ -907,4 +907,13 @@
   <data name="SideBarAttachmentNoName" xml:space="preserve">
     <value>attachment with no name</value>
   </data>
+  <data name="DefaultNewRoster" xml:space="preserve">
+    <value>New roster</value>
+  </data>
+  <data name="DefaultNewStaticText" xml:space="preserve">
+    <value>New static text</value>
+  </data>
+  <data name="DefaultNewSubsection" xml:space="preserve">
+    <value>New sub-section</value>
+  </data>
 </root>

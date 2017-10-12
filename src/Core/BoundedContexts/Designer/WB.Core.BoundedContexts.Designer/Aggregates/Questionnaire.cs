@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 CreatedBy = createdBy
             };
 
-            this.AddGroup(CreateGroup(Guid.NewGuid(), "New Section", null, null, null,false), null);
+            this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, null, null, null,false), null);
         }
 
         public void CloneQuestionnaire(string title, bool isPublic, Guid createdBy, Guid publicKey, IQuestionnaireDocument source)
