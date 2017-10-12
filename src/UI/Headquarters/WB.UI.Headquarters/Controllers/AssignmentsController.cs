@@ -59,16 +59,6 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(model);
         }
-
-        private static readonly ResourceManager[] Resources =
-        {
-            MainMenu.ResourceManager,
-            Assignments.ResourceManager,
-            Pages.ResourceManager,
-            global::Resources.Common.ResourceManager,
-            Strings.ResourceManager
-        };
-
     }
 
     public class AssignmentsFilters
