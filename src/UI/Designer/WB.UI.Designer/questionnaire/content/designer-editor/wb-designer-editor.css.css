@@ -809,6 +809,8 @@
   max-height: 25px;
   overflow: hidden;
   vertical-align: top;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 #designer-editor.container section#header > .header-line > .questionnarie-title > .title .questionnarie-title-buttons {
   display: block;
