@@ -240,4 +240,7 @@
   <data name="UserName_required" xml:space="preserve">
     <value>Login is required</value>
   </data>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>Questionnaire title is required</value>
+  </data>
 </root>
