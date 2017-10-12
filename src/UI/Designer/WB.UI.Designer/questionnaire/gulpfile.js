@@ -8,12 +8,13 @@ const debug = require('gulp-debug');
 const appendPrepend = require('gulp-append-prepend');
 const minifyHTML = require('gulp-htmlmin');
 const templateCache = require("gulp-angular-templatecache");
+const fs = require("fs");
 
 const paths = {
   scripts: ['details/scripts/**/*.js'],
   htmls: ['details/views/**/*.html'],
   vendor: [
-    'node_modules/angular-block-ui/dist/css/angular-block-ui.css',
+    'node_modules/angular-block-ui/dist/angular-block-ui.css',
     'node_modules/angular-hotkeys/build/hotkeys.css',
     'node_modules/angular-loading-bar/build/loading-bar.css',
     'node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css',
@@ -69,7 +70,7 @@ const paths = {
     'node_modules/xss/dist/xss.js',
     'node_modules/html5shiv/dist/html5shiv.js',
     'node_modules/angular-ui-ace/src/ui-ace.js',
-    'node_modules/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js',
+    'external/jquery.validate.unobtrusive.bootstrap.js',
     'node_modules/jquery-validation/dist/jquery.validate.js',
     'details/scripts/modules/perfect_scrollbar.js',
     'node_modules/angular-pnotify/src/angular-pnotify.js',
@@ -80,6 +81,10 @@ const paths = {
     'node_modules/ng-i18next/dist/ng-i18next.js'
   ]  
 };
+
+paths.vendor.forEach((f) => {
+  fs.statSync(f); // ensure that all files are existing
+});
 
 gulp.task('clean', function	(){
 	return gulp.src('build/*')
