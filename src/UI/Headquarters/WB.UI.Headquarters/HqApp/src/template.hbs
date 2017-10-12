@@ -2,6 +2,7 @@
 {{#with htmlWebpackPlugin}}
 <script>
     window.CONFIG.locale = {
+        locale: '@System.Globalization.CultureInfo.CurrentUICulture.Name',
         locales: {{{ options.locales }}}
     }
 </script>
