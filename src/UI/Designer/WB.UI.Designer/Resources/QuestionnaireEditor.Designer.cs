@@ -898,6 +898,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keyboard Shortcuts.
+        /// </summary>
+        public static string HotkeysShortcuts {
+            get {
+                return ResourceManager.GetString("HotkeysShortcuts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show / hide this help menu.
+        /// </summary>
+        public static string HotkeysShowHideHelp {
+            get {
+                return ResourceManager.GetString("HotkeysShowHideHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log out.
         /// </summary>
         public static string LogOut {

@@ -153,7 +153,7 @@
         $httpProvider.interceptors.push('authorizationInterceptor');
     }])
     .config(['blockUIConfig', function (blockUiConfig) {
-        blockUiConfig.message = 'Please wait...';
+        blockUiConfig.message = '';
         blockUiConfig.autoBlock = false;
     }])
     .config(['unsavedWarningsConfigProvider', function (unsavedWarningsConfigProvider) {
@@ -166,6 +166,24 @@
     }])
     .config(['$qProvider', function ($qProvider) {
         $qProvider.errorOnUnhandledRejections(false);
+    }])
+    .config(['hotkeysProvider', function(hotkeysProvider) {
+        hotkeysProvider.cheatSheetDescription = 'HotkeysShowHideHelp';
+        hotkeysProvider.templateTitle = 'HotkeysShortcuts';
+        hotkeysProvider.template = '<div class="cfp-hotkeys-container fade" ng-class="{in: helpVisible}" style="display: none;"><div class="cfp-hotkeys">' +
+                          '<h4 class="cfp-hotkeys-title" ng-if="!header">{{ title | i18next}}</h4>' +
+                          '<div ng-bind-html="header" ng-if="header"></div>' +
+                          '<table><tbody>' +
+                            '<tr ng-repeat="hotkey in hotkeys | filter:{ description: \'!$$undefined$$\' }">' +
+                              '<td class="cfp-hotkeys-keys">' +
+                                '<span ng-repeat="key in hotkey.format() track by $index" class="cfp-hotkeys-key">{{ key }}</span>' +
+                              '</td>' +
+                              '<td class="cfp-hotkeys-text">{{ hotkey.description | i18next }}</td>' +
+                            '</tr>' +
+                          '</tbody></table>' +
+                          '<div ng-bind-html="footer" ng-if="footer"></div>' +
+                          '<div class="cfp-hotkeys-close" ng-click="toggleCheatSheet()">&#215;</div>' +
+                        '</div></div>';
     }]);
 
     angular.module('templates', []);
