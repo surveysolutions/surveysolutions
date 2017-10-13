@@ -6,7 +6,6 @@
             $scope.downloadBaseUrl = '../../translations';
             $scope.isReadOnlyForUser = false;
 
-
             var hideTranslationsPane = 'ctrl+shift+t';
 
             if (hotkeys.get(hideTranslationsPane) !== false) {
@@ -24,6 +23,7 @@
                 translation.translationId = translationDto.translationId;
                 translation.name = translationDto.name;
                 translation.file = null;
+                translation.isDefault = translationDto.isDefault;
                 translation.content = {};
                 translation.content.details = {};
 
@@ -164,6 +164,20 @@
             $scope.getDefaultTemplate = function () {
             };
 
+            $scope.setDefaultTranslation = function (translationIndex) {
+                var translationId = null;
+
+                _.forEach($scope.translations, function(translation, index) {
+                    if(translationIndex === index) {
+                        translation.isDefault = true;
+                        translationId = translation.translationId;
+                    } else {
+                        translation.isDefault = false;
+                    }
+                });
+
+                commandService.setDefaultTranslation($state.params.questionnaireId, translationId);
+            };
 
             $scope.foldback = function () {
                 $scope.isFolded = false;
@@ -176,7 +190,6 @@
                     setTimeout(function () { utilityService.focus("focusTranslation" + params.focusOn); }, 500);
                 }
             });
-
 
             $scope.$on('closeTranslationsRequested', function () {
                 $scope.foldback();

@@ -1,0 +1,7 @@
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "build": true,
+        "./content/**/*.css": true
+    }
+}

@@ -583,6 +583,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
         }
 
+        public void SetDefaultTranslation(SetDefaultTranslation command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            this.innerDocument.DefaultTranslation = command.TranslationId;
+        }
+
         #endregion
 
         #region Lookup table command handlers

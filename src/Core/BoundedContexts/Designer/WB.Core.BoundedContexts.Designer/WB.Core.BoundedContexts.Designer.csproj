@@ -144,9 +144,11 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
       <Generator></Generator>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\VerificationMessages.ru.resx">
       <Generator></Generator>
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\VerificationMessages.resx">
       <CustomToolNamespace></CustomToolNamespace>

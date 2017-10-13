@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, DeleteAttachment>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
         ICommandPostProcessor<Questionnaire, DeleteTranslation>,
+        ICommandPostProcessor<Questionnaire, SetDefaultTranslation>,
         ICommandPostProcessor<Questionnaire, AddGroup>,
         ICommandPostProcessor<Questionnaire, UpdateGroup>,
         ICommandPostProcessor<Questionnaire, MoveGroup>,
@@ -273,6 +274,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteAttachment command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, AddOrUpdateTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, DeleteTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
+        public void Process(Questionnaire aggregate, SetDefaultTranslation command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, AddGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, MoveGroup command) => this.Update(command.QuestionnaireId.FormatGuid());
@@ -297,7 +299,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, UpdateCascadingComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateFilteredComboboxOptions command) => this.Update(command.QuestionnaireId.FormatGuid());
         public void Process(Questionnaire aggregate, UpdateAreaQuestion command) => this.Update(command.QuestionnaireId.FormatGuid());
-
         public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
             => this.Update(command.QuestionnaireId.FormatGuid(), aggregate.QuestionnaireDocument.Title, aggregate.QuestionnaireDocument.IsPublic);
 
