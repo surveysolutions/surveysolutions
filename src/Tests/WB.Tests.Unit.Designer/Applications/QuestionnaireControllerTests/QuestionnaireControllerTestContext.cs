@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
@@ -34,6 +35,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 userHelper ?? Mock.Of<IMembershipUserService>(),
                 questionnaireHelper ?? Mock.Of<IQuestionnaireHelper>(),
                 questionnaireViewFactory ?? Mock.Of<IQuestionnaireViewFactory>(),
+                Mock.Of<IFileSystemAccessor>(),
                 logger ?? Mock.Of<ILogger>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
