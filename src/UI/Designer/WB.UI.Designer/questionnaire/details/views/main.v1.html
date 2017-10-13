@@ -319,7 +319,9 @@
                     <form role="form" name="translationsForm" novalidate>
                         <div class="translation-list">
                             <ng-form name="translation.form" ng-repeat="translation in translations">
-                                <div class="translations-panel-item" ng-class="{'has-error': translation.form.name.$error.pattern}" ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                <div class="translations-panel-item" ng-class="{'has-error': translation.form.name.$error.pattern}" 
+                                        ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)" 
+                                        ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                     <a href ng-click="deleteTranslation($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="translation-content">
                                         <input focus-on-out="focusTranslation{{translation.translationId}}"
@@ -336,13 +338,25 @@
                                         </div>
                                         <div class="actions" ng-class="{dirty: translation.form.$dirty }">
                                             <div ng-show="translation.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="translation.form.$invalid" class="btn lighter-hover" ng-click="saveTranslation(translation);$event.stopPropagation()" ng-i18next>Save</button>
+                                                <button type="submit" ng-disabled="translation.form.$invalid" class="btn lighter-hover" ng-click="saveTranslation(translation);$event.stopPropagation()"
+                                                    ng-i18next>Save</button>
                                                 <button type="button" class="btn lighter-hover" ng-click="cancel(translation);$event.stopPropagation()" ng-i18next>Cancel</button>
                                             </div>
+
+                                            <button type="button" class="btn btn-default"
+                                                ng-show="translation.isDefault"
+                                                ng-click="setDefaultTranslation(null);$event.stopPropagation()" ng-i18next>Don't use as default</button>
+
                                             <div class="permanent-actions pull-right">
-                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default" target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
-                                                
-                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
+                                                <button type="button" class="btn lighter-hover"
+                                                    ng-show="!translation.isDefault"
+                                                    ng-click="setDefaultTranslation($index);$event.stopPropagation()" ng-i18next>MarkAsDefault</button>
+
+                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default"
+                                                    target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
+                                        
+                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                                    ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
                                                     <span ng-i18next>Update</span>
                                                 </button>
                                             </div>

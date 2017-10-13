@@ -135,6 +135,14 @@
                 return commandCall("DeleteTranslation", command);
             };
 
+            commandService.setDefaultTranslation = function(questionnaireId, translationId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    translationId: translationId
+                };
+                return commandCall("SetDefaultTranslation", command);
+            };
+
             commandService.addMacro = function (questionnaireId, macro) {
                 var command = {
                     questionnaireId: questionnaireId,
