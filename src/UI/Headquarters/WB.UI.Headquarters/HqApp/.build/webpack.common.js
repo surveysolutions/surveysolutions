@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const baseAppPath = "../"
 const baseDir = path.resolve(__dirname, baseAppPath);
-const devMode = process.env.NODE_ENV != 'production'; 
+const devMode = process.env.NODE_ENV != 'production';
 var WebpackNotifierPlugin = require('webpack-notifier');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -10,12 +10,13 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const merge = require('webpack-merge')
 
 const babelLoader = devMode ? "babel-loader?cacheDirectory=true" : "babel-loader"
+const RuntimePublicPathPlugin = require("./RuntimePublicPathPlugin")
 
 module.exports = {
     output: {
         path: path.resolve(__dirname, baseAppPath, "dist"),
         filename: devMode ? "[name].bundle.js" : "[name].bundle.[chunkhash].js",
-        chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js",
+        chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js"
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
@@ -44,12 +45,11 @@ module.exports = {
                 test: /\.js$/,
                 include: path.resolve(baseDir, "src"),
                 use: [babelLoader]
-            }, {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                  use: "css-loader"
-                })
-              }
+            },
+
+            devMode
+                ? { test: /\.css$/, use: "css-loader" }
+                : { test: /\.css$/, use: ExtractTextPlugin.extract({ use: "css-loader" }) }
 
             // , {
             //     test: /\.(js|vue)$/,
@@ -59,7 +59,7 @@ module.exports = {
             //         formatter: require('eslint-friendly-formatter')
             //     }
             // }
-        ]
+        ].filter((x) => x)
     },
 
     plugins: [
@@ -70,12 +70,16 @@ module.exports = {
             'moment': 'moment'
         }),
 
-        new ExtractTextPlugin("styles.css"),
+        new RuntimePublicPathPlugin({
+            runtimePublicPath: "window.CONFIG.assetsPath"
+        }),
+
+        devMode ? null : new ExtractTextPlugin("styles.css"),
         
         devMode ? null : new webpack.optimize.CommonsChunkPlugin({
-            name: 'common',
+            name: 'common'//,
             //async: true,
-            names: ['datatables.net', 'jquery-contextmenu', 'bootstrap-select', 'moment', 'flatpickr']
+            //names: ['datatables.net', 'jquery-contextmenu', 'bootstrap-select', 'moment', 'flatpickr']
         }),
 
         devMode ? null : new webpack.optimize.CommonsChunkPlugin({
