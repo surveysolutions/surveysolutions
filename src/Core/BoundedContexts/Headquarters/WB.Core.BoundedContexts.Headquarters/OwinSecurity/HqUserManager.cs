@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Services;
 using IPasswordHasher = Microsoft.AspNet.Identity.IPasswordHasher;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -16,17 +16,19 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
     public class HqUserManager : UserManager<HqUser, Guid>
     {
         private readonly IHashCompatibilityProvider hashCompatibilityProvider;
-        private readonly ILogger logger;
+        private readonly IAuditLog auditLog;
         private IUserPasswordStore<HqUser, Guid> PasswordStore => this.Store as IUserPasswordStore<HqUser, Guid>;
 
         public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider, 
-            IPasswordHasher passwordHasher, IIdentityValidator<string> identityValidator, ILoggerProvider logger)
+            IPasswordHasher passwordHasher, 
+            IIdentityValidator<string> identityValidator, 
+            IAuditLog auditLog)
             : base(store)
         {
             this.hashCompatibilityProvider = hashCompatibilityProvider;
+            this.auditLog = auditLog;
             this.PasswordHasher = passwordHasher;
             this.PasswordValidator = identityValidator;
-            this.logger = logger.GetFor<HqUserManager>();
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(HqUser user, string newPassword)
@@ -81,12 +83,6 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 {
                     var changeResult = await this.ChangePasswordAsync(user, password);
 
-                    if (changeResult != IdentityResult.Success)
-                    {
-                        this.logger.Warn($"Unable to migrate password for user: {user.UserName}. " +
-                                $"Reason(s): {string.Join("\r\n\r\n", changeResult.Errors)}");
-                    }
-
                     if (changeResult == IdentityResult.Success)
                     {
                         user.PasswordHashSha1 = null;
@@ -106,7 +102,14 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             return result;
         }
-        
+
+        private static readonly List<UserRoles> RolesToIncludeInAuditLog = new List<UserRoles>
+        {
+            UserRoles.Headquarter,
+            UserRoles.ApiUser,
+            UserRoles.Observer
+        };
+
         public virtual async Task<IdentityResult> CreateUserAsync(HqUser user, string password, UserRoles role)
         {
             user.CreationDate = DateTime.UtcNow;
@@ -116,7 +119,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
             if (result.Succeeded)
             {
-                return await this.CreateAsync(user);
+                var identityResult = await this.CreateAsync(user);
+                if (identityResult.Succeeded && RolesToIncludeInAuditLog.Contains(role))
+                {
+                    this.auditLog.Append($"{role} user '{user.UserName}' created");
+                }
+                return identityResult;
             }
 
             return result;
