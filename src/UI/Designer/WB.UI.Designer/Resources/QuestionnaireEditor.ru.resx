@@ -833,7 +833,7 @@
     <value>Закрыть секции</value>
   </data>
   <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
-    <value>Перейти к предидущему</value>
+    <value>Перейти к предыдущему</value>
   </data>
   <data name="HotkeysNavigateToSibling" xml:space="preserve">
     <value>Перейти к следующему </value>
@@ -946,5 +946,11 @@
   </data>
   <data name="DefaultNewSubsection" xml:space="preserve">
     <value>Новая подсекция</value>
+  </data>
+  <data name="HotkeysShortcuts" xml:space="preserve">
+    <value>Горячие клавиши</value>
+  </data>
+  <data name="HotkeysShowHideHelp" xml:space="preserve">
+    <value>Показать / скрыть это меню </value>
   </data>
 </root>
