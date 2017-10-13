@@ -5,17 +5,22 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -76,20 +81,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISessionProvider sessionProvider;
         private readonly IEntitySerializer<object> jsonSerializer;
-        private readonly IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository;
 
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
             IQuestionnaireStorage questionnaireStorage,
             ISessionProvider sessionProvider,
-            IEntitySerializer<object> jsonSerializer,
-            IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository)
+            IEntitySerializer<object> jsonSerializer)
         {
             this.summaryRepository = summaryRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.sessionProvider = sessionProvider;
             this.jsonSerializer = jsonSerializer;
-            this.interviewRepository = interviewRepository;
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
@@ -313,10 +315,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             if (!multimediaQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
 
-            return this.interviewRepository.Query(_ => _
-                .Where(x => multimediaQuestionIds.Contains(x.Identity.Id) && x.IsEnabled && x.AsString != null)
-                .Select(x => new InterviewStringAnswer {InterviewId = x.InterviewId, Answer = x.AsString})
-                .ToArray());
+            return this.sessionProvider.GetSession().Connection
+                .Query<InterviewStringAnswer>($"SELECT {InterviewIdColumn}, {AsStringColumn} as answer " +
+                                              $"FROM {InterviewsTableName} " +
+                                              $"WHERE {EnabledColumn} = true " +
+                                              $"AND {AsStringColumn} IS NOT NULL " +
+                                              $"AND {EntityIdColumn} IN ({string.Join(",", multimediaQuestionIds.Select(x => $"'{x}'"))})")
+                .ToArray();
         }
 
         public InterviewStringAnswer[] GetAllAudioAnswers()
@@ -369,6 +374,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .ToArray();
 
         #region Obsolete InterviewData
+
+        private IEntitySerializer<T> GetSerializer<T>() where T : class => ServiceLocator.Current.GetInstance<IEntitySerializer<T>>() ;
+
         public InterviewData GetInterviewData(Guid interviewId)
         {
             var interviewSummary = this.summaryRepository.GetById(interviewId.FormatGuid());
@@ -393,8 +401,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 this.questionnaireStorage.GetQuestionnaire(
                     QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity), null);
 
-            List<InterviewEntity> interviewEntites =
-                this.interviewRepository.Query(_ => _.Where(x => x.InterviewId == interviewId).ToList());
+            var interviewEntites = this.sessionProvider.GetSession().Connection
+                .Query($"SELECT * FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId", new {InterviewId = interviewId})
+                .ToList()
+                .Select(x => new InterviewEntity
+                {
+                    InterviewId = x.interviewid,
+                    Identity = Identity.Create(x.entityid, x.rostervector),
+                    EntityType = (EntityType)x.entitytype,
+                    AnswerType = (AnswerType?)x.answertype,
+                    IsEnabled = x.isenabled,
+                    IsReadonly = x.isreadonly,
+                    HasFlag = x.hasflag,
+                    InvalidValidations = x.invalidvalidations,
+                    AsString = x.asstring,
+                    AsInt = x.asint,
+                    AsBool = x.asbool,
+                    AsDouble = x.asdouble,
+                    AsDateTime = x.asdatetime,
+                    AsLong = x.aslong,
+                    AsIntArray = x.asintarray,
+                    AsIntMatrix = x.asintmatrix == null ? null : this.GetSerializer<int[][]>().Deserialize(x.asintmatrix),
+                    AsGps = x.asgps == null ? null : this.GetSerializer<GeoPosition>().Deserialize(x.asgps),
+                    AsList = x.aslist == null ? null : this.GetSerializer<InterviewTextListAnswer[]>().Deserialize(x.aslist),
+                    AsYesNo = x.asyesno == null ? null : this.GetSerializer<AnsweredYesNoOption[]>().Deserialize(x.asyesno),
+                    AsAudio = x.asaudio == null ? null : this.GetSerializer<AudioAnswer>().Deserialize(x.asaudio),
+                    AsArea = x.asarea == null ? null : this.GetSerializer<Area>().Deserialize(x.asarea),
+                })
+                .ToList();
 
             var groupBy = interviewEntites
                 .GroupBy(x => x.Identity?.RosterVector ?? RosterVector.Empty)

@@ -11,7 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewEntity : IView
     {
-        public virtual int Id { get; set; }
         public virtual Guid InterviewId { get; set; }
         public virtual Identity Identity { get; set; }
         public virtual EntityType EntityType { get; set; }
@@ -77,5 +76,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     throw new NotSupportedException("Unknown type of answer");
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            var target = obj as InterviewEntity;
+            if (target == null) return false;
+
+            return this.InterviewId == target.InterviewId && this.Identity == target.Identity;
+        }
+
+        public override int GetHashCode() => this.InterviewId.GetHashCode() ^ this.Identity.GetHashCode();
     }
 }
