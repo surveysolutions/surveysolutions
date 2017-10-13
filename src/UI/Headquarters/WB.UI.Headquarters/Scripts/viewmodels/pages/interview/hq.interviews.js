@@ -41,7 +41,7 @@
                 if (itemsThatShouldBeReassigned.length > 0) {
                     var getParamsToAssignToOtherTeam = function(interview) {
                         return {
-                            SupervisorId: self.AssignTo().SupervisorId,
+                            SupervisorId: self.AssignTo().SupervisorId === self.AssignTo().ResponsibleId ? self.AssignTo().SupervisorId : null,
                             InterviewerId: self.AssignTo().InterviewerId,
                             InterviewId: interview.InterviewId
                         }
@@ -135,7 +135,7 @@
                 if (itemsThatShouldBeReassigned.length > 0) {
                     var getParamsToAssignToOtherTeam = function (interview) {
                         return {
-                            SupervisorId: model.Users.AssignTo().SupervisorId,
+                            SupervisorId: model.Users.AssignTo().SupervisorId === model.Users.AssignTo().ResponsibleId ? model.Users.AssignTo().SupervisorId: null,
                             InterviewerId: model.Users.AssignTo().InterviewerId,
                             InterviewId: interview.InterviewId
                         }
