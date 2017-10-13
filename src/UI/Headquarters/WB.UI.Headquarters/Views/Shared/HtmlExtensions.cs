@@ -121,6 +121,7 @@ namespace ASP
                 case MenuItem.DevicesInterviewers: return MainMenu.DevicesInterviewers;
                 case MenuItem.Assignments: return MainMenu.Assignments;
                 case MenuItem.AuditLog: return AuditLog.PageTitle;
+                case MenuItem.Maps: return MainMenu.Maps;
                 default: return String.Empty;
             }
         }

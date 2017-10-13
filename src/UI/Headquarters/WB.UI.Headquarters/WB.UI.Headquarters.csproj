@@ -2163,6 +2163,12 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.1.0\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
   </Target>
+  <Target Name="RemoveNetFxForceConflicts" BeforeTargets="BuiltProjectOutputGroupDependencies">
+    <ItemGroup>
+      <ReferencePath Remove="@(ReferencePath)" Condition="'%(FileName)' == 'netfx.force.conflicts.dll'" />
+    </ItemGroup>
+  </Target>
+
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
