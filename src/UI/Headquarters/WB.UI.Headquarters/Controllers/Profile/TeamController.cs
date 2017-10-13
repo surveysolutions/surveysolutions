@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -25,7 +24,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly HqUserManager userManager;
-        protected IAuditLog auditLog => ServiceLocator.Current.GetInstance<IAuditLog>();
 
         public TeamController(ICommandService commandService, ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager)
             : base(commandService, logger)
