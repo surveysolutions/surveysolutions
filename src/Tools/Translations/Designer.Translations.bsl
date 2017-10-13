@@ -538,7 +538,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0025_LookupHasEmptyName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Lookup table cannot have empty name." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя справочной таблицы не может быть пустым." er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имя справочной таблицы не может быть пустым." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0026_ItemsWithTheSameNamesFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -628,7 +628,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0040_TextListQuestionCannotBeFilledBySupervisor" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="List  question cannot be filled by supervisor." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос-список не может быть заполнен супервизором." er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос-список не может быть заполнен супервизором." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -934,7 +934,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0091_CascadingChildQuestionShouldNotContainCondition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Child cascading combo box question should not contain enabling condition. " ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос с каскадным дочерним каскадом не должен содержать включающее выражение." er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос с каскадным дочерним каскадом не должен содержать включающее выражение." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0092_CascadingChildQuesionShouldNotContainValidation" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -976,7 +976,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0098_QuestionnaireHasSizeMoreThan5MB" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than {1}MB." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Размер опросника примерно равен {0:0.##} МБ и слишком велик для правильной работы с Survey Solutions. Попытайтесь уменьшить количество данных, пока оно не будет меньше, чем {1} МБ." er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="Размер опросника примерно равен {0:0.##} МБ и слишком велик для правильной работы с Survey Solutions. Попытайтесь уменьшить количество данных, пока оно не будет меньше, чем {1} МБ." ts="Translated" qs="Approved" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1384,7 +1384,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0237_BitwiseAnd" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="&amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&amp; используется в выражении. Убедитесь, что вы понимаете разницу между операторами &amp; и &amp;&amp;. В большинстве случаев используйте &amp;&amp;." er="" ts="Translated" qs="Approved" />
+            <li lc="ru" tx="&amp; используется в выражении. Убедитесь, что вы понимаете разницу между операторами &amp; и &amp;&amp;. В большинстве случаев используйте &amp;&amp;." ts="Translated" qs="Approved" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0238_BitwiseOr" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2283,8 +2283,8 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="CreatedDate" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Created date" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Дата создания" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Created on" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Дата создания" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="CreateNew" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2391,8 +2391,8 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="LastModified" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Last modified" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Дата редактирования" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Modified on" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Дата изменения" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="ManageUsers" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
