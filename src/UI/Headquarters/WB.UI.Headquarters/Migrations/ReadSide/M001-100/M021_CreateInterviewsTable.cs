@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using Dapper;
@@ -28,11 +27,12 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
+            var primaryKeyName = "pk_interviews";
+
             Create.Table("interviews")
-                .WithColumn("id").AsInt32().Identity().PrimaryKey()
-                .WithColumn("interviewid").AsGuid()
-                .WithColumn("entityid").AsGuid()
-                .WithColumn("rostervector").AsCustom("int[]").Nullable()
+                .WithColumn("interviewid").AsGuid().PrimaryKey(primaryKeyName)
+                .WithColumn("entityid").AsGuid().PrimaryKey(primaryKeyName)
+                .WithColumn("rostervector").AsCustom("int[]").Nullable().PrimaryKey(primaryKeyName)
                 .WithColumn("entitytype").AsInt32()
                 .WithColumn("answertype").AsInt32().Nullable()
                 .WithColumn("isenabled").AsBoolean().WithDefaultValue(true)
@@ -43,14 +43,14 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("aslong").AsInt64().Nullable()
                 .WithColumn("asdouble").AsDouble().Nullable()
                 .WithColumn("asdatetime").AsDateTime().Nullable()
-                .WithColumn("aslist").AsCustom("json").Nullable()
+                .WithColumn("aslist").AsCustom("jsonb").Nullable()
                 .WithColumn("asintarray").AsCustom("int[]").Nullable()
-                .WithColumn("asintmatrix").AsCustom("json").Nullable()
-                .WithColumn("asgps").AsCustom("json").Nullable()
+                .WithColumn("asintmatrix").AsCustom("jsonb").Nullable()
+                .WithColumn("asgps").AsCustom("jsonb").Nullable()
                 .WithColumn("asbool").AsBoolean().Nullable()
-                .WithColumn("asyesno").AsCustom("json").Nullable()
-                .WithColumn("asaudio").AsCustom("json").Nullable()
-                .WithColumn("asarea").AsCustom("json").Nullable()
+                .WithColumn("asyesno").AsCustom("jsonb").Nullable()
+                .WithColumn("asaudio").AsCustom("jsonb").Nullable()
+                .WithColumn("asarea").AsCustom("jsonb").Nullable()
                 .WithColumn("hasflag").AsBoolean().WithDefaultValue(false);
 
             if (!Schema.Table("interviewdatas").Exists())
@@ -58,85 +58,88 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             Execute.WithConnection((connection, transaction) =>
             {
+                var npgsqlConnection = connection as NpgsqlConnection;
+
                 var logger = ServiceLocator.Current.GetInstance<ILogger>();
 
                 logger.Info("Interview data -> Interviews. Reading interview ids.");
-                var interviewIds = connection.Query<string>("SELECT id FROM \"readside\".\"interviewdatas\"", transaction).ToList();
-                logger.Info($"Interview data -> Interviews. {interviewIds.Count} interviews for processing.");
+
+                int groupInterviewsCount = 10;
+
+                var interviewIds = connection.Query<string>("SELECT id FROM \"readside\".\"interviewdatas\" " +
+                                                            "WHERE \"interviewdatas\".\"value\" IS NOT NULL ", transaction)
+                    .Batch(groupInterviewsCount);
+                var allInterviewsCount = interviewIds.Sum(x=>x.Count());
+
+                logger.Info($"Interview data -> Interviews. {allInterviewsCount} interviews for processing.");
 
                 var deserializer = new EntitySerializer<InterviewData>();
                 var serializer = new EntitySerializer<object>();
 
                 int processedInterviewsCount = 0;
+
                 var sw = new Stopwatch();
                 sw.Start();
-                foreach (string interviewId in interviewIds)
+                TimeSpan totalProcessingTime = TimeSpan.Zero;
+                foreach (var groupOfInterviewIds in interviewIds)
                 {
-                    string jsonInterviewData = null;
-                    using (var dbCommand = connection.CreateCommand())
+                    var interviewsEntities = connection.Query<string>(
+                            $"SELECT value FROM \"readside\".\"interviewdatas\" " +
+                            $"WHERE \"interviewdatas\".\"value\" IS NOT NULL " +
+                            $"AND \"interviewdatas\".\"id\" IN ({string.Join(",", groupOfInterviewIds.Select(x => $"'{x}'"))})",
+                            transaction)
+                        .Select(deserializer.Deserialize)
+                        .SelectMany(
+                            interview => interview.Levels.Values.SelectMany(x => ToEntities(interview.InterviewId, x)));
+
+                    var copyFromCommand =
+                        "COPY  \"readside\".\"interviews\" (interviewid, entityid, rostervector, entitytype, answertype, " +
+                        "isenabled, isreadonly, invalidvalidations, asstring, asint, aslong, asdouble, " +
+                        "asdatetime, asbool, asintarray, aslist, asyesno, asintmatrix, asgps, asaudio, asarea, hasflag) FROM STDIN BINARY;";
+
+                    using (var writer = npgsqlConnection.BeginBinaryImport(copyFromCommand))
                     {
-                        dbCommand.CommandText = "SELECT value FROM \"readside\".\"interviewdatas\" where \"interviewdatas\".\"id\" = @interviewid";
-                        dbCommand.Transaction = transaction;
-                        dbCommand.Parameters.Add(new NpgsqlParameter("interviewid", DbType.String) { Value = interviewId });
-
-
-                        jsonInterviewData = (string)dbCommand.ExecuteScalar();
-                    }
-                    if (string.IsNullOrEmpty(jsonInterviewData)) continue;
-
-                    var interviewData = deserializer.Deserialize(jsonInterviewData);
-                    var entities = interviewData.Levels.Values.SelectMany(x => ToEntities(Guid.Parse(interviewId), x));
-
-                    foreach (var entity in entities)
-                    {
-                        using (var dbCommand = connection.CreateCommand())
+                        foreach (var entity in interviewsEntities)
                         {
-                            dbCommand.CommandText = "INSERT INTO \"readside\".\"interviews\" " +
-                                                    "VALUES (DEFAULT, @interviewid, @entityid, @rostervector, @entitytype, @answertype, " +
-                                                    "@isenabled, @isreadonly, @invalidvalidations, @asstring, @asint, @aslong, @asdouble, " +
-                                                    "@asdatetime, @aslist, @asintarray, @asintmatrix, @asgps, @asbool, @asyesno, @asaudio, @asarea, @hasflag); ";
-
-                            dbCommand.Transaction = transaction;
-
-                            dbCommand.Parameters.Add(new NpgsqlParameter("interviewid", DbType.Guid) { Value = interviewId });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("entityid", DbType.Guid) { Value = entity.Identity.Id });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("rostervector", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = entity.Identity.RosterVector.ToArray() });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("entitytype", DbType.Int32) { Value = entity.EntityType  });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("answertype", DbType.Int32) { Value = entity.AnswerType ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("isenabled", DbType.Boolean) { Value = entity.IsEnabled });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("isreadonly", DbType.Boolean) { Value = entity.IsReadonly });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("invalidvalidations", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = entity.InvalidValidations ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("hasflag", DbType.Boolean) { Value = entity.HasFlag });
-
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asstring", DbType.String) { Value = entity.AsString ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asint", DbType.Int32) { Value = entity.AsInt ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("aslong", DbType.Int64) { Value = entity.AsLong ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asdouble", DbType.Double) { Value = entity.AsDouble ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asdatetime", DbType.DateTime) { Value = entity.AsDateTime ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asbool", DbType.Boolean) { Value = entity.AsBool ?? (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asintarray", NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = entity.AsIntArray ?? (object)DBNull.Value });
-
-                            dbCommand.Parameters.Add(new NpgsqlParameter("aslist", NpgsqlDbType.Json) { Value = entity.AsList != null ? serializer.Serialize(entity.AsList) : (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asyesno", NpgsqlDbType.Json) { Value = entity.AsYesNo != null ? serializer.Serialize(entity.AsYesNo) : (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asintmatrix", NpgsqlDbType.Json) { Value = entity.AsIntMatrix != null ? serializer.Serialize(entity.AsIntMatrix) : (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asgps", NpgsqlDbType.Json) { Value = entity.AsGps != null ? serializer.Serialize(entity.AsGps) : (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asaudio", NpgsqlDbType.Json) { Value = entity.AsAudio != null ? serializer.Serialize(entity.AsAudio) : (object)DBNull.Value });
-                            dbCommand.Parameters.Add(new NpgsqlParameter("asarea", NpgsqlDbType.Json) { Value = entity.AsArea != null ? serializer.Serialize(entity.AsArea) : (object)DBNull.Value });
-
-                            dbCommand.ExecuteNonQuery();
+                            writer.StartRow();
+                            writer.Write(entity.InterviewId, NpgsqlDbType.Uuid);
+                            writer.Write(entity.Identity.Id, NpgsqlDbType.Uuid);
+                            writer.Write(entity.Identity.RosterVector.ToArray(), NpgsqlDbType.Array | NpgsqlDbType.Integer);
+                            writer.Write(entity.EntityType, NpgsqlDbType.Integer);
+                            if (entity.AnswerType == null) writer.WriteNull(); else writer.Write(entity.AnswerType, NpgsqlDbType.Integer);
+                            writer.Write(entity.IsEnabled, NpgsqlDbType.Boolean);
+                            writer.Write(entity.IsReadonly, NpgsqlDbType.Boolean);
+                            if(entity.InvalidValidations == null) writer.WriteNull(); else writer.Write(entity.InvalidValidations, NpgsqlDbType.Array | NpgsqlDbType.Integer);
+                            if(entity.AsString == null) writer.WriteNull(); else writer.Write(entity.AsString, NpgsqlDbType.Text);
+                            if (entity.AsInt == null) writer.WriteNull(); else writer.Write(entity.AsInt, NpgsqlDbType.Integer);
+                            if (entity.AsLong == null) writer.WriteNull(); else writer.Write(entity.AsLong, NpgsqlDbType.Bigint);
+                            if (entity.AsDouble == null) writer.WriteNull(); else writer.Write(entity.AsDouble, NpgsqlDbType.Double);
+                            if (entity.AsDateTime == null) writer.WriteNull(); else writer.Write(entity.AsDateTime, NpgsqlDbType.Timestamp);
+                            if (entity.AsBool == null) writer.WriteNull(); else writer.Write(entity.AsBool, NpgsqlDbType.Boolean);
+                            if (entity.AsIntArray == null) writer.WriteNull(); else writer.Write(entity.AsIntArray, NpgsqlDbType.Array | NpgsqlDbType.Integer);
+                            if (entity.AsList == null) writer.WriteNull(); else writer.Write(serializer.Serialize(entity.AsList), NpgsqlDbType.Jsonb);
+                            if (entity.AsYesNo == null) writer.WriteNull(); else writer.Write(serializer.Serialize(entity.AsYesNo), NpgsqlDbType.Jsonb);
+                            if (entity.AsIntMatrix == null) writer.WriteNull(); else writer.Write(serializer.Serialize(entity.AsIntMatrix), NpgsqlDbType.Jsonb);
+                            if (entity.AsGps == null) writer.WriteNull(); else writer.Write(serializer.Serialize(entity.AsGps), NpgsqlDbType.Jsonb);
+                            if (entity.AsAudio == null) writer.WriteNull(); else writer.Write(serializer.Serialize(entity.AsAudio), NpgsqlDbType.Jsonb);
+                            if (entity.AsArea == null) writer.WriteNull(); else writer.Write(serializer.Serialize(entity.AsArea), NpgsqlDbType.Jsonb);
+                            writer.Write(entity.HasFlag, NpgsqlDbType.Boolean);
                         }
                     }
 
-                    if (++processedInterviewsCount % 10000 == 0)
+                    processedInterviewsCount += groupOfInterviewIds.Count();
+
+                    if (processedInterviewsCount % 10000 == 0)
                     {
                         logger.Info($"Interview data -> Interviews. " +
-                                    $"Processed {processedInterviewsCount} interviews out of {interviewIds.Count} in {sw.Elapsed}");
+                                    $"Processed {processedInterviewsCount} interviews out of {allInterviewsCount} in {sw.Elapsed}");
+                        totalProcessingTime = totalProcessingTime.Add(sw.Elapsed);
                         sw.Restart();
                     }
                 }
 
-                logger.Info("Interview data -> Interviews. Creating index by interviewid, entityid, rostervector.");
-                connection.Execute("ALTER TABLE readside.interviews ADD CONSTRAINT uk_interview UNIQUE(interviewid, entityid, rostervector);", transaction);
+                logger.Info($"Interview data -> Interviews. " +
+                            $"Processed {processedInterviewsCount} interviews out of {allInterviewsCount} in {totalProcessingTime}");
 
                 //logger.Info("Interview data -> Interviews. Removing interview data table.");
                 //connection.Execute("DROP TABLE \"readside\".\"interviewdatas\"", transaction);
@@ -173,7 +176,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     AsLong = question.Value.Answer as long?,
                     AsDateTime = question.Value.Answer as DateTime?,
                     AsDouble = question.Value.Answer as double? ?? (question.Value.Answer is decimal ? (double?)Convert.ToDouble(question.Value.Answer) : null),
-                    AsList = (question.Value.Answer as InterviewTextListAnswers)?.Answers ?? (question.Value.Answer as Tuple<decimal, string>[])?.Select(x=> new InterviewTextListAnswer(x.Item1, x.Item2))?.ToArray(),
+                    AsList = (question.Value.Answer as InterviewTextListAnswers)?.Answers ?? (question.Value.Answer as Tuple<decimal, string>[])?.Select(x => new InterviewTextListAnswer(x.Item1, x.Item2))?.ToArray(),
                     AsYesNo = question.Value.Answer as AnsweredYesNoOption[],
                     AsGps = question.Value.Answer as GeoPosition,
                     AsAudio = question.Value.Answer as AudioAnswer,
