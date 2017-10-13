@@ -151,7 +151,7 @@
     <value>Created By</value>
   </data>
   <data name="CreatedDate" xml:space="preserve">
-    <value>Created date</value>
+    <value>Created on</value>
   </data>
   <data name="CreateNew" xml:space="preserve">
     <value>Create New</value>
@@ -202,7 +202,7 @@
     <value>Initializing</value>
   </data>
   <data name="LastModified" xml:space="preserve">
-    <value>Last modified</value>
+    <value>Modified on</value>
   </data>
   <data name="ManageUsers" xml:space="preserve">
     <value>Manage users</value>
