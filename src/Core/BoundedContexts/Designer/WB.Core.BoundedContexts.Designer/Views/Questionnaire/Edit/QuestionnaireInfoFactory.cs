@@ -31,21 +31,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
        
         private readonly IExpressionProcessor expressionProcessor;
 
-        private static readonly SelectOption[] AllQuestionScopeOptions =
+        private SelectOption[] AllQuestionScopeOptions => new []
         {
-            new SelectOption { Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer },
-            new SelectOption { Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor },
-            new SelectOption { Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden },
-            new SelectOption { Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying }
+            new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
+            new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
+            new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
+            new SelectOption {Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying}
         };
 
         private static readonly HashSet<QuestionType> QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new HashSet<QuestionType>
         { QuestionType.Text, QuestionType.Numeric, QuestionType.DateTime };
 
-        private static readonly HashSet<QuestionType> QuestionsWhichCanBeReferencedByLinkedQuestion = new HashSet<QuestionType>
-        { QuestionType.TextList };
-
-        private static readonly SelectOption[] VariableTypeOptions =
+        private SelectOption[] VariableTypeOptions => new []
         {
             new SelectOption
             {
@@ -74,7 +71,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
         };
 
-        private static readonly SelectOption[] QuestionTypeOptions =
+        private SelectOption[] QuestionTypeOptions => new []
         {
             new SelectOption
             {
@@ -136,7 +133,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private readonly string rosterType = "roster";
 
-        private static readonly SelectOption[] RosterTypeOptions =
+        private SelectOption[] RosterTypeOptions => new[]
         {
             new SelectOption {Value = RosterType.Fixed.ToString(), Text = Roster.RosterType_Fixed},
             new SelectOption {Value = RosterType.List.ToString(), Text = Roster.RosterType_List},
