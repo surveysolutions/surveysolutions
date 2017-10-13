@@ -261,4 +261,7 @@
   <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
     <value>Последняя секция не может быть удалена из опросника</value>
   </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>Значения опций должны быть чиловыми</value>
+  </data>
 </root>
