@@ -5,7 +5,6 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -24,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewFactory : IInterviewFactory
     {
+        private const string PrimaryKeyConstraintName = "pk_interviews";
         private const string InterviewsTableName = "readside.interviews";
         private const string InterviewIdColumn = "interviewId";
         private const string EntityIdColumn = "entityId";
@@ -77,22 +77,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly ISessionProvider sessionProvider;
         private readonly IEntitySerializer<object> jsonSerializer;
         private readonly IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository;
-        private readonly IRosterStructureService rosterStructureService;
 
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
             IQuestionnaireStorage questionnaireStorage,
             ISessionProvider sessionProvider,
             IEntitySerializer<object> jsonSerializer,
-            IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository,
-            IRosterStructureService rosterStructureService)
+            IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository)
         {
             this.summaryRepository = summaryRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.sessionProvider = sessionProvider;
             this.jsonSerializer = jsonSerializer;
             this.interviewRepository = interviewRepository;
-            this.rosterStructureService = rosterStructureService;
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
@@ -109,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {FlagColumn}) " +
                 $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, {flagged}) " +
-                "ON CONFLICT ON CONSTRAINT uk_interview " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
                 "DO UPDATE SET " +
                 $"{FlagColumn} = {flagged};",
                 new
@@ -144,7 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 command.CommandText =
                     $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AnswerTypeColumn}, {columnNameByAnswer}) " +
                     $"VALUES(@{InterviewIdColumn}, @{EntityIdColumn}, @{RosterVectorColumn}, @{EntityTypeColumn}, @{AnswerTypeColumn}, @Answer) " +
-                    "ON CONFLICT ON CONSTRAINT uk_interview " +
+                    $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
                     "DO UPDATE SET " +
                     $"{columnNameByAnswer} = @Answer;";
 
@@ -165,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
-                "ON CONFLICT ON CONSTRAINT uk_interview " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
                 "DO UPDATE SET " +
                 $"{InvalidValidationsColumn} = null;",
                 entityIds.Select(x => new
@@ -181,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {InvalidValidationsColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @InvalidValidations) " +
-                "ON CONFLICT ON CONSTRAINT uk_interview " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
                 "DO UPDATE SET " +
                 $"{InvalidValidationsColumn} = @InvalidValidations;",
                 entityIds.Select(x => new
@@ -197,7 +194,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {EnabledColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @Enabled) " +
-                "ON CONFLICT ON CONSTRAINT uk_interview " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
                 "DO UPDATE SET " +
                 $"{EnabledColumn} = {isEnabled};",
                 entityIds.Select(x => new
@@ -213,7 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {ReadOnlyColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, true) " +
-                "ON CONFLICT ON CONSTRAINT uk_interview " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
                 "DO UPDATE SET " +
                 $"{ReadOnlyColumn} = true;",
                 questionIds.Select(x => new
@@ -289,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
-                "ON CONFLICT ON CONSTRAINT uk_interview " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
                 "DO UPDATE SET " +
                 $"{AsAreaColumn} = null, " +
                 $"{AsAudioColumn} = null, " +
