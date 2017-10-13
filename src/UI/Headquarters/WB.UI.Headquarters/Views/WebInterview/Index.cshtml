@@ -20,24 +20,22 @@
     <link href="~/Dependencies/build/webinterview.css" rel="stylesheet" />
 </head>
 <body class="gray-background">
-    <script>
-        global: CONFIG = {
-            basePath: '@Url.Content("~/")',
-            virtualPath: '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})',
-            imageUploadUri: '@Url.RouteUrl(@"WebInterview.ImageAnswering", new { controller = "WebInterview", Action = "Image"})',
-            audioUploadUri: '@Url.RouteUrl(@"WebInterview.AudioAnswering", new { controller = "WebInterview", Action = "Audio"})',
-            imageGetBase:  '@Url.Content("~/api/WebInterviewResources")',
-            signalrPath: '@Url.Content("~/signalr/hubs")',
-            verboseLogging: false,
-            assetsPath: '@Url.Content("~/InterviewApp")/',
-            supportedTransports: ["webSockets", "longPolling"],
-            appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
-            googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
-            hqLink : @Html.Raw(this.User.Identity.IsAuthenticated && this.User.IsInRole("Interviewer")
-                                    ? "'" + Url.Content(@"~/InterviewerHq/Started") + "'"
-                                    : "null")
-        }
-    </script>
+<script>
+    global: CONFIG = {
+        virtualPath: '@Url.RouteUrl("Default", new {controller = "WebInterview", Action = "Index"})',
+        imageUploadUri: '@Url.RouteUrl(@"WebInterview.ImageAnswering", new { controller = "WebInterview", Action = "Image"})',
+        audioUploadUri: '@Url.RouteUrl(@"WebInterview.AudioAnswering", new { controller = "WebInterview", Action = "Audio"})',
+        imageGetBase:  '@Url.Content("~/api/WebInterviewResources")',
+        signalrPath: '@Url.Content("~/signalr/hubs")',
+        verboseLogging: false,
+        supportedTransports: ["webSockets", "longPolling"],
+        appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
+        googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
+        hqLink : @Html.Raw(this.User.Identity.IsAuthenticated && this.User.IsInRole("Interviewer")
+                     ? "'" + Url.Content(@"~/InterviewerHq/Started") + "'"
+                     : "null")
+    }
+</script>
     <div id="app"></div>
     @Html.Partial("partial.webinterview")
 </body>

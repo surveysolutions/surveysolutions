@@ -1,15 +1,16 @@
 {
     "plugins": [
         [
-            "transform-async-to-generator",
             "syntax-dynamic-import",
+            "dynamic-import-webpack",
+            "transform-async-to-generator",            
             "transform-runtime",
             {
                 "polyfill": true,
                 "regenerator": true
             }
         ]
-    ],    
+    ],
     "presets": [
         [
             "env",
@@ -26,7 +27,9 @@
     ],
     "env": {
         "test": {
-          "plugins": ["transform-es2015-modules-commonjs"]
+            "plugins": [
+                "transform-es2015-modules-commonjs"
+            ]
         }
-      }
+    }
 }
