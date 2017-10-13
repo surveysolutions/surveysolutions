@@ -22,6 +22,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
@@ -38,6 +39,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
@@ -48,6 +50,7 @@ namespace WB.UI.Designer.Controllers
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
             IQuestionnaireViewFactory questionnaireViewFactory,
+            IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
@@ -58,6 +61,7 @@ namespace WB.UI.Designer.Controllers
             this.commandService = commandService;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
@@ -391,11 +395,8 @@ namespace WB.UI.Designer.Controllers
 
         public FileResult ExportOptions()
         {
-            var title = this.questionWithOptionsViewModel.QuestionTitle.RemoveHtmlTags();
-            var questionTitle = title.Length > 50
-                ? title.Substring(0, 50)
-                : title;
-            var fileDownloadName = $"Options-in-question-{questionTitle}.txt";
+            var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
+            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
             return
                 File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
                     fileDownloadName);
