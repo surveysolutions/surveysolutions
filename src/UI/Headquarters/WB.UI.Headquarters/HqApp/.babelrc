@@ -2,8 +2,7 @@
     "plugins": [
         [
             "syntax-dynamic-import",
-            "dynamic-import-webpack",
-            "transform-async-to-generator",            
+            "transform-async-to-generator",
             "transform-runtime",
             {
                 "polyfill": true,
