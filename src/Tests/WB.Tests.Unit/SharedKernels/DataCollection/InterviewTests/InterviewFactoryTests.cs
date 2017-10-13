@@ -30,8 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 summaryRepository: interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 sessionProvider: sessionProvider ?? Mock.Of<ISessionProvider>(),
-                jsonSerializer: jsonSerializer ?? Mock.Of<IEntitySerializer<object>>(), 
-                interviewRepository: interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewEntity>>());
+                jsonSerializer: jsonSerializer ?? Mock.Of<IEntitySerializer<object>>());
         [Test]
         public void when_remove_flag_question_received_by_interviewer()
         {
