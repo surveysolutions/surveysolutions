@@ -182,6 +182,8 @@ table.table-header {
     tr {
         th {
             padding-top: 5px;
+            padding-right: 21px;
+            line-height: 14px;
 
             a {
                 color: @pagination-active-color;
@@ -196,6 +198,7 @@ table.table-header {
             }
 
             &.ordered {
+                padding-right: 8px;
                 a, span.glyphicon {
                     color: @btn-default-color;
                 }
@@ -207,6 +210,7 @@ table.table-header {
 
 table.table-content {
     cursor: default;
+    table-layout: fixed;
 
     tr {
         td {
@@ -267,11 +271,11 @@ table#questionnaire-table-content {
     tr {
         td, th {
             &:nth-child(2) {
-                width: 11%;
+                width: 16%;
             }
 
             &:nth-child(3) {
-                width: 11%;
+                width: 15%;
             }
 
             &:nth-child(4) {

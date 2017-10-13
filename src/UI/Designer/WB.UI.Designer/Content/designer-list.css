@@ -333,6 +333,8 @@ table.table-header {
 }
 table.table-header tr th {
   padding-top: 5px;
+  padding-right: 21px;
+  line-height: 14px;
 }
 table.table-header tr th a {
   color: #b2b2b2;
@@ -343,12 +345,17 @@ table.table-header tr th a:hover {
 table.table-header tr th span.glyphicon {
   color: #b2b2b2;
 }
+table.table-header tr th.ordered,
+table.table-header tr th.ordered{
+    padding-right: 8px;
+}
 table.table-header tr th.ordered a,
 table.table-header tr th.ordered span.glyphicon {
   color: #2a81cb;
 }
 table.table-content {
   cursor: default;
+  table-layout: fixed;
 }
 table.table-content tr td.search-value {
   font-family: 'Roboto-Light', sans-serif;
@@ -396,13 +403,13 @@ table#questionnaire-table-header tr td:nth-child(2),
 table#questionnaire-table-content tr td:nth-child(2),
 table#questionnaire-table-header tr th:nth-child(2),
 table#questionnaire-table-content tr th:nth-child(2) {
-  width: 11%;
+  width: 16%;
 }
 table#questionnaire-table-header tr td:nth-child(3),
 table#questionnaire-table-content tr td:nth-child(3),
 table#questionnaire-table-header tr th:nth-child(3),
 table#questionnaire-table-content tr th:nth-child(3) {
-  width: 11%;
+  width: 15%;
 }
 table#questionnaire-table-header tr td:nth-child(4),
 table#questionnaire-table-content tr td:nth-child(4),
