@@ -316,6 +316,11 @@
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
     <Compile Include="Models\VerificationReferenceEnriched.cs" />
+    <Compile Include="Resources\Paging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Paging.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\PdfMessages.Designer.cs">
       <DependentUpon>PdfMessages.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -869,6 +874,11 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\FindReplaceResources.ru.resx" />
+    <EmbeddedResource Include="Resources\Paging.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Paging.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Paging.ru.resx" />
     <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
       <LastGenOutput>PdfMessages.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>

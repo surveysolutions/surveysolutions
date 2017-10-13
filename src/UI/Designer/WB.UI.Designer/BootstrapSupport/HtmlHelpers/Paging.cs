@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using WB.UI.Designer.Resources;
 
 /*
 <!-- Usage in razor (note @model): -->
@@ -81,19 +82,19 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             }
             else
             {
-                MakeDisabledPagingItem(htmlTitle: "FIRST", root: pager);
-                MakeDisabledPagingItem(htmlTitle: "PREVIOUS", root: pager); 
+                MakeDisabledPagingItem(htmlTitle: Paging.First.ToUpper(), root: pager);
+                MakeDisabledPagingItem(htmlTitle: Paging.Previous.ToUpper(), root: pager); 
             }
 
             if (currentPage < totalPages)
             {
-                MakePagingItem(isActive: false, text: pageUrl(currentPage + 1), htmlTitle: "NEXT", root: pager);
-                MakePagingItem(isActive: false, text: pageUrl(totalPages), htmlTitle: "LAST", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(currentPage + 1), htmlTitle: Paging.Next.ToUpper(), root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(totalPages), htmlTitle: Paging.Last.ToUpper(), root: pager);
             }
             else
             {
-                MakeDisabledPagingItem(htmlTitle: "NEXT", root: pager);
-                MakeDisabledPagingItem(htmlTitle: "LAST", root: pager);
+                MakeDisabledPagingItem(htmlTitle: Paging.Next.ToUpper(), root: pager);
+                MakeDisabledPagingItem(htmlTitle: Paging.Last.ToUpper(), root: pager);
             }
 
             nav.InnerHtml = pagination.ToString() + pager.ToString();
