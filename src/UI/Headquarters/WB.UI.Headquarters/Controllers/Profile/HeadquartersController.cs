@@ -19,13 +19,13 @@ namespace WB.UI.Headquarters.Controllers
     [ValidateInput(false)]
     public class HeadquartersController : TeamController
     {
+
         public HeadquartersController(ICommandService commandService, 
                               ILogger logger,
                               IAuthorizedUser authorizedUser,
                               HqUserManager userManager)
             : base(commandService, logger, authorizedUser, userManager)
         {
-            
         }
 
         public ActionResult Create()
