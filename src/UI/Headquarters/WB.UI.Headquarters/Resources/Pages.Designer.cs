@@ -529,6 +529,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to delete map?.
+        /// </summary>
+        public static string GlobalSettings_DeleteMapConfirmation {
+            get {
+                return ResourceManager.GetString("GlobalSettings_DeleteMapConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete questionnaire? All interviews conducted by current questionnaire will be lost..
         /// </summary>
         public static string GlobalSettings_DeleteQuestionnareConfirmation {

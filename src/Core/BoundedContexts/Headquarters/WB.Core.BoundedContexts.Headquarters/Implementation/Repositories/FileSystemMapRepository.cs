@@ -183,5 +183,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                 }
             }
         }
+
+        public void DeleteMap(string mapName)
+        {
+            var map = this.mapPlainStorageAccessor.GetById(mapName);
+            if (map != null)
+                this.mapPlainStorageAccessor.Remove(mapName);
+
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
+
+            if(this.fileSystemAccessor.IsFileExists(filePath))
+                fileSystemAccessor.DeleteFile(filePath);
+        }
     }
 }

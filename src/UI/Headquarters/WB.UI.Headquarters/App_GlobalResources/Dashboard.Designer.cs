@@ -151,6 +151,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete map.
+        /// </summary>
+        internal static string DeleteMap {
+            get {
+                return ResourceManager.GetString("DeleteMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete questionnaire.
         /// </summary>
         internal static string DeleteQuestionnaire {

@@ -10,5 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         string[] UnzipAndGetFileList(string id);
         void SaveOrUpdateMap(string map);
         void DeleteTempData(string id);
+
+        void DeleteMap(string map);
     }
 }

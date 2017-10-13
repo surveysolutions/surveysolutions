@@ -22,11 +22,13 @@
         var mapsListUrl =
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "MapsApi", action = "Maps"})';
 
+        var $deleteMapUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "MapsApi", action = "DeleteMap"})';
+
         var notifier = new Notifier();
         var ajax = new Ajax(notifier);
 
         $(function() {
-            var model = new Supervisor.VM.Maps(mapsListUrl, notifier, ajax);
+            var model = new Supervisor.VM.Maps(mapsListUrl, notifier, ajax, $deleteMapUrl);
 
             model.getDataTableColumns = function() {
                 return [
@@ -56,6 +58,39 @@
                         "class": "date"
                     }
                 ];
+            };
+
+            model.onTableInitCompleteExtra = function () {
+
+                var buildMenuItem = function(selectedRow) {
+                    var items = {}
+
+
+                    @if (!isObserver)
+                    {
+                        <text>
+                        items["delete"] =
+                        {
+                            name: "@Dashboard.DeleteMap",
+                            callback: model.deleteMap
+                        };
+                        </text>
+                    }
+                    return items;
+                }
+
+                var contextMenuOptions = {
+                    selector: "table#data_holder .with-context-menu",
+                    autoHide: false,
+                    build: function ($trigger, e) {
+                        var selectedRow = model.selectRowAndGetData($trigger);
+                        var items = buildMenuItem(selectedRow);
+                        return { items: items };
+                    },
+                    trigger: 'left'
+                };
+
+                $.contextMenu(contextMenuOptions);
             };
 
             ko.applyBindings(model);
