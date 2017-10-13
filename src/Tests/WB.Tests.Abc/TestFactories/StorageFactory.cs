@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity;
 using Moq;
 using SQLite;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
@@ -21,7 +22,7 @@ namespace WB.Tests.Abc.TestFactories
             Mock.Of<IHashCompatibilityProvider>(),
             Mock.Of<IPasswordHasher>(),
             Mock.Of<IIdentityValidator<string>>(),
-            Mock.Of<ILoggerProvider>()) { }
+            Mock.Of<IAuditLog>()) { }
     }
 
     public class StorageFactory
@@ -38,12 +39,12 @@ namespace WB.Tests.Abc.TestFactories
             IHashCompatibilityProvider hashCompatibilityProvider = null,
             IPasswordHasher passwordHasher = null,
             IIdentityValidator<string> identityValidator = null,
-            ILoggerProvider logger = null)
+            IAuditLog logger = null)
             => new HqUserManager(userStore ?? Mock.Of<IUserStore<HqUser, Guid>>(),
                 hashCompatibilityProvider,
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 identityValidator ?? Mock.Of<IIdentityValidator<string>>(),
-                logger ?? Mock.Of<ILoggerProvider>());
+                logger ?? Mock.Of<IAuditLog>());
 
         public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()
         {
