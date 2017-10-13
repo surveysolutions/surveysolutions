@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Documents;
@@ -2035,6 +2036,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     DomainExceptionType.QuestionIsNotAFilteredCombobox,
                     string.Format(ExceptionMessages.QuestionIsNotCombobox, FormatQuestionForException(questionId, this.innerDocument)));
             }
+
+            ThrowIfOptionsCanNotBeParsed(options);
         }
 
         private void ThrowDomainExceptionIfCascadingComboboxIsInvalid(Guid questionId, Option[] options)
@@ -2045,6 +2048,17 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new QuestionnaireException(
                     DomainExceptionType.QuestionNotFound,
                     string.Format(ExceptionMessages.ComboboxCannotBeFound, questionId));
+            }
+            
+            ThrowIfOptionsCanNotBeParsed(options);
+        }
+
+        private static void ThrowIfOptionsCanNotBeParsed(Option[] options)
+        {
+            if (options.Any(x => !int.TryParse(x.Value, NumberStyles.None, CultureInfo.InvariantCulture, out int _)))
+            {
+                throw new QuestionnaireException(DomainExceptionType.SelectorValueSpecialCharacters,
+                    ExceptionMessages.OptionValuesShouldBeNumbers);
             }
         }
 
