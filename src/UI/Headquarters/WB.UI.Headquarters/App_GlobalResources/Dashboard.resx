@@ -192,4 +192,7 @@
   <data name="UploadAssignments" xml:space="preserve">
     <value>Upload assignments</value>
   </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>Delete map</value>
+  </data>
 </root>

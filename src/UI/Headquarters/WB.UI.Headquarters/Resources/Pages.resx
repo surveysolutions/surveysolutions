@@ -1039,8 +1039,8 @@
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>
-  </data>  
-  <data name="StatusDurationDescription">
+  </data>
+  <data name="StatusDurationDescription" xml:space="preserve">
     <value>Number of days that assignments and interviews have stayed in their current status</value>
   </data>
   <data name="ExportToExcel" xml:space="preserve">
@@ -1069,5 +1069,8 @@
   </data>
   <data name="Or" xml:space="preserve">
     <value>or</value>
+  </data>
+  <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+    <value>Do you want to delete map?</value>
   </data>
 </root>

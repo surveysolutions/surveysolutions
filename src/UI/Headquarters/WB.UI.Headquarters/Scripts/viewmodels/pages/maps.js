@@ -1,4 +1,4 @@
-﻿Supervisor.VM.Maps = function (listViewUrl, notifier, ajax) {
+﻿Supervisor.VM.Maps = function (listViewUrl, notifier, ajax, $deleteMapUrl) {
     Supervisor.VM.Maps.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -13,6 +13,14 @@
     };
 
     self.onTableInitCompleteExtra = function () { };
+
+    self.sendDeleteMapCommand = function (item) {
+        ajax.sendRequest($deleteMapUrl, "post", { map: item.fileName }, false,
+            // onSuccess
+            function () {
+                setTimeout(function () { self.reloadDataTable();; }, 1000);
+            });
+    }
 
     self.onTableInitComplete = function () {
 
