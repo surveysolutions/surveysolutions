@@ -8,7 +8,6 @@ Vue.use(config)
 import Vuei18n from "shared/plugins/locale"
 
 import './init'
-import "./misc/audioRecorder.js"
 import "./misc/htmlPoly.js"
 
 import "./errors"
@@ -28,6 +27,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     const store = require("./store").default;
     const App = require("./App").default;
     const installApi = require("./api").install
+    
     installApi(Vue)
 
     box.init(i18n, browserLanguage)

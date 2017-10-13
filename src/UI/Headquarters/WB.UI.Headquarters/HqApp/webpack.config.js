@@ -7,7 +7,6 @@ const merge = require('webpack-merge')
 const hqViewsFolder = path.resolve(__dirname, "..", "Views")
 const localization = require("./.build/localization")
 
-console.log(`Building HQ UI js in ${(devMode ? "DEVELOPMENT" : "PRODUCTION")} mode.`)
 
 var commonConfig = require("./.build/webpack.common")
 

@@ -44,9 +44,11 @@
     </wb-question>
 </template>
 <script lang="js">
+
 import { entityDetails } from "../mixins"
-import * as $ from 'jquery'
 import moment from "moment"
+import "shared/misc/audioRecorder.js"
+
 const AudioRecorder = new window.AudioRecorder
 
 export default {
