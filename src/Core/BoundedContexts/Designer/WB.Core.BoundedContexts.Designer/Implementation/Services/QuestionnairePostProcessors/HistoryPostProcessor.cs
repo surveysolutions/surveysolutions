@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, DeleteAttachment>,
         ICommandPostProcessor<Questionnaire, AddOrUpdateTranslation>,
         ICommandPostProcessor<Questionnaire, DeleteTranslation>,
+        ICommandPostProcessor<Questionnaire, SetDefaultTranslation>,
         ICommandPostProcessor<Questionnaire, AddGroup>,
         ICommandPostProcessor<Questionnaire, UpdateGroup>,
         ICommandPostProcessor<Questionnaire, MoveGroup>,
@@ -80,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireChangeRecord>>();
 
-        private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTackerStorage
+        private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage
             => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
 
         private IQuestionnireHistoryVersionsService questionnireHistoryVersionsService 
@@ -112,19 +113,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void UpdateQuestionnaireTitleIfNeed(Guid questionnaireId, string title)
         {
-
-            var questionnaireStateTacker = this.questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
-            var titleInState = questionnaireStateTacker.GroupsState[questionnaireId];
+            var questionnaireStateTracker = this.questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
+            var titleInState = questionnaireStateTracker.GroupsState[questionnaireId];
             if (titleInState != title)
             {
-                questionnaireStateTacker.GroupsState[questionnaireId] = title;
-                this.questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId.FormatGuid());
+                questionnaireStateTracker.GroupsState[questionnaireId] = title;
+                this.questionnaireStateTrackerStorage.Store(questionnaireStateTracker, questionnaireId.FormatGuid());
             }
         }
 
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             if (questionnaire == null)
                 return;
 
@@ -149,9 +149,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, ImportQuestionnaire command)
         {
-            var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            var questionnaireStateTracker = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.Source.CreatedBy.Value,
-                questionnaireStateTacker == null ? QuestionnaireActionType.Import : QuestionnaireActionType.Replace, QuestionnaireItemType.Questionnaire,
+                questionnaireStateTracker == null ? QuestionnaireActionType.Import : QuestionnaireActionType.Replace, QuestionnaireItemType.Questionnaire,
                 command.QuestionnaireId, command.Source.Title, aggregate.QuestionnaireDocument);
 
             this.UpdateFullQuestionnaireState(command.Source, command.QuestionnaireId, command.Source.CreatedBy ?? Guid.Empty);
@@ -193,7 +193,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteStaticText command)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             string staticTitle;
             questionnaire.StaticTextState.TryGetValue(command.EntityId, out staticTitle);
 
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             questionnaire.Parents.Remove(command.EntityId);
             questionnaire.StaticTextState.Remove(command.EntityId);
-            this.questionnaireStateTackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
+            this.questionnaireStateTrackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
 
         public void Process(Questionnaire aggregate, MoveStaticText command)
@@ -233,16 +233,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteVariable command)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
-            string variableName;
-            questionnaire.VariableState.TryGetValue(command.EntityId, out variableName);
+            var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            questionnaire.VariableState.TryGetValue(command.EntityId, out var variableName);
 
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
                 QuestionnaireItemType.Variable, command.EntityId, variableName, aggregate.QuestionnaireDocument);
 
             questionnaire.Parents.Remove(command.EntityId);
             questionnaire.VariableState.Remove(command.EntityId);
-            questionnaireStateTackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
+            questionnaireStateTrackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
 
         public void Process(Questionnaire aggregate, MoveVariable command)
@@ -322,6 +321,33 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             => this.DeleteItemFromStateAndUpdateHistory(command.QuestionnaireId, q => q.TranslationState, command.TranslationId,
                 QuestionnaireItemType.Translation, command.ResponsibleId, aggregate.QuestionnaireDocument);
 
+        public void Process(Questionnaire aggregate, SetDefaultTranslation command)
+        {
+            var state = this.questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            bool isDirty = false;
+
+            if (state.TranslationState.TryGetValue(command.QuestionnaireId, out var defaultTranslation))
+            {
+                if (defaultTranslation != command.TranslationId?.FormatGuid())
+                {
+                    state.TranslationState[command.QuestionnaireId] = command.TranslationId?.FormatGuid();
+                    isDirty = true;
+                }
+            }
+            else
+            {
+                state.TranslationState.Add(command.QuestionnaireId, command.TranslationId?.FormatGuid());
+                isDirty = true;
+            }
+            if (isDirty)
+            {
+                this.questionnaireStateTrackerStorage.Store(state, command.QuestionnaireId.FormatGuid());
+            }
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
+              QuestionnaireItemType.Translation, command.QuestionnaireId, null, aggregate.QuestionnaireDocument);
+        }
+
         #endregion
 
         #region Groups and Rosters
@@ -344,7 +370,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var groupTitle = command.VariableName ?? command.Title;
             this.AddOrUpdateGroupState(command.QuestionnaireId, command.GroupId, groupTitle, parentId: null);
 
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
                 questionnaire.GroupsState.ContainsKey(command.GroupId)
                     ? QuestionnaireItemType.Section
@@ -355,7 +381,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteGroup command)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
 
             var isGroup = questionnaire.GroupsState.ContainsKey(command.GroupId);
             string groupTitle;
@@ -368,7 +394,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 isGroup ? QuestionnaireItemType.Section : QuestionnaireItemType.Roster, command.GroupId, groupTitle, aggregate.QuestionnaireDocument);
 
             questionnaire.RemoveCascadely(command.GroupId);
-            this.questionnaireStateTackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
+            this.questionnaireStateTrackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
 
         public void Process(Questionnaire aggregate, MoveGroup command)
@@ -376,7 +402,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void UpdateRoster(Guid questionnaireId, bool isRoster, Guid groupId, Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
             if (isRoster)
             {
                 if (questionnaire.RosterState.ContainsKey(groupId))
@@ -387,7 +413,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 questionnaire.RosterState[groupId] = groupTitle;
                 questionnaire.GroupsState.Remove(groupId);
 
-                this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
+                this.questionnaireStateTrackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
                 this.AddQuestionnaireChangeItem(questionnaireId, responsibleId,
                     QuestionnaireActionType.GroupBecameARoster, QuestionnaireItemType.Section, groupId, groupTitle, questionnaireDocument);
 
@@ -405,7 +431,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 questionnaire.GroupsState[groupId] = rosterTitle;
                 questionnaire.RosterState.Remove(groupId);
 
-                this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
+                this.questionnaireStateTrackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
                 this.AddQuestionnaireChangeItem(questionnaireId, responsibleId,
                     QuestionnaireActionType.RosterBecameAGroup, QuestionnaireItemType.Roster, groupId, rosterTitle, questionnaireDocument);
             }
@@ -503,7 +529,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, DeleteQuestion command)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(command.QuestionnaireId.FormatGuid());
+            var questionnaire = questionnaireStateTrackerStorage.GetById(command.QuestionnaireId.FormatGuid());
             string questionTitle;
             questionnaire.QuestionsState.TryGetValue(command.QuestionId, out questionTitle);
 
@@ -512,7 +538,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             questionnaire.Parents.Remove(command.QuestionId);
             questionnaire.QuestionsState.Remove(command.QuestionId);
-            this.questionnaireStateTackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
+            this.questionnaireStateTrackerStorage.Store(questionnaire, command.QuestionnaireId.FormatGuid());
         }
 
         public void Process(Questionnaire aggregate, MoveQuestion command)
@@ -543,10 +569,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private void MoveEntity(Guid questionnaireId, Guid entityId, Guid? targetGroupOrRosterId, Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
-            var questionnaire = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaire = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
 
             questionnaire.Parents[entityId] = targetGroupOrRosterId;
-            this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
+            this.questionnaireStateTrackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
 
             QuestionnaireChangeReference movedReference = null;
             if (targetGroupOrRosterId.HasValue)
@@ -598,7 +624,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 entityId, moveditemTitle, questionnaireDocument, movedReference);
         }
 
-        private void AddQuestionnaireChangeItem(Guid questionnaireId, Guid responsibleId, QuestionnaireActionType actionType, QuestionnaireItemType targetType, Guid targetId, string targetTitle, QuestionnaireDocument questionnaireDocument, QuestionnaireChangeReference reference = null)
+        private void AddQuestionnaireChangeItem(Guid questionnaireId, 
+            Guid responsibleId, 
+            QuestionnaireActionType actionType, 
+            QuestionnaireItemType targetType, 
+            Guid targetId, 
+            string targetTitle, 
+            QuestionnaireDocument questionnaireDocument, 
+            QuestionnaireChangeReference reference = null)
         {
             AddQuestionnaireChangeItem(questionnaireId,
                 responsibleId,
@@ -689,35 +722,35 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private void AddOrUpdateQuestionnaireStateItem(Guid questionnaireId, Guid itemId, string itemTitle,
             Guid? parentId, Action<QuestionnaireStateTracker, Guid, string> setAction)
         {
-            var questionnaireStateTacker = this.questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+            var questionnaireStateTracker = this.questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
 
             if (parentId.HasValue)
             {
-                questionnaireStateTacker.Parents[itemId] = parentId;
+                questionnaireStateTracker.Parents[itemId] = parentId;
             }
 
-            setAction(questionnaireStateTacker, itemId, itemTitle);
+            setAction(questionnaireStateTracker, itemId, itemTitle);
 
-            this.questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId.FormatGuid());
+            this.questionnaireStateTrackerStorage.Store(questionnaireStateTracker, questionnaireId.FormatGuid());
         }
 
         private void UpdateFullQuestionnaireState(QuestionnaireDocument questionnaireDocument, Guid questionnaireId, Guid createdBy)
         {
-            var questionnaireStateTacker = questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
-            if (questionnaireStateTacker == null)
-                questionnaireStateTacker = new QuestionnaireStateTracker() { CreatedBy = createdBy };
+            var questionnaireStateTracker = questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
+            if (questionnaireStateTracker == null)
+                questionnaireStateTracker = new QuestionnaireStateTracker() { CreatedBy = createdBy };
 
-            questionnaireStateTacker.GroupsState[questionnaireId] = questionnaireDocument.Title;
+            questionnaireStateTracker.GroupsState[questionnaireId] = questionnaireDocument.Title;
 
             var compositeElements = questionnaireDocument.Find<IComposite>(c => true);
             foreach (var compositeElement in compositeElements)
             {
-                questionnaireStateTacker.Parents[compositeElement.PublicKey] = compositeElement.GetParent()?.PublicKey;
+                questionnaireStateTracker.Parents[compositeElement.PublicKey] = compositeElement.GetParent()?.PublicKey;
 
                 var question = compositeElement as IQuestion;
                 if (question != null)
                 {
-                    questionnaireStateTacker.QuestionsState[question.PublicKey] = question.StataExportCaption ??
+                    questionnaireStateTracker.QuestionsState[question.PublicKey] = question.StataExportCaption ??
                                                                                   question.QuestionText;
                     continue;
                 }
@@ -726,31 +759,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 {
                     var groupTitle = @group.VariableName ?? @group.Title;
                     if (group.IsRoster)
-                        questionnaireStateTacker.RosterState[group.PublicKey] = groupTitle;
+                        questionnaireStateTracker.RosterState[group.PublicKey] = groupTitle;
                     else
-                        questionnaireStateTacker.GroupsState[group.PublicKey] = groupTitle;
+                        questionnaireStateTracker.GroupsState[group.PublicKey] = groupTitle;
                     continue;
                 }
                 var staticTexts = compositeElement as IStaticText;
                 if (staticTexts != null)
                 {
-                    questionnaireStateTacker.StaticTextState[staticTexts.PublicKey] = staticTexts.Text;
+                    questionnaireStateTracker.StaticTextState[staticTexts.PublicKey] = staticTexts.Text;
                     continue;
                 }
                 var variable = compositeElement as IVariable;
                 if (variable != null)
                 {
-                    questionnaireStateTacker.VariableState[variable.PublicKey] = variable.Name;
+                    questionnaireStateTracker.VariableState[variable.PublicKey] = variable.Name;
                 }
             }
-            questionnaireStateTackerStorage.Store(questionnaireStateTacker, questionnaireId.FormatGuid());
+            questionnaireStateTrackerStorage.Store(questionnaireStateTracker, questionnaireId.FormatGuid());
         }
 
         private void DeleteItemFromStateAndUpdateHistory(Guid questionnaireId,
             Func<QuestionnaireStateTracker, Dictionary<Guid, string>> state, Guid itemId, QuestionnaireItemType itemType,
             Guid responsibleId, QuestionnaireDocument questionnaireDocument)
         {
-            QuestionnaireStateTracker questionnaire = this.questionnaireStateTackerStorage.GetById(questionnaireId.FormatGuid());
+            QuestionnaireStateTracker questionnaire = this.questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
 
             string itemName = "";
 
@@ -761,7 +794,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             questionnaire.Parents.Remove(itemId);
             state(questionnaire).Remove(itemId);
-            this.questionnaireStateTackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
+            this.questionnaireStateTrackerStorage.Store(questionnaire, questionnaireId.FormatGuid());
         }
 
         private void AddOrUpdateQuestionState(Guid questionnaireId, Guid itemId, string itemTitle, Guid? parentId)
@@ -831,7 +864,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, RevertVersionQuestionnaire command)
         {
-            questionnaireStateTackerStorage.Remove(command.QuestionnaireId.FormatGuid());
+            questionnaireStateTrackerStorage.Remove(command.QuestionnaireId.FormatGuid());
             var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
 

@@ -66,8 +66,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     questionsCount++;
                     return;
                 }
-                var group = item as IGroup;
-                if (group != null)
+
+                if (item is IGroup group)
                 {
                     if (group.IsRoster)
                     {
@@ -79,6 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     }
                 }
             });
+
             questionnaireInfoView.QuestionsCount = questionsCount;
             questionnaireInfoView.GroupsCount = groupsCount;
             questionnaireInfoView.RostersCount = rostersCount;
@@ -134,7 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                     AttachmentId = attachmentIdentity.AttachmentId.FormatGuid(),
                     Name = attachmentIdentity.Name,
                     Content = this.attachmentService.GetContentDetails(attachmentIdentity.ContentId),
-                    Meta = attachments.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
+                    Meta = attachments?.FirstOrDefault(x => x.AttachmentId == attachmentIdentity.AttachmentId)
                 })
                 .OrderBy(x => x.Name)
                 .ToList();
@@ -144,7 +145,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .Select(translationIdentity => new TranslationView
                 {
                     TranslationId = translationIdentity.Id.FormatGuid(),
-                    Name = translationIdentity.Name
+                    Name = translationIdentity.Name,
+                    IsDefault = translationIdentity.Id == questionnaireDocument.DefaultTranslation
                 })
                 .OrderBy(x => x.Name)
                 .ToList();

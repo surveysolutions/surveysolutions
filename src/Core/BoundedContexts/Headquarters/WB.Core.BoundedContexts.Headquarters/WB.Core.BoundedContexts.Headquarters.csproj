@@ -267,7 +267,4 @@
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Documents\" />
-  </ItemGroup>
 </Project>
