@@ -1087,4 +1087,7 @@
     <value>или</value>
     <comment>или</comment>
   </data>
+  <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+    <value>Вы хотите удалить карту?</value>
+  </data>
 </root>

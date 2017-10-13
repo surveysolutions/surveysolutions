@@ -261,8 +261,7 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
-                "~/Scripts/viewmodels/pages/questionnaires.js"
-                ));
+                "~/Scripts/viewmodels/pages/questionnaires.js"));
 
             bundles.Add(new ScriptBundle("~/js/maps").Include(
                 "~/Scripts/viewmodels/pages/maps.js"
@@ -336,9 +335,6 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new ScriptBundle("~/js/importquestionaires").Include(
                 "~/Scripts/viewmodels/pages/importquestionaires.js"));
-
-            bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
-                "~/Scripts/viewmodels/pages/questionnaires.js"));
         }
     }
 }
