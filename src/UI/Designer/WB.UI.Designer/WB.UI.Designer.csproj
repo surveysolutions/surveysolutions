@@ -868,6 +868,7 @@
     <EmbeddedResource Include="Resources\AccountResources.ru.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FindReplaceResources.ru.resx" />
     <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
       <LastGenOutput>PdfMessages.ru.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>

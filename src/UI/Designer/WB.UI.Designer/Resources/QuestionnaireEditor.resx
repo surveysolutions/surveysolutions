@@ -919,4 +919,10 @@
   <data name="DefaultNewSubsection" xml:space="preserve">
     <value>New sub-section</value>
   </data>
+  <data name="HotkeysShortcuts" xml:space="preserve">
+    <value>Keyboard Shortcuts</value>
+  </data>
+  <data name="HotkeysShowHideHelp" xml:space="preserve">
+    <value>Show / hide this help menu</value>
+  </data>
 </root>
