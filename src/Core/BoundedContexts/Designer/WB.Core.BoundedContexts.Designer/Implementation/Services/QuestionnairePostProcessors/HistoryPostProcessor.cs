@@ -339,13 +339,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 state.TranslationState.Add(command.QuestionnaireId, command.TranslationId?.FormatGuid());
                 isDirty = true;
             }
+
             if (isDirty)
             {
                 this.questionnaireStateTrackerStorage.Store(state, command.QuestionnaireId.FormatGuid());
             }
 
-            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Update,
-              QuestionnaireItemType.Translation, command.QuestionnaireId, null, aggregate.QuestionnaireDocument);
+            var translationName = aggregate.QuestionnaireDocument.Translations
+                .SingleOrDefault(t => t.Id == command.TranslationId)?.Name;
+
+            this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Mark,
+              QuestionnaireItemType.Translation, command.QuestionnaireId, translationName, aggregate.QuestionnaireDocument);
         }
 
         #endregion

@@ -315,4 +315,10 @@
   <data name="Roster_Move_To_Roster" xml:space="preserve">
     <value>Ростер {0} перемещен в ростер {1}</value>
   </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Оргинальный</value>
+  </data>
+  <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+    <value>Установлен язык по умолчанию {0}</value>
+  </data>
 </root>
