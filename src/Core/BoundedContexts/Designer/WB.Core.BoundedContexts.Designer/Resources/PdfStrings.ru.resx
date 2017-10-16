@@ -117,6 +117,54 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AppendixLink" xml:space="preserve">
+    <value>И еще {0} символ(а, ов) [{1}]</value>
+  </data>
+  <data name="Appendix_Conditions" xml:space="preserve">
+    <value>Приложение {0} {1} включающие условия</value>
+  </data>
+  <data name="Appendix_Instructions" xml:space="preserve">
+    <value>Приложение {0} {1} инструкции</value>
+  </data>
+  <data name="Appendix_OptionFilters" xml:space="preserve">
+    <value>Приложение {0} {1} фильтры опций</value>
+  </data>
+  <data name="Appendix_Options" xml:space="preserve">
+    <value>Приложение {0} {1} опции</value>
+  </data>
+  <data name="Appendix_Validations" xml:space="preserve">
+    <value>Приложение {0} {1} проверочные условия и сообщения об ошибках</value>
+  </data>
+  <data name="Appendix_Variables" xml:space="preserve">
+    <value>Приложение {0} {1} переменные</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Опросник создан: {0}</value>
+  </data>
+  <data name="EnablementCondition" xml:space="preserve">
+    <value>Условие включения:</value>
+  </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>Этот PDF сгенерирован: {0}</value>
+  </data>
+  <data name="LastEdited" xml:space="preserve">
+    <value>{0} изменил {1}</value>
+  </data>
+  <data name="LastModifiedBy" xml:space="preserve">
+    <value>Последний раз изменен: {0}</value>
+  </data>
+  <data name="NeverEdited" xml:space="preserve">
+    <value>{0} (никогда не редактировал)</value>
+  </data>
+  <data name="NotShared" xml:space="preserve">
+    <value>Ни у кого нет доступа</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Опции:</value>
+  </data>
+  <data name="PdfLegend" xml:space="preserve">
+    <value>Legend and structure of information in this file</value>
+  </data>
   <data name="QuestionScope_Identifying" xml:space="preserve">
     <value>идентифицирующий</value>
   </data>
@@ -177,6 +225,9 @@
   <data name="QuestionType_YesNo" xml:space="preserve">
     <value>да/нет</value>
   </data>
+  <data name="Roster" xml:space="preserve">
+    <value>Ростер:</value>
+  </data>
   <data name="RosterType_List" xml:space="preserve">
     <value>список</value>
   </data>
@@ -185,6 +236,63 @@
   </data>
   <data name="RosterType_Numeric" xml:space="preserve">
     <value>числовой</value>
+  </data>
+  <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+    <value>размножается фиксированным списком</value>
+  </data>
+  <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+    <value>размножается вопросом {1} (типа {0})</value>
+  </data>
+  <data name="Scope" xml:space="preserve">
+    <value>Область видимости: {0}</value>
+  </data>
+  <data name="SharedWith" xml:space="preserve">
+    <value>Доступ открыт:</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Статический текст</value>
+  </data>
+  <data name="Stat_NoQuestions" xml:space="preserve">
+    <value>Нет вопросов</value>
+  </data>
+  <data name="Stat_NoRosters" xml:space="preserve">
+    <value>Нет ростеров</value>
+  </data>
+  <data name="Stat_NoSubsections" xml:space="preserve">
+    <value>Нет подсекций</value>
+  </data>
+  <data name="Stat_Questions" xml:space="preserve">
+    <value>Вопросов: {0}</value>
+  </data>
+  <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+    <value>Вопросов со включающим условием: {0}</value>
+  </data>
+  <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+    <value>Вопсросов с проверяющим условием: {0}</value>
+  </data>
+  <data name="Stat_Rosters" xml:space="preserve">
+    <value>Ростеров: {0}</value>
+  </data>
+  <data name="Stat_Sections" xml:space="preserve">
+    <value>Секций: {0}</value>
+  </data>
+  <data name="Stat_StaticTexts" xml:space="preserve">
+    <value>Статических текстов: {0}</value>
+  </data>
+  <data name="Stat_Subsections" xml:space="preserve">
+    <value>Подсекций: {0}</value>
+  </data>
+  <data name="Stat_Variables" xml:space="preserve">
+    <value>Переменных: {0}</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Проверочное условие:</value>
+  </data>
+  <data name="ValidationMessage" xml:space="preserve">
+    <value>Сообщение об ошибке:</value>
+  </data>
+  <data name="Variable" xml:space="preserve">
+    <value>Переменная</value>
   </data>
   <data name="VariableType_Boolean" xml:space="preserve">
     <value>логическая</value>
