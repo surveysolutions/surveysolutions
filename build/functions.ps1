@@ -34,7 +34,7 @@ function GetMsBuildFromVsWhere() {
 #
 ##############################
 function GetPathToMSBuild() {
-    if (Test-File $vswhere) { 
+    if (Test-Path $vswhere) { 
         return GetMsBuildFromVsWhere
     }
 
