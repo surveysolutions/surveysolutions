@@ -1,4 +1,6 @@
-﻿@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+﻿@using WB.Core.BoundedContexts.Designer.Resources
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@using WB.UI.Designer.Utils
 @model Main.Core.Entities.SubEntities.IGroup
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
@@ -16,7 +18,9 @@
                     @if (questionnaire.ExpressionIsTooLong(group.ConditionExpression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetConditionRef(group.PublicKey)">@(group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E")]</a>
+                            <a href="#@questionnaire.GetConditionRef(group.PublicKey)">
+                                @Pdf.Format(PdfStrings.AppendixLink, group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E"))
+                            </a>
                         </div>
                     }
                 </div>
