@@ -80,29 +80,35 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
             var allItems = questionnaire.Children.SelectMany(x => x.TreeToEnumerable(g => g.Children)).ToList();
 
+            var modificationStatisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser
+            {
+                UserId = requestedByUserId,
+                Name = requestedByUserName,
+                Date = DateTime.Now
+            };
+
+            var statisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser
+            {
+                UserId = questionnaire.CreatedBy ?? Guid.Empty,
+                Name = questionnaire.CreatedBy.HasValue
+                    ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value.FormatGuid())?.UserName
+                    : string.Empty,
+                Date = questionnaire.CreationDate
+            };
+            var lastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).FirstOrDefault();
+            var statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
+            {
+                UserId = person.UserId,
+                Name = this.accountsStorage.GetById(person.UserId.FormatGuid())?.UserName,
+                Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
+            }).Where(sharedPerson => sharedPerson.Name != requestedByUserName);
+
             var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings)
             {
-                Requested = new PdfQuestionnaireModel.ModificationStatisticsByUser
-                {
-                    UserId = requestedByUserId,
-                    Name = requestedByUserName,
-                    Date = DateTime.Now
-                },
-                Created = new PdfQuestionnaireModel.ModificationStatisticsByUser
-                {
-                    UserId = questionnaire.CreatedBy ?? Guid.Empty,
-                    Name = questionnaire.CreatedBy.HasValue
-                        ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value.FormatGuid())?.UserName
-                        : string.Empty,
-                    Date = questionnaire.CreationDate
-                },
-                LastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).First(),
-                SharedPersons = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
-                {
-                    UserId = person.UserId,
-                    Name = this.accountsStorage.GetById(person.UserId.FormatGuid())?.UserName,
-                    Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
-                }).Where(sharedPerson => sharedPerson.Name != requestedByUserName),
+                Requested = modificationStatisticsByUser,
+                Created = statisticsByUser,
+                LastModified = lastModified,
+                SharedPersons = statisticsByUsers,
                 AllItems = allItems,
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),
