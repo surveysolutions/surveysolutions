@@ -1,14 +1,27 @@
 ﻿jQuery.fn.preventDoubleSubmission = function () {
-    $(this).on('submit', function (e) {
+    $(this).on('submit', function(e) {
         var $form = $(this);
 
         if ($form.data('submitted') === true) {
             // Previously submitted - don't submit again
             e.preventDefault();
-        } else if ($form.valid()) {
-            // Mark it so that the next submit can be ignored
-            $form.data('submitted', true);
+        } else {
+            if (typeof $form.valid !== "undefined") {
+                if ($form.valid()) {
+                    // Mark it so that the next submit can be ignored
+                    $form.data('submitted', true);
+                }
+            } else {
+                // Mark it so that the next submit can be ignored
+                $form.data('submitted', true);
+            }
         }
+    });
+
+    $(this).find("input[type='submit']").dblclick(function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        return false;
     });
 
     // Keep chainability
