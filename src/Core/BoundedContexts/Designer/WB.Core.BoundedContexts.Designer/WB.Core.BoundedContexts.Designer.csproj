@@ -95,40 +95,40 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Properties\Roster - Copy.Designer.cs">
-      <DependentUpon>Roster.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Properties\Roster - Copy.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Roster.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\ExceptionMessages.Designer.cs">
+     <Compile Update="Resources\ExceptionMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+    <Compile Update="Resources\PdfStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+      <DependentUpon>PdfStrings.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\VerificationMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </Compile>
+	<Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </Compile>
+	<Compile Update="Resources\Roster.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Roster.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Roster.ru.resx">
-      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
+	<EmbeddedResource Update="Resources\Roster.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+	  <DependentUpon>Roster.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Roster.resx">
+    <EmbeddedResource Update="Resources\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Roster - Copy.Designer.cs</LastGenOutput>
+      <LastGenOutput>Roster.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ExceptionMessages.resx">
       <CustomToolNamespace></CustomToolNamespace>
@@ -137,6 +137,15 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ExceptionMessages.ru.resx">
       <Generator></Generator>
+	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfStrings.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+	   <DependentUpon>Resources\PdfStrings.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Sanitizer;
@@ -219,11 +220,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
-                    return "multi-select";
+                    return PdfStrings.RosterType_Multi;
                 case QuestionType.Numeric:
-                    return "numeric";
+                    return PdfStrings.RosterType_Numeric;
                 case QuestionType.TextList:
-                    return "list";
+                    return PdfStrings.RosterType_List;
                 default:
                     return string.Empty;
             }
@@ -252,13 +253,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     var isCombobox = singleQuestion?.IsFilteredCombobox ?? false;
                     var questionOptions = (new[]
                     {
-                        isLinked ? "linked" : "",
-                        isCascading? "cascading" : "",
-                        isCombobox? "Combo box" : ""
+                        isLinked ? PdfStrings.QuestionType_Linked : "",
+                        isCascading? PdfStrings.QuestionType_Cascading : "",
+                        isCombobox? PdfStrings.QuestionType_Combobox : ""
                     }).Where(x => !string.IsNullOrWhiteSpace(x));
 
                     var stringifiedQuestionOptions = string.Join(", ", questionOptions);
-                    return "single-select" + (string.IsNullOrWhiteSpace(stringifiedQuestionOptions) ? "" : ": " + stringifiedQuestionOptions);
+                    return PdfStrings.QuestionType_SingleSelect + (string.IsNullOrWhiteSpace(stringifiedQuestionOptions) ? "" : ": " + stringifiedQuestionOptions);
                 }
                 case QuestionType.MultyOption:
                 {
@@ -270,33 +271,33 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
                     var questionOptions = (new[]
                     {
-                        areAnswersOrdered ? "ordered" : "",
-                        isYesNoView ? "yes/no" : "",
-                        isLinked ? "linked" : ""
+                        areAnswersOrdered ? PdfStrings.QuestionType_Ordered : "",
+                        isYesNoView ? PdfStrings.QuestionType_YesNo : "",
+                        isLinked ? PdfStrings.QuestionType_Linked : ""
                     }).Where(x => !string.IsNullOrWhiteSpace(x));
                     var stringifiedQuestionOptions = string.Join(", ", questionOptions);
-                    return "multi-select" + (string.IsNullOrWhiteSpace(stringifiedQuestionOptions) ? "" : ": " + stringifiedQuestionOptions);
+                    return PdfStrings.QuestionType_MultiSelect + (string.IsNullOrWhiteSpace(stringifiedQuestionOptions) ? "" : ": " + stringifiedQuestionOptions);
                 }
                 case QuestionType.Numeric:
                     var isInteger = (question as NumericQuestion)?.IsInteger ?? false;
-                    return "numeric: " + (isInteger ? "integer" : "decimal");
+                    return PdfStrings.QuestionType_Numeric + " " + (isInteger ? PdfStrings.QuestionType_Integer : PdfStrings.QuestionType_Decimal);
                 case QuestionType.DateTime:
                     var isTimestamp = (question as DateTimeQuestion)?.IsTimestamp ?? false;
-                    return isTimestamp ? "date: current time" : "date";
+                    return isTimestamp ? PdfStrings.QuestionType_CurrentTime : PdfStrings.QuestionType_Date;
                 case QuestionType.GpsCoordinates:
-                    return "GPS";
+                    return PdfStrings.QuestionType_GPS;
                 case QuestionType.Text:
-                    return "text";
+                    return PdfStrings.QuestionType_Text;
                 case QuestionType.TextList:
-                    return "list";
+                    return PdfStrings.QuestionType_List;
                 case QuestionType.QRBarcode:
-                    return "barcode";
+                    return PdfStrings.QuestionType_Barcode;
                 case QuestionType.Multimedia:
-                    return "picture";
+                    return PdfStrings.QuestionType_Picture;
                 case QuestionType.Area:
-                    return "area";
+                    return PdfStrings.QuestionType_Area;
                 case QuestionType.Audio:
-                    return "audio";
+                    return PdfStrings.QuestionType_Audio;
                 default:
                     return string.Empty;
             }
@@ -307,15 +308,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             switch (variable.Type)
             {
                 case VariableType.String:
-                    return "string";
+                    return PdfStrings.VariableType_String;
                 case VariableType.Boolean:
-                    return "boolean";
+                    return PdfStrings.VariableType_Boolean;
                 case VariableType.DateTime:
-                    return "datetime";
+                    return PdfStrings.VariableType_Date;
                 case VariableType.Double:
-                    return "double";
+                    return PdfStrings.VariableType_Double;
                 case VariableType.LongInteger:
-                    return "long";
+                    return PdfStrings.VariableType_Long;
                 default:
                     return string.Empty;
             }
@@ -416,7 +417,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             if (question.QuestionScope == QuestionScope.Interviewer && question.Featured)
             {
-                return "identifying";
+                return PdfStrings.QuestionScope_Identifying;
             }
             return question.QuestionScope.ToString();
         }
