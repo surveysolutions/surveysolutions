@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Average" xml:space="preserve">
+    <value>საშუალო</value>
+  </data>
+  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+    <value>დავალების საშუალო დრო</value>
+  </data>
+  <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+    <value>საშუალო დრო როდესაც ინტერვიუერს დაევალა ინტერვიუ - ინტერვიუს დასრულების ღილაკამდე ტაბლეტზე</value>
+  </data>
+  <data name="AverageHQProcessingTime" xml:space="preserve">
+    <value>სათაო ოფისის საშუალო დამუშავების დრო</value>
+  </data>
+  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+    <value>საშუალო დრო, ზედამხედველის ინტერვიუს დამტკიცებიდან - სათაო ოფისის მიერ ინტერვიუს დამტკიცებამდე ან უარყოფამდე.</value>
+  </data>
+  <data name="AverageInterviewDuration" xml:space="preserve">
+    <value>ინტერვიუს საშუალო ხანგრძლივობა</value>
+  </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>საშუალო დრო, ინტერვიუერის ინტერვიუს პირველი პასუხის ჩაწერიდან - დასრულების ღილაკის დაჭერამდე.</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+    <value>საშუალო საერთო დამუშავების დრო</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+    <value>საშუალო დრო, ინტერვიუს არჩევიდან - სათაო ოფისში ამავე ინტერვიუს დამტკციებამდე</value>
+  </data>
+  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+    <value>ზედამხედველის დამუშავების საშუალო დრო</value>
+  </data>
+  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+    <value>საშუალო დრო, ინტერვიუერის დასრულებულია ღილაკის დაჭერიდან - ზედამხედველის დამტკიცებამდე ან უარყოფამდე.</value>
+  </data>
+  <data name="BackToSupervisors" xml:space="preserve">
+    <value>უკან ზედამხედველებთან</value>
+  </data>
+  <data name="By" xml:space="preserve">
+    <value>მიერ</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>დღეები</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>დან</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>ინტერვიუს ქმედებები</value>
+  </data>
+  <data name="InThe" xml:space="preserve">
+    <value>ში</value>
+  </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>{0} გუნდში</value>
+  </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>იწყება</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>თვეები</value>
+  </data>
+  <data name="NumberOfCompletedInterviews" xml:space="preserve">
+    <value>დასრულებული ინტერვიუების რაოდენობა</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+    <value>გუნდის ინტერვიუების დასრულების რაოდენობა. უარყოფილი და შემდეგ დასრულებული ინტერვიუები ჩაითვლება ცალკეული დასრულებულ ღონისძიებებად.</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+    <value>სათაო ოფისი მიერ დამტკიცებული ინტერვიუების რაოდენობა</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+    <value>ინტევიუების რაოდენობა შეგროვებული {0} -ს მიერ  დამტკიცებულია სათაო ოფისიგან</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+    <value>სათაო ოფისის ინტერვიუს ოპერაციების რაოდენობა</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+    <value>სათაო ოფისის მიერ დამტკიცებული ან უარყოფილი ინტერვიუები შეგროვებული {0} -ს მიერ.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+    <value>ზედამხედველის მიერ ინტერვიუს ოპერაციების რაოდენობა</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+    <value>ზედამხედველის მიერ დამტკიცებული ან უარყოფილი ინტერვიუები შეგროვებული {0} -ს მიერ.</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>უკანასკნელი</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>პერიოდი</value>
+  </data>
+  <data name="PeriodCount" xml:space="preserve">
+    <value>პერიოდის დათვლა</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>პერიოდის ერთეული</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>კითხვარი</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>გუნდი</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>გუნდის წევრი</value>
+  </data>
+  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+    <value>ინტერვიუს დასრულების საშუალო დრო</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>ჯამი</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>ტიპი</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>ver.</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>კვირები</value>
+  </data>
+</root>
