@@ -191,9 +191,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_CloneQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid questionnaireOwner = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid questionnaireOwner = Id.g3;
             string ownerName = "owner";
 
             AssemblyContext.SetupServiceLocator();
@@ -244,9 +244,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_CreateQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            Guid questionnaireId = Id.g1;
             Guid chapterId = Guid.Parse("A1111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+            Guid responsibleId = Id.g2;
             string responsibleName = "owner";
 
             AssemblyContext.SetupServiceLocator();
@@ -306,8 +306,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         [Test]
         public void When_ImportQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid questionnaireOwner = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid questionnaireOwner = Id.g3;
             string ownerName = "owner";
             string questionnnaireTitle = "name of questionnaire";
             TestPlainStorage<QuestionnaireChangeRecord> historyStorage; 
@@ -354,9 +354,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_DeleteQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid questionnaireOwnerId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid questionnaireOwnerId = Id.g3;
             string ownerName = "owner";
             string questionnaireTitle = "title of questionnaire";
 
@@ -413,9 +413,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_DeleteAttachment_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid attachmentId = Guid.Parse("44444444444444444444444444444444");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid attachmentId = Id.g4;
             string ownerName = "owner";
             string attachmentName = "attachment";
 
@@ -473,8 +473,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_UpdateQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
             string responsibleName = "owner";
 
             AssemblyContext.SetupServiceLocator();
@@ -532,9 +532,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_AddSharedPersonToQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid sharedWithId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid sharedWithId = Id.g3;
             string responsibleUserName = "responsible";
             string sharedWithUserName = "shared with";
 
@@ -584,9 +584,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_RemoveSharedPersonFromQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid sharedWithId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid sharedWithId = Id.g3;
             string responsibleUserName = "responsible";
             string sharedWithUserName = "shared with";
 
@@ -635,9 +635,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_UpdateAttachment_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid attachmentId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid attachmentId = Id.g3;
             string responsibleUserName = "responsible";
             string attachmentName = "shared with";
 
@@ -685,9 +685,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_UpdateStaticText_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid staticTextId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid staticTextId = Id.g3;
             string responsibleUserName = "responsible";
             string staticText = "static text";
 
@@ -736,9 +736,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_UpdateVariable_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid variableId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid variableId = Id.g3;
             string responsibleUserName = "responsible";
             string variableName = "variable";
 
@@ -786,9 +786,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_UpdateGroup_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid groupId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid groupId = Id.g3;
             string responsibleUserName = "responsible";
             string variable = "variable";
 
@@ -846,9 +846,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_UpdateGroup_and_group_became_a_roster_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid rosterId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid rosterId = Id.g3;
             string responsibleUserName = "responsible";
             string variable = "variable";
 
@@ -934,9 +934,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_UpdateRoster_and_roster_became_a_group_Then_new_history_item_should_be_added_with_spacified_parameters()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid groupId = Guid.Parse("33333333333333333333333333333333");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid groupId = Id.g3;
             string responsibleUserName = "responsible";
             string variable = "variable";
 
@@ -1010,13 +1010,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_move_roster_and_group_and_static_text_and_text_qeustion_Then_4_new_history_items_should_be_added()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid groupId = Guid.Parse("33333333333333333333333333333333");
-            Guid staticTextId = Guid.Parse("44444444444444444444444444444444");
-            Guid variableId = Guid.Parse("55555555555555555555555555555555");
-            Guid questionId = Guid.Parse("66666666666666666666666666666666");
-            Guid targetGroupId = Guid.Parse("77777777777777777777777777777777");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid groupId = Id.g3;
+            Guid staticTextId = Id.g4;
+            Guid variableId = Id.g5;
+            Guid questionId = Id.g6;
+            Guid targetGroupId = Id.g7;
 
             AssemblyContext.SetupServiceLocator();
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
@@ -1069,13 +1069,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_pasting_after_group_Then_children_should_be_added_to_history()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid groupId = Guid.Parse("33333333333333333333333333333333");
-            Guid staticTextId = Guid.Parse("44444444444444444444444444444444");
-            Guid variableId = Guid.Parse("55555555555555555555555555555555");
-            Guid questionId = Guid.Parse("66666666666666666666666666666666");
-            Guid targetGroupId = Guid.Parse("77777777777777777777777777777777");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid groupId = Id.g3;
+            Guid staticTextId = Id.g4;
+            Guid variableId = Id.g5;
+            Guid questionId = Id.g6;
+            Guid targetGroupId = Id.g7;
 
             AssemblyContext.SetupServiceLocator();
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
@@ -1143,8 +1143,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_deletting_questionnire_after_rename()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
 
             AssemblyContext.SetupServiceLocator();
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
@@ -1202,11 +1202,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_move_question_to_another_group_Then_parents_should_be_updated()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid groupAId = Guid.Parse("33333333333333333333333333333333");
-            Guid groupBId = Guid.Parse("44444444444444444444444444444444");
-            Guid questionId = Guid.Parse("66666666666666666666666666666666");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid groupAId = Id.g3;
+            Guid groupBId = Id.g4;
+            Guid questionId = Id.g6;
 
             AssemblyContext.SetupServiceLocator();
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
@@ -1252,11 +1252,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         public void When_amout_of_records_exceed_the_limit_Then_questionnaire_should_be_set_to_null_for_older_records()
         {
             // arrange
-            Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            Guid responsibleId = Guid.Parse("22222222222222222222222222222222");
-            Guid groupAId = Guid.Parse("33333333333333333333333333333333");
-            Guid groupBId = Guid.Parse("44444444444444444444444444444444");
-            Guid questionId = Guid.Parse("66666666666666666666666666666666");
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            Guid groupAId = Id.g3;
+            Guid groupBId = Id.g4;
+            Guid questionId = Id.g6;
 
             AssemblyContext.SetupServiceLocator();
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
