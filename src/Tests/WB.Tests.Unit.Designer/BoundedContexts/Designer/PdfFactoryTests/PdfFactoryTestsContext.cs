@@ -1,6 +1,7 @@
 ﻿using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
@@ -8,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
 {
@@ -18,6 +20,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage = null,
             IPlainStorageAccessor<User> accountsDocumentReader = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
+            IQuestionnaireTranslator translator = null,
+            ITranslationsService translationService = null,
             PdfSettings pdfSettings = null)
         {
             return new PdfFactory(
@@ -25,6 +29,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                 questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
                 accountsStorage: accountsDocumentReader ?? Mock.Of<IPlainStorageAccessor<User>>(),
                 questionnaireListViewItemStorage: questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
+                translationService: translationService ?? Mock.Of<ITranslationsService>(),
+                translator: translator ?? Mock.Of<IQuestionnaireTranslator>(),
                 pdfSettings: pdfSettings ?? new PdfSettings(0, 0, 0, 0, 0, 0, 0));
         }
     }
