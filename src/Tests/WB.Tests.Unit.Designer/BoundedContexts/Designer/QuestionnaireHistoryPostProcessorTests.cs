@@ -11,6 +11,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
+using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -1330,6 +1331,73 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
             Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
         }
+
+        [Test]
+        public void when_setting_translation_as_default()
+        {
+             // arrange
+            Guid questionnaireId = Id.g1;
+            Guid responsibleId = Id.g2;
+            string responsibleName = "owner";
+
+            AssemblyContext.SetupServiceLocator();
+            var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
+
+            var usersStorage = new TestPlainStorage<User>();
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleName }, responsibleId.FormatGuid());
+            Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
+
+            var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
+            questionnaireStateTackerStorage.Store(
+                new QuestionnaireStateTracker
+                {
+                    CreatedBy = responsibleId,
+                    GroupsState = new Dictionary<Guid, string>() { { questionnaireId, "title" } },
+                },
+                questionnaireId.FormatGuid());
+
+            Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
+            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
+
+            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
+
+            SetupEntitySerializer();
+
+            var questionnaire = Create.Questionnaire();
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
+            questionnaireDocument.Translations.Add(new Core.SharedKernels.SurveySolutions.Documents.Translation
+            {
+                Id = Id.gF,
+                Name = "Mova"
+            });
+
+            questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
+
+            var command = new SetDefaultTranslation(questionnaireId, responsibleId, Id.gF);
+
+            var historyPostProcessor = CreateHistoryPostProcessor();
+            // act
+            historyPostProcessor.Process(questionnaire, command);
+
+            // assert
+            var questionnaireHistoryItem = historyStorage.Query(
+                historyItems => historyItems.First(historyItem =>
+                    historyItem.QuestionnaireId == questionnaireId.FormatGuid()));
+
+            Assert.That(questionnaireHistoryItem, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.QuestionnaireId, Is.EqualTo(command.QuestionnaireId.FormatGuid()));
+            Assert.That(questionnaireHistoryItem.ActionType, Is.EqualTo(QuestionnaireActionType.Mark));
+            Assert.That(questionnaireHistoryItem.UserId, Is.EqualTo(responsibleId));
+            Assert.That(questionnaireHistoryItem.UserName, Is.EqualTo(responsibleName));
+            Assert.That(questionnaireHistoryItem.Sequence, Is.EqualTo(0));
+            Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Translation));
+            Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
+            Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo("Mova"));
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+        }
+
 
         private void SetupEntitySerializer()
         {
