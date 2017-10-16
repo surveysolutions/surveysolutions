@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>აქტიური რუკა</value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>ფართობი</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>მოწყობილობაზე არსებული რუკები</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>დახურვა</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>რედაქტირება</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>პერიმეტრი</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>ადგილმდებარეობა</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>რუკა</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>ცვლილებები არ დაგვიმახსოვრებია</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>რუკები ნაპოვნი არ არის. გთხოვთ, განაახლოთ რუკები</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>შენახვა</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>წინა მნიშვნელობის დაბრუნება</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>რუკების განახლება</value>
+  </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>განახლება არ შესრულდა</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>რუკების განახლება</value>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>დავალება #{0}</value>
+  </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>არ მოხერხდა აუდიო ფაილის ჩაწერა. დარწმუნდით, რომ მოწყობილობას აქვს თავისუფალი ადგილი შიდა მეხსიერებაში</value>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>მოულოდნელი გამონაკლისი აუდიო ჩანაწერის დაწყებისას</value>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} აუდიო ჩანაწერის</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>ჯერ არცერთი კითხვარი
+
+თქვენ შეგიძლიათ შექმნათ ან რედაქტირება გაუკეთოთ თქვენს კითხვარებს Survey Solutions Designer-ში</value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>კითხვარები არ არის ნაპოვნი</value>
+  </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+  </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>ჩემი კითხვარები</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>საჯარო კითხვარები</value>
+  </data>
+  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>კითხვარები</value>
+  </data>
+  <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>თარიღის შესაყვანად დააჭირეთ</value>
+  </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>თქვენს მოწყობილობას არ გააჩნია მხარდაჭერა ამ ფუნქციების შესასრულებლად</value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>სინქრონიზაციის საბოლოო წერტილი</value>
+  </data>
+  <data name="EndpointText" xml:space="preserve">
+    <value>ვებ-სერვისის საბოლოო წერტილი</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>შეცდომა</value>
+  </data>
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>თქვენი მომხმარებლის ანგარიში დაბლოკილია. დაუკავშირდით მხარდაჭერის გუნდს ელექტრონულ ფოსტაზე: support@mysurvey.solutions </value>
+  </data>
+  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>თქვენი ანგარიში არ არის დამტკიცებული. გთხოვთ, პირველ რიგში დაადასტუროთ თქვენი ანგარიში</value>
+  </data>
+  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>სერვერის შეცდომა. დაუკავშირდით მხარდაჭერის გუნდს ელექტრონულ ფოსტაზე: support@mysurvey.solutions </value>
+  </data>
+  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+    <value>მოცემული Survey Solutions Designer-ის ვებ-მისამართი არასწორია. შეამოწმეთ პარამეტრები</value>
+  </data>
+  <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>Survey Solutions Designer-ის ვებ-გვერდზე მიმდინარეობს ტექნიკური სამუშაოები, რისთვისაც ბოდიშს გიხდით </value>
+  </data>
+  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>Survey Solutions Designer-ის ვებ-გვერდზე დაკავშირებისას ამოიწურა დრო. შეამოწმეთ ინტერნეტ კავშირი</value>
+  </data>
+  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>კავშირი არაა Survey Solutions Designer-ის ვებ-გვერდზე. დარწმუნდით, რომ ვებ-გვერდი არსებობს</value>
+  </data>
+  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>თქვენი მომხმარებლის სახელი ან პაროლი არასწორია</value>
+  </data>
+  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>გამოვიდა აპლიკაციის ახალი ვერსია. გთხოვთ, განაახლოთ აპლიკაცია</value>
+  </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>ტექსტის შესაყვანად დააჭირეთ</value>
+  </data>
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>აპლიკაციას უნდა ჰქონდეს ნებართვა ამ მოწყობილობის ადგილმდებარეობის გამოსაყენებლად. გაიმეორეთ კითხვებზე პასუხების გაცემა და დაუშვით წვდომა. თუ არ ჩანს ნებართვების შეტყობინება, გადადით პარამეტრებში და აპლიკაციას მიეცით წვდომა ადგილმდებარეობაზე</value>
+  </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>GPS-ს არ შეუძლია განსაზღვროს თქვენი ადგილმდებარეობა. მიზეზების გასარკვევად სცადეთ: დარწმუნდით რომ ხართ შენობის გარეთ. დარწმუნდით რომ GPS ჩართულია მოწყობილობაზე, ან შეცვალეთ GPS-ის დროის ამოწურვის პარამეტრები</value>
+  </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>რიცხვის შესაყვანად დააჭირეთ</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>თქვენი კომენტარი</value>
+  </data>
+  <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>პასუხგაცემული</value>
+  </data>
+  <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>დასრულებული</value>
+  </data>
+  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>ინტერვიუს დასრულების შემდეგ იგი აღინიშნება როგორც დასრულებული და შემდეგი სინქრონიზაციისას აიტვირთება ზედამხედველთან </value>
+  </data>
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>შეცდომიანი ობიექტები</value>
+  </data>
+  <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>შეცდომ(ები)ა</value>
+  </data>
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>პირველი {0} შეცდომიანი ობიექტები:</value>
+  </data>
+  <data name="Interview_Complete_No" xml:space="preserve">
+    <value>არა</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>შენიშვნა ზედამხედველისთვის</value>
+  </data>
+  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>კითხვების სტატუსი</value>
+  </data>
+  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>თქვენ აპირებთ დაასრულოთ ეს ინტერვიუ</value>
+  </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>თქვენ აპირებთ დაასრულოთ ინტერვიუ {0}</value>
+  </data>
+  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>დასრულება</value>
+  </data>
+  <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>პასუხგაუცემელი</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>დასრულების ეკრანი</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>პირველი {0} კითხვები კომენტარებთან ერთად:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>კითხვები ზედამხედველის კომენტარებთან ერთად:</value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>ყდა</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>ზედამხედველის შენიშვნა:</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} პასუხები</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>ერთი პასუხი</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} შეცდომები</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>ერთი შეცდომა</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>დასრულებული სექციები: {0}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>სექცია არ არის დაწყებული</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>დაწყებული სექციები: {0}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} ქვე-სექციები</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>ერთი ქვე-სექცია</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>ქვე-სექციები არ არის</value>
+  </data>
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>სათაო ოფისის კომენტარი</value>
+  </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>მაჩვენე ინსტრუქცია</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>ინსტრუქცია</value>
+  </data>
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>ინტერვიუერის კომენტარი</value>
+  </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>პარამეტრები ხელმისაწვდომი იქნება მითითებულ კითხვაზე პასუხის გაცემის შემდეგ</value>
+  </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>შემდეგი სექცია</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>მომხმარებლის კომენტარი</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>ყველა {0} კითხვებზე პასუხი გაცემულია</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>შენიშვნა: "{0}" კითხვებზე პასუხები არ არის გაცემული</value>
+  </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>პასუხი "{0}" არ შეესაბამება არცერთ პარამეტრს</value>
+  </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>პასუხი "{0}" არ შეესაბამება არცერთ პარამეტრს</value>
+  </data>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>ცარიელი მნიშვნელობის შენახვა არ შეიძლება</value>
+  </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>პასუხი '{0}' არასწორია, რადგანაც კითხვა გამოიყენება როგორც როსტერის ზომა და აღნიშნული პასუხი უარყოფითია</value>
+  </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>შეყვანილი მნიშვნელობა არ შეიძლება დაყოფილი იქნეს როგორც მთელი მნიშვნელობა</value>
+  </data>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>პასუხი '{0}' არასწორია, რადგანაც იგი მეტია როსტერის ზედა ზღვარზე '{1}' </value>
+  </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>ცარიელი მნიშვნელობები არ მიიღება</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>შეყვანილი მნიშვნელობა არ შეიძლება დაიყოს ათწილადად</value>
+  </data>
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>პასუხი არ უნდა იყოს ცარიელი</value>
+  </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>გთხოვთ, შეავსოთ ყველა აუცილებელი მნიშვნელობა</value>
+  </data>
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>ფართობის ედიტირებისთვის დააჭირეთ</value>
+  </data>
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>ახალი ჩანაწერის გაკეთება</value>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>აუდიო-ჩაწერისთვის დააჭირეთ</value>
+  </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>GPS-ის ჩაწერისთვის დააჭირეთ</value>
+  </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>ფოტოს გადასაღებად დააჭირეთ</value>
+  </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>barcode-ის გადასაღებად დააჭირეთ</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ {0} სვეტის ამოღება ყოველი დაკავშირებული როსტერიდან?</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>მიმდინარე დროის ჩასაწერად დააჭირეთ</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>ზედამხედველის კომენტარი</value>
+  </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Interviewer</value>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>აუდიო-ჩაწერა</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>დიაგნოსტიკა</value>
+  </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>შესრულებულია</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>უარყოფა</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>თქვენ უკვე დაკავშირებული ხართ სხვა მოწყობილობასთან</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>ხელახლა დაკავშირება</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>თუ ხელახლა დაუკავშირდებით ამ მოწყობილობას &lt;br/&gt; თქვენი ყველა ნამუშევარი ძველ მოწყობილობაზე დაიკარგება</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>სცადეთ შესვლა</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>ინტერვიუს ღილაკი: {0}</value>
+  </data>
+  <data name="LoginNameHint" xml:space="preserve">
+    <value>თქვენი სისტემაში შესვლა</value>
+  </data>
+  <data name="LoginText" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+  <data name="LoginTitleText" xml:space="preserve">
+    <value>Survey Solutions Questionnaire Tester</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>რუკების ედიტორიდან გამოსვლა</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>ყველაფრის გასუფთავება</value>
+  </data>
+  <data name="Messages_WaitPendingOperation" xml:space="preserve">
+    <value>დაელოდეთ, სანამ მიმდინარე ოპერაცია დასრულდება</value>
+  </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>მოთხოვნილი ქმედების განსახორციელებლად აპლიკაციას არ გააჩნია საკმარისი უფლებები </value>
+  </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>კითხვაზე პასუხითვის აპლიკაციას უნდა ჰქონდეს ნებართვა მოწყობილობის კამერაზე. კიდევ სცადეთ კითხვებზე პასუხის გაცემა და დაუშვით წვდომა. თუ არ ჩანს ნებართვების შეტყობინება, გადადით პარამეტრებში და აპლიკაციას მიეცით წვდომა კამერაზე</value>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>კითხვაზე პასუხითვის აპლიკაციას უნდა ჰქონდეს ნებართვა მოწყობილობის მიკროფონზე. კიდევ სცადეთ კითხვებზე პასუხის გაცემა და დაუშვით წვდომა. თუ არ ჩანს ნებართვების შეტყობინება, გადადით პარამეტრებში და აპლიკაციას მიეცით წვდომა მიკროფონზე</value>
+  </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>კითხვაზე პასუხითვის აპლიკაციას უნდა ჰქონდეს ნებართვა მოწყობილობის მონაცემთა საცავზე. კიდევ სცადეთ კითხვებზე პასუხის გაცემა და დაუშვით წვდომა. თუ არ ჩანს ნებართვების შეტყობინება, გადადით პარამეტრებში და აპლიკაციას მიეცით წვდომა მონაცემთა საცავზე</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>აირჩიეთ გალერეიდან</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>აირჩიეთ მნიშვნელობა</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>გადაიღეთ ფოტო</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>არა</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>კარგი</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>პაროლი</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Google Play სერვისები არაა ხელმისაწვდომი</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Location Client არ დაწყებულა</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>თქვენ არ შეგიძლიათ MvxLocation სერვისების ერთ ჯერზე უფრო მეტად გაშვება</value>
+  </data>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>START</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>მეტრების რაოდენობა სიზუსტის დასადგენად</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>GPS კითხვების სასურველი სიზუსტე</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>რუკაზე ადგილმდებარეობის ჩვენება</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>რუკის ჩატვირთვა GPS კითხვების მდებარეობის სანახავად</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>როცა პასუხი ვერ გაივლის ვალიდაციას, ტაბლეტი დაიწყებს ვიბრირებას</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>არასწორი პასუხის შემთხვევაში ვიბრაცია</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>ათწილადის შესაყვანად დააჭირეთ</value>
+  </data>
+  <data name="StaySignedInText" xml:space="preserve">
+    <value>დარჩით სისტემაში</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>ამ მოწყობილობაზე თქვენ არ გაქვთ დავალებები. გააგზავნეთ ტაბლეტის ინფორმაცია, გაასუფთავეთ აპლიკაციის მონაცემები და სისტემაში შედით სხვა მომხმარებლის სახელით</value>
+  </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>ახალი პუნქტის შესაყვანად დააჭირეთ</value>
+  </data>
+  <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>ტექსტის შესაყვანად დააჭირეთ</value>
+  </data>
+  <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>ტექსტის შესაყვანად დააჭირეთ ({0})</value>
+  </data>
+  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>პასუხი არასწორია</value>
+  </data>
+  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>პასუხი არ შეინახა</value>
+  </data>
+  <data name="VariableEmptyValue" xml:space="preserve">
+    <value>&lt;ცარიელი&gt;</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>თქვენი აპლიკაციის ვერსიას არ გააჩნია მხარდაჭერა ამ ფუნქციონალზე</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>დიახ</value>
+  </data>
+</root>
