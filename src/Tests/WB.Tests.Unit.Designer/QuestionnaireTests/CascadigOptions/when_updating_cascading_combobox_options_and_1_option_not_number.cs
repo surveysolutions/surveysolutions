@@ -1,10 +1,9 @@
-﻿extern alias designer;
-using System;
-using designer::WB.Core.BoundedContexts.Designer.Resources;
+﻿using System;
+using WB.Core.BoundedContexts.Designer.Resources;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
-using QuestionnaireException = designer::WB.Core.BoundedContexts.Designer.Exceptions.QuestionnaireException;
+using QuestionnaireException = WB.Core.BoundedContexts.Designer.Exceptions.QuestionnaireException;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadigOptions
 {
