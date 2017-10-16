@@ -4,6 +4,7 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -11,7 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
-    public class when_crearing_interview_from_questionnaire_with_selected_default_translation: in_standalone_app_domain
+    public class when_creating_interview_from_questionnaire_with_selected_default_translation: in_standalone_app_domain
     {
         private Interview interview;
         private const string language = "Mova";
@@ -55,8 +56,6 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), null) == nonTranslatedPlainQuestionnaire &&
                 x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), language) == translatedPlainQuestionnaire);
 
-            this.eventContext = new EventContext();
-
             // ACT
             interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(nonTranslatedQuestionnaire
                 , questionnaireStorage: questionnaires);
@@ -65,14 +64,14 @@ namespace WB.Tests.Integration.InterviewTests.Variables
                 new QuestionnaireIdentity(nonTranslatedQuestionnaire.PublicKey, 1),
                 DateTime.Now, Id.g2, null, null, null);
 
-            eventContext = new EventContext();
+            this.eventContext = new EventContext();
             interview.CreateInterview(command);
         }
 
         [Test]
         public void should_apply_switch_translation_event()
         {
-            Assert.That(this.eventContext.GetSingleEvent<SwitchTranslation>().Language, Is.EqualTo(language));
+            Assert.That(this.eventContext.GetSingleEvent<TranslationSwitched>().Language, Is.EqualTo(language));
         }
     }
 }
