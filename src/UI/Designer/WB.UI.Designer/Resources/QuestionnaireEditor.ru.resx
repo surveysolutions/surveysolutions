@@ -953,4 +953,13 @@
   <data name="HotkeysShowHideHelp" xml:space="preserve">
     <value>Показать / скрыть это меню </value>
   </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="MarkAsDefault" xml:space="preserve">
+    <value>Установить языком по умолчанию</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>Не использовать по умолчанию</value>
+  </data>
 </root>

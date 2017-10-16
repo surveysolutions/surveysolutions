@@ -925,4 +925,10 @@
   <data name="HotkeysShowHideHelp" xml:space="preserve">
     <value>Show / hide this help menu</value>
   </data>
+  <data name="MarkAsDefault" xml:space="preserve">
+    <value>Mark as default language</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>Don't use as default</value>
+  </data>
 </root>
