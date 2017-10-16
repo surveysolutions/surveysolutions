@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<SingleQuestion>(CascadingQuestionHasValidationExpresssion, "WB0092", VerificationMessages.WB0092_CascadingChildQuesionShouldNotContainValidation),
             Critical<IComposite>(this.ConditionExpressionHasLengthMoreThan10000Characters, "WB0094", string.Format(VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Critical<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", string.Format(VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
+            Critical<IGroup>(GroupEnablementConditionReferenceChildItems,  "WB0130", VerificationMessages.WB0130_SubsectionOrRosterReferenceChildrendInCondition),
             ErrorsByCircularReferences,
             WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
             WarningForCollection(FewQuestionsWithSameLongValidation, "WB0236", VerificationMessages.WB0236_FewQuestionsWithSameLongValidation),
@@ -66,6 +67,28 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
             WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", string.Format(VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, UnconditionalSingleChoiceQuestionOptionsCount)),
         };
+
+        private bool GroupEnablementConditionReferenceChildItems(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(group.ConditionExpression))
+                return false;
+            var condition = this.macrosSubstitutionService.InlineMacros(group.ConditionExpression, questionnaire.Macros.Values);
+            if (string.IsNullOrWhiteSpace(condition))
+                return false;
+
+            var variablesInExpression = GetIdentifiersUsedInExpression(condition, questionnaire);
+            foreach (var variable in variablesInExpression)
+            {
+                var entity = questionnaire.Questionnaire.GetEntityByVariable(variable);
+                if (entity == null)
+                    continue;
+                var parentIds = questionnaire.Questionnaire.GetParentGroupsIds(entity);
+                if (parentIds.Contains(group.PublicKey))
+                    return true;
+            }
+            return false;
+        }
+
 
         private IEnumerable<IQuestion> GetReferencedQuestions(string expression, MultiLanguageQuestionnaireDocument questionnaire)
             => this

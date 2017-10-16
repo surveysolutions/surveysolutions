@@ -16,6 +16,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private static readonly Guid Id1 = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
 
+        [Test]
+        public void group_referense_child_elements_in_condition()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.FixedRoster(enablementCondition: "a > 10", children: new IComposite[]
+                    {
+                        Create.NumericIntegerQuestion(Id1, variable: "a")
+                    })
+                })
+                .ExpectCritical("WB0130");
+
         [TestCase("variableЙФЪ", "WB0122")]
         [TestCase("1variable", "WB0123")]
         [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "WB0121")]
@@ -42,6 +53,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 })
                 .ExpectError(errorCode);
 
+        [Test]
         public void text_question_variable_name_is_too_long()
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {

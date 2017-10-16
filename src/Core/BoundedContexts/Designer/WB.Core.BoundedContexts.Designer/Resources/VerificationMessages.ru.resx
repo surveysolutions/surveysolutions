@@ -501,6 +501,9 @@
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
     <value>Название опции слишком длинное. Оно должно находиться в диапазоне от {0} до {1}</value>
   </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>Нельзя ссылаться на дочерние элементы во включающих условиях секций, подсекций и ростеров.</value>
+  </data>
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров.</value>
   </data>

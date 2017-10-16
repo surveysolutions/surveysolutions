@@ -1214,6 +1214,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot use child entities in enablement condition for sections, subsection and rosters..
+        /// </summary>
+        public static string WB0130_SubsectionOrRosterReferenceChildrendInCondition {
+            get {
+                return ResourceManager.GetString("WB0130_SubsectionOrRosterReferenceChildrendInCondition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         public static string WB0200_LargeNumberOfRostersIsCreated {

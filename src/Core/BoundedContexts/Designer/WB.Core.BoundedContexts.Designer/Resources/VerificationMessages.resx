@@ -678,4 +678,7 @@
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
     <value>Answer title is too long. Should be in range from {0} to {1}</value>
   </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>You cannot use child entities in enablement condition for sections, subsection and rosters.</value>
+  </data>
 </root>
