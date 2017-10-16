@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Tests.Unit
+namespace WB.Tests.Abc
 {
     internal class Id
     {
