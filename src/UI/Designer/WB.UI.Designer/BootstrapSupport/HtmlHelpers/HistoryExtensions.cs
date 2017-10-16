@@ -19,6 +19,15 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 
             switch (record.ActionType)
             {
+                case QuestionnaireActionType.Mark:
+                    switch (record.TargetType)
+                    {
+                        case QuestionnaireItemType.Translation:
+                            var language = record.TargetTitle ?? QuestionnaireHistoryResources.Translation_Original;
+                            text = string.Format(QuestionnaireHistoryResources.Translation_DefaultTranslationSet, language);
+                            break;
+                    }
+                    break;
                 case QuestionnaireActionType.ReplaceAllTexts:
                     text = string.Format(QuestionnaireHistoryResources.TextsReplaced, record.TargetTitle,
                         record.TargetNewTitle, record.AffectedEntries);
@@ -54,34 +63,34 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     break;
                 case QuestionnaireActionType.Clone:
                     {
-                    switch (record.TargetType)
-                    {
-                        case QuestionnaireItemType.Variable:
-                        case QuestionnaireItemType.Section:
-                        case QuestionnaireItemType.Question:
-                        case QuestionnaireItemType.Roster:
-                        case QuestionnaireItemType.StaticText:
-                        case QuestionnaireItemType.Questionnaire:
-                            text = ToCloneMessage(helper, urlHelper, questionnaireId, record, recordLink);
-                            break;
-                    }
+                        switch (record.TargetType)
+                        {
+                            case QuestionnaireItemType.Variable:
+                            case QuestionnaireItemType.Section:
+                            case QuestionnaireItemType.Question:
+                            case QuestionnaireItemType.Roster:
+                            case QuestionnaireItemType.StaticText:
+                            case QuestionnaireItemType.Questionnaire:
+                                text = ToCloneMessage(helper, urlHelper, questionnaireId, record, recordLink);
+                                break;
+                        }
 
-                }
+                    }
                     break;
                 case QuestionnaireActionType.Move:
-                {
-                    switch (record.TargetType)
                     {
-                        case QuestionnaireItemType.Variable:
-                        case QuestionnaireItemType.Section:
-                        case QuestionnaireItemType.Question:
-                        case QuestionnaireItemType.Roster:
-                        case QuestionnaireItemType.StaticText:
-                            text = ToMoveMessage(helper, urlHelper, questionnaireId, record, recordLink);
-                            break;
-                    }
+                        switch (record.TargetType)
+                        {
+                            case QuestionnaireItemType.Variable:
+                            case QuestionnaireItemType.Section:
+                            case QuestionnaireItemType.Question:
+                            case QuestionnaireItemType.Roster:
+                            case QuestionnaireItemType.StaticText:
+                                text = ToMoveMessage(helper, urlHelper, questionnaireId, record, recordLink);
+                                break;
+                        }
 
-                }
+                    }
                     break;
             }
             return MvcHtmlString.Create(text);

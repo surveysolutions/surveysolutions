@@ -565,11 +565,29 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default translation set to {0}.
+        /// </summary>
+        public static string Translation_DefaultTranslationSet {
+            get {
+                return ResourceManager.GetString("Translation_DefaultTranslationSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Translation {0} deleted.
         /// </summary>
         public static string Translation_Delete {
             get {
                 return ResourceManager.GetString("Translation_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Original.
+        /// </summary>
+        public static string Translation_Original {
+            get {
+                return ResourceManager.GetString("Translation_Original", resourceCulture);
             }
         }
         
