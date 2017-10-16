@@ -925,6 +925,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mark as default language.
+        /// </summary>
+        public static string MarkAsDefault {
+            get {
+                return ResourceManager.GetString("MarkAsDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmation.
         /// </summary>
         public static string ModalConfirm {
@@ -2370,6 +2379,15 @@ namespace WB.UI.Designer.Resources {
         public static string TreeRoster {
             get {
                 return ResourceManager.GetString("TreeRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Don&apos;t use as default.
+        /// </summary>
+        public static string UnMarkAsDefault {
+            get {
+                return ResourceManager.GetString("UnMarkAsDefault", resourceCulture);
             }
         }
         
