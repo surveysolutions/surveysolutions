@@ -1,7 +1,9 @@
 ﻿@using System
 @using System.Linq
 @using Main.Core.Entities.SubEntities
+@using WB.Core.BoundedContexts.Designer.Resources
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@using WB.UI.Designer.Utils
 @model Main.Core.Entities.SubEntities.IQuestion
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
@@ -18,7 +20,7 @@
                     @if (questionnaire.InstructionIsTooLong(question))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetInstructionsRef(question.PublicKey)">@(question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "I")]</a>
+                            <a href="#@questionnaire.GetInstructionsRef(question.PublicKey)">@Pdf.Format(PdfStrings.AppendixLink, question.Instructions.Length - questionnaire.Settings.InstructionsExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "I"))</a>
                         </div>
                     }
                 </div>
@@ -30,7 +32,9 @@
                     @if (questionnaire.OptionsFilterIsTooLong(question))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetOptionsFilterRef(question.PublicKey)">@(questionnaire.GetQuestionOptionsFilter(question).Length - questionnaire.Settings.VariableExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "F")]</a>
+                            <a href="#@questionnaire.GetOptionsFilterRef(question.PublicKey)">
+                                @Pdf.Format(PdfStrings.AppendixLink, questionnaire.GetQuestionOptionsFilter(question).Length - questionnaire.Settings.VariableExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "F"))
+                            </a>
                         </div>
                     }
                 </div>
@@ -42,12 +46,13 @@
                     @if (questionnaire.ExpressionIsTooLong(question.ConditionExpression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetConditionRef(question.PublicKey)">@(question.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "E")]</a>
+                            <a href="#@questionnaire.GetConditionRef(question.PublicKey)">
+                                @Pdf.Format(PdfStrings.AppendixLink, question.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "E"))
+                            </a>
                         </div>
                     }
                 </div>
             }
-
 
             @for (int i = 0; i < questionnaire.GetValidationsCount(question.ValidationConditions); i++)
             {
@@ -56,7 +61,9 @@
                     @if (questionnaire.ExpressionIsTooLong(validation.Expression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetValidationsRef(question.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "V")]</a>
+                            <a href="#@questionnaire.GetValidationsRef(question.PublicKey)">
+                                @Pdf.Format(PdfStrings.AppendixLink, validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "V"))
+                            </a>
                         </div>
                     }
                 </div>
@@ -71,10 +78,10 @@
         <div class="question-meta">
             <div class="type">
                 @questionnaire.GetFormattedQuestionType(question)
-                @if (!@questionnaire.IsInterviewerQuestion(question))
+                @if (!questionnaire.IsInterviewerQuestion(question))
                 {
                     <br />
-                    <span>Scope: @questionnaire.GetQuestionScope(question)</span>
+                    <span>@string.Format(PdfStrings.Scope, questionnaire.GetQuestionScope(question))</span>
                 }
             </div>
             <div class="variable_name">@question.StataExportCaption</div>
@@ -87,19 +94,20 @@
                     @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
                     {
                         <div class="option">
-                            <div class="option-value"><span >
-    @questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)
-</span>
-                                </div>
+                            <div class="option-value"><span >@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</span></div>
                             <div class="option-text">
                                 <input type="radio" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
                                 <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
                             </div>
-</div>
+                        </div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
-                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O")]</a></div>
+                        <div class="more">
+                            <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">
+                                @Pdf.Format(PdfStrings.AppendixLink, question.Answers.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O"))
+                            </a>
+                        </div>
                     }
                 </div>
                 break;
@@ -128,13 +136,16 @@
                                     <input type="checkbox" id="@question.StataExportCaption-@option.AnswerValue" name="@question.StataExportCaption">
                                     <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
                                 </div>
-
                             }
                         </div>
                     }
                     @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
                     {
-                        <div class="more">And <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">@(question.Answers.Count - questionnaire.Settings.OptionsExcerptCount) other [@questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O")]</a></div>
+                        <div class="more">
+                            <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">
+                                @Pdf.Format(PdfStrings.AppendixLink, question.Answers.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "O"))
+                            </a>
+                        </div>
                     }
                 </div>
                 break;
