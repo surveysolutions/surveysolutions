@@ -315,4 +315,10 @@
   <data name="Roster_Move_To_Roster" xml:space="preserve">
     <value>Roster {0} moved to roster {1}</value>
   </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+    <value>Default translation set to {0}</value>
+  </data>
 </root>
