@@ -240,6 +240,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsNumericRoster(Guid id);
 
         IReadOnlyCollection<string> GetTranslationLanguages();
+        string GetDefaultTransation();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
         bool IsSubSection(Guid groupId);
         bool IsVariable(Guid id);

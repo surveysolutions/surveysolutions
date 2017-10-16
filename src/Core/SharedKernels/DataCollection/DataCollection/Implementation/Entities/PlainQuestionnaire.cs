@@ -997,6 +997,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
 
+        public string GetDefaultTransation()
+        {
+            return this.QuestionnaireDocument.Translations.SingleOrDefault(t =>
+                t.Id == this.QuestionnaireDocument.DefaultTranslation)?.Name;
+        }
+
         public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
         {
             var rosters = GetRosterGroupsByRosterSizeQuestion(questionId).ToArray();

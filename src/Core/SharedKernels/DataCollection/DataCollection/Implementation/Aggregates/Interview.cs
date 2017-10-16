@@ -1432,6 +1432,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
             }
+
+            var defaultTranslation = questionnaire.GetDefaultTransation();
+            if (defaultTranslation != null)
+            {
+                this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
+            }
         }
 
         protected void PutAnswers(InterviewTree changedInterviewTree, 
@@ -1537,7 +1543,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvents(treeDifference, command.UserId);
             this.ApplyEvent(new TranslationSwitched(command.Language, command.UserId));
-            
         }
 
         public void CommentAnswer(Guid userId, Guid questionId, RosterVector rosterVector, DateTime commentTime, string comment)
