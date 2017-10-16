@@ -203,6 +203,7 @@
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="EventExtensions.cs" />
+    <Compile Include="Id.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="Storage\QueryableDbSetMock.cs" />
