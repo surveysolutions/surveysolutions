@@ -32,7 +32,7 @@ using It = Moq.It;
 namespace WB.Tests.Integration.InterviewTests
 {
     [Subject(typeof(Interview))]
-    internal class InterviewTestsContext
+    public class InterviewTestsContext
     {
         internal static AnsweredYesNoOption Yes(decimal value)
         {
