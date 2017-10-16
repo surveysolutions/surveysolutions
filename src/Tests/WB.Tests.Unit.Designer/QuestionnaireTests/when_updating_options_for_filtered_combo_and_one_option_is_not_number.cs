@@ -1,7 +1,6 @@
-﻿extern alias designer;
-using System;
-using designer::WB.Core.BoundedContexts.Designer.Exceptions;
-using designer::WB.Core.BoundedContexts.Designer.Resources;
+﻿using System;
+using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Resources;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;

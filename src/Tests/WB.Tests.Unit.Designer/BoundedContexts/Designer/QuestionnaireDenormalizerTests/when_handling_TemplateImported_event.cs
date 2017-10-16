@@ -12,8 +12,6 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
 {
-    extern alias designer;
-
     internal class when_ImportQuestionnaire : QuestionnaireDenormalizerTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
