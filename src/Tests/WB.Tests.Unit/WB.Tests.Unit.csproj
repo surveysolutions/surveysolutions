@@ -774,7 +774,6 @@
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_designer_historical_events_Json.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_hq_historical_events.cs" />
     <Compile Include="GenericSubdomains\Utils\NewtonJsonUtilsTests\when_deserializing_questionnaire_document_with_json_utils_to_old_format.cs" />
-    <Compile Include="Id.cs" />
     <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\BinaryFormatDataExportHandlerTestContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\BinaryFormatDataExportHandlerTests\when_export_all_binary_data.cs" />
     <Compile Include="DataExportTests\DataExportStatusReaderTests\DataExportStatusReaderTestContext.cs" />
@@ -1622,7 +1621,6 @@
     <Folder Include="Applications\Headquarters\PublicApiTests\ApiTests\" />
     <Folder Include="Properties\" />
     <Folder Include="Resources\" />
-    <Folder Include="SharedKernels\DataCollection\InterviewTests\Validation\" />
     <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />
     <Folder Include="SharedKernels\SurveyManagement\Factories\ChangeStatusFactoryTests\" />
     <Folder Include="SharedKernels\SurveyManagement\ViewsTests\InterviewerInterviewsFactoryTests\" />
