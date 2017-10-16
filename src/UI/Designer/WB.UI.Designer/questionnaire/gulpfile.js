@@ -187,6 +187,8 @@ gulp.task('index', function () {
     		   .pipe(gulp.dest('./details'));
 });
 
+gulp.task("dev", ["resx2json", "copyFilesNeededForBundler"]);
+
 gulp.task('default', function(callback){
 	runSequence('clean', 
 		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss', 'resx2json', 'copyFilesNeededForBundler'],
