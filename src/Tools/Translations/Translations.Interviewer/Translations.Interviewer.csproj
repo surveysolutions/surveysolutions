@@ -40,9 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.Designer.cs">
-      <Link>InterviewerUIResources.Designer.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

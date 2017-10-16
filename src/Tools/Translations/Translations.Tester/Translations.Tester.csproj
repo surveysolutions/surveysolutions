@@ -40,9 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.Designer.cs">
-      <Link>TesterUIResources.Designer.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

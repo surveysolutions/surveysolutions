@@ -52,11 +52,23 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.ru.resx">
       <Link>ExceptionMessages.ru.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx">
+      <Link>PdfStrings.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.ru.resx">
+      <Link>PdfStrings.ru.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.resx">
       <Link>QuestionnaireEditor.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\QuestionnaireEditor.ru.resx">
       <Link>QuestionnaireEditor.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.resx">
+      <Link>Roster.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Roster.ru.resx">
+      <Link>Roster.ru.resx</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx">
       <Link>VerificationMessages.resx</Link>

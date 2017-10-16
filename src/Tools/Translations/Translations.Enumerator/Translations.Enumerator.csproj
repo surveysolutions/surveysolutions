@@ -40,9 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.Designer.cs">
-      <Link>UIResources.Designer.cs</Link>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
