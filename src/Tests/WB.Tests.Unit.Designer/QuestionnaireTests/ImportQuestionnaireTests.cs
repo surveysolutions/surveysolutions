@@ -1,5 +1,4 @@
-﻿extern alias designer;
-using System;
+﻿using System;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
