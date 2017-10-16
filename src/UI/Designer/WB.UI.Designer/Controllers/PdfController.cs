@@ -159,14 +159,14 @@ namespace WB.UI.Designer.Controllers
             this.StartRenderPdf(id, newPdfGenerationProgress);
             return newPdfGenerationProgress;
         }
-
-
+        
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress)
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
             var pdfDocument = this.GetSourceUrlsForPdf(id);
             var pdfOutput = new PdfOutput {OutputFilePath = generationProgress.FilePath};
-            Task.Run(() =>
+
+            Task.Factory.StartNew(() =>
             {
                 try
                 {
@@ -178,7 +178,7 @@ namespace WB.UI.Designer.Controllers
                     this.logger.Error($"Failed to generate PDF {id.FormatGuid()}", exception);
                     generationProgress.Fail();
                 }
-            });
+            }, TaskCreationOptions.LongRunning);
         }
 
         private PdfConvertEnvironment GetPdfConvertEnvironment() => new PdfConvertEnvironment

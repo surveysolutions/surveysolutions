@@ -4,13 +4,14 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
@@ -25,6 +26,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
+        private readonly IQuestionnaireTranslator translator;
+        private readonly ITranslationsService translationService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly PdfSettings pdfSettings;
@@ -34,21 +37,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
+            IQuestionnaireTranslator translator,
+            ITranslationsService translationService,
             PdfSettings pdfSettings)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
             this.accountsStorage = accountsStorage;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
+            this.translator = translator;
+            this.translationService = translationService;
             this.pdfSettings = pdfSettings;
         }
 
         public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            
             if (questionnaire == null || questionnaire.IsDeleted)
             {
                 return null;
+            }
+            
+            if (questionnaire.DefaultTranslation != null)
+            {
+                var translation = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
+                questionnaire = translator.Translate(questionnaire, translation);
             }
 
             var listItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
@@ -64,7 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Name = grouping.Key.UserName,
                 })).ToList();
 
-            var allItems = questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
+            var allItems = questionnaire.Children.SelectMany(x => x.TreeToEnumerable(g => g.Children)).ToList();
 
             var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings)
             {
