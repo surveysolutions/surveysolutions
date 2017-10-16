@@ -4,20 +4,20 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTests
 {
     internal class when_loading_non_empty_questionnaire : QuestionnaireInfoViewFactoryContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
-             var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+        [OneTimeSetUp]
+        public void context()
+        {
+            var questionnaire = Create.QuestionnaireDocumentWithOneChapter(
                 new NumericQuestion
                 {
                     QuestionType = QuestionType.Numeric
@@ -28,7 +28,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
                 });
             questionnaire.Title = questionnaireTitle;
             questionnaire.CreatedBy = userId;
-
+            questionnaire.DefaultTranslation = Id.gA;
+            questionnaire.Translations.Add(new Core.SharedKernels.SurveySolutions.Documents.Translation
+            {
+                Id = Id.gA,
+                Name = "Default"
+            });
+            questionnaire.Translations.Add(new Core.SharedKernels.SurveySolutions.Documents.Translation
+            {
+                Id = Id.gB,
+                Name = "NotDefault"
+            });
             var repositoryMock = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             repositoryMock
                 .Setup(x => x.GetById(questionnaireId))
@@ -36,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
             var userRepositoryMock =
                 Mock.Of<IPlainStorageAccessor<User>>(
-                    x => x.GetById(userId.FormatGuid()) == new User() { Email = ownerEmail });
+                    x => x.GetById(userId.FormatGuid()) == new User() {Email = ownerEmail});
             factory = CreateQuestionnaireInfoViewFactory(repository: repositoryMock.Object,
                 accountsDocumentReader: userRepositoryMock);
             BecauseOf();
@@ -44,23 +54,43 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         private void BecauseOf() => view = factory.Load(questionnaireId, userId);
 
-        [NUnit.Framework.Test] public void should_count_number_of_questions_in_questionnaire () => view.QuestionsCount.ShouldEqual(1);
+        [Test]
+        public void should_count_number_of_questions_in_questionnaire
+            () => view.QuestionsCount.ShouldEqual(1);
 
-        [NUnit.Framework.Test] public void should_count_number_of_groups_in_questionnaire () => view.GroupsCount.ShouldEqual(1);
+        [Test]
+        public void should_count_number_of_groups_in_questionnaire
+            () => view.GroupsCount.ShouldEqual(1);
 
-        [NUnit.Framework.Test] public void should_count_number_of_roster_in_questionnaire () => view.RostersCount.ShouldEqual(1);
+        [Test]
+        public void should_count_number_of_roster_in_questionnaire
+            () => view.RostersCount.ShouldEqual(1);
 
-        [NUnit.Framework.Test] public void should_contain_email_of_first_element_in_list_of_shared_persons_equal_to_owner_email () => view.SharedPersons[0].Email.ShouldEqual(ownerEmail);
+        [Test]
+        public void should_contain_email_of_first_element_in_list_of_shared_persons_equal_to_owner_email
+            () => view.SharedPersons[0].Email.ShouldEqual(ownerEmail);
 
-        [NUnit.Framework.Test] public void should_contain_id_of_first_element_in_list_of_shared_persons_equal_to_owner_id () => view.SharedPersons[0].UserId.ShouldEqual(userId);
+        [Test]
+        public void should_contain_id_of_first_element_in_list_of_shared_persons_equal_to_owner_id
+            () => view.SharedPersons[0].UserId.ShouldEqual(userId);
 
-        [NUnit.Framework.Test] public void should_contain_isOwner_of_first_element_in_list_of_shared_persons_be_true () => view.SharedPersons[0].IsOwner.ShouldEqual(true);
+        [Test]
+        public void should_contain_isOwner_of_first_element_in_list_of_shared_persons_be_true
+            () => view.SharedPersons[0].IsOwner.ShouldEqual(true);
+
+        [Test]
+        public void should_contain_default_translation_value
+            () => view.Translations[0].IsDefault.ShouldEqual(true);
+
+        [Test]
+        public void should_not_contain_default_translation_value_for_non_default_translations
+            () => view.Translations[1].IsDefault.ShouldEqual(false);
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;
         private static string questionnaireId = "11111111111111111111111111111111";
         private static string questionnaireTitle = "questionnaire title";
         private static Guid userId = Guid.Parse("22222222222222222222222222222222");
-        private static string ownerEmail= "r@example.org";
+        private static string ownerEmail = "r@example.org";
     }
 }
