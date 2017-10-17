@@ -2,6 +2,7 @@ using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Abc.TestFactories
@@ -109,5 +110,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewId = null, string userId = null, string comment = null)
             => new UnapprovedByHeadquarters(ToGuid(userId) ?? Guid.NewGuid(), comment)
                 .ToPublishedEvent(eventSourceId: interviewId);
+
+        public IPublishedEvent<RosterInstancesRemoved> RosterInstancesRemoved(Guid interviewId, params RosterInstance[] instances)
+            => new RosterInstancesRemoved(instances).ToPublishedEvent(eventSourceId: interviewId);
     }
 }
