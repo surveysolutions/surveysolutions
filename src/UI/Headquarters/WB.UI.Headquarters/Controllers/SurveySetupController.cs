@@ -467,7 +467,7 @@ namespace WB.UI.Headquarters.Controllers
                         model.Version,
                         questionnaireInfo?.Title,
                         global::Resources.BatchUpload.Prerequisite_Questionnaire,
-                        AssignmentImportType.Panel,
+                        model.AssignmentImportType,
                         null));
             }
 
