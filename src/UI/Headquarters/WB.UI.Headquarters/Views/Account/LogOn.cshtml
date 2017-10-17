@@ -1,4 +1,4 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Shared.Web.Captcha
@@ -17,6 +17,7 @@
 
     @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
     <!-- cssLibs:css -->
+    <link rel='stylesheet' href='@Url.Content("~/Dependencies/build/libs.css")' >
     <!-- endinject -->
     <!-- cssApp:css -->
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
