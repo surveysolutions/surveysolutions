@@ -1,4 +1,4 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.UI.Headquarters.Controllers
 @{ Layout = null; }
 <!DOCTYPE html>
@@ -17,7 +17,10 @@
     <link rel='apple-touch-icon' sizes='76x76' href='~/Dependencies/img/identity/favicon-hq-76x76.png'>
     <link rel='apple-touch-icon' sizes='72x72' href='~/Dependencies/img/identity/favicon-hq-72x72.png'>
     <link rel='apple-touch-icon' href='~/Dependencies/img/identity/favicon-hq.png'>
-    <link href="~/Dependencies/build/webinterview.css" rel="stylesheet" />
+    
+    <!-- cssWebinterview:css -->
+    <link rel='stylesheet' href='@Url.Content("~/Dependencies/dist/webinterview.css")' >
+    <!-- endinject -->    
 </head>
 <body class="gray-background">
 <script>
