@@ -1073,6 +1073,11 @@ namespace WB.Tests.Unit.Designer
                 return new DeleteTranslation(questionnaireId, responsibleId, translationId);
             }
 
+            public static SetDefaultTranslation SetDefaultTranslation(Guid questionnaireId, Guid? translationId, Guid responsibleId)
+            {
+                return new SetDefaultTranslation(questionnaireId, responsibleId, translationId);
+            }
+
             public static MoveGroup MoveGroup(Guid questionnaireId, Guid groupId, Guid responsibleId, Guid? targetGroupId = null, int? tagretIndex = null)
                 => new MoveGroup(questionnaireId, groupId, targetGroupId, tagretIndex ?? 0, responsibleId);
 
