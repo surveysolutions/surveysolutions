@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -396,6 +395,20 @@ namespace WB.UI.Headquarters.Controllers
             {
                 // load persisted state in future
                 var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+
+                if (questionnaireInfo.IsDeleted)
+                {
+                    return this.View("InterviewImportVerificationErrors",
+                        ImportDataParsingErrorsView.CreatePrerequisiteError(
+                            questionnaireId,
+                            version,
+                            questionnaireInfo?.Title,
+                            global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                            AssignmentImportType.Panel,
+                            null));
+                }
+
                 model = new PreloadedDataConfirmationModel
                 {
                     Id = id,
@@ -445,6 +458,18 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
             QuestionnaireBrowseItem questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+
+            if (questionnaireInfo.IsDeleted)
+            {
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        model.QuestionnaireId,
+                        model.Version,
+                        questionnaireInfo?.Title,
+                        global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                        AssignmentImportType.Panel,
+                        null));
+            }
 
             this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
             this.interviewImportService.Status.QuestionnaireTitle = questionnaireInfo.Title;
