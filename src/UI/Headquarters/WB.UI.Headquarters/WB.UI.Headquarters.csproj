@@ -1613,7 +1613,6 @@
     <Content Include="Views\Shared\_export-buttons.cshtml" />
     <Content Include="Views\Assignments\index.cshtml" />
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
-    <Content Include="Views\Shared\_MainLayoutWebInterview.cshtml" />
     <Content Include="Views\WebInterview\Index.cshtml" />
     <Content Include="Views\AuditLog\Index.cshtml" />
     <Content Include="Views\Maps\Index.cshtml" />
