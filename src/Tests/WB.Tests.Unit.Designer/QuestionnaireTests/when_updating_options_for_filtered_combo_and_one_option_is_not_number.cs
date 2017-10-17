@@ -3,6 +3,7 @@ using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Tests.Abc;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireTests

@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
+using WB.Tests.Abc;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer

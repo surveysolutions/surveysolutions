@@ -2,6 +2,7 @@
 using WB.Core.BoundedContexts.Designer.Resources;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Tests.Abc;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 using QuestionnaireException = WB.Core.BoundedContexts.Designer.Exceptions.QuestionnaireException;
 
