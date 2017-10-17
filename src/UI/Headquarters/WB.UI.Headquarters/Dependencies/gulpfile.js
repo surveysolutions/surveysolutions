@@ -51,11 +51,11 @@ const config = {
             folder: '../Views/Account/'
         },
         {
-            file: "_MainLayout.cshtml",
+            file: "_AdminLayout.cshtml",
             folder: '../Views/Shared/'
         },
         {
-            file: "_MainLayoutVue.cshtml",
+            file: "_MainLayout.cshtml",
             folder: '../Views/Shared/'
         },
         {
@@ -118,11 +118,16 @@ config.sourceFiles = [
     'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js'
 ];
 
-function compress(error) {
-    //return util.noop()
+function compressJs(error) {
     return config.production
         ? plugins.uglify().on('error', error)
         : util.noop()
+}
+
+function compressCss(error) {
+    return config.production
+    ? cleanCSS({ compatibility: 'ie9' }).on('error', error)
+    : util.noop()
 }
 
 gulp.task("checkSources", (done, error) => {
@@ -144,8 +149,8 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(autoprefixer('last 2 version').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
+        .pipe(compressCss(error))
         .pipe(plugins.rev().on('error', error))
-        .pipe(cleanCSS({ compatibility: 'ie9' }))
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
@@ -155,7 +160,7 @@ gulp.task('styles.webinterview', ['move-bootstrap-fonts'], wrapPipe(function (su
         .pipe(autoprefixer('last 2 version').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
-        .pipe(cleanCSS({ compatibility: 'ie9' }))
+        .pipe(compressCss(error))
         .pipe(plugins.rev().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
@@ -167,7 +172,7 @@ gulp.task('libsJs', ["checkSources"], wrapPipe((success, error) => {
         .pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
-        .pipe(compress(error))
+        .pipe(compressJs(error))
         .pipe(plugins.rev().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));

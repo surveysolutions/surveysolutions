@@ -34,11 +34,9 @@
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
     @RenderSection("styles", false)
-    <!-- jsLibs:js -->
-    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
-    <!-- endinject -->
-    @Scripts.Render("~/js/new-ui")
-
+    
+    @RenderSection(@"JsLibsHeader", false)
+    
     @Html.Partial("GlobalSettings")
     @RenderSection("scripts", false)
 </head>
@@ -133,8 +131,8 @@
         </div>
     </div>
 </footer>
-<!-- jsApp:js -->
-<!-- endinject -->
+
+@RenderSection("JsLibsFooter", false)
 @Html.Partial("Clickjacking")
 </body>
 </html>

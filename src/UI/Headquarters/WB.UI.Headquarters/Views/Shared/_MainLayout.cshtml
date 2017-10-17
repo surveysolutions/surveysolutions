@@ -1,10 +1,23 @@
 ﻿@{
-    Layout = "~/Views/Shared/_MainLayoutVue.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 @section styles
 {
     @RenderSection("styles", false)
+}
+
+@section JsLibsHeader {
+    <!-- jsLibs:js -->
+    <script type="text/javascript" src="@Url.Content("~/Dependencies/build/libs.js")"></script>
+    <!-- endinject -->
+
+    @Scripts.Render("~/js/new-ui")
+}
+
+@section JsLibsFooter {
+    <!-- jsApp:js -->
+    <!-- endinject -->
 }
 
 @section scripts
