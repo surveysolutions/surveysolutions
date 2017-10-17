@@ -77,8 +77,8 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 
             if (currentPage > 1)
             {
-                MakePagingItem(isActive: false, text: pageUrl(1), htmlTitle: "FIRST", root: pager);
-                MakePagingItem(isActive: false, text: pageUrl(currentPage - 1), htmlTitle: "PREVIOUS", root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(1), htmlTitle: Paging.First.ToUpper(), root: pager);
+                MakePagingItem(isActive: false, text: pageUrl(currentPage - 1), htmlTitle: Paging.Previous.ToUpper(), root: pager);
             }
             else
             {
