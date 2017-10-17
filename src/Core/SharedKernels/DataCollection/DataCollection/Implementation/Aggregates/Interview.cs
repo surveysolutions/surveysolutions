@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public Interview(IQuestionnaireStorage questionnaireRepository,
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-            ISubstitutionTextFactory substitutionTextFactory, 
+            ISubstitutionTextFactory substitutionTextFactory,
             IInterviewTreeBuilder treeBuilder)
         {
             this.questionnaireRepository = questionnaireRepository;
@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.Tree.GetQuestion(questionIdentity).SetAnswer(NumericIntegerAnswer.FromInt(@event.Answer));
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
-           
+
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateNumericIntegerAnswer(@event.QuestionId, @event.RosterVector, @event.Answer);
         }
@@ -216,7 +216,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var question = this.Tree.GetQuestion(questionIdentity);
 
             question.SetAnswer(CategoricalFixedSingleOptionAnswer.FromDecimal(@event.SelectedValue));
-            
+
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateSingleOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValue);
         }
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var question = this.Tree.GetQuestion(questionIdentity);
 
             question.SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(@event.SelectedValues));
-            
+
             this.ActualizeRostersIfQuestionIsRosterSize(@event.QuestionId);
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateMultiOptionAnswer(@event.QuestionId, @event.RosterVector, @event.SelectedValues);
@@ -657,7 +657,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// Filter for regular categorical questions, such as YesNo, Single and Multi.
         public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-            
+
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
@@ -674,7 +674,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
 
-        private List<CategoricalOption> FiltereCategoricalOptions(Identity questionIdentity, int itemsCount, IQuestionnaire questionnaire, 
+        private List<CategoricalOption> FiltereCategoricalOptions(Identity questionIdentity, int itemsCount, IQuestionnaire questionnaire,
             IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
         {
             // too much
@@ -1303,7 +1303,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, command.UserId);
         }
 
-       
+
         public void AnswerPictureQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, string pictureFileName)
         {
             new InterviewPropertiesInvariants(this.properties)
@@ -1411,8 +1411,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //apply events
             this.ApplyEvent(new InterviewCreated(
                 command.UserId,
-                this.QuestionnaireIdentity.QuestionnaireId, 
-                this.QuestionnaireIdentity.Version, 
+                this.QuestionnaireIdentity.QuestionnaireId,
+                this.QuestionnaireIdentity.Version,
                 command.AssignmentId,
                 questionnaire.IsUsingExpressionStorage(),
                 command.AnswersTime));
@@ -1440,8 +1440,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void PutAnswers(InterviewTree changedInterviewTree, 
-            IEnumerable<InterviewAnswer> answers, 
+        protected void PutAnswers(InterviewTree changedInterviewTree,
+            IEnumerable<InterviewAnswer> answers,
             int? commandAssignmentId)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -1558,36 +1558,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
 
-        private void AssignResponsible(Guid userId, Guid? interviewerId, Guid? supervisorId, DateTime? assignTime)
-        {
-            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
-            var isInterviewInSupervisorResponsibility = this.properties.Status == InterviewStatus.SupervisorAssigned ||
-                                                        this.properties.Status == InterviewStatus.RejectedBySupervisor;
-
-            var isNeedPerformAssignToSupervisor = supervisorId.HasValue;
-            var isNeedPerformAssignToInterviewer = interviewerId.HasValue;
-            var isAssignForTheSameSupervisor = supervisorId.HasValue && supervisorId.Value == this.properties.SupervisorId;
-
-            if (isNeedPerformAssignToSupervisor)
-                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
-            else if (isNeedPerformAssignToInterviewer)
-                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
-
-            if (isNeedPerformAssignToInterviewer)
-                propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId.Value);
-
-            if (isAssignForTheSameSupervisor && isInterviewInSupervisorResponsibility)
-                propertiesInvariants.ThrowIfTryAssignToSameSupervisor(supervisorId.Value);
-
-            // events
-            if (isNeedPerformAssignToSupervisor && !(isAssignForTheSameSupervisor && isNeedPerformAssignToInterviewer))
-                this.FireSupervisorAssignedEvents(userId, supervisorId.Value, assignTime);
-
-            this.FireInterviewerAssignedEvents(userId, interviewerId, assignTime);
-        }
 
         private void FireSupervisorAssignedEvents(Guid userId, Guid supervisorId, DateTime? assignTime)
         {
@@ -1627,17 +1597,136 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AssignResponsible(AssignResponsibleCommand command)
         {
-            AssignResponsible(command.UserId, command.InterviewerId, command.SupervisorId, command.AssignTime);
+            var interviewerId = command.InterviewerId;
+            var supervisorId = command.SupervisorId;
+
+            if (!interviewerId.HasValue && !supervisorId.HasValue)
+            {
+                throw new InterviewException(
+                    $"Can't assign interview {this.properties.Id} to empty interviewer or supervisor.",
+                    InterviewDomainExceptionType.OtherUserIsResponsible);
+            }
+
+            var moveWithInTheSameTeam = interviewerId.HasValue && !supervisorId.HasValue;
+            if (moveWithInTheSameTeam)
+            {
+                AssignInterviewer(command.UserId, interviewerId.Value, command.AssignTime);
+                return;
+            }
+
+            var moveToANewTeamNoInterviewerSpecified = !interviewerId.HasValue;
+            if (moveToANewTeamNoInterviewerSpecified)
+            {
+                AssignSupervisor(command.UserId, supervisorId.Value, command.AssignTime);
+                return;
+            }
+
+            if (this.properties.SupervisorId != supervisorId && this.properties.InterviewerId == interviewerId)
+                throw new InterviewException(
+                    $"To change a team, provide new id of supervisor and empty (null) or nor interviewer id (and make sure it belongs to the same team). Currently, you specified a new supervisor {supervisorId} and the same interviewer {interviewerId}.",
+                    InterviewDomainExceptionType.OtherUserIsResponsible);
+
+            //within the same team
+            if (this.properties.SupervisorId == supervisorId)
+            {
+                AssignInterviewer(command.UserId, interviewerId.Value, command.AssignTime);
+                return;
+            }
+
+            // move to other team
+            AssignSupervisor(command.UserId, supervisorId.Value, command.AssignTime);
+            AssignInterviewer(command.UserId, interviewerId.Value, command.AssignTime);
+            
+            //AssignResponsible(command.UserId, interviewerId, supervisorId, command.AssignTime);
         }
 
-        public void AssignSupervisor(Guid userId, Guid supervisorId)
+        public void AssignSupervisor(Guid userId, Guid supervisorId, DateTime? assignTime = null)
         {
-            AssignResponsible(userId, null, supervisorId, null);
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+
+            var isInterviewInSupervisorResponsibility =
+                this.properties.Status == InterviewStatus.SupervisorAssigned ||
+                this.properties.Status == InterviewStatus.RejectedBySupervisor;
+
+            if (isInterviewInSupervisorResponsibility)
+                propertiesInvariants.ThrowIfTryAssignToSameSupervisor(supervisorId);
+
+            // assign the supervisor
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, assignTime));
+            if (this.properties.InterviewerId.HasValue)
+            {
+                // clear responsible interviewer if set
+                this.ApplyEvent(new InterviewerAssigned(userId, null, null));
+            }
+            if (this.properties.Status == InterviewStatus.Created ||
+                this.properties.Status == InterviewStatus.InterviewerAssigned)
+            {
+                //change status of the interview
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            }
         }
 
-        public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime assignTime)
+        public void AssignInterviewer(Guid userId, Guid interviewerId, DateTime? assignTime)
         {
-            AssignResponsible(userId, interviewerId, null, assignTime);
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, 
+                InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+
+            if (!this.properties.SupervisorId.HasValue)
+            {
+                // direct assign to the interviewer?
+                throw new InterviewException(
+                    $"Specify supervisor's id for interviewer {interviewerId} to make direct assignment on interviewer for interview {this.properties.Id}.",
+                    InterviewDomainExceptionType.OtherUserIsResponsible);
+            }
+            propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId);
+
+            if (this.properties.Status == InterviewStatus.RejectedByHeadquarters)
+            {
+                this.ApplyEvent(new InterviewRejected(userId, comment: null, rejectTime: assignTime));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment: null));
+            }
+
+            this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
+            if (this.properties.Status != InterviewStatus.InterviewerAssigned && this.properties.Status != InterviewStatus.RejectedBySupervisor)
+            {
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+            }
+        }
+
+        private void AssignResponsible(Guid userId, Guid? interviewerId, Guid? supervisorId, DateTime? assignTime)
+        {
+            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
+
+            propertiesInvariants.ThrowIfInterviewHardDeleted();
+
+            var isInterviewInSupervisorResponsibility = this.properties.Status == InterviewStatus.SupervisorAssigned ||
+                                                        this.properties.Status == InterviewStatus.RejectedBySupervisor;
+
+            var isNeedPerformAssignToSupervisor = supervisorId.HasValue;
+            var isNeedPerformAssignToInterviewer = interviewerId.HasValue;
+            var isAssignForTheSameSupervisor = supervisorId.HasValue && supervisorId.Value == this.properties.SupervisorId;
+
+            if (isNeedPerformAssignToSupervisor)
+                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+            else if (isNeedPerformAssignToInterviewer)
+                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+
+            if (isNeedPerformAssignToInterviewer)
+                propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId.Value);
+
+            if (isAssignForTheSameSupervisor && isInterviewInSupervisorResponsibility)
+                propertiesInvariants.ThrowIfTryAssignToSameSupervisor(supervisorId.Value);
+
+            // events
+            if (isNeedPerformAssignToSupervisor && !(isAssignForTheSameSupervisor && isNeedPerformAssignToInterviewer))
+                this.FireSupervisorAssignedEvents(userId, supervisorId.Value, assignTime);
+
+            this.FireInterviewerAssignedEvents(userId, interviewerId, assignTime);
         }
 
         public void Delete(Guid userId)
@@ -2156,7 +2245,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var answer = changedQuestion.GetAsInterviewTreeAreaQuestion().GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
-                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length, 
+                        changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length,
                         answer.Coordinates, answer.DistanceToEditor));
                 }
 
@@ -2164,8 +2253,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var audioAnswer = changedQuestion.GetAsInterviewTreeAudioQuestion().GetAnswer();
 
-                    this.ApplyEvent(new AudioQuestionAnswered(responsibleId, changedQuestion.Identity.Id, 
-                       changedQuestion.Identity.RosterVector, DateTime.UtcNow, 
+                    this.ApplyEvent(new AudioQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
+                       changedQuestion.Identity.RosterVector, DateTime.UtcNow,
                        audioAnswer.FileName, audioAnswer.Length));
                 }
             }
@@ -2214,10 +2303,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => new AnswerComment(answerComment.UserId, answerComment.UserRole, answerComment.Date, answerComment.Text,
                 Identity.Create(answerDto.Id, answerDto.QuestionRosterVector));
 
-        public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) => 
+        public InterviewTreeMultiLinkedToRosterQuestion GetLinkedMultiOptionQuestion(Identity identity) =>
             this.Tree.GetQuestion(identity).GetAsInterviewTreeMultiLinkedToRosterQuestion();
 
-        public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) => 
+        public InterviewTreeSingleLinkedToRosterQuestion GetLinkedSingleOptionQuestion(Identity identity) =>
             this.Tree.GetQuestion(identity).GetAsInterviewTreeSingleLinkedToRosterQuestion();
 
         public string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option)
@@ -2406,7 +2495,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // backward compatibility if assembly cannot process linked questions
                 CalculateLinkedOptionsOnTree(interviewTree);
             }
-            
+
             CalculateLinkedToListOptionsOnTree(interviewTree, interviewExpressionState);
         }
 
@@ -2426,7 +2515,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (InterviewTreeQuestion linkedQuestion in linkedQuestions)
             {
                 var options = linkedQuestion.GetCalculatedLinkedOptions();
-                if (options!=null)
+                if (options != null)
                     linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.Select(x => x.Option).ToArray());
             }
         }
