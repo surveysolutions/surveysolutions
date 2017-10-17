@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
+using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -7,6 +10,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -48,7 +52,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<VariablesDisabled>,
         IEventHandler<VariablesEnabled>,
         IEventHandler<AreaQuestionAnswered>,
-        IEventHandler<AudioQuestionAnswered>
+        IEventHandler<AudioQuestionAnswered>,
+
+        IEventHandler<InterviewCreated>,
+        IEventHandler<InterviewFromPreloadedDataCreated>,
+        IEventHandler<InterviewOnClientCreated>
     {
         private readonly IInterviewFactory repository;
 
@@ -60,6 +68,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public override object[] Writers => new object[0];
 
+        private readonly Dictionary<Guid, QuestionnaireIdentity> interviewToQuestionnaire =
+            new Dictionary<Guid, QuestionnaireIdentity>();
+
         public void Handle(IPublishedEvent<GroupPropagated> evnt)
             => this.repository.AddRosters(evnt.EventSourceId, new[] {Identity.Create(evnt.Payload.GroupId, evnt.Payload.OuterScopeRosterVector)});
 
@@ -67,7 +78,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.repository.AddRosters(evnt.EventSourceId, evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
         public void Handle(IPublishedEvent<RosterInstancesRemoved> evnt)
-            => this.repository.RemoveRosters(evnt.EventSourceId, evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
+            => this.repository.RemoveRosters(this.interviewToQuestionnaire[evnt.EventSourceId], evnt.EventSourceId,
+                evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
             => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.SelectedValues);
@@ -169,5 +181,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IPublishedEvent<VariablesEnabled> evnt)
             => this.repository.EnableEntities(evnt.EventSourceId, evnt.Payload.Variables, EntityType.Variable, true);
+
+        public void Handle(IPublishedEvent<InterviewCreated> evnt)
+            => this.AddQuestionnaireToDictionary(evnt.EventSourceId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion);
+
+        public void Handle(IPublishedEvent<InterviewFromPreloadedDataCreated> evnt)
+            => this.AddQuestionnaireToDictionary(evnt.EventSourceId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion);
+
+        public void Handle(IPublishedEvent<InterviewOnClientCreated> evnt)
+            => this.AddQuestionnaireToDictionary(evnt.EventSourceId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion);
+
+        private void AddQuestionnaireToDictionary(Guid interviewId, Guid questionnaireId, long questionnaireVersion)
+            => this.interviewToQuestionnaire[interviewId] = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
     }
 }

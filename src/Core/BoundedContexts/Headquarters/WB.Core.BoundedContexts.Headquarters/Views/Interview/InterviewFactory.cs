@@ -5,7 +5,6 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -235,14 +234,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityType = EntityType.Section
                 }));
 
-        public void RemoveRosters(Guid interviewId, Identity[] rosterIds)
+        public void RemoveRosters(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity[] rosterIds)
         {
-            var questionnaireId = this.summaryRepository.Query(_ => _.Where(x => x.InterviewId == interviewId)
-                .Select(x => x.QuestionnaireIdentity).FirstOrDefault());
-            var questionnaire =
-                this.questionnaireStorage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId));
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId);
             if (questionnaire == null) return;
-
 
             var removedEntityIds = new List<Identity>();
             foreach (var instance in rosterIds)
