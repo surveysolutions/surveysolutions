@@ -9,7 +9,6 @@ const gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
-    cssnano = require('gulp-cssnano'),
     util = require('gulp-util'),
     debug = require('gulp-debug'),
     rename = require('gulp-rename'),
@@ -29,12 +28,10 @@ const gulp = require('gulp'),
 
 function wrapPipe(taskFn) {
     return function (done) {
-        var onSuccess = function () {
-            done();
-        };
-        var onError = function (err) {
-            done(err);
-        }
+        function onSuccess() { done(); }
+
+        function onError(err) { done(err); }
+
         var outStream = taskFn(onSuccess, onError);
         if (outStream && typeof outStream.on === 'function') {
             outStream.on('end', onSuccess);
