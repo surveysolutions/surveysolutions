@@ -74,7 +74,7 @@ module.exports = {
             runtimePublicPath: "window.CONFIG.assetsPath"
         }),
 
-        devMode ? null : new ExtractTextPlugin("styles.css"),
+        devMode ? null : new ExtractTextPlugin("styles.[chunkhash].css"),
         
         devMode ? null : new webpack.optimize.CommonsChunkPlugin({
             name: 'common'//,
