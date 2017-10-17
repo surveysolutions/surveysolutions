@@ -200,12 +200,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(interview.EventSourceId, headquarterId, interviewerId2));
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(interview.EventSourceId, headquarterId, interviewerId: interviewerId2, supervisorId: supervisorId2));
 
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
             eventContext.AssertThatContainsEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.SupervisorAssigned);
-            eventContext.AssertThatDoesNotContainEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.InterviewerAssigned);
+            eventContext.AssertThatContainsEvent<InterviewStatusChanged>(s => s.Status == InterviewStatus.InterviewerAssigned);
         }
 
         [Test]
