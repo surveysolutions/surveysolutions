@@ -1,0 +1,13 @@
+﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Controllers.InterviewReviewModel
+@{
+    ViewBag.Title = string.Format(ReviewInterview.PageTitle, Model.Key);
+    Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
+}
+@section styles
+{
+    <link href="~/Dependencies/build/webinterview.css" rel="stylesheet" />
+}
+
+@Html.RenderHqConfig(Model)
+
+<div id="vueApp"></div>

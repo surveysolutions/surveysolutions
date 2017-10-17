@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -80,6 +81,17 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(detailsViewModel);
         }
 
+        [ActivePage(MenuItem.Docs)]
+        public ActionResult Review(Guid id)
+        {
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+            return View(new InterviewReviewModel
+            {
+                Id = id,
+                Key = interviewSummary.Key
+            });
+        }
+
         public ActionResult InterviewHistory(Guid id)
         {
             return this.View(interviewHistoryViewFactory.Load(id));
@@ -111,5 +123,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             return this.View(question);
         }
+    }
+
+    public class InterviewReviewModel
+    {
+        public Guid Id { get; set; }
+        
+        public string Key { get; set; }
     }
 }
