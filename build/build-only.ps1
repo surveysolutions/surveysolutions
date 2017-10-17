@@ -32,9 +32,7 @@ New-Item $artifactsFolder -Type Directory -Force
 
 
 try {
-    $buildSuccessful = BuildSolution `
-        -Solution $MainSolution `
-        -BuildConfiguration $BuildConfiguration
+    $buildSuccessful = BuildSolution -Solution 'src\WB without Xamarin.sln' -BuildConfiguration $BuildConfiguration
     if ($buildSuccessful) { 
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force
