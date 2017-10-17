@@ -14,8 +14,8 @@ const gulp = require('gulp'),
     debug = require('gulp-debug'),
     rename = require('gulp-rename'),
     glob = require('glob'),
-    es = require('event-stream');
-
+    es = require('event-stream'),
+    cleanCSS = require('gulp-clean-css');
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
@@ -77,7 +77,7 @@ const config = {
     cssWebinterviewInject: "cssWebinterview",
     cssLibsInject: 'cssLibs',
     jsLibsInject: 'jsLibs'
-}
+};
 
 config.sourceFiles = [
     'node_modules/jquery/dist/jquery.js',
@@ -121,6 +121,21 @@ config.sourceFiles = [
     'vendor/jquery.validate.unobtrusive.bootstrap/jquery.validate.unobtrusive.bootstrap.js'
 ];
 
+function compress(error) {
+    //return util.noop()
+    return config.production
+        ? plugins.uglify().on('error', error)
+        : util.noop()
+}
+
+gulp.task("checkSources", (done, error) => {
+    // check that all provided files exists on disk
+    config.sourceFiles.forEach((f) => {
+        fs.statSync(f);
+    });
+    done();
+});
+
 gulp.task('move-bootstrap-fonts', wrapPipe(function (success, error) {
     return gulp.src(config.bootstrapFontFiles)
         .pipe(gulp.dest(config.fontsDir).on('error', error));
@@ -133,7 +148,7 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
         .pipe(plugins.rev().on('error', error))
-        //.pipe(cssnano().on('error', error))
+        .pipe(cleanCSS({ compatibility: 'ie9' }))
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
@@ -143,93 +158,74 @@ gulp.task('styles.webinterview', ['move-bootstrap-fonts'], wrapPipe(function (su
         .pipe(autoprefixer('last 2 version').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
+        .pipe(cleanCSS({ compatibility: 'ie9' }))
         .pipe(plugins.rev().on('error', error))
-        //.pipe(cssnano().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
-gulp.task('libsJs', wrapPipe((success, error) => {
-
-    config.sourceFiles.forEach((f) => {
-        fs.statSync(f);
-    });
-
+gulp.task('libsJs', ["checkSources"], wrapPipe((success, error) => {
     return gulp.src(config.sourceFiles)
         .pipe(plugins.filter(['**/*.js']))
         // .pipe(debug())
         .pipe(concat('libs.js').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
-        .pipe(config.production ? plugins.uglify().on('error', error) : util.noop())
+        .pipe(compress(error))
         .pipe(plugins.rev().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
-gulp.task('libsCss', wrapPipe(function (success, error) {
-    config.sourceFiles.forEach((f) => {
-        fs.statSync(f); // ensure that all files are existing
-    });
-
+gulp.task('libsCss', ["checkSources"], wrapPipe(function (success, error) {
     return gulp.src(config.sourceFiles)
         .pipe(plugins.filter('**/*.css'))
         .pipe(autoprefixer('last 2 version').on('error', error))
-        //.pipe(cssnano().on('error', error))
         .pipe(concat('libs.css').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
         .pipe(rename({ suffix: '.min' }).on('error', error))
+        .pipe(cleanCSS({ compatibility: 'ie9' }))
         .pipe(plugins.rev().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
-gulp.task('inject',
-    ['styles', 'libsCss', 'libsJs', 'styles.webinterview'],
-    wrapPipe(function (success, error) {
-        if (config.production) {
+gulp.task('inject', ['styles', 'libsCss', 'libsJs', 'styles.webinterview'],
+    wrapPipe((success, error) => {
+        if (!config.production) return util.noop();
 
-            function transform(filepath) {
-                const url = '@Url.Content("~/Dependencies' + filepath + '")';
+        function transform(filepath) {
+            const url = '@Url.Content("~/Dependencies' + filepath + '")';
 
-                if (filepath.endsWith(".css")) {
-                    return "<link rel='stylesheet' href='" + url + "' >";
-                }
-                else if (filepath.endsWith(".js")) {
-                    return " <script type='text/javascript' src='" + url + "'></script>";
-                }
-
-                return inject.transform.apply(inject.transform, arguments);
+            if (filepath.endsWith(".css")) {
+                return "<link rel='stylesheet' href='" + url + "' >";
+            }
+            else if (filepath.endsWith(".js")) {
+                return " <script type='text/javascript' src='" + url + "'></script>";
             }
 
-            var cssApp = gulp.src(config.buildDistDir + '/markup-*.min.css', { read: false });
-            var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
-            var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
-            var cssWebInterview = gulp.src(config.buildDistDir + "/webinterview-*.min.css", { read: false })
-
-            function inject(files, name) {
-                const options = { relative: false, name, transform };
-                return plugins.inject(files, options).on('error', error);
-            }
-
-            var tasks = config.filesToInject.map(function (fileToInject) {
-                var target = gulp.src(fileToInject.folder + fileToInject.file);
-
-                return target
-                    // .pipe(plugins.inject(cssApp, {
-                    //     relative: false,
-                    //     name: config.cssAppInject, 
-                    //     transform: toUrlContent
-                    // }).on('error', error))
-
-                    .pipe(inject(cssApp, config.cssAppInject))
-                    .pipe(inject(cssLibs, config.cssLibsInject))
-                    .pipe(inject(jsLibs, config.jsLibsInject))
-                    .pipe(inject(cssWebInterview, config.cssWebinterviewInject))
-                    .pipe(gulp.dest(fileToInject.folder));
-            });
-
-            return tasks;
+            return inject.transform.apply(inject.transform, arguments);
         }
 
-        return util.noop();
+        var cssApp = gulp.src(config.buildDistDir + '/markup-*.min.css', { read: false });
+        var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
+        var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
+        var cssWebInterview = gulp.src(config.buildDistDir + "/webinterview-*.min.css", { read: false })
+
+        function inject(files, name) {
+            const options = { relative: false, name, transform };
+            return plugins.inject(files, options).on('error', error);
+        }
+
+        var tasks = config.filesToInject.map(function (fileToInject) {
+            var target = gulp.src(fileToInject.folder + fileToInject.file);
+
+            return target
+                .pipe(inject(cssApp, config.cssAppInject))
+                .pipe(inject(cssLibs, config.cssLibsInject))
+                .pipe(inject(jsLibs, config.jsLibsInject))
+                .pipe(inject(cssWebInterview, config.cssWebinterviewInject))
+                .pipe(gulp.dest(fileToInject.folder));
+        });
+
+        return tasks;
     }));
 
 gulp.task('clean', function () {
