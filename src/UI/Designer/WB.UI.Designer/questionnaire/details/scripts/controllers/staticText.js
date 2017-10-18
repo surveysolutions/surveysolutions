@@ -24,8 +24,10 @@
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
                         if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                            $scope.saveStaticText();
-                            $scope.staticTextForm.$setPristine();
+                            if ($scope.staticTextForm.$dirty) {
+                                $scope.saveStaticText();
+                                $scope.staticTextForm.$setPristine();
+                            }
                             event.preventDefault();
                         }
                     }
