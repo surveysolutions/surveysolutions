@@ -940,4 +940,13 @@
   <data name="RequestFailedUnexpectedly" xml:space="preserve">
     <value>Request failed unexpectedly.</value>
   </data>
+  <data name="IncorrectRosterTitle" xml:space="preserve">
+    <value>Incorrect roster title question</value>
+  </data>
+  <data name="SelectedInvalidItem" xml:space="preserve">
+    <value>Selected invalid item. Fix it.</value>
+  </data>
+  <data name="SelectItemFromTheList" xml:space="preserve">
+    <value>Select item from the list</value>
+  </data>
 </root>
