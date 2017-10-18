@@ -243,4 +243,7 @@
   <data name="QuestionnaireTitle_required" xml:space="preserve">
     <value>Введите имя опросника</value>
   </data>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>Ключ опросника не был предоставлен для проверки прав доступа</value>
+  </data>
 </root>

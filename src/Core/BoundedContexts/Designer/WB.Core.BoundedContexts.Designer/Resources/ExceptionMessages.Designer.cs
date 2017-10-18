@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ExceptionMessages {
@@ -57,6 +57,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing attachment with id {0}.
+        /// </summary>
+        public static string AttachmentIdIsMissing {
+            get {
+                return ResourceManager.GetString("AttachmentIdIsMissing", resourceCulture);
             }
         }
         
@@ -205,11 +214,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table with id {0} doen&apos;t have content.
+        /// </summary>
+        public static string LookupTableHasEmptyContent {
+            get {
+                return ResourceManager.GetString("LookupTableHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lookup table with such id is absent..
         /// </summary>
         public static string LookupTableIsAbsent {
             get {
                 return ResourceManager.GetString("LookupTableIsAbsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table with id {0} is missing.
+        /// </summary>
+        public static string LookupTableIsMissing {
+            get {
+                return ResourceManager.GetString("LookupTableIsMissing", resourceCulture);
             }
         }
         
@@ -340,6 +367,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old attachment id is empty and file is absent for attachment {0} in questionnaire {1}.
+        /// </summary>
+        public static string OldAttachmentIdIsEmpty {
+            get {
+                return ResourceManager.GetString("OldAttachmentIdIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only QuestionnaireDocuments are supported for now.
         /// </summary>
         public static string OnlyQuestionnaireDocumentsAreSupported {
@@ -358,7 +394,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with public key {0} can&apos;t be found..
+        ///   Looks up a localized string similar to Question with id {0} can&apos;t be found..
         /// </summary>
         public static string QuestionCannotBeFound {
             get {
@@ -457,6 +493,69 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found errors in excel file.
+        /// </summary>
+        public static string TranlationExcelFileHasErrors {
+            get {
+                return ResourceManager.GetString("TranlationExcelFileHasErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has invalid id at [{1}].
+        /// </summary>
+        public static string TranslationCel_A_lIsInvalid {
+            get {
+                return ResourceManager.GetString("TranslationCel_A_lIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has invalid index at [{1}].
+        /// </summary>
+        public static string TranslationCellIndexIsInvalid {
+            get {
+                return ResourceManager.GetString("TranslationCellIndexIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has invalid type [{1}].
+        /// </summary>
+        public static string TranslationCellTypeIsInvalid {
+            get {
+                return ResourceManager.GetString("TranslationCellTypeIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel file is empty - contains no worksheets.
+        /// </summary>
+        public static string TranslationFileIsEmpty {
+            get {
+                return ResourceManager.GetString("TranslationFileIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to extract translations from uploaded file.
+        /// </summary>
+        public static string TranslationsCantBeExtracted {
+            get {
+                return ResourceManager.GetString("TranslationsCantBeExtracted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worksheet with translations not found.
+        /// </summary>
+        public static string TranslationWorksheetIsMissing {
+            get {
+                return ResourceManager.GetString("TranslationWorksheetIsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown item type. Paste failed..
         /// </summary>
         public static string UnknownTypeCantBePaste {
@@ -498,6 +597,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string VariableCantBePaste {
             get {
                 return ResourceManager.GetString("VariableCantBePaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable with id {0} was not found in questionnaire {1}.
+        /// </summary>
+        public static string VariableWithIdWasNotFound {
+            get {
+                return ResourceManager.GetString("VariableWithIdWasNotFound", resourceCulture);
             }
         }
     }

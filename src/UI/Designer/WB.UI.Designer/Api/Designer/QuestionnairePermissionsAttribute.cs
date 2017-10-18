@@ -6,6 +6,7 @@ using System.Web.Http.Filters;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Api
 {
@@ -21,8 +22,7 @@ namespace WB.UI.Designer.Api
             Guid parsedId;
             if (id == null || !Guid.TryParse(id.ToString(), out parsedId))
             {
-                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                    "Questionnaire Id was not provided to validate permissions");
+                actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.NotFound, ErrorMessages.NoQuestionnaireIdToValidatePremissions);
             }
             else
             {
@@ -30,7 +30,7 @@ namespace WB.UI.Designer.Api
                 bool hasAccess = user.IsAdmin || this.QuestionnaireViewFactory.HasUserAccessToQuestionnaire(parsedId, user.UserId);
                 if (!hasAccess)
                 {
-                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Forbidden, "You are not authorized to access this questionnaire");
+                    actionContext.Response = actionContext.Request.CreateErrorResponse(HttpStatusCode.Forbidden, ErrorMessages.NoAccessToQuestionnaire);
                 }
             }
         }

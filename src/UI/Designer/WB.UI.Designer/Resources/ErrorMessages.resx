@@ -243,4 +243,7 @@
   <data name="QuestionnaireTitle_required" xml:space="preserve">
     <value>Questionnaire title is required</value>
   </data>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>Questionnaire id was not provided to validate permissions</value>
+  </data>
 </root>
