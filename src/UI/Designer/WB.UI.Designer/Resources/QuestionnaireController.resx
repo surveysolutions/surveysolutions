@@ -200,6 +200,9 @@
   </data>  
   <data name="GeneratePdf" xml:space="preserve">
     <value>Generate pdf</value>
+  </data>  
+    <data name="ChooseLanguage" xml:space="preserve">
+    <value>Choose language</value>
   </data>
   <data name="Initializing" xml:space="preserve">
     <value>Initializing</value>

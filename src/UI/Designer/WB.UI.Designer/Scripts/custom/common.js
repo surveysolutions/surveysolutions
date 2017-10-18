@@ -4,6 +4,7 @@
     self.itemName = "";
     self.itemType = "";
     self.pdfStatusUrl = '';
+    self.selectedTransalation = null;
 
     self.deleteItem = function (id, type, name) {
         var encName = decodeURIComponent(name);
@@ -93,7 +94,11 @@
         }).done(function (result) {
             if (result.length && result.length > 1) {
                 self.initLanguageComboBox(result);
+                $('.start-pdf-generation').show();
+                $('#export-pdf-modal-status').hide();
             } else {
+                $('.start-pdf-generation').hide();
+                $('#export-pdf-modal-status').show();
                 self.updateExportPdfStatusNeverending(null);
             }
         }).fail(function (xhr, status, error) {
@@ -104,39 +109,27 @@
 
     self.initLanguageComboBox = function (translationList) {
         var typeaheadCtrl = $(".languages-combobox");
-        //typeahead.typeahead('destroy')
-        typeaheadCtrl.typeahead({
-            source: /*translationList*/ ["111", "222", "333"],
-            //items: "all",
-            autoSelect: true,
-            //minLength: 0,
-            showHintOnFocus: true,
-            /*displayText: function(item) {
-                return item.name;
-            },*/
-            /*matcher: function() {
-                return true;
-            },
-            updater: function(item) {
-                return item.id;
-            },*/
-            afterSelect: function(item) {
-                self.updateExportPdfStatusNeverending(item.id);
-            }
+        typeaheadCtrl.empty();
+
+        for (var i = 0; i < translationList.length; i++) {
+            var translationItem = translationList[i];
+            typeaheadCtrl.append('<li><a href="#" value="' + translationItem.Value + '">' + translationItem.Name + '</a></li>');
+        }
+
+        typeaheadCtrl.unbind('click');
+        typeaheadCtrl.click(function (evn) {
+            var link = $(evn.target);
+            self.selectedTransalation = link.attr('value');
+            $('#dropdownMenuButton').text(link.text());
+            $('#pdfGenerateButton').prop('disabled', false);
         });
-        $(".languages-combobox").change(function (evt) {
-            var current = typeaheadCtrl.typeahead("getActive");
-            if (current) {
-                // Some item from your model is active!
-                if (current.name == typeaheadCtrl.val()) {
-                    // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
-                } else {
-                    // This means it is only a partial match, you can either add a new item
-                    // or take the active if you don't want new items
-                }
-            } else {
-                // Nothing is active so it is a new value (or maybe empty value)
-            }
+
+        $('#pdfGenerateButton').prop('disabled', true);
+        $('#pdfGenerateButton').unbind('click');
+        $('#pdfGenerateButton').click(function(evn) {
+            self.updateExportPdfStatusNeverending(self.selectedTransalation);
+            $('.start-pdf-generation').hide();
+            $('#export-pdf-modal-status').show();
         });
     }
 }

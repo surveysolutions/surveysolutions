@@ -516,8 +516,8 @@ namespace WB.UI.Designer.Controllers
 
         private class ComboItem
         {
-            public string name { get; set; }
-            public Guid? id { get; set; }
+            public string Name { get; set; }
+            public Guid? Value { get; set; }
         }
 
         [HttpPost]
@@ -525,9 +525,9 @@ namespace WB.UI.Designer.Controllers
         {
             var questionnaire = GetQuestionnaireOrThrow404(id);
             var comboBoxItems =
-                //new ComboItem { Name = QuestionnaireHistoryResources.Translation_Original, Id = null }.ToEnumerable().Concat(
-                    questionnaire.Source.Translations.Select(i => new ComboItem { name = i.Name, id = i.Id })
-                ;
+                new ComboItem { Name = QuestionnaireHistoryResources.Translation_Original, Value = null }.ToEnumerable().Concat(
+                    questionnaire.Source.Translations.Select(i => new ComboItem { Name = i.Name, Value = i.Id })
+                );
             return this.Json(comboBoxItems);
         }
     }

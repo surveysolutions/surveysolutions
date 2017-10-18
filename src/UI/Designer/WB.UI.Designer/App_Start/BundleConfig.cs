@@ -37,8 +37,7 @@ namespace WB.UI.Designer
                 new ScriptBundle("~/list").Include(
                     "~/Content/plugins/jquery.mousewheel.js",
                     "~/Content/plugins/perfect-scrollbar.jquery.js",
-                    "~/Scripts/custom/common.js",
-                    "~/Scripts/custom/bootstrap3-typeahead.js"));
+                    "~/Scripts/custom/common.js"));
         }
     }
 }
