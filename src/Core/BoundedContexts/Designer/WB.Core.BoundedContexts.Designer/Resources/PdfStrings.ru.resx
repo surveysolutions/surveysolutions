@@ -309,4 +309,7 @@
   <data name="VariableType_String" xml:space="preserve">
     <value>строковая</value>
   </data>
+  <data name="Legend" xml:space="preserve">
+    <value>Легенда</value>
+  </data>
 </root>

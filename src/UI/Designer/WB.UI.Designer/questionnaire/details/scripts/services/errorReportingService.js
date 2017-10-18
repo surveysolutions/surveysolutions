@@ -1,7 +1,7 @@
 ﻿angular.module('designerApp')
     .factory('errorReportingInterceptor', [
-        '$q', 'notificationService',
-        function ($q, notificationService) {
+        '$q', 'notificationService', '$i18next',
+        function ($q, notificationService, $i18next) {
             return {
                 responseError: function (rejection) {
                     if (rejection.status === 406 || rejection.status === 403 || rejection.status === 400) {
@@ -12,9 +12,9 @@
                         }
                     }
                     else if (rejection.status === 404) {
-                        notificationService.notice('Entry was not found in questionnaire, please select another.');
+                        notificationService.notice($i18next.t("EntryWasNotFound"));
                     } else {
-                        notificationService.error('Request failed unexpectedly.');
+                        notificationService.error($i18next.t("RequestFailedUnexpectedly"));
                     }
                     return $q.reject(rejection);
                 }

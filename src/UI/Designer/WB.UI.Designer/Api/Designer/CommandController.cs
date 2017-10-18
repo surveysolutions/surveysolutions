@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Exceptions;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,8 +18,8 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;
-using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.CommandDeserialization;
+using QuestionnaireEditor = WB.UI.Designer.Resources.QuestionnaireEditor;
 
 namespace WB.UI.Designer.Api
 {
@@ -47,17 +48,17 @@ namespace WB.UI.Designer.Api
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
         private readonly ICommandInflater commandInflater;
-       
+
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationsService;
 
         public CommandController(
-            ICommandService commandService, 
-            ICommandDeserializer commandDeserializer, 
-            ILogger logger, 
+            ICommandService commandService,
+            ICommandDeserializer commandDeserializer,
+            ILogger logger,
             ICommandInflater commandPreprocessor,
-            ILookupTableService lookupTableService, 
+            ILookupTableService lookupTableService,
             IAttachmentService attachmentService,
             ITranslationsService translationsService)
         {
@@ -81,12 +82,12 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public HttpResponseMessage UpdateAttachment(AttachmentModel model)
         {
-            var commandType = typeof (AddOrUpdateAttachment).Name;
+            var commandType = typeof(AddOrUpdateAttachment).Name;
             AddOrUpdateAttachment command;
             try
             {
                 command = (AddOrUpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
-                
+
                 if (model.File != null)
                 {
                     command.AttachmentContentId = this.attachmentService.CreateAttachmentContentId(model.File.Buffer);
@@ -99,7 +100,7 @@ namespace WB.UI.Designer.Api
                 else
                 {
                     if (!command.OldAttachmentId.HasValue)
-                        throw new ArgumentException($"Old attachment id is empty and file is absent for attachment {command.AttachmentId} in questionnaire {command.QuestionnaireId}");
+                        throw new ArgumentException(string.Format(ExceptionMessages.OldAttachmentIdIsEmpty, command.AttachmentId, command.QuestionnaireId));
                     command.AttachmentContentId = this.attachmentService.GetAttachmentContentId(command.OldAttachmentId.Value);
                 }
 
@@ -135,8 +136,8 @@ namespace WB.UI.Designer.Api
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            var multipartStreamProvider = new MultipartMemoryStreamProvider(); 
-            
+            var multipartStreamProvider = new MultipartMemoryStreamProvider();
+
             UpdateLookupTable updateLookupTableCommand;
             try
             {
@@ -151,7 +152,8 @@ namespace WB.UI.Designer.Api
                 var fileStreamContent = multipartContents.Single(x => x.ParamName == fileParameterName);
                 var commandContent = multipartContents.Single(x => x.ParamName == commandParameterName);
 
-                updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent.StringContent);
+                updateLookupTableCommand =
+                    (UpdateLookupTable) this.commandDeserializer.Deserialize(commandType, commandContent.StringContent);
 
                 if (fileStreamContent.StringContent != null)
                 {
@@ -163,7 +165,8 @@ namespace WB.UI.Designer.Api
             }
             catch (FormatException)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, Resources.QuestionnaireController.SelectTabFile);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                    Resources.QuestionnaireController.SelectTabFile);
             }
             catch (ArgumentException e)
             {
@@ -200,10 +203,10 @@ namespace WB.UI.Designer.Api
         public HttpResponseMessage UpdateTranslation(TranslationModel model)
         {
             var commandType = typeof(AddOrUpdateTranslation).Name;
-            AddOrUpdateTranslation command; 
+            AddOrUpdateTranslation command;
             try
             {
-                command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateTranslation) this.commandDeserializer.Deserialize(commandType, model.Command);
                 if (model.File != null && model.File.Buffer?.Length > 0)
                 {
                     this.translationsService.Store(command.QuestionnaireId,
@@ -231,10 +234,11 @@ namespace WB.UI.Designer.Api
             if (commandResponse.HasErrors || model.File == null)
                 return commandResponse.Response;
 
-            var storedTranslationsCount = this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
-            var resultMessage = storedTranslationsCount == 1 ? 
-                string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount) :
-                string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
+            var storedTranslationsCount =
+                this.translationsService.Count(command.QuestionnaireId, command.TranslationId);
+            var resultMessage = storedTranslationsCount == 1
+                ? string.Format(QuestionnaireEditor.TranslationsObtained, storedTranslationsCount)
+                : string.Format(QuestionnaireEditor.TranslationsObtained_plural, storedTranslationsCount);
             return this.Request.CreateResponse(resultMessage);
         }
 
@@ -250,15 +254,18 @@ namespace WB.UI.Designer.Api
             {
                 if (exc.ExceptionType == CommandInflatingExceptionType.Forbidden)
                 {
-                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, exc.Message));
+                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden,
+                        exc.Message));
                 }
 
                 if (exc.ExceptionType == CommandInflatingExceptionType.EntityNotFound)
                 {
-                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotFound, exc.Message));
+                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotFound,
+                        exc.Message));
                 }
 
-                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, exc.Message));
+                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                    exc.Message));
             }
             catch (Exception e)
             {
@@ -271,10 +278,12 @@ namespace WB.UI.Designer.Api
 
                 if (domainEx.ErrorType == DomainExceptionType.DoesNotHavePermissionsForEdit)
                 {
-                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden, domainEx.Message));
+                    return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.Forbidden,
+                        domainEx.Message));
                 }
 
-                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, domainEx.Message));
+                return new CommandProcessResult(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
+                    domainEx.Message));
             }
 
             return new CommandProcessResult(this.Request.CreateResponse(new JsonResponseResult()), false);
