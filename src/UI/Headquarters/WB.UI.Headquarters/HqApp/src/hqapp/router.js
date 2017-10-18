@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 import views from "./views"
 
 Vue.use(VueRouter)
@@ -14,8 +13,10 @@ routes.push({path: "*", component: {
     }
 })
 
-export default new VueRouter({
+var router =  new VueRouter({
     base: window.input.settings.config.basePath,
     mode: "history",
     routes
-})
+});
+
+export default router;

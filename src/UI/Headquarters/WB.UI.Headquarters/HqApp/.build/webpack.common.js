@@ -23,6 +23,7 @@ module.exports = {
         symlinks: false,
         alias: {
             "shared": path.resolve(baseDir, 'src/shared'),
+            "~": path.resolve(baseDir, 'src'),
             'vue$': 'vue/dist/vue.esm.js',
             moment$: 'moment/moment.js'
         }
