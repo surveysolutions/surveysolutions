@@ -22,7 +22,7 @@
         },
         computed: {
             info() {
-                return this.$store.state.breadcrumbs
+                return this.$store.state.webinterview.breadcrumbs
             },
             showBreadcrumbs() {
                 return this.$route.params.sectionId != null && this.info.title != null

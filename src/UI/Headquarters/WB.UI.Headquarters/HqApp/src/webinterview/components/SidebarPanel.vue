@@ -52,7 +52,7 @@
                 return this.panel.hasChildren
             },
             childPanels() {
-                return this.$store.state.sidebar.panels[this.panel.id] || []
+                return this.$store.state.webinterview.sidebar.panels[this.panel.id] || []
             },
             isActive() {
                 if (this.panel.to) {

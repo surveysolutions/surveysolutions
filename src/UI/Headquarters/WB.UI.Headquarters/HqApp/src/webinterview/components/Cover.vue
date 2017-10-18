@@ -62,27 +62,27 @@ export default {
     },
     computed: {
         title() {
-            return this.$store.state.questionnaireTitle
+            return this.$store.state.webinterview.questionnaireTitle
         },
         commentsTitle() {
-            return this.$store.state.coverInfo.entitiesWithComments.length < this.$store.state.coverInfo.commentedQuestionsCount
-                ? this.$t("WebInterviewUI.CoverFirstComments", { count: this.$store.state.coverInfo.entitiesWithComments.length})
+            return this.$store.state.webinterview.coverInfo.entitiesWithComments.length < this.$store.state.webinterview.coverInfo.commentedQuestionsCount
+                ? this.$t("WebInterviewUI.CoverFirstComments", { count: this.$store.state.webinterview.coverInfo.entitiesWithComments.length})
                 : this.$t("WebInterviewUI.CoverComments");
         },
         questions() {
-            return this.$store.state.coverInfo.identifyingQuestions
+            return this.$store.state.webinterview.coverInfo.identifyingQuestions
         },
         commentedQuestions() {
-            return this.$store.state.coverInfo.entitiesWithComments
+            return this.$store.state.webinterview.coverInfo.entitiesWithComments
         },
         firstSectionId() {
-            return this.$store.state.firstSectionId
+            return this.$store.state.webinterview.firstSectionId
         },
         supervisorComment() {
-            return this.$store.state.coverInfo.supervisorRejectComment
+            return this.$store.state.webinterview.coverInfo.supervisorRejectComment
         },
         hasSupervisorComment() {
-            return !isEmpty(this.$store.state.coverInfo.supervisorRejectComment)
+            return !isEmpty(this.$store.state.webinterview.coverInfo.supervisorRejectComment)
         }
     },
     methods: {

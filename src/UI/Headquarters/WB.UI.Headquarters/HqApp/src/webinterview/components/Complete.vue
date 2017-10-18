@@ -74,7 +74,7 @@
         },
         computed: {
             completeInfo() {
-                return this.$store.state.completeInfo;
+                return this.$store.state.webinterview.completeInfo;
             },
             hasCompleteInfo() {
                 return this.completeInfo != undefined

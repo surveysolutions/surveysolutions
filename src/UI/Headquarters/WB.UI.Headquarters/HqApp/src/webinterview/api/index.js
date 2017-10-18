@@ -4,7 +4,7 @@ import * as $script from "scriptjs"
 
 import "signalr"
 
-let store = null;
+export let store = null;
 
 // wraps jQuery promises into awaitable ES 2016 Promise
 const wrap = (jqueryPromise) => {

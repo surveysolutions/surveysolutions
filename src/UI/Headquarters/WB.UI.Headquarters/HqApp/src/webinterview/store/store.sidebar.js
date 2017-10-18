@@ -1,4 +1,3 @@
-import * as debounce from "lodash/debounce"
 import * as forEach from "lodash/foreach"
 import * as groupBy from "lodash/groupby"
 import Vue from "vue"
@@ -22,7 +21,7 @@ export default safeStore({
             commit("SET_SIDEBAR_STATE", sideBar)
         }, null, null),
 
-        toggleSidebar({ commit, dispatch, state }, { panel, collapsed }) {
+        toggleSidebar({ commit, dispatch }, { panel, collapsed }) {
             commit("SET_SIDEBAR_TOGGLE", { panel, collapsed })
 
             if (collapsed === false) {
