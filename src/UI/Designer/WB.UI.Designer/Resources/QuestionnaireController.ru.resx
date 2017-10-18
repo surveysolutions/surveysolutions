@@ -247,4 +247,8 @@
     <value>Сшенерировать pdf</value>
     <comment>Сшенерировать pdf</comment>
   </data>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Выберите язык</value>
+    <comment>Выберите язык</comment>
+  </data>
 </root>
