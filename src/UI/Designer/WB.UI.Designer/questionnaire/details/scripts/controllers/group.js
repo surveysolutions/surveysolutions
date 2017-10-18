@@ -15,8 +15,11 @@
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
                         if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                            $scope.saveGroup();
-                            $scope.groupForm.$setPristine();
+                            if ($scope.groupForm.$dirty) {
+                                $scope.saveGroup();
+                                $scope.groupForm.$setPristine();
+                            }
+
                             event.preventDefault();
                         }
                     }
