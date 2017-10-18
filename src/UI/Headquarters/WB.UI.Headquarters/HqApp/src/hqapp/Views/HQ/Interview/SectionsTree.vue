@@ -1,8 +1,11 @@
 <template>
-  <div>tree</div>
+  <Sidebar />
 </template>
 <script>
+
+import Sidebar from "~/webinterview/components/Sidebar"
+
 export default {
-  
+  components:{ Sidebar }
 }
 </script>
