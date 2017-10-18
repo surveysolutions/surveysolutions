@@ -1,3 +1,5 @@
+window.jQuery = require("jquery")
+
 $.fn.preventDoubleSubmission = function () {
     $(this).on('submit', function (e) {
         var $form = $(this);

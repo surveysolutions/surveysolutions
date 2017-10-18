@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using Main.Core.Entities.SubEntities;
@@ -45,12 +46,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
+            Guid interviewGuid = Guid.Parse(interviewId);
             var interview = transactionManagerProvider.GetTransactionManager()
                 .ExecuteInQueryTransaction(
-                    () => interviewSummaryStorage.GetById(interviewId));
+                    () => interviewSummaryStorage.GetById(interviewGuid));
 
             if (interview == null)
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Headquarters.Resources.WebInterview.Error_NotFound);
+
+            if (CurrentUserCanAccessInterview(interview)) return;
 
             if (!AllowedInterviewStatuses.Contains(interview.Status))
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
@@ -91,5 +95,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     Headquarters.Resources.WebInterview.Error_InterviewExpired);
             }
         }
+
+        private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
+        {
+            var currentPrincipal = Thread.CurrentPrincipal;
+            string userIdString = currentPrincipal?.Identity?.GetUserId();
+            Guid.TryParse(userIdString, out Guid userId);
+
+            return currentPrincipal.IsInRole(UserRoles.Administrator.ToString()) || currentPrincipal.IsInRole(UserRoles.Headquarter.ToString()) ||
+                (currentPrincipal.IsInRole(UserRoles.Supervisor.ToString()) && userId == interviewSummary.TeamLeadId);
+        }
+
     }
 }

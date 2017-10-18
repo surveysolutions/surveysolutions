@@ -1,6 +1,7 @@
 import "babel-polyfill";
 
 import Vue from 'vue'
+import Vuex from 'vuex'
 
 import config from "shared/config"
 Vue.use(config)
