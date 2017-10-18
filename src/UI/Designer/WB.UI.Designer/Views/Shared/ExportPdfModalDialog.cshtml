@@ -18,11 +18,20 @@
                 <div class="start-pdf-generation">
                     <p>Some explanation text</p>
                     <div class="input-group">
-                        <input class="form-control with-clear-btn languages-combobox" placeholder="Choose language" type="text" />
-                        <span class="input-group-btn">
-                            <button id="pdfClearButton" class="btn btn-cancel" type="button"><span></span></button>
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                @QuestionnaireController.ChooseLanguage                                
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu languages-combobox" aria-labelledby="dropdownMenuButton">
+                                @*<li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li><a href="#">Separated link</a></li>*@
+                            </ul>
                             <button id="pdfGenerateButton" class="btn btn-default" type="button">@QuestionnaireController.GeneratePdf</button>
-                        </span>
+
+                        </div>
                     </div>
                 </div>
                 <pre id="export-pdf-modal-status">@QuestionnaireController.Initializing...</pre>
