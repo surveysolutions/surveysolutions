@@ -153,7 +153,7 @@
         $httpProvider.interceptors.push('authorizationInterceptor');
     }])
     .config(['blockUIConfig', function (blockUiConfig) {
-        blockUiConfig.message = '';
+        blockUiConfig.template = '<div class=\"block-ui-overlay\"></div><div class=\"block-ui-message-container\" aria-live=\"assertive\" aria-atomic=\"true\"><div class=\"block-ui-message\" ng-class=\"$_blockUiMessageClass\">{{ "PleaseWait" | i18next }}</div></div>';
         blockUiConfig.autoBlock = false;
     }])
     .config(['unsavedWarningsConfigProvider', function (unsavedWarningsConfigProvider) {
