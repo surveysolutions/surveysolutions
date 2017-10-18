@@ -925,6 +925,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incorrect roster title question.
+        /// </summary>
+        public static string IncorrectRosterTitle {
+            get {
+                return ResourceManager.GetString("IncorrectRosterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log out.
         /// </summary>
         public static string LogOut {
@@ -1560,6 +1569,24 @@ namespace WB.UI.Designer.Resources {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected invalid item. Fix it..
+        /// </summary>
+        public static string SelectedInvalidItem {
+            get {
+                return ResourceManager.GetString("SelectedInvalidItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select item from the list.
+        /// </summary>
+        public static string SelectItemFromTheList {
+            get {
+                return ResourceManager.GetString("SelectItemFromTheList", resourceCulture);
             }
         }
         
