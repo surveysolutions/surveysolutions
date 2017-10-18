@@ -11,17 +11,23 @@ import http from "shared/plugins/http"
 import config from "shared/config"
 import store from "./store"
 import './components'
-import router from "./router"
 import './compatibility.js'
+import '~/webinterview/components'
+import 'shared/components/questions'
 import box from "shared/modal"
 import { browserLanguage } from "shared/helpers"
 
 export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
-    Vue.use(config)
+    Vue.use(config);
     Vue.use(http);
     Vue.use(VeeValidate);
-    Vue.use(Vuei18n)
-    box.init(i18n, browserLanguage)
+    Vue.use(Vuei18n);
+    const router = require('./router').default;
+    const installApi = require("~/webinterview/api").install
+    
+    installApi(Vue, { store })
+
+    box.init(i18n, browserLanguage);
     new Vue({
         el: "#vueApp",
         render: h => h('router-view'),

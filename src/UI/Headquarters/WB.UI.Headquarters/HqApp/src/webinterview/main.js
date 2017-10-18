@@ -1,6 +1,7 @@
 import "babel-polyfill";
 
 import Vue from 'vue'
+import Vuex from 'vuex'
 
 import config from "shared/config"
 Vue.use(config)
@@ -28,7 +29,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     const App = require("./App").default;
     const installApi = require("./api").install
     
-    installApi(Vue)
+    installApi(Vue, { store })
 
     box.init(i18n, browserLanguage)
 

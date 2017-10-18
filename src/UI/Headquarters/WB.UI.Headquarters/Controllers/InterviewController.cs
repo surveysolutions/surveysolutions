@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
@@ -27,6 +28,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
         public InterviewController(
             ICommandService commandService, 
@@ -35,7 +37,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IChangeStatusFactory changeStatusFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
-            IInterviewDetailsViewFactory interviewDetailsViewFactory)
+            IInterviewDetailsViewFactory interviewDetailsViewFactory,
+            IStatefulInterviewRepository statefulInterviewRepository)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -43,6 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
+            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? questionsTypes, string currentGroupId)
@@ -88,6 +92,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ActivePage(MenuItem.Docs)]
         public ActionResult Review(Guid id)
         {
+            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
              bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
 
@@ -96,7 +101,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             return View(new InterviewReviewModel
             {
-                Id = id,
+                Id = id.FormatGuid(),
                 Key = interviewSummary.Key
             });
         }
@@ -136,7 +141,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
     public class InterviewReviewModel
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         
         public string Key { get; set; }
     }
