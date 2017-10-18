@@ -962,4 +962,7 @@
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Не использовать по умолчанию</value>
   </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Ожидайте...</value>
+  </data>
 </root>

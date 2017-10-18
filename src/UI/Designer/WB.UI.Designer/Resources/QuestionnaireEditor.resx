@@ -931,4 +931,7 @@
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Don't use as default</value>
   </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Please wait...</value>
+  </data>
 </root>
