@@ -1558,43 +1558,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, commentTime, comment));
         }
 
-
-        private void FireSupervisorAssignedEvents(Guid userId, Guid supervisorId, DateTime? assignTime)
-        {
-            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, assignTime));
-
-            if (this.properties.Status == InterviewStatus.Created || this.properties.Status == InterviewStatus.InterviewerAssigned)
-            {
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
-            }
-        }
-
-        private void FireInterviewerAssignedEvents(Guid userId, Guid? interviewerId, DateTime? assignTime)
-        {
-            if (interviewerId.HasValue)
-            {
-                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, assignTime));
-
-                if (this.properties.Status == InterviewStatus.RejectedByHeadquarters)
-                {
-                    this.ApplyEvent(new InterviewRejected(userId, comment: null, rejectTime: assignTime));
-                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment: null));
-                }
-
-                if (!this.properties.WasRejected && this.properties.Status == InterviewStatus.SupervisorAssigned)
-                {
-                    this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
-                }
-            }
-            else
-            {
-                if (this.properties.InterviewerId.HasValue)
-                {
-                    this.ApplyEvent(new InterviewerAssigned(userId, null, null));
-                }
-            }
-        }
-
         public void AssignResponsible(AssignResponsibleCommand command)
         {
             var interviewerId = command.InterviewerId;
@@ -1696,37 +1659,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }
-        }
-
-        private void AssignResponsible(Guid userId, Guid? interviewerId, Guid? supervisorId, DateTime? assignTime)
-        {
-            InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
-
-            propertiesInvariants.ThrowIfInterviewHardDeleted();
-
-            var isInterviewInSupervisorResponsibility = this.properties.Status == InterviewStatus.SupervisorAssigned ||
-                                                        this.properties.Status == InterviewStatus.RejectedBySupervisor;
-
-            var isNeedPerformAssignToSupervisor = supervisorId.HasValue;
-            var isNeedPerformAssignToInterviewer = interviewerId.HasValue;
-            var isAssignForTheSameSupervisor = supervisorId.HasValue && supervisorId.Value == this.properties.SupervisorId;
-
-            if (isNeedPerformAssignToSupervisor)
-                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Created, InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
-            else if (isNeedPerformAssignToInterviewer)
-                propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
-
-            if (isNeedPerformAssignToInterviewer)
-                propertiesInvariants.ThrowIfTryAssignToSameInterviewer(interviewerId.Value);
-
-            if (isAssignForTheSameSupervisor && isInterviewInSupervisorResponsibility)
-                propertiesInvariants.ThrowIfTryAssignToSameSupervisor(supervisorId.Value);
-
-            // events
-            if (isNeedPerformAssignToSupervisor && !(isAssignForTheSameSupervisor && isNeedPerformAssignToInterviewer))
-                this.FireSupervisorAssignedEvents(userId, supervisorId.Value, assignTime);
-
-            this.FireInterviewerAssignedEvents(userId, interviewerId, assignTime);
         }
 
         public void Delete(Guid userId)
