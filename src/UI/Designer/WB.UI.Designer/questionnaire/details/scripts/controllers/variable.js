@@ -65,8 +65,10 @@
                    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                    callback: function (event) {
                        if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                           $scope.saveVariable();
-                           $scope.variableForm.$setPristine();
+                           if ($scope.variableForm.$dirty) {
+                               $scope.saveVariable();
+                               $scope.variableForm.$setPristine();
+                           }
                            event.preventDefault();
                        }
                    }
