@@ -63,6 +63,10 @@ const config = {
             folder: '../Views/Shared/'
         },
         {
+            file: "Review.cshtml",
+            folder: '../Views/Interview/'
+        },
+        {
             file: "Index.cshtml",
             folder: '../Views/WebInterview/'
         }
