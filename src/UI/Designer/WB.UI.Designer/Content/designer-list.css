@@ -621,78 +621,74 @@ table.table-content tr th:last-child {
 }
 /*# sourceMappingURL=designer-list.css.map */
 
-.start-pdf-generation .dropdown {
-    max-width: 450px;
+.start-pdf-generation .dropdown .dropdown-toggle {
+    width: 300px;
+    background: transparent;
+    position: relative;
+    float: left;
+    text-align: left;
+    font: 14px/16px Arial,Helvetica,sans-serif;
+    border: 1px solid #dbdfe2;
+    text-transform: none;
+    color: #555;
+    height: 42px;
+    letter-spacing: normal;
+    color: #a6a8a9;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 5px 0 0 5px;
+    padding-right: 30px;
 }
 
-    .start-pdf-generation .dropdown .dropdown-toggle {
-        width: calc(100% - 120px);
-        background: transparent;
-        position: relative;
-        float: left;
-        text-align: left;
-        font: 14px/16px Arial,Helvetica,sans-serif;
-        border: 1px solid #dbdfe2;
-        text-transform: none;
-        color: #555;
-        height: 42px;
-        letter-spacing: normal;
-        color: #a6a8a9;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        border-radius: 5px 0 0 5px;
-        padding-right: 30px;
+    .start-pdf-generation .dropdown .dropdown-toggle:after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 15px;
+        right: 10px;
+        width: 0;
+        height: 0;
+        display: block;
+        border-top: 12px solid #a6a8a9;
+        border-right: 7px solid transparent;
+        border-left: 7px solid transparent;
+        border-bottom: none;
     }
 
-        .start-pdf-generation .dropdown .dropdown-toggle:after {
-            content: "";
-            display: block;
-            position: absolute;
-            top: 15px;
-            right: 10px;
-            width: 0;
-            height: 0;
-            display: block;
-            border-top: 12px solid #a6a8a9;
-            border-right: 7px solid transparent;
-            border-left: 7px solid transparent;
-            border-bottom: none;
+.start-pdf-generation .dropdown.open .dropdown-toggle:after {
+    border-top: none;
+    border-bottom: 12px solid #a6a8a9;
+}
+
+.start-pdf-generation .dropdown .dropdown-menu {
+    width: 300px;
+}
+
+    .start-pdf-generation .dropdown .dropdown-menu > li > a {
+        display: block;
+        padding: 7px 20px;
+        color: #6b6b6b;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: pre-wrap;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        -ms-transition: all 0.3s;
+        -o-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+
+        .start-pdf-generation .dropdown .dropdown-menu > li > a:hover,
+        .start-pdf-generation .dropdown .dropdown-menu > li > a:focus {
+            color: #000;
         }
 
-    .start-pdf-generation .dropdown.open .dropdown-toggle:after {
-        border-top: none;
-        border-bottom: 12px solid #a6a8a9;
-    }
-
-    .start-pdf-generation .dropdown .dropdown-menu {
-        width: calc(100% - 120px);
-    }
-
-        .start-pdf-generation .dropdown .dropdown-menu > li > a {
-            display: block;
-            padding: 7px 20px;
-            color: #6b6b6b;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            white-space: pre-wrap;
-            -webkit-transition: all 0.3s;
-            -moz-transition: all 0.3s;
-            -ms-transition: all 0.3s;
-            -o-transition: all 0.3s;
-            transition: all 0.3s;
-        }
-
-            .start-pdf-generation .dropdown .dropdown-menu > li > a:hover,
-            .start-pdf-generation .dropdown .dropdown-menu > li > a:focus {
-                color: #000;
-            }
-
-    .start-pdf-generation .dropdown .dropdown-toggle:hover,
-    .start-pdf-generation .dropdown .dropdown-toggle:focus,
-    .start-pdf-generation .dropdown .dropdown-toggle:active {
-        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
-    }
+.start-pdf-generation .dropdown .dropdown-toggle:hover,
+.start-pdf-generation .dropdown .dropdown-toggle:focus,
+.start-pdf-generation .dropdown .dropdown-toggle:active {
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}
 
 .start-pdf-generation .btn-default {
     padding: 14px 10px;
