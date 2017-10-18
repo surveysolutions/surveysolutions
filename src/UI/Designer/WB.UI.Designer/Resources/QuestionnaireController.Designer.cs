@@ -115,6 +115,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose language to render pdf questionnaire on it.
+        /// </summary>
+        public static string ChooseLanguageTitle {
+            get {
+                return ResourceManager.GetString("ChooseLanguageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
