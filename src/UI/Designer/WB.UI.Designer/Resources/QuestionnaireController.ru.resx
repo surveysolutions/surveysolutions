@@ -251,4 +251,8 @@
     <value>Выберите язык</value>
     <comment>Выберите язык</comment>
   </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Выберите язык для использования его в pdf </value>
+    <comment>Выберите язык для использования его в pdf </comment>
+  </data>
 </root>
