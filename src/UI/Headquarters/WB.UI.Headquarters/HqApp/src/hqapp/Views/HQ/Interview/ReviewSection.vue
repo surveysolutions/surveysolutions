@@ -1,14 +1,15 @@
 <template>
-  <section class="questionnaire details-interview">
-      Section here
-      <a :href="oldPageUrl">Old interview details</a>
-  </section>
+    <section class="questionnaire details-interview">
+        <!-- <Navbar /> -->
+        <a :href="oldPageUrl">Old interview details</a>
+    </section>
 </template>
 <script>
+
 export default {
-     computed: {
+    computed: {
         oldPageUrl() {
-            return window.input.settings.config.basePath + "Interview/Details/" + this.$route.params.id;
+            return window.input.settings.config.basePath + "Interview/Details/" + this.$route.params.interviewId;
         }
     }
 }
