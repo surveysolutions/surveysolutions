@@ -790,7 +790,6 @@
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="questionnaire\content\fonts\OpenSans300.woff" />
     <Content Include="questionnaire\content\fonts\Roboto300.woff" />
-    <Content Include="Views\Shared\ExportPdfStartDialog.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
