@@ -32,6 +32,10 @@
         $('#pdfDownloadButton').hide();
         $('#pdfRetryGenerate').hide();
 
+        self.selectedTransalation = null;
+        var dropButton = $('#dropdownMenuButton');
+        dropButton.text(dropButton[0].title);
+
         self.getLanguages(getLanguagesUrl);
     };
 
@@ -113,7 +117,7 @@
 
         for (var i = 0; i < translationList.length; i++) {
             var translationItem = translationList[i];
-            typeaheadCtrl.append('<li><a href="#" value="' + translationItem.Value + '">' + translationItem.Name + '</a></li>');
+            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' + translationItem.Value + '">' + translationItem.Name + '</a></li>');
         }
 
         typeaheadCtrl.unbind('click');
