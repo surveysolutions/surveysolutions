@@ -1205,7 +1205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer title is too long. Should be in range from {0} to {1}.
+        ///   Looks up a localized string similar to Answer title is empty or too long. Title&apos;s length should be in range from {0} to {1}.
         /// </summary>
         public static string WB0129_AnswerTitleIsTooLong {
             get {

@@ -676,7 +676,7 @@
     <value>Number of decimal places is not in range from {0} to {1}.</value>
   </data>
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
-    <value>Answer title is too long. Should be in range from {0} to {1}</value>
+    <value>Answer title is empty or too long. Title's length should be in range from {0} to {1}</value>
   </data>
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
     <value>You cannot use child entities in enablement condition for sections, subsection and rosters.</value>
