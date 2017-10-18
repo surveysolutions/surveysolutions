@@ -50,6 +50,8 @@
 
     window.CONFIG = {
         basePath: '@Url.Content(@"~/")',
-        dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat'
+        dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',
+        signalrPath: '@Url.Content("~/signalr/hubs")',
+        supportedTransports: ["webSockets", "longPolling"],
     }
 </script>
