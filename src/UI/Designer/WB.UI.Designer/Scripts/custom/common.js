@@ -33,7 +33,6 @@
         $('#pdfRetryGenerate').hide();
 
         self.getLanguages(getLanguagesUrl);
-        //self.updateExportPdfStatusNeverending();
     };
 
     self.retryPdfExport = function() {
@@ -96,6 +95,7 @@
                 self.initLanguageComboBox(result);
                 $('.start-pdf-generation').show();
                 $('#export-pdf-modal-status').hide();
+                $('#pdfDownloadButton').hide();
             } else {
                 $('.start-pdf-generation').hide();
                 $('#export-pdf-modal-status').show();
