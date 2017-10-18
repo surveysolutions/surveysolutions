@@ -64,18 +64,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         }
 
         private void ArrangeTest(
-            UserRoles? userRole = null, 
+            UserRoles? loggedInUserRole = null, 
             InterviewStatus? interviewStatus = InterviewStatus.InterviewerAssigned, 
             bool webInterviewEnabled = true, 
-            Guid? interviewerId = null, 
-            Guid? responsibleId = null)
+            Guid? loggedInUserId = null, 
+            Guid? responsibleId = null,
+            Guid? teamLeadId = null)
         {
-            if (interviewerId.HasValue && userRole.HasValue)
+            if (loggedInUserId.HasValue && loggedInUserRole.HasValue)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, interviewerId.ToString()),
-                    new Claim(ClaimTypes.Role, userRole.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, loggedInUserId.ToString()),
+                    new Claim(ClaimTypes.Role, loggedInUserRole.ToString())
                 };
 
                 Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims));
@@ -83,14 +84,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             if (interviewStatus.HasValue)
             {                
-                interview = Create.Entity.InterviewSummary(responsibleId: responsibleId ?? Guid.NewGuid(), status: interviewStatus.Value);
+                interview = Create.Entity.InterviewSummary(responsibleId: responsibleId ?? Guid.NewGuid(), 
+                                                        status: interviewStatus.Value,
+                                                        teamLeadId: teamLeadId);
                 
                 webInterviewConfig.Started = webInterviewEnabled;
                 
-                if (interviewerId.HasValue)
-                {
-                }
-
                 interviewSummaryRepoMock
                     .Setup(s => s.GetById(It.IsAny<string>()))
                     .Returns(interview);
@@ -122,7 +121,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         public void should_not_allow_user_that_is_not_responsible()
         {
             ArrangeTest(UserRoles.Interviewer, InterviewStatus.InterviewerAssigned, 
-                webInterviewEnabled: false, interviewerId: Id.g1, responsibleId:Id.g2);
+                webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId:Id.g2);
 
             Assert.Throws<WebInterviewAccessException>(Act);
         }
@@ -139,16 +138,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         public void should_allow_for_interviewer_when_interview_is_rejected()
         {
             ArrangeTest(UserRoles.Interviewer, InterviewStatus.RejectedBySupervisor,
-                webInterviewEnabled: false, interviewerId: Id.g1, responsibleId: Id.g1);
+                webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId: Id.g1);
             Act();
         }
 
         [TestCase(UserRoles.Interviewer, ExpectedResult = true)]
-        [TestCase(UserRoles.Supervisor, ExpectedResult = false)]
-        [TestCase(UserRoles.Headquarter, ExpectedResult = false)]
+        [TestCase(UserRoles.Headquarter, ExpectedResult = true)]
         public bool should_allow_access_for_interviewerOnly_when_webInterview_disabled(UserRoles userRole)
         {
-            ArrangeTest(userRole, webInterviewEnabled: false, interviewerId: Id.g1, responsibleId: Id.g1);
+            ArrangeTest(userRole, webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId: Id.g1);
 
             try
             {
@@ -159,6 +157,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
                 return false;
             }
             return true;
+        }
+
+        [Test]
+        public void should_allow_access_for_team_supervisor()
+        {
+            var supervisorId = Id.g2;
+            ArrangeTest(UserRoles.Supervisor, webInterviewEnabled: false, loggedInUserId: supervisorId, teamLeadId: supervisorId);
+
+            Assert.DoesNotThrow(Act);
         }
 
         [Test]
