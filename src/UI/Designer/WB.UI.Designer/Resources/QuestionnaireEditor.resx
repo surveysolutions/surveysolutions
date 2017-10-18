@@ -934,4 +934,10 @@
   <data name="PleaseWait" xml:space="preserve">
     <value>Please wait...</value>
   </data>
+  <data name="EntryWasNotFound" xml:space="preserve">
+    <value>Entry was not found in questionnaire, please select another.</value>
+  </data>
+  <data name="RequestFailedUnexpectedly" xml:space="preserve">
+    <value>Request failed unexpectedly.</value>
+  </data>
 </root>

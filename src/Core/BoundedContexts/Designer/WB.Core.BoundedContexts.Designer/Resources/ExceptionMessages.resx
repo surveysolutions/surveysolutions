@@ -178,7 +178,7 @@
     <value>You don't have permissions for changing this questionnaire</value>
   </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
-    <value>Question with public key {0} can't be found.</value>
+    <value>Question with id {0} can't be found.</value>
   </data>
   <data name="QuestionIsNotCombobox" xml:space="preserve">
     <value>Question {0} is not a combo box</value>
@@ -263,5 +263,41 @@
   </data>
   <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
     <value>Option value should have only number characters</value>
+  </data>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Missing attachment with id {0}</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Lookup table with id {0} doen't have content</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Lookup table with id {0} is missing</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>Old attachment id is empty and file is absent for attachment {0} in questionnaire {1}</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Found errors in excel file</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} has invalid index at [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} has invalid type [{1}]</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} has invalid id at [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Excel file is empty - contains no worksheets</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Failed to extract translations from uploaded file</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Worksheet with translations not found</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>Variable with id {0} was not found in questionnaire {1}</value>
   </data>
 </root>

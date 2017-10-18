@@ -261,4 +261,43 @@
   <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
     <value>Последняя секция не может быть удалена из опросника</value>
   </data>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Не найдено вложение с ключом {0}</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Таблица поиска с ключом {0} пустая</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Таблица поиска с ключом {0} не может быть найдена</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>Старый ключ вложения пуст и файл отсутствует для вложения {0} для опросника {1}</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>Значения опций должны содержать только числовые значения</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Найдены ошибки в excel файле</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>Неверное значение ключа {0} по адресу [{1}]</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>Неверное значение индекса {0} по адресу [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>Неверное значение типа {0} по адресу [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Excel файл пуст и не содержит листов с переводами</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Произошла ошибка при попытке разбора загруженного файла с переводами</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Лист с переводами не найден</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>Переменная с ключом {0} не найдена в опроснике {1}</value>
+  </data>
 </root>
