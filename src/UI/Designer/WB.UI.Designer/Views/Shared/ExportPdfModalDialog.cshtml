@@ -7,6 +7,24 @@
                 <h4 class="modal-title">@Html.Raw(string.Format(QuestionnaireController.GeneratingPdf, "<span id=\"export-pdf-modal-questionnaire-title\">?</span>"))</h4>
             </div>
             <div class="modal-body">
+               @* <div class="start-pdf-generation">
+                    <div class="input-group">
+                        <input class="form-control with-clear-btn languages-combobox" placeholder="Any" data-bind="typeahead2: Users.AssignTo, typeaheadOptions2: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text"/>
+
+                        <button id="pdfGenerateButton" class="btn btn-primary pull-left">@QuestionnaireController.GeneratePdf</button>
+                    </div>
+                </div>*@
+                
+                <div class="start-pdf-generation">
+                    <p>Some explanation text</p>
+                    <div class="input-group">
+                        <input class="form-control with-clear-btn languages-combobox" placeholder="Choose language" type="text" />
+                        <span class="input-group-btn">
+                            <button id="pdfClearButton" class="btn btn-cancel" type="button"><span></span></button>
+                            <button id="pdfGenerateButton" class="btn btn-default" type="button">@QuestionnaireController.GeneratePdf</button>
+                        </span>
+                    </div>
+                </div>
                 <pre id="export-pdf-modal-status">@QuestionnaireController.Initializing...</pre>
             </div>
             <div class="modal-footer">
