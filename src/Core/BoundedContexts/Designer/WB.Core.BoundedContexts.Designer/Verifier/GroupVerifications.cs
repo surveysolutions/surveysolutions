@@ -34,8 +34,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IGroup>(FixedRosterHasMoreThanAllowedItems, "WB0038", string.Format(VerificationMessages.WB0038_RosterFixedTitlesHaveMoreThan200Items, Constants.MaxLongRosterRowCount)),
             Error<IGroup, IComposite>(RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster, "WB0054", VerificationMessages.WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster),
             Error<IGroup>(RosterLevelIsMoreThan4, "WB0055", string.Format(VerificationMessages.WB0055_RosterHasRosterLevelMoreThan4, MaxNestedRostersCount)),
-            Error<IGroup>(RosterHasEmptyVariableName, "WB0067", VerificationMessages.WB0067_RosterHasEmptyVariableName),
-            Error<IGroup>(RosterHasInvalidVariableName, "WB0069", VerificationMessages.WB0069_RosterHasInvalidVariableName),
             Error<IGroup>(RostersVariableEqualsToQuestionnaireTitle, "WB0070", VerificationMessages.WB0070_RosterHasVariableNameEqualToQuestionnaireTitle),
             Error<IGroup>(GroupHasLevelDepthMoreThan10, "WB0101", string.Format(VerificationMessages.WB0101_GroupHasLevelDepthMoreThan10, MaxNestedSubsectionsCount)),
             ErrorForTranslation<IGroup>(GroupTitleIsTooLong, "WB0260", string.Format(VerificationMessages.WB0260_GroupTitleIsTooLong, MaxTitleLength)),
@@ -201,14 +199,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return groupLevel > 10 + 1/*questionnaire level*/;
         }
 
-        
-        private bool RosterHasInvalidVariableName(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            if (!group.IsRoster)
-                return false;
-            return !IsVariableNameValid(group.VariableName);
-        }
-
         private bool RostersVariableEqualsToQuestionnaireTitle(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!group.IsRoster)
@@ -220,13 +210,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var questionnaireVariableName = this.fileSystemAccessor.MakeStataCompatibleFileName(questionnaire.Title);
 
             return group.VariableName.Equals(questionnaireVariableName, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private static bool RosterHasEmptyVariableName(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            if (!group.IsRoster)
-                return false;
-            return string.IsNullOrWhiteSpace(group.VariableName);
         }
 
         private static EntityVerificationResult<IComposite> RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster(IGroup roster, MultiLanguageQuestionnaireDocument questionnaire)

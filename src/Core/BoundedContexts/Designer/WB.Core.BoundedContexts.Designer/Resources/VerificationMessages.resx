@@ -231,8 +231,8 @@
   <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
     <value>Circular references are not allowed.</value>
   </data>
-  <data name="WB0057_QuestionHasEmptyVariableName" xml:space="preserve">
-    <value>Question cannot have empty variable name.</value>
+  <data name="WB0057_" xml:space="preserve">
+    <value />
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
     <value>Variable name or roster ID cannot be a reserved word.</value>
@@ -258,14 +258,14 @@
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Question of this type is not supported.</value>
   </data>
-  <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
-    <value>Roster cannot have empty roster ID.</value>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>Valid variable or roster ID name should not be empty.</value>
   </data>
   <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
     <value>Roster cannot have more than {0} child elements</value>
   </data>
-  <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
-    <value>Roster has invalid roster ID.</value>
+  <data name="WB0069_" xml:space="preserve">
+    <value />
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>Roster has roster ID equal to questionnaire title.</value>
@@ -676,9 +676,12 @@
     <value>Number of decimal places is not in range from {0} to {1}.</value>
   </data>
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
-    <value>Answer title is empty or too long. Title's length should be in range from {0} to {1}</value>
+    <value>Answer title is empty or too long. Title's length should be in range from {0} to {1} characters.</value>
   </data>
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
     <value>You cannot use child entities in enablement condition for sections, subsection and rosters.</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
 </root>
