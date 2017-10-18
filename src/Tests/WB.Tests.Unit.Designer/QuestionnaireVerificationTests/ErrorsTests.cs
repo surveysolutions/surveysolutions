@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
@@ -15,6 +16,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
     {
         private static readonly Guid Id1 = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
+
+        [Test]
+        public void numeric_roster_title_question_is_linked_multioption()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.NumericIntegerQuestion(Id1, variable: "a"),
+                    Create.NumericRoster(Id2, variable:"r", rosterTitleQuestionId: Id.g3, children: new IComposite[]
+                    {
+                        Create.MultyOptionsQuestion(Id.g3, variable: "b", linkedToRosterId: Id2)
+                    })
+                })
+                .ExpectError("WB0083");
 
         [Test]
         public void group_referense_child_elements_in_condition()

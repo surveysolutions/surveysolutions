@@ -305,5 +305,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             if (!rosterSizeQuestionId.HasValue) return null;
             return this.Find<IQuestion>(rosterSizeQuestionId.Value);
         }
+
+        public bool IsLinked(IQuestion question)
+        {
+            return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
+        }
     }
 }
