@@ -67,9 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
 
-            bool isAccessAllowed =
-                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
-                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
+            bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
 
             if (!isAccessAllowed)
                 return HttpNotFound();
@@ -81,10 +79,21 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(detailsViewModel);
         }
 
+        private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
+        {
+            return this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
+                   (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
+        }
+
         [ActivePage(MenuItem.Docs)]
         public ActionResult Review(Guid id)
         {
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+             bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
+
+            if (!isAccessAllowed)
+                return HttpNotFound();
+
             return View(new InterviewReviewModel
             {
                 Id = id,
