@@ -3,7 +3,8 @@ import config from "shared/config"
 import * as $script from "scriptjs"
 
 import "signalr"
-import store from "../store"
+
+let store = null;
 
 // wraps jQuery promises into awaitable ES 2016 Promise
 const wrap = (jqueryPromise) => {
@@ -189,9 +190,10 @@ export async function apiCaller(action) {
     }
 }
 
-export function install(Vue) {
+export function install(Vue, options) {
     Vue.mixin({
         created() {
+            store = options.store
             this.$apiCaller = apiCaller;
         }
     });

@@ -29,7 +29,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     const App = require("./App").default;
     const installApi = require("./api").install
     
-    installApi(Vue)
+    installApi(Vue, { store })
 
     box.init(i18n, browserLanguage)
 

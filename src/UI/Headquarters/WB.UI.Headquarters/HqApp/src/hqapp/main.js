@@ -21,6 +21,10 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     Vue.use(VeeValidate);
     Vue.use(Vuei18n);
     const router = require('./router').default;
+    const installApi = require("~/webinterview/api").install
+    
+    installApi(Vue, { store })
+
     box.init(i18n, browserLanguage);
     new Vue({
         el: "#vueApp",
