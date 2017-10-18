@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using Group = Main.Core.Entities.SubEntities.Group;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -37,11 +38,12 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
             Error("WB0261", QuestionnaireHasRostersPropagationsExededLimit, VerificationMessages.WB0261_RosterStructureTooExplosive),
             Error<IComposite>("WB0121", VariableNameTooLong, string.Format(VerificationMessages.WB0121_VariableNameTooLong, DefaultVariableLengthLimit)),
-            Error<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
-            Error<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
             Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
-            Error<IComposite>("WB0058", VariableNameIsKeywords, VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
+            Critical<IComposite>("WB0067", VariableNameIsEmpty, string.Format(VerificationMessages.WB0067_VariableNameIsEmpty)),
+            Critical<IComposite>("WB0058", VariableNameIsKeywords, VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
+            Critical<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
+            Critical<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
@@ -62,6 +64,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.MultyOption,
             QuestionType.TextList
         };
+        private static bool VariableNameIsEmpty(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (entity is IGroup && !questionnaire.Questionnaire.IsRoster(entity))
+                return false;
+            if (entity is StaticText)
+                return false;
+            return string.IsNullOrWhiteSpace(entity.VariableName);
+        }
 
         private static bool VariableNameTooLong(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -403,6 +413,15 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Select(entity => QuestionnaireVerificationMessage.Error(code, message, CreateReference(entity)));
         }
 
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Critical<TEntity>(
+            string code, Func<TEntity, MultiLanguageQuestionnaireDocument, bool> hasError,  string message)
+            where TEntity : class, IComposite
+        {
+            return questionnaire =>
+                questionnaire
+                    .Find<TEntity>(entity => hasError(entity, questionnaire))
+                    .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, CreateReference(entity)));
+        }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)
         {

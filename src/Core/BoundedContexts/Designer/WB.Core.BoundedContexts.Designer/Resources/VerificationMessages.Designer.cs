@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire must contain at least one question..
         /// </summary>
         public static string WB0001_NoQuestions {
@@ -566,11 +575,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question cannot have empty variable name..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        public static string WB0057_QuestionHasEmptyVariableName {
+        public static string WB0057_ {
             get {
-                return ResourceManager.GetString("WB0057_QuestionHasEmptyVariableName", resourceCulture);
+                return ResourceManager.GetString("WB0057_", resourceCulture);
             }
         }
         
@@ -656,11 +665,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster cannot have empty roster ID..
+        ///   Looks up a localized string similar to Valid variable or roster ID name should not be empty..
         /// </summary>
-        public static string WB0067_RosterHasEmptyVariableName {
+        public static string WB0067_VariableNameIsEmpty {
             get {
-                return ResourceManager.GetString("WB0067_RosterHasEmptyVariableName", resourceCulture);
+                return ResourceManager.GetString("WB0067_VariableNameIsEmpty", resourceCulture);
             }
         }
         
@@ -674,11 +683,11 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster has invalid roster ID..
+        ///   Looks up a localized string similar to .
         /// </summary>
-        public static string WB0069_RosterHasInvalidVariableName {
+        public static string WB0069_ {
             get {
-                return ResourceManager.GetString("WB0069_RosterHasInvalidVariableName", resourceCulture);
+                return ResourceManager.GetString("WB0069_", resourceCulture);
             }
         }
         
@@ -1205,7 +1214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer title is empty or too long. Title&apos;s length should be in range from {0} to {1}.
+        ///   Looks up a localized string similar to Answer title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
         /// </summary>
         public static string WB0129_AnswerTitleIsTooLong {
             get {
