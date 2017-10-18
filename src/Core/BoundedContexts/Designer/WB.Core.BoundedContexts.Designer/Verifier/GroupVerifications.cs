@@ -171,7 +171,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return noErrors;
 
             if (QuestionTypesValidToBeRosterTitles.Contains(rosterTitleQuestion.QuestionType))
-                return noErrors;
+            {
+                if (!questionnaire.Questionnaire.IsLinked(rosterTitleQuestion))
+                    return noErrors;
+            }
 
             return new EntityVerificationResult<IComposite>
             {
