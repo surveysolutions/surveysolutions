@@ -39,6 +39,7 @@
                     var pdfDownloadUrl = Url.Action("download", "Pdf", routevalues);
                     var pdfStatusUrl = Url.Action("status", "Pdf", routevalues);
                     var pdfRetryUrl = Url.Action("Retry", "Pdf", routevalues);
+                    var getLanguagesUrl = Url.Action("GetLanguages", "Questionnaire", routevalues);
 
                     <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                         <td class="search-value">
@@ -76,7 +77,7 @@
                                                     {
                                                         <li class="divider"></li>
                                                         <li>
-                                                            <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl")' data-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
+                                                            <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl", "@getLanguagesUrl")' data-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
                                                         </li>
                                                     }
                                                     if (actionModel.CanSynchronize)
