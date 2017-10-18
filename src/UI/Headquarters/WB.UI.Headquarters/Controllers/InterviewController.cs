@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             return View(new InterviewReviewModel
             {
-                Id = id,
+                Id = id.FormatGuid(),
                 Key = interviewSummary.Key
             });
         }
@@ -136,7 +136,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
     public class InterviewReviewModel
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         
         public string Key { get; set; }
     }
