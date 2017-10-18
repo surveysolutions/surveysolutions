@@ -502,37 +502,27 @@
       <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AccountResources.ru.resx">
-      <SubType>Designer</SubType>
       <DependentUpon>AccountResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>ErrorMessages.ru.Designer.cs</LastGenOutput>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\FindReplaceResources.ru.resx">
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\NotificationResources.ru.resx">
-      <LastGenOutput>NotificationResources.ru.Designer.cs</LastGenOutput>
       <DependentUpon>NotificationResources.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Paging.ru.resx">
       <DependentUpon>Paging.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>PdfMessages.ru.Designer.cs</LastGenOutput>
       <DependentUpon>PdfMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireController.ru.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>QuestionnaireController.ru.Designer.cs</LastGenOutput>
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ru.resx">
-      <SubType>Designer</SubType>
-      <LastGenOutput>QuestionnaireHistoryResources.ru.Designer.cs</LastGenOutput>
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </EmbeddedResource>
     <None Include="compilerconfig.json" />
