@@ -5,7 +5,9 @@
 }
 @section styles
 {
-    <link href="~/Dependencies/build/webinterview.css" rel="stylesheet" />
+    <!-- cssWebinterview:css -->
+    <link rel='stylesheet' href='@Url.Content("~/Dependencies/build/webinterview.css")' >
+    <!-- endinject -->    
 }
 
 @Html.RenderHqConfig(Model)
