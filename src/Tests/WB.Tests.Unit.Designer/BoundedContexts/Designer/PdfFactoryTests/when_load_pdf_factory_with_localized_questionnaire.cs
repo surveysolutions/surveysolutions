@@ -64,10 +64,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                 questionnaireChangeHistoryStorage: questionnaireChangeHistoryStorage,
                 questionnaireListViewItemStorage: questionnaireListItemStorage,
                 translationService: this.translationsService.Object,
-                translator: this.translator.Object);
+                questionnaireTranslator: this.translator.Object);
         }
 
-        private void BecauseOf() => view = factory.Load(questionnaireId.FormatGuid(), userId, userName);
+        private void BecauseOf() => view = factory.Load(questionnaireId.FormatGuid(), userId, userName, null);
 
         [Test]
         public void should_translate_document_according_to_default_translation()
