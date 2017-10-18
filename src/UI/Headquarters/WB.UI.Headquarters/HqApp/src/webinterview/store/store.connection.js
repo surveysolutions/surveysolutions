@@ -1,6 +1,5 @@
 import * as toastr from "toastr"
 import Vue from "vue"
-import { Store } from "vuex"
 import { apiStop } from "../api"
 import modal from "shared/modal"
 

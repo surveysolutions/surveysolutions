@@ -31,7 +31,7 @@
         },
         computed: {
             showCover() {
-                return this.$store.state.hasCoverPage
+                return this.$store.state.webinterview.hasCoverPage
             },
             sections() {
                 return this.$store.getters.rootSections
@@ -40,7 +40,7 @@
                 return this.$route.params.sectionId
             },
             interviewState() {
-                return this.$store.state.interviewState
+                return this.$store.state.webinterview.interviewState
             },
             completeSection() {
                 return {

@@ -25,7 +25,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     require("./directives")
 
     const router = require("./router").default;
-    const store = require("./store").default;
+    const store = new Vuex.Store(require("./store").default);
     const App = require("./App").default;
     const installApi = require("./api").install
     

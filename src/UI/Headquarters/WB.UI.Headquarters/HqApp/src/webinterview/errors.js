@@ -8,7 +8,7 @@ Vue.config.errorHandler = (error, vm) => {
 }
 
 function toastErr(err, message) {
-    if (this.$config.verboseMode) {
+    if (window.CONFIG.verboseMode) {
         console.error(message, err)
     }
 
@@ -21,7 +21,7 @@ function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
     return function() {
         try {
-            if (Vue.$config.verboseMode && !(window ).NODEBUG) {
+            if (window.CONFIG.verboseMode && !(window ).NODEBUG) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
                 console.debug("call", section, name, argument) // , new Error().stack)

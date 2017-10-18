@@ -42,13 +42,13 @@
         },
         computed: {
             entities() {
-                return this.$store.state.entities
+                return this.$store.state.webinterview.entities
             },
             fetchProgress() {
-                return this.$store.state.fetch.inProgress
+                return this.$store.state.webinterview.fetch.inProgress
             },
             info() {
-                return this.$store.state.breadcrumbs
+                return this.$store.state.webinterview.breadcrumbs
             },
             sectionClass() {
                 if (this.info) {
