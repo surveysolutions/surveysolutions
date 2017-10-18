@@ -160,7 +160,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Created date.
+        ///   Looks up a localized string similar to Created on.
         /// </summary>
         public static string CreatedDate {
             get {
@@ -295,6 +295,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate pdf.
+        /// </summary>
+        public static string GeneratePdf {
+            get {
+                return ResourceManager.GetString("GeneratePdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generating pdf for &quot;{0}&quot;.
         /// </summary>
         public static string GeneratingPdf {
@@ -322,7 +331,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Last modified.
+        ///   Looks up a localized string similar to Modified on.
         /// </summary>
         public static string LastModified {
             get {

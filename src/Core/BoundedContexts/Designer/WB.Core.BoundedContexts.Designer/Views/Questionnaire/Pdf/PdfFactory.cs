@@ -12,13 +12,14 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName);
+        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation);
         string LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
@@ -26,31 +27,31 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
-        private readonly IQuestionnaireTranslator translator;
         private readonly ITranslationsService translationService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly PdfSettings pdfSettings;
+        private readonly IQuestionnaireTranslator questionnaireTranslator;
 
         public PdfFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
-            IQuestionnaireTranslator translator,
             ITranslationsService translationService,
-            PdfSettings pdfSettings)
+            PdfSettings pdfSettings,
+            IQuestionnaireTranslator questionnaireTranslator)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
             this.accountsStorage = accountsStorage;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
-            this.translator = translator;
             this.translationService = translationService;
             this.pdfSettings = pdfSettings;
+            this.questionnaireTranslator = questionnaireTranslator;
         }
 
-        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName)
+        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
             
@@ -58,11 +59,20 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             {
                 return null;
             }
-            
-            if (questionnaire.DefaultTranslation != null)
+
+            if (translation.HasValue)
             {
-                var translation = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
-                questionnaire = translator.Translate(questionnaire, translation);
+                var translationMetadata = questionnaire.Translations.FirstOrDefault(t => t.Id == translation.Value);
+                if (translationMetadata == null)
+                    throw new ArgumentException("Questionnaire doesn't contains translation: " + translation);
+
+                var translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
+                questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
+            } 
+            else if (questionnaire.DefaultTranslation != null)
+            {
+                var translationData = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
+                questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
             var listItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);

@@ -620,3 +620,77 @@ table.table-content tr th:last-child {
   padding-right: 0;
 }
 /*# sourceMappingURL=designer-list.css.map */
+
+.start-pdf-generation {
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+    .start-pdf-generation .input-group {
+        max-width: 450px;
+    }
+
+        .start-pdf-generation .input-group .form-control {
+            padding-right: 25px;
+        }
+
+    .start-pdf-generation .input-group-btn .btn-cancel {
+        margin: 0;
+        padding: 10px 4px;
+        position: absolute;
+        z-index: 2;
+        left: -30px;
+        background-color: transparent;
+        outline: none;
+    }
+
+        .start-pdf-generation .input-group-btn .btn-cancel span {
+            display: block;
+            width: 20px;
+            height: 20px;
+        }
+
+            .start-pdf-generation .input-group-btn .btn-cancel span:before,
+            .start-pdf-generation .input-group-btn .btn-cancel span:after {
+                display: block;
+                background-color: #a6a8a9;
+                content: "";
+                width: 20px;
+                height: 2px;
+                -webkit-transform: rotate(45deg);
+                -ms-transform: rotate(45deg);
+                -o-transform: rotate(45deg);
+                transform: rotate(45deg);
+                position: relative;
+                top: 9px;
+            }
+
+        .start-pdf-generation .input-group-btn .btn-cancel:hover span:before,
+        .start-pdf-generation .input-group-btn .btn-cancel:hover span:after {
+            background-color: #000;
+        }
+
+        .start-pdf-generation .input-group-btn .btn-cancel span:after {
+            top: 7px;
+            -webkit-transform: rotate(-45deg);
+            -ms-transform: rotate(-45deg);
+            -o-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+        }
+
+    .start-pdf-generation .input-group-btn .btn-default {
+        padding: 14px 10px;
+        background: transparent;
+        border: 1px solid #dbdfe2;
+        color: #555;
+    }
+
+        .start-pdf-generation .input-group-btn .btn-default:hover,
+        .start-pdf-generation .input-group-btn .btn-default:focus,
+        .start-pdf-generation .input-group-btn .btn-default:active {
+            background-color: #f3f3f3;
+            color: #000;
+        }

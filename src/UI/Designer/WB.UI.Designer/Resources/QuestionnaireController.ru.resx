@@ -243,4 +243,8 @@
   <data name="You" xml:space="preserve">
     <value>Вы</value>
   </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Сшенерировать pdf</value>
+    <comment>Сшенерировать pdf</comment>
+  </data>
 </root>

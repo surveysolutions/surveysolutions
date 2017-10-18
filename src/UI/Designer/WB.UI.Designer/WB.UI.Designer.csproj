@@ -495,6 +495,8 @@
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
+    <Content Include="Scripts\custom\bootstrap3-typeahead.js" />
+    <Content Include="Scripts\custom\bootstrap3-typeahead.min.js" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
     <EmbeddedResource Include="Resources\AccountResources.resx">
@@ -790,6 +792,7 @@
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="questionnaire\content\fonts\OpenSans300.woff" />
     <Content Include="questionnaire\content\fonts\Roboto300.woff" />
+    <Content Include="Views\Shared\ExportPdfStartDialog.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

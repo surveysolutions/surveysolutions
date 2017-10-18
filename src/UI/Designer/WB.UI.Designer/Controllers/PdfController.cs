@@ -54,7 +54,7 @@ namespace WB.UI.Designer.Controllers
 
         #endregion
 
-        private static readonly ConcurrentDictionary<Guid, PdfGenerationProgress> GeneratedPdfs = new ConcurrentDictionary<Guid, PdfGenerationProgress>();
+        private static readonly ConcurrentDictionary<string, PdfGenerationProgress> GeneratedPdfs = new ConcurrentDictionary<string, PdfGenerationProgress>();
 
         private readonly IPdfFactory pdfFactory;
         private readonly PdfSettings pdfSettings;
@@ -77,9 +77,9 @@ namespace WB.UI.Designer.Controllers
 
         [LocalOrDevelopmentAccessOnly]
         [System.Web.Mvc.AllowAnonymous]
-        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
+        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation)
         {
-            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName);
+            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName, translation);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -90,15 +90,16 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
-        public ActionResult PrintPreview(Guid id)
+        public ActionResult PrintPreview(Guid id, Guid? translation)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
-        public ActionResult Download(Guid id)
+        public ActionResult Download(Guid id, Guid? translation)
         {
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(id);
+            var pdfKey = id.ToString() + translation;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
 
             if (pdfGenerationProgress?.IsFinished == true)
             {
@@ -107,7 +108,7 @@ namespace WB.UI.Designer.Controllers
                 byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
                 this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
-                GeneratedPdfs.TryRemove(id);
+                GeneratedPdfs.TryRemove(pdfKey);
 
                 return this.File(content, "application/pdf", $"{questionnaireTitle}.pdf");
             }
@@ -119,9 +120,10 @@ namespace WB.UI.Designer.Controllers
 
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
         [System.Web.Mvc.HttpGet]
-        public JsonResult Status(Guid id)
+        public JsonResult Status(Guid id, Guid? translation)
         {
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(id, StartNewPdfGeneration);
+            var pdfKey = id.ToString() + translation;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation));
 
             if (pdfGenerationProgress.IsFailed)
                 return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate), JsonRequestBehavior.AllowGet);
@@ -142,28 +144,29 @@ namespace WB.UI.Designer.Controllers
         }
 
         [System.Web.Mvc.HttpPost]
-        public ActionResult Retry(Guid id)
+        public ActionResult Retry(Guid id, Guid? translation)
         {
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(id, StartNewPdfGeneration);
+            var pdfKey = id.ToString() + translation;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
-                GeneratedPdfs.TryRemove(id);
+                GeneratedPdfs.TryRemove(pdfKey);
             }
-            GeneratedPdfs.GetOrAdd(id, this.StartNewPdfGeneration);
+            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation));
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
 
-        private PdfGenerationProgress StartNewPdfGeneration(Guid id)
+        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation)
         {
             var newPdfGenerationProgress = new PdfGenerationProgress();
-            this.StartRenderPdf(id, newPdfGenerationProgress);
+            this.StartRenderPdf(id, newPdfGenerationProgress, translation);
             return newPdfGenerationProgress;
         }
         
-        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress)
+        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation)
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
-            var pdfDocument = this.GetSourceUrlsForPdf(id);
+            var pdfDocument = this.GetSourceUrlsForPdf(id, translation);
             var pdfOutput = new PdfOutput {OutputFilePath = generationProgress.FilePath};
 
             Task.Factory.StartNew(() =>
@@ -188,13 +191,14 @@ namespace WB.UI.Designer.Controllers
             WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow()
         };
 
-        private PdfDocument GetSourceUrlsForPdf(Guid id) => new PdfDocument
+        private PdfDocument GetSourceUrlsForPdf(Guid id, Guid? translation) => new PdfDocument
         {
             Url = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaire), "Pdf", new
             {
                 id = id,
                 requestedByUserId = this.UserHelper.WebUser.UserId,
                 requestedByUserName = this.UserHelper.WebUser.UserName,
+                translation = translation
             }),
             FooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new
             {
@@ -214,9 +218,9 @@ namespace WB.UI.Designer.Controllers
             return path;
         }
 
-        private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName)
+        private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation)
         {
-            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName);
+            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName, translation);
             if (questionnaire == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

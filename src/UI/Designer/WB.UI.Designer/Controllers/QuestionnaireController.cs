@@ -513,5 +513,22 @@ namespace WB.UI.Designer.Controllers
             this.Error(Resources.QuestionnaireController.Forbidden);
             return this.RedirectToAction("Index");
         }
+
+        private class ComboItem
+        {
+            public string name { get; set; }
+            public Guid? id { get; set; }
+        }
+
+        [HttpPost]
+        public ActionResult GetLanguages(Guid id)
+        {
+            var questionnaire = GetQuestionnaireOrThrow404(id);
+            var comboBoxItems =
+                //new ComboItem { Name = QuestionnaireHistoryResources.Translation_Original, Id = null }.ToEnumerable().Concat(
+                    questionnaire.Source.Translations.Select(i => new ComboItem { name = i.Name, id = i.Id })
+                ;
+            return this.Json(comboBoxItems);
+        }
     }
 }

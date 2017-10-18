@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Translations;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
 {
@@ -20,9 +21,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage = null,
             IPlainStorageAccessor<User> accountsDocumentReader = null,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage = null,
-            IQuestionnaireTranslator translator = null,
             ITranslationsService translationService = null,
-            PdfSettings pdfSettings = null)
+            PdfSettings pdfSettings = null,
+            IQuestionnaireTranslator questionnaireTranslator = null)
         {
             return new PdfFactory(
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
@@ -30,8 +31,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                 accountsStorage: accountsDocumentReader ?? Mock.Of<IPlainStorageAccessor<User>>(),
                 questionnaireListViewItemStorage: questionnaireListViewItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
                 translationService: translationService ?? Mock.Of<ITranslationsService>(),
-                translator: translator ?? Mock.Of<IQuestionnaireTranslator>(),
-                pdfSettings: pdfSettings ?? new PdfSettings(0, 0, 0, 0, 0, 0, 0));
+                pdfSettings: pdfSettings ?? new PdfSettings(0, 0, 0, 0, 0, 0, 0),
+                questionnaireTranslator: questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>());
         }
     }
 }
