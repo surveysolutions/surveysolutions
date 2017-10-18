@@ -5,7 +5,7 @@ import localStore from "./store"
 import { apiCaller, getInstance as hubProxy, queryString } from "~/webinterview/api"
 
 function registerStore() {
-    appStore.registerModule("webInterview", localStore);
+    appStore.registerModule("webinterview", localStore);
 }
 
 async function beforeEnter(to, from, next) {

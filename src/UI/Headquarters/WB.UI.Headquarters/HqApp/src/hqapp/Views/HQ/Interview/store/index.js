@@ -4,4 +4,8 @@ Vue.use(Vuex)
 
 import webinterview from "~/webinterview/store/store.object"
 
-export default webinterview;
+const store = {
+    modules: { webinterview }
+}
+
+export default store;

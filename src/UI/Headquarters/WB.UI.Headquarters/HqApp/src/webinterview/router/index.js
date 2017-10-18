@@ -3,12 +3,12 @@ import VueRouter from "vue-router"
 
 Vue.use(VueRouter)
 
-import { apiCaller, getInstance as hubProxy, queryString } from "../api"
+import { apiCaller, getInstance as hubProxy, queryString, store } from "../api"
 import Complete from "../components/Complete"
 import Cover from "../components/Cover"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
-import store from "../store"
+//import store from "../store"
 
 const router = new VueRouter({
     base: Vue.$config.virtualPath + "/",

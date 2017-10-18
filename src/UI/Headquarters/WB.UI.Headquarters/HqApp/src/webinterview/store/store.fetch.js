@@ -8,7 +8,7 @@ const fetch = {
     actions: {
         fetch({ commit, rootState }, {id, ids, done}) {
             commit("SET_FETCH", {
-                entityDetails: rootState.entityDetails,
+                entityDetails: rootState.webinterview.entityDetails,
                 id, ids,
                 done: done || false
             })
@@ -23,7 +23,7 @@ const fetch = {
         },
         uploadProgress({ commit, rootState }, {id, now, total}) {
             commit("SET_UPLOAD_PROGRESS", {
-                entity: rootState.entityDetails[id], now, total
+                entity: rootState.webinterview.entityDetails[id], now, total
             })
         },
         scroll({commit, state}) {

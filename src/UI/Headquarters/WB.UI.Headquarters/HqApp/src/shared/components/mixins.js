@@ -6,7 +6,7 @@ export const entityPartial = {
         $me() {
             const id = this.id || this.$parent.id
 
-            return this.$store.state.entityDetails[id] || {
+            return this.$store.state.webinterview.entityDetails[id] || {
                 isAnswered: false,
                 validity: {
                     isValid: true
@@ -25,7 +25,7 @@ export function detailsMixin(fetchMethod, defaults) {
                 let result = null
 
                 if (this.id != null) {
-                    result = this.$store.state.entityDetails[this.id]
+                    result = this.$store.state.webinterview.entityDetails[this.id]
                 }
 
                 return result || defaults
