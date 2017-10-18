@@ -27,10 +27,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 })
                 .ExpectCritical("WB0130");
 
-        [TestCase("variableЙФЪ", "WB0122")]
-        [TestCase("1variable", "WB0123")]
+        
         [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "WB0121")]
-        [TestCase("_variable", "WB0123")]
         [TestCase("variable_", "WB0124")]
         [TestCase("vari__able", "WB0125")]
         public void variable_variable_name_is_invalid(string variable, string errorCode)
@@ -41,9 +39,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectError(errorCode);
 
         [TestCase("variableЙФЪ", "WB0122")]
-        [TestCase("1variable", "WB0123")]
-        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "WB0121")]
+        [TestCase(" ", "WB0067")]
         [TestCase("_variable", "WB0123")]
+        [TestCase("1variable", "WB0123")]
+        public void variable_variable_name_has_invalid_chars(string variable, string errorCode)
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Variable(Id1, variableName: variable)
+                })
+                .ExpectCritical(errorCode);
+
+        
+        [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "WB0121")]
         [TestCase("variable_", "WB0124")]
         [TestCase("vari__able", "WB0125")]
         public void roster_variable_name_is_invalid(string variable, string errorCode)
@@ -53,6 +60,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 })
                 .ExpectError(errorCode);
 
+        [TestCase("variableЙФЪ", "WB0122")]
+        [TestCase("     ", "WB0067")]
+        [TestCase("1variable", "WB0123")]
+        [TestCase("_variable", "WB0123")]
+        public void roster_variable_name_has_invalid_chars(string variable, string errorCode)
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.FixedRoster(Id1, variable: variable)
+                })
+                .ExpectCritical(errorCode);
+
         [Test]
         public void text_question_variable_name_is_too_long()
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
@@ -60,24 +78,32 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     Create.TextQuestion(Id1, variable: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 })
                 .ExpectError("WB0121");
-
-        [TestCase("variableЙФЪ", "WB0122")]
-        [TestCase("1variable", "WB0123")]
-        [TestCase("_variable", "WB0123")]
+       
         [TestCase("variable_", "WB0124")]
         [TestCase("vari__able", "WB0125")]
         [TestCase("a23456789012345678901", "WB0121")]
-        [TestCase("rowcode", "WB0058")]
-        [TestCase("rowname", "WB0058")]
-        [TestCase("rowindex", "WB0058")]
-        [TestCase("roster", "WB0058")]
-        [TestCase("Id", "WB0058")]
         public void question_variable_name_is_invalid(string variable, string errorCode)
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
                     Create.GpsCoordinateQuestion(Id1, variable: variable)
                 })
                 .ExpectError(errorCode);
+
+        [TestCase("1variable", "WB0123")]
+        [TestCase("_variable", "WB0123")]
+        [TestCase("variableЙФЪ", "WB0122")]
+        [TestCase(null, "WB0067")]
+        [TestCase("rowcode", "WB0058")]
+        [TestCase("rowname", "WB0058")]
+        [TestCase("rowindex", "WB0058")]
+        [TestCase("roster", "WB0058")]
+        [TestCase("Id", "WB0058")]
+        public void question_variable_name_has_invalid_chars(string variable, string errorCode)
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.GpsCoordinateQuestion(Id1, variable: variable)
+                })
+                .ExpectCritical(errorCode);
 
         [Test]
         public void categorical_question_with_long_option()

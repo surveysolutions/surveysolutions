@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new[]
         {
             Error<IQuestion>("WB0030", PrefilledQuestionCantBeInsideOfRoster, VerificationMessages.WB0030_PrefilledQuestionCantBeInsideOfRoster),
-            Error<IQuestion>("WB0057", QuestionHasEmptyVariableName, VerificationMessages.WB0057_QuestionHasEmptyVariableName),
             Error<IQuestion>("WB0066", QuestionTypeIsNotAllowed, VerificationMessages.WB0066_QuestionTypeIsNotAllowed),
             //Error<IQuestion>("WB0077", QuestionHasInvalidVariableName, VerificationMessages.WB0077_QuestionHasInvalidVariableName),
             Error<IQuestion>("WB0090", LinkedQuestionIsInterviewersOnly, VerificationMessages.WB0090_LinkedQuestionIsInterviewersOnly),
@@ -693,11 +692,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool QRBarcodeQuestionIsPreFilledQuestion(IQRBarcodeQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return questionnaire.Questionnaire.IsPreFilledQuestion(question);
-        }
-
-        private static bool QuestionHasEmptyVariableName(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            return string.IsNullOrEmpty(question.StataExportCaption);
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TReferencedEntity>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, EntityVerificationResult<TReferencedEntity>> verifyEntity, string message)
