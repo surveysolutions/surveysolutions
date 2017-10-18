@@ -499,7 +499,7 @@
     <value>Количество десятичных знаков после запятой не находится в диапазоне от {0} до {1}.</value>
   </data>
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
-    <value>Название опции слишком длинное. Оно должно находиться в диапазоне от {0} до {1}</value>
+    <value>Название опции пустая или слишком длинное. Длинна названия должна находиться в диапазоне от {0} до {1} символов.</value>
   </data>
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
     <value>Нельзя ссылаться на дочерние элементы во включающих условиях секций, подсекций и ростеров.</value>
