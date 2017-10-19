@@ -34,55 +34,55 @@ export default {
     }, "fetch", /* limit */ 100),
 
     answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
-        apiCallerAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
+        Vue.$api.callAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
     },
     answerTextQuestion({ dispatch }, { identity, text }) {
-        apiCallerAndFetch(identity, api => api.answerTextQuestion(identity, text))
+        Vue.$api.callAndFetch(identity, api => api.answerTextQuestion(identity, text))
     },
     answerMultiOptionQuestion({ dispatch }, { answer, questionId }) {
-        apiCallerAndFetch(questionId, api => api.answerMultiOptionQuestion(answer, questionId))
+        Vue.$api.callAndFetch(questionId, api => api.answerMultiOptionQuestion(answer, questionId))
     },
     answerYesNoQuestion({ dispatch }, { questionId, answer }) {
-        apiCallerAndFetch(questionId, api => api.answerYesNoQuestion(questionId, answer))
+        Vue.$api.callAndFetch(questionId, api => api.answerYesNoQuestion(questionId, answer))
     },
     answerIntegerQuestion({ dispatch }, { identity, answer }) {
-        apiCallerAndFetch(identity, api => api.answerIntegerQuestion(identity, answer))
+        Vue.$api.callAndFetch(identity, api => api.answerIntegerQuestion(identity, answer))
     },
     answerDoubleQuestion({ dispatch }, { identity, answer }) {
-        apiCallerAndFetch(identity, api => api.answerDoubleQuestion(identity, answer))
+        Vue.$api.callAndFetch(identity, api => api.answerDoubleQuestion(identity, answer))
     },
     answerGpsQuestion({ dispatch }, { identity, answer }) {
-        apiCallerAndFetch(identity, api => api.answerGpsQuestion(identity, answer))
+        Vue.$api.callAndFetch(identity, api => api.answerGpsQuestion(identity, answer))
     },
     answerDateQuestion({ dispatch }, { identity, date }) {
-        apiCallerAndFetch(identity, api => api.answerDateQuestion(identity, date))
+        Vue.$api.callAndFetch(identity, api => api.answerDateQuestion(identity, date))
     },
     answerTextListQuestion({ dispatch }, { identity, rows }) {
-        apiCallerAndFetch(identity, api => api.answerTextListQuestion(identity, rows))
+        Vue.$api.callAndFetch(identity, api => api.answerTextListQuestion(identity, rows))
     },
     answerLinkedSingleOptionQuestion({ dispatch }, { questionIdentity, answer }) {
-        apiCallerAndFetch(questionIdentity, api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
+        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
     },
     answerLinkedMultiOptionQuestion({ dispatch }, { questionIdentity, answer }) {
-        apiCallerAndFetch(questionIdentity, api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
+        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
     },
     answerLinkedToListMultiQuestion({ dispatch }, { questionIdentity, answer }) {
-        apiCallerAndFetch(questionIdentity, api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
+        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
     },
     answerLinkedToListSingleQuestion({ dispatch }, { questionIdentity, answer }) {
-        apiCallerAndFetch(questionIdentity, api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
+        Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
     },
     answerMultimediaQuestion({ dispatch }, { id, file }) {
-        apiCallerAndFetch(id, api => api.answerPictureQuestion(id, file))
+        Vue.$api.callAndFetch(id, api => api.answerPictureQuestion(id, file))
     },
     answerAudioQuestion({ dispatch }, { id, file }) {
-        apiCallerAndFetch(id, api => api.answerAudioQuestion(id, file))
+        Vue.$api.callAndFetch(id, api => api.answerAudioQuestion(id, file))
     },
     answerQRBarcodeQuestion({ dispatch }, { identity, text }) {
-        apiCallerAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))
+        Vue.$api.callAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))
     },
     removeAnswer({ dispatch }, questionId) {
-        apiCallerAndFetch(questionId, api => api.removeAnswer(questionId))
+        Vue.$api.callAndFetch(questionId, api => api.removeAnswer(questionId))
     },
     sendNewComment({ dispatch }, { questionId, comment }) {
         Vue.$api.call(api => api.sendNewComment(questionId, comment))
@@ -178,8 +178,10 @@ export default {
     }, 200),
 
     fetchSectionEnabledStatus: debounce(async ({ state }) => {
-        const routeParams = (router.currentRoute.params )
-        const currentSectionId = routeParams.sectionId
+        const sectionId = state.routes.sectionId
+        const interviewId = state.routes.interviewId
+
+        const currentSectionId = sectionId
         const isPrefilledSection = currentSectionId === undefined
 
         if (!isPrefilledSection) {
@@ -189,7 +191,7 @@ export default {
                 const firstSectionLocation = {
                     name: "section",
                     params: {
-                        interviewId: routeParams.interviewId,
+                        interviewId: interviewId,
                         sectionId: firstSectionId
                     }
                 }
@@ -235,6 +237,6 @@ export default {
         Vue.$api.call(api => api.changeLanguage(language))
     },
     stop() {
-        apiStop()
+        Vue.$api.stop()
     }
 }
