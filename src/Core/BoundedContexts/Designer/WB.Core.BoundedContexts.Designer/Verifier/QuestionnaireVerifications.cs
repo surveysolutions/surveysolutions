@@ -325,7 +325,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 return QuestionnaireVerificationReferenceType.Question;
 
             if (entityType.IsAssignableFrom(typeof(StaticText)))
-                return QuestionnaireVerificationReferenceType.Question;
+                return QuestionnaireVerificationReferenceType.StaticText;
+
+            if (entityType.IsAssignableFrom(typeof(Variable)))
+                return QuestionnaireVerificationReferenceType.Variable;
 
             var group = questionnaire.Find<IGroup>(id);
 
