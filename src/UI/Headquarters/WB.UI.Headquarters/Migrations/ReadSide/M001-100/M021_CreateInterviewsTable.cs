@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             {
                 var npgsqlConnection = connection as NpgsqlConnection;
 
-                var logger = ServiceLocator.Current.GetInstance<ILogger>();
+                var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<M021_CreateInterviewsTable>();
 
                 logger.Info("Interview data -> Interviews. Reading interview ids.");
 

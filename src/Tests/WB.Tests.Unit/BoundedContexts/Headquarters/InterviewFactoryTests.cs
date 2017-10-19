@@ -1,7 +1,6 @@
 using System;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -13,19 +12,16 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
+namespace WB.Tests.Unit.BoundedContexts.Headquarters
 {
     [TestOf(typeof(InterviewFactory))]
     internal class InterviewFactoryTests
     {
         private static InterviewFactory CreateInterviewFactory(
-            IPlainStorageAccessor<InterviewEntity> interviewEntitiesRepository = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ISessionProvider sessionProvider = null,
-            IEntitySerializer<object> jsonSerializer = null,
-            IQueryableReadSideRepositoryReader<InterviewEntity> interviewRepository = null,
-            IRosterStructureService rosterStructureService = null)
+            IEntitySerializer<object> jsonSerializer = null)
             => new InterviewFactory(
                 summaryRepository: interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),

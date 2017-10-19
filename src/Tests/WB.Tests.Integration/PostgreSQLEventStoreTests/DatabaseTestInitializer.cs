@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.Entity;
 using Npgsql;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.UI.Headquarters.Migrations.PlainStore;
-using WB.UI.Headquarters.Migrations.Users;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
     internal enum DbType
     {
-        PlainStore
+        PlainStore,
+        ReadSide
     }
 
     internal class DatabaseTestInitializer
@@ -45,6 +43,9 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 case DbType.PlainStore:
                     schemaName = "plainstore";
                     break;
+                case DbType.ReadSide:
+                    schemaName = "readside";
+                    break;
             }
 
             DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, schemaName);
@@ -55,6 +56,11 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 case DbType.PlainStore:
                     DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName,
                         new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace));
+                    break;
+                case DbType.ReadSide:
+                    DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName,
+                        new DbUpgradeSettings(typeof(WB.UI.Headquarters.Migrations.ReadSide.M001_InitDb).Assembly,
+                            typeof(WB.UI.Headquarters.Migrations.ReadSide.M001_InitDb).Namespace));
                     break;
             }
 
