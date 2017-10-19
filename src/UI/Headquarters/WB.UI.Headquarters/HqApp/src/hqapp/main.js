@@ -14,6 +14,8 @@ import './components'
 import './compatibility.js'
 import '~/webinterview/components'
 import 'shared/components/questions'
+import 'shared/components/questions/parts'
+
 import box from "shared/modal"
 import { browserLanguage } from "shared/helpers"
 
@@ -22,9 +24,17 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     Vue.use(http);
     Vue.use(VeeValidate);
     Vue.use(Vuei18n);
-    const router = require('./router').default;
+
+    const viewsProvider = require("./views").default;
+    const Router = require('./router').default;
     const installApi = require("~/webinterview/api").install
-    
+
+    const views = viewsProvider(store);
+
+    const router = new Router({
+        routes: views.routes
+    });
+
     installApi(Vue, { store })
 
     box.init(i18n, browserLanguage);
@@ -32,7 +42,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
         el: "#vueApp",
         render: h => h('router-view'),
         store,
-        router,
+        router: router.router,
         i18n
     });
 })
