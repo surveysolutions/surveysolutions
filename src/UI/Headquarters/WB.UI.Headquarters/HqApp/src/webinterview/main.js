@@ -1,7 +1,8 @@
 import "babel-polyfill";
 
 import Vue from 'vue'
-import Vuex from 'vuex'
+import Vuex from "vuex"
+Vue.use(Vuex)
 
 import config from "shared/config"
 Vue.use(config)
@@ -23,9 +24,15 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     require("shared/components/questions")
     require("shared/components/questions/parts")
     require("./directives")
-
+    
     const router = require("./router").default;
-    const store = new Vuex.Store(require("./store").default);
+    
+    const store = new Vuex.Store({
+        modules: { 
+            webinterview: require("./store").default
+        }
+    });
+    
     const App = require("./App").default;
     const installApi = require("./api").install
     

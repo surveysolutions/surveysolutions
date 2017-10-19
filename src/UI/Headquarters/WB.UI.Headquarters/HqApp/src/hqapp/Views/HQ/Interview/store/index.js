@@ -5,7 +5,20 @@ Vue.use(Vuex)
 import webinterview from "~/webinterview/store/store.object"
 
 const store = {
-    modules: { webinterview }
+    state: {
+
+    },
+
+    action: {
+
+    },
+
+    mutations: {
+        
+    }
 }
 
-export default store;
+export default {
+    webinterview,
+    review: store
+};

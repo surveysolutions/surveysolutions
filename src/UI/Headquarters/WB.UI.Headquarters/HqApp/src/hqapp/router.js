@@ -1,22 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import views from "./views"
 
 Vue.use(VueRouter)
 
-const routes = _.chain(views).flattenDeep().map("routes").flatten().value();
-
-routes.push({path: "*", component: {
-    render:  (h) => h('h2', 
-        "Route not found. Base path is window.input.settings.config.basePath: "
-        + window.input.settings.config.basePath)
+export default class HqRouter {
+    constructor(options) {
+        this.options = Object.assign({
+            base: window.input.settings.config.basePath,
+            mode: "history",
+        }, options);
     }
-})
 
-var router =  new VueRouter({
-    base: window.input.settings.config.basePath,
-    mode: "history",
-    routes
-});
-
-export default router;
+    get router() {
+        return new VueRouter(this.options)
+    }
+}

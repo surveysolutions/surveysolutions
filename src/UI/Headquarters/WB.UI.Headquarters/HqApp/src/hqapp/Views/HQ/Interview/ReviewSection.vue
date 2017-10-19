@@ -2,6 +2,7 @@
     <section class="questionnaire details-interview">
         <!-- <Navbar /> -->
         <a :href="oldPageUrl">Old interview details</a>
+        <Section />
     </section>
 </template>
 <script>
