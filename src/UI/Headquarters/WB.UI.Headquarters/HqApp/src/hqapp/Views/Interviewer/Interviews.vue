@@ -1,5 +1,5 @@
 <template>
-    <Layout :title="title"
+    <HqLayout :title="title"
             :hasFilter="true">
         <Filters slot="filters">
             <FilterBlock :title="$t('Common.Questionnaire')">
@@ -52,7 +52,7 @@
             {{ $t("Pages.InterviewerHq_DiscardConfirm") }}
         </Confirm>
 
-    </Layout>
+    </HqLayout>
 </template>
 
 <script>

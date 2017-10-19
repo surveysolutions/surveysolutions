@@ -1,5 +1,5 @@
 <template>
-    <Layout :hasFilter="true"
+    <HqLayout :hasFilter="true"
             :title="$t('Pages.StatusDuration')"
             :subtitle="$t('Pages.StatusDurationDescription')">
         <Filters slot="filters">
@@ -33,7 +33,7 @@
                 <th></th>
             </tr>
         </DataTables>
-    </Layout>
+    </HqLayout>
 </template>
 
 <script>

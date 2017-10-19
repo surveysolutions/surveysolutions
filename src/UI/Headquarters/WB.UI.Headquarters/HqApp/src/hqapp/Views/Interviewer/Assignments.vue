@@ -1,7 +1,7 @@
 <template>
-    <Layout :title="title">
+    <HqLayout :title="title">
         <DataTables ref="table" :tableOptions="tableOptions" :contextMenuItems="contextMenuItems"></DataTables>
-    </Layout>
+    </HqLayout>
 </template>
 
 <script>
