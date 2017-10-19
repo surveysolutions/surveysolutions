@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class VerificationMessages {
@@ -1741,6 +1741,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0270_SectionContainsTooManyQuestions {
             get {
                 return ResourceManager.GetString("WB0270_SectionContainsTooManyQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Macro cannot be empty..
+        /// </summary>
+        public static string WB0271_MacroHasEmptyContent {
+            get {
+                return ResourceManager.GetString("WB0271_MacroHasEmptyContent", resourceCulture);
             }
         }
     }
