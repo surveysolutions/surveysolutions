@@ -36,7 +36,9 @@
         computed: {
             isLoading() {
                 const loadedCount = this.$store.state.webinterview.loadedEntitiesCount
-                const totalCount = this.$store.state.webinterview.entities.length
+                const totalCount = this.$store.state.webinterview.entities != null 
+                    ? this.$store.state.webinterview.entities.length
+                    : 0
 
                 return loadedCount === 0 || totalCount === 0 || (loadedCount < totalCount)
             }
