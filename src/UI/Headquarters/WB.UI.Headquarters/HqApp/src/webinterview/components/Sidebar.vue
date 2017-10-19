@@ -4,7 +4,7 @@
         <div class="panel-group structured-content">
             <SidebarPanel :panel="coverSection" v-if="showCover" />
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel" />
-            <SidebarPanel :panel="completeSection" />
+            <SidebarPanel :panel="completeSection" v-if="showComplete"/>
         </div>
     </aside>
 </template>
@@ -14,6 +14,7 @@
 
     export default {
         name: 'sidebar',
+        props: {showComplete:true},
         components: { SidebarPanel },
         data() {
             return {
