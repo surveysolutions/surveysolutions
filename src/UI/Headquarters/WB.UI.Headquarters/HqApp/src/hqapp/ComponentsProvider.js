@@ -22,7 +22,7 @@ export default class ComponentsProvider {
     }
 
     get routes() {
-        return flatten(this.components.map((c) => c.routes));
+        return flatten(this.components.map((c) => c.routes || []));
     }
 }
 
