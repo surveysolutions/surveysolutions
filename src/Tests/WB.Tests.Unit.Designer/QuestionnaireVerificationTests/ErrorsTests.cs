@@ -18,6 +18,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
 
         [Test]
+        public void static_text_and_variable_with_the_same_id()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.StaticText(Id1),
+                    Create.Variable(Id1)
+                })
+                .ExpectCritical("WB0102");
+
+        [Test]
         public void numeric_roster_title_question_is_linked_multioption()
             => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
                 {
