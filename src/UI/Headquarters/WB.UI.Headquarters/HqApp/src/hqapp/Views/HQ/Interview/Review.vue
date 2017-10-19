@@ -4,8 +4,11 @@
             <div class="row">
                 <Facets />
                 <!--<SearchResults />-->
-                <SectionsTree />
-                <ReviewSection />
+                <Sidebar :showCover="false"/>
+                <section class="questionnaire details-interview">
+                    <Cover v-if="isCoverPage"/>
+                    <ReviewSection v-else />
+                </section>
             </div>
         </div>
     </main>
@@ -15,23 +18,30 @@
 import Facets from "./Facets"
 import SearchResults from "./SearchResults"
 import ReviewSection from "./ReviewSection"
-import SectionsTree from "./SectionsTree"
+import Sidebar from "~/webinterview/components/Sidebar"
+import Cover from "~/webinterview/components/Cover"
 
 export default {
     data() {
-        return { }
+        return {}
     },
-
     computed: {
+        isCoverPage() {
+            return this.sectionid === undefined;
+        }
     },
-
+    beforeMount() {
+        this.$store.dispatch("getLanguageInfo")
+        this.$store.dispatch("loadInterview")
+    },
     mounted() {
     },
     components: {
         Facets,
         SearchResults,
         ReviewSection,
-        SectionsTree
+        Sidebar,
+        Cover
     }
 }
 

@@ -11,7 +11,8 @@ export default class ReviewComponent {
         return [
             {
                 path: '/Interview/Review/:interviewId',
-                component: Review
+                component: Review,
+                props: true
             },
             {
                 name: "section",
