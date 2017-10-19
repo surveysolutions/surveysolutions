@@ -27,14 +27,14 @@ export default class ReviewComponent {
     async beforeEnter(to, from, next) {
         this.initializeIfNeeded()
 
-        Vue.$hub_queryString["interviewId"] = to.params["interviewId"]
-        Vue.$hub_queryString["review"] = true
+        Vue.$api.queryString["interviewId"] = to.params["interviewId"]
+        Vue.$api.queryString["review"] = true
 
         const proxy = await Vue.$hub()
         proxy.state.sectionId = to.params["sectionId"]
 
         if (to.name === "section") {
-            const isEnabled = await Vue.$Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
+            const isEnabled = await Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
 
             if (!isEnabled) {
                 next(false)
