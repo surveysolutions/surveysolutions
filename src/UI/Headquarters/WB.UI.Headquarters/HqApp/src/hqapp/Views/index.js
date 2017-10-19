@@ -1,7 +1,6 @@
 import HQ from "./HQ"
 import Interviewer from "./Interviewer"
 
-export default [
-    HQ,
-    Interviewer
-]
+import ViewProvider from "../ComponentsProvider"
+
+export default (rootStore) =>  new ViewProvider(rootStore, [HQ, Interviewer])
