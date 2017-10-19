@@ -22,7 +22,37 @@ export default class ComponentsProvider {
     }
 
     get routes() {
-        return flatten(this.components.map((c) => c.routes || []));
+        return flatten(this.components.map((component) => {
+            const init = component.initialize ? () => component.initialize() : null;
+            const beforeEnter = component.beforeEnter ? (from, to, next) => component.beforeEnter(from, to, next) : null;
+            const routes = component.routes || [];
+
+            if(init || beforeEnter) {
+                routes.forEach((route) => {
+                    route.beforeEnter = (from, to, next) => {
+                        if(component._isInitialized !== true) {
+
+                            if(component.modules != null) {
+                                Object.keys(component.modules).forEach((module) => {
+                                    this.rootStore.registerModule(module, component.modules[module]);
+                                });
+                            }
+
+                            init && init();
+
+                            component._isInitialized = true;
+                        }
+
+                        if(beforeEnter != null){ 
+                            beforeEnter(from, to, next); 
+                        }
+                        else next();
+                    };
+                })
+            }
+
+            return routes;
+        }));
     }
 }
 

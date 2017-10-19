@@ -191,17 +191,18 @@ export async function apiCaller(action) {
 }
 
 export function install(Vue, options) {
-    Vue.mixin({
-        created() {
-            store = options.store
-            this.$api = {
-                call: Vue.$api.call,
-                hub: getInstance,
-                stop: apiStop,
-                queryString
-            }
-        }
-    });
+    //Object.
+    store = options.store;
+    const api = {
+        call: apiCaller,
+        hub: getInstance,
+        stop: apiStop,
+        queryString
+    };
+
+    Object.defineProperty(Vue, "$api",{
+        get: function() { return api; }
+    })
 }
 
 export function apiStop() {
