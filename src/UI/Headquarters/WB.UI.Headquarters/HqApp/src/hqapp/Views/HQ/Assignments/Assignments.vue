@@ -1,5 +1,5 @@
 <template>
-    <Layout :title="title"
+    <HqLayout :title="title"
             :hasFilter="true">
 
         <Filters slot="filters">
@@ -133,7 +133,7 @@
             </div>
         </ModalFrame>
 
-    </Layout>
+    </HqLayout>
 </template>
 
 <script>

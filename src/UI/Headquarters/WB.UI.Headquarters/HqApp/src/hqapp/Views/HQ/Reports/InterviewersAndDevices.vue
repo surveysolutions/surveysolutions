@@ -1,7 +1,7 @@
 <template>
-    <Layout :title="$t('Pages.InterviewersAndDevicesTitle')">
+    <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')">
         <DataTables ref="table" :tableOptions="tableOptions" exportable></DataTables>
-    </Layout>
+    </HqLayout>
 </template>
 
 <script>
