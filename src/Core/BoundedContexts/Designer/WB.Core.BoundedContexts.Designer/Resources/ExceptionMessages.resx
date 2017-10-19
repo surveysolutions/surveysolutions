@@ -178,7 +178,7 @@
     <value>You don't have permissions for changing this questionnaire</value>
   </data>
   <data name="QuestionCannotBeFound" xml:space="preserve">
-    <value>Question with id {0} can't be found.</value>
+    <value>Question with public key {0} can't be found.</value>
   </data>
   <data name="QuestionIsNotCombobox" xml:space="preserve">
     <value>Question {0} is not a combo box</value>
