@@ -113,5 +113,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public IPublishedEvent<RosterInstancesRemoved> RosterInstancesRemoved(Guid interviewId, params RosterInstance[] instances)
             => new RosterInstancesRemoved(instances).ToPublishedEvent(eventSourceId: interviewId);
+
+        public IPublishedEvent<DateTimeQuestionAnswered> DateTimeQuestionAnswered(Guid? interviewId = null, Guid? userId = null, 
+            Guid? questionId = null, DateTime? answer = null)
+            => new DateTimeQuestionAnswered(userId ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), new decimal[0], DateTime.UtcNow, answer ?? DateTime.UtcNow)
+                .ToPublishedEvent(eventSourceId: interviewId);
     }
 }

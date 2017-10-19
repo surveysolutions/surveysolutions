@@ -704,6 +704,7 @@
     <Compile Include="SharedKernels\Enumerator\ViewModels\VibrationViewModelTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_MultiOptionQuestionAnswered_with_empty_array_received.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewEventHandlerFunctionalTests\when_RosterRowRemoved_event_recived_having_answered_questions.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewHistoryDenormalizerTests\InterviewHistoryDenormalizer_when_recive_question_answer_event.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\InterviewSummaryEventHandlerFunctionalTests\InterviewSummaryDenormalizerTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\EventHandlers\StatusChangeHistoryDenormalizerFunctionalTests\StatusChangeHistoryDenormalizerFunctionalTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\ExportViewFactoryTestsContext_Variables_Tests.cs" />

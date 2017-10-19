@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -15,6 +16,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
@@ -69,6 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IUserViewFactory userReader;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
         private readonly ConcurrentDictionary<string, UserView> cacheUserDocument = new ConcurrentDictionary<string, UserView>();
@@ -79,13 +82,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IUserViewFactory userReader,
             InterviewDataExportSettings interviewDataExportSettings, 
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.readSideStorage = readSideStorage;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
 
@@ -254,8 +259,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
+            var questionnaire = questionnaireStorage.GetQuestionnaireDocument(view.QuestionnaireId, view.QuestionnaireVersion);
+            var question = questionnaire.Find<DateTimeQuestion>(@event.Payload.QuestionId);
+
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
-                this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
+                this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer, isTimestamp: question.IsTimestamp),
                     @event.Payload.RosterVector));
 
             return view;
