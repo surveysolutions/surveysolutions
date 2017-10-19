@@ -54,6 +54,12 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
+
+        store.dispatch("navigatingTo", {
+            interviewId: to.params["interviewId"],
+            sectionId: to.params["sectionId"]
+        })
+
         Vue.$api.queryString["interviewId"] = to.params["interviewId"]
 
         const proxy = await Vue.$api.hub()
