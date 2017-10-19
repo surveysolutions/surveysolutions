@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<SingleQuestion>("WB0086", CascadingQuestionReferencesMissingParent, VerificationMessages.WB0086_ParentCascadingQuestionShouldExist),
             Error<SingleQuestion>("WB0088", CascadingQuestionHasMoreThanAllowedOptions, string.Format(VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<SingleQuestion>("WB0089", CascadingQuestionOptionsWithParentValuesShouldBeUnique, VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
-            Error<INumericQuestion>("WB0128", CountOfDecimalPlacesIsInRange1_15, VerificationMessages.WB0128_CountOfDecimalPlacesIsNotInRange),
+            Error<INumericQuestion>("WB0128", CountOfDecimalPlacesIsInRange1_15, string.Format(VerificationMessages.WB0128_CountOfDecimalPlacesIsNotInRange, MinCountOfDecimalPlaces, MaxCountOfDecimalPlaces)),
             Error<ITextListQuestion>("WB0039", TextListQuestionCannotBePrefilled, VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Error<ITextListQuestion>("WB0040", TextListQuestionCannotBeFilledBySupervisor, VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
             Error<ITextListQuestion>("WB0042", TextListQuestionMaxAnswerNotInRange1And200, string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200,Constants.MaxLongRosterRowCount, Constants.MinLongRosterRowCount)),
@@ -372,7 +372,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (!question.CountOfDecimalPlaces.HasValue)
                 return false;
 
-            return !(question.CountOfDecimalPlaces.Value >= 1 && question.CountOfDecimalPlaces.Value <= MaxCountOfDecimalPlaces);
+            return !(question.CountOfDecimalPlaces.Value >= MinCountOfDecimalPlaces && question.CountOfDecimalPlaces.Value <= MaxCountOfDecimalPlaces);
         }
 
         private static bool RosterSizeQuestionMaxValueCouldBeInRange1And60(IQuestion question,
