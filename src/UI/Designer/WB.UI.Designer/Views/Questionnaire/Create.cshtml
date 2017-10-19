@@ -1,6 +1,11 @@
 @using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Models.QuestionnaireViewModel
+
+@{
+    ViewBag.Title = QuestionnaireController.CreateNew;
+}    
+
 <div id="edit-form">
     @if (TempData.ContainsKey(Alerts.SUCCESS))
     {
