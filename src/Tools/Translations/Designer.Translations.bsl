@@ -1225,12 +1225,6 @@
             <li lc="ru" tx="Циклические ссылки не разрешены." ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0057_QuestionHasEmptyVariableName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Question cannot have empty variable name." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="У вопроса не может быть пустого имени переменной." ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0058_QuestionHasVariableNameReservedForServiceNeeds" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Variable name or roster ID cannot be a reserved word." ts="Translated" qs="ToReview" />
@@ -1285,22 +1279,16 @@
             <li lc="ru" tx="Вопрос данного типа не поддерживается." ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0067_RosterHasEmptyVariableName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0067_VariableNameIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Roster cannot have empty roster ID." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="ID ростера не может быть оставлено пустым." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Valid variable or roster ID name should not be empty." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имя переменной или ID ростера не должны быть пустыми" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0068_RosterHasMoreThanAllowedChildElements" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster cannot have more than {0} child elements" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ростер не может содержать более {0} дочерних элементов" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0069_RosterHasInvalidVariableName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Roster has invalid roster ID." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="ID ростера недопустимо." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1653,8 +1641,8 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0129_AnswerTitleIsTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Answer title is too long. Should be in range from {0} to {1}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Название опции слишком длинное. Оно должно находиться в диапазоне от {0} до {1}" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Answer title is empty or too long. Title's length should be in range from {0} to {1} characters." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Название опции пустая или слишком длинное. Длинна названия должна находиться в диапазоне от {0} до {1} символов." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0130_SubsectionOrRosterReferenceChildrendInCondition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
