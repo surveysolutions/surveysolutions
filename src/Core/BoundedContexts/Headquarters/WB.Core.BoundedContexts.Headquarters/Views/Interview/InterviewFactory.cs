@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     InterviewId = interviewId,
                     EntityId = questionIdentity.Id,
-                    RosterVector = questionIdentity.RosterVector.ToArray(),
+                    RosterVector = questionIdentity.RosterVector.Array,
                     EntityType = EntityType.Question
                 });
         }
@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 command.Parameters.Add(new NpgsqlParameter(InterviewIdColumn, NpgsqlDbType.Uuid){ Value = interviewId});
                 command.Parameters.Add(new NpgsqlParameter(EntityIdColumn, NpgsqlDbType.Uuid) { Value = questionIdentity.Id });
-                command.Parameters.Add(new NpgsqlParameter(RosterVectorColumn, NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = questionIdentity.RosterVector.ToArray() });
+                command.Parameters.Add(new NpgsqlParameter(RosterVectorColumn, NpgsqlDbType.Array | NpgsqlDbType.Integer) { Value = questionIdentity.RosterVector.Array });
                 command.Parameters.Add(new NpgsqlParameter(EntityTypeColumn, NpgsqlDbType.Integer) { Value = entityType });
                 command.Parameters.Add(new NpgsqlParameter(AnswerTypeColumn, NpgsqlDbType.Integer) { Value = answerType });
                 command.Parameters.Add(isJsonAnswer
@@ -170,7 +170,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     InterviewId = interviewId,
                     EntityId = x.Id,
-                    RosterVector = x.RosterVector.ToArray(),
+                    RosterVector = x.RosterVector.Array,
                     EntityType = entityType
                 }));
 
@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     InterviewId = interviewId,
                     EntityId = x.Key.Id,
-                    RosterVector = x.Key.RosterVector.ToArray(),
+                    RosterVector = x.Key.RosterVector.Array,
                     EntityType = entityType,
                     InvalidValidations = x.Value.Select(y => y.FailedConditionIndex).ToArray()
                 }));
@@ -202,7 +202,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     InterviewId = interviewId,
                     EntityId = x.Id,
-                    RosterVector = x.RosterVector.ToArray(),
+                    RosterVector = x.RosterVector.Array,
                     EntityType = entityType,
                     Enabled = isEnabled
                 }));
@@ -218,7 +218,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     InterviewId = interviewId,
                     EntityId = x.Id,
-                    RosterVector = x.RosterVector.ToArray(),
+                    RosterVector = x.RosterVector.Array,
                     EntityType = EntityType.Question
                 }));
 
@@ -230,7 +230,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     InterviewId = interviewId,
                     EntityId = x.Id,
-                    RosterVector = x.RosterVector.ToArray(),
+                    RosterVector = x.RosterVector.Array,
                     EntityType = EntityType.Section
                 }));
 
@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 InterviewId = interviewId,
                 EntityId = x.Id,
-                RosterVector = x.RosterVector.ToArray(),
+                RosterVector = x.RosterVector.Array,
             });
 
             this.sessionProvider.GetSession().Connection.Execute($"DELETE FROM {InterviewsTableName} " +
@@ -302,7 +302,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     InterviewId = interviewId,
                     EntityId = x.Id,
-                    RosterVector = x.RosterVector.ToArray(),
+                    RosterVector = x.RosterVector.Array,
                     EntityType = EntityType.Question
                 }));
 
@@ -321,7 +321,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewStringAnswer[] GetAllAudioAnswers()
             => this.sessionProvider.GetSession().Connection.Query<InterviewStringAnswer>(
-                $"SELECT {InterviewIdColumn}, {AsAudioColumn}::json->'FileName' as Answer " +
+                $"SELECT {InterviewIdColumn}, {AsAudioColumn}->>'{nameof(AudioAnswer.FileName)}' as Answer " +
                 $"FROM {InterviewsTableName} " +
                 $"WHERE {AsAudioColumn} IS NOT NULL " +
                 $"AND {EnabledColumn} = true").ToArray();

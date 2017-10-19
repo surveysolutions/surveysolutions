@@ -27,5 +27,32 @@
         {
             return Coordinates;
         }
+
+        public override bool Equals(object obj)
+        {
+            var target = obj as Area;
+            if (target == null) return false;
+
+            return this.Equals(target);
+        }
+
+        protected bool Equals(Area other)
+            => string.Equals(Geometry, other.Geometry) && string.Equals(MapName, other.MapName) &&
+               AreaSize.Equals(other.AreaSize) && Length.Equals(other.Length) &&
+               string.Equals(Coordinates, other.Coordinates) && DistanceToEditor.Equals(other.DistanceToEditor);
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (Geometry != null ? Geometry.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (MapName != null ? MapName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ AreaSize.GetHashCode();
+                hashCode = (hashCode * 397) ^ Length.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Coordinates != null ? Coordinates.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ DistanceToEditor.GetHashCode();
+                return hashCode;
+            }
+        }
     }
 }

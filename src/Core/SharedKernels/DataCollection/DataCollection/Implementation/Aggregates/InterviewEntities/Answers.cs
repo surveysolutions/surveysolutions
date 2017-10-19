@@ -303,7 +303,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return fileName != null ? new AudioAnswer(fileName, length.Value) : null;
         }
 
-        public override string ToString() => FileName;
+        public override string ToString() => $"{FileName} => {Length}";
 
         public AudioAnswerForConditions ToAudioAnswerForContions()
         {
@@ -313,6 +313,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 Length = this.Length
             };
         }
+
+        public override bool Equals(object obj)
+        {
+            var target = obj as AudioAnswer;
+            if (target == null) return false;
+
+            return target.Length == this.Length && target.FileName == this.FileName;
+        }
+
+        public override int GetHashCode() => this.Length.GetHashCode() ^ this.FileName.GetHashCode();
     }
 
     [DebuggerDisplay("{ToString()}")]
