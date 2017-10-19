@@ -28,7 +28,7 @@
 
 <script lang="js">
 
-    import { entityPartial } from "shared/components/mixins"
+    import { entityPartial } from "~/webinterview/components/mixins"
 
     export default {
         mixins: [entityPartial],

@@ -1,6 +1,6 @@
 import * as $ from "jquery"
 import Vue from "vue"
-import numerics from "shared/numerics"
+import numerics from "../components/numerics"
 
 const defaults = {
         aSep: "",

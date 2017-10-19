@@ -1,4 +1,4 @@
-import { getLocationHash } from "../helpers"
+import { getLocationHash } from "~/shared/helpers"
 
 // Validation, Title, RemoveAnswer, Instruction, Attachment
 export const entityPartial = {

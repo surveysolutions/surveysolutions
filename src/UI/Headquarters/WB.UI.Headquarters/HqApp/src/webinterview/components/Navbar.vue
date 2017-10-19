@@ -43,7 +43,7 @@
     </nav>
 </template>
 <script lang="js">
-    import modal from "shared/modal"
+    import modal from "./modal"
 
     export default {
         name: 'navbar',

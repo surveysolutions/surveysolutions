@@ -1,7 +1,7 @@
 import * as toastr from "toastr"
 import Vue from "vue"
 import { apiStop } from "../api"
-import modal from "shared/modal"
+import modal from "../components/modal"
 
 const connectionStore = {
     state: {

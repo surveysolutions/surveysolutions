@@ -1,5 +1,5 @@
 import * as diffInMinutes from "date-fns/difference_in_minutes"
-import modal from "shared/modal"
+import modal from "./components/modal"
 import store from "./store"
 import Vue from "vue"
 
