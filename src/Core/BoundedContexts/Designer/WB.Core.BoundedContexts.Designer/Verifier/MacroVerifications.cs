@@ -14,13 +14,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             ErrorForMacro(MacroHasEmptyName, "WB0014", VerificationMessages.WB0014_MacroHasEmptyName),
             ErrorForMacro(MacroHasInvalidName, "WB0010", VerificationMessages.WB0010_MacroHasInvalidName),
-            ErrorsByMacrosWithDuplicateName
+            ErrorsByMacrosWithDuplicateName,
+            ErrorForMacro(MacroHasEmptyContent, "WB0271", VerificationMessages.WB0271_MacroHasEmptyContent)
         };
 
         private static bool MacroHasEmptyName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return string.IsNullOrWhiteSpace(macro.Name);
         }
+
+        private static bool MacroHasEmptyContent(Macro macro, MultiLanguageQuestionnaireDocument questionnaire) 
+            => string.IsNullOrWhiteSpace(macro.Content);
 
         private bool MacroHasInvalidName(Macro macro, MultiLanguageQuestionnaireDocument questionnaire)
         {
