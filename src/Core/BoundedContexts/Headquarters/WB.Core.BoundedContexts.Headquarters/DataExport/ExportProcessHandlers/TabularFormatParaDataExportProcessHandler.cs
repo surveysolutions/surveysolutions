@@ -19,6 +19,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
         private readonly ILogger logger;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public TabularFormatParaDataExportProcessHandler(IStreamableEventStore eventStore,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
@@ -54,7 +56,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, 
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
-            ILogger logger)
+            ILogger logger,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
@@ -67,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.logger = logger;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
@@ -77,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             var interviewParaDataEventHandler =
                 new InterviewParaDataEventHandler(interviewHistoryReader, this.interviewSummaryReader, this.userReader,
-                    this.interviewDataExportSettings, this.questionnaireExportStructureStorage);
+                    this.interviewDataExportSettings, this.questionnaireExportStructureStorage, this.questionnaireStorage);
 
             var interviewDenormalizerProgress =
                 this.TransactionManager.ExecuteInQueryTransaction(
