@@ -592,7 +592,7 @@ namespace WB.Tests.Integration
             //assert
             var upsertedIdentities = this.sessionProvider.ExecuteInPlainTransaction(() => this.sessionProvider.GetSession().Connection.Query(
                     $"SELECT {EntityIdColumn}, {RosterVectorColumn} FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId " +
-                    $"AND {AsGpsColumn} IS NOT NULL " +
+                    $"AND ({AsGpsColumn} IS NOT NULL " +
                     $"OR {AsStringColumn} IS NOT NULL " +
                     $"OR {AsIntColumn} IS NOT NULL " +
                     $"OR {AsIntArrayColumn} IS NOT NULL " +
@@ -604,7 +604,7 @@ namespace WB.Tests.Integration
                     $"OR {AsAreaColumn} IS NOT NULL " +
                     $"OR {AsAudioColumn} IS NOT NULL " +
                     $"OR {AsListColumn} IS NOT NULL " +
-                    $"OR {AsLongColumn} IS NOT NULL ",
+                    $"OR {AsLongColumn} IS NOT NULL) ",
                     new { InterviewId = interviewId })
                 .Select(x => Identity.Create((Guid)x.entityid, (int[])x.rostervector))
                 .ToArray());
