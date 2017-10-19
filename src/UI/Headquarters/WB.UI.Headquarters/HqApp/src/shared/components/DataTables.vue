@@ -9,11 +9,11 @@
              v-if="exportable">
             {{$t("Pages.DownloadReport")}}
             <a target="_blank"
-               v-bind:href="$store.state.exportUrls.excel">XLSX</a> {{$t("Pages.Or")}}
+               v-bind:href="$store.state.reports.exportUrls.excel">XLSX</a> {{$t("Pages.Or")}}
             <a target="_blank"
-               v-bind:href="$store.state.exportUrls.csv">CSV</a> {{$t("Pages.Or")}}
+               v-bind:href="$store.state.reports.exportUrls.csv">CSV</a> {{$t("Pages.Or")}}
             <a target="_blank"
-               v-bind:href="$store.state.exportUrls.tab">TAB</a>
+               v-bind:href="$store.state.reports.exportUrls.tab">TAB</a>
         </div>
         <slot />
     </div>
