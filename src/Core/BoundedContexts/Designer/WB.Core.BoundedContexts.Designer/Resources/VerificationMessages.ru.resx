@@ -675,4 +675,8 @@
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>Секция не может содержать более {0} вопросов.</value>
   </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>Макрос не может быть пустым.</value>
+    <comment>Макрос не может быть пустым.</comment>
+  </data>
 </root>
