@@ -142,7 +142,7 @@
     <value>Нельзя использовать подстановки в теге переменной.</value>
   </data>
   <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
-    <value>Управляющий вопрос для ростера отстутствует</value>
+    <value>Вопрос, определяющий количество строк в ростере, отсутствует</value>
   </data>
   <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
     <value>Неверное имя макроса</value>
@@ -277,7 +277,7 @@
     <value>Ростер являющийся источником ссылки, должен существовать.</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
-    <value>Ростер должен иметь более глубокий или такой же уровень вложенности как и вопрос являющийся источникам ростера.</value>
+    <value>Ростер должен иметь более глубокий или такой же уровень вложенности как и вопрос являющийся источником ростера.</value>
   </data>
   <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
     <value>У ростера может быть не более {0} родительских ростеров.</value>
@@ -286,7 +286,7 @@
     <value>Циклические ссылки не разрешены.</value>
   </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
-    <value>Имя переменной или ID реестра не может быть зарезервированным словом.</value>
+    <value>Имя переменной или ID ростера не может быть зарезервированным словом.</value>
   </data>
   <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
     <value>Если элемент использует подстановку %rostertitle%, его необходимо размещать внутри ростера.</value>
@@ -469,22 +469,22 @@
     <value>Названия секций и подсекций не могут быть пустыми или содержать только пробелы.</value>
   </data>
   <data name="WB0121_VariableNameTooLong" xml:space="preserve">
-    <value>Имя переменной или ID не должно быть длиннее чем {0} символов.</value>
+    <value>Имя переменной или ID не должно быть длиннее чем {0} символа.</value>
   </data>
   <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
     <value>Действительная переменная или ростер ID должны содержать только буквы, цифры и символ подчеркивания</value>
   </data>
   <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
-    <value>Имя переменной или ID реестра не должны начинаться с цифры или символа подчеркивания</value>
+    <value>Имя переменной или ID ростера не должны начинаться с цифры или символа подчеркивания</value>
   </data>
   <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
-    <value>Имя переменной или ID реестра не должны заканчиваться символом подчеркивания</value>
+    <value>Имя переменной или ID ростера не должны заканчиваться символом подчеркивания</value>
   </data>
   <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
-    <value>Имя переменной или ID реестра не должны содержать двух и более последовательных символов подчеркивания.</value>
+    <value>Имя переменной или ID ростера не должны содержать двух и более последовательных символов подчеркивания.</value>
   </data>
   <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
-    <value>Имя переменной или ID реестра должны быть уникальными в области анкетирования.</value>
+    <value>Имя переменной или ID ростера должны быть уникальными в области анкетирования.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>Существует по крайней мере один дубликат пар Title + Parent Value. Список опций не должен содержать дубликатов такого типа.</value>
@@ -493,7 +493,7 @@
     <value>Количество десятичных знаков после запятой не находится в диапазоне от {0} до {1}.</value>
   </data>
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
-    <value>Название опции пустая или слишком длинное. Длинна названия должна находиться в диапазоне от {0} до {1} символов.</value>
+    <value>Название опции пустое или слишком длинное. Длинна названия должна находиться в диапазоне от {0} до {1} символов.</value>
   </data>
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
     <value>Нельзя ссылаться на дочерние элементы во включающих условиях секций, подсекций и ростеров.</value>
