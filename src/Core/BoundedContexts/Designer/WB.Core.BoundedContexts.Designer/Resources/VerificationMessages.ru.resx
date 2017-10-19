@@ -315,14 +315,14 @@
   <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
     <value>Вопрос данного типа не поддерживается.</value>
   </data>
-  <data name="WB0067_RosterHasEmptyVariableName" xml:space="preserve">
-    <value>ID ростера не может быть оставлено пустым.</value>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>Имя переменной или ID ростера не должны быть пустыми</value>
   </data>
   <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
     <value>Ростер не может содержать более {0} дочерних элементов</value>
   </data>
-  <data name="WB0069_RosterHasInvalidVariableName" xml:space="preserve">
-    <value>ID ростера недопустимо.</value>
+  <data name="WB0069_" xml:space="preserve">
+    <value />
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>ID ростера совпадает с именем опросника.</value>
