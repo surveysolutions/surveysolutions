@@ -21,7 +21,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
-    import modal from "shared/modal"
+    import modal from "../modal"
 
     class TextListAnswerRow {
        constructor(value, text) {

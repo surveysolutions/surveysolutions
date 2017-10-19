@@ -5,7 +5,7 @@ import Vue from "vue"
 import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
 import { batchedAction } from "../helpers"
 import router from "./../router"
-import modal from "shared/modal"
+import modal from "../components/modal"
 
 export default {
     onBeforeNavigate({ commit }) {
