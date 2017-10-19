@@ -46,9 +46,7 @@ export default class InterviewerHqComponent {
     }
 
     get routes() {
-        const beforeEnter = (from, to, next) => this.beforeEnter(from, to, next);
-
-        const routes = [{
+        return [{
             path: '/InterviewerHq/CreateNew', component: Assignments
         }, {
             path: '/InterviewerHq/Rejected', component: Interviews
@@ -57,10 +55,6 @@ export default class InterviewerHqComponent {
         }, {
             path: '/InterviewerHq/Started', component: Interviews
         }];
-
-        routes.forEach((path) => path.beforeEnter = beforeEnter);
-
-        return routes;
     }
 
     async beforeEnter(to, from, next) {
@@ -70,5 +64,5 @@ export default class InterviewerHqComponent {
         next();
     }
 
-    get moduleName() { return "hqinterviewer" }
+    get modules() { return {hqinterviewer: store}}
 }

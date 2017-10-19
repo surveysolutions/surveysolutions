@@ -2,35 +2,30 @@ import Review from "./Review"
 import localStore from "./store"
 import Vue from 'vue'
 
-
 export default class ReviewComponent {
     constructor(rootStore) {
         this.rootStore = rootStore;
     }
 
     get routes() {
-        const beforeEnter = (from, to, next) => this.beforeEnter(from, to, next);
         return [
             {
                 path: '/Interview/Review/:interviewId',
-                component: Review,
-                beforeEnter: beforeEnter
+                component: Review
             },
             {
                 name: "section",
                 path: '/Interview/Review/:interviewId/Section/:sectionId',
-                component: Review,
-                beforeEnter: beforeEnter
-            }]
+                component: Review
+            }
+        ]
     }
 
     async beforeEnter(to, from, next) {
-        this.initializeIfNeeded()
-
         Vue.$api.queryString["interviewId"] = to.params["interviewId"]
         Vue.$api.queryString["review"] = true
 
-        const proxy = await Vue.$hub()
+        const proxy = await Vue.$api.hub()
         proxy.state.sectionId = to.params["sectionId"]
 
         if (to.name === "section") {
@@ -49,18 +44,10 @@ export default class ReviewComponent {
         next();
     }
 
-    initializeIfNeeded() {
-        if (this.rootStore.state[this.moduleName] == null) {
-            Object.keys(localStore).forEach((module) => {
-                this.rootStore.registerModule(module, localStore[module]);
-            });
-            
-            
-            const installApi = require("~/webinterview/api").install
-
-            installApi(Vue, this.rootStore);
-        }
+    initialize() {
+        const installApi = require("~/webinterview/api").install
+        installApi(Vue, { store: this.rootStore });
     }
 
-    get moduleName() { return "review" }
+    get modules() { return localStore; }
 }
