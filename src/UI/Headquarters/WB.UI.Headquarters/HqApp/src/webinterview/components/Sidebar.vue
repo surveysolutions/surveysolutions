@@ -14,7 +14,12 @@
 
     export default {
         name: 'sidebar',
-        props: {showComplete:true},
+        props: {
+            showComplete: {
+                type: Boolean,
+                default: true
+            }
+        },
         components: { SidebarPanel },
         data() {
             return {

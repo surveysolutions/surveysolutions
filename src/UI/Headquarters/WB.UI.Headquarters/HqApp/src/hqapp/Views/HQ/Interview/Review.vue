@@ -4,10 +4,9 @@
             <div class="row">
                 <Facets />
                 <!--<SearchResults />-->
-                <Sidebar :showCover="false"/>
+                <Sidebar :showComplete="false"/>
                 <section class="questionnaire details-interview">
-                    <Cover v-if="isCoverPage"/>
-                    <ReviewSection v-else />
+                    <router-view></router-view>
                 </section>
             </div>
         </div>
@@ -17,18 +16,13 @@
 <script>
 import Facets from "./Facets"
 import SearchResults from "./SearchResults"
-import ReviewSection from "./ReviewSection"
 import Sidebar from "~/webinterview/components/Sidebar"
-import Cover from "~/webinterview/components/Cover"
 
 export default {
     data() {
         return {}
     },
     computed: {
-        isCoverPage() {
-            return this.sectionid === undefined;
-        }
     },
     beforeMount() {
         this.$store.dispatch("getLanguageInfo")
@@ -39,9 +33,7 @@ export default {
     components: {
         Facets,
         SearchResults,
-        ReviewSection,
-        Sidebar,
-        Cover
+        Sidebar
     }
 }
 
