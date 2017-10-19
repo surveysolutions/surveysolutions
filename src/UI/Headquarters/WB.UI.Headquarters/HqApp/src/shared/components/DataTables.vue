@@ -57,7 +57,6 @@ export default {
         noPaging: Boolean,
         noSearch: Boolean,
         exportable: Boolean,
-
         // support for rows selection
         selectable: Boolean,
         selectableId: { type: String, default: 'id' }
@@ -226,11 +225,13 @@ export default {
 
             var requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
 
-            this.$store.dispatch('setExportUrls', {
-                excel: requestUrl + "&exportType=excel",
-                csv: requestUrl + "&exportType=csv",
-                tab: requestUrl + "&exportType=tab",
-            });
+            if(this.exportable) {
+                this.$store.dispatch('setExportUrls', {
+                    excel: requestUrl + "&exportType=excel",
+                    csv: requestUrl + "&exportType=csv",
+                    tab: requestUrl + "&exportType=tab",
+                });
+            }
         };
 
         options.ajax.complete = (response) => {
