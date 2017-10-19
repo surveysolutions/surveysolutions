@@ -96,9 +96,11 @@ export default {
         commit("CLEAR_ANSWER_VALIDITY", { id })
     },
 
-    fetchSectionEntities: debounce(async ({ commit }) => {
-        const routeParams = (router.currentRoute.params )
-        const id = routeParams.sectionId
+    fetchSectionEntities: debounce(async ({ state, commit }) => {
+        const sectionId = state.routes.sectionId
+        const interviewId = state.routes.interviewId
+
+        const id = sectionId
         const isPrefilledSection = id === undefined
 
         if (isPrefilledSection) {
@@ -107,7 +109,7 @@ export default {
                 const loc = {
                     name: "section",
                     params: {
-                        interviewId: routeParams.interviewId,
+                        interviewId: interviewId,
                         sectionId: prefilledPageData.firstSectionId
                     }
                 }
