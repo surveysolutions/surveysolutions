@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.Single().Code.ShouldEqual("WB0102");
 
         [NUnit.Framework.Test] public void should_return_message_with_level_critical () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
 
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
             verificationMessages.Single().References.Count.ShouldEqual(2);
