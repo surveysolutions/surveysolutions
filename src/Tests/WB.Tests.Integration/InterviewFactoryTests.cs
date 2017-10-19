@@ -148,8 +148,6 @@ namespace WB.Tests.Integration
             //assert
             Assert.That(flaggedIdentites.Length, Is.EqualTo(2));
             Assert.That(flaggedIdentites, Is.EquivalentTo(questionIdentities));
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -182,8 +180,6 @@ namespace WB.Tests.Integration
 
             Assert.That(flaggedIdentity.Id, Is.EqualTo(questionIdentity.Id));
             Assert.That(flaggedIdentity.RosterVector, Is.EqualTo(questionIdentity.RosterVector));
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -216,8 +212,6 @@ namespace WB.Tests.Integration
 
             Assert.That(flaggedIdentity.Id, Is.EqualTo(questionIdentity.Id));
             Assert.That(flaggedIdentity.RosterVector, Is.EqualTo(questionIdentity.RosterVector));
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -293,8 +287,6 @@ namespace WB.Tests.Integration
 
             Assert.That(upsertedQuestionIdentities.Length, Is.EqualTo(2));
             Assert.That(readOnlyQuestions, Is.EquivalentTo(upsertedQuestionIdentities));
-
-            this.ClearByInterview(interviewId);
         }
 
         [TestCase(EntityType.StaticText)]
@@ -325,8 +317,6 @@ namespace WB.Tests.Integration
 
             Assert.That(upsertedIdentities.Length, Is.EqualTo(2));
             Assert.That(enabledEntities, Is.EquivalentTo(upsertedIdentities));
-
-            this.ClearByInterview(interviewId);
         }
 
         [TestCase(EntityType.StaticText)]
@@ -386,8 +376,6 @@ namespace WB.Tests.Integration
 
             Assert.That(upsertedIdentities.Length, Is.EqualTo(2));
             Assert.That(validEntities, Is.EquivalentTo(upsertedIdentities));
-
-            this.ClearByInterview(interviewId);
         }
 
         [TestCase(EntityType.StaticText)]
@@ -419,8 +407,6 @@ namespace WB.Tests.Integration
 
             Assert.That(upsertedEntities.Keys.Count, Is.EqualTo(3));
             Assert.That(invalidEntities, Is.EquivalentTo(upsertedEntities));
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -448,8 +434,6 @@ namespace WB.Tests.Integration
 
             Assert.That(upsertedIdentities.Length, Is.EqualTo(2));
             Assert.That(addedRosterIdentities, Is.EquivalentTo(upsertedIdentities));
-
-            this.ClearByInterview(interviewId);
         }
         
         [Test]
@@ -486,8 +470,6 @@ namespace WB.Tests.Integration
                 Assert.That(upsertedEntity, Is.Not.Null);
                 Assert.AreEqual(changedVariable.NewValue, upsertedEntity.NewValue);
             }
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -550,8 +532,6 @@ namespace WB.Tests.Integration
                 Assert.That(upsertedEntity, Is.Not.Null);
                 Assert.AreEqual(question.Answer, upsertedEntity.Answer);
             }
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -610,8 +590,6 @@ namespace WB.Tests.Integration
                 .ToArray());
 
             Assert.That(upsertedIdentities, Is.Empty);
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -671,8 +649,6 @@ namespace WB.Tests.Integration
             //assert
             Assert.That(allMultimediaAnswers.Length, Is.EqualTo(3));
             Assert.That(allMultimediaAnswers, Is.EquivalentTo(expectedMultimediaAnswers.Where(x=>x.Enabled).Select(x=>x.Answer)));
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -731,8 +707,6 @@ namespace WB.Tests.Integration
             //assert
             Assert.That(allAudioAnswers.Length, Is.EqualTo(3));
             Assert.That(allAudioAnswers, Is.EquivalentTo(expectedAudioAnswers.Where(x => x.Enabled).Select(x => x.Answer)));
-
-            this.ClearByInterview(interviewId);
         }
 
         [Test]
@@ -794,9 +768,6 @@ namespace WB.Tests.Integration
             //assert
             Assert.That(allGpsQuestionIds.Length, Is.EqualTo(3));
             Assert.That(allGpsQuestionIds, Is.EquivalentTo(expectedGpsAnswers.Select(x => x.QuestionId.Id)));
-
-            foreach (var expectedGpsAnswer in expectedGpsAnswers)
-                this.ClearByInterview(expectedGpsAnswer.InterviewId);
         }
 
         [Test]
@@ -829,11 +800,11 @@ namespace WB.Tests.Integration
                     Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
                 }
             };
-
-
-
+            
             this.sessionProvider.ExecuteInPlainTransaction(() =>
             {
+                this.sessionProvider.GetSession().Connection.Execute($"DELETE FROM {InterviewsTableName}");
+
                 this.sessionProvider.GetSession().Connection.Execute("INSERT INTO readside.interviewsummaries VALUES(@InterviewId,@InterviewId,'Questionnaire title','responsible','9d003a6a-b479-4809-bf31-307871aeed93','responsible',4,'2017-06-28 03:34:17',FALSE,FALSE,FALSE,'6158dd07-4d64-498f-8a50-e5e9828fda23',1,'0ba7b65d-2107-4b43-ba01-b4aac0a973a8',60,FALSE,TRUE,@ClientKey,9458,'',@QuestionnaireId,FALSE)",
                     expectedGpsAnswers.Select(x => new { InterviewId = x.InterviewId, QuestionnaireId = x.QuestionnaireId.ToString(), ClientKey = x.InterviewId.ToString().Substring(0,12) }));
 
@@ -860,15 +831,208 @@ namespace WB.Tests.Integration
             //assert
             Assert.That(questionnaireIdentities.Length, Is.EqualTo(2));
             Assert.That(questionnaireIdentities, Is.EquivalentTo(expectedGpsAnswers.Select(x => x.QuestionnaireId.ToString()).Distinct()));
-
-            foreach (var expectedGpsAnswer in expectedGpsAnswers)
-                this.ClearByInterview(expectedGpsAnswer.InterviewId);
         }
 
-        private void ClearByInterview(Guid interviewId)
-            => this.sessionProvider.ExecuteInPlainTransaction(() => this.sessionProvider.GetSession().Connection.Query(
-                $"DELETE FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
-                new {InterviewId = interviewId}));
+        [Test]
+        public void when_getting_gps_answers_by_questionnaire_id_and_question_id()
+        {
+            //arrange
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
+            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+
+            var allGpsAnswers = new[]
+            {
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
+                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            this.sessionProvider.ExecuteInPlainTransaction(() =>
+            {
+                this.sessionProvider.GetSession().Connection.Execute("INSERT INTO readside.interviewsummaries VALUES(@InterviewId,@InterviewId,'Questionnaire title','responsible','9d003a6a-b479-4809-bf31-307871aeed93','responsible',4,'2017-06-28 03:34:17',FALSE,FALSE,FALSE,'6158dd07-4d64-498f-8a50-e5e9828fda23',1,'0ba7b65d-2107-4b43-ba01-b4aac0a973a8',60,FALSE,TRUE,@ClientKey,9458,'',@QuestionnaireId,FALSE)",
+                    allGpsAnswers.Select(x => new { InterviewId = x.InterviewId, QuestionnaireId = x.QuestionnaireId.ToString(), ClientKey = x.InterviewId.ToString().Substring(0, 12) }));
+
+                this.sessionProvider.GetSession().Connection
+                    .Execute(
+                        $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AsGpsColumn}) " +
+                        $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @Answer) ",
+                        allGpsAnswers.Select(x => new
+                        {
+                            InterviewId = x.InterviewId,
+                            EntityId = x.QuestionId.Id,
+                            RosterVector = x.QuestionId.RosterVector.Array,
+                            EntityType = EntityType.Question,
+                            Answer = x.Answer
+                        }));
+            });
+
+
+            var factory = CreateInterviewFactory();
+
+            //act
+            var gpsAnswers = this.sessionProvider.ExecuteInPlainTransaction(
+                () => factory.GetGpsAnswersByQuestionIdAndQuestionnaire(questionnaireId, questionId.Id, 10, 90, -90, 180, -180));
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(2));
+            Assert.That(gpsAnswers, Is.EquivalentTo(allGpsAnswers
+                    .Where(x => x.QuestionId == questionId && x.QuestionnaireId == questionnaireId)
+                    .Select(x => new InterviewGpsAnswer
+                    {
+                        InterviewId = x.InterviewId,
+                        Longitude = x.Answer.Longitude,
+                        Latitude = x.Answer.Latitude
+                    })));
+        }
+
+        [Test]
+        public void when_getting_gps_answers_by_questionnaire_id_and_question_id_and_limit_by_west_latitude()
+        {
+            //arrange
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
+            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+
+            var allGpsAnswers = new[]
+            {
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
+                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            this.sessionProvider.ExecuteInPlainTransaction(() =>
+            {
+                this.sessionProvider.GetSession().Connection.Execute("INSERT INTO readside.interviewsummaries VALUES(@InterviewId,@InterviewId,'Questionnaire title','responsible','9d003a6a-b479-4809-bf31-307871aeed93','responsible',4,'2017-06-28 03:34:17',FALSE,FALSE,FALSE,'6158dd07-4d64-498f-8a50-e5e9828fda23',1,'0ba7b65d-2107-4b43-ba01-b4aac0a973a8',60,FALSE,TRUE,@ClientKey,9458,'',@QuestionnaireId,FALSE)",
+                    allGpsAnswers.Select(x => new { InterviewId = x.InterviewId, QuestionnaireId = x.QuestionnaireId.ToString(), ClientKey = x.InterviewId.ToString().Substring(0, 12) }));
+
+                this.sessionProvider.GetSession().Connection
+                    .Execute(
+                        $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AsGpsColumn}) " +
+                        $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @Answer) ",
+                        allGpsAnswers.Select(x => new
+                        {
+                            InterviewId = x.InterviewId,
+                            EntityId = x.QuestionId.Id,
+                            RosterVector = x.QuestionId.RosterVector.Array,
+                            EntityType = EntityType.Question,
+                            Answer = x.Answer
+                        }));
+            });
+
+
+            var factory = CreateInterviewFactory();
+
+            //act
+            var gpsAnswers = this.sessionProvider.ExecuteInPlainTransaction(
+                () => factory.GetGpsAnswersByQuestionIdAndQuestionnaire(questionnaireId, questionId.Id, 10, 90, 2, 180, -180));
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(1));
+            Assert.AreEqual(gpsAnswers[0],
+                new InterviewGpsAnswer
+                {
+                    InterviewId = allGpsAnswers[2].InterviewId,
+                    Longitude = allGpsAnswers[2].Answer.Longitude,
+                    Latitude = allGpsAnswers[2].Answer.Latitude
+                });
+        }
+
+        [Test]
+        public void when_getting_gps_answers_by_questionnaire_id_and_question_id_and_limit_by_answers_count()
+        {
+            //arrange
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
+            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+
+            var allGpsAnswers = new[]
+            {
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
+                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            this.sessionProvider.ExecuteInPlainTransaction(() =>
+            {
+                this.sessionProvider.GetSession().Connection.Execute("INSERT INTO readside.interviewsummaries VALUES(@InterviewId,@InterviewId,'Questionnaire title','responsible','9d003a6a-b479-4809-bf31-307871aeed93','responsible',4,'2017-06-28 03:34:17',FALSE,FALSE,FALSE,'6158dd07-4d64-498f-8a50-e5e9828fda23',1,'0ba7b65d-2107-4b43-ba01-b4aac0a973a8',60,FALSE,TRUE,@ClientKey,9458,'',@QuestionnaireId,FALSE)",
+                    allGpsAnswers.Select(x => new { InterviewId = x.InterviewId, QuestionnaireId = x.QuestionnaireId.ToString(), ClientKey = x.InterviewId.ToString().Substring(0, 12) }));
+
+                this.sessionProvider.GetSession().Connection
+                    .Execute(
+                        $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AsGpsColumn}) " +
+                        $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @Answer) ",
+                        allGpsAnswers.Select(x => new
+                        {
+                            InterviewId = x.InterviewId,
+                            EntityId = x.QuestionId.Id,
+                            RosterVector = x.QuestionId.RosterVector.Array,
+                            EntityType = EntityType.Question,
+                            Answer = x.Answer
+                        }));
+            });
+
+
+            var factory = CreateInterviewFactory();
+
+            //act
+            var gpsAnswers = this.sessionProvider.ExecuteInPlainTransaction(
+                () => factory.GetGpsAnswersByQuestionIdAndQuestionnaire(questionnaireId, questionId.Id, 1, 90, -90, 180, -180));
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(1));
+        }
     }
 
     public class JsonHandler<T> : SqlMapper.TypeHandler<T> where T: class
