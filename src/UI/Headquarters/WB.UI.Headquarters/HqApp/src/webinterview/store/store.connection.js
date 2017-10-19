@@ -1,6 +1,6 @@
 import * as toastr from "toastr"
 import Vue from "vue"
-import { apiStop } from "../api"
+
 import modal from "../components/modal"
 
 const connectionStore = {
@@ -20,7 +20,8 @@ const connectionStore = {
         disconnected({state, commit}) {
             if (state.isReconnecting && !state.isDisconnected) {
                 commit("IS_DISCONNECTED", true)
-                apiStop()
+                Vue.$api.stop()
+                
                 modal.alert({
                     title: Vue.$t("WebInterviewUI.Disconnected"),
                     message: "<p>" + Vue.$t("WebInterviewUI.ConnectionLostTitle") + "</p><p>" + Vue.$t("WebInterviewUI.ConnectionLostMessage") + "</p>",

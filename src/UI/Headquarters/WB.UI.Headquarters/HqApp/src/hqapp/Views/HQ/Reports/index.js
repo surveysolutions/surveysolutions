@@ -29,17 +29,11 @@ export default class ReportComponent {
     }
 
     get routes() {
-        const beforeEnter = (from, to, next) => this.beforeEnter(from, to, next);
-        
-        const routes =  [{
+        return [{
             path: '/Reports/InterviewersAndDevices', component: InterviewersAndDevices
         }, {
             path: '/Reports/StatusDuration', component: StatusDuration
         }]
-
-        routes.forEach((path) => path.beforeEnter = beforeEnter);
-
-        return routes;
     }
 
     async beforeEnter(to, from, next) {
@@ -49,5 +43,5 @@ export default class ReportComponent {
         next();
     }
 
-    get moduleName() { return "reports" }
+    get modules() { return { reports: store }}
 }
