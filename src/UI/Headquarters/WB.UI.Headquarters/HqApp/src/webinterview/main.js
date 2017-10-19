@@ -22,7 +22,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
 
     require("./componentsRegistry")
     
-    const router = require("./router").default;
+    const createRouter = require("./router").default;
     
     const store = new Vuex.Store({
         modules: { 
@@ -42,7 +42,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
         render: h => h(App),
         components: { App },
         store,
-        router,
+        router: createRouter(store),
         i18n
     });
 })

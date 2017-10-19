@@ -2,7 +2,6 @@ import * as debounce from "lodash/debounce"
 import * as map from "lodash/map"
 import Vue from "vue"
 
-import { apiCaller, apiCallerAndFetch, apiStop } from "../api"
 import { batchedAction } from "../helpers"
 import router from "./../router"
 import modal from "../components/modal"
@@ -13,20 +12,20 @@ export default {
     },
 
     async loadInterview({ commit }) {
-        const info = await apiCaller(api => api.getInterviewDetails())
+        const info = await Vue.$api.call(api => api.getInterviewDetails())
         commit("SET_INTERVIEW_INFO", info)
-        const flag = await apiCaller(api => api.hasCoverPage())
+        const flag = await Vue.$api.call(api => api.hasCoverPage())
         commit("SET_HAS_COVER_PAGE", flag)
 
     },
 
     async getLanguageInfo({ commit }) {
-        const languageInfo = await apiCaller(api => api.getLanguageInfo())
+        const languageInfo = await Vue.$api.call(api => api.getLanguageInfo())
         commit("SET_LANGUAGE_INFO", languageInfo)
     },
 
     fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
-        const details = await apiCaller(api => api.getEntitiesDetails(map(ids, "id")))
+        const details = await Vue.$api.call(api => api.getEntitiesDetails(map(ids, "id")))
         dispatch("fetch", { ids, done: true })
         commit("SET_ENTITIES_DETAILS", {
             entities: details,
@@ -86,7 +85,7 @@ export default {
         apiCallerAndFetch(questionId, api => api.removeAnswer(questionId))
     },
     sendNewComment({ dispatch }, { questionId, comment }) {
-        apiCaller(api => api.sendNewComment(questionId, comment))
+        Vue.$api.call(api => api.sendNewComment(questionId, comment))
     },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
@@ -103,7 +102,7 @@ export default {
         const isPrefilledSection = id === undefined
 
         if (isPrefilledSection) {
-            const prefilledPageData = await apiCaller(api => api.getPrefilledEntities())
+            const prefilledPageData = await Vue.$api.call(api => api.getPrefilledEntities())
             if (!prefilledPageData.hasAnyQuestions) {
                 const loc = {
                     name: "section",
@@ -118,7 +117,7 @@ export default {
                 commit("SET_SECTION_DATA", prefilledPageData.entities)
             }
         } else {
-            const section = await apiCaller(api => api.getSectionEntities(id))
+            const section = await Vue.$api.call(api => api.getSectionEntities(id))
             commit("SET_SECTION_DATA", section)
         }
     }, 200),
@@ -182,7 +181,7 @@ export default {
         const isPrefilledSection = currentSectionId === undefined
 
         if (!isPrefilledSection) {
-            const isEnabled = await apiCaller(api => api.isEnabled(currentSectionId))
+            const isEnabled = await Vue.$api.call(api => api.isEnabled(currentSectionId))
             if (!isEnabled) {
                 const firstSectionId = state.firstSectionId
                 const firstSectionLocation = {
@@ -198,32 +197,32 @@ export default {
     }, 200),
 
     fetchBreadcrumbs: debounce(async ({ commit }) => {
-        const crumps = await apiCaller(api => api.getBreadcrumbs())
+        const crumps = await Vue.$api.call(api => api.getBreadcrumbs())
         commit("SET_BREADCRUMPS", crumps)
     }, 200),
 
     fetchCompleteInfo: debounce(async ({ commit }) => {
-        const completeInfo = await apiCaller(api => api.getCompleteInfo())
+        const completeInfo = await Vue.$api.call(api => api.getCompleteInfo())
         commit("SET_COMPLETE_INFO", completeInfo)
     }, 200),
 
     fetchInterviewStatus: debounce(async ({ commit }) => {
-        const interviewState = await apiCaller(api => api.getInterviewStatus())
+        const interviewState = await Vue.$api.call(api => api.getInterviewStatus())
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
     fetchCoverInfo: debounce(async ({ commit }) => {
-        const coverInfo = await apiCaller(api => api.getCoverInfo())
+        const coverInfo = await Vue.$api.call(api => api.getCoverInfo())
         commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
     fetchQuestionComments: debounce(async ({ commit }, questionId) => {
-        const comments = await apiCaller(api => api.getQuestionComments(questionId))
+        const comments = await Vue.$api.call(api => api.getQuestionComments(questionId))
         commit("SET_QUESTION_COMMENTS", { questionId, comments})
     }, 200),
 
     completeInterview({ dispatch }, comment) {
-        apiCaller(api => api.completeInterview(comment))
+        Vue.$api.call(api => api.completeInterview(comment))
     },
 
     cleanUpEntity: batchedAction(({ commit }, ids) => {
@@ -231,7 +230,7 @@ export default {
     }, null, /* limit */ 100),
 
     changeLanguage({ commit }, language) {
-        apiCaller(api => api.changeLanguage(language))
+        Vue.$api.call(api => api.changeLanguage(language))
     },
     stop() {
         apiStop()

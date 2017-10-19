@@ -11,9 +11,12 @@ import http from "shared/plugins/http"
 import config from "shared/config"
 import store from "./store"
 import './components'
+
 import './compatibility.js'
+
 import "~/webinterview/componentsRegistry"
 import box from "~/webinterview/components/modal"
+
 import { browserLanguage } from "shared/helpers"
 
 export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
@@ -24,7 +27,6 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
 
     const viewsProvider = require("./views").default;
     const Router = require('./router').default;
-    const installApi = require("~/webinterview/api").install
 
     const views = viewsProvider(store);
 
@@ -32,7 +34,6 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
         routes: views.routes
     });
 
-    installApi(Vue, { store })
 
     box.init(i18n, browserLanguage);
     new Vue({
