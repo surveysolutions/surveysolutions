@@ -1,7 +1,7 @@
 import * as forEach from "lodash/foreach"
 import * as groupBy from "lodash/groupby"
 import Vue from "vue"
-import { apiCaller } from "../api"
+
 import { safeStore } from "../errors"
 import { batchedAction } from "../helpers"
 
@@ -17,7 +17,7 @@ export default safeStore({
     actions: {
 
         fetchSidebar: batchedAction(async ({ commit }, ids) => {
-            const sideBar = await apiCaller(api => api.getSidebarChildSectionsOf(ids))
+            const sideBar = await Vue.$api.call(api => api.getSidebarChildSectionsOf(ids))
             commit("SET_SIDEBAR_STATE", sideBar)
         }, null, null),
 

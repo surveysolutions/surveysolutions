@@ -194,7 +194,12 @@ export function install(Vue, options) {
     Vue.mixin({
         created() {
             store = options.store
-            this.$apiCaller = apiCaller;
+            this.$api = {
+                call: Vue.$api.call,
+                hub: getInstance,
+                stop: apiStop,
+                queryString
+            }
         }
     });
 }

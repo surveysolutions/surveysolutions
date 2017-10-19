@@ -1,7 +1,7 @@
 import Review from "./Review"
 import localStore from "./store"
+import Vue from 'vue'
 
-import { apiCaller, getInstance as hubProxy, queryString } from "~/webinterview/api"
 
 export default class ReviewComponent {
     constructor(rootStore) {
@@ -27,14 +27,14 @@ export default class ReviewComponent {
     async beforeEnter(to, from, next) {
         this.initializeIfNeeded()
 
-        queryString["interviewId"] = to.params["interviewId"]
-        queryString["review"] = true
+        Vue.$hub_queryString["interviewId"] = to.params["interviewId"]
+        Vue.$hub_queryString["review"] = true
 
-        const proxy = await hubProxy()
+        const proxy = await Vue.$hub()
         proxy.state.sectionId = to.params["sectionId"]
 
         if (to.name === "section") {
-            const isEnabled = await apiCaller(api => api.isEnabled(to.params["sectionId"]))
+            const isEnabled = await Vue.$Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
 
             if (!isEnabled) {
                 next(false)
@@ -55,6 +55,10 @@ export default class ReviewComponent {
                 this.rootStore.registerModule(module, localStore[module]);
             });
             
+            
+            const installApi = require("~/webinterview/api").install
+
+            installApi(Vue, this.rootStore);
         }
     }
 
