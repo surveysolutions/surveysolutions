@@ -377,7 +377,7 @@
 
                 var label = _.isUndefined(item.variableData) ? item.label : item.variableData.label;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(label || "Untitled variable"));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(label || $i18next.t('UntitledVariable')));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
@@ -412,7 +412,7 @@
             $scope.deleteGroup = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title || $i18next.t('UntitledGroup')));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
@@ -453,7 +453,7 @@
 
                 var item = questionnaireService.findItem($scope.items, itemIdToDelete);
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.text));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.text || $i18next.t('UntitledStaticText')));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {

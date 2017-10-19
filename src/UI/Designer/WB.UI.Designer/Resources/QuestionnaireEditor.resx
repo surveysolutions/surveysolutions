@@ -949,4 +949,19 @@
   <data name="SelectItemFromTheList" xml:space="preserve">
     <value>Select item from the list</value>
   </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>Untitled sub-section or roster</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>Untitled variable</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>Untitled section</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>Untitled roster</value>
+  </data>
+  <data name="UntitledStaticText" xml:space="preserve">
+    <value>Untitled static text</value>
+  </data>
 </root>

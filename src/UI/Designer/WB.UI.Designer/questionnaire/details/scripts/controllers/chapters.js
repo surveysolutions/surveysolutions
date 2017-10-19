@@ -55,7 +55,7 @@
             $scope.deleteChapter = function (chapter) {
                 var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(chapter.title));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(chapter.title || $i18next.t('UntitledSection')));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {

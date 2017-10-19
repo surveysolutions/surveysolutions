@@ -965,4 +965,19 @@
   <data name="PleaseWait" xml:space="preserve">
     <value>Ожидайте...</value>
   </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>Подсекция или ростер без названия</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>Переменная без названия</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>Секция без названия</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>Ростер без названия</value>
+  </data>
+  <data name="UntitledStaticText" xml:space="preserve">
+    <value>Статический текст без названия</value>
+  </data>
 </root>
