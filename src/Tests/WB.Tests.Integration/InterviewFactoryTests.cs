@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Dapper;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Npgsql;
@@ -20,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -1032,6 +1034,63 @@ namespace WB.Tests.Integration
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void when_remove_rosters()
+        {
+            //arrange
+            var interviewId = Guid.NewGuid();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777);
+            var rosterVector = Create.RosterVector(1, 2, 3);
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericRoster(children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(),
+                    Create.Entity.StaticText(),
+                    Create.Entity.Variable(),
+                    Create.Entity.Group()
+
+                }), Create.Entity.ListRoster(children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(),
+                    Create.Entity.StaticText(),
+                    Create.Entity.Variable(),
+                    Create.Entity.Group()
+
+                }));
+
+            var questionnaireStorage = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+
+            this.sessionProvider.ExecuteInPlainTransaction(() => this.sessionProvider.GetSession().Connection
+                .Execute(
+                    $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
+                    $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) ",
+                    questionnaire.Children[0].Children.SelectMany(x => x.Children).Select(x =>
+                        new
+                        {
+                            InterviewId = interviewId,
+                            EntityId = x.PublicKey,
+                            RosterVector = rosterVector.Array,
+                            EntityType = x is Group ? EntityType.Section : (x is StaticText ? EntityType.StaticText : (x is Variable ? EntityType.Variable : EntityType.Question))
+                        })));
+
+
+            var factory = CreateInterviewFactory(questionnaireStorage: questionnaireStorage);
+
+            //act
+            this.sessionProvider.ExecuteInPlainTransaction(() => factory.RemoveRosters(questionnaireId, interviewId,
+                questionnaire.Children[0].Children.Select(x => Identity.Create(x.PublicKey, rosterVector)).ToArray()));
+
+            //assert
+            var interviewEntities = this.sessionProvider.ExecuteInPlainTransaction(() => this.sessionProvider.GetSession().Connection.Query(
+                    $"SELECT {EntityIdColumn}, {RosterVectorColumn} FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
+                    new { InterviewId = interviewId })
+                .Select(x => Identity.Create((Guid)x.entityid, (int[])x.rostervector))
+                .ToArray());
+
+            Assert.That(interviewEntities, Is.Empty);
         }
     }
 
