@@ -20,8 +20,8 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
-    import modal from "../../modal"
-    import numerics from "../../numerics"
+    import modal from "../modal"
+    import numerics from "../numerics"
 
     export default {
         name: 'Integer',

@@ -18,7 +18,7 @@
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import modal from "../../modal"
+    import modal from "../modal"
 
     export default {
         name: 'CategoricalMulti',

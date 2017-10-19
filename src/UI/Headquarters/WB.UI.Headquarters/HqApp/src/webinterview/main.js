@@ -13,17 +13,14 @@ import './init'
 import "./misc/htmlPoly.js"
 
 import "./errors"
-import box from "shared/modal"
+import box from "./components/modal"
 
 import { browserLanguage } from "shared/helpers"
 
 export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     Vue.use(Vuei18n)
 
-    require("./components")
-    require("shared/components/questions")
-    require("shared/components/questions/parts")
-    require("./directives")
+    require("./componentsRegistry")
     
     const router = require("./router").default;
     

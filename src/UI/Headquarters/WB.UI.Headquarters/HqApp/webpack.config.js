@@ -13,7 +13,7 @@ var commonConfig = require("./.build/webpack.common")
 const config = {
     hq: {
         entry: "./src/hqapp/main.js",
-        locales: ["Pages", "Common", "Users", "Assignments", "Strings", "Reports", "DevicesInterviewers"]
+        locales: ["Pages", "WebInterviewUI", "Common", "Users", "Assignments", "Strings", "Reports", "DevicesInterviewers"]
     },
     webinterview: {
         entry: "./src/webinterview/main.js",

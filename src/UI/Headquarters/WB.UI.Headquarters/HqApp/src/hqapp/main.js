@@ -12,11 +12,8 @@ import config from "shared/config"
 import store from "./store"
 import './components'
 import './compatibility.js'
-import '~/webinterview/components'
-import 'shared/components/questions'
-import 'shared/components/questions/parts'
-
-import box from "shared/modal"
+import "~/webinterview/componentsRegistry"
+import box from "~/webinterview/components/modal"
 import { browserLanguage } from "shared/helpers"
 
 export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {

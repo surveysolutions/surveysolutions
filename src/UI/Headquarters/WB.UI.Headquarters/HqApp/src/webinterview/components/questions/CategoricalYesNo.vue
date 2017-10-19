@@ -31,7 +31,7 @@
     import { entityDetails } from "../mixins"
 
     import * as $ from "jquery"
-    import modal from "../../modal"
+    import modal from "../modal"
     import * as findIndex from "lodash/findIndex"
 
     export default {
