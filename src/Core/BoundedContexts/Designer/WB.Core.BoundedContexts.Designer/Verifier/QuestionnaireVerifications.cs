@@ -312,7 +312,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .GroupBy(x => x.Id)
                 .Where(group => group.Count() > 1)
                 .Select(group =>
-                    QuestionnaireVerificationMessage.Error(
+                    QuestionnaireVerificationMessage.Critical(
                         "WB0102",
                         VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
                         group.Select(x => new QuestionnaireNodeReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
