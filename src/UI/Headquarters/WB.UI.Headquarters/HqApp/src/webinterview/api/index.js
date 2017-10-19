@@ -197,7 +197,8 @@ export function install(Vue, options) {
         call: apiCaller,
         hub: getInstance,
         stop: apiStop,
-        queryString
+        queryString,
+        callAndFetch: apiCallerAndFetch
     };
 
     Object.defineProperty(Vue, "$api",{
