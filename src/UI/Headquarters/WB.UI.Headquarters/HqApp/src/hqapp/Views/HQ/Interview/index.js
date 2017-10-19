@@ -1,6 +1,8 @@
 import Review from "./Review"
 import localStore from "./store"
 import Vue from 'vue'
+import Cover from "~/webinterview/components/Cover"
+import ReviewSection from "./ReviewSection"
 
 export default class ReviewComponent {
     constructor(rootStore) {
@@ -12,17 +14,27 @@ export default class ReviewComponent {
             {
                 path: '/Interview/Review/:interviewId',
                 component: Review,
-                props: true
-            },
-            {
-                name: "section",
-                path: '/Interview/Review/:interviewId/Section/:sectionId',
-                component: Review
+                children: [
+                    {
+                        path: '',
+                        component: Cover
+                    },
+                    {
+                        path: 'Cover',
+                        name: 'prefilled',
+                        component: Cover
+                    },
+                    {
+                        path: 'Section/:sectionId',
+                        name: 'section',
+                        component: ReviewSection
+                    }
+                ]
             }
         ]
     }
 
-    async beforeEnter(to, from, next) {
+    beforeEnter(to, from, next) {
         Vue.$api.queryString["interviewId"] = to.params["interviewId"]
         Vue.$api.queryString["review"] = true
 
@@ -31,23 +43,22 @@ export default class ReviewComponent {
             sectionId: to.params["sectionId"]
         })
 
-        const proxy = await Vue.$api.hub()
-        proxy.state.sectionId = to.params["sectionId"]
-
-        if (to.name === "section") {
-            const isEnabled = await Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
-
-            if (!isEnabled) {
-                next(false)
-                return
+        Vue.$api.hub().then((proxy) => {
+            proxy.state.sectionId = to.params["sectionId"]
+            if (to.name === "section") {
+                const isEnabled = Vue.$api.call(api => api.isEnabled(to.params["sectionId"])).then((isEnabled) => {
+                    if (!isEnabled) {
+                        next(false);
+                    } else {
+                        next();
+                    }
+                });
             } else {
-                next()
+                next();
             }
-        } else {
-            next()
-        }
 
-        next();
+            next();
+        })
     }
 
     initialize() {
