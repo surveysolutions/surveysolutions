@@ -2464,11 +2464,56 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Untitled sub-section or roster.
+        /// </summary>
+        public static string UntitledGroupOrRoster {
+            get {
+                return ResourceManager.GetString("UntitledGroupOrRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Untitled question.
         /// </summary>
         public static string UntitledQuestion {
             get {
                 return ResourceManager.GetString("UntitledQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untitled roster.
+        /// </summary>
+        public static string UntitledRoster {
+            get {
+                return ResourceManager.GetString("UntitledRoster", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untitled section.
+        /// </summary>
+        public static string UntitledSection {
+            get {
+                return ResourceManager.GetString("UntitledSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untitled static text.
+        /// </summary>
+        public static string UntitledStaticText {
+            get {
+                return ResourceManager.GetString("UntitledStaticText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untitled variable.
+        /// </summary>
+        public static string UntitledVariable {
+            get {
+                return ResourceManager.GetString("UntitledVariable", resourceCulture);
             }
         }
         

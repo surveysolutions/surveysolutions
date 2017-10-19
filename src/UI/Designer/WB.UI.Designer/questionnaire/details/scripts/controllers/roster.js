@@ -214,7 +214,7 @@
                 };
 
                 $scope.deleteRoster = function () {
-                    var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup($scope.activeRoster.title));
+                    var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup($scope.activeRoster.title || $i18next.t('UntitledRoster')));
 
                     modalInstance.result.then(function (confirmResult) {
                         if (confirmResult === 'ok') {
