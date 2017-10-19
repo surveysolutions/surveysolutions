@@ -39,8 +39,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool TranslationsHasDuplicatedNames(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var trimedTranslationName = translation.Name.Trim();
-            var countNames = questionnaire.Questionnaire.Translations.Count(t => t.Name.Trim() == trimedTranslationName);
+            if (string.IsNullOrWhiteSpace(translation.Name))
+                return false;
+
+            var trimedTranslationName = translation.Name?.Trim() ?? "";
+            var countNames = questionnaire.Questionnaire.Translations.Count(t => (t.Name?.Trim() ?? "") == trimedTranslationName);
             return countNames > 1;
         }
 
