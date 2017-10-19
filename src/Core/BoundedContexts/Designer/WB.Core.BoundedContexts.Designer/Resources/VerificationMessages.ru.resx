@@ -285,9 +285,6 @@
   <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
     <value>Циклические ссылки не разрешены.</value>
   </data>
-  <data name="WB0057_QuestionHasEmptyVariableName" xml:space="preserve">
-    <value>У вопроса не может быть пустого имени переменной.</value>
-  </data>
   <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
     <value>Имя переменной или ID реестра не может быть зарезервированным словом.</value>
   </data>
@@ -320,9 +317,6 @@
   </data>
   <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
     <value>Ростер не может содержать более {0} дочерних элементов</value>
-  </data>
-  <data name="WB0069_" xml:space="preserve">
-    <value />
   </data>
   <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
     <value>ID ростера совпадает с именем опросника.</value>
