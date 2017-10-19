@@ -1,5 +1,4 @@
 import Review from "./Review"
-//import appStore from "~/hqapp/store"
 import localStore from "./store"
 
 import { apiCaller, getInstance as hubProxy, queryString } from "~/webinterview/api"

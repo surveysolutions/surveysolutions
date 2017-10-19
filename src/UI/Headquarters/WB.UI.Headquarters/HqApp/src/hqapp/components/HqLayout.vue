@@ -55,7 +55,7 @@ export default {
             }
         },
         showProgress() {
-            return this.$store.state.pendingProgress;
+            return this.$store.state.progress.pendingProgress;
         }
     }
 }
