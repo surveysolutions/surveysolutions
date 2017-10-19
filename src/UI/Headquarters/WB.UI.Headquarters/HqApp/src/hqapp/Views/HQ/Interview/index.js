@@ -26,6 +26,11 @@ export default class ReviewComponent {
         Vue.$api.queryString["interviewId"] = to.params["interviewId"]
         Vue.$api.queryString["review"] = true
 
+        this.rootStore.dispatch("navigatingTo", {
+            interviewId: to.params["interviewId"],
+            sectionId: to.params["sectionId"]
+        })
+
         const proxy = await Vue.$api.hub()
         proxy.state.sectionId = to.params["sectionId"]
 
