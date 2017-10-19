@@ -575,15 +575,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string WB0057_ {
-            get {
-                return ResourceManager.GetString("WB0057_", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Variable name or roster ID cannot be a reserved word..
         /// </summary>
         public static string WB0058_QuestionHasVariableNameReservedForServiceNeeds {
@@ -679,15 +670,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0068_RosterHasMoreThanAllowedChildElements {
             get {
                 return ResourceManager.GetString("WB0068_RosterHasMoreThanAllowedChildElements", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string WB0069_ {
-            get {
-                return ResourceManager.GetString("WB0069_", resourceCulture);
             }
         }
         
