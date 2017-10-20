@@ -1641,8 +1641,8 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0129_AnswerTitleIsTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Answer title is empty or too long. Title's length should be in range from {0} to {1} characters." ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Название опции пустое или слишком длинное. Длинна названия должна находиться в диапазоне от {0} до {1} символов." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Option title is empty or too long. Title's length should be in range from {0} to {1} characters." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Название опции пустое или слишком длинное. Длинна названия должна находиться в диапазоне от {0} до {1} символов." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0130_SubsectionOrRosterReferenceChildrendInCondition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
