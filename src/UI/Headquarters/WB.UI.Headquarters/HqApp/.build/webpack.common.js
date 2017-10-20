@@ -48,9 +48,7 @@ module.exports = {
                 use: [babelLoader]
             },
 
-            devMode
-                ? { test: /\.css$/, use: "css-loader" }
-                : { test: /\.css$/, use: ExtractTextPlugin.extract({ use: "css-loader" }) }
+            { test: /\.css$/, use: ExtractTextPlugin.extract({ use: "css-loader" }) }
 
             // , {
             //     test: /\.(js|vue)$/,
@@ -75,8 +73,8 @@ module.exports = {
             runtimePublicPath: "window.CONFIG.assetsPath"
         }),
 
-        devMode ? null : new ExtractTextPlugin("styles.[chunkhash].css"),
-        
+        new ExtractTextPlugin("styles.[chunkhash].css"),
+
         devMode ? null : new webpack.optimize.CommonsChunkPlugin({
             name: 'common'//,
             //async: true,
@@ -87,7 +85,7 @@ module.exports = {
             name: "manifest",
             minChunks: Infinity
         }),
-        
+
         devMode ? null : new webpack.HashedModuleIdsPlugin(),
 
         devMode ? null : new webpack.optimize.ModuleConcatenationPlugin(),
@@ -100,7 +98,7 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
 
-        devMode ? new WebpackNotifierPlugin({alwaysNotify: true}) : null,
+        devMode ? new WebpackNotifierPlugin({ alwaysNotify: true }) : null,
 
         devMode ? null : new BundleAnalyzerPlugin({
             analyzerMode: 'static',
