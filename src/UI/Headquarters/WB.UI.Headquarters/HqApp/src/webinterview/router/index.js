@@ -54,17 +54,9 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
+         await Vue.$api.hub({ interviewId: to.params["interviewId"] })
 
-        store.dispatch("navigatingTo", {
-            interviewId: to.params["interviewId"],
-            sectionId: to.params["sectionId"]
-        })
-
-        Vue.$api.queryString["interviewId"] = to.params["interviewId"]
-
-        const proxy = await Vue.$api.hub()
-        proxy.state.sectionId = to.params["sectionId"]
-
+         // TODO: Section will not be checked on each secion
         if (to.name === "section") {
             const isEnabled = await Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
             if (!isEnabled) {
@@ -76,8 +68,11 @@ function NewRouter(store) {
         } else {
             next()
         }
+    })
 
-        // navigation could be canceled
+    router.afterEach((to) => {
+        
+        store.dispatch("changeSection", to.params.sectionId)
         store.dispatch("onBeforeNavigate")
 
         const hamburger = document.getElementById("sidebarHamburger")

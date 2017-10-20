@@ -49,6 +49,7 @@
     window.input = input;
 
     window.CONFIG = {
+        verboseMode: false,
         basePath: '@Url.Content(@"~/")',
         appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
         dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',

@@ -2,6 +2,7 @@ import "babel-polyfill";
 
 import Vue from 'vue'
 import Vuex from "vuex"
+import { sync } from 'vuex-router-sync'
 Vue.use(Vuex)
 
 import config from "shared/config"
@@ -29,6 +30,10 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
             webinterview: require("./store").default
         }
     });
+
+    const router = createRouter(store);
+
+    sync(store, router)
     
     const App = require("./App").default;
     const installApi = require("./api").install
@@ -42,7 +47,7 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
         render: h => h(App),
         components: { App },
         store,
-        router: createRouter(store),
+        router,
         i18n
     });
 })

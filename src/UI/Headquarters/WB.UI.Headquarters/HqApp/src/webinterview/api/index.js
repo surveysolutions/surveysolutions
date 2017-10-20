@@ -54,7 +54,7 @@ const scriptIncludedPromise = new Promise(resolve =>
 
         interviewProxy.server.answerPictureQuestion = (id, file) => {
             const fd = new FormData()
-            fd.append("interviewId", queryString.interviewId)
+            fd.append("interviewId", store.getters.interviewId)
             fd.append("questionId", id)
             fd.append("file", file)
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
@@ -81,7 +81,7 @@ const scriptIncludedPromise = new Promise(resolve =>
 
         interviewProxy.server.answerAudioQuestion = (id, file) => {
             const fd = new FormData()
-            fd.append("interviewId", queryString.interviewId)
+            fd.append("interviewId", store.getters.interviewId)
             fd.append("questionId", id)
             fd.append("file", file)
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
@@ -110,44 +110,51 @@ const scriptIncludedPromise = new Promise(resolve =>
     })
 )
 
-async function hubStarter() {
-    if (config.signalrUrlOverride) {
-        $.connection.hub.url = config.signalrUrlOverride
-    }
+let hubInstance = null;
 
-    $.connection.hub.qs = queryString
+function hubStarter(options) {
+    return hubInstance || (hubInstance = new Promise((resolve) => {
+        if(options == null) throw "Need to provide options for hub"
 
-    // { transport: supportedTransports }
-    await wrap($.signalR.hub.start({
-        transport: config.supportedTransports
-    }))
-    // await wrap($.signalR.hub.start({ transport: "longPolling" }))
-    $.connection.hub.connectionSlow(() => {
-        store.dispatch("connectionSlow")
-    })
+        const queryString = {
+            interviewId: store.getters.interviewId,
+            appVersion: config.appVersion
+        }
+    
+        if (queryString.interviewId == null && options != null) {
+            queryString.interviewId = options.interviewId;
+        }
+    
+        $.connection.hub.qs = Object.assign(options, queryString);
+    
+        // { transport: supportedTransports }
+        wrap($.signalR.hub.start({ transport: config.supportedTransports })).then(() => {
+            // transport: "longPolling"
+            $.connection.hub.connectionSlow(() => {
+                store.dispatch("connectionSlow")
+            })
+    
+            $.connection.hub.reconnecting(() => {
+                store.dispatch("tryingToReconnect", true)
+            })
+    
+            $.connection.hub.reconnected(() => {
+                store.dispatch("tryingToReconnect", false)
+            })
+    
+            $.connection.hub.disconnected(() => {
+                store.dispatch("disconnected")
+            })
 
-    $.connection.hub.reconnecting(() => {
-        store.dispatch("tryingToReconnect", true)
-    })
-
-    $.connection.hub.reconnected(() => {
-        store.dispatch("tryingToReconnect", false)
-    })
-
-    $.connection.hub.disconnected(() => {
-        store.dispatch("disconnected")
-    })
+            resolve(jQuery.signalR.interview)
+        })
+    }));
 }
 
-export const queryString = {
-    interviewId: null,
-    appVersion: config.appVersion
-}
-
-export async function getInstance() {
+export async function getInstance(options) {
     await scriptIncludedPromise
-    await hubStarter()
-    return jQuery.signalR.interview
+    return await hubStarter(options)
+    //return jQuery.signalR.interview
 }
 
 async function getInterviewHub() {
@@ -197,12 +204,16 @@ export function install(Vue, options) {
         call: apiCaller,
         hub: getInstance,
         stop: apiStop,
-        queryString,
-        callAndFetch: apiCallerAndFetch
+        callAndFetch: apiCallerAndFetch,
+        setState: async (callback) => {
+            const hub = await getInstance()
+            
+            callback(hub.state);
+        }
     };
 
-    Object.defineProperty(Vue, "$api",{
-        get: function() { return api; }
+    Object.defineProperty(Vue, "$api", {
+        get: function () { return api; }
     })
 }
 
