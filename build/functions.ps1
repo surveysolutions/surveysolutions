@@ -210,7 +210,13 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
     Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
 
-    & (GetPathToMSBuild) $Solution /t:Build /nologo /m /v:m /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
+    $verbosity = "minimal"
+
+    if(Test-Path variable:$env:MSBUILD_VERBOSITY -eq False){
+        $verbosity = $env:MSBUILD_VERBOSITY
+    }
+
+    & (GetPathToMSBuild) $Solution /t:Build /nologo /m /v:$verbosity /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
