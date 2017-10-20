@@ -244,7 +244,7 @@
     <value>Вы</value>
   </data>
   <data name="GeneratePdf" xml:space="preserve">
-    <value>Сшенерировать pdf</value>
+    <value>Сгенерировать pdf</value>
     <comment>Сшенерировать pdf</comment>
   </data>
   <data name="ChooseLanguage" xml:space="preserve">
