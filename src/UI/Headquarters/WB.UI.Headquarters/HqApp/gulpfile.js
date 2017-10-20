@@ -46,11 +46,11 @@ gulp.task('resx2json', () => {
 });
 
 gulp.task('cleanup', (cb) => {
-    // if (utils.env.production) {
+    if (utils.env.production) {
     rimraf.sync(config.dist + "/**/*.*")
     rimraf.sync(config.resources.dest + "/**/*.*")
     rimraf.sync(config.hqViews + "/partial.*.cshtml")
-    //}
+    }
     return cb();
 });
 
@@ -64,8 +64,10 @@ gulp.task("build", (done) => {
     } else {
         process.env.NODE_ENV = 'production';
     }
-
-    return webpack(merge(require("./webpack.config.js"), opts), onBuild(done));
+    require("./webpack.config.js").then((config) => {
+        return webpack(merge(config, opts), onBuild(done));    
+    });
+    
 })
 
 gulp.task("default", ['cleanup', 'resx2json',
