@@ -57,12 +57,5 @@ export default class InterviewerHqComponent {
         }];
     }
 
-    async beforeEnter(to, from, next) {
-        if (this.rootStore.state[this.moduleName] == null) {
-            this.rootStore.registerModule(this.moduleName, store)
-        }
-        next();
-    }
-
     get modules() { return {hqinterviewer: store}}
 }
