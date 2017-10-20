@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public async Task<ActionResult> Create(Guid? supervisorId)
         {
             if (!supervisorId.HasValue)
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public async Task<ActionResult> Create(InterviewerModel model)
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
         [ActionName("Profile")]
         public async Task<ActionResult> InterviewerProfile(Guid? id)
         {
@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(interviewerProfileModel);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<ActionResult> Edit(Guid id)
         {
             var user = await this.userManager.FindByIdAsync(id);
@@ -158,7 +158,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             });
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
@@ -179,7 +179,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         [HttpPost]
         public async Task<ActionResult> UnArchive(Guid id)
         {
@@ -200,7 +200,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return RedirectToAction("Profile", new { id = id });
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult Back()
         {
             return this.RedirectToAction("Index", "Interviewers");

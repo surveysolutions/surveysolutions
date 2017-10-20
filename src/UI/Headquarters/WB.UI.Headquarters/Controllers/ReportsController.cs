@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Reports;
@@ -52,7 +53,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewStatuses = interviewStatuses;
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult SurveysAndStatuses()
         {
             this.ViewBag.ActivePage = MenuItem.Surveys;
@@ -60,7 +61,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        [Authorize(Roles = "Supervisor")]
+        [AuthorizeOr403(Roles = "Supervisor")]
         public ActionResult SurveysAndStatusesForSv()
         {
             this.ViewBag.ActivePage = MenuItem.Surveys;
@@ -69,7 +70,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult SupervisorsAndStatuses()
         {
             this.ViewBag.ActivePage = MenuItem.Summary;
@@ -81,7 +82,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
-        [Authorize(Roles = "Supervisor")]
+        [AuthorizeOr403(Roles = "Supervisor")]
         public ActionResult TeamMembersAndStatuses()
         {
             this.ViewBag.ActivePage = MenuItem.Summary;
@@ -90,7 +91,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult MapReport()
         {
             this.ViewBag.ActivePage = MenuItem.MapReport;
@@ -106,7 +107,7 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult InterviewsChart()
         {
             this.ViewBag.ActivePage = MenuItem.InterviewsChart;
@@ -124,7 +125,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.StatusDuration)]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult StatusDuration()
         {
             return this.View("StatusDuration", new StatusDurationModel
@@ -171,7 +172,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("SpeedAndQuantity", model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult QuantityBySupervisors(PeriodiceReportType reportType = PeriodiceReportType.NumberOfCompletedInterviews)
         {
             this.ViewBag.ActivePage = MenuItem.NumberOfCompletedInterviews;
@@ -215,7 +216,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("SpeedAndQuantity", model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult SpeedBySupervisors(PeriodiceReportType reportType = PeriodiceReportType.AverageInterviewDuration)
         {
             this.ViewBag.ActivePage = MenuItem.SpeedOfCompletingInterviews;
@@ -239,7 +240,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.DevicesInterviewers)]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ActionResult InterviewersAndDevices()
         {
             return this.View("InterviewersAndDevices", new DevicesInterviewersModel

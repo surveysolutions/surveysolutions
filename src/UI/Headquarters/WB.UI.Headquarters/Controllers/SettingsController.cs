@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services;
@@ -17,7 +18,7 @@ using WB.UI.Shared.Web.Extensions;
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Administrator")]
+    [AuthorizeOr403(Roles = "Administrator")]
     [ObserverNotAllowed]
     public class SettingsController : BaseController
     {

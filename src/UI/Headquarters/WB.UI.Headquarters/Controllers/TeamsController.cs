@@ -41,34 +41,34 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter, Observer")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Observer")]
         public UsersView AssigneeSupervisorsAndDependentInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.teamViewFactory.GetAssigneeSupervisorsAndDependentInterviewers(pageSize: pageSize, searchBy: query);
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public UsersView Supervisors(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
             => this.userViewFactory.GetAllSupervisors(pageSize: pageSize, searchBy: query, showLocked: showLocked);
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public ResponsibleView Responsibles(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
             => this.userViewFactory.GetAllResponsibles(pageSize: pageSize, searchBy: query, showLocked: showLocked);
 
         [HttpGet]
-        [Authorize(Roles = "Supervisor")]
+        [AuthorizeOr403(Roles = "Supervisor")]
         public UsersView AsigneeInterviewersBySupervisor(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.teamViewFactory.GetAsigneeInterviewersBySupervisor(pageSize: pageSize, searchBy: query,
                 supervisorId: this.authorizedUser.Id);
 
         [HttpGet]
-        [Authorize(Roles = "Supervisor")]
+        [AuthorizeOr403(Roles = "Supervisor")]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query,
                     supervisorId: this.authorizedUser.Id);
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public UsersView AllInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.userViewFactory.GetInterviewers(pageSize: pageSize, searchBy: query, supervisorId: null);
 
@@ -86,7 +86,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [CamelCase]
         public ResponsibleComboboxModel ResponsiblesCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED, bool showArchived = DEFAULT_SHOW_ARCHIVED)
         {
@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [CamelCase]
         public ComboboxModel SupervisorsCombobox(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE, bool showLocked = DEFAULT_SHOW_LOCKED)
         {
