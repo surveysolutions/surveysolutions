@@ -12,6 +12,8 @@ const merge = require('webpack-merge')
 const babelLoader = devMode ? "babel-loader?cacheDirectory=true" : "babel-loader"
 const RuntimePublicPathPlugin = require("./RuntimePublicPathPlugin")
 
+const manifest = require("../dist/shared_vendor.manifest.json")
+
 module.exports = {
     output: {
         path: path.resolve(__dirname, baseAppPath, "dist"),
@@ -73,7 +75,11 @@ module.exports = {
             runtimePublicPath: "window.CONFIG.assetsPath"
         }),
 
-        new ExtractTextPlugin("styles.[chunkhash].css"),
+        new webpack.DllReferencePlugin({
+            manifest
+        }),
+
+        new ExtractTextPlugin(`styles${devMode ? "" : ".[chunkhash]"}.css`),
 
         devMode ? null : new webpack.optimize.CommonsChunkPlugin({
             name: 'common'//,
