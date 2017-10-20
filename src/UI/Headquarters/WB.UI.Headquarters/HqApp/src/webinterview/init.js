@@ -1,4 +1,5 @@
 import { browserLanguage } from "shared/helpers"
+import "bootstrap/js/dropdown";
 
 global.jQuery = require("jquery")
 
