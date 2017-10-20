@@ -170,7 +170,7 @@
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
                     $scope.showOptionsInList();
-                    $scope.trimLastEmptyOptions();
+                    $scope.trimEmptyOptions();
                     var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion) && $scope.activeQuestion.isCascade;
                     commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).then(function () {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
@@ -406,15 +406,11 @@
                 $scope.activeQuestion.useListAsOptionsEditor = true;
             };
 
-            $scope.trimLastEmptyOptions = function () {
-                var count = $scope.activeQuestion.options.length;
-                if (count > 0) {
-                    var lastoption = $scope.activeQuestion.options[count - 1];
-                    if (_.isNull(lastoption.value) && lastoption.title === '') {
-                        $scope.activeQuestion.options.splice(count - 1, 1);
-                        $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
-                    }
-                }
+            $scope.trimEmptyOptions = function () {
+                var notEmptyOptions = _.filter($scope.activeQuestion.options, function (o) {
+                    return !(_.isEmpty(o.value || '') && _.isEmpty(o.title || ''));
+                });
+                $scope.activeQuestion.options = notEmptyOptions;
             }
 
             $scope.changeQuestionScope = function (scope) {
