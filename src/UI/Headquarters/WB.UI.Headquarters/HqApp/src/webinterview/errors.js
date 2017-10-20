@@ -19,9 +19,9 @@ function toastErr(err, message) {
 
 function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
-    return function() {
+    return function () {
         try {
-            if (window.CONFIG.verboseMode && !(window ).NODEBUG) {
+            if (window.CONFIG.verboseMode && !(window).NODEBUG) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
 
                 console.debug("call", section, name, argument) // , new Error().stack)
@@ -59,11 +59,20 @@ function handleErrors(object, section) {
 
 export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
 
-    for (const field in fieldToSafe) {
-        const item = fieldToSafe[field]
-        if (storeConfig[item]) {
-            storeConfig[item] = handleErrors(storeConfig[item], item)
+    function wrapFields(config) {
+        for (const field in fieldToSafe) {
+            const item = fieldToSafe[field]
+
+            if(config.hasOwnProperty(item)) {
+                config[item] = handleErrors(config[item], item)
+            }
         }
+    }
+
+    wrapFields(storeConfig);
+
+    if (storeConfig.hasOwnProperty("modules")) {
+        Object.keys(storeConfig.modules).forEach((module) => wrapFields(storeConfig.modules[module]))
     }
 
     storeConfig.actions.UNHANDLED_ERROR = (ctx, error) => {
