@@ -213,7 +213,7 @@
             <label for="optionsFilterExpression" ng-i18next>QuestionFilter</label>
 
             <div class="pseudo-form-control">
-                <div id="optionsFilterExpression" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
+                <div id="optionsFilterExpression" ui-ace="{ onLoad : activeQuestion.isLinked ? aceLoadedForOtionFilter : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.linkedFilterExpression"></div>
             </div>
         </div>
     </script>
