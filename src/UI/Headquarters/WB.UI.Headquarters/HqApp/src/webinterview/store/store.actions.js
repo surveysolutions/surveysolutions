@@ -96,41 +96,13 @@ export default {
         commit("CLEAR_ANSWER_VALIDITY", { id })
     },
 
-    fetchSectionEntities: debounce(async ({ state, commit }) => {
-        const sectionId = state.routes.sectionId
-        const interviewId = state.routes.interviewId
-
-        const id = sectionId
-        const isPrefilledSection = id === undefined
-
-        if (isPrefilledSection) {
-            const prefilledPageData = await Vue.$api.call(api => api.getPrefilledEntities())
-            if (!prefilledPageData.hasAnyQuestions) {
-                const loc = {
-                    name: "section",
-                    params: {
-                        interviewId: interviewId,
-                        sectionId: prefilledPageData.firstSectionId
-                    }
-                }
-
-                router.replace(loc)
-            } else {
-                commit("SET_SECTION_DATA", prefilledPageData.entities)
-            }
-        } else {
-            const section = await Vue.$api.call(api => api.getSectionEntities(id))
-            commit("SET_SECTION_DATA", section)
-        }
-    }, 200),
-
     // called by server side. reload interview
     reloadInterview() {
         location.reload(true)
     },
     // called by server side. navigate to finish page
     finishInterview() {
-        const routeParams = (router.currentRoute.params )
+        const routeParams = (router.currentRoute.params)
         location.replace(router.resolve({ name: "finish", params: { interviewId: routeParams.interviewId } }).href)
     },
 
@@ -177,15 +149,42 @@ export default {
         dispatch("fetchInterviewStatus")
     }, 200),
 
-    fetchSectionEnabledStatus: debounce(async ({ state }) => {
-        const sectionId = state.routes.sectionId
-        const interviewId = state.routes.interviewId
+    fetchSectionEntities: debounce(async ({ commit, rootState }) => {
+        const sectionId = rootState.route.params.sectionId
+        const interviewId = rootState.route.params.interviewId
 
-        const currentSectionId = sectionId
-        const isPrefilledSection = currentSectionId === undefined
+        const id = sectionId
+        const isPrefilledSection = id === undefined
+
+        if (isPrefilledSection) {
+            const prefilledPageData = await Vue.$api.call(api => api.getPrefilledEntities())
+            if (!prefilledPageData.hasAnyQuestions) {
+                const loc = {
+                    name: "section",
+                    params: {
+                        interviewId: interviewId,
+                        sectionId: prefilledPageData.firstSectionId
+                    }
+                }
+
+                router.replace(loc)
+            } else {
+                commit("SET_SECTION_DATA", prefilledPageData.entities)
+            }
+        } else {
+            const section = await Vue.$api.call(api => api.getSectionEntities(id))
+            commit("SET_SECTION_DATA", section)
+        }
+    }, 200),
+
+    fetchSectionEnabledStatus: debounce(async ({ state, rootState }) => {
+        const sectionId = rootState.route.params.sectionId
+        const interviewId = rootState.route.params.interviewId
+
+        const isPrefilledSection = sectionId === undefined
 
         if (!isPrefilledSection) {
-            const isEnabled = await Vue.$api.call(api => api.isEnabled(currentSectionId))
+            const isEnabled = await Vue.$api.call(api => api.isEnabled(sectionId))
             if (!isEnabled) {
                 const firstSectionId = state.firstSectionId
                 const firstSectionLocation = {
@@ -222,7 +221,7 @@ export default {
 
     fetchQuestionComments: debounce(async ({ commit }, questionId) => {
         const comments = await Vue.$api.call(api => api.getQuestionComments(questionId))
-        commit("SET_QUESTION_COMMENTS", { questionId, comments})
+        commit("SET_QUESTION_COMMENTS", { questionId, comments })
     }, 200),
 
     completeInterview({ dispatch }, comment) {
@@ -236,7 +235,13 @@ export default {
     changeLanguage({ commit }, language) {
         Vue.$api.call(api => api.changeLanguage(language))
     },
+
     stop() {
         Vue.$api.stop()
+    },
+
+    changeSection(ctx, sectionId) {
+        return Vue.$api.setState((state) => state.sectionId = sectionId)
     }
+
 }

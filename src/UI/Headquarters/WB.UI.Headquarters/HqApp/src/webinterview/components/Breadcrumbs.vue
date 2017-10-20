@@ -16,7 +16,7 @@
             this.fetchBreadcrumbs()
         },
         watch: {
-            $route(from, to) {
+            "$route.params.sectionId"() {
                 this.fetchBreadcrumbs()
             }
         },

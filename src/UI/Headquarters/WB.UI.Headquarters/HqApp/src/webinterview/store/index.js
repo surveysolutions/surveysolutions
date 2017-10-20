@@ -4,10 +4,9 @@ import connection from "./store.connection"
 import { fetch } from "./store.fetch.js"
 import mutations from "./store.mutations"
 import sidebar from "./store.sidebar"
-import routes from "./store.routes"
 
 const store = safeStore({
-    modules: { fetch, sidebar, connection, routes },
+    modules: { fetch, sidebar, connection },
     state: {
         lastActivityTimestamp: new Date(),
         hasCoverPage: false,
@@ -26,7 +25,17 @@ const store = safeStore({
         }
     },
     actions,
-    mutations
+    mutations,
+    getters: {
+        interviewId(state) {
+            if(state.route == null) return null;
+            return state.route.params.interviewId;
+        },
+        sectionId(state){
+            if(state.route == null) return null;
+            return state.route.params.sectionId;
+        }
+    }
 })
 
 export default store

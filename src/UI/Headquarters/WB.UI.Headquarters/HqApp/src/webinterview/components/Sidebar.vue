@@ -67,9 +67,9 @@
                 this.fetchInterviewStatus()
         },
         watch: {
-            $route(from, to) {
-                this.fetchSidebar(),
-                    this.fetchInterviewStatus()
+            $route() {
+                this.fetchSidebar();
+                this.fetchInterviewStatus()
             }
         },
         methods: {

@@ -55,7 +55,7 @@
                     return [
                         {
                             'complete-section': this.info.status == "Completed",
-                            'section-with-error': this.info.status == "Invalid",
+                            'section-with-error': this.info.status == "Invalid"
                         }
                     ]
                 }

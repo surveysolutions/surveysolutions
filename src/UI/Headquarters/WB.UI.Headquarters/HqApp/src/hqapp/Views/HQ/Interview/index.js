@@ -35,18 +35,13 @@ export default class ReviewComponent {
     }
 
     beforeEnter(to, from, next) {
-        Vue.$api.queryString["interviewId"] = to.params["interviewId"]
-        Vue.$api.queryString["review"] = true
 
-        this.rootStore.dispatch("navigatingTo", {
+        Vue.$api.hub({
             interviewId: to.params["interviewId"],
-            sectionId: to.params["sectionId"]
-        })
-
-        Vue.$api.hub().then((proxy) => {
-            proxy.state.sectionId = to.params["sectionId"]
+            review: true
+        }).then(() => {
             if (to.name === "section") {
-                const isEnabled = Vue.$api.call(api => api.isEnabled(to.params["sectionId"])).then((isEnabled) => {
+                Vue.$api.call(api => api.isEnabled(to.params["sectionId"])).then((isEnabled) => {
                     if (!isEnabled) {
                         next(false);
                     } else {
@@ -64,6 +59,11 @@ export default class ReviewComponent {
     initialize() {
         const installApi = require("~/webinterview/api").install
         installApi(Vue, { store: this.rootStore });
+
+        this.rootStore.subscribe((mutation, state) => {
+            if(mutation.type == "route/ROUTE_CHANGED")
+                this.rootStore.dispatch("changeSection", state.route.params.sectionId)
+        })
     }
 
     get modules() { return localStore; }

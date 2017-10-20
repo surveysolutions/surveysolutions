@@ -5,6 +5,7 @@ import 'bootstrap-select'
 import "babel-polyfill"
 
 import Vue from 'vue'
+import { sync } from 'vuex-router-sync'
 import VeeValidate from 'vee-validate';
 import Vuei18n from "shared/plugins/locale"
 import http from "shared/plugins/http"
@@ -32,15 +33,16 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
 
     const router = new Router({
         routes: views.routes
-    });
+    }).router;
 
+    sync(store, router)
 
     box.init(i18n, browserLanguage);
     new Vue({
         el: "#vueApp",
         render: h => h('router-view'),
         store,
-        router: router.router,
+        router,
         i18n
     });
 })
