@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         }
 
         [ActivePage(MenuItem.Docs)]
-        public ActionResult Review(Guid id)
+        public ActionResult Review(Guid id, string url)
         {
             var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
