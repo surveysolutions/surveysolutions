@@ -169,7 +169,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to export.
+        ///   Looks up a localized string similar to export process.
         /// </summary>
         internal static string export {
             get {
