@@ -202,7 +202,7 @@
     <value>Вложенность подсекций и ростеров не может быть больше чем {0}.</value>
   </data>
   <data name="CantPasteQuestion" xml:space="preserve">
-    <value>Вопрос не может быть вставлен сюда.</value>
+    <value>Вопрос не может быть перемещен сюда.</value>
   </data>
   <data name="CantRemoveUserFromTheList" xml:space="preserve">
     <value>Нельзя удалить пользователя из списка, поскольку он в нем отсутсвует</value>
@@ -253,7 +253,7 @@
     <value>Опции каскадного вопроса не могут содержать пустые значения в колонке ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Опции каскадного вопроса должны сожержать только числеднные значения в колонках Value и ParentValue.</value>
+    <value>Опции каскадного вопроса должны содержать только числеднные значения в колонках Value и ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>Найдена как минимум одна одинаковая пара Title + Parent Value. Список опций не должен сожержать дубликаты такого типа.</value>
