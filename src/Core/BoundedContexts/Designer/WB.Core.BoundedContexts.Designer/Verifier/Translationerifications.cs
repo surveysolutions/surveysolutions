@@ -27,8 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool TranslationNameIsInvalid(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var names = questionnaire.Translations.Select(t => t.Name);
-            return names.All(name => string.IsNullOrWhiteSpace(name) || name.Length > 32);
+            return string.IsNullOrWhiteSpace(translation.Name) || translation.Name.Length > 32;
         }
 
         private bool TranslationHasEmptyContent(Translation translation, MultiLanguageQuestionnaireDocument questionnaire)
