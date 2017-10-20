@@ -2,10 +2,9 @@ import * as forEach from "lodash/foreach"
 import * as groupBy from "lodash/groupby"
 import Vue from "vue"
 
-import { safeStore } from "../errors"
 import { batchedAction } from "../helpers"
 
-export default safeStore({
+export default {
     state: {
         panels: {
             // organized by parentId, that way it easier to search and request data
@@ -62,4 +61,4 @@ export default safeStore({
             return []
         }
     }
-})
+}
