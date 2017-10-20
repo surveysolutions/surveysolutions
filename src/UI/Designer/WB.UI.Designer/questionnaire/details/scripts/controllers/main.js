@@ -493,7 +493,11 @@ angular.module('designerApp')
                 setCommonAceOptions(editor);
             };
 
-            $scope.aceLoaded = function (editor) {
+            $scope.aceLoadedForOtionFilter = $scope.aceLoaded = function (editor) {
+                $scope.aceLoaded(editor, "linkedOptionsFilter");
+            }
+            $scope.aceLoaded = function (editor, editorType) {
+                editorType = editorType || 'regular';
                 editor.setOptions({
                     maxLines: Infinity,
                     fontSize: 16,
@@ -502,10 +506,10 @@ angular.module('designerApp')
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true
                 });
-                $scope.aceEditorUpdateMode(editor);
+                $scope.aceEditorUpdateMode(editor, editorType);
                 
                 $rootScope.$on('variablesChanged', function () {
-                    $scope.aceEditorUpdateMode(editor);
+                    $scope.aceEditorUpdateMode(editor, editorType);
                 });
 
                 setCommonAceOptions(editor);
@@ -515,7 +519,7 @@ angular.module('designerApp')
                 return _($rootScope.variableNames);
             }
 
-            $scope.aceEditorUpdateMode = function(editor) {
+            $scope.aceEditorUpdateMode = function (editor, editorType) {
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
                     editor.getSession().setMode(new CSharpExtendableMode(function () {
@@ -526,13 +530,29 @@ angular.module('designerApp')
                     {
                         getCompletions: function(editor, session, pos, prefix, callback) {
                             var i = 0;
-                            callback(null,
-                                $scope.getVariablesNames()
+
+                            var variables = $scope.getVariablesNames()
                                 .sortBy('name')
                                 .reverse()
                                 .map(function(variable) {
-                                    return { name: variable.name, value: variable.name, score: i++, meta: variable.type }
-                                }));
+                                    return {
+                                        name: variable.name,
+                                        value: variable.name,
+                                        score: i++,
+                                        meta: variable.type
+                                    }
+                                });
+
+                            if (editorType === "linkedOptionsFilter") {
+                                variables.push({
+                                    name: "@current",
+                                    value: "@current",
+                                    score: i++,
+                                    meta: "Roster"
+                                });
+                            }
+
+                            callback(null, variables);
                         },
 
                         identifierRegexps : [/[@a-zA-Z_0-9\$\-\u00A2-\uFFFF]/]
