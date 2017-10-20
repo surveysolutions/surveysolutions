@@ -36,12 +36,5 @@ export default class ReportComponent {
         }]
     }
 
-    async beforeEnter(to, from, next) {
-        if (this.rootStore.state[this.moduleName] == null) {
-            this.rootStore.registerModule(this.moduleName, store)
-        }
-        next();
-    }
-
     get modules() { return { reports: store }}
 }
