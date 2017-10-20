@@ -23,8 +23,10 @@ function wrap(name, method, section) {
         try {
             if (window.CONFIG.verboseMode && !(window).NODEBUG) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
-
-                console.debug("call", section, name, argument) // , new Error().stack)
+                if (argument && argument.hasOwnProperty("source"))
+                    console.debug("call", section, "from", argument.source, name, argument)
+                else
+                    console.debug("call", section, name, argument)
             }
 
             const result = method.apply(this, arguments)
@@ -32,6 +34,7 @@ function wrap(name, method, section) {
             // handle async exceptions
             if (result && result.catch) {
                 result.catch(err => {
+                    console.error(name, err)
                     toastErr(err, name + ": " + err.message)
                 })
             }
@@ -63,7 +66,7 @@ export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
         for (const field in fieldToSafe) {
             const item = fieldToSafe[field]
 
-            if(config.hasOwnProperty(item)) {
+            if (config.hasOwnProperty(item)) {
                 config[item] = handleErrors(config[item], item)
             }
         }
@@ -76,6 +79,7 @@ export function safeStore(storeConfig, fieldToSafe = ["actions", "mutations"]) {
     }
 
     storeConfig.actions.UNHANDLED_ERROR = (ctx, error) => {
+        console.error(name, error)
         toastErr(error, error.message)
     }
 
