@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -77,8 +79,14 @@ namespace WB.UI.Designer.Controllers
 
         [LocalOrDevelopmentAccessOnly]
         [System.Web.Mvc.AllowAnonymous]
-        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation)
+        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode)
         {
+            if (!string.IsNullOrWhiteSpace(cultureCode))
+            {
+                CultureInfo culture = CultureInfo.GetCultureInfo(cultureCode);
+                Thread.CurrentThread.CurrentCulture = culture;
+                Thread.CurrentThread.CurrentUICulture = culture;
+            }
             var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName, translation);
             return this.View("RenderQuestionnaire", questionnaire);
         }
@@ -123,7 +131,8 @@ namespace WB.UI.Designer.Controllers
         public JsonResult Status(Guid id, Guid? translation)
         {
             var pdfKey = id.ToString() + translation;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation));
+            var cultureCode = CultureInfo.CurrentUICulture.Name;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
 
             if (pdfGenerationProgress.IsFailed)
                 return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate), JsonRequestBehavior.AllowGet);
@@ -147,26 +156,27 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Retry(Guid id, Guid? translation)
         {
             var pdfKey = id.ToString() + translation;
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation));
+            var cultureCode = CultureInfo.CurrentUICulture.Name;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
                 GeneratedPdfs.TryRemove(pdfKey);
             }
-            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation));
+            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
 
-        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation)
+        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation, string cultureCode)
         {
             var newPdfGenerationProgress = new PdfGenerationProgress();
-            this.StartRenderPdf(id, newPdfGenerationProgress, translation);
+            this.StartRenderPdf(id, newPdfGenerationProgress, translation, cultureCode);
             return newPdfGenerationProgress;
         }
         
-        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation)
+        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, string cultureCode)
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
-            var pdfDocument = this.GetSourceUrlsForPdf(id, translation);
+            var pdfDocument = this.GetSourceUrlsForPdf(id, translation, cultureCode);
             var pdfOutput = new PdfOutput {OutputFilePath = generationProgress.FilePath};
 
             Task.Factory.StartNew(() =>
@@ -191,14 +201,15 @@ namespace WB.UI.Designer.Controllers
             WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow()
         };
 
-        private PdfDocument GetSourceUrlsForPdf(Guid id, Guid? translation) => new PdfDocument
+        private PdfDocument GetSourceUrlsForPdf(Guid id, Guid? translation, string cultureCode) => new PdfDocument
         {
             Url = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaire), "Pdf", new
             {
                 id = id,
                 requestedByUserId = this.UserHelper.WebUser.UserId,
                 requestedByUserName = this.UserHelper.WebUser.UserName,
-                translation = translation
+                translation = translation,
+                cultureCode = cultureCode
             }),
             FooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new
             {

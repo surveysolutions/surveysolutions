@@ -34,7 +34,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantPasteQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question cannot be pasted here." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос не может быть вставлен сюда." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос не может быть перемещен сюда." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantRemoveLastSectionInQuestionnaire" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -58,7 +58,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Options in cascading question can not have not numeric value in ParentValue column." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опции каскадного вопроса должны сожержать только числеднные значения в колонках Value и ParentValue." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опции каскадного вопроса должны содержать только числеднные значения в колонках Value и ParentValue." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -892,7 +892,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0001_NoQuestions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire must contain at least one question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросник должен содержать хотябы один вопрос" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="ru" tx="Опросник должен содержать хотя бы один вопрос" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0002_CustomValidationExpressionHasIncorrectSyntax" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1024,7 +1024,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster size source question is incorrect. Only numeric, categorical with multi-select or text list questions can be used." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Не верно выбран управляющий вопрос. Допустимо использование только: числового, одновариантного, многовариантного или вопроса-списка." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Неверно выбран вопрос, определяющий количество строк в ростере. Допустимо использование только: числового, одновариантного, многовариантного или вопроса-списка." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0024_LookupHasInvalidName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1576,7 +1576,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0118_ExpressionReferencingForbiddenDateTimeProperies" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Expression referencing forbidden DateTime properties: {0}, {1}, {2}. Consider using current time question instead." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Выражение, ссылающееся на запрещенные свойства DateTime: {0}, {1}, {2}. Рассмотрите возможность вопроса о текущем времени." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Выражение, ссылающееся на запрещенные свойства DateTime: {0}, {1}, {2}. Рассмотрите возможность добавления вопроса о текущем времени." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0119_QuestionnaireTitleTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1714,19 +1714,19 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0210_CategoricalQuestionHasManyOptions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Single-choice question has too many categories, consider changing to combo box." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Одновариантный вопрос содержит слишком много опций, рассмотрите использование Комбобокс режима." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Катигориальный вопрос содержит слишком много опций, рассмотрите использование поля с каскадным списком" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0211_QuestionnaireHasNoGpsQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire contains no GPS questions. Consider adding a GPS question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросник не содержит вопросов GPS. Подумайте о добавлении вопроса GPS." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опросник не содержит GPS вопросов. Подумайте о добавлении GPS вопроса." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0212_LongValidationCondition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Validation condition #{0} is long. It might be possible to have shorter, more readable conditions with built-in functions (i.e., InList())." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Проверочное выражение # {0} длинное. Возможно использовать более короткие, более читаемые условия со встроенными функциями (т. Е. InList ())." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Проверочное выражение # {0} длинное. Возможно использовать более короткие, более читаемые условия со встроенными функциями (напр. InList ())" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0213_AttachmentSizeIsMoreThan5Mb" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1786,7 +1786,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0222_SingleOptionPrefilled" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Single-choice question is marked as identifying. Consider using a text question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Одновариантный вопрос помечен как идентифицирующийю. Рассмотрите возможность использования текстового вопроса." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Катигориальный вопрос помечен как идентифицирующий. Рассмотрите возможность использования текстового вопроса." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0223_SectionWithLessThan5Questions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1804,7 +1804,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0225_ComboBoxWithLessThan10Elements" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Drop-down menu (combo box) contains less than 10 elements. Consider switching to a standard single choice representation." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрим переход на стандартное представление одного выбора." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0226_SameCascadingParentQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1816,7 +1816,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0227_NotShared" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire hasn’t been reviewed. Consider sharing it with another user for feedback." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросник не был рецензирован. Подумайте о том, чтобы поделиться им с другим пользователем для возможных советов." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опросник не был рецензирован. Подумайте о том, чтобы поделиться им с другим пользователем для возможных правок." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0228_OmittedOptions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1834,13 +1834,13 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0230_NonconsecutiveCascadings" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Nonconsecutive cascade questions. Consider laying the cascading questions one after another." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Непоследовательные каскадные вопросы. Расположите каскадные вопросах один за другим." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Непоследовательные каскадные вопросы. Расположите каскадные вопросы один за другим." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0231_MultiOptionWithMoreThan20Options" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Multichoice question contains too many (&gt;{0}) categories. It will be difficult to navigate on tablets. Consider splitting into two multichoice questions if possible." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос с множественным выбором содержит слишком много (&gt; {0}) категорий. На планшетах будет сложно ориентироваться. По возможности рассмотрите разделение на два вопроса с несколькими вариантами." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Категориальный вопрос (с опцией выбора нескольких вариантов) содержит слишком много (&gt; {0}) категорий. На планшетe будет сложно ориентироваться. По возможности рассмотрите разделение на два вопроса с несколькими вариантами." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0232_FiveOrMoreQuestionsWithSameEnabling" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1912,7 +1912,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0255_QuestionIsTooShort" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question is too short. This might be an incomplete question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос слишком короткий. Вопрос может быть не полным." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Слишком короткий вопрос. Дополните описание. " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0256_TranslationNameIsInvalid" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1924,7 +1924,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0257_TranslationHasEmptyContent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Translation has empty content" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Перевод не может быть пустым" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Файл с переводом не может быть пустым. " er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0258_TranslationsHaveDuplicatedNames" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1942,7 +1942,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0260_GroupTitleIsTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Title is too long. It should be no longer than {0} characters." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя слишком длинное. Оно не должно содержать более {0} символов." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Название секции слишком длинное. Оно не должно содержать более {0} символов. " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0261_RosterStructureTooExplosive" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1966,7 +1966,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0264_GpsQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You have a GPS question. Tablets must support geolocation to be used with this questionnaire." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="У вас есть вопрос GPS. Планшеты, которые будут использоваться с этим опросником должны поддерживать геолокацию." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0265_MoreThan30PercentQuestionsAreText" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1978,7 +1978,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0266_SameTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Duplicate questions. (Questions have the same title.)" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Одинаковые вопросы. (У вопросов одинаковый тест.)" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Одинаковые вопросы. (У вопросов одинаковый текст.)" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0267_QRBarcodeQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2884,7 +2884,7 @@
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="GeneratePdf" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Generate pdf" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Сшенерировать pdf" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Сгенерировать pdf" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="GeneratingPdf" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
