@@ -14,8 +14,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(questionId, Create.TextQuestion(variable: "var"));
-            questionnaire.Macros.Add(macro1Id, Create.Macro("hello"));
-            questionnaire.Macros.Add(macro2Id, Create.Macro("hello"));
+            questionnaire.Macros.Add(macro1Id, Create.Macro("hello", "var == \"\""));
+            questionnaire.Macros.Add(macro2Id, Create.Macro("hello", "var == \"\""));
 
             verifier = CreateQuestionnaireVerifier();
             BecauseOf();
