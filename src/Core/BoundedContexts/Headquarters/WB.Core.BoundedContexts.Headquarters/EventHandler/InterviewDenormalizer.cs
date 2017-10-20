@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
@@ -82,10 +83,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
-            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.SelectedValues);
+            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                evnt.Payload.SelectedValues.Select(Convert.ToInt32).ToArray());
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
-            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);
+            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), Convert.ToDouble(evnt.Payload.Answer));
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
             => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);
@@ -94,10 +96,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);
 
         public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
-            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answers);
+            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                evnt.Payload.Answers.Select(x => new InterviewTextListAnswer(x.Item1, x.Item2)).ToArray());
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
-            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.SelectedValue);
+            => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), Convert.ToInt32(evnt.Payload.SelectedValue));
 
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
             => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
