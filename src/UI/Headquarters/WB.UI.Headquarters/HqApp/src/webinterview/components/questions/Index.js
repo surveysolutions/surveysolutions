@@ -3,53 +3,32 @@ import "jquery-mask-plugin"
 
 import Vue from "vue"
 
-import Audio from "./Audio"
-import CategoricalMulti from "./CategoricalMulti"
-import CategoricalSingle from "./CategoricalSingle"
-import CategoricalYesNo from "./CategoricalYesNo"
-import Combobox from "./Combobox"
-import DateTime from "./DateTime"
-import Double from "./Double"
-import Gps from "./Gps"
-import Group from "./Group"
-import Integer from "./Integer"
-import LinkedMulti from "./LinkedMulti"
-import LinkedSingle from "./LinkedSingle"
-import Multimedia from "./Multimedia"
-import NavigationButton from "./NavigationButton"
-import QRBarcode from "./QRBarcode"
-import Question from "./Question"
-import StaticText from "./StaticText"
-import TextList from "./TextList"
-import TextQuestion from "./TextQuestion"
-import Humburger from "./ui/humburger"
-import Unsupported from "./Unsupported"
-import Typeahead from "./ui/typeahead"
+Vue.component("Audio", () => import(/* webpackChunkName: "questions" */"./Audio"))
+Vue.component("CategoricalMulti", () => import(/* webpackChunkName: "questions" */"./CategoricalMulti"))
+Vue.component("CategoricalSingle", () => import(/* webpackChunkName: "questions" */"./CategoricalSingle"))
+Vue.component("CategoricalYesNo", () => import(/* webpackChunkName: "questions" */"./CategoricalYesNo"))
+Vue.component("Combobox", () => import(/* webpackChunkName: "questions" */"./Combobox"))
+Vue.component("DateTime", () => import(/* webpackChunkName: "questions" */"./DateTime"))
+Vue.component("Double", () => import(/* webpackChunkName: "questions" */"./Double"))
+Vue.component("Gps", () => import(/* webpackChunkName: "questions" */"./Gps"))
+Vue.component("Group", () => import(/* webpackChunkName: "questions" */"./Group"))
+Vue.component("Integer", () => import(/* webpackChunkName: "questions" */"./Integer"))
+Vue.component("LinkedMulti", () => import(/* webpackChunkName: "questions" */"./LinkedMulti"))
+Vue.component("LinkedSingle", () => import(/* webpackChunkName: "questions" */"./LinkedSingle"))
+Vue.component("Multimedia", () => import(/* webpackChunkName: "questions" */"./Multimedia"))
+Vue.component("NavigationButton", () => import(/* webpackChunkName: "questions" */"./NavigationButton"))
+Vue.component("QRBarcode", () => import(/* webpackChunkName: "questions" */"./QRBarcode"))
+Vue.component("StaticText", () => import(/* webpackChunkName: "questions" */"./StaticText"))
+Vue.component("TextList", () => import(/* webpackChunkName: "questions" */"./TextList"))
+Vue.component("TextQuestion", () => import(/* webpackChunkName: "questions" */"./TextQuestion"))
+Vue.component("Unsupported", () => import(/* webpackChunkName: "questions" */"./Unsupported"))
 
-Vue.component("Audio", Audio)
-Vue.component("CategoricalMulti", CategoricalMulti)
-Vue.component("CategoricalSingle", CategoricalSingle)
-Vue.component("CategoricalYesNo", CategoricalYesNo)
-Vue.component("Combobox", Combobox)
-Vue.component("DateTime", DateTime)
-Vue.component("Double", Double)
-Vue.component("Gps", Gps)
-Vue.component("Group", Group)
-Vue.component("Integer", Integer)
-Vue.component("LinkedMulti", LinkedMulti)
-Vue.component("LinkedSingle", LinkedSingle)
-Vue.component("Multimedia", Multimedia)
-Vue.component("NavigationButton", NavigationButton)
-Vue.component("QRBarcode", QRBarcode)
-Vue.component("StaticText", StaticText)
-Vue.component("TextList", TextList)
-Vue.component("TextQuestion", TextQuestion)
-Vue.component("Unsupported", Unsupported)
-Vue.component("wb-question", Question)
-Vue.component("wb-humburger", Humburger)
-Vue.component("wb-typeahead", Typeahead)
+Vue.component("wb-question", () => import( /* webpackChunkName: "questions" */ "./Question"))
+Vue.component("wb-humburger", () => import( /* webpackChunkName: "questions" */ "./ui/humburger"))
+Vue.component("wb-typeahead", () => import( /* webpackChunkName: "questions" */ "./ui/typeahead"))
 
 export const GroupStatus = {
+
     Completed: 1,
     Invalid: -1,
     Other: 0,
