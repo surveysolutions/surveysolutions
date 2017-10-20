@@ -42,7 +42,7 @@ export default class ComponentsProvider {
             const beforeEnter = component.beforeEnter ? (from, to, next) => component.beforeEnter(from, to, next) : null;
             const routes = component.routes || [];
 
-            if(init || beforeEnter) {
+            if(init || beforeEnter || component.modules) {
                 routes.forEach((route) => {
                     route.beforeEnter = (from, to, next) => {
                         if(component._isInitialized !== true) {
