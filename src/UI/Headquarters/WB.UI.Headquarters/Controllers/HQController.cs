@@ -18,13 +18,14 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
     public class HQController : BaseController
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
@@ -79,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(Guid id, long version)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
@@ -94,7 +95,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         public ActionResult CloneQuestionnaire(CloneQuestionnaireModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;

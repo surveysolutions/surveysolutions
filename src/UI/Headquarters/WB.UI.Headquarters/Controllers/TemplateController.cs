@@ -15,13 +15,14 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
     public class TemplateController : BaseController
     {
         private readonly IRestService designerQuestionnaireApiRestService;

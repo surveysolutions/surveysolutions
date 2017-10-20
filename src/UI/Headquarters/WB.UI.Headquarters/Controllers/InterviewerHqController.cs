@@ -24,12 +24,13 @@ using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using CommonRes = Resources.Common;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Interviewer")]
+    [AuthorizeOr403(Roles = "Interviewer")]
     public class InterviewerHqController : BaseController
     {
         private readonly ICommandService commandService;

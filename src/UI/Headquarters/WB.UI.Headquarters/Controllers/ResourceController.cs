@@ -7,10 +7,11 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
     public class ResourceController : BaseController
     {
         private readonly IImageFileStorage imageFileRepository;

@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
@@ -98,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
         public async Task<ActionResult> UpdatePassword(UserEditModel model)
         {
             if (this.ModelState.IsValid)
