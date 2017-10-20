@@ -12,13 +12,14 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
     [ValidateInput(false)]
-    [Authorize(Roles = "Administrator, Headquarter, Observer")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter, Observer")]
     public class SupervisorController : TeamController
     {
         public SupervisorController(ICommandService commandService, 
@@ -36,7 +37,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
         public async Task<ActionResult> Create(UserModel model)
         {
@@ -57,13 +58,13 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Headquarter, Observer")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Observer")]
         public ActionResult Index()
         {
             return this.View();
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         public async Task<ActionResult> Edit(Guid id)
         {
             var user = await this.userManager.FindByIdAsync(id);
@@ -84,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
         [ObserverNotAllowed]
         public async Task<ActionResult> Edit(UserEditModel model)
         {

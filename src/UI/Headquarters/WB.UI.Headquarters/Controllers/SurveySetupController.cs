@@ -17,13 +17,14 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Threading;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
     public class SurveySetupController : BaseController
     {
         private readonly IPreloadingTemplateService preloadingTemplateService;

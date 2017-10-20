@@ -15,6 +15,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Captcha;
@@ -23,7 +24,7 @@ using WB.UI.Shared.Web.Extensions;
 namespace WB.UI.Headquarters.Controllers
 {
     [ValidateInput(false)]
-    [Authorize(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer, Interviewer")] // UserRoles.
+    [AuthorizeOr403(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer, Interviewer")] // UserRoles.
     public class AccountController : TeamController
     {
         private readonly ICaptchaProvider captchaProvider;
@@ -234,7 +235,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private static readonly UserRoles[] ObservableRoles = {UserRoles.Headquarter, UserRoles.Supervisor};
 
-        [Authorize(Roles = "Administrator, Observer")]
+        [AuthorizeOr403(Roles = "Administrator, Observer")]
         public async Task<ActionResult> ObservePerson(string personName)
         {
             if (string.IsNullOrEmpty(personName))
@@ -260,7 +261,7 @@ namespace WB.UI.Headquarters.Controllers
             UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer
         };
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Headquarter, Supervisor")]
         public async Task<ActionResult> ReturnToObserver()
         {
             if (!this.authorizedUser.IsObserver)
