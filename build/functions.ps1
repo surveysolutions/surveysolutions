@@ -212,7 +212,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
 
     $verbosity = "minimal"
 
-    if(Test-Path variable:$env:MSBUILD_VERBOSITY -eq False){
+    if((Test-Path variable:$env:MSBUILD_VERBOSITY) -eq $False){
         $verbosity = $env:MSBUILD_VERBOSITY
     }
 
