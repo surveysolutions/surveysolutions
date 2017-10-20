@@ -4,7 +4,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -35,11 +34,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_1_message () =>
             verificationMessages.Count().ShouldEqual(1);
 
-        [NUnit.Framework.Test] public void should_return_message_with_code_WB0102 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0102");
-
-        [NUnit.Framework.Test] public void should_return_message_with_level_critical () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+        [NUnit.Framework.Test] public void should_return_WB0102_message_with_level_critical() =>
+            verificationMessages.ShouldContainCritical("WB0102");
 
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
             verificationMessages.Single().References.Count.ShouldEqual(2);
