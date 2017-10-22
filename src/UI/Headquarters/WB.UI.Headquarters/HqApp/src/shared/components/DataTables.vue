@@ -168,8 +168,7 @@ export default {
             }
 
             this.$emit("selectedRowsChanged", this.selectedRows)
-        },
-
+        }
     },
 
     mounted() {
@@ -180,7 +179,30 @@ export default {
             serverSide: true,
             language:
             {
-                "url": window.input.settings.config.dataTableTranslationsUrl,
+                emptyTable: this.$t("DataTables.EmptyTable"),
+                info: this.$t("DataTables.Info"),
+                infoEmpty: this.$t("DataTables.InfoEmpty"),
+                infoFiltered: this.$t("DataTables.InfoFiltered"),
+                infoPostFix: this.$t("DataTables.InfoPostFix"),
+                thousands: this.$t("DataTables.InfoThousands"),
+                lengthMenu: this.$t("DataTables.LengthMenu"),
+                loadingRecords: "<div>" + this.$t("DataTables.LoadingRecords") + "</div>",
+                processing: "<div>" + this.$t("DataTables.Processing") + "</div>",
+                search: this.$t("DataTables.Search"),
+                searchPlaceholder: this.$t("DataTables.SearchPlaceholder"),
+                zeroRecords: this.$t("DataTables.ZeroRecords"),
+                paginate:
+                {
+                    first: this.$t("DataTables.Paginate_First"),
+                    last: this.$t("DataTables.Paginate_Last"),
+                    next: this.$t("DataTables.Paginate_Next"),
+                    previous: this.$t("DataTables.Paginate_Previous")
+                },
+                aria:
+                {
+                    sortAscending: this.$t("DataTables.Aria_SortAscending"),
+                    sortDescending:this.$t("DataTables.Aria_SortDescending")
+                }
             },
             searchHighlight: true,
             pagingType: "full_numbers",
@@ -229,7 +251,7 @@ export default {
                 this.$store.dispatch('setExportUrls', {
                     excel: requestUrl + "&exportType=excel",
                     csv: requestUrl + "&exportType=csv",
-                    tab: requestUrl + "&exportType=tab",
+                    tab: requestUrl + "&exportType=tab"
                 });
             }
         };
@@ -240,7 +262,7 @@ export default {
         };
 
         this.table = $(this.$refs.table).DataTable(options);
-        this.table.on('init.dt', this.onTableInitComplete);
+        this.onTableInitComplete();
 
         this.table.on('select', (e, dt, type, indexes) => {
             self.rowsSelected(e, dt, type, indexes)

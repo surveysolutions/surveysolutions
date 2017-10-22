@@ -1,5 +1,5 @@
 import "babel-polyfill"
-import 'bootstrap/dist/js/bootstrap.js'
+import 'bootstrap'
 import 'bootstrap-select'
 
 import Vue from 'vue'
@@ -8,11 +8,11 @@ import Vuei18n from "~/shared/plugins/locale"
 import http from "~/shared/plugins/http"
 import config from "~/shared/config"
 import store from "./store"
+
 import './components'
-
 import './compatibility.js'
-
 import "~/webinterview/componentsRegistry"
+
 import box from "~/webinterview/components/modal"
 import 'flatpickr/dist/flatpickr.css'
 import { browserLanguage } from "~/shared/helpers"
