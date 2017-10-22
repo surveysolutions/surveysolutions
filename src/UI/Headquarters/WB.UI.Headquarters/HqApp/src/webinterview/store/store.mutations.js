@@ -1,4 +1,4 @@
-import * as forEach from "lodash/foreach"
+import { forEach } from "lodash"
 import Vue from "vue"
 
 export default {

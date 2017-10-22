@@ -30,6 +30,7 @@ const store = {
             context.dispatch("showProgress", true);
             window.location = Vue.$config.model.interviewerHqEndpoint + "/OpenInterview/" + interviewId
         },
+
         discardInterview(context, { callback, interviewId }) {
             $.ajax({
                 url: Vue.$config.model.interviewerHqEndpoint + "/DiscardInterview/" + interviewId,

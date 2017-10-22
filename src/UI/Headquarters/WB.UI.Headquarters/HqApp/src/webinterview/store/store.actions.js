@@ -1,5 +1,4 @@
-import * as debounce from "lodash/debounce"
-import * as map from "lodash/map"
+import { map, debounce } from "lodash"
 import Vue from "vue"
 
 import { batchedAction } from "../helpers"

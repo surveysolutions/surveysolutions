@@ -5,10 +5,10 @@ import Vuex from "vuex"
 import { sync } from 'vuex-router-sync'
 Vue.use(Vuex)
 
-import config from "shared/config"
+import config from "~/shared/config"
 Vue.use(config)
 
-import Vuei18n from "shared/plugins/locale"
+import Vuei18n from "~/shared/plugins/locale"
 
 import './init'
 import "./misc/htmlPoly.js"
@@ -16,7 +16,7 @@ import "./misc/htmlPoly.js"
 import "./errors"
 import box from "./components/modal"
 
-import { browserLanguage } from "shared/helpers"
+import { browserLanguage } from "~/shared/helpers"
 
 export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     Vue.use(Vuei18n)

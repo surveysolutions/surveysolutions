@@ -1,5 +1,4 @@
-import * as forEach from "lodash/foreach"
-import * as groupBy from "lodash/groupby"
+import { forEach, groupBy } from "lodash"
 import Vue from "vue"
 
 import { batchedAction } from "../helpers"

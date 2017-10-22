@@ -31,7 +31,7 @@ export const GroupStatus = {
 
     Completed: 1,
     Invalid: -1,
-    Other: 0,
+    Other: 0
 }
 
 export const ButtonType = {

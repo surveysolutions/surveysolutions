@@ -1,5 +1,5 @@
 import Vue from "vue"
-import { getLocationHash } from "shared/helpers"
+import { getLocationHash } from "~/shared/helpers"
 
 const fetch = {
     state: {
