@@ -9,7 +9,7 @@ const jest = require('jest-cli');
 
 const config = {
     dist: 'dist',
-    hqViews: '../Views/Shared',
+    hqViews: '../Views/Shared'
 }
 
 config.resources = {
@@ -27,11 +27,11 @@ gulp.task("test", (done) => {
 })
 
 gulp.task('resx2json', () => {
-    const files = gulp.src([
+    return gulp.src([
         "../**/*.resx",
         "../../../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
     ])
-        //.pipe(debug())
+        // .pipe(debug())
         .pipe(plugins.resx2json())
         .pipe(plugins.rename((filePath) => {
             filePath.extname = ".json";
@@ -39,22 +39,19 @@ gulp.task('resx2json', () => {
                 filePath.basename += ".en";
             }
         }))
-
-    return files.pipe(
-        gulp.dest(config.resources.dest)
-    );
+        .pipe(gulp.dest(config.resources.dest));
 });
 
 gulp.task('cleanup', (cb) => {
     if (utils.env.production) {
-    rimraf.sync(config.dist + "/**/*.*")
-    rimraf.sync(config.resources.dest + "/**/*.*")
-    rimraf.sync(config.hqViews + "/partial.*.cshtml")
+        rimraf.sync(config.dist + "/**/*.*")
+        rimraf.sync(config.resources.dest + "/**/*.*")
+        rimraf.sync(config.hqViews + "/partial.*.cshtml")
     }
     return cb();
 });
 
-gulp.task("build", (done) => {
+gulp.task("build", ["resx2json"], (done) => {
     const opts = {
         plugins: []
     }
@@ -65,15 +62,12 @@ gulp.task("build", (done) => {
         process.env.NODE_ENV = 'production';
     }
     require("./webpack.config.js").then((config) => {
-        return webpack(merge(config, opts), onBuild(done));    
+        return webpack(merge(config, opts), onBuild(done));
     });
-    
+
 })
 
-gulp.task("default", ['cleanup', 'resx2json',
-    utils.env.production ? "test" : null].filter((x) => x), () => {
-        return gulp.start("build");
-    });
+gulp.task("default", ['cleanup', 'resx2json', "build"].filter((x) => x));
 
 gulp.task("watch", ['resx2json'], () => {
     const compiler = webpack(merge(require("./webpack.config.js"), {
@@ -95,7 +89,7 @@ function onBuild(done, onBuildMessage, exitOnError = true) {
     return function (err, stats) {
         if (err) {
             utils.log('Error', err);
-            if(exitOnError) throw "Build has failed"
+            if (exitOnError) throw "Build has failed"
         }
         else {
             const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
@@ -103,7 +97,7 @@ function onBuild(done, onBuildMessage, exitOnError = true) {
 
             if (stats.hasErrors()) {
                 utils.log(stats.toString());
-                if(exitOnError) throw "Build has failed"
+                if (exitOnError) throw "Build has failed"
             }
 
             if (stats.hasWarnings()) {
