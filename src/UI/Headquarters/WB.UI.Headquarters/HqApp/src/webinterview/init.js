@@ -1,5 +1,6 @@
 import { browserLanguage } from "~/shared/helpers"
 import "bootstrap/js/dropdown";
+import 'flatpickr/dist/flatpickr.css'
 
 global.jQuery = require("jquery")
 

@@ -1,42 +1,35 @@
-Structure
-=========
+Prerequisties
+=============
 
-HQ.vendor.libs.js
------------------
+`Nodejs` and `Yarn` required for project to be build
 
-Collection of essential js libraries that used by all client side projects:
+- `NodeJS` https://nodejs.org/en/download/current/
+- `Yarn` https://yarnpkg.com/en/docs/install
 
-* `vue`, `vuex`, `vue-router` - ui part
-* `jquery` - we want to get rid of it, but we can't 
-* `axios` - all ajax should go through this lib, migrate from jquery
-* ?`lodash` - full blown lodash( i guess it's better to not do)
-* `i18next` - all client side libs will use localization via this lib
-* `bootstrap` - bootstrap related js libs
+Setup dev env
+=============
 
+For better dev experience `VSCode` recommended - but can be used any modern editor
 
-Shared components
------------------
+Tasks
+-----
 
-Separate project that contains all shared vue components. this will. Other project should include it as dependency in `package.json`
+There is several `VS Code` tasks set up to make live easier
 
-```js
-{
-    "dependencies": {
-        "wb-shared": "../shared"
-    }
-}
-```
+* `gulp default` - this is default task to build project in developer mode. Can be executed with `CTRL+Shift+B` hotkey
+* `gulp: watch` - will run webpack in watch mode with notification on build (no hot reload for now)
+* `gulp: production` - will create production build
+* `Rebuild` - will run dev build with `dist` folder cleanup
 
+Build scripts
+=============
 
+Main build occur with `Webpack`. This tool helps to split all js/css into several bundles. 
 
+Build orchestration is done with `gulp`.
 
-Notes
-=====
+There is a two step build for main app. One step generate `shared_vendor.dll.js` - one time compiled lib with all shared and essential libs for app. Second step compile app. During develop of application shared vendor lib will be compiled only once.
 
-We do not use `css-loader` - so any css include should be done through @alex
+`resx2json` task - generate localization json files from C# Resources.
 
-
-
-
-
-
+There is 2 webpack configuration files one for shared vendor dll lib and one for application entries.

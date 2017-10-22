@@ -4,9 +4,7 @@ const baseAppPath = "../"
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const _ = require("lodash")
 
-const devMode = process.env.NODE_ENV != 'production';
-
-module.exports = function(packageName) {
+module.exports = function(packageName, devMode) {
     return {
         resolve:{
             alias: {
@@ -16,7 +14,7 @@ module.exports = function(packageName) {
         },
         output: {
             path: path.resolve(__dirname, baseAppPath, "dist"),
-            filename: "[name].dll.js",
+            filename: "[name].dll.[hash].js",
             library: '[name]_[hash]',
         },
         stats: { chunks: false, modules: false },

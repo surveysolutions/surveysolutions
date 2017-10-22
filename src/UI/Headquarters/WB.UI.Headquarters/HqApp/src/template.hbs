@@ -8,7 +8,8 @@
         locales: {{{ options.locales }}}
     }
 </script>
- {{#with files}}
+<script src='@Url.Content("~/HqApp/dist/{{options.manifest}}")'></script>
+{{#with files}}
   {{#each css}}
  <link href='@Url.Content("~/HqApp/dist/{{this}}")' rel="stylesheet" lazyload="1" />
   {{/each}}
