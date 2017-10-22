@@ -1,8 +1,6 @@
-import 'core-js/es6/promise'
-import 'core-js/modules/es6.object.assign'
+import "babel-polyfill"
 import 'bootstrap/dist/js/bootstrap.js'
 import 'bootstrap-select'
-import "babel-polyfill"
 
 import Vue from 'vue'
 import { sync } from 'vuex-router-sync'
@@ -16,7 +14,7 @@ import './compatibility.js'
 
 import "~/webinterview/componentsRegistry"
 import box from "~/webinterview/components/modal"
-
+import 'flatpickr/dist/flatpickr.css'
 import { browserLanguage } from "~/shared/helpers"
 
 export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {

@@ -21,14 +21,15 @@
 <script lang="js">
 
     import { entityDetails } from "../mixins"
-    
+    import Vue from 'vue'
+
     export default {
         name: 'ComboboxQuestion',
         mixins: [entityDetails],
 
         data() {
             return {
-                answer: null,
+                answer: null
             }
         },
 
@@ -43,8 +44,8 @@
                  this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, questionId: this.$me.id })
             },
 
-            async optionsSource(filter) {
-                return await this.$api.call(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 50))
+            optionsSource(filter) {
+                return Vue.$api.call(api => api.getTopFilteredOptionsForQuestion(this.$me.id, filter, 50))
             }
         }
     }

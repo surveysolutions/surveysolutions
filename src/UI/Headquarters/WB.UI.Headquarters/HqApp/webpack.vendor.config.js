@@ -8,19 +8,19 @@ const devMode = process.env.NODE_ENV != 'production';
 
 const packageName = "shared_vendor";
 
-// console.log("Building HQ UI vendor libs");
-
 const shared = require("./.build/webpack.shared.vendor");
 
-module.exports = merge(shared(packageName), {
+module.exports = merge(shared(packageName, devMode), {
     entry: {
         [packageName]: [
             "autonumeric",
             "axios",
             "bootbox",
+            "babel-polyfill",
             "bootstrap/dist/js/bootstrap.js",
             "date-fns",
             "flatpickr",
+            "lodash",
             "jquery-mask-plugin",
             "jquery",
             "moment",
