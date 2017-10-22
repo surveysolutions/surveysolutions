@@ -1,7 +1,4 @@
 const webpack = require('webpack')
-const path = require('path')
-const baseAppPath = "./"
-
 const merge = require('webpack-merge');
 
 const devMode = process.env.NODE_ENV != 'production';
@@ -20,6 +17,7 @@ module.exports = merge(shared(packageName, devMode), {
             "bootstrap/dist/js/bootstrap.js",
             "date-fns",
             "flatpickr",
+            "flatpickr/dist/l10n",
             "lodash",
             "jquery-mask-plugin",
             "jquery",
