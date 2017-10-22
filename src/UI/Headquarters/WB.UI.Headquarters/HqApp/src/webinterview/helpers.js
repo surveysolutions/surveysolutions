@@ -13,7 +13,7 @@ function forEachIfNeeded(data, each) {
 export function batchedAction(callback, fetchAction = "fetch", limit = null) {
     let queue = []
 
-    return async (ctx, data) => {
+    return (ctx, data) => {
         if (fetchAction != null) {
             forEachIfNeeded(data, id => ctx.dispatch(fetchAction, { id }))
         }
@@ -23,17 +23,17 @@ export function batchedAction(callback, fetchAction = "fetch", limit = null) {
         forEachIfNeeded(data, item => queue.push(item))
 
         if (isQueueWereEmpty) {
-            Vue.nextTick(async () => {
+            Vue.nextTick(() => {
                 const ids = queue
                 queue = []
-                await callback(ctx, ids)
+                return callback(ctx, ids)
             })
         }
 
         if (limit && queue.length > limit) {
             const ids = queue
             queue = []
-            await callback(ctx, ids)
+            return callback(ctx, ids)
         }
     }
 }

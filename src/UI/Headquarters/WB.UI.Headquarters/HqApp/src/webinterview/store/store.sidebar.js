@@ -14,9 +14,11 @@ export default {
 
     actions: {
 
-        fetchSidebar: batchedAction(async ({ commit }, ids) => {
-            const sideBar = await Vue.$api.call(api => api.getSidebarChildSectionsOf(ids))
-            commit("SET_SIDEBAR_STATE", sideBar)
+        fetchSidebar: batchedAction(({ commit }, ids) => {
+            return Vue.$api.call(api => api.getSidebarChildSectionsOf(ids))
+                .then((sideBar) => {
+                    commit("SET_SIDEBAR_STATE", sideBar)
+                });
         }, null, null),
 
         toggleSidebar({ commit, dispatch }, { panel, collapsed }) {

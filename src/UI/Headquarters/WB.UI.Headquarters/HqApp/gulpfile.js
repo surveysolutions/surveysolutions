@@ -6,6 +6,7 @@ const rimraf = require("rimraf");
 const debug = require('gulp-debug');
 const plugins = require('gulp-load-plugins')();
 const jest = require('jest-cli');
+const fs = require("fs")
 
 const config = {
     dist: 'dist',
@@ -26,7 +27,7 @@ gulp.task("test", (done) => {
     });
 })
 
-gulp.task('resx2json', () => {
+gulp.task('resx2json', ["cleanup"], () => {
     return gulp.src([
         "../**/*.resx",
         "../../../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
@@ -43,7 +44,7 @@ gulp.task('resx2json', () => {
 });
 
 gulp.task('cleanup', (cb) => {
-    if (utils.env.production) {
+    if (utils.env.production || process.env.FORCE_CLEANUP) {
         rimraf.sync(config.dist + "/**/*.*")
         rimraf.sync(config.resources.dest + "/**/*.*")
         rimraf.sync(config.hqViews + "/partial.*.cshtml")
@@ -51,7 +52,25 @@ gulp.task('cleanup', (cb) => {
     return cb();
 });
 
-gulp.task("build", ["resx2json"], (done) => {
+gulp.task("shared_dll", ["cleanup"], (done) => {
+    fs.stat("./dist/shared_vendor.manifest.json", (err) => {
+        if (err) {
+            utils.log(utils.colors.yellow("Building VENDOR DLL libs"));
+
+            if (utils.env.production) {
+                process.env.NODE_ENV = 'production';
+            }
+
+            const dllConfig = require("./webpack.vendor.config");
+            
+            webpack(dllConfig, done, "Shared vendor dll build done", true);
+        } else {
+            done()
+        }
+    });
+});
+
+gulp.task("build", ["resx2json", "shared_dll"], (done) => {
     const opts = {
         plugins: []
     }
@@ -61,10 +80,9 @@ gulp.task("build", ["resx2json"], (done) => {
     } else {
         process.env.NODE_ENV = 'production';
     }
-    require("./webpack.config.js").then((config) => {
-        return webpack(merge(config, opts), onBuild(done));
-    });
 
+    const config = require("./webpack.config.js")
+    return webpack(merge(config, opts), onBuild(done));
 })
 
 gulp.task("default", ['cleanup', 'resx2json', "build"].filter((x) => x));

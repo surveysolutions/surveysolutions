@@ -84,13 +84,13 @@
             updateOptionsList(e) {
                 this.loadOptions(e.target.value)
             },
-            async loadOptions(filter) {
+            loadOptions(filter) {
                 this.isLoading = true
 
-                const options = await this.optionsSource(filter);
-                
-                this.isLoading = false
-                this.options = options || []
+                return this.optionsSource(filter).then((options) => {
+                    this.isLoading = false
+                    this.options = options || []
+                });
             },
             selectOption(value) {
                 this.$emit('input', value)

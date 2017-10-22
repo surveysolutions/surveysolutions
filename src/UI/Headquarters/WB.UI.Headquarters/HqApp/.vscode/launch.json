@@ -8,7 +8,10 @@
             "type": "node",
             "request": "launch",
             "name": "Gulp default",
-            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js"
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
+            "args": [
+                "--production"
+            ]
         },
         {
             "type": "node",
