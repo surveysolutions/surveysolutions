@@ -8,5 +8,5 @@ Vue.directive("blurOnEnterKey", {
                 $(el).blur()
             }
         })
-    },
+    }
 })

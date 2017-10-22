@@ -1,5 +1,5 @@
 // tslint:disable-next-line:max-line-length
-import config from "shared/config"
+import config from "~/shared/config"
 import * as $script from "scriptjs"
 
 import "signalr"

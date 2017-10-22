@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import BaseFormatter from 'shared/localization/customFormatter'
+import BaseFormatter from '~/shared/localization/customFormatter'
 Vue.use(VueI18n)
 
-import api from 'shared/api'
+import api from '~/shared/api'
 
 export default {
     initializeAsync(browserLanguage) {

@@ -18,8 +18,7 @@
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import * as find from "lodash/find"
-    import * as isEqual from "lodash/isequal"
+    import { find, isEqual } from "lodash"
 
     export default {
         name: "LinkedSingle",

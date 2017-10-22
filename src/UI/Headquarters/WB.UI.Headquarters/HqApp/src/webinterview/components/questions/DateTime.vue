@@ -39,7 +39,7 @@
     import 'flatpickr/dist/flatpickr.css'
     import * as format from "date-fns/format"
     import * as isSame from "date-fns/is_equal"
-    import { DateFormats } from "shared/helpers"
+    import { DateFormats } from "~/shared/helpers"
 
     const parseUTC = date => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
 

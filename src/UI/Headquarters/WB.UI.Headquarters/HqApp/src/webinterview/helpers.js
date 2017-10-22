@@ -1,5 +1,3 @@
-import indexOf from "lodash/indexOf"
-
 import Vue from "vue"
 
 function forEachIfNeeded(data, each) {

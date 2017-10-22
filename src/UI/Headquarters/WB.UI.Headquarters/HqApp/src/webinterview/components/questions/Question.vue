@@ -23,7 +23,7 @@
 </template>
 
 <script lang="js">
-    import { getLocationHash } from "shared/helpers"
+    import { getLocationHash } from "~/shared/helpers"
 
     export default {
         name: 'wb-question',

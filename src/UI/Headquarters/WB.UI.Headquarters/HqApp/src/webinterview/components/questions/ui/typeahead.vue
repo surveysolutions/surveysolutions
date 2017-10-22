@@ -38,9 +38,8 @@
     </div>
 </template>
 <script lang="js">
-    import * as escape from "lodash/escape"
-    import * as escapeRegExp from "lodash/escapeRegExp"
-
+    import { escape, escapeRegExp } from "lodash"
+    
     export default {
         name: 'wb-typeahead',
         props: {
@@ -54,7 +53,7 @@
             },
             optionsSource: {
                 type: Function,
-                required: true,
+                required: true
             }
         },
         computed: {

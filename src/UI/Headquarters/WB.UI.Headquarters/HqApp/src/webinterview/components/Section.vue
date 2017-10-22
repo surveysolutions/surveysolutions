@@ -11,7 +11,7 @@
 </template>
 
 <script lang="js">
-    import * as debounce from "lodash/debounce"
+    import { debounce } from "lodash"
     import SectionProgress from "./SectionLoadProgress"
 
     export default {

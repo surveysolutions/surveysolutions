@@ -12,7 +12,7 @@
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import { getLocationHash } from "shared/helpers"
+    import { getLocationHash } from "~/shared/helpers"
 
     export default {
         name: 'StaticText',
