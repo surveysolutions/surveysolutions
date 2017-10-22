@@ -1,5 +1,4 @@
 // tslint:disable-next-line:ordered-imports
-import "jquery-mask-plugin"
 
 import Vue from "vue"
 

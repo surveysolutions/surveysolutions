@@ -1,7 +1,5 @@
 import Vue from "vue"
 
-import "bootstrap/js/collapse";
-
 import Breadcrumbs from "./Breadcrumbs"
 import Cover from "./Cover"
 import Layout from "./Layout"

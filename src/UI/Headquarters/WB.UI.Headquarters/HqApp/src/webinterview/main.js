@@ -11,7 +11,6 @@ Vue.use(config)
 import Vuei18n from "~/shared/plugins/locale"
 
 import './init'
-import "./misc/htmlPoly.js"
 
 import "./errors"
 import box from "./components/modal"
