@@ -47,7 +47,7 @@
 
 import { entityDetails } from "../mixins"
 import moment from "moment"
-import "shared/misc/audioRecorder.js"
+import "~/shared/misc/audioRecorder.js"
 
 const AudioRecorder = new window.AudioRecorder
 

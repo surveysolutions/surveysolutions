@@ -7,7 +7,7 @@ export default class HqRouter {
     constructor(options) {
         this.options = Object.assign({
             base: window.input.settings.config.basePath,
-            mode: "history",
+            mode: "history"
         }, options);
     }
 

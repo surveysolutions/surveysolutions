@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
   import Flatpickr from 'flatpickr';
-  import { browserLanguage } from "shared/helpers"
+  import { browserLanguage } from "~/shared/helpers"
   import FlatpickrLocale from "flatpickr/dist/l10n"
 
   Flatpickr.localize(FlatpickrLocale[browserLanguage]);
@@ -52,8 +52,8 @@
         default: false
       },
       id: {
-        type: String,
-      },
+        type: String
+      }
     },
     data () {
       return {
@@ -103,7 +103,7 @@
       value (newValue) {
         this.fp && this.fp.setDate(newValue, true);
       }
-    },
+    }
   };
 </script>
 

@@ -6,7 +6,7 @@
     </div>
 </template>
 <script lang="js">
-    import * as delay from "lodash/delay"
+    import { delay } from "lodash"
     
     export default {
         name: "wb-progress",

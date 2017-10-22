@@ -16,7 +16,7 @@
             this.fetchBreadcrumbs()
         },
         watch: {
-            "$route.params.sectionId"() {
+            "store.getters.sectionId"() {
                 this.fetchBreadcrumbs()
             }
         },
@@ -25,7 +25,7 @@
                 return this.$store.state.webinterview.breadcrumbs
             },
             showBreadcrumbs() {
-                return this.$route.params.sectionId != null && this.info.title != null
+                return this.$store.getters.sectionId != null && this.info.title != null
             },
             entities() {
                 if (!this.info) return {}
