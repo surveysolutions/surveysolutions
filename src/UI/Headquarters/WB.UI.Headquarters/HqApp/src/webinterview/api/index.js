@@ -54,7 +54,7 @@ const scriptIncludedPromise = new Promise(resolve =>
 
         interviewProxy.server.answerPictureQuestion = (id, file) => {
             const fd = new FormData()
-            fd.append("interviewId", store.getters.interviewId)
+            fd.append("interviewId", store.state.route.params.interviewId)
             fd.append("questionId", id)
             fd.append("file", file)
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
@@ -81,7 +81,7 @@ const scriptIncludedPromise = new Promise(resolve =>
 
         interviewProxy.server.answerAudioQuestion = (id, file) => {
             const fd = new FormData()
-            fd.append("interviewId", store.getters.interviewId)
+            fd.append("interviewId", store.state.route.params.interviewId)
             fd.append("questionId", id)
             fd.append("file", file)
             store.dispatch("uploadProgress", { id, now: 0, total: 100 })
@@ -116,8 +116,13 @@ function hubStarter(options) {
     return hubInstance || (hubInstance = new Promise((resolve) => {
         if(options == null) throw "Need to provide options for hub"
 
+        let routeInteviewId = null;
+        if(store.route != null && store.route.params != null) {
+            routeInteviewId = store.route.params.interviewId;
+        }
+        
         const queryString = {
-            interviewId: store.getters.interviewId,
+            interviewId: routeInteviewId,
             appVersion: config.appVersion
         }
     
