@@ -85,9 +85,9 @@ gulp.task("build", ["resx2json", "shared_dll"], (done) => {
     return webpack(merge(config, opts), onBuild(done));
 })
 
-gulp.task("default", ['cleanup', 'resx2json', "build"].filter((x) => x));
+gulp.task("default", ['cleanup', 'resx2json', 'build', 'test'].filter((x) => x));
 
-gulp.task("watch", ['resx2json'], () => {
+gulp.task("watch", ['resx2json', 'shared_dll'], () => {
     const compiler = webpack(merge(require("./webpack.config.js"), {
         plugins: [new webpack.ProgressPlugin()]
     }));

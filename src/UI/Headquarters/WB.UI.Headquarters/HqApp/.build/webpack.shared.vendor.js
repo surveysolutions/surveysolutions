@@ -9,7 +9,8 @@ module.exports = function(packageName, devMode) {
         resolve:{
             alias: {
                 'vue$': 'vue/dist/vue.esm.js',
-                moment$: 'moment/moment.js'
+                moment$: 'moment/moment.js',
+                bootstrap: 'bootstrap/dist/js/bootstrap.js'
             }
         },
         output: {

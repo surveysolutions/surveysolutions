@@ -97,9 +97,7 @@ module.exports = function (appConfig) {
             new ExtractTextPlugin(`styles${devMode ? "" : ".[chunkhash]"}.css`),
 
             devMode ? null : new webpack.optimize.CommonsChunkPlugin({
-                name: 'common'//,
-                //async: true,
-                //names: ['datatables.net', 'jquery-contextmenu', 'bootstrap-select', 'moment', 'flatpickr']
+                name: 'common'
             }),
 
             devMode ? null : new webpack.optimize.CommonsChunkPlugin({
