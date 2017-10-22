@@ -12,6 +12,7 @@ const merge = require('webpack-merge')
 const babelLoader = devMode ? "babel-loader?cacheDirectory=true" : "babel-loader"
 const RuntimePublicPathPlugin = require("./RuntimePublicPathPlugin")
 
+const join = path.join.bind(path, baseDir);
 const manifest = require("../dist/shared_vendor.manifest.json")
 
 module.exports = {
@@ -21,10 +22,10 @@ module.exports = {
         chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js"
     },
     resolve: {
+        unsafeCache: true,
         extensions: ['.js', '.vue', '.json'],
         symlinks: false,
         alias: {
-            "shared": path.resolve(baseDir, 'src/shared'),
             "~": path.resolve(baseDir, 'src'),
             'vue$': 'vue/dist/vue.esm.js',
             moment$: 'moment/moment.js'
@@ -64,6 +65,9 @@ module.exports = {
     },
 
     plugins: [
+        new webpack.PrefetchPlugin(join("./src/webinterview/componentsRegistry.js")),
+        new webpack.PrefetchPlugin(join("./src/hqapp/components/index.js")),
+        new webpack.PrefetchPlugin(join("./src/hqapp/main.js")),//
         new webpack.ProvidePlugin({
             _: 'lodash',
             '$': "jquery",

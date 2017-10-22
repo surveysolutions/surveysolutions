@@ -52,6 +52,7 @@ module.exports = new Promise(async (resolve) => {
 
     fs.stat("./dist/shared_vendor.manifest.json", (err, stats) => {
         if (err) {
+            console.log("Building VENDOR DLL libs")
             webpack(dllConfig, (err, stats) => {
                 resolve(buildMainConfig());
             });
