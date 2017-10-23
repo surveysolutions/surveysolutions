@@ -4,7 +4,13 @@
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
                     <div class="field">
-                        <input class="wb-radio" type="radio" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" v-model="answer">
+                        <input class="wb-radio" 
+                            type="radio" 
+                            :id="$me.id + '_' + option.value" 
+                            :name="$me.id" 
+                            :value="option.value" 
+                            :disabled="!$me.acceptAnswer"
+                            v-model="answer">
                         <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
                         </label>
@@ -12,6 +18,7 @@
                     </div>
                 </div>
                 <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
@@ -27,7 +34,9 @@
                     return this.$me.answer
                 },
                 set(value) {
-                    this.$store.dispatch("answerSingleOptionQuestion", { answer: value, questionId: this.$me.id })
+                    this.sendAnswer(() => {
+                        this.$store.dispatch("answerSingleOptionQuestion", { answer: value, questionId: this.$me.id })
+                    })
                 }
             },
             noOptions() {
