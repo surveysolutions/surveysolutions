@@ -1,5 +1,5 @@
-﻿Supervisor.VM.Maps = function (listViewUrl, notifier, ajax, $deleteMapUrl) {
-    Supervisor.VM.Maps.superclass.constructor.apply(this, arguments);
+﻿Supervisor.VM.MapUsers = function (listViewUrl, notifier, ajax, $deleteMapUserUrl) {
+    Supervisor.VM.MapUsers.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = new Url(window.location.href);
@@ -14,13 +14,19 @@
 
     self.onTableInitCompleteExtra = function () { };
 
-    self.sendDeleteMapCommand = function (item) {
-        ajax.sendRequest($deleteMapUrl, "post", { map: item.fileName }, false,
+    self.sendDeleteMapUserCommand = function (item) {
+        ajax.sendRequest($deleteMapUserUrl, "post", { map: self.Url.query['mapname'], user:item.userName }, false,
             // onSuccess
             function () {
                 setTimeout(function () { self.reloadDataTable(); }, 1000);
             });
     }
+
+    self.GetFilterMethod = function () {
+        
+
+        return { MapName: self.Url.query['mapname'] };
+    };
 
     self.onTableInitComplete = function () {
 
@@ -47,15 +53,15 @@
         return selectedRows;
     }
 
-    self.deleteMap = function (key, opt) {
+    self.deleteMapUser = function (key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
 
         notifier.confirm('Confirmation Needed', input.settings.messages.deleteMapConfirmationMessage,
             // confirm
-            function () { self.sendDeleteMapCommand(selectedRow); },
+            function () { self.sendDeleteMapUserCommand(selectedRow); },
             // cancel
             function () { });
     };
 };
 
-Supervisor.Framework.Classes.inherit(Supervisor.VM.Maps, Supervisor.VM.ListView);
+Supervisor.Framework.Classes.inherit(Supervisor.VM.MapUsers, Supervisor.VM.ListView);
