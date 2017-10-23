@@ -17,6 +17,7 @@ using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Headquarters.Resources;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -62,7 +63,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             if (statefulInterview.CountInvalidEntitiesInInterview() > 0)
                 return SimpleGroupStatus.Invalid;
 
-            return (statefulInterview.CountActiveQuestionsInInterview() == statefulInterview.CountActiveAnsweredQuestionsInInterview())
+            return (statefulInterview.CountActiveQuestionsInInterview() 
+                == statefulInterview.CountActiveAnsweredQuestionsInInterview())
                 ? SimpleGroupStatus.Completed
                 : SimpleGroupStatus.Other;
         }
@@ -487,6 +489,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
                 this.PutInstructions(result, identity);
                 this.ApplyDisablement(result, identity);
+                this.ApplyReviewState(result, question, callerInterview);
                 result.Comments = this.GetComments(question, callerInterview);
 
                 return result;
@@ -532,6 +535,17 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
 
             return null;
+        }
+
+        private void ApplyReviewState(GenericQuestion result, InterviewTreeQuestion question, IStatefulInterview callerInterview)
+        {
+            if (!IsReviewMode)
+            {
+                result.AcceptAnswer = true;
+                return;
+            }
+            // TODO: Fix this
+            result.AcceptAnswer = question.IsSupervisors && callerInterview.Status < InterviewStatus.ApprovedByHeadquarters;
         }
 
         private T Map<T>(InterviewTreeQuestion question, Action<T> afterMap = null)

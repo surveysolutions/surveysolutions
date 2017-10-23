@@ -37,6 +37,7 @@
             id() {
                 return this.question.id
             },
+
             valuenow() {
                 if (this.question.fetchState) {
                     return this.question.fetchState.uploaded
@@ -67,6 +68,7 @@
             questionEditorClass() {
                 return [{
                     answered: this.question.isAnswered && !this.noAnswer,
+                    readonly: !this.question.acceptAnswer,
                     'has-error': !this.question.validity.isValid
                 }, this.questionCssClassName]
             },
