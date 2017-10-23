@@ -54,9 +54,9 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
-         await Vue.$api.hub({ interviewId: to.params["interviewId"] })
+        await Vue.$api.hub({ interviewId: to.params["interviewId"] })
 
-         // TODO: Section will not be checked on each secion
+        // TODO: Section will not be checked on each secion
         if (to.name === "section") {
             const isEnabled = await Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
             if (!isEnabled) {
@@ -71,7 +71,7 @@ function NewRouter(store) {
     })
 
     router.afterEach((to) => {
-        
+
         store.dispatch("changeSection", to.params.sectionId)
         store.dispatch("onBeforeNavigate")
 
@@ -80,6 +80,17 @@ function NewRouter(store) {
         // check for button visibility.
         if (hamburger && hamburger.offsetParent != null) {
             store.dispatch("toggleSidebarPanel", false /* close sidebar panel */)
+        }
+    })
+
+    store.subscribeAction((action, state) => {
+        switch (action.type) {
+            case "finishInterview":
+                location.replace(router.resolve({ name: "finish", params: { interviewId: state.route.params.interviewId } }).href)
+                break;
+            case "navigateTo":
+                router.replace(action.payload)
+                break;
         }
     })
 
