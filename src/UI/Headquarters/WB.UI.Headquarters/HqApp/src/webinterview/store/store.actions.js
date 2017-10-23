@@ -2,7 +2,7 @@ import { map, debounce } from "lodash"
 import Vue from "vue"
 
 import { batchedAction } from "../helpers"
-import router from "./../router"
+
 import modal from "../components/modal"
 
 export default {
@@ -99,11 +99,11 @@ export default {
     reloadInterview() {
         location.reload(true)
     },
+
     // called by server side. navigate to finish page
-    finishInterview() {
-        const routeParams = (router.currentRoute.params)
-        location.replace(router.resolve({ name: "finish", params: { interviewId: routeParams.interviewId } }).href)
-    },
+    finishInterview() { },
+
+    navigeToRoute() { },
 
     closeInterview({ dispatch }) {
         modal.alert({
@@ -148,7 +148,7 @@ export default {
         dispatch("fetchInterviewStatus")
     }, 200),
 
-    fetchSectionEntities: debounce(async ({ commit, rootState }) => {
+    fetchSectionEntities: debounce(async ({ dispatch, commit, rootState }) => {
         const sectionId = rootState.route.params.sectionId
         const interviewId = rootState.route.params.interviewId
 
@@ -166,7 +166,7 @@ export default {
                     }
                 }
 
-                router.replace(loc)
+                dispatch("navigeToRoute", loc)
             } else {
                 commit("SET_SECTION_DATA", prefilledPageData.entities)
             }
@@ -176,7 +176,7 @@ export default {
         }
     }, 200),
 
-    fetchSectionEnabledStatus: debounce(async ({ state, rootState }) => {
+    fetchSectionEnabledStatus: debounce(async ({ dispatch, state, rootState }) => {
         const sectionId = rootState.route.params.sectionId
         const interviewId = rootState.route.params.interviewId
 
@@ -193,7 +193,8 @@ export default {
                         sectionId: firstSectionId
                     }
                 }
-                router.replace(firstSectionLocation)
+
+                dispatch("navigeToRoute", firstSectionLocation)
             }
         }
     }, 200),
