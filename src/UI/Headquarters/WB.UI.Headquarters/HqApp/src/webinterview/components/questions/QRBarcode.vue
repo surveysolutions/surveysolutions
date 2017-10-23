@@ -5,34 +5,37 @@
                 <div class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <input autocomplete="off" type="text" class="field-to-fill"
+                            :disabled="!$me.acceptAnswer"
                             :placeholder="$t('WebInterviewUI.TextEnter')" :title="$t('WebInterviewUI.TextEnter')" :value="$me.answer"
                             v-blurOnEnterKey @blur="answerQRBarcodeQuestion">
                             <wb-remove-answer />
                     </div>
                 </div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import * as $ from "jquery"
 
     export default {
         name: 'QRBarcode',
         mixins: [entityDetails],
         methods: {
             answerQRBarcodeQuestion(evnt) {
-                const target = $(evnt.target)
-                const answer = target.val()
+                this.sendAnswer(() => {
+                    const target = $(evnt.target)
+                    const answer = target.val()
 
-                if(this.handleEmptyAnswer(answer)) {
-                    return
-                }
+                    if(this.handleEmptyAnswer(answer)) {
+                        return
+                    }
 
-                if (answer) {
-                    this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })
-                }
+                    if (answer) {
+                        this.$store.dispatch('answerQRBarcodeQuestion', { identity: this.id, text: answer })
+                    }
+                })
             }
         }
     }
