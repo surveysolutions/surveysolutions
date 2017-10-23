@@ -54,15 +54,17 @@ try {
                 Write-Host "##teamcity[buildProblem description='Failed to build static content for HQ App']"
                 Exit 
         } else {
+
             Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
-            Move-Item ".\src\coverage" "$artifactsFolder\coverage" -ErrorAction SilentlyContinue
+            Move-Item ".\dist\shared_vendor.stats.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
+            Move-Item ".\src\coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
         }}
 
         #Compress-Archive -Path "$artifactsFolder\stats" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal -ErrorAction SilentlyContinue
         #Compress-Archive -Path "$artifactsFolder\coverage" -DestinationPath "$artifactsFolder\coverage.zip" -CompressionLevel Optimal -ErrorAction SilentlyContinue
 
-        Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
-        Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
+        # Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
+        # Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
