@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,7 +17,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
     public class FileSystemMapRepository : IMapRepository
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
+        private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
         private readonly IMapPropertiesProvider mapPropertiesProvider;
+        private readonly IUserRepository userStorage;
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
@@ -34,13 +37,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         private static readonly HashSet<string> createdFolders = new HashSet<string>();
 
         public FileSystemMapRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
-            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor, IMapPropertiesProvider mapPropertiesProvider)
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
+            IPlainStorageAccessor<UserMap> userMapsStorage,
+            IMapPropertiesProvider mapPropertiesProvider,
+            IUserRepository userStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.archiveUtils = archiveUtils;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
 
             this.mapPropertiesProvider = mapPropertiesProvider;
+
+            this.userMapsStorage = userMapsStorage;
+            this.userStorage = userStorage;
 
             this.path = fileSystemAccessor.CombinePath(folderPath, TempFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.path))
@@ -194,6 +203,80 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
             if(this.fileSystemAccessor.IsFileExists(filePath))
                 fileSystemAccessor.DeleteFile(filePath);
+        }
+
+        public void DeleteMapUser(string map, string user)
+        {
+            if(string.IsNullOrWhiteSpace(map)||string.IsNullOrWhiteSpace(user))
+                return;
+
+            var mapUsers = this.userMapsStorage.Query(q=> q.Where(x=>x.Map==map && x.UserName == user)).ToList();
+            if (mapUsers.Count > 0)
+                this.userMapsStorage.Remove(mapUsers);
+        }
+
+        public string[][] GetAllMapUsers()
+        {
+            var pageSize = 1024;
+            var page = 1;
+
+            List<string[]> rows = new List<string[]>();
+
+            do
+            {
+                List<string> itemIds = this.mapPlainStorageAccessor.Query(queryable =>
+                {
+                    IQueryable<MapBrowseItem> pagedResults = queryable.Skip((page - 1) * pageSize).Take(pageSize);
+
+                    itemIds = pagedResults.Select(x => x.Id).ToList();
+
+                    return itemIds;
+                });
+
+                if(itemIds.Count<1)
+                    break;
+
+                page++;
+
+                List<Tuple<string, string>> maps = userMapsStorage.Query(q =>
+                {
+                    return q.Select(x => new Tuple<string, string>(x.Map, x.UserName)).Where(x => itemIds.Contains(x.Item1))
+                        .ToList();
+                });
+
+                rows.AddRange(
+                    itemIds.Select(x => new[]
+                        {
+                            x,
+                            string.Join(",", maps.Where(y => y.Item1 == x).Select(y => y.Item2).ToArray())
+                        }
+                    ));
+
+            } while (true);
+
+
+
+            return rows.ToArray();
+        }
+
+        public bool UpdateUserMaps(string mapName, string[] users)
+        {
+            var map = this.mapPlainStorageAccessor.GetById(mapName);
+            if (map == null)
+                return false;
+
+            var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map == mapName).ToList());
+            
+            userMapsStorage.Remove(userMaps);
+            var availableUsers = this.userStorage.Users.Where(x => users.Contains(x.UserName.ToLower()) && x.IsArchivedOrLocked == false).ToList();
+            var userMappings = availableUsers.Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
+
+            userMapsStorage.Store(userMappings.Select(x => Tuple.Create(x, (object)x)));
+
+            if(availableUsers.Count < users.Length)
+                return false;
+
+            return true;
         }
     }
 }

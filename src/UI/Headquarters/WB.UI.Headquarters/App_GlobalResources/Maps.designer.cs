@@ -70,7 +70,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MaxScale.
+        ///   Looks up a localized string similar to Max Scale.
         /// </summary>
         internal static string MaxScale {
             get {
