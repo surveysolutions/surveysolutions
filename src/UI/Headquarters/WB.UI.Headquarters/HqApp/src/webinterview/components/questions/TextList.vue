@@ -2,25 +2,32 @@
     <wb-question :question="$me" questionCssClassName="single-select-question">
         <div class="question-unit">
             <div class="options-group">
-                <div class="form-group" v-for="(row, index) in $me.rows">
+                <div class="form-group" v-for="(row, index) in $me.rows" :key="row.value">
                     <div class="field answered">
-                        <input autocomplete="off" type="text" class="field-to-fill" :value="row.text" v-blurOnEnterKey @blur="updateRow($event, row)"/>
-                        <button type="submit" class="btn btn-link btn-clear" v-on:click="confirmAndRemoveRow(index)"><span></span></button>
+                        <input autocomplete="off" type="text" class="field-to-fill" 
+                            :value="row.text"
+                            :disabled="!$me.acceptAnswer"
+                            v-blurOnEnterKey 
+                            @blur="updateRow($event, row)"/>
+                        <button type="submit" class="btn btn-link btn-clear" 
+                            v-if="$me.acceptAnswer"
+                            @click="confirmAndRemoveRow(index)"><span></span></button>
                     </div>
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
                         <input autocomplete="off" type="text" class="field-to-fill"
+                            :disabled="!$me.acceptAnswer"
                             :placeholder="$t('WebInterviewUI.TextEnterNewItem')" :title="$t('WebInterviewUI.TextEnterNewItem')" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import * as $ from "jquery"
     import modal from "../modal"
 
     class TextListAnswerRow {
@@ -34,12 +41,18 @@
         name: 'TextList',
         mixins: [entityDetails],
         computed:{
-            canAddNewItem(){
+            canAddNewItem() {
                 return this.$me.rows == undefined || this.$me.maxAnswersCount == null || this.$me.maxAnswersCount > this.$me.rows.length
+            },
+
+            canAnswer() {
+                return this.$me.acceptAnswer;
             }
         },
         methods: {
             confirmAndRemoveRow(index) {
+                if(!this.canAnswer) return;
+
                 if (!this.$me.isRosterSize) {
                     this.removeRow(index)
                     return
@@ -55,14 +68,20 @@
                     }
                 })
             },
+
             removeRow(index) {
+                if(!this.canAnswer) return;
+
                 this.$me.rows.splice(index, 1)
                 if (this.$me.rows.length == 0)
                     this.$store.dispatch('removeAnswer', this.id)
                 else
                     this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
             },
+
             updateRow(evnt, item) {
+                if(!this.canAnswer) return;
+
                 const target = $(evnt.target)
                 let text = target.val()
 
@@ -75,6 +94,8 @@
                 this.$store.dispatch('answerTextListQuestion', { identity: this.id, rows: this.$me.rows })
             },
             addRow(evnt) {
+                if(!this.canAnswer) return;
+
                 const target = $(evnt.target)
                 let text = target.val()
 
