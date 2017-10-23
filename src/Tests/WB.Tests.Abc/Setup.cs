@@ -181,7 +181,9 @@ namespace WB.Tests.Abc
         public static StatefulInterview StatefulInterview(QuestionnaireDocument questionnaireDocument, bool census = true)
         {
             questionnaireDocument.IsUsingExpressionStorage = true;
-            questionnaireDocument.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            var questionnaireDocumentExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaireDocument.ExpressionsPlayOrder = questionnaireDocumentExpressionsPlayOrder;
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 

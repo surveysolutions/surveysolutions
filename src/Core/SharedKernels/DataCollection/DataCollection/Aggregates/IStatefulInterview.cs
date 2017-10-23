@@ -28,9 +28,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasErrors { get; }
         bool IsCompleted { get; }
 
-        [Obsolete("Replaced with HasEditableIdentifyingQuestions")]
-        bool CreatedOnClient { get; }
-
         bool HasEditableIdentifyingQuestions { get; }
 
         InterviewTreeGroup GetGroup(Identity identity);
@@ -114,10 +111,13 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
-        IEnumerable<IInterviewTreeNode> GetAllNodes();
+
         IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
+
         InterviewTreeSection FirstSection { get; }
+
         Guid CurrentResponsibleId { get; }
+
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
         int CountActiveAnsweredQuestionsInInterview();
@@ -132,10 +132,14 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int CountAllInvalidEntities();
 
+
+        [Obsolete("KP-10173: should be removed with new details")]
         int CountEnabledSupervisorQuestions();
 
+        [Obsolete("KP-10173: should be removed with new details")]
         int CountEnabledHiddenQuestions();
 
+        [Obsolete("KP-10173: should be removed with new details")]
         int CountAllEnabledUnansweredQuestions();
 
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
@@ -172,12 +176,20 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         
         IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId);
 
+        IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
+        
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
+
         bool AcceptsInterviewerAnswers();
+
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
+
         InterviewSynchronizationDto GetSynchronizationDto();
+
         bool IsReadOnlyQuestion(Identity identity);
+
         InterviewKey GetInterviewKey();
+
         int? GetAssignmentId();
     }
 }
