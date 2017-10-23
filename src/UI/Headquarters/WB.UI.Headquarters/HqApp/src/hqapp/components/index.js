@@ -1,12 +1,12 @@
 import Vue from 'vue'
 
 import Confirm from './Confirm'
-import DataTables from "~/shared/components/DataTables"
+import DataTables from "./DataTables"
 import FilterBlock from "./FilterBlock"
 import Filters from "./Filters"
 import HqLayout from "./HqLayout"
 import ModalFrame from "./ModalFrame"
-import Typeahead from '~/shared/components/Typeahead'
+import Typeahead from './Typeahead'
 
 Vue.component("Confirm", Confirm)
 Vue.component("DataTables", DataTables)
