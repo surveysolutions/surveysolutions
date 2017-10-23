@@ -14,7 +14,7 @@
                 <h2>{{$config.model.key}}</h2>
                 <ul class="list-unstyled about-questionnaire">
                     <li>
-                        <b>Assignment #356, interview 3</b>
+                        <b>Assignment #356</b>
                     </li>
                     <li>
                         <b>conducted on
@@ -31,9 +31,9 @@
                 </ul>
                 <div class="filter-actions-block">
                     <button type="button"
-                            class="btn btn-success">Approve</button>
+                            class="btn btn-success" v-if="showApproveButton">{{$t("Pages.ApproveRejectPartialView_ApproveAction")}}</button>
                     <button type="button"
-                            class="btn btn-default btn-lg reject">Reject</button>
+                            class="btn btn-default btn-lg reject" v-if="showRejectButton">{{$t("Pages.ApproveRejectPartialView_RejectAction")}}</button>
 
                     <button type="button"
                             class="btn btn-link"
@@ -128,6 +128,13 @@
 </template>
 <script>
 export default {
-
+    computed: {
+        showApproveButton() {
+            return this.$config.model.approveReject.supervisorApproveAllowed || this.$config.model.approveReject.hqOrAdminApproveAllowed;
+        },
+        showRejectButton() {
+            return this.$config.model.approveReject.supervisorRejectAllowed || this.$config.model.approveReject.hqOrAdminRejectAllowed;
+        }
+    }
 }
 </script>

@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
@@ -80,6 +81,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 questionsTypes: questionsTypes ?? InterviewDetailsFilter.All,
                 currentGroupIdentity: string.IsNullOrEmpty(currentGroupId) ? null : Identity.Parse(currentGroupId));
 
+            detailsViewModel.ApproveReject = GetApproveReject(interviewSummary);
+
             return View(detailsViewModel);
         }
 
@@ -92,18 +95,35 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ActivePage(MenuItem.Docs)]
         public ActionResult Review(Guid id, string url)
         {
-            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
+
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
-             bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
+            bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
 
             if (!isAccessAllowed)
                 return HttpNotFound();
 
-            return View(new InterviewReviewModel
+            return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
                 Id = id.FormatGuid(),
                 Key = interviewSummary.Key
             });
+        }
+
+        private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
+        {
+            return new ApproveRejectAllowed
+            {
+                SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                           authorizedUser.IsSupervisor,
+                HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                                    (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                          authorizedUser.IsSupervisor,
+                HqOrAdminRejectAllowed = interviewSummary.Status == InterviewStatus.ApprovedBySupervisor &&
+                                                  (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+            };
         }
 
         public ActionResult InterviewHistory(Guid id)
@@ -141,8 +161,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
     public class InterviewReviewModel
     {
+        public InterviewReviewModel(ApproveRejectAllowed approveRejectAllowed)
+        {
+            this.ApproveReject = approveRejectAllowed;
+        }
+
         public string Id { get; set; }
         
         public string Key { get; set; }
+
+        public ApproveRejectAllowed ApproveReject { get; }
     }
 }
