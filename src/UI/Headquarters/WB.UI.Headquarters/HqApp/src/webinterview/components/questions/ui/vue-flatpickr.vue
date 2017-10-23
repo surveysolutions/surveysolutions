@@ -2,6 +2,7 @@
 
   <input type="text"
          :id="id"
+         :disabled="disabled"
          :class="inputClass"
          :name="name"
          :placeholder="placeholder"
@@ -35,6 +36,7 @@
           wrap: false
         })
       },
+      disabled: Boolean,
       placeholder: {
         type: String,
         default: ''

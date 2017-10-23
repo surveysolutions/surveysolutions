@@ -9,9 +9,11 @@
                          :class="{answered: $me.isAnswered}">
                         <flat-pickr :config="pickerOpts"
                                     :value="answer"
+                                    :disabled="!$me.acceptAnswer"
                                     class="field-to-fill"
                                     :placeholder="$t('WebInterviewUI.EnterDate')"
                                     :title="$t('WebInterviewUI.EnterDate')" />
+
                         <wb-remove-answer/>
                     </div>
                 </div>
@@ -30,13 +32,14 @@
                     </div>
                 </div>
             </div>
+            <wb-lock />
         </div>
     </wb-question>
 </template>
 <script lang="js">
+
     import { entityDetails } from "../mixins"
     import flatPickr from './ui/vue-flatpickr'
-    import 'flatpickr/dist/flatpickr.css'
     import * as format from "date-fns/format"
     import * as isSame from "date-fns/is_equal"
     import { DateFormats } from "~/shared/helpers"
@@ -73,21 +76,23 @@
         },
         methods: {
             answerDate(answer) {
-                if(answer) {
-                    if (!this.$me.isTimestamp) {
-                        if (!isSame(this.$me.answer, answer)) {
-                            const dateAnswer = parseUTC(answer)
+                this.sendAnswer(() => {
+                    if(answer) {
+                        if (!this.$me.isTimestamp) {
+                            if (!isSame(this.$me.answer, answer)) {
+                                const dateAnswer = parseUTC(answer)
 
-                            this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
+                                this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
+                            }
+                        }
+                        else {
+                            this.$store.dispatch('answerDateQuestion', { 
+                                    identity: this.$me.id,
+                                    date: format(new Date(), DateFormats.dateTime)
+                                    });
                         }
                     }
-                    else {
-                        this.$store.dispatch('answerDateQuestion', { 
-                                identity: this.$me.id,
-                                date: format(new Date(), DateFormats.dateTime)
-                                });
-                    }
-                }
+                });
             }
         },
         components: {
