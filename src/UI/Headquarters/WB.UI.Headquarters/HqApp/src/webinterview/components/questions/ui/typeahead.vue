@@ -2,6 +2,7 @@
     <div class="btn-group btn-input clearfix">
         <button type="button"
                 class="btn dropdown-toggle"
+                :disabled="disabled"
                 data-toggle="dropdown">
             <span data-bind="label"
                   v-if="value === null"
@@ -54,6 +55,10 @@
             optionsSource: {
                 type: Function,
                 required: true
+            },
+            disabled: {
+                required: false,
+                type: Boolean
             }
         },
         computed: {
