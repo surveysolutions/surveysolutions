@@ -158,7 +158,7 @@ export default {
 
     computed: {
         title() {
-            return this.$t("Assignments.AssignmentsHeader") + " (" + this.totalRows + ")";
+            return this.$t("Assignments.AssignmentsHeader") + " (" + this.formatNumber(this.totalRows) + ")";
         },
         config(){
             return this.$config.model;
@@ -480,6 +480,14 @@ export default {
         
         resetSelection() {
             this.selectedRows.splice(0,this.selectedRows.length);
+        },
+        formatNumber(value) {
+            if (value == null || value == undefined)
+                return value;
+            var language = navigator.languages && navigator.languages[0] || 
+               navigator.language || 
+               navigator.userLanguage; 
+            return value.toLocaleString(language);
         }
     },
 
