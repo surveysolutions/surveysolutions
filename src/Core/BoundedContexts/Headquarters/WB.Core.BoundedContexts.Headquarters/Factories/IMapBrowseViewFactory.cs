@@ -5,5 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Factories
     public interface IMapBrowseViewFactory
     {
         MapsView Load(MapsInputModel input);
+
+        MapUsersView Load(MapUsersInputModel input);
     }
 }

@@ -267,6 +267,10 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/pages/maps.js"
             ));
 
+            bundles.Add(new ScriptBundle("~/js/mapusers").Include(
+                "~/Scripts/viewmodels/pages/mapusers.js"
+            ));
+
             bundles.Add(new ScriptBundle("~/js/exportdata").Include(
                 "~/Scripts/bootbox.min.js",
                 "~/Scripts/viewmodels/pages/interviews.base.js",

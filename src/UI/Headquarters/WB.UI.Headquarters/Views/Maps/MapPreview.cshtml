@@ -1,6 +1,5 @@
-﻿@using WB.Core.SharedKernels.Questionnaire.Documents
-@using WB.UI.Shared.Web.Extensions
-@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+﻿@using WB.UI.Shared.Web.Extensions
+@model WB.Core.BoundedContexts.Headquarters.Views.Maps.MapBrowseItem
 @{
     Layout = null;
 }
@@ -10,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Area</title>
+    <title>Map View</title>
     @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
    
     <style>
@@ -21,8 +20,7 @@
             width: 100%;
         }
     </style>
-    @if (Model.IsAnswered)
-    {
+    
         <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
         <script src="https://js.arcgis.com/4.3/"></script>
         <script>
@@ -31,17 +29,26 @@
                     "esri/views/MapView",
                     "esri/Graphic",
                     "esri/geometry/Polygon",
+                    "esri/geometry/Extent",
                     "esri/symbols/SimpleLineSymbol",
                     "esri/symbols/SimpleFillSymbol",
                     "dojo/domReady!"
                 ],
-                function(Map, MapView, Graphic, Polygon, SimpleLineSymbol, SimpleFillSymbol) {
-                    var map = new Map({
-                        basemap: "hybrid"
+                function (Map, MapView, Graphic, Polygon, Extent, SimpleLineSymbol, SimpleFillSymbol) {
+                    
+                    var startExtent = new Extent({
+                        "xmin":@Model.XMinVal,"ymin":@Model.YMinVal,"xmax":@Model.XMaxVal,"ymax":@Model.YMaxVal,
+                        "spatialReference":{"wkid":@Model.Wkid}
                     });
 
-                    var geometryJson = @Html.Raw((Model.Answer as Area).Geometry);
-                    var polygon = Polygon.fromJSON(geometryJson);
+                    var map = new Map({
+                        basemap: "hybrid",
+                        extent: startExtent,
+                        maxScale: @Model.MaxScale,
+                        minScale: @Model.MinScale
+                    });
+
+                    var polygon = Polygon.fromExtent(startExtent);
 
                     var fillSymbol = new SimpleFillSymbol({
                         outline: {
@@ -54,21 +61,18 @@
                         geometry: polygon,
                         symbol: fillSymbol
                     });
-
                     var view = new MapView({
                         container: "viewDiv",
-                        map: map,
-                        spatialReference: polygon.spatialReference
+                        map: map
+                        
                     });
 
                     view.graphics.addMany([polygonGraphic]);
-
-                    var taxLotExtent = view.graphics.items[0].geometry.extent;
-                    view.extent = taxLotExtent;
+                    view.extent = startExtent;
 
                 });
         </script>
-    }
+    
 </head>
 <body>
     <div id="viewDiv"></div>
