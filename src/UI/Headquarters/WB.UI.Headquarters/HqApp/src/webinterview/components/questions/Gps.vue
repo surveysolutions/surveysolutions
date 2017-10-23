@@ -9,16 +9,20 @@
                         </div>
                     </div>
                     <div class="block-with-data">{{$me.answer.latitude}}, {{$me.answer.longitude}}</div>
-                    <button type="submit" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
+                     <wb-remove-answer />
+                    <button type="submit" v-if="$me.acceptAnswer" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
                 <div class="action-btn-holder gps-question">
-                    <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">{{ $t('WebInterviewUI.GPSRecord') }}</button>
+                    <button type="button" :disabled="!$me.acceptAnswer" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">{{ $t('WebInterviewUI.GPSRecord') }}</button>
                 </div>
             </div>
+            <wb-lock />
         </div>
     </wb-question>
 </template>
+
 <script lang="js">
+
     import { entityDetails } from "../mixins"
     
     class GpsAnswer {
@@ -54,24 +58,26 @@
                 this.$store.dispatch("removeAnswer", this.id)
             },
             answerGpsQuestion() {
-                if (!('geolocation' in navigator)) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.GPSNotAvailable"))
-                    return
-                }
+                this.sendAnswer(() => {
+                    if (!('geolocation' in navigator)) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.GPSNotAvailable"))
+                        return
+                    }
 
-                if (this.isInProgress) return
+                    if (this.isInProgress) return
 
-                this.isInProgress = true
-                this.$store.dispatch("fetchProgress", 1)
+                    this.isInProgress = true
+                    this.$store.dispatch("fetchProgress", 1)
 
-                navigator.geolocation.getCurrentPosition(
-                    (position) => { this.onPositionDetermined(position, this.id) },
-                    (error) => { this.onPositionDeterminationFailed(error) },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 30000,
-                        maximumAge: 60000
-                    })
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => { this.onPositionDetermined(position, this.id) },
+                        (error) => { this.onPositionDeterminationFailed(error) },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 30000,
+                            maximumAge: 60000
+                        })
+                });
             },
             onPositionDetermined(position, questionId) {
                 this.$store.dispatch('answerGpsQuestion', {
