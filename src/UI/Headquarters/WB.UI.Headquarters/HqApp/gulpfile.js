@@ -18,6 +18,24 @@ config.resources = {
     dest: "locale/.resources"
 }
 
+gulp.task("default", ['cleanup', 'resx2json', 'build', 'test'].filter((x) => x));
+
+gulp.task("build", ["resx2json", "shared_dll"], (done) => {
+    const opts = {
+        plugins: []
+    }
+
+    if (!utils.env.production) {
+        opts.plugins.push(new webpack.ProgressPlugin());
+    } else {
+        process.env.NODE_ENV = 'production';
+    }
+
+    const config = require("./webpack.config.js")
+    return webpack(merge(config, opts), onBuild(done));
+})
+
+
 gulp.task("test", (done) => {
     var exec = require('child_process').exec;
     exec('yarn test --ci', (err, stdout, stderr) => {
@@ -69,23 +87,6 @@ gulp.task("shared_dll", ["cleanup"], (done) => {
         }
     });
 });
-
-gulp.task("build", ["resx2json", "shared_dll"], (done) => {
-    const opts = {
-        plugins: []
-    }
-
-    if (!utils.env.production) {
-        opts.plugins.push(new webpack.ProgressPlugin());
-    } else {
-        process.env.NODE_ENV = 'production';
-    }
-
-    const config = require("./webpack.config.js")
-    return webpack(merge(config, opts), onBuild(done));
-})
-
-gulp.task("default", ['cleanup', 'resx2json', 'build', 'test'].filter((x) => x));
 
 gulp.task("watch", ['resx2json', 'shared_dll'], () => {
     const compiler = webpack(merge(require("./webpack.config.js"), {
