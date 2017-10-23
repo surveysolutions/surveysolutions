@@ -222,7 +222,7 @@
                 <div class="page-header clearfix">
                     <div class="neighbor-block-to-search">
                         <div class="topic-with-button">
-                            <h1>@Html.Raw(string.Format(Users.InterviewersCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
+                            <h1>@Html.Raw(string.Format(Users.InterviewersCountDescription, @"<span data-bind='text: formatNumber(UsersCount())'></span>"))</h1>
                             @if (isVisibleSupervisorColumn && !authorizedUser.IsObserving)
                             {
                                 <a class="btn btn-success" href="@Url.Action("Create", "Interviewer", new {area = string.Empty})">
