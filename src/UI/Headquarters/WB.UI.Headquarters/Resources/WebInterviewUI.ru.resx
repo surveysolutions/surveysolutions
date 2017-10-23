@@ -373,6 +373,6 @@
     <value>Обновлено {{ date }}</value>
   </data>
   <data name="Responsible" xml:space="preserve">
-    <value>Ответственный: {{responsible}}</value>
+    <value>Ответственный: {{ responsible }}</value>
   </data>
 </root>
