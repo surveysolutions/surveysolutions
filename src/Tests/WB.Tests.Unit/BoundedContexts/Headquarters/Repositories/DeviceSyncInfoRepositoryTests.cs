@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             });
 
             //act
-            var result = repository.GetSynchronizationActivity(interviewerId, deviceId);
+            var result = repository.GetSynchronizationActivity(interviewerId);
 
             //assert
             Assert.That(result.Days.Length, Is.EqualTo(7));
@@ -127,12 +127,51 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             });
 
             //act
-            var result = repository.GetSynchronizationActivity(interviewerId, deviceId);
+            var result = repository.GetSynchronizationActivity(interviewerId);
 
             //assert
 
             Assert.That(result.Days[6].Quarters[0].DownloadedAssignmentsInProportionCount, Is.EqualTo(5));
             Assert.That(result.Days[6].Quarters[0].UploadedInterviewsInProportionCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void when_getting_synchronization_activity_and_1_interviewer_has_many_devices()
+        {
+            //arrange
+            var interviewerId = Guid.Parse("11111111111111111111111111111111");
+            var lastSyncDate = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 1, 0, 0);
+
+            var repository = this.Create(new[]
+            {
+                new DeviceSyncInfo
+                {
+                    InterviewerId = interviewerId,
+                    DeviceId = Guid.NewGuid().ToString(),
+                    SyncDate = lastSyncDate,
+                    Statistics = new SyncStatistics{UploadedInterviewsCount = 1}
+                },
+                new DeviceSyncInfo
+                {
+                    InterviewerId = interviewerId,
+                    DeviceId = Guid.NewGuid().ToString(),
+                    SyncDate = lastSyncDate.AddDays(-2),
+                    Statistics = new SyncStatistics{UploadedInterviewsCount = 1}
+                }, 
+                new DeviceSyncInfo
+                {
+                    InterviewerId = interviewerId,
+                    DeviceId = Guid.NewGuid().ToString(),
+                    SyncDate = lastSyncDate.AddDays(-4),
+                    Statistics = new SyncStatistics{UploadedInterviewsCount = 1}
+                }
+            });
+
+            //act
+            var result = repository.GetSynchronizationActivity(interviewerId);
+
+            //assert
+            Assert.AreEqual(3, result.Days.Sum(x => x.Quarters.Sum(y => y.UploadedInterviewsCount)));
         }
     }
 }

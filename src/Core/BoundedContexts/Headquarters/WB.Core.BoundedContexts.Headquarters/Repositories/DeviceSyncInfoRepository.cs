@@ -60,14 +60,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
         
-        public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId, string deviceId)
+        public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId)
         {
             var toDay = DateTime.UtcNow;
             var fromDay = toDay.AddDays(-6);
 
             var deviceInfoByPeriod = this.dbContext.DeviceSyncInfo
-                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.DeviceId == deviceId &&
-                                   syncInfo.SyncDate > fromDay)
+                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.SyncDate > fromDay)
                 .Select(syncInfo => new DbDay
                 {
                     Statistics = syncInfo.Statistics == null
