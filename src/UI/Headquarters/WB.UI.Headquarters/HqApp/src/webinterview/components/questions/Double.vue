@@ -7,10 +7,12 @@
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
                             :placeholder="$t('WebInterviewUI.DecimalEnter')" :title="$t('WebInterviewUI.DecimalEnter')"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
+                            :disabled="!$me.acceptAnswer"
                             v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
                             <wb-remove-answer />
                     </div>
                 </div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
@@ -35,25 +37,27 @@
         },
         methods: {
             answerDoubleQuestion(evnt) {
-                const answerString = $(evnt.target).autoNumeric('get');
-                if (answerString.replace(/[^0-9]/g, "").length > 15) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
-                    return
-                }
+                this.sendAnswer(() => {
+                    const answerString = $(evnt.target).autoNumeric('get');
+                    if (answerString.replace(/[^0-9]/g, "").length > 15) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
+                        return
+                    }
 
-                const answer = answerString != undefined && answerString != ''
-                    ? parseFloat(answerString)
-                    : null
+                    const answer = answerString != undefined && answerString != ''
+                        ? parseFloat(answerString)
+                        : null
 
-                if(this.handleEmptyAnswer(answer)) {
-                    return
-                }
-                if (answer > 999999999999999 || answer < -999999999999999) {
-                    this.markAnswerAsNotSavedWithMessage($t("WebInterviewUI.DecimalCannotParse"))
-                    return
-                }
+                    if(this.handleEmptyAnswer(answer)) {
+                        return
+                    }
+                    if (answer > 999999999999999 || answer < -999999999999999) {
+                        this.markAnswerAsNotSavedWithMessage($t("WebInterviewUI.DecimalCannotParse"))
+                        return
+                    }
 
-                this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
+                    this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
+                });
             }
         }
     }
