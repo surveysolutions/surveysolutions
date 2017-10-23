@@ -259,7 +259,4 @@
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
     <value>Нельзя модифицировать интервью полученное интервьюером на устройство</value>
   </data>
-  <data name="Responsible" xml:space="preserve">
-    <value>Ответственный: {{responsible}}</value>
-  </data>
 </root>

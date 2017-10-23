@@ -382,6 +382,6 @@
     <value>Updated {{ date }}</value>
   </data>
   <data name="Responsible" xml:space="preserve">
-    <value>Responsible {{ responsible }}</value>
+    <value>Responsible: {{ responsible }}</value>
   </data>
 </root>
