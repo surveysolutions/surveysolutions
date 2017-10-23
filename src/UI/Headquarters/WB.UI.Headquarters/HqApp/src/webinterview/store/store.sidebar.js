@@ -9,7 +9,9 @@ export default {
             // organized by parentId, that way it easier to search and request data
             // sectionId1: [sectiondata1, sectiondata2, sectiondata3], root: [section1, section2], ... etc
         },
-        sidebarHidden: false
+        sidebarHidden: false,
+        facetHidden: false,
+        searchResultsHidden: true
     },
 
     actions: {
@@ -29,7 +31,18 @@ export default {
             }
         },
         toggleSidebarPanel({ commit, state }, newState = null) {
+            let isLarge = isLargeScreen();
             commit("SET_SIDEBAR_HIDDEN", newState == null ? !state.sidebarHidden : newState)
+        },
+        hideFacets({ commit, state }, newState = null) {
+            commit("SET_FACET_HIDDEN", newState == null ? !state.facetHidden : newState)
+        },
+        hideSearchResults({ commit, state }, newState = null) {
+            commit("SET_FACET_HIDDEN", false)
+            commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? !state.searchResultsHidden : newState)
+        },
+        showSearchResults({ commit }) {
+            commit("SET_SEARCH_RESULTS_HIDDEN", false)
         }
     },
 
@@ -45,6 +58,12 @@ export default {
         },
         SET_SIDEBAR_HIDDEN(state, sidebarHidden) {
             state.sidebarHidden = sidebarHidden
+        },
+        SET_FACET_HIDDEN(state, facetHidden) {
+            state.facetHidden = facetHidden
+        },
+        SET_SEARCH_RESULTS_HIDDEN(state, searchResultsHidden) {
+            state.searchResultsHidden = searchResultsHidden
         }
     },
 
