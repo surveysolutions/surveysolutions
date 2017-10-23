@@ -52,6 +52,7 @@
         verboseMode: false,
         googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
         basePath: '@Url.Content(@"~/")',
+        imageGetBase:  '@Url.Content("~/api/WebInterviewResources")',
         appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
         dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',
         signalrPath: '@Url.Content("~/signalr/hubs")',
