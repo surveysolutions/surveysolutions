@@ -10,7 +10,6 @@
     </div>
 </template>
 <script lang="js">
-    // import { imageGetBase } from "src/config"
 
     export default {
         data() {
@@ -59,7 +58,7 @@
         methods: {
             showModal(show) {
                 this.modal = show
-            },
+            }
         },
         name: "wb-attachment"
     }

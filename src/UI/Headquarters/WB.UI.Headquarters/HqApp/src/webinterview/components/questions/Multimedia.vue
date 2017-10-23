@@ -6,17 +6,17 @@
                     <wb-attachment :filename="$me.answer" :thumb="uploadingImage"></wb-attachment>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
-                <input name="file" ref="uploader" v-show="false" accept="image/*" type="file"
+                <input name="file" ref="uploader" v-show="false" accept="image/*" type="file" 
                     @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
-                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
+                <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" :disabled="!$me.acceptAnswer"
                     v-if="!$me.isAnswered && !inFetchState" @click="$refs.uploader.click()">{{ $t("WebInterviewUI.PhotoUpload") }}</button>
             </div>
+            <wb-lock />
         </div>
     </wb-question>
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
-    import * as $ from 'jquery'
 
     const imageFileSizeLimit = 30 * 1024 * 1024; // mb
 
@@ -50,13 +50,15 @@
                 this.$refs.uploader.type = 'file'
             },
             onFileChange(e) {
-                var files = e.target.files || e.dataTransfer.files;
+                this.sendAnswer(() => {
+                    const files = e.target.files || e.dataTransfer.files;
 
-                if (!files.length) {
-                    return;
-                }
+                    if (!files.length) {
+                        return;
+                    }
 
-                this.createImage(files[0]);
+                    this.createImage(files[0]);
+                })
             },
             createImage(file) {
                 if (file.size > imageFileSizeLimit) {
