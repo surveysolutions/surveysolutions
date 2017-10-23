@@ -34,31 +34,9 @@
                     return this.$me.answer
                 },
                 set(value) {
-                    if (!this.$me.isRosterSize) {
-                        this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
-                        return;
-                    }
-
-                    const currentAnswerCount = value.length;
-                    const previousAnswersCount = this.$me.answer.length;
-                    const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
-
-                    if (!isNeedRemoveRosters) {
-                        this.$store.dispatch('answerMultiOptionQuestion', { answer: value, questionId: this.$me.id });
-                        return;
-                    }
-
-                    const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
-
-                    modal.confirm(confirmMessage, result => {
-                        if (result) {
-                            this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
-                            return;
-                        } else {
-                            this.fetch()
-                            return
-                        }
-                    })
+                    this.sendAnswer(() => {
+                        this.answerMulti(value);
+                    });
                 }
             },
             noOptions() {
@@ -72,6 +50,33 @@
             getAnswerOrder(answerValue) {
                 var answerIndex = this.$me.answer.indexOf(answerValue)
                 return answerIndex > -1 ? answerIndex + 1 : ""
+            },
+            answerMulti(value) {
+                if (!this.$me.isRosterSize) {
+                    this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
+                    return;
+                }
+
+                const currentAnswerCount = value.length;
+                const previousAnswersCount = this.$me.answer.length;
+                const isNeedRemoveRosters = currentAnswerCount < previousAnswersCount;
+
+                if (!isNeedRemoveRosters) {
+                    this.$store.dispatch('answerMultiOptionQuestion', { answer: value, questionId: this.$me.id });
+                    return;
+                }
+
+                const confirmMessage = this.$t("WebInterviewUI.ConfirmRosterRemove");
+
+                modal.confirm(confirmMessage, result => {
+                    if (result) {
+                        this.$store.dispatch("answerMultiOptionQuestion", { answer: value, questionId: this.$me.id })
+                        return;
+                    } else {
+                        this.fetch()
+                        return
+                    }
+                })
             }
         },
         mixins: [entityDetails]
