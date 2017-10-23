@@ -21,6 +21,7 @@
                         <wb-remove-answer />
                     </div>
                 </div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
