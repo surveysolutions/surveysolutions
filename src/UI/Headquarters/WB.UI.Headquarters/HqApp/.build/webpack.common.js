@@ -16,10 +16,14 @@ const localization = require("./localization")
 const join = path.join.bind(path, baseDir);
 
 module.exports = function (appConfig) {
+    // cacheDirectory improve development build greatly, but doesn't need on production build
     const babelLoader = devMode ? "babel-loader?cacheDirectory=true" : "babel-loader"
-    const manifest = require("../dist/shared_vendor.manifest.json")
 
+    // linking shared_vendor.dll file to output. Manifest path passed to html template
+    const manifest = require("../dist/shared_vendor.manifest.json")
     const vendor_dll_hash = manifest.name.replace("shared_vendor_", "");
+
+    // combine, group and merge all localization files into consumable form
     const localizationInfo = localization.buildLocalizationFiles(appConfig);
 
     const entryNames = Object.keys(appConfig)
@@ -32,6 +36,7 @@ module.exports = function (appConfig) {
             filename: devMode ? "[name].bundle.js" : "[name].bundle.[chunkhash].js",
             chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js"
         },
+
         resolve: {
             unsafeCache: true,
             extensions: ['.js', '.vue', '.json'],
@@ -46,6 +51,7 @@ module.exports = function (appConfig) {
         stats: { chunks: false },
 
         devtool: '#source-map', // '#cheap-module-eval-source-map',
+
         module: {
             rules: [
                 {
@@ -76,9 +82,11 @@ module.exports = function (appConfig) {
         },
 
         plugins: [
-            new webpack.PrefetchPlugin(join("./src/webinterview/componentsRegistry.js")),
-            new webpack.PrefetchPlugin(join("./src/hqapp/components/index.js")),
-            new webpack.PrefetchPlugin(join("./src/hqapp/main.js")),//
+            // new webpack.PrefetchPlugin(join("./src/webinterview/componentsRegistry.js")),
+            // new webpack.PrefetchPlugin(join("./src/hqapp/components/index.js")),
+            // new webpack.PrefetchPlugin(join("./src/hqapp/main.js")),
+            
+            // provide global accessible variables
             new webpack.ProvidePlugin({
                 _: 'lodash',
                 '$': "jquery",
@@ -131,6 +139,8 @@ module.exports = function (appConfig) {
     };
     
     entryNames.forEach((e) => {
+
+        // for each entry we produce separate partial cshtml file
         webpackConfig.plugins.unshift(new HtmlWebpackPlugin({
             inject: false,
             filename: path.resolve(hqViewsFolder, "shared", `partial.${e}.cshtml`),
