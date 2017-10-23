@@ -4,8 +4,10 @@ using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -19,6 +21,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
@@ -36,11 +39,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             ITransactionManagerProvider transactionManagerProvider,
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
-            IWebInterviewConfigProvider webInterviewConfigProvider)
+            IWebInterviewConfigProvider webInterviewConfigProvider, 
+            IAuthorizedUser authorizedUser)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.interviewSummaryStorage = interviewSummaryStorage;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.authorizedUser = authorizedUser;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
@@ -59,19 +64,14 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             if (!AllowedInterviewStatuses.Contains(interview.Status))
                 throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
 
-            var currentPrincipalIdentity = Thread.CurrentPrincipal;
-            var userId = currentPrincipalIdentity?.Identity?.GetUserId();
-            if (!string.IsNullOrEmpty(userId))
+            if (this.authorizedUser.IsInterviewer)
             {
-                if (currentPrincipalIdentity.IsInRole(UserRoles.Interviewer.ToString()))
+                if (interview.ResponsibleId == this.authorizedUser.Id)
+                    return;
+                else
                 {
-                    if(interview.ResponsibleId.ToString() == userId)
-                        return;
-                    else
-                    {
-                        throw new WebInterviewAccessException(InterviewAccessExceptionReason.Forbidden,
-                            Headquarters.Resources.WebInterview.Error_Forbidden);
-                    }
+                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.Forbidden,
+                        Headquarters.Resources.WebInterview.Error_Forbidden);
                 }
             }
 
@@ -98,12 +98,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
         {
-            var currentPrincipal = Thread.CurrentPrincipal;
-            string userIdString = currentPrincipal?.Identity?.GetUserId();
-            Guid.TryParse(userIdString, out Guid userId);
-
-            return currentPrincipal.IsInRole(UserRoles.Administrator.ToString()) || currentPrincipal.IsInRole(UserRoles.Headquarter.ToString()) ||
-                (currentPrincipal.IsInRole(UserRoles.Supervisor.ToString()) && userId == interviewSummary.TeamLeadId);
+            return this.authorizedUser.IsAdministrator || this.authorizedUser.IsHeadquarter ||
+                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
         }
 
     }

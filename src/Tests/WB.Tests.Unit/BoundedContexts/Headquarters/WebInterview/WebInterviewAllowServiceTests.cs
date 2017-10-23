@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -31,6 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private IWebInterviewConfigProvider webInterviewConfigProvider;
         private IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private WebInterviewConfig webInterviewConfig;
+        private Mock<IAuthorizedUser> authorizedUserMock;
 
         [SetUp]
         public void Setup()
@@ -45,17 +44,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
+            authorizedUserMock = new Mock<IAuthorizedUser>();
 
             webInterviewAllowService = new WebInterviewAllowService(transactionManagerProvider, 
                 plainTransactionManagerProvider,
                 interviewSummaryRepoMock.Object, 
-                webInterviewConfigProvider);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Thread.CurrentPrincipal = null;
+                webInterviewConfigProvider,
+                authorizedUserMock.Object);
         }
 
         private void Act()
@@ -73,13 +68,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         {
             if (loggedInUserId.HasValue && loggedInUserRole.HasValue)
             {
-                var claims = new List<Claim>
+                this.authorizedUserMock.Setup(x => x.Id).Returns(loggedInUserId.Value);
+                this.authorizedUserMock.Setup(x => x.IsAuthenticated).Returns(true);
+                switch (loggedInUserRole)
                 {
-                    new Claim(ClaimTypes.NameIdentifier, loggedInUserId.ToString()),
-                    new Claim(ClaimTypes.Role, loggedInUserRole.ToString())
-                };
-
-                Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims));
+                    case UserRoles.Headquarter:
+                        this.authorizedUserMock.Setup(x => x.IsHeadquarter).Returns(true);
+                        break;
+                    case UserRoles.Supervisor:
+                        this.authorizedUserMock.Setup(x => x.IsSupervisor).Returns(true);
+                        break;
+                    case UserRoles.Interviewer:
+                        this.authorizedUserMock.Setup(x => x.IsInterviewer).Returns(true);
+                        break;
+                }
             }
 
             if (interviewStatus.HasValue)
