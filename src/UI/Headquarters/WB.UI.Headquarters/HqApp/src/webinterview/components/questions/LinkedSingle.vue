@@ -8,7 +8,7 @@
                             :id="$me.id + '_' + option.value" 
                             :name="$me.id" 
                             :value="option.value"
-                            :disabled="disabled"
+                            :disabled="!$me.acceptAnswer"
                             v-model="answer">
                         <label :for="$me.id + '_' + option.value">
                                 <span class="tick"></span> {{option.title}}
