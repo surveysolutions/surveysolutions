@@ -6,7 +6,8 @@
     "watch": "gulp watch",
     "dev": "gulp",
     "production": "gulp --production",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "rimraf dist"
   },
   "author": "World Bank Group",
   "license": "ISC",
