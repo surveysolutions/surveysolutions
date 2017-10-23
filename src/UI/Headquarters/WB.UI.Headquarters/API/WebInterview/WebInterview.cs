@@ -6,6 +6,7 @@ using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -23,11 +24,12 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
+        private readonly IAuthorizedUser authorizedUser;
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
         private bool IsReviewMode => 
-            Thread.CurrentPrincipal.HasAnyOfRoles(UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Administrator) &&
+            this.authorizedUser.IsHeadquarter || this.authorizedUser.IsSupervisor || this.authorizedUser.IsAdministrator &&
             this.Context.QueryString[@"review"].ToBool(false);
 
         private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
@@ -41,13 +43,15 @@ namespace WB.UI.Headquarters.API.WebInterview
             ICommandService commandService,
             IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
-            IWebInterviewNotificationService webInterviewNotificationService)
+            IWebInterviewNotificationService webInterviewNotificationService,
+            IAuthorizedUser authorizedUser)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
             this.autoMapper = autoMapper;
             this.questionnaireRepository = questionnaireRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
+            this.authorizedUser = authorizedUser;
         }
 
 

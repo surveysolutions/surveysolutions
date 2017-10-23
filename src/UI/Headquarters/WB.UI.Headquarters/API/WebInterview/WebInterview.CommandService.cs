@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -16,6 +15,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             get
             {
                 var statefulInterview = this.GetCallerInterview();
+                if (IsReviewMode)
+                {
+                    return this.authorizedUser.Id;
+                }
+
                 return statefulInterview.CurrentResponsibleId;
             }
         }
