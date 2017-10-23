@@ -1,19 +1,19 @@
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const devMode = process.env.NODE_ENV != 'production';
 const WebpackNotifierPlugin = require('webpack-notifier');
 const cleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const RuntimePublicPathPlugin = require("./RuntimePublicPathPlugin")
-
-const path = require('path')
-const baseAppPath = "../"
-const baseDir = path.resolve(__dirname, baseAppPath);
-const hqViewsFolder = path.resolve(baseDir, "..", "Views")
 const localization = require("./localization")
 
+const devMode = process.env.NODE_ENV != 'production';
+const path = require('path')
+
+const baseDir = path.resolve(__dirname,"../");
 const join = path.join.bind(path, baseDir);
+
+const hqViewsFolder = join("..", "Views")
 
 module.exports = function (appConfig) {
     // cacheDirectory improve development build greatly, but doesn't need on production build
@@ -23,53 +23,80 @@ module.exports = function (appConfig) {
     const manifest = require("../dist/shared_vendor.manifest.json")
     const vendor_dll_hash = manifest.name.replace("shared_vendor_", "");
 
-    // combine, group and merge all localization files into consumable form
+    // combine, group and merge all localization files into consumable form specific for each entry
     const localizationInfo = localization.buildLocalizationFiles(appConfig);
 
-    const entryNames = Object.keys(appConfig)
+    const entryNames = Object.keys(appConfig) // [ 'hq', 'webinterview' ]
+
+    const cssUseList = ['css-loader'];
+
+    // using `clean-css` to minize css output for production builds
+    if (!devMode) {
+        cssUseList.push({
+            loader: 'clean-css-loader',
+            options: {
+                compatibility: 'ie9',
+                level: 2,
+                inline: ['remote']
+            }
+        });
+    }
 
     const webpackConfig = {
+
+        // extracting entry names and path to entry file from appconfig to webpack
+        // output will look similiar to:
+        // > { hq: './src/hqapp/main.js', webinterview: './src/webinterview/main.js' }
         entry: entryNames.reduce((result, key) => { result[key] = appConfig[key].entry; return result; }, {}),
 
         output: {
-            path: path.resolve(__dirname, baseAppPath, "dist"),
+            path: join("dist"), // setting up webpack output to `dist` folder
+
+            // for development we do not add any chunk info to make breakpoints work
+            // for production each output file will have own hash in name for cache busting
             filename: devMode ? "[name].bundle.js" : "[name].bundle.[chunkhash].js",
             chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js"
         },
 
         resolve: {
-            unsafeCache: true,
+            unsafeCache: true, // performance related optimization
             extensions: ['.js', '.vue', '.json'],
-            symlinks: false,
+            symlinks: false, // performance related optimization
             alias: {
-                "~": path.resolve(baseDir, 'src'),
+                "~": join('src'),
                 'vue$': 'vue/dist/vue.esm.js',
                 moment$: 'moment/moment.js'
             }
         },
 
-        stats: { chunks: false },
+        stats: devMode ? "errors-only" : {
+            chunks: false
+        },
 
         devtool: '#source-map', // '#cheap-module-eval-source-map',
 
         module: {
             rules: [
                 {
+                    // parsing vue files, including only src folder for perf
                     test: /\.vue$/,
-                    include: path.resolve(baseDir, "src"),
+                    include: join("src"),
                     use: [{
-                        loader: 'vue-loader', options: {
+                        loader: 'vue-loader',
+                        options: {
                             loaders: { js: babelLoader }
                         }
                     }]
                 }, {
+                    // parsing js files, including only src folder for perf
                     test: /\.js$/,
-                    include: path.resolve(baseDir, "src"),
+                    include: join("src"),
                     use: [babelLoader]
                 },
 
-                { test: /\.css$/, use: ExtractTextPlugin.extract({ use: "css-loader" }) }
+                { test: /\.css$/, use: ExtractTextPlugin.extract({ use: cssUseList }) }
 
+                // disabled for now
                 // , {
                 //     test: /\.(js|vue)$/,
                 //     loader: 'eslint-loader',
@@ -82,10 +109,6 @@ module.exports = function (appConfig) {
         },
 
         plugins: [
-            // new webpack.PrefetchPlugin(join("./src/webinterview/componentsRegistry.js")),
-            // new webpack.PrefetchPlugin(join("./src/hqapp/components/index.js")),
-            // new webpack.PrefetchPlugin(join("./src/hqapp/main.js")),
-            
             // provide global accessible variables
             new webpack.ProvidePlugin({
                 _: 'lodash',
@@ -94,39 +117,50 @@ module.exports = function (appConfig) {
                 'moment': 'moment'
             }),
 
+            // to make async chunks loading happen in any domain/supath combination,
+            // we need to make sure, that webpack knows where our assets located
             new RuntimePublicPathPlugin({
                 runtimePublicPath: "window.CONFIG.assetsPath"
             }),
 
+            // attaching shared_vendor.dll js file to our build
             new webpack.DllReferencePlugin({
                 manifest
             }),
 
-            new ExtractTextPlugin(`styles${devMode ? "" : ".[chunkhash]"}.css`),
+            new ExtractTextPlugin(`styles${devMode ? "" : ".[hash]"}.css`),
 
+            // extracting all common stuff beetween hq/webinterview into separate chunk
             devMode ? null : new webpack.optimize.CommonsChunkPlugin({
                 name: 'common'
             }),
 
+            // build optimization stuff
             devMode ? null : new webpack.optimize.CommonsChunkPlugin({
                 name: "manifest",
                 minChunks: Infinity
             }),
 
+            // build optimization stuff
             devMode ? null : new webpack.HashedModuleIdsPlugin(),
 
+            // build optimization stuff
             devMode ? null : new webpack.optimize.ModuleConcatenationPlugin(),
 
+            // minizing js files
             devMode ? null : new webpack.optimize.UglifyJsPlugin({
                 sourceMap: true
             }),
 
+            // make sure that build will be optimized for production. Required by vuejs
             devMode ? null : new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify('production')
             }),
 
+            // notify on build
             devMode ? new WebpackNotifierPlugin({ alwaysNotify: true }) : null,
 
+            // build stats
             devMode ? null : new BundleAnalyzerPlugin({
                 analyzerMode: 'static',
                 reportFilename: 'stats.html',
@@ -137,17 +171,24 @@ module.exports = function (appConfig) {
 
         ].filter(x => x != null)
     };
-    
+
     entryNames.forEach((e) => {
 
         // for each entry we produce separate partial cshtml file
+        // this file will contain all required chunks
         webpackConfig.plugins.unshift(new HtmlWebpackPlugin({
             inject: false,
             filename: path.resolve(hqViewsFolder, "shared", `partial.${e}.cshtml`),
+
+            // we dont need webinterview chunk in hq output and vice versa
             excludeChunks: entryNames.filter((name) => name !== e),
             template: '!!handlebars-loader!src/template.hbs',
+
+            // provide list of available locales to template and app
             locales: JSON.stringify(localizationInfo[e]),
             entry: e,
+
+            // provide path to shared_vendor.dll
             manifest: "shared_vendor.dll." + vendor_dll_hash + ".js"
         }))
     });
