@@ -14,18 +14,11 @@
                 <h2>{{$config.model.key}}</h2>
                 <ul class="list-unstyled about-questionnaire">
                     <li>
-                        <b>Assignment #356</b>
+                        <b> {{lastUpdateDate}} </b>
                     </li>
                     <li>
-                        <b>conducted on
-                            <span>Mar 23, 23:23 GMT+3</span>
-                        </b>
-                    </li>
-                    <li>
-                        <b>by
-                            <a href="#"
-                               target="_blank"
-                               class="interviewer">enumer52</a>
+                        <b>
+                            {{ this.$t('WebInterviewUI.Responsible', { responsible: this.$config.model.responsible }) }}
                         </b>
                     </li>
                 </ul>
@@ -134,6 +127,9 @@ export default {
         },
         showRejectButton() {
             return this.$config.model.approveReject.supervisorRejectAllowed || this.$config.model.approveReject.hqOrAdminRejectAllowed;
+        },
+        lastUpdateDate() {
+            return this.$t('WebInterviewUI.LastUpdated', {date: moment.utc(this.$config.model.lastUpdatedAtUtc).fromNow() })
         }
     }
 }

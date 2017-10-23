@@ -257,7 +257,7 @@
   <data name="GPSPermissionDenied" xml:space="preserve">
     <value>This website does not have permission to use the Geolocation API</value>
   </data>
-  <data name="GPSPositionUnavailable" xml:space="preserve">'
+  <data name="GPSPositionUnavailable" xml:space="preserve">
     <value>The current position could not be determined.</value>
   </data>
   <data name="GPSTimeout" xml:space="preserve">
@@ -377,5 +377,11 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Updated {{ date }}</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>Responsible {{ responsible }}</value>
   </data>
 </root>
