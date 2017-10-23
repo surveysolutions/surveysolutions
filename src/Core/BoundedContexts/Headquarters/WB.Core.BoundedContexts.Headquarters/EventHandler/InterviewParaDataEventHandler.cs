@@ -12,13 +12,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -113,6 +111,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 if (interviewSummary != null)
                     currentState = new InterviewHistoryView(evt.EventSourceId, new List<InterviewHistoricalRecordView>(), 
                         interviewSummary.QuestionnaireId, interviewSummary.QuestionnaireVersion);
+                else //interview was deleted
+                {
+                    return;
+                }
             }
 
             var newState = (InterviewHistoryView)updateMethod
