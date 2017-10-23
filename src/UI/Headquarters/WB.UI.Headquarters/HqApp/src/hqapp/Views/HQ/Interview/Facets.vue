@@ -2,12 +2,10 @@
 <div>
     <aside class="filters">
         <div class="wrapper-view-mode">
-            <div class="foldback-button"
-                 id="hide-filters">
+            <div class="foldback-button" id="hide-filters"  @click="hideFacets">
                 <span class="arrow"></span>
                 <span class="arrow"></span>
-                <span class="glyphicon glyphicon-tasks"
-                      aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
             </div>
             <div class="filters-container">
                 <h2>{{$config.model.key}}</h2>
@@ -90,6 +88,13 @@ export default {
           });
         }
       });
+        },
+        hideFacets() {
+            this.$store.dispatch("hideFacets")
+        },
+        // temporaly to test panels
+        showSearchResults() {
+            this.$store.dispatch("showSearchResults")
     }
   },
   computed: {

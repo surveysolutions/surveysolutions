@@ -1,9 +1,10 @@
 <template>
-    <main class="web-interview web-interview-for-supervisor">
+    <main class="web-interview web-interview-for-supervisor" :class="classes">
         <div class="container-fluid">
             <div class="row">
                 <Facets />
-                <Sidebar :showComplete="false"/>
+                <SearchResults />
+                <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false"/>
                 <section class="questionnaire details-interview">
                     <router-view></router-view>
                 </section>
@@ -25,6 +26,22 @@ export default {
         return {}
     },
     computed: {
+        classes() {
+            var cssClass = "";
+            if (this.$store.state.webinterview.sidebar.sidebarHidden)
+            {
+                cssClass+= " fullscreen-hidden-content";
+            }
+            if (this.$store.state.webinterview.sidebar.facetHidden)
+            {
+                cssClass+= " fullscreen-hidden-filters";
+            }
+            if (!this.$store.state.webinterview.sidebar.searchResultsHidden)
+            {
+                cssClass+= " filters-results-are-shown";
+            }
+            return cssClass;
+        }
     },
     beforeMount() {
         this.$store.dispatch("getLanguageInfo")
