@@ -13,6 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         int GetSuccessSynchronizationsCount(Guid interviewerId);
         int GetFailedSynchronizationsCount(Guid interviewerId);
         double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId);
-        SynchronizationActivity GetSynchronizationActivity(Guid interviewerId, string deviceId);
+        SynchronizationActivity GetSynchronizationActivity(Guid interviewerId);
     }
 }

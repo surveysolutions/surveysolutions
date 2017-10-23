@@ -128,7 +128,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 LastSyncronizationDate = this.deviceSyncInfoRepository.GetLastSyncronizationDate(userId),
                 LastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(userId),
                 AverageSyncSpeedBytesPerSecond = this.deviceSyncInfoRepository.GetAverageSynchronizationSpeedInBytesPerSeconds(userId),
-                SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId, interviewer.Profile.DeviceId),
+                SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId),
                 DeviceAssignmentDate = interviewer.Profile.DeviceRegistrationDate
             };
             return this.View(interviewerProfileModel);
