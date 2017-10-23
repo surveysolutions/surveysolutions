@@ -44,7 +44,7 @@
                 items["open"] = {
                     name: "Open",
                     callback: function(t, e) {
-                        var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId();
+                        var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId().replace(/-/g, '');
                         window.location = detailsUrl;
                     }
                 };
