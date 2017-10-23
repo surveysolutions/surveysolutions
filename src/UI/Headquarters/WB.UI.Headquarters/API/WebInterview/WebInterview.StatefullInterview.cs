@@ -200,8 +200,6 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             if (currentSectionIdx + 1 >= sections.Length)
             {
-                if (IsReviewMode) return null;
-
                 return new ButtonState
                 {
                     Id = id,
