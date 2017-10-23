@@ -38,6 +38,10 @@ export function detailsMixin(fetchMethod, defaults) {
             },
             inFetchState() {
                 return this.$me.fetchState != null && this.$me.fetching == true;
+            },
+
+            acceptAnswer() {
+                return this.$me.acceptAnswer;
             }
         },
         props: ["id"],
@@ -54,6 +58,11 @@ export function detailsMixin(fetchMethod, defaults) {
             this.$store.dispatch("cleanUpEntity", this.id)
         },
         methods: {
+            sendAnswer(callback) {
+                if(this.acceptAnswer){
+                    callback();
+                }
+            },
             cleanValidity() {
                 this.$store.dispatch("clearAnswerValidity", { id: this.id })
             },
@@ -71,6 +80,7 @@ export function detailsMixin(fetchMethod, defaults) {
                     source: "client"
                 })
             },
+            
             handleEmptyAnswer(answer) {
                 const answ = answer === undefined || answer === null || answer === "" ? null : answer
 
