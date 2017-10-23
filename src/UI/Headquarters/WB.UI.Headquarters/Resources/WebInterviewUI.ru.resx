@@ -372,4 +372,7 @@
   <data name="LastUpdated" xml:space="preserve">
     <value>Обновлено {{ date }}</value>
   </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>Ответственный: {{responsible}}</value>
+  </data>
 </root>
