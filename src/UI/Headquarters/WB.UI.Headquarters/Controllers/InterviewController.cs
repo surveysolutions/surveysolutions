@@ -106,7 +106,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
                 Id = id.FormatGuid(),
-                Key = interviewSummary.Key
+                Key = interviewSummary.Key,
+                LastUpdatedAtUtc = interviewSummary.UpdateDate,
+                Responsible = interviewSummary.ResponsibleName,
+                ResponsibleRole = interviewSummary.ResponsibleRole.ToString()
             });
         }
 
@@ -170,6 +173,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         
         public string Key { get; set; }
 
+        public DateTime LastUpdatedAtUtc { get; set; }
+
         public ApproveRejectAllowed ApproveReject { get; }
+
+        public string Responsible { get; set; }
+
+        public string ResponsibleRole { get; set; }
     }
 }

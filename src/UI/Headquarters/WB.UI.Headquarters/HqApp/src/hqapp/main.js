@@ -16,6 +16,7 @@ import "~/webinterview/componentsRegistry"
 import box from "~/webinterview/components/modal"
 import 'flatpickr/dist/flatpickr.css'
 import { browserLanguage } from "~/shared/helpers"
+moment.locale(browserLanguage);
 
 export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     Vue.use(config);
