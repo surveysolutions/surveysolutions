@@ -6,7 +6,7 @@
                     v-if="!isRecording && !$me.isAnswered"
                     v-on:click="startRecording"
                     :disabled="!$me.acceptAnswer"
-                    >{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
+                    ><span></span>{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li>{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
