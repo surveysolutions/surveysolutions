@@ -3,17 +3,24 @@
         <div class="question-unit">
             <div class="options-group">
                 <button type="button" class="btn btn-default btn-lg btn-action-questionnaire"
-                    v-if="!isRecording && !$me.isAnswered" v-on:click="startRecording">{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
+                    v-if="!isRecording && !$me.isAnswered"
+                    v-on:click="startRecording"
+                    :disabled="!$me.acceptAnswer"
+                    >{{ $t('WebInterviewUI.AudioClickRecord')}}</button>
                 <div class="field answered" v-if="$me.isAnswered">
                     <ul class="block-with-data list-unstyled">
                         <li>{{ $t("WebInterviewUI.AudioRecordingDuration", { humanizedLength: humanizedLength, formattedLength }) }}</li>
                     </ul>
-                    <wb-remove-answer @answerRemoved="answerRemoved" />
+                    <wb-remove-answer />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
-                    <button v-if="!isRecording" v-on:click="startRecording" type="button"
+                    <button v-if="!isRecording" 
+                        v-on:click="startRecording" 
+                        :disabled="!$me.acceptAnswer" 
+                        type="button"
                         class="btn btn-default btn-lg btn-action-questionnaire">{{ $t("WebInterviewUI.AudioRecordNew") }}</button>
                 </div>
+                <wb-lock />
             </div>
         </div>
         <div class="modal fade" tabindex="-1" role="dialog">
@@ -82,9 +89,6 @@ export default {
             }
         },
     methods: {
-        answerRemoved() {
-        },
-
         showModal() {
             var modal = $(this.$el).find(".modal");
             $(this.$el).find(".modal-backdrop").show()
@@ -113,29 +117,30 @@ export default {
             this.formattedTimer = "00:00:00"
         },
         startRecording() {
-            this.showModal()
-            const self = this
-            AudioRecorder.initAudio({
-                analyserEl: $(this.$el).find(".analyser")[0],
-                startRecordingCallback: () => {
-                    this.isRecording = true;
-                    self.startRecordingTime = self.currentTime()
-                    clearInterval(self.stopwatchInterval)
-                    clearInterval(self.maxDurationInterval)
-                    self.stopwatchInterval = setInterval(self.updateTimer, 31)
-                    self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
-                },
-                errorCallback: (e) => {
-                    self.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.AudioInitializationFailed"))
-                    console.log(e)
-                },
-                doneCallback: (blob) => {
-                    self.$store.dispatch('answerAudioQuestion', {
-                        id: self.id,
-                        file: blob
-                    })
-                }
-            })
+            this.sendAnswer(() => {
+                this.showModal()
+                const self = this
+                AudioRecorder.initAudio({
+                    analyserEl: $(this.$el).find(".analyser")[0],
+                    startRecordingCallback: () => {
+                        self.isRecording = true;
+                        self.startRecordingTime = self.currentTime()
+                        clearInterval(self.stopwatchInterval)
+                        clearInterval(self.maxDurationInterval)
+                        self.stopwatchInterval = setInterval(self.updateTimer, 31)
+                        self.maxDurationInterval = setInterval(self.stopRecording, self.maxDuration)
+                    },
+                    errorCallback: (e) => {
+                        self.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.AudioInitializationFailed"))
+                    },
+                    doneCallback: (blob) => {
+                        self.$store.dispatch('answerAudioQuestion', {
+                            id: self.id,
+                            file: blob
+                        })
+                    }
+                })
+            });
         },
         currentTime() {
             return new Date().getTime();
