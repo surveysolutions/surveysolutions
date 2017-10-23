@@ -8,11 +8,13 @@
                          :class="{answered: $me.isAnswered}">
                         <wb-typeahead :questionId="$me.id"
                                       :value="$me.answer"
+                                      :disabled="!$me.acceptAnswer"
                                       :optionsSource="optionsSource"
                                       @input="answerComboboxQuestion" />
                         <wb-remove-answer />
                     </div>
                 </div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
@@ -41,7 +43,9 @@
         
         methods: {
             answerComboboxQuestion(newValue) {
-                 this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, questionId: this.$me.id })
+                this.sendAnswer(() => {
+                    this.$store.dispatch("answerSingleOptionQuestion", { answer: newValue, questionId: this.$me.id })
+                })
             },
 
             optionsSource(filter) {
