@@ -167,6 +167,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
         public bool IsAnswered { get; set; }
+        public bool AcceptAnswer { get; set; }
         public Validity Validity { get; set; } = new Validity();
         public Comment[] Comments { get; set; }
     }

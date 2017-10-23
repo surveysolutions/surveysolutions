@@ -3,16 +3,20 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field answered">
+                    <div class="field">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
                             :placeholder="$t('WebInterviewUI.NumberEnter')"
                             :title="$t('WebInterviewUI.NumberEnter')"
-                            :value="$me.answer" v-blurOnEnterKey @blur="answerIntegerQuestion" v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
-                            <button v-if="$me.isAnswered" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
-                            <span></span>
+                            :value="$me.answer" 
+                            v-blurOnEnterKey 
+                            :disabled="!$me.acceptAnswer"
+                            @blur="answerIntegerQuestion" 
+                            v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">                            
+                            <wb-remove-answer />
                         </button>
                     </div>
                 </div>
+                <wb-lock />
             </div>
         </div>
     </wb-question>
@@ -39,55 +43,57 @@
         },
         methods: {
             answerIntegerQuestion(evnt) {
-                const answerString = numerics.get($(evnt.target))
-                const answer = answerString != undefined && answerString != ''
-                    ? parseInt(answerString)
-                    : null
+                this.sendAnswer(() => {
+                    const answerString = numerics.get($(evnt.target))
+                    const answer = answerString != undefined && answerString != ''
+                        ? parseInt(answerString)
+                        : null
 
-                if(this.handleEmptyAnswer(answer)) {
-                    return
-                }
-
-                if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotParse"))
-                    return
-                }
-
-                if (!this.$me.isRosterSize) {
-                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                    return
-                }
-
-                if (answer < 0) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterError", { answer }))
-                    return;
-                }
-
-                if (answer > this.$me.answerMaxValue) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterUpperBound", { answer, answerMaxValue: this.$me.answerMaxValue }))
-                    return;
-                }
-
-                const previousAnswer = this.$me.answer
-                const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
-
-                if (!isNeedRemoveRosters) {
-                    this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                    return
-                }
-
-                const amountOfRostersToRemove = previousAnswer - answer;
-
-                const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
-
-                modal.confirm(confirmMessage, result => {
-                    if (result) {
-                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                        return
-                    } else {
-                        this.fetch()
+                    if(this.handleEmptyAnswer(answer)) {
                         return
                     }
+
+                    if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotParse"))
+                        return
+                    }
+
+                    if (!this.$me.isRosterSize) {
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                        return
+                    }
+
+                    if (answer < 0) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterError", { answer }))
+                        return;
+                    }
+
+                    if (answer > this.$me.answerMaxValue) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterUpperBound", { answer, answerMaxValue: this.$me.answerMaxValue }))
+                        return;
+                    }
+
+                    const previousAnswer = this.$me.answer
+                    const isNeedRemoveRosters = previousAnswer != undefined && answer < previousAnswer
+
+                    if (!isNeedRemoveRosters) {
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                        return
+                    }
+
+                    const amountOfRostersToRemove = previousAnswer - answer;
+
+                    const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
+
+                    modal.confirm(confirmMessage, result => {
+                        if (result) {
+                            this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                            return
+                        } else {
+                            this.fetch()
+                            return
+                        }
+                    });
                 });
             },
 
