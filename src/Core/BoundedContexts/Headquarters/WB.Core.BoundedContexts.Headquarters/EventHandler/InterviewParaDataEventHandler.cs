@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IReadSideRepositoryWriter<InterviewHistoryView> readSideStorage;
         private readonly ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure> cacheQuestionnaireExportStructure = new ConcurrentDictionary<QuestionnaireIdentity, QuestionnaireExportStructure>();
-        private readonly ConcurrentDictionary<string, UserView> cacheUserDocument = new ConcurrentDictionary<string, UserView>();
+        private readonly ConcurrentDictionary<Guid, UserView> cacheUserDocument = new ConcurrentDictionary<Guid, UserView>();
 
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         public InterviewParaDataEventHandler(
@@ -498,8 +498,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private UserView GetUserDocument(Guid originatorId)
         {
-            var cachedUserDocument = this.cacheUserDocument.GetOrAdd(originatorId.FormatGuid(),
-                (key) => this.userReader.GetUser(new UserViewInputModel(key)));
+            var cachedUserDocument = this.cacheUserDocument.GetOrAdd(originatorId, key => this.userReader.GetUser(new UserViewInputModel(key)));
 
             this.ReduceCacheIfNeeded(this.cacheUserDocument);
 
