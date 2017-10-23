@@ -8,6 +8,6 @@
 
     export default {
         name: "UNSUPPORTED",
-        mixins: [entityDetails],
+        mixins: [entityDetails]
     }
 </script>

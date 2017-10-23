@@ -12,6 +12,7 @@
                                class="field-to-fill"
                                :placeholder="$t('WebInterviewUI.TextEnterMasked', { userFriendlyMask })"
                                :value="$me.answer"
+                               :disabled="!$me.acceptAnswer"
                                v-blurOnEnterKey
                                @blur="answerTextQuestion"
                                v-mask="$me.mask"
@@ -43,19 +44,21 @@
         },
         methods: {
             answerTextQuestion() {
-                const target = $(this.$refs.input)
-                const answer = this.$refs.input.value
+                this.sendAnswer(() => {
+                    const target = $(this.$refs.input)
+                    const answer = this.$refs.input.value
 
-                if(this.handleEmptyAnswer(answer)) {
-                    return
-                }
+                    if(this.handleEmptyAnswer(answer)) {
+                        return
+                    }
 
-                if (this.$me.mask && !target.data("maskCompleted")) {
-                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
-                }
-                else {
-                    this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
-                }
+                    if (this.$me.mask && !target.data("maskCompleted")) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.TextRequired"))
+                    }
+                    else {
+                        this.$store.dispatch('answerTextQuestion', { identity: this.id, text: answer })
+                    }
+                });
             }
         },
         directives: {
