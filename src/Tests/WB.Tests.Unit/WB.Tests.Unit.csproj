@@ -613,6 +613,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level3.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_getting_answer_as_string_for_question_linked_to_list_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level4_and_linked_question_is_on_level4.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\Review\when_getting_entities_for_review.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefullInterview.InvalidQuestions.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_creating_interview_from_snapshot_when_question_type_is_wrong.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_all_enabled_questions_and_census_interview_and_has_prefilled_question.cs" />
