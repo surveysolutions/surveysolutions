@@ -3,7 +3,6 @@
         <div class="container-fluid">
             <div class="row">
                 <Facets />
-                <!--<SearchResults />-->
                 <Sidebar :showComplete="false"/>
                 <section class="questionnaire details-interview">
                     <router-view></router-view>
