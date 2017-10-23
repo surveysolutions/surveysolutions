@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading;
 using AutoMapper;
+using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
@@ -9,6 +11,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -23,6 +26,9 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
+        private bool IsReviewMode => 
+            Thread.CurrentPrincipal.HasAnyOfRoles(UserRoles.Headquarter, UserRoles.Supervisor, UserRoles.Administrator) &&
+            this.Context.QueryString[@"review"].ToBool(false);
 
         private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 

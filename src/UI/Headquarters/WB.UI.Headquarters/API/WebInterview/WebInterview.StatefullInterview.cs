@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using Esri.ArcGISRuntime.Mapping;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.GenericSubdomains.Portable;
@@ -134,7 +135,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             Identity sectionIdentity = Identity.Parse(sectionId);
             var statefulInterview = this.GetCallerInterview();
 
-            var ids = statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
+            var ids = IsReviewMode ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity) : 
+                                     statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
             var questionarie = this.GetCallerQuestionnaire();
             var entities = ids
                 .Where(id => !questionarie.IsVariable(id.Id))
