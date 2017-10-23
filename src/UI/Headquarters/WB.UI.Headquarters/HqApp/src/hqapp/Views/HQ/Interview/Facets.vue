@@ -24,7 +24,10 @@
                 </ul>
                 <div class="filter-actions-block">
                     <button type="button"
-                            class="btn btn-success" v-if="showApproveButton">{{$t("Pages.ApproveRejectPartialView_ApproveAction")}}</button>
+                            class="btn btn-success" v-if="showApproveButton"
+                            @click="approve">
+                            {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
+                    </button>
                     <button type="button"
                             class="btn btn-default btn-lg reject" v-if="showRejectButton">{{$t("Pages.ApproveRejectPartialView_RejectAction")}}</button>
 
@@ -117,10 +120,26 @@
                 </div>
             </div>
         </div>
+
+        <Confirm ref="confirmApprove"
+                 id="confirmApprove"
+                 slot="modals"
+                 title="Approve?">
+            
+        </Confirm>
     </aside>
 </template>
 <script>
 export default {
+    methods: {
+        approve() {
+            this.$refs.confirmApprove.promt(ok => {
+                if (ok) {
+                    console.log('approved');
+                }
+            });
+        }
+    },
     computed: {
         showApproveButton() {
             return this.$config.model.approveReject.supervisorApproveAllowed || this.$config.model.approveReject.hqOrAdminApproveAllowed;
