@@ -11,9 +11,14 @@ const store = {
     },
 
     actions: {
-        superviorApprove({commit}, comment) {
+        approve({commit}, comment) {
             return Vue.$api.call(api => {
-                api.supervisorApprove(comment);
+                api.approve(comment);
+            });
+        },
+        reject({commit}, comment, assignTo) {
+            return Vue.$api.call(api => {
+                api.reject(comment, assignTo);
             });
         }
     },
