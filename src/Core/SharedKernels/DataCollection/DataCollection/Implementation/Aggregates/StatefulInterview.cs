@@ -300,6 +300,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.CreatedOnClient,
                 questionnaire.IsUsingExpressionStorage()
             );
+            
+            if (command.SynchronizedInterview.Language != null)
+                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId));
+            
             var synchronizedInterviewInterviewKey = command.SynchronizedInterview.InterviewKey;
             if (synchronizedInterviewInterviewKey != null)
             {
@@ -329,6 +333,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.SynchronizedInterview.CreatedOnClient,
                 questionnaire.IsUsingExpressionStorage()
             );
+
+            if (command.SynchronizedInterview.Language != null)
+                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId));
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
 
@@ -793,6 +800,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledVariables: disabledVariables,
                 wasCompleted: this.properties.WasCompleted,
                 createdOnClient: true);
+            interviewSynchronizationDto.Language = this.Language;
             interviewSynchronizationDto.InterviewKey = GetInterviewKey();
             interviewSynchronizationDto.AssignmentId = GetAssignmentId();
 

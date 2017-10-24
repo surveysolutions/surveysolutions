@@ -71,6 +71,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronizati
 
         public Guid Id { get;  set; }
         public bool CreatedOnClient { get; set; }
+        public string Language { get; set; }
         public InterviewStatus Status { get;  set; }
         public string Comments { get; set; }
         public DateTime? RejectDateTime { get; set; }
