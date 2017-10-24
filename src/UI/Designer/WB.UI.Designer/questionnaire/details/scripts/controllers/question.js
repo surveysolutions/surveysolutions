@@ -408,7 +408,7 @@
 
             $scope.trimEmptyOptions = function () {
                 var notEmptyOptions = _.filter($scope.activeQuestion.options, function (o) {
-                    return !(_.isEmpty(o.value || '') && _.isEmpty(o.title || ''));
+                    return !_.isNull(o.value || null) || !_.isEmpty(o.title || '');
                 });
                 $scope.activeQuestion.options = notEmptyOptions;
             }
