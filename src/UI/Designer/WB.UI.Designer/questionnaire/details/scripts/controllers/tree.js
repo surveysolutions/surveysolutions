@@ -412,7 +412,7 @@
             $scope.deleteGroup = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title || $i18next.t('UntitledGroup')));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(item.title || $i18next.t('UntitledGroupOrRoster')));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {
