@@ -15,7 +15,6 @@ export default {
         commit("SET_INTERVIEW_INFO", info)
         const flag = await Vue.$api.call(api => api.hasCoverPage())
         commit("SET_HAS_COVER_PAGE", flag)
-
     },
 
     async getLanguageInfo({ commit }) {
