@@ -32,6 +32,9 @@
                 </div>
             </div>
             <FacetFilters />
+             <button type="button"
+                     class="btn btn-link"
+                     @click="showSearchResults">show search results</button>
         </div>
     </aside>
     <Confirm ref="confirmApprove"
@@ -95,7 +98,7 @@ export default {
         // temporaly to test panels
         showSearchResults() {
             this.$store.dispatch("showSearchResults")
-    }
+        }
   },
   computed: {
     approveCharsLeft() {
