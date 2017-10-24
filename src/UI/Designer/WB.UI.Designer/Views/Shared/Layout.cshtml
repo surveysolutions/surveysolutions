@@ -41,6 +41,10 @@
                 @Html.MenuActionLink(QuestionnaireController.PublicQuestionnaires, "Public", "Questionnaire", "presentation")
                 @if (userHelper.WebUser.IsAdmin)
                 {
+                    @Html.MenuActionLink(QuestionnaireController.QuestionnaireTreeFolders, "PublicFolders", "Questionnaire", "presentation")
+                }
+                @if (userHelper.WebUser.IsAdmin)
+                {
                     @Html.MenuActionLink(QuestionnaireController.ManageUsers, "Index", "Admin", "presentation")
                 }
                 <li role="presentation" class="create">

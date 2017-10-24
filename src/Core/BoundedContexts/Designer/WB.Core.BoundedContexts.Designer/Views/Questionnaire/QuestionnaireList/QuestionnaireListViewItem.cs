@@ -40,5 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public virtual ISet<SharedPerson> SharedPersons { get; set; } = new HashSet<SharedPerson>();
 
         public virtual string Owner { get; set; }
+
+        public virtual Guid? FolderId { get; set; }
     }
 }
