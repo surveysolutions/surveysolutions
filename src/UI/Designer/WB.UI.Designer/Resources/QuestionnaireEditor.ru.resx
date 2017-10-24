@@ -957,7 +957,7 @@
     <value>Ok</value>
   </data>
   <data name="MarkAsDefault" xml:space="preserve">
-    <value>Установить языком по умолчанию</value>
+    <value>Установить язык по умолчанию </value>
   </data>
   <data name="UnMarkAsDefault" xml:space="preserve">
     <value>Не использовать по умолчанию</value>
