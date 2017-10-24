@@ -1,5 +1,19 @@
 <<template>
   <div>
+      <li class="dropdown language">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" :title="currentLanguage">{{currentLanguage}}
+                        <span class="caret" v-if="canChangeLanguage"></span>
+                    </a>
+                    <ul class="dropdown-menu" v-if="canChangeLanguage">
+                        <li v-if="currentLanguage != $store.state.webinterview.originalLanguageName">
+                            <a href="javascript:void(0)" @click="changeLanguage()">{{ $store.state.webinterview.originalLanguageName }}</a>
+                        </li>
+                        <li :key="language.OriginalLanguageName" v-for="language in $store.state.webinterview.languages" v-if="language != $store.state.webinterview.currentLanguage">
+                            <a href="javascript:void(0)" @click="changeLanguage(language)">{{ language }}</a>
+                        </li>
+                    </ul>
+                </li>
+				
                   <div class="filters-container">
                 <h4>Filter Questions</h4>
                 <div class="block-filter separate-filters-group">
@@ -88,14 +102,30 @@
 <script>
 export default {
   computed: {
-      
     oldPageUrl() {
       return (
         window.input.settings.config.basePath +
         "Interview/Details/" +
         this.$route.params.interviewId
       );
+    },
+    canChangeLanguage() {
+      return (
+        this.$store.state.webinterview.languages != undefined &&
+        this.$store.state.webinterview.languages.length > 0
+      );
+    },
+    currentLanguage() {
+      return (
+        this.$store.state.webinterview.currentLanguage ||
+        this.$store.state.webinterview.originalLanguageName
+      );
+    }
+  },
+  methods: {
+    changeLanguage(language) {
+      this.$store.dispatch("changeLanguage", { language: language });
     }
   }
-}
+};
 </script>
