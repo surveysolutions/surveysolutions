@@ -1,10 +1,10 @@
 <template>
-      <div class="modal fade" :id="id" ref="modal" tabindex="-1" role="dialog">
+      <div class="modal fade" :id="id" ref="modal" tabindex="-1" role="dialog" :aria-labelledby="titleId">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button v-if="canClose" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-                    <h2>{{ title }}</h2>
+                    <h2 :id="titleId">{{ title }}</h2>
                 </div>
                 <div class="modal-body">
                     <slot />
@@ -28,13 +28,19 @@ export default {
         }
     },
 
+    computed: {
+        titleId(){
+            return this.id + "lbl";
+        }
+    },
+
     methods:{
         hide() {
             $(this.$refs.modal).modal("hide");
         },
 
-        modal(options){
-            $(this.$refs.modal).modal(options)
+        modal(){
+            $(this.$refs.modal).modal();
         }
     }
     
