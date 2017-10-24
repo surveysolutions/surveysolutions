@@ -224,6 +224,10 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Public(int? p, string sb, int? so, string f) 
             => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: true));
 
+        [ValidateInput(false)]
+        public ActionResult PublicFolders() 
+            => this.View();
+
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
             bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToQuestionnaire(id, this.UserHelper.WebUser.UserId);

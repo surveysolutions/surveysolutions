@@ -38,6 +38,14 @@ namespace WB.UI.Designer
                     "~/Content/plugins/jquery.mousewheel.js",
                     "~/Content/plugins/perfect-scrollbar.jquery.js",
                     "~/Scripts/custom/common.js"));
+            bundles.Add(
+                new ScriptBundle("~/folders").Include(
+                    "~/Scripts/lib/jquery.fancytree/jquery.fancytree-all-deps.min.js",
+                    "~/Scripts/lib/jquery.fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js",
+                    "~/Scripts/custom/public-folders.js"));
+            bundles.Add(
+                new StyleBundle("~/folders/lib/tree/skin").Include(
+                    new [] {"~/Scripts/lib/jquery.fancytree/skin-win8/ui.fancytree.min.css"}));
         }
     }
 }

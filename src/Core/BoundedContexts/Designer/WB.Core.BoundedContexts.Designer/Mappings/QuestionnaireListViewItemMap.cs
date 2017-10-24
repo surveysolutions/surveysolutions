@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.IsDeleted);
             Property(x => x.IsPublic);
             Property(x => x.Owner);
+            Property(x => x.FolderId);
 
             Set(x => x.SharedPersons, m =>
             {

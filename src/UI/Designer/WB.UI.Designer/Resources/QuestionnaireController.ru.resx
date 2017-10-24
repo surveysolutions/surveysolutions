@@ -255,4 +255,8 @@
     <value>Выберите язык для использования его в pdf </value>
     <comment>Выберите язык для использования его в pdf </comment>
   </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Папки</value>
+    <comment>Папки</comment>
+  </data>
 </root>
