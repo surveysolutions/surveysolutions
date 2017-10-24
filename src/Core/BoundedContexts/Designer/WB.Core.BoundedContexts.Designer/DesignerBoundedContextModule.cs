@@ -62,6 +62,7 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<IFindReplaceService>().ToMethod((c) => new FindReplaceService(c.Kernel.Get<IPlainAggregateRootRepository<Questionnaire>>()));
 
             this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
+            this.Bind<IPublicFoldersStorage>().To<PublicFoldersStorage>();
             this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();
             this.Bind<IQuestionnaireViewFactory>().To<QuestionnaireViewFactory>();
             this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();

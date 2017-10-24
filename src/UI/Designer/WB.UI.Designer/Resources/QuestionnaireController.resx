@@ -227,6 +227,9 @@
   </data>
   <data name="PublicQuestionnaires" xml:space="preserve">
     <value>Public Questionnaires</value>
+  </data>  
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Folders</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
     <value>Questionnaire Title</value>

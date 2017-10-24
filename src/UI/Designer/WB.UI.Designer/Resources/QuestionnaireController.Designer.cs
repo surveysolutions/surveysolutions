@@ -403,6 +403,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Folders.
+        /// </summary>
+        public static string QuestionnaireTreeFolders {
+            get {
+                return ResourceManager.GetString("QuestionnaireTreeFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Restore questionnaire.
         /// </summary>
         public static string RestoreQuestionnaire {

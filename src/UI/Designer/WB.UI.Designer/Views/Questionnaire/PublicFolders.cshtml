@@ -1,0 +1,34 @@
+﻿@using WB.UI.Designer.Resources
+
+@{
+    ViewBag.Title = QuestionnaireController.QuestionnaireTreeFolders;
+}
+
+@section Scripts {
+    @Scripts.Render("~/folders/lib/tree/skin")
+    @Scripts.Render("~/simplepage")
+    @Scripts.Render("~/folders")
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.2.3/jquery.contextMenu.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-contextmenu/2.2.3/jquery.contextMenu.min.js">
+    </script>
+
+    <script type="text/javascript">
+        $(function(){
+            var subFoldersUrl =  '/Designer/api/questionnairetreeapi/getfolders';
+            var rootFoldersUrl = '/Designer/api/questionnairetreeapi/getrootfolders';
+            var addNodeUrl =     '/Designer/api/questionnairetreeapi/createfolder';
+            var renameNodeUrl =  '/Designer/api/questionnairetreeapi/RenameFolder';
+            var removeNodeUrl =  '/Designer/api/questionnairetreeapi/RemoveFolder';
+
+            window.foldersModel = new FoldersModel($("#jstree"), rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
+        });
+    </script>
+}
+
+<div id="edit-form">
+    <div id="jstree">
+    </div>
+</div>
+
+
