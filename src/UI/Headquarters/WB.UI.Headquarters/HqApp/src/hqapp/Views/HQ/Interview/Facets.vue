@@ -27,7 +27,7 @@
                     <button type="button"
                             class="btn btn-link"
                             data-toggle="modal"
-                            data-target="#statuses">History</button>
+                            data-target="#statusHistoryModal">History</button>
                 </div>
             </div>
             <FacetFilters />
