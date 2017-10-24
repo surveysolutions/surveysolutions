@@ -22,7 +22,10 @@
                             {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
                     </button>
                     <button type="button"
-                            class="btn btn-default btn-lg reject" v-if="showRejectButton">{{$t("Pages.ApproveRejectPartialView_RejectAction")}}</button>
+                            class="btn btn-default btn-lg reject" v-if="showRejectButton"
+                            @click="reject">
+                            {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
+                    </button>
 
                     <button type="button"
                             class="btn btn-link"
@@ -44,6 +47,17 @@
                 id="txtApproveComment" v-model="approveComment"></textarea>
             <span class="countDown">{{approveCharsLeft}}</span>
     </Confirm>
+    <Confirm ref="rejectConfirm"
+             id="rejectConfirm"
+             slot="modals"
+             :title="$t('Pages.ApproveRejectPartialView_RejectLabel')">
+             <label for="txtApproveComment">
+                 {{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:
+             </label>
+             <textarea class="form-control" rows="10" :maxlength="commentMaxLength"
+                id="txtRejectComment" v-model="rejectComment"></textarea>
+            <span class="countDown">{{rejectCharsLeft}}</span>
+    </Confirm>
 </div>
 </template>
 <script>
@@ -54,6 +68,7 @@ export default {
   data() {
     return {
       approveComment: "",
+      rejectComment: "",
       commentMaxLength: 1500
     };
   },
@@ -61,10 +76,16 @@ export default {
     approve() {
       this.$refs.confirmApprove.promt(ok => {
         if (ok) {
-          var action = this.$config.model.approveReject.hqOrAdminApproveAllowed
-            ? "hqApprove"
-            : "superviorApprove";
-          this.$store.dispatch(action, this.approveComment).then(() => {
+          this.$store.dispatch("approve", this.approveComment).then(() => {
+            window.location = this.$config.model.interviewsUrl;
+          });
+        }
+      });
+    },
+    reject() {
+      this.$refs.rejectConfirm.promt(ok => {
+        if (ok) {
+          this.$store.dispatch("reject", this.reject).then(() => {
             window.location = this.$config.model.interviewsUrl;
           });
         }
@@ -74,6 +95,9 @@ export default {
   computed: {
     approveCharsLeft() {
       return `${this.approveComment.length} / ${this.commentMaxLength}`;
+    },
+    rejectCharsLeft() {
+      return `${this.rejectComment.length} / ${this.commentMaxLength}`;
     },
     showApproveButton() {
       return (
