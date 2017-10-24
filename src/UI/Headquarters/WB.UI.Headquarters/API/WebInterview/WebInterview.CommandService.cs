@@ -145,10 +145,32 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.commandService.Execute(command);
         }
 
-        public void SupervisorApprove(string comment)
+        public void Approve(string comment)
         {
-            var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
-            this.commandService.Execute(command);
+            if (this.authorizedUser.IsSupervisor)
+            {
+                var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
+                this.commandService.Execute(command);
+            }
+            else if(this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
+            {
+                var command = new HqApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
+                this.commandService.Execute(command);
+            }
+        }
+
+        public void Reject(string comment, Guid? assignTo)
+        {
+            if (this.authorizedUser.IsSupervisor)
+            {
+                var command = new RejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
+                this.commandService.Execute(command);
+            }
+            if (this.authorizedUser.IsHeadquarter)
+            {
+                var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
+                this.commandService.Execute(command);
+            }
         }
     }
 }
