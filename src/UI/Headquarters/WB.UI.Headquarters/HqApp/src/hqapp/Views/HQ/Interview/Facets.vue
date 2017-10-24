@@ -140,7 +140,12 @@ export default {
     approve() {
       this.$refs.confirmApprove.promt(ok => {
         if (ok) {
-          console.log("approved");
+          var action = this.$config.model.approveReject.hqOrAdminApproveAllowed
+            ? "hqApprove"
+            : "superviorApprove";
+          this.$store.dispatch(action, this.approveComment).then(() => {
+            window.location = this.$config.model.interviewsUrl;
+          });
         }
       });
     }

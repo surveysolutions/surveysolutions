@@ -144,5 +144,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             var command = new CommentAnswerCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, comment);
             this.commandService.Execute(command);
         }
+
+        public void SupervisorApprove(string comment)
+        {
+            var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
+            this.commandService.Execute(command);
+        }
     }
 }
