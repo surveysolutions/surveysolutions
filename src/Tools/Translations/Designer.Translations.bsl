@@ -28,7 +28,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantMoveSubsectionInWrongPosition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You can't move to sub-section {0} because it position {1} in not acceptable." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Нельзя переместить подсекцию  {0} в неправильную позицию {1}." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Недопустимо перемещение подсекции  {0} в позицию {1}." er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantPasteQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -58,7 +58,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Options in cascading question can not have not numeric value in ParentValue column." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опции каскадного вопроса должны содержать только числеднные значения в колонках Value и ParentValue." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опции каскадного вопроса должны содержать только численные значения в колонках Value и ParentValue." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -268,7 +268,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="RosterCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster cannot be pasted here." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ростер не может быть вставлен сюда." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ростер не может быть скопирован сюда." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="SectionCantHaveMoreThan_Items" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -280,7 +280,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="StaticTextCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Static Text cannot be pasted here." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Статический текст не может быть вставлен сюда." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Статический текст не может быть скопирован сюда." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="SubSectionCantBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -364,7 +364,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="VariableCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Variable cannot be pasted here." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Переменная не может быть вставлена сюда." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Переменная не может быть скопирована сюда." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="VariableWithIdWasNotFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -436,13 +436,13 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="LastEdited" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} last edited {1}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{0} изменил {1}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="{0} отредактирован {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="LastModifiedBy" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last modified by {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Последний раз изменен: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Последний раз отредактирован: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="Legend" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -472,7 +472,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="PdfLegend" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Legend and structure of information in this file" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Legend and structure of information in this file" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Легенда и структура информации в этом файле" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="QuestionScope_Identifying" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1066,7 +1066,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0030_PrefilledQuestionCantBeInsideOfRoster" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Identifying questions cannot be inside a roster." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Идентифицирующий вопросн не может быть внутри ростера." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Идентифицирующий вопрос не может быть внутри ростера." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0031_LookupTableHasInvalidHeaders" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1078,7 +1078,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster where roster size source is question could not have fixed set of items." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ростер в котором источником ростера является управляющий вопрос не может быть фиксированным ростером." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ростер, в котором источником ростера является управляющий вопрос, не может быть фиксированным ростером." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1096,7 +1096,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster where roster size source is question has invalid roster title question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ростер в котором источником ростера является управляющий вопрос, определяющий имя ростера вопрос не верный." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос, определяющий имена строк в числовом ростере, указан неверно" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1204,7 +1204,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0053_LinkedQuestionReferencesNotExistingRoster" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster which is the source of the link should exist." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ростер являющийся источником ссылки, должен существовать." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Связанный вопрос ссылается на несуществующий ростер" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1378,13 +1378,13 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0084_CascadingOptionsShouldHaveParent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Options in child cascading combo box question should reference only existing option in parent question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опции дочернего каскадного вопроса должны ссылаться только на существующий опции родительского вопроса." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опции дочернего каскадного вопроса должны ссылаться только на существующие опции родительского вопроса." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0085_CascadingQuestionWrongParentLevel" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question should have deeper or the same level as it's parent question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос должен иметь более глубокий или тот же уровень вложенности, что и его родительский вопрос." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос должен иметь более глубокий или тот же уровень вложенности как и его родительский вопрос." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0086_ParentCascadingQuestionShouldExist" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1420,7 +1420,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0091_CascadingChildQuestionShouldNotContainCondition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Child cascading combo box question should not contain enabling condition. " ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос с каскадным дочерним каскадом не должен содержать включающее выражение." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Дочерний каскадный вопрос не должен содержать включающее выражение." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0092_CascadingChildQuesionShouldNotContainValidation" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1456,7 +1456,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0097_QuestionnaireTitleHasInvalidCharacters" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire title contains characters that are not allowed. Only non Unicode letters, numbers, space and _ are allowed." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя опросника содержит символы, которые не разрешены. Разрешены только буквы, цифры, пробелы и _ .  Unicode символы не разрешены." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Имя опросника содержит символы, которые не разрешены. Разрешены только буквы, цифры, пробелы и _ .  Unicode символы не разрешены." er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0098_QuestionnaireHasSizeMoreThan5MB" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1486,19 +1486,19 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster which is the source of the link is a roster, not a subsection." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ростер являющимся источником для ссылки, является ростер,  а не подстановка" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Ростер являющимся источником для связанного вопроса, является ростером, а не подсекцией" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0104_ValidationConditionIsTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Validation condition #{0} is too long. It should be no longer than {1} characters." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Проверочное выражение  # {0} слишком большое. Он должен быть не более {1} символов." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Проверочное выражение  # {0} слишком большое. Оно должно быть не более {1} символов." er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0105_ValidationMessageIsTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Validation error message #{0} is too long. It should be no longer than {1} characters." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Сообщение об ошибке  # {0} слишком длинное. Оно должно быть не более {1} символов." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Сообщение об ошибке  # {0} слишком длинное. Оно должно быть не более {1} символов." er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0106_ValidationConditionIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1516,7 +1516,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Linked question filter expression has length more than {0} characters." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Фильтрующее выражение связанного вопроса имеет длину больше, чем {0} символов." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Фильтрующее выражение связанного вопроса имеет длину больше чем {0} символов." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1540,7 +1540,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0112_VariableHasInvalidName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Variable has invalid name." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя переменной не допустимо." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Некорректное имя переменной." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0113_VariableHasEmptyVariableName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1576,7 +1576,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0118_ExpressionReferencingForbiddenDateTimeProperies" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Expression referencing forbidden DateTime properties: {0}, {1}, {2}. Consider using current time question instead." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Выражение, ссылающееся на запрещенные свойства DateTime: {0}, {1}, {2}. Рассмотрите возможность добавления вопроса о текущем времени." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Выражение, ссылающееся на запрещенные свойства DateTime: {0}, {1}, {2}. Рассмотрите возможность добавления вопроса Текущее время." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0119_QuestionnaireTitleTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1624,7 +1624,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0126_VarialbeNameNotUnique" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Variable name or roster ID should be unique in questionnaire's scope." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя переменной или ID ростера должны быть уникальными в области анкетирования." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Имя переменной или ID ростера должны быть уникальными в рамках опросника." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1672,7 +1672,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0203_RosterHasSingleQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster group contains only one question. Consider grouping with other rosters. For fixed roster, consider presenting as a set of independent questions." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ростер содержит только один вопрос. Рассмотрите возможность группировки его с другими ростерами.  Для фиксированного ростера рассмотрите представление как набор независимых вопросов." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Ростер содержит только один вопрос. Рассмотрите возможность группировки его с другими ростерами.  Для фиксированного ростера рассмотрите представление как набор независимых вопросов." er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0204_EmptyRoster" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1720,7 +1720,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0211_QuestionnaireHasNoGpsQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire contains no GPS questions. Consider adding a GPS question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросник не содержит GPS вопросов. Подумайте о добавлении GPS вопроса." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опросник не содержит GPS вопросов. Рассмотрите вариант добавления GPS вопроса." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0212_LongValidationCondition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1750,7 +1750,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0216_NoPrefilledQuestions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No identifying questions are defined. Define at least one identifying question." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Определяющие вопросы не определены. Определите хотя бы один идентифицирующий вопрос." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Идентифицирующие вопросы не созданы. Определите хотя бы один идентифицирующий вопрос." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0217_VariableLableMoreThan120Characters" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1774,13 +1774,13 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0220_RowIndexInMultiOptionBasedRoster" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Using @{0} with a multi-choice roster may be unstable. Consider using @{1} instead." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Использование @ {0} многовариантного вопроса в качестве управляющего может быть неустойчивым. Вместо этого используйте @ {1}." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Использование @ {0} многовариантного вопроса в качестве вопроса, определяющего количество и имена строк в ростере, может быть неустойчивым. Вместо этого используйте @ {1}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0221_NoCurrentTimeQuestions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="No current time question was found. Consider recording the date of interview in your questionnaire." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос о текущем времени не найден. Рассмотрите вопрос о дате собеседования в своей анкете." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос Текущее время не найден. Рассмотрите вариант создания вопроса о дате собеседования." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0222_SingleOptionPrefilled" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1798,13 +1798,13 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0224_TooManySubsectionsAtOneLevel" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Too many sub-sections at one level. Consider hierarchical layout." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Слишком много подразделов на одном уровне. Рассмотрим иерархическую структуру." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Слишком много подсекций на одном уровне. Пересмотрите иерархическую структуру." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0225_ComboBoxWithLessThan10Elements" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Drop-down menu (combo box) contains less than 10 elements. Consider switching to a standard single choice representation." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. " er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0226_SameCascadingParentQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1995,14 +1995,20 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0269_QuestionTitleIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Question cannot have empty text." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="У вопроса не может быть пустой текст." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Question cannot have empty option titlet." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="У вопроса не может быть пустой текст опции." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0270_SectionContainsTooManyQuestions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Section should not contain more than {0} questions." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Секция не может содержать более {0} вопросов." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0271_MacroHasEmptyContent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Macro cannot be empty." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Макрос не может быть пустым." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx" nm="AllRights" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2939,6 +2945,12 @@
           <lis>
             <li lc="nn-nn" tx="Questionnaire Title" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя опросника" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="QuestionnaireTreeFolders" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Folders" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Папки" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="RestoreQuestionnaire" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">

@@ -205,13 +205,13 @@
     <value>Вопрос с фильтром опций не может быть помечен как идентифицирующий.</value>
   </data>
   <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
-    <value>Идентифицирующий вопросн не может быть внутри ростера.</value>
+    <value>Идентифицирующий вопрос не может быть внутри ростера.</value>
   </data>
   <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
     <value>Неверные названия колонок в справочной таблице.</value>
   </data>
   <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
-    <value>Ростер в котором источником ростера является управляющий вопрос не может быть фиксированным ростером.</value>
+    <value>Ростер, в котором источником ростера является управляющий вопрос, не может быть фиксированным ростером.</value>
   </data>
   <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
     <value>Фиксированный ростер не может иметь вопрос о размере ростера.</value>
@@ -220,7 +220,7 @@
     <value>Фиксированный ростер не может содержать вопрос о заголовке ростера.</value>
   </data>
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
-    <value>Ростер в котором источником ростера является управляющий вопрос, определяющий имя ростера вопрос не верный.</value>
+    <value>Вопрос, определяющий имена строк в числовом ростере, указан неверно</value>
   </data>
   <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
     <value>Ростер, в котором управляющий вопрос многовариантный или вопрос-список, не может содержать определяющий имя ростера вопрос.</value>
@@ -274,7 +274,7 @@
     <value>Имя справочной таблицы не может быть зарезервированным словом.</value>
   </data>
   <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
-    <value>Ростер являющийся источником ссылки, должен существовать.</value>
+    <value>Связанный вопрос ссылается на несуществующий ростер</value>
   </data>
   <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
     <value>Ростер должен иметь более глубокий или такой же уровень вложенности как и вопрос являющийся источником ростера.</value>
@@ -361,10 +361,10 @@
     <value>Вопрос данного типа не может быть использован как определяющий имя ростера</value>
   </data>
   <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
-    <value>Опции дочернего каскадного вопроса должны ссылаться только на существующий опции родительского вопроса.</value>
+    <value>Опции дочернего каскадного вопроса должны ссылаться только на существующие опции родительского вопроса.</value>
   </data>
   <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
-    <value>Вопрос должен иметь более глубокий или тот же уровень вложенности, что и его родительский вопрос.</value>
+    <value>Вопрос должен иметь более глубокий или тот же уровень вложенности как и его родительский вопрос.</value>
   </data>
   <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
     <value>Каскадный вопрос ссылается на отсутствующий или неподдерживаемый тип вопроса.</value>
@@ -382,7 +382,7 @@
     <value>Связанный вопрос может быть заполнен только интервьюерами.</value>
   </data>
   <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
-    <value>Вопрос с каскадным дочерним каскадом не должен содержать включающее выражение.</value>
+    <value>Дочерний каскадный вопрос не должен содержать включающее выражение.</value>
   </data>
   <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
     <value>Дочерний каскадный вопрос не должен содержать проверочное выражение.</value>
@@ -400,7 +400,7 @@
     <value>Ошибка при компиляции опросника.</value>
   </data>
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
-    <value>Имя опросника содержит символы, которые не разрешены. Разрешены только буквы, цифры, пробелы и _ .  Unicode символы не разрешены.</value>
+    <value>Имя опросника содержит символы, которые не разрешены. Разрешены только буквы, цифры, пробелы и _ .  Unicode символы не разрешены.</value>
   </data>
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
     <value>Размер опросника примерно равен {0:0.##} МБ и слишком велик для правильной работы с Survey Solutions. Попытайтесь уменьшить количество данных, пока оно не будет меньше, чем {1} МБ.</value>
@@ -415,13 +415,13 @@
     <value>Следующие элементы вопросника (вопрос / группа / статический текст / и т.д.) Используют один и тот же внутренний идентификатор. Пожалуйста, удалите один из них.</value>
   </data>
   <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
-    <value>Ростер являющимся источником для ссылки, является ростер,  а не подстановка</value>
+    <value>Ростер являющимся источником для связанного вопроса, является ростером, а не подсекцией</value>
   </data>
   <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
-    <value>Проверочное выражение  # {0} слишком большое. Он должен быть не более {1} символов.</value>
+    <value>Проверочное выражение  # {0} слишком большое. Оно должно быть не более {1} символов.</value>
   </data>
   <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
-    <value>Сообщение об ошибке  # {0} слишком длинное. Оно должно быть не более {1} символов.</value>
+    <value>Сообщение об ошибке  # {0} слишком длинное. Оно должно быть не более {1} символов.</value>
   </data>
   <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
     <value>Проверочное выражение № {0} пусто.</value>
@@ -430,7 +430,7 @@
     <value>Сообщение об ошибке  # {0} пусто.</value>
   </data>
   <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
-    <value>Фильтрующее выражение связанного вопроса имеет длину больше, чем {0} символов.</value>
+    <value>Фильтрующее выражение связанного вопроса имеет длину больше чем {0} символов.</value>
   </data>
   <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
     <value>Вопрос не может быть использован в качестве собственного фильтра.</value>
@@ -442,7 +442,7 @@
     <value>Вложение не может быть пустым</value>
   </data>
   <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
-    <value>Имя переменной не допустимо.</value>
+    <value>Некорректное имя переменной.</value>
   </data>
   <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
     <value>У переменной не может быть пустого имени.</value>
@@ -460,7 +460,7 @@
     <value>Связанный со списком вопрос не поддерживает фильтрацию опций.</value>
   </data>
   <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
-    <value>Выражение, ссылающееся на запрещенные свойства DateTime: {0}, {1}, {2}. Рассмотрите возможность добавления вопроса о текущем времени.</value>
+    <value>Выражение, ссылающееся на запрещенные свойства DateTime: {0}, {1}, {2}. Рассмотрите возможность добавления вопроса Текущее время.</value>
   </data>
   <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
     <value>Имя опросника не может содержать более {0} символов.</value>
@@ -484,7 +484,7 @@
     <value>Имя переменной или ID ростера не должны содержать двух и более последовательных символов подчеркивания.</value>
   </data>
   <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
-    <value>Имя переменной или ID ростера должны быть уникальными в области анкетирования.</value>
+    <value>Имя переменной или ID ростера должны быть уникальными в рамках опросника.</value>
   </data>
   <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>Существует по крайней мере один дубликат пар Title + Parent Value. Список опций не должен содержать дубликатов такого типа.</value>
@@ -508,7 +508,7 @@
     <value>Секция не содержит вопросов. Рассмотрите удаление пустых секций.</value>
   </data>
   <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
-    <value>Ростер содержит только один вопрос. Рассмотрите возможность группировки его с другими ростерами.  Для фиксированного ростера рассмотрите представление как набор независимых вопросов.</value>
+    <value>Ростер содержит только один вопрос. Рассмотрите возможность группировки его с другими ростерами.  Для фиксированного ростера рассмотрите представление как набор независимых вопросов.</value>
   </data>
   <data name="WB0204_EmptyRoster" xml:space="preserve">
     <value>Ростер пустой. Удалите его, если он не нужен.</value>
@@ -532,7 +532,7 @@
     <value>Катигориальный вопрос содержит слишком много опций, рассмотрите использование поля с каскадным списком</value>
   </data>
   <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
-    <value>Опросник не содержит GPS вопросов. Подумайте о добавлении GPS вопроса.</value>
+    <value>Опросник не содержит GPS вопросов. Рассмотрите вариант добавления GPS вопроса.</value>
   </data>
   <data name="WB0212_LongValidationCondition" xml:space="preserve">
     <value>Проверочное выражение # {0} длинное. Возможно использовать более короткие, более читаемые условия со встроенными функциями (напр. InList ())</value>
@@ -547,7 +547,7 @@
     <value>Опросник содержит неиспользуемые вложения</value>
   </data>
   <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
-    <value>Определяющие вопросы не определены. Определите хотя бы один идентифицирующий вопрос.</value>
+    <value>Идентифицирующие вопросы не созданы. Определите хотя бы один идентифицирующий вопрос.</value>
   </data>
   <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
     <value>Тег переменной слишком длинный (больше символов {0}) и будет усечен в экспорте файла SPSS.</value>
@@ -559,10 +559,10 @@
     <value>Несколько последовательных безусловных вопросов с единственным выбора и {0} опциями. Рассмотрите вариант использования одного вопроса с множественным выбором.</value>
   </data>
   <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
-    <value>Использование @ {0} многовариантного вопроса в качестве управляющего может быть неустойчивым. Вместо этого используйте @ {1}.</value>
+    <value>Использование @ {0} многовариантного вопроса в качестве вопроса, определяющего количество и имена строк в ростере, может быть неустойчивым. Вместо этого используйте @ {1}.</value>
   </data>
   <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
-    <value>Вопрос о текущем времени не найден. Рассмотрите вопрос о дате собеседования в своей анкете.</value>
+    <value>Вопрос Текущее время не найден. Рассмотрите вариант создания вопроса о дате собеседования.</value>
   </data>
   <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
     <value>Катигориальный вопрос помечен как идентифицирующий. Рассмотрите возможность использования текстового вопроса.</value>
@@ -571,10 +571,10 @@
     <value>Секция содержит меньше пяти вопросов. Рассмотрите возможность объединения с другими секциями.</value>
   </data>
   <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
-    <value>Слишком много подразделов на одном уровне. Рассмотрим иерархическую структуру.</value>
+    <value>Слишком много подсекций на одном уровне. Пересмотрите иерархическую структуру.</value>
   </data>
   <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
-    <value>Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. </value>
+    <value>Выпадающее меню (поле со списком) содержит менее 10 элементов. Рассмотрите переход на стандартное представление с выбором одной опции. </value>
   </data>
   <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
     <value>Каскадные вопросы имеют один и тот же родительский вопрос.</value>
@@ -670,7 +670,7 @@
     <value>Вы пытаетесь использовать подстановки для неподдерживаемых сущностей.</value>
   </data>
   <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
-    <value>У вопроса не может быть пустой текст.</value>
+    <value>У вопроса не может быть пустой текст опции.</value>
   </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>Секция не может содержать более {0} вопросов.</value>

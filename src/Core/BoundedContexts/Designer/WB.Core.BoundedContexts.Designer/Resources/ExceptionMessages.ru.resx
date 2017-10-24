@@ -124,7 +124,7 @@
     <value>Загруженный файл не является изображением</value>
   </data>
   <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
-    <value>Нельзя переместить подсекцию  {0} в неправильную позицию {1}.</value>
+    <value>Недопустимо перемещение подсекции  {0} в позицию {1}.</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>Комбобокс вопрос с ключом {0} не найден.</value>
@@ -229,10 +229,10 @@
     <value>Неподдерживаемый тип вопроса: {0}.</value>
   </data>
   <data name="RosterCantBePaste" xml:space="preserve">
-    <value>Ростер не может быть вставлен сюда.</value>
+    <value>Ростер не может быть скопирован сюда.</value>
   </data>
   <data name="StaticTextCantBePaste" xml:space="preserve">
-    <value>Статический текст не может быть вставлен сюда.</value>
+    <value>Статический текст не может быть скопирован сюда.</value>
   </data>
   <data name="UnknownTypeCantBePaste" xml:space="preserve">
     <value>Элемент неизвестного типа. Вставка невозможна.</value>
@@ -247,13 +247,13 @@
     <value>Все значения для фиксированного ростера должны быть числами.</value>
   </data>
   <data name="VariableCantBePaste" xml:space="preserve">
-    <value>Переменная не может быть вставлена сюда.</value>
+    <value>Переменная не может быть скопирована сюда.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
     <value>Опции каскадного вопроса не могут содержать пустые значения в колонке ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Опции каскадного вопроса должны содержать только числеднные значения в колонках Value и ParentValue.</value>
+    <value>Опции каскадного вопроса должны содержать только численные значения в колонках Value и ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
     <value>Найдена как минимум одна одинаковая пара Title + Parent Value. Список опций не должен сожержать дубликаты такого типа.</value>
