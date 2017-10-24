@@ -11,18 +11,17 @@ export default {
         },
         sidebarHidden: false,
         facetHidden: false,
-        searchResultsHidden: true
+        searchResultsHidden: true,
+        screenWidth: 1400
     },
 
     actions: {
-
         fetchSidebar: batchedAction(({ commit }, ids) => {
             return Vue.$api.call(api => api.getSidebarChildSectionsOf(ids))
                 .then((sideBar) => {
                     commit("SET_SIDEBAR_STATE", sideBar)
                 });
         }, null, null),
-
         toggleSidebar({ commit, dispatch }, { panel, collapsed }) {
             commit("SET_SIDEBAR_TOGGLE", { panel, collapsed })
 
@@ -31,18 +30,54 @@ export default {
             }
         },
         toggleSidebarPanel({ commit, state }, newState = null) {
-            let isLarge = isLargeScreen();
-            commit("SET_SIDEBAR_HIDDEN", newState == null ? !state.sidebarHidden : newState)
+            const sidebarPanelNewState = newState == null ? !state.sidebarHidden : newState;
+            let panelBeingClosed = !sidebarPanelNewState;
+            if (state.screenWidth < 1210 && panelBeingClosed){
+                commit("SET_FACET_HIDDEN", true)
+                commit("SET_SEARCH_RESULTS_HIDDEN", true)
+            }
+            commit("SET_SIDEBAR_HIDDEN", sidebarPanelNewState)
         },
         hideFacets({ commit, state }, newState = null) {
-            commit("SET_FACET_HIDDEN", newState == null ? !state.facetHidden : newState)
+            const facetPanelNewState = newState == null ? !state.facetHidden : newState;
+            let panelBeingClosed = !facetPanelNewState;
+            if (state.screenWidth < 1210 && panelBeingClosed){
+                commit("SET_SIDEBAR_HIDDEN", true)
+                commit("SET_SEARCH_RESULTS_HIDDEN", true)
+            }
+            commit("SET_FACET_HIDDEN", facetPanelNewState)
         },
         hideSearchResults({ commit, state }, newState = null) {
-            commit("SET_FACET_HIDDEN", false)
+            if (state.screenWidth >= 1210){
+                commit("SET_FACET_HIDDEN", false)
+            }
             commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? !state.searchResultsHidden : newState)
         },
-        showSearchResults({ commit }) {
+        showSearchResults({ commit, state }) {
             commit("SET_SEARCH_RESULTS_HIDDEN", false)
+            if (state.screenWidth < 1210){
+                commit("SET_FACET_HIDDEN", true)
+                commit("SET_SIDEBAR_HIDDEN", true)
+            }
+        },
+        screenWidthChanged({ commit, state }, newWidth) {
+            // close all panels for S and M sceen sizes
+            if (state.screenWidth > 1210 && newWidth <= 1210) {
+                commit("SET_FACET_HIDDEN", true)
+                commit("SET_SIDEBAR_HIDDEN", true)
+                commit("SET_SEARCH_RESULTS_HIDDEN", true)
+            }
+            // return default state if screen size is L and XL
+            if (state.screenWidth < 1210 && newWidth >= 1210)
+            {
+                commit("SET_FACET_HIDDEN", false)
+                commit("SET_SIDEBAR_HIDDEN", false)
+                commit("SET_SEARCH_RESULTS_HIDDEN", true)
+            }
+
+            if (state.screenWidth != newWidth) {
+                commit("SET_SCREEN_WIDTH", newWidth)
+            }
         }
     },
 
@@ -64,6 +99,9 @@ export default {
         },
         SET_SEARCH_RESULTS_HIDDEN(state, searchResultsHidden) {
             state.searchResultsHidden = searchResultsHidden
+        },
+        SET_SCREEN_WIDTH(state, screenWidth) {
+            state.screenWidth = screenWidth
         }
     },
 
