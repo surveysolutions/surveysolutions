@@ -20,7 +20,7 @@ config.resources = {
 
 gulp.task("default", ['cleanup', 'resx2json', 'build', 'test'].filter((x) => x));
 
-gulp.task("build", ["resx2json", "shared_dll"], (done) => {
+gulp.task("build", ["resx2json", "vendor"], (done) => {
     const opts = {
         plugins: []
     }
@@ -70,7 +70,7 @@ gulp.task('cleanup', (cb) => {
     return cb();
 });
 
-gulp.task("shared_dll", ["cleanup"], (done) => {
+gulp.task("vendor", ["cleanup"], (done) => {
     fs.stat("./dist/shared_vendor.manifest.json", (err) => {
         if (err) {
             utils.log(utils.colors.yellow("Building VENDOR DLL libs"));
@@ -88,7 +88,7 @@ gulp.task("shared_dll", ["cleanup"], (done) => {
     });
 });
 
-gulp.task("watch", ['resx2json', 'shared_dll'], () => {
+gulp.task("watch", ['resx2json', 'vendor'], () => {
     const compiler = webpack(merge(require("./webpack.config.js"), {
         plugins: [new webpack.ProgressPlugin()]
     }));
