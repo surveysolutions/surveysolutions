@@ -55,6 +55,7 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
     <DocumentationFile>bin\WB.UI.Headquarters.XML</DocumentationFile>
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
+	<PlatformTarget>AnyCPU</PlatformTarget>
     <MvcBuildViews>true</MvcBuildViews>
   </PropertyGroup>
   <ItemGroup>
