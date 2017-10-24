@@ -28,13 +28,27 @@ export default {
     computed: {
         classes() {
             var cssClass = "";
-            if (this.$store.state.webinterview.sidebar.sidebarHidden)
+            if (this.$store.state.webinterview.sidebar.screenWidth < 1210)
             {
-                cssClass+= " fullscreen-hidden-content";
+                if (!this.$store.state.webinterview.sidebar.sidebarHidden)
+                {
+                    cssClass+= " show-content";
+                }
+
+                if (!this.$store.state.webinterview.sidebar.facetHidden)
+                {
+                    cssClass+= " show-filters";
+                }
             }
-            if (this.$store.state.webinterview.sidebar.facetHidden)
-            {
-                cssClass+= " fullscreen-hidden-filters";
+            else{
+                if (this.$store.state.webinterview.sidebar.sidebarHidden)
+                {
+                    cssClass+= " fullscreen-hidden-content";
+                }
+                if (this.$store.state.webinterview.sidebar.facetHidden)
+                {
+                    cssClass+= " fullscreen-hidden-filters";
+                }
             }
             if (!this.$store.state.webinterview.sidebar.searchResultsHidden)
             {
@@ -43,17 +57,31 @@ export default {
             return cssClass;
         }
     },
+    methods: {
+        onResize() {
+            var screenWidth = document.documentElement.clientWidth;
+            this.$store.dispatch("screenWidthChanged", screenWidth);
+        },
+    },
     beforeMount() {
         this.$store.dispatch("getLanguageInfo")
         this.$store.dispatch("loadInterview")
     },
     mounted() {
+        const self = this;
+        this.$nextTick(function() {
+            window.addEventListener('resize', self.onResize);
+            self.onResize();
+        })
     },
     components: {
         Facets,
         StatusesHistory,
         SearchResults,
         Sidebar
+    },
+    beforeDestroy() {
+        window.removeEventListener('resize', this.onResize);
     }
 }
 
