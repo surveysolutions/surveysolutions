@@ -109,7 +109,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 Key = interviewSummary.Key,
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
                 Responsible = interviewSummary.ResponsibleName,
-                ResponsibleRole = interviewSummary.ResponsibleRole.ToString()
+                ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
+                InterviewsUrl = authorizedUser.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ")
             });
         }
 
@@ -180,5 +181,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string Responsible { get; set; }
 
         public string ResponsibleRole { get; set; }
+
+        public string InterviewsUrl { get; set; }
     }
 }
