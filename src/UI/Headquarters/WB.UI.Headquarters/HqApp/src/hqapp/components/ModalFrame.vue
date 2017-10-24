@@ -4,7 +4,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button v-if="canClose" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
-                    <h2 :id="titleId">{{ title }}</h2>
+                    <slot name="title">
+                        <h2 :id="titleId">{{ title }}</h2>
+                    </slot>
                 </div>
                 <div class="modal-body">
                     <slot />
