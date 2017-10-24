@@ -15,11 +15,11 @@
 
     <script type="text/javascript">
         $(function(){
-            var subFoldersUrl =  '/Designer/api/questionnairetreeapi/getfolders';
-            var rootFoldersUrl = '/Designer/api/questionnairetreeapi/getrootfolders';
-            var addNodeUrl =     '/Designer/api/questionnairetreeapi/createfolder';
-            var renameNodeUrl =  '/Designer/api/questionnairetreeapi/RenameFolder';
-            var removeNodeUrl =  '/Designer/api/questionnairetreeapi/RemoveFolder';
+            var subFoldersUrl =  '/api/questionnairetreeapi/getfolders';
+            var rootFoldersUrl = '/api/questionnairetreeapi/getrootfolders';
+            var addNodeUrl =     '/api/questionnairetreeapi/createfolder';
+            var renameNodeUrl =  '/api/questionnairetreeapi/RenameFolder';
+            var removeNodeUrl =  '/api/questionnairetreeapi/RemoveFolder';
 
             window.foldersModel = new FoldersModel($("#jstree"), rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
         });
