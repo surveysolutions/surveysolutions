@@ -270,7 +270,7 @@ namespace WB.UI.Designer.Controllers
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             var options = editQuestionView?.Options.Select(
-                              option => new Option(Guid.NewGuid(), option.Value.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
+                              option => new Option(Guid.NewGuid(), option.Value.HasValue? null : option.Value.Value.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
             {
