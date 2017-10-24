@@ -9,41 +9,49 @@ using System.Collections.Generic;
 
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
-	public static class LookupTables
-	{
+    public static class LookupTables
+    {
 <#
-	foreach (var table in LookupTables) 
+    foreach (var table in LookupTables) 
     {
 #>
-		private static readonly Dictionary<int, <#= table.TypeName#>> <#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable();
-		public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> 
-		{
-			get { return <#= table.TableNameField #>; }
-		}
+        private static readonly Dictionary<int, <#= table.TypeName#>> <#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable();
+        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> 
+        {
+            get { return <#= table.TableNameField #>; }
+        }
 <# 
-	}
+    }
 #>
-	}
+    }
 
 <#
-	foreach (var table in LookupTables) 
+    foreach (var table in LookupTables) 
     {
 #>
-	public static class <#= table.TypeName#>_Generator
-	{
-		public static Dictionary<int, <#= table.TypeName#>> GetTable()
-		{
-			var table = new Dictionary<int, <#= table.TypeName#>>();
+    public static class <#= table.TypeName#>_Generator
+    {
+
+        //to avoid SO
+        private static void AddElement(Dictionary<int, <#= table.TypeName#>> dic, int key, <#= table.TypeName#> value)
+        {
+            dic.Add(key,value);
+        }
+
+
+        public static Dictionary<int, <#= table.TypeName#>> GetTable()
+        {
+            var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
 <#
-		    foreach (var row in table.Rows) 
-		    {
+            foreach (var row in table.Rows) 
+            {
 #>
-			    table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) ) #>));
+                AddElement(lookup__table, <#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) ) #>));
 <# 
-		    }
+            }
 #>
-            return table;
-		}
+            return lookup__table;
+        }
     }
 
 <#	
@@ -52,34 +60,34 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 
 
 <#
-	foreach (var table in LookupTables) 
+    foreach (var table in LookupTables) 
     {
 #>
-	public class <#= table.TypeName#>
-	{
-		public <#= table.TypeName#>(int rowcode, <#= string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName)) #>)
-		{
-			this.rowcode = rowcode;
+    public class <#= table.TypeName#>
+    {
+        public <#= table.TypeName#>(int rowcode, <#= string.Join(",",  table.VariableNames.Select(variableName =>"double? " + variableName)) #>)
+        {
+            this.rowcode = rowcode;
 <#
-		foreach (var variableName in table.VariableNames) 
-		{
+        foreach (var variableName in table.VariableNames) 
+        {
 #>
-			this.<#= variableName #> = <#= variableName #>;
+            this.<#= variableName #> = <#= variableName #>;
 <# 
-		}
+        }
 #>
-		}
-		public int rowcode { get; private set;}
+        }
+        public int rowcode { get; private set;}
 <#
-		foreach (var variableName in table.VariableNames) 
-		{
+        foreach (var variableName in table.VariableNames) 
+        {
 #>
-		public double? <#= variableName #> { get; private set;}	
+        public double? <#= variableName #> { get; private set;}	
 <# 
-		}
+        }
 #>
-	}
+    }
 <# 
-	}
+    }
 #>
 }
