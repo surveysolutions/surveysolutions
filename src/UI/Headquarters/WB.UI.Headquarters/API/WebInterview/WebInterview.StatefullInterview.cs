@@ -45,7 +45,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
                 FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
-                InterviewKey = statefulInterview.GetInterviewKey().ToString()
+                InterviewKey = statefulInterview.GetInterviewKey().ToString(),
+                StatusesHistory = this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id)
             };
         }
 
