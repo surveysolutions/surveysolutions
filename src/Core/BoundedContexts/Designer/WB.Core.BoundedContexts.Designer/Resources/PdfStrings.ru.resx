@@ -148,10 +148,10 @@
     <value>Этот PDF сгенерирован: {0}</value>
   </data>
   <data name="LastEdited" xml:space="preserve">
-    <value>{0} изменил {1}</value>
+    <value>{0} отредактирован {1}</value>
   </data>
   <data name="LastModifiedBy" xml:space="preserve">
-    <value>Последний раз изменен: {0}</value>
+    <value>Последний раз отредактирован: {0}</value>
   </data>
   <data name="NeverEdited" xml:space="preserve">
     <value>{0} (никогда не редактировал)</value>
@@ -163,7 +163,7 @@
     <value>Опции:</value>
   </data>
   <data name="PdfLegend" xml:space="preserve">
-    <value>Legend and structure of information in this file</value>
+    <value>Легенда и структура информации в этом файле</value>
   </data>
   <data name="QuestionScope_Identifying" xml:space="preserve">
     <value>идентифицирующий</value>
