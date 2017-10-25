@@ -7,7 +7,19 @@ import webinterview from "~/webinterview/store"
 
 const store = {
     state: {
+        filter: {
+            flagged: false,
+            withComments: false,
 
+            invalid: true,
+            valid: false,
+
+            answered: true,
+            unanswered: false,
+
+            forSupervisor: false,
+            forInterviewer: false,
+        }
     },
 
     actions: {
@@ -20,11 +32,26 @@ const store = {
             return Vue.$api.call(api => {
                 api.reject(comment, assignTo);
             });
+        },
+
+        applyFiltering( {commit, state}, filter){
+            const filterState = state.filter;
+
+            filterState.forSupervisor = !filterState.forSupervisor;
+
+            commit("CHANGE_FILTERS", filter)
         }
     },
 
     mutations: {
-        
+        CHANGE_FILTERS(state, payload) {
+            state.filter = payload
+        }
+    },
+    getters: {
+        filteringState(state) {
+            return state.filter;
+        }
     }
 }
 

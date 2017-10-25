@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterview {
@@ -138,6 +138,87 @@ namespace WB.UI.Headquarters.Resources {
         public static string Error_UserNotAuthorised {
             get {
                 return ResourceManager.GetString("Error_UserNotAuthorised", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answered.
+        /// </summary>
+        public static string Filters_Answered {
+            get {
+                return ResourceManager.GetString("Filters_Answered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flagged.
+        /// </summary>
+        public static string Filters_Flagged {
+            get {
+                return ResourceManager.GetString("Filters_Flagged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For interviewer.
+        /// </summary>
+        public static string Filters_ForInterviewer {
+            get {
+                return ResourceManager.GetString("Filters_ForInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For supervisor.
+        /// </summary>
+        public static string Filters_ForSupervisor {
+            get {
+                return ResourceManager.GetString("Filters_ForSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid.
+        /// </summary>
+        public static string Filters_Invalid {
+            get {
+                return ResourceManager.GetString("Filters_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Questions.
+        /// </summary>
+        public static string Filters_Title {
+            get {
+                return ResourceManager.GetString("Filters_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unanswered.
+        /// </summary>
+        public static string Filters_Unanswered {
+            get {
+                return ResourceManager.GetString("Filters_Unanswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid.
+        /// </summary>
+        public static string Filters_Valid {
+            get {
+                return ResourceManager.GetString("Filters_Valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With comments.
+        /// </summary>
+        public static string Filters_WithComments {
+            get {
+                return ResourceManager.GetString("Filters_WithComments", resourceCulture);
             }
         }
         
@@ -354,15 +435,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string PleaseFillCaptcha {
             get {
                 return ResourceManager.GetString("PleaseFillCaptcha", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Powered by.
-        /// </summary>
-        public static string PoweredBy {
-            get {
-                return ResourceManager.GetString("PoweredBy", resourceCulture);
             }
         }
         
