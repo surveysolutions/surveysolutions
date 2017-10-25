@@ -116,18 +116,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
         {
-            return new ApproveRejectAllowed
+            var approveRejectAllowed = new ApproveRejectAllowed
             {
                 SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
                                            authorizedUser.IsSupervisor,
                 HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
-                                                    (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                                          (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
                                           authorizedUser.IsSupervisor,
                 HqOrAdminRejectAllowed = interviewSummary.Status == InterviewStatus.ApprovedBySupervisor &&
-                                                  (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-                HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator)
+                                         (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+
+                
             };
+            approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
+            return approveRejectAllowed;
         }
 
         public ActionResult InterviewHistory(Guid id)
