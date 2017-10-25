@@ -286,4 +286,7 @@
   <data name="Filters_ForInterviewer" xml:space="preserve">
     <value>Для интервьюера</value>
   </data>
+  <data name="Filters_Unflagged" xml:space="preserve">
+    <value>Без флага</value>
+  </data>
 </root>
