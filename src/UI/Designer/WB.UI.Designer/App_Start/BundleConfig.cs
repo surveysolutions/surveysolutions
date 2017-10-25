@@ -39,13 +39,16 @@ namespace WB.UI.Designer
                     "~/Content/plugins/perfect-scrollbar.jquery.js",
                     "~/Scripts/custom/common.js"));
             bundles.Add(
-                new ScriptBundle("~/folders").Include(
-                    "~/Scripts/lib/jquery.fancytree/jquery.fancytree-all-deps.min.js",
-                    "~/Scripts/lib/jquery.fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js",
-                    "~/Scripts/custom/public-folders.js"));
+                new ScriptBundle("~/folders").Include(new[] {
+                    "~/Content/plugins/jquery.fancytree-all-deps.min.js",
+                    "~/Content/plugins/jquery.fancytree.contextMenu.js",
+                    "~/Content/plugins/jquery.contextMenu.min.js",
+                    "~/Scripts/custom/public-folders.js" }));
             bundles.Add(
-                new StyleBundle("~/folders/lib/tree/skin").Include(
-                    new [] {"~/Scripts/lib/jquery.fancytree/skin-win8/ui.fancytree.min.css"}));
+                new StyleBundle("~/folders/lib/tree/skin").Include( new [] {
+                    "~/Content/plugins/ui.fancytree.min.css",
+                    "~/Content/plugins/jquery.contextMenu.min.css"
+                }));
         }
     }
 }
