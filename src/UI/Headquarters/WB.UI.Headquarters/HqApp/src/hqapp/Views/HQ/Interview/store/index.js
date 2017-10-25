@@ -22,8 +22,12 @@ const store = {
             });
         },
 
-        async getStatusesHistory({ commit }) {
-            return await Vue.$api.call(api => api.getStatusesHistory());
+        applyFiltering( {commit, state}, filter){
+            const filterState = state.filter;
+
+            filterState.forSupervisor = !filterState.forSupervisor;
+
+            commit("CHANGE_FILTERS", filter)
         }
     },
 

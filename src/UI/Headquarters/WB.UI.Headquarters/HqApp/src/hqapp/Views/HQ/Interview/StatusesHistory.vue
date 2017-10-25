@@ -60,7 +60,7 @@ export default {
     },
     async show() {
       if (this.items == null)
-        this.items = await this.$store.dispatch("getStatusesHistory");
+        this.items = await this.$api.call(api => api.getStatusesHistory());
         
       this.$refs.modal.modal();
     }
