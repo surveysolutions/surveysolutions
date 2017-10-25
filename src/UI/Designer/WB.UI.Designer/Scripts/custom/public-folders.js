@@ -39,10 +39,20 @@
             }
         },
         contextMenu: {
-            menu: {
+            /*menu: {
                 "createSubFolder": { "name": "Create Folder", "icon": "create" },
                 "edit": { "name": "Edit", "icon": "edit" },
                 "delete": { "name": "Delete", "icon": "delete" },
+            },*/
+            menu: function (node) {
+                if (node.key === "00000000-0000-0000-0000-000000000000")
+                    return { "createSubFolder": { "name": "Create Folder", "icon": "create" } };
+
+                return {
+                    "createSubFolder": { "name": "Create Folder", "icon": "create" },
+                    "edit": { "name": "Edit", "icon": "edit" },
+                    "delete": { "name": "Delete", "icon": "delete" }
+                };
             },
             beforeOpen: function (event, ui) {
                 var node = $.ui.fancytree.getNode(ui.target);
@@ -97,6 +107,7 @@
                 var newTitle = data.input.val();
                 self.postRequest(renameNodeUrl, { "id": data.node.key, "newTitle": newTitle }, function() {
                     $(data.node.span).removeClass("pending");
+                    data.node.parent.sortChildren(null, false);
                 });
                 return true;
             },

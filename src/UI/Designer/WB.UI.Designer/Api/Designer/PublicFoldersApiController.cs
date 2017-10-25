@@ -11,7 +11,7 @@ namespace WB.UI.Designer.Api
 {
     [Authorize]
     [ApiNoCache]
-    //[Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class PublicFoldersApiController : ApiController
     {
         private readonly IPublicFoldersStorage publicFoldersStorage;
