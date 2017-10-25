@@ -20,6 +20,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "comma-dangle": "error",
         "no-const-assign": "warn",
         "no-this-before-super": "warn",
         "no-undef": "warn",
@@ -27,7 +28,8 @@
         "no-unused-vars": "warn",
         "constructor-super": "warn",
         "valid-typeof": "warn",
-        "vue/valid-v-if": "error"
+        "vue/valid-v-if": "error",
+        "no-debugger": "off"
     },
     "extends": [
         "eslint:recommended",

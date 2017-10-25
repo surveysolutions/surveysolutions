@@ -1,0 +1,45 @@
+-
+    var options = htmlWebpackPlugin.options;
+    var devPublicPath = options.isHot ? webpackConfig.devServer.publicPath : "";
+
+    function join(a, b) {
+        if(a.endsWith("/") && b.startsWith("/")) {
+            b = b.substr(1)
+        }
+
+        return a + b;
+    }
+
+    function urlContent(path, dontUseAssets) {
+        
+        var result = dontUseAssets ? path : join(options.assetsPath, path);
+
+        if(options.isHot) {
+            return result;
+        } else {
+            return '@Url.Content("' + result + '")';
+        }
+    }
+|
+|
+script.
+    window.CONFIG.basePath = '@Url.Content("~/")';
+    window.CONFIG.assetsPath = '!{urlContent(devPublicPath)}';
+    window.CONFIG.locale = {
+        locale: '@System.Globalization.CultureInfo.CurrentUICulture.Name',
+        locales: !{options.locales}
+    }
+|
+|
+script(src!=urlContent(options.manifest) type="text/javascript")
+|
+|
+each file in htmlWebpackPlugin.files.css
+    link(href!=urlContent(devPublicPath + file) rel="stylesheet")
+    |
+    |
+
+each js in htmlWebpackPlugin.files.js
+    script(src!=urlContent(devPublicPath + js)  type="text/javascript")
+    |
+    |

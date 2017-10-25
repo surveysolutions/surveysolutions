@@ -5,15 +5,20 @@ const cleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const RuntimePublicPathPlugin = require("./RuntimePublicPathPlugin")
+const WriteFilePlugin = require('write-file-webpack-plugin')
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const _ = require("lodash")
 const localization = require("./localization")
 
 const devMode = process.env.NODE_ENV != 'production';
+const isHot = process.env.NODE_ENV === "hot";
 const path = require('path')
 
-const baseDir = path.resolve(__dirname,"../");
+const baseDir = path.resolve(__dirname, "../");
 const join = path.join.bind(path, baseDir);
 
 const hqViewsFolder = join("..", "Views")
+const assetsPath = isHot ? "http://localhost:8080/" : "~/HqApp/dist/";
 
 module.exports = function (appConfig) {
     // cacheDirectory improve development build greatly, but doesn't need on production build
@@ -42,12 +47,13 @@ module.exports = function (appConfig) {
         });
     }
 
-    const webpackConfig = {
+    // extracting entry names and path to entry file from appconfig to webpack
+    // output will look similiar to:
+    // > { hq: './src/hqapp/main.js', webinterview: './src/webinterview/main.js' }
+    const entry = entryNames.reduce((result, key) => { result[key] = appConfig[key].entry; return result; }, {})
 
-        // extracting entry names and path to entry file from appconfig to webpack
-        // output will look similiar to:
-        // > { hq: './src/hqapp/main.js', webinterview: './src/webinterview/main.js' }
-        entry: entryNames.reduce((result, key) => { result[key] = appConfig[key].entry; return result; }, {}),
+    const webpackConfig = {
+        entry,
 
         output: {
             path: join("dist"), // setting up webpack output to `dist` folder
@@ -55,7 +61,8 @@ module.exports = function (appConfig) {
             // for development we do not add any chunk info to make breakpoints work
             // for production each output file will have own hash in name for cache busting
             filename: devMode ? "[name].bundle.js" : "[name].bundle.[chunkhash].js",
-            chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js"
+            chunkFilename: devMode ? "[name].chunk.js" : "[name].chunk.[chunkhash].js",
+            publicPath: ""
         },
 
         resolve: {
@@ -94,7 +101,7 @@ module.exports = function (appConfig) {
                     use: [babelLoader]
                 },
 
-                { test: /\.css$/, use: ExtractTextPlugin.extract({ use: cssUseList }) }
+                { test: /\.css$/, use: ExtractTextPlugin.extract({ use: cssUseList }) },
 
                 // disabled for now
                 // , {
@@ -108,7 +115,8 @@ module.exports = function (appConfig) {
             ].filter((x) => x)
         },
 
-        plugins: [
+        plugins: _.flatten([
+            new FriendlyErrorsWebpackPlugin(),
             // provide global accessible variables
             new webpack.ProvidePlugin({
                 _: 'lodash',
@@ -122,6 +130,9 @@ module.exports = function (appConfig) {
             new RuntimePublicPathPlugin({
                 runtimePublicPath: "window.CONFIG.assetsPath"
             }),
+
+            isHot ? new webpack.NamedModulesPlugin() : null,
+            isHot ? new webpack.HotModuleReplacementPlugin() : null,
 
             // attaching shared_vendor.dll js file to our build
             new webpack.DllReferencePlugin({
@@ -160,6 +171,32 @@ module.exports = function (appConfig) {
             // notify on build
             devMode ? new WebpackNotifierPlugin({ alwaysNotify: true }) : null,
 
+            _.map(entryNames, (entryName) => {
+                // for each entry we produce separate partial cshtml file
+                // this file will contain all required chunks
+                return new HtmlWebpackPlugin({
+                    inject: false,
+                    filename: path.resolve(hqViewsFolder, "shared", `partial.${entryName}.cshtml`),
+
+                    // we dont need webinterview chunk in hq output and vice versa
+                    excludeChunks: entryNames.filter((name) => name !== entryName),
+                    template: '!!pug-loader!src/template.pug',
+
+                    // provide list of available locales to template and app
+                    locales: JSON.stringify(localizationInfo[entryName]),
+                    entry: entryName,
+                    cache: false,
+                    // provide path to shared_vendor.dll
+                    manifest: "shared_vendor.dll." + vendor_dll_hash + ".js",
+
+                    assetsPath,
+
+                    isHot
+                })
+            }),
+
+            isHot ? new WriteFilePlugin({ test: /\.cshtml$/, useHashIndex: true, force: true, log: true }) : null,
+
             // build stats
             devMode ? null : new BundleAnalyzerPlugin({
                 analyzerMode: 'static',
@@ -169,29 +206,20 @@ module.exports = function (appConfig) {
                 statsOptions: { chunkModules: true, assets: true },
             })
 
-        ].filter(x => x != null)
+        ]).filter(x => x != null),
+
+        devServer: {
+            contentBase: join("dist"),
+            publicPath: "/headquarters/hqapp/dist/",
+            hot: true,
+            compress: false,
+
+            headers: { "Access-Control-Allow-Origin": "*" },
+            host: "localhost",
+            port: 8080,
+            quiet: true
+        }
     };
-
-    entryNames.forEach((e) => {
-
-        // for each entry we produce separate partial cshtml file
-        // this file will contain all required chunks
-        webpackConfig.plugins.unshift(new HtmlWebpackPlugin({
-            inject: false,
-            filename: path.resolve(hqViewsFolder, "shared", `partial.${e}.cshtml`),
-
-            // we dont need webinterview chunk in hq output and vice versa
-            excludeChunks: entryNames.filter((name) => name !== e),
-            template: '!!handlebars-loader!src/template.hbs',
-
-            // provide list of available locales to template and app
-            locales: JSON.stringify(localizationInfo[e]),
-            entry: e,
-
-            // provide path to shared_vendor.dll
-            manifest: "shared_vendor.dll." + vendor_dll_hash + ".js"
-        }))
-    });
 
     return webpackConfig;
 }
