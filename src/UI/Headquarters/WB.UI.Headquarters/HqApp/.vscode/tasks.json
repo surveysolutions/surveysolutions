@@ -47,6 +47,11 @@
             "type": "npm",
             "script": "production",
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "vendor",
+            "problemMatcher": []
         }
     ]
 }
