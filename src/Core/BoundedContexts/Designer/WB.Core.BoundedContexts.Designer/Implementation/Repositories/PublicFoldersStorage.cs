@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         {
             return folderStorage.Query(_ =>
             {
-                return _.Where(f => f.Parent == folderId);
+                return _.Where(f => f.Parent == folderId).OrderBy(i => i.Title);
             }).ToArray();
         }
 
@@ -30,7 +30,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             {
                 new QuestionnaireListViewFolder()
                 {
-                    Title = "Public Questionnires",
+                    Title = "Public Questionnaires",
+                    //Title = QuestionnaireController.PublicQuestionnaires,
                 }, 
             };
 
