@@ -41,10 +41,10 @@
         contextMenu: {
             menu: function (node) {
                 if (node.key === "00000000-0000-0000-0000-000000000000")
-                    return { "createSubFolder": { "name": "Create Folder", "icon": "create" } };
+                    return { "createSubFolder": { "name": "Create Folder", "icon": "add" } };
 
                 return {
-                    "createSubFolder": { "name": "Create Folder", "icon": "create" },
+                    "createSubFolder": { "name": "Create Folder", "icon": "add" },
                     "edit": { "name": "Edit", "icon": "edit" },
                     "delete": { "name": "Delete", "icon": "delete" }
                 };
