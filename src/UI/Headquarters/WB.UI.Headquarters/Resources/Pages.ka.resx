@@ -1,0 +1,1063 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessDenied_Title" xml:space="preserve">
+    <value>შეღწევა უარყოფილია</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>პაროლის შეცვლა</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>ანგარიშისთვის პაროლის შესაცვლელად გამოიყენეთ ქვემოთ მოცემული ფორმა</value>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>პროფილის საჯარო ინფორმაციის დეტალების რედაქტირება</value>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>როლი</value>
+  </data>
+  <data name="AccountManage_SaveChanges" xml:space="preserve">
+    <value>ცვლილებების შენახვა</value>
+  </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>რედაქტირება {0} პროფილი</value>
+  </data>
+  <data name="AnyOption" xml:space="preserve">
+    <value>ნებისმიერი</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>დამტკიცებულია სათაო ოფისის მიერ</value>
+  </data>
+  <data name="ApprovedByupervisor" xml:space="preserve">
+    <value>დამტკიცებულია ზედამხედველის მიერ</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+    <value>დაამტკიცება</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
+    <value>დამტკიცებული ინტერვიუ</value>
+  </data>
+  <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectAction" xml:space="preserve">
+    <value>უარი </value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
+    <value>უარყოფილი ინტერვიუ</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
+    <value>დაუშვებელია</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
+    <value>დაუშვებელი ინტერვიუ</value>
+  </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>ფართობი</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>კვადრატული მეტრი</value>
+  </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>დავალებები</value>
+  </data>
+  <data name="Attention" xml:space="preserve">
+    <value>ყურადღება!</value>
+  </data>
+  <data name="Backup_IndexTitle" xml:space="preserve">
+    <value>ინდექსი</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="CautionTitle" xml:space="preserve">
+    <value>სიფრთხილით:</value>
+  </data>
+  <data name="CloseLabel" xml:space="preserve">
+    <value>დახურვა</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>დასრულებულია</value>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>საჭიროა დადასტურება</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>შექმნა</value>
+  </data>
+  <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
+    <value>დაწერე კომენტარი...</value>
+  </data>
+  <data name="DownloadPage_Instructions" xml:space="preserve">
+    <value>ინსტალაციის ინსტრუქცია</value>
+  </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>ჩამოტვირთეთ ინტერვიუერის აპლიკაცია</value>
+  </data>
+  <data name="DownloadPage_Title" xml:space="preserve">
+    <value>მსოფლიო ბანკის მიერ შემუშავებული კომპიუტერული დახმარების პერსონალური ინტერვიუს ტექნოლოგია.</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>ვერსია</value>
+  </data>
+  <data name="DownloadPage_Welcome" xml:space="preserve">
+    <value>კეთილი იყოს თქვენი მობრძანება Survey Solutions Interviewer-ის გვერდი</value>
+  </data>
+  <data name="DownloadReport" xml:space="preserve">
+    <value>ანგარიშის ჩამოტვირთვა</value>
+  </data>
+  <data name="EditQuestion_Save" xml:space="preserve">
+    <value>ჩაწერა</value>
+  </data>
+  <data name="Error_Description" xml:space="preserve">
+    <value>თქვენი მოთხოვნის დამუშავებისას მოხდა შეცდომა.</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>შეცდომა</value>
+  </data>
+  <data name="ErrorIndex_Title" xml:space="preserve">
+    <value>შეცდომა</value>
+  </data>
+  <data name="ExcludeEsriTitle" xml:space="preserve">
+    <value>გამორიცხეთ ESRI- ის რუკის მხარდაჭერა</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>ექსპორტი</value>
+  </data>
+  <data name="ExportToCsv" xml:space="preserve">
+    <value>მძიმით გამოყოფილი მნიშვნელობები (.csv)</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Excel (.xlsx)</value>
+  </data>
+  <data name="ExportToTab" xml:space="preserve">
+    <value>Tab გამოყოფილი მნიშვნელობები (.tv)</value>
+  </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>დავალება</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>ფილტრები</value>
+  </data>
+  <data name="Forbidden_Title" xml:space="preserve">
+    <value>აკრძალული</value>
+  </data>
+  <data name="GetEsriExtraDescription" xml:space="preserve">
+    <value>ESRI რუკის მხარდაჭერა ექსპერიმენტული ფუნქციაა. გამოიყენეთ ეს მხოლოდ იმ შემთხვევაში, თუ თქვენ გჭირდებათ თანამედროვე ESRI GIS ფუნქცია. ამ ფუნქციის მნიშვნელოვნად გაზრდება განაცხადის ზომა და ჩამოტვირთვის დრო.</value>
+  </data>
+  <data name="GetLatestApp" xml:space="preserve">
+    <value>ჩამოტვირთეთ უახლესი ინტერვიუერის აპლიკაცია</value>
+  </data>
+  <data name="GetLatestAppDescription" xml:space="preserve">
+    <value>ჩამოტვირთეთ და დააინსტალირეთ ინტერვიუერის აპლიკაციის ეს ვერსია კვლევებისთვის, რომლებიც არ იყენებენ ESRI GIS ფუნქციებს. ეს apk არ შეიცავს ESRI SDK და ამდენად ბევრად უფრო მცირე ზომის და სწრაფად ჩამოსატვირთი ვერსიაა.</value>
+  </data>
+  <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+    <value>ჩამოტვირთეთ და დააინსტალირეთ ინტერვიუერის აპლიკაციის ეს ვერსია  მხოლოდ იმ შემთხვევაში, თუ ისარგებლებთ თანამედროვე ESRI GIS ფუნქციებით. ეს apk შეიცავს დიდ ESRI SDK-ს, არის დიდი ზომის და შესაძლოა ხანგრძლივი დრო დასჭირდება ჩამოსატვირთად.</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ წაშალოთ კითხვარი? არსებული ინტერვიუები კითხვარში დაიკარგება</value>
+  </data>
+  <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
+    <value>ამ მოქმედების ნებართვა არ გაქვთ.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
+    <value>თქვენი წინა მოთხოვნა არ არის დასრულებული. გთხოვთ, დაელოდოთ, რომ დასრულდეს და გაიმეოროთ თქვენი ოპერაცია.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogTitle" xml:space="preserve">
+    <value>გთხოვთ, მოიცადოთ</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
+    <value>ამ ზუმის დონისთვის ნიშნულების მაქსიმუმი მიღწეულია ზღვარს. გთხოვთ გაზარდოთ დონე და განაახლოთ ნიშნულები.</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
+    <value>ყველა ნიშნული არ ჩაიტვირთა</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
+    <value>გეოლოგიური ადგილმდებარეობის შესახებ ინფორმაცია არ არსებობს.</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
+    <value>მარკერები არ დაემატა</value>
+  </data>
+  <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
+    <value>გაუთვალისწინებელი ხარვეზია. ჩვენ ვწუხვართ უხერხულობისთვის.</value>
+  </data>
+  <data name="GPS_accuracy" xml:space="preserve">
+    <value>სიზუსტე</value>
+  </data>
+  <data name="GPS_altitude" xml:space="preserve">
+    <value>სიმაღლე</value>
+  </data>
+  <data name="GPS_latitude" xml:space="preserve">
+    <value>გრძედი</value>
+  </data>
+  <data name="GPS_longitude" xml:space="preserve">
+    <value>განედი</value>
+  </data>
+  <data name="HealthCheck_Header" xml:space="preserve">
+    <value>ჯანმრთელობის შემოწმების მონიტორი</value>
+  </data>
+  <data name="HealthCheck_IndexTitle" xml:space="preserve">
+    <value>ჯანმრთელობის შემოწმების გვერდი</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>ფილტრის დამალვა</value>
+  </data>
+  <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+    <value>ენიჭება</value>
+  </data>
+  <data name="HistoryOfStatuses_By" xml:space="preserve">
+    <value>მიერ</value>
+  </data>
+  <data name="HistoryOfStatuses_Comment" xml:space="preserve">
+    <value>კომენტარი</value>
+  </data>
+  <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+    <value>ინტერვიუ</value>
+  </data>
+  <data name="HistoryOfStatuses_On" xml:space="preserve">
+    <value>შეიცვალა</value>
+  </data>
+  <data name="HistoryOfStatuses_State" xml:space="preserve">
+    <value>მდგომარეობა</value>
+  </data>
+  <data name="HistoryOfStatuses_Title" xml:space="preserve">
+    <value>ინტერვიუს სტატუსის ისტორია</value>
+  </data>
+  <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+    <value>ინტერვიუს ნახვა</value>
+  </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>ჩაკეტილი სათაო ოფისი (მონიშნული გრაფა) შეუძლებელია შესვლა და ნებისმიერი ქმედების შესრულება სერვერზე.</value>
+  </data>
+  <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
+    <value>გსურთ გააგრძელოთ?</value>
+  </data>
+  <data name="InstallationInstruction" xml:space="preserve">
+    <value>დაყენების ინსტრუქცია</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
+    <value>სტატუსი დადგენილია კვლევის გადაწყვეტილებების მხარდაჭერის გუნდიდან.</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
+    <value>ბოლო სტატუსის განმეორება იყო წარუმატებელი.</value>
+  </data>
+  <data name="InterviewController_RevalidationFailed" xml:space="preserve">
+    <value>ხელახალი ვერიფიკაცია იყო წარუმატებელი</value>
+  </data>
+  <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
+    <value>ყველა</value>
+  </data>
+  <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
+    <value>პასუხი გასცა</value>
+  </data>
+  <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
+    <value>კომენტარი გააკეთა</value>
+  </data>
+  <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+    <value>ორიგინალური</value>
+  </data>
+  <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
+    <value>ჩართულია</value>
+  </data>
+  <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
+    <value>მონიშნული</value>
+  </data>
+  <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
+    <value>ჯგუფები</value>
+  </data>
+  <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
+    <value>დამალული</value>
+  </data>
+  <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
+    <value>ჯგუფების დამალვა</value>
+  </data>
+  <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
+    <value>არასწორია</value>
+  </data>
+  <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+    <value>დეტალები</value>
+  </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>არჩეული ფილტრის დამაკმაყოფილებელი ელემენტი არ არის</value>
+  </data>
+  <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
+    <value>ინტერვიუ აქვს სინქრონიზაციის პაკეტები რიგში</value>
+  </data>
+  <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
+    <value>პასუხისმგებელი</value>
+  </data>
+  <data name="InterviewDetails_ShowGroupsLabel" xml:space="preserve">
+    <value>ჯგუფების ჩვენება</value>
+  </data>
+  <data name="InterviewDetails_StatusLabel" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+  <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
+    <value>ზედამხედველის</value>
+  </data>
+  <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+    <value>ენა</value>
+  </data>
+  <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
+    <value>უპასუხო</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>დაბლოკილი ინტერვიუერები (შემოწმებული) ვერ უკავშირებენ ცხრილებს სერვერს და ვერ გზავნიან ინტერვიუებს სერვერზე.</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>ინტერვიუერი დანიშნულია</value>
+  </data>
+  <data name="InterviewerController_EditSuccess" xml:space="preserve">
+    <value>ინფორმაცია {0} წარმატებით განახლდა</value>
+  </data>
+  <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
+    <value>ინტერვიუერი წარმატებით შეიქმნა</value>
+  </data>
+  <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
+    <value>მომხმარებლის ინფორმაციის განახლება ვერ მოხერხდა, რადგან მიმდინარე მომხმარებელი არ არსებობს</value>
+  </data>
+  <data name="InterviewerCreate_CreateIn" xml:space="preserve">
+    <value>ინტერვიუერის შექმნა</value>
+  </data>
+  <data name="InterviewerCreate_Team" xml:space="preserve">
+    <value>გუნდი</value>
+  </data>
+  <data name="InterviewerCreate_Title" xml:space="preserve">
+    <value>შექმნა</value>
+  </data>
+  <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
+    <value>მოწყობილობის id</value>
+  </data>
+  <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
+    <value>ინტერვიუერს ჯერ არ აქვს სინქრონიზებული. არ არის ინფორმაცია მისი მოწყობილობების შესახებ.</value>
+  </data>
+  <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
+    <value>დაიწყეთ თარიღის გამოყენება</value>
+  </data>
+  <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
+    <value>ინტერვიუერი: {0}</value>
+  </data>
+  <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ გასაუბრების მონაცემების გაუქმება?</value>
+  </data>
+  <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+    <value>გაუქმება</value>
+  </data>
+  <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+    <value>გახსნა</value>
+  </data>
+  <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+    <value>გთხოვთ, გაითვალისწინოთ კომენტარი, თუ საჭიროა გასაუბრების ახლიდან დასაწყებად</value>
+  </data>
+  <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+    <value>გადატვირთვა</value>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>ინტერვიუერი დაარქივებულია</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>Android ვერსია</value>
+  </data>
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
+    <value>ინტერვიუები (დასრულებული და დამტკიცებული სათაო ოფისი მიერ)</value>
+  </data>
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0} (ზედამხედველი: {1})</value>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>საშუალო სინქრონიზაციის სიჩქარე</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>ბატარეის სტატუსი (%)</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>გათიშვა</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>ჩართვა</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}%, კვების წყარო: {1}, ბატარეის ოპტიმიზაცია {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+    <value>ტიპი: {0} {1}, ოპერატორი: {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>კავშირის სიჩქარე</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>კავშირის ტიპი</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+    <value>ტიპი: {0}</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>მონაცემთა ბაზა</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} ატვირთულია, {1} გადმოწერილია</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>მოწყობილობის და კავშირის სტატისტიკა</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>მოწყობილობის დავალების თარიღი</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>ტაბლეტის დრო სინქრონიზაციის დასაწყისში</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>მოწყობილობის ID</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>მოწყობილობის დეტალური ინფორმაცია</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>მოწყობილობის ენა</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>მოწყობილობა მდებარეობა ან ბოლო მდებარეობა</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>მოწყობილობის მოდელი</value>
+  </data>
+  <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+    <value>მოწყობილობის ორიენტაცია</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>მოწყობილობის სერიული ნომერი</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>ინტერვიუერის მიერ მიღებული ინტერვიუები</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+    <value>ინტერვიუერის მიერ მიღებული კითხვარები</value>
+  </data>
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+    <value>ელ-ფოსტა: {0}</value>
+  </data>
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+    <value>სრული სახელი: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Info" xml:space="preserve">
+    <value>პირადი ინფორმაციის რედაქტირება</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>ინტერვიუერის აპლიკაცია</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+    <value>შეიძლება განახლდეს</value>
+  </data>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>ინტერვიუერები</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>ბოლო კვლევის გადაწყვეტილებების განახლებული თარიღი</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+    <value>დღემდე</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>კვლევის გადაწყვეტილებების ვერსია</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>ბოლო კავშირის სტატისტიკა</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>ბოლო წარუმატებელი სინქრონიზაცია</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>ბოლო წარმატებული სინქრონიზაცია</value>
+  </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>ბოლო საკომუნიკაციო თარიღი</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>მეხსიერება (ხელმისაწვდომი / ჯამური)</value>
+  </data>
+  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+    <value>ახალი მოწყობილობაზე</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+    <value>წარუმატებელი სინქრონიზაციების საერთო რაოდენობა</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+    <value>წარმატებული სინქრონიზაციების საერთო რაოდენობა</value>
+  </data>
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+    <value>ტელეფონის ნომერი: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Rejected" xml:space="preserve">
+    <value>ისევ უარი თქვა აპარატზე</value>
+  </data>
+  <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+    <value>სერვერის დრო სინქრონიზაციის დასაწყისში</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>სიგნალის სიძლიერე</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>დავალებები, რომლებიც დაიწყო, მაგრამ არ დასრულებულა</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>საცავი (ხელმისაწვდომია / სულ)</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+    <value>დაუმთავრებელი ან არასინქრონიზებული დავალებების რაოდენობა ყოველ მომენტში</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>გადმოწერილი დავალებები</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>ვერ მოხერხდა სინქრონიზაციის მცდელობა</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>წარმატებული კავშირი, სინქრონიზაციას არ საჭიროებს</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>ბოლო სინქრონიზაციის აქტივობა</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>ატვირთულია სერვერზე დასადასტურებლად</value>
+  </data>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>ინტერვიუერი: {0}</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>სინქრონიზაციის ხანგრძლივობა</value>
+  </data>
+  <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+    <value>ინტერვიუერისგან მიღებული წარმატებული გასაუბრება</value>
+  </data>
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+    <value>ელოდება დადასტურებას</value>
+  </data>
+  <data name="Interviewers_ActiveUsers" xml:space="preserve">
+    <value>აქტიური ინტერვიუერები</value>
+  </data>
+  <data name="Interviewers_Archive" xml:space="preserve">
+    <value>არქივი</value>
+  </data>
+  <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+    <value>არქივირებული ინტერვიუერები</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
+    <value>ინტერვიუერი დაარქივდება</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
+    <value>გსურთ გააგრძელოთ?</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
+    <value>თუ ინტერვიუერმა დაასრულა გასაუბრება მისი ტაბლეტზე, მაშინ მონაცემები დაიკარგება.</value>
+  </data>
+  <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+    <value>არქივის სტატუსი</value>
+  </data>
+  <data name="Interviewers_Connected" xml:space="preserve">
+    <value>დაკავშირებულია</value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>დაკავშირებულია სერვერთან</value>
+  </data>
+  <data name="Interviewers_CreationDateTitle" xml:space="preserve">
+    <value>ანგარიშის შექმნილია</value>
+  </data>
+  <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+    <value>თარიღი, როდესაც ინტერვიუერის ანგარიში შეიქმნა</value>
+  </data>
+  <data name="Interviewers_EmailTitle" xml:space="preserve">
+    <value>ინტერვიუერის ელ ფოსტა</value>
+  </data>
+  <data name="Interviewers_Header" xml:space="preserve">
+    <value>ინტერვიუერები</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>არასოდეს დაკავშირებია</value>
+  </data>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>აპლიკაციის ვერსია</value>
+  </data>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>ინტერვიუერის აპლიკაცია იტყობინება სერვერზე მისი ტაბლეტის ბოლო სინქრონიზაციის დროს</value>
+  </data>
+  <data name="Interviewers_NotConnected" xml:space="preserve">
+    <value>არ არის დაკავშირებული</value>
+  </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>არასოდეს დაკავშირებია</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>მოძველებულია</value>
+  </data>
+  <data name="Interviewers_Selected" xml:space="preserve">
+    <value>ინტერვიუ (ებ) ის შერჩეული</value>
+  </data>
+  <data name="Interviewers_SupervisorTitle" xml:space="preserve">
+    <value>ზედამხედველი</value>
+  </data>
+  <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+    <value>ინტერვიუერის ზედამხედველის სახელი</value>
+  </data>
+  <data name="Interviewers_Title" xml:space="preserve">
+    <value>ინტერვიუერები</value>
+  </data>
+  <data name="Interviewers_Unarchive" xml:space="preserve">
+    <value>ამოარქივება</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>დღემდე</value>
+  </data>
+  <data name="Interviewers_UserNameTitle" xml:space="preserve">
+    <value>სახელი</value>
+  </data>
+  <data name="InterviewersAndDevicesTitle" xml:space="preserve">
+    <value>მოწყობილობები / ინტერვიუერები</value>
+  </data>
+  <data name="InterviewHistory_Header" xml:space="preserve">
+    <value>ინტერვიუს ისტორია</value>
+  </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>შერჩეული ინტერვიუ(ები)</value>
+  </data>
+  <data name="Layout_Filter" xml:space="preserve">
+    <value>ფილტრი</value>
+  </data>
+  <data name="Layout_Legal" xml:space="preserve">
+    <value>იურიდიული</value>
+  </data>
+  <data name="Layout_RightsReserved" xml:space="preserve">
+    <value>ყველა უფლება დაცულია.</value>
+  </data>
+  <data name="Layout_WorldBank" xml:space="preserve">
+    <value>მსოფლიო ბანკის ჯგუფი</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+  <data name="LogOn_Legend" xml:space="preserve">
+    <value>გთხოვთ შეხვიდეთ</value>
+  </data>
+  <data name="LogOn_LogIn" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+  <data name="LogOn_Title" xml:space="preserve">
+    <value>ქსელში შესვლა</value>
+  </data>
+  <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
+    <value>შესვლა წარუმატებელი აღმოჩნდა. გთხოვთ, გაასწოროთ შეცდომები და ისევ სცადოთ.</value>
+  </data>
+  <data name="Maintenance_Description" xml:space="preserve">
+    <value>პლიკაცია ამჟამად განახლებას აკეთებს. ამ ოპერაციამ შეიძლება მოითხოვოს დიდი დრო. პროცესის დასრულების შემდეგ თქვენ ავტომატურად გადამისამართდებით თქვენს მიერ მოთხოვნილ გვერდზე.</value>
+  </data>
+  <data name="Maintenance_RebuildDescription" xml:space="preserve">
+    <value>აპლიკაცია იტვირთება ამას შეიძლება დასჭირდეს 10 წუთი ან მეტი. პროცესის დასრულების შემდეგ თქვენ ავტომატურად გადამისამართდებით თქვენს მიერ მოთხოვნილ გვერდზე.</value>
+  </data>
+  <data name="Maintenance_Title" xml:space="preserve">
+    <value>შენარჩუნება</value>
+  </data>
+  <data name="MaintenanceReadSide_Header" xml:space="preserve">
+    <value>შენარჩუნების ქვეშ ...</value>
+  </data>
+  <data name="MaintenanceRebuild_Header" xml:space="preserve">
+    <value>გადატვირთვა ...</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>შედეგები არ მოიძებნა</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>არ მოიძებნა</value>
+  </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>შეცდომა მოხდა გთხოვთ, სცადოთ მოგვიანებით.</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>ოპერაცია ჩაიშალა</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>ან</value>
+  </data>
+  <data name="PackagesInfo_DeviceId" xml:space="preserve">
+    <value>მოწყობილობის Id</value>
+  </data>
+  <data name="PackagesInfo_Header" xml:space="preserve">
+    <value>ტაბლეტის საინფორმაციო პაკეტები</value>
+  </data>
+  <data name="PackagesInfo_Size" xml:space="preserve">
+    <value>ზომა (ბაიტი)</value>
+  </data>
+  <data name="PackagesInfo_Title" xml:space="preserve">
+    <value>ინდექსი</value>
+  </data>
+  <data name="PackagesInfo_UploadDate" xml:space="preserve">
+    <value>ატვირთვის თარიღი</value>
+  </data>
+  <data name="PackagesInfo_UserId" xml:space="preserve">
+    <value>მომხმარებლის Id</value>
+  </data>
+  <data name="PackagesInfo_UserName" xml:space="preserve">
+    <value>მომხმარებლის სახელი</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>პაროლი</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>API მომხმარებლის შექმნა</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>შეცვალეთ API მომხმარებლის პროფილი: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>API მომხმარებლები</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>API მომხმარებელი &lt;b&gt; {0} &lt;/ b&gt; წარმატებით შეიქმნა</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>სათაო ოფისის შექმნა</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>სათაო ოფისის პროფილის რედაქტირება: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>სათაო ოფისი</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>ინტერვიუერის პროფილის შექმნა</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>ინტერვიუერის პროფილის რედაქტირება: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>ინტერვიუერის პროფილი</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>ინტერვიუერები</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>დამკვირვებლის შექმნა</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>დამკვირვებლის პროფილის რედაქტირება: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>დამკვირვებლები</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>ზედამხედველის შექმნა</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>ზედამხედველის პროფილის რედაქტირება: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>ზედამხედველები</value>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>პერსონალური ინფორმაციის დეტალები (სურვილისამებრ) &lt;br&gt; &lt;br&gt; იქნება ხილული მხოლოდ სათაო ოფისისთვის</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>(ver. {1}) {0}</value>
+  </data>
+  <data name="RejectedByHeadquarters" xml:space="preserve">
+    <value>უარყოფილია სათაო ოფისის მიერ</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>უარყოფილია ზედამხედველის მიერ</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>ძიება</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>ფილტრის ჩვენება</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>ეს ქმედება ქმნის ინდივიდუალურ მომხმარებელს ზედამხედველის უფლებებით,
+        &lt;br&gt; იმისათვის რომ შექმნათ რამოდენიმე მომხმარებელი გამოიყენეთ &lt;a href="{0}" target="__blank"&gt; მომხმარებლის სურათების შექმნა &lt;/a&gt;. </value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>ჩაკეტილი ზედამხედველი (ყუთი მონიშნულია) ვერ შედის სისტემაში და ვერ ასრულებს ქმედებებს სერვერზე.</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>ზედამხედველი დავალებულია</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>აქტიური ზედამხედველები</value>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>არქივი</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>დაარქივებული ზედამხედველები</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+    <value>არქივის სტატუსი</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>თუ ინტერვიუერმა დაასრულა ინტერვიუები მის ტაბლეტზე, მაშინ მონაცემები დაიკარგება.</value>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>ზედამხედველ(ები)ი არჩეული</value>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>ამოარქივება</value>
+  </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>გინდათ გააგრძელოთ?</value>
+  </data>
+  <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
+    <value>კლიენტზე შეიქმნა</value>
+  </data>
+  <data name="Survey_HasErrorsTitle" xml:space="preserve">
+    <value>შეცდომებია</value>
+  </data>
+  <data name="Survey_Header" xml:space="preserve">
+    <value>ინტერვიუები</value>
+  </data>
+  <data name="Survey_LastUpdateTitle" xml:space="preserve">
+    <value>ბოლო განახლება</value>
+  </data>
+  <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
+    <value>მიღებულია ინტერვიუერის მიერ</value>
+  </data>
+  <data name="Survey_ResponsibleTitle" xml:space="preserve">
+    <value>პასუხისმგებელი</value>
+  </data>
+  <data name="Survey_Status_Header" xml:space="preserve">
+    <value>ინტერვიუერები და კვლევები</value>
+  </data>
+  <data name="Survey_Status_Title" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+  <data name="Survey_StatusTitle" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0}  ინტერვიუები</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>ინტერვიუერი (გუნდი)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>კვლევები და სტატუსები</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>ზედამხედველი (გუნდები)</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
+    <value>დამტკიცებულია სათაო ოფისის მიერ</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
+    <value>დამტკიცებულია ზედამხედველის მიერ</value>
+  </data>
+  <data name="SurveysStatuses_Completed" xml:space="preserve">
+    <value>დასრულებულია</value>
+  </data>
+  <data name="SurveysStatuses_InterviewerAssigned" xml:space="preserve">
+    <value>ინტერვიუერის დავალებულია</value>
+  </data>
+  <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
+    <value>უარია სათაო ოფისიდან</value>
+  </data>
+  <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
+    <value>უარია ზედამხედველისგან</value>
+  </data>
+  <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
+    <value>ზედამხედველი დავალებულია</value>
+  </data>
+  <data name="SurveysStatuses_SurveyName" xml:space="preserve">
+    <value>გამოკითხვის სახელი</value>
+  </data>
+  <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
+    <value>გუნდის წევრები</value>
+  </data>
+  <data name="SurveysStatuses_Title" xml:space="preserve">
+    <value>კვლევები და სტატუსები</value>
+  </data>
+  <data name="SurveysStatuses_Total" xml:space="preserve">
+    <value>სულ</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>გუნდის წევრი</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>გუნდის წევრები და სტატუსები</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>ნიმუში</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>სულ</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>ამოარქივება</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="Upload_Upload" xml:space="preserve">
+    <value>ატვირთვა</value>
+  </data>
+  <data name="Users_API_Instruction1" xml:space="preserve">
+    <value>დააჭირეთ API-ს ღილაკს, რათა შეიქმნას ახალი API მომხმარებელი.</value>
+  </data>
+  <data name="Users_API_Instruction2" xml:space="preserve">
+    <value>დაწკაპეთ შესასვლელ სახელს, რათა შეცვალოთ არსებული API მომხმარებლის პროფილი..</value>
+  </data>
+  <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+    <value>დააჭირეთ სათაო ოფისის ღილაკს, რათა შეიქმნას ახალი სათაო ოფისის მომხმარებელი.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+    <value>დაწკაპეთ შესასვლელ სახელს, რათა შეიცვალოთ არსებული სათაოს ოფისის მომხმარებლის პროფილი</value>
+  </data>
+  <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+    <value>დააჭირეთ ინტერვიუერის ღილაკს, რათა შეიქმნას ახალი ინტერვიუერი.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+    <value>დაწკაპეთ შესასვლელ სახელს, რათა იხილოთ ინფორმაცია ინტერვიუერზე და შეცვალოთ ინტერვიუერის პროფილი.</value>
+  </data>
+  <data name="Users_Observers_Instruction1" xml:space="preserve">
+    <value>დააჭირეთ დამკვირვებლის ღილაკს, რათა შეიქმნას ახალი დამკვირვებელი.</value>
+  </data>
+  <data name="Users_Observers_Instruction2" xml:space="preserve">
+    <value>დაწკაპეთ შესასვლელ სახელს (Login Name), რათა შეცვალოთ დამკვირვებლის პროფილი.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+    <value>დააჭირეთ  ზედამხეველის ღილაკს, რათა შეიქმნას ახალი ხელმძღვანელი.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+    <value>დაწკაპეთ შესასვლელ სახელს (Login Name), რათა შეცვალოთ არსებული ზედამხედველის პროფილი.</value>
+  </data>
+  <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
+    <value>ფოლდერი, რომელიც შეიცავს საიტს აქვს ძალიან დიდი დასახელების  გთხოვთ, გადაითანოთ საიტი სხვა ფოლდერში, რომელსაც უფრო მოკლე დასახელება ექნება</value>
+  </data>
+  <data name="YesNoQuestion_No" xml:space="preserve">
+    <value>არა</value>
+  </data>
+  <data name="YesNoQuestion_Yes" xml:space="preserve">
+    <value>დიახ</value>
+  </data>
+</root>

@@ -1,0 +1,553 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdvancedMode" xml:space="preserve">
+    <value>მონაცემთა ატვირთვის გაფართოებული რეჟიმი</value>
+  </data>
+  <data name="AdvancedModeDescription" xml:space="preserve">
+    <value>იმისათვის რომ წინასწარ ჩატვირთოთ მონაცემები ბევრ სექციებში და ცვლადებში, თქვენ წინასწარ უნდა გაამზადოთ .tab ფაილები, რომლებიც პასუხობს თქვენი კითხვარის სტრუქტურას და მოათავსეთ ისინი .zip არქივში. გთხოვთ, გამოიყენოთ ქვემოთ მოცემული არქივის ნიმუში. თქვენ უნდა განათავსოთ მხოლოდ ის ფაილები და სვეტები, რომლებიც გსურთ და ატვირთეთ. ნებისმიერი სხვა სვეტი, რომელიც არ შეესაბამება არსებული კითხვარის ცვლადებს, არ აიტვირთება.</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>ყველა</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გსურთ ამ ფაილის წაშლა?</value>
+  </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>მიკუთვნებულია {0} აღმრიცხველს</value>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>მიკუთვნებულია {0} ზედამხედველს</value>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>მიკუთვნებულია 1 აღმრიცხველს</value>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>მიკუთვნებულია 1 ზედამხედველს</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>მიკუთვნებები არ არის გაკეთებული</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>უკან იმპორტისკენ</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>ატვირთეთ არქივი იდენტიფიცირებული ტაბ-ფაილით და შეგროვებული მონაცემებით</value>
+  </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>ატვირთული ფაილის ვერიფიკაცია ვერ შესრულდა</value>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>იდენტიფიკაცია და მონაცემების შეგროვება (არქივი)</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>პაკეტური ატვირთვა</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>ბევრი მიკუთვნებების შექმნა</value>
+  </data>
+  <data name="BrowseTeams" xml:space="preserve">
+    <value>ჯგუფების მოძებნა</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>უჯრა</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>კოდი</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>სვეტი</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>მიკუთვნების შექმნა</value>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>ინტერვიუს შექმნა</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>ინტერვიუს შექმნა ამ მონაცემებიდან</value>
+  </data>
+  <data name="CreateUsers" xml:space="preserve">
+    <value>მომხმარებლების შექმნა</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>ბევრი მიკუთვნებების შექმნის პროცესი</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>ბევრი ინტერვიუების შექმნის პროცესი</value>
+  </data>
+  <data name="CreatingUsers" xml:space="preserve">
+    <value>მომხმარებლების შექმნის პროცესი</value>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>{0} მიკუთვნებებისთვის მონაცემები ნაპოვნია</value>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>{0} ინტერვიუებისთვის მონაცემები ნაპოვნია</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>1 მიკუთვნებისთვის მონაცემები ნაპოვნია</value>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>1 ინტერვიუსთვის მონაცემები ნაპოვნია</value>
+  </data>
+  <data name="DataIsValid" xml:space="preserve">
+    <value>მონაცემები სანდოა (ნამდვილია)</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>წაშლა</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>დეტალები</value>
+  </data>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>ცვლადები, აღნიშნულნი, როგორც იდენტიფიცირებული დიზაინერში. გადმოწერეთ</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>არასწორი მიკუთვნებების გადმოწერა</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>არასწორი ინტერვიუების გადმოწერა</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>.tab ნიმუში.</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>გადმოწერეთ .tab ნიმუში ამ კითხვარისთვის</value>
+  </data>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>გადმოწერეთ .zip ნიმუში ამ კითხვარისთვის</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>თუ მომხმარებლის სახელები არ არის აღნიშნული, თქვენ ზედამხედველს უნდა მიაკუთვნოთ ყველა დავალება სამომავლოდ</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>სავარაუდო დრო</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ფაილი</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>ფაილის სახელი</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>ფაილი არ იყო გაანალიზებული. დასაშვებია მხოლოდ tab-delimited ფაილი.</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>ფაილის ზომა</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>ფაილის ზომამ არ შეიძლება 300MB-ს გადააჭარბოს</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>დასრულებულია</value>
+  </data>
+  <data name="FinishedWithError" xml:space="preserve">
+    <value>დასრულებულია შეცდომებით</value>
+  </data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve">
+    <value>დასრულებულია შეცდომებით. მიზეზი:</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>ფაილის ფორმატი არ შეესაბამება. მონაცემები ფაილის შიგნით იგნორირებული იქნება</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>საჭირო საიდენტიფიკაციო მონაცემების დამალვა</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 დავალება წარმატებით დადასტურდა</value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 შეცდომა</value>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>{0} დავალებები წარმატებით დადასტურდა</value>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{0} შეცდომები</value>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>დავალების მონაცემთა გადამოწმება</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>კითხვარების {0} დავალებების გადამოწმება</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>მონაცემთა ფაილის გადამოწმება</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>ნაბიჯი {0} {1}-დან</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>მონაცემთა გადამოწმება წარმატებით დასრულდა</value>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>ბევრი დავალების შექმნა პაკეტური ატვირთვისთვის</value>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>{0}-სთვის დავალებების იმპორტი</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>ინფორმაციის იმპორტი {0}-დან {1}-სთვის</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>იმპორტი</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>სხვა დავალებების იმპორტირების პროცესი მიმდინარეობს. დასაშვებია მხოლოდ ერთი დავალების იმპორტი დროის კონკრეტულ მომენტში. დაელოდეთ პროცესის დასრულებას და შემდეგ ატვირთეთ სხვა ფაილი. დეტალური ინფორმაციისთვის გამოიყენეთ მოცემული ბმული.</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>აირჩიეთ ფაილი ასატვირთად</value>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>შესრულებულია:</value>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>არაფერი არ შესრულდა:</value>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>ბევრი ინტერვიუების შექმნა პაკეტური ატვირთვისთვის</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>მონიშვნა</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>აირჩიეთ პასუხისმგებელი</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>{0}-სთვის ინტერვიუების იმპორტი</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+    <value>{1}-დან {0}</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>ნიმუშის იმპორტი</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>სტატუსის იმპორტი</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>არცერთი ინტერვიუ გაკეთებული არ არის</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>ინტერვიუების იმპორტი</value>
+  </data>
+  <data name="InVerificationProcess" xml:space="preserve">
+    <value>არის ვერიფიკაციის პროცესში, დადასტურდა</value>
+  </data>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>არის არასწორი. გთხოვთ შეასწოროთ ქვემოთ მოყვანილი შეცდომები და ატვირთოდ თავიდან</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>განახლებულია უკანასკნელი თარიღი</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>თქვენ შეგიძლიათ {0}-ში შექმნათ ინდივიდუალური დავალებები ყველა აუცილებელი მონაცემებით </value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>მექანიკური რეჟიმი</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>შეტყობინება</value>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{0} დავალებების შექმნა არ შესრულდა</value>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{0} დავალებები შეიქმნა</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>ნაპოვნია {0} შეცდომა</value>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>{0} ინტერვიუს შექმნა არ შესრულდა</value>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>{0} ინტერვიუ შეიქმნა</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>ინტერვიუები შეიქმნა</value>
+  </data>
+  <data name="OutOf" xml:space="preserve">
+    <value>დან</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>გთხოვთ დაიცადოთ, ფაილი</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>ფაილს არ გააჩნია სვეტები შესაბამისი საიდენტიფიკაციო კითხვების: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>საჭირო საიდენტიფიკაციო მონაცემები</value>
+  </data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve">
+    <value>ატვირთული ფაილი არ იხსნება. შეამოწმეთ ფაილის ფორმატი.</value>
+  </data>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+    <value>მხოლოდ .tab და .txt ფაილები ატვირთვა არის შესაძლებელი</value>
+  </data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+    <value>შემდეგი ფაილები არ არის მხარდაჭერილი: {0}.</value>
+  </data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve">
+    <value>მხოლოდ .zip ფაილების ატვირთვა არის შესაძლებელი</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>პროცესის მიმდინარეობა</value>
+  </data>
+  <data name="ReadyForUserCreation" xml:space="preserve">
+    <value>მზადყოფნა მომხმარებლის შესაქმნელად</value>
+  </data>
+  <data name="ReadyForValidation" xml:space="preserve">
+    <value>მზადყოფნა ვალიდაციისთვის</value>
+  </data>
+  <data name="RecordsCount" xml:space="preserve">
+    <value>მზადყოფნა დასათვლელად</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>განახლება</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>პასუხისმგებელი მომხმარებელი მიეკუთვნება ავტომატურად</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>მწკრივი</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>გაშვებული დავალებების იმპორტის პროცესში გადასვლა</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>ინტერვიუს შექმნა წარმატებით დასრულდა</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>ინტერვიუს შექმნის შედეგები</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>ინტერვიუს იმპორტი შეცდომებით დასრულდა</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>ინტერვიუს იმპორტი წარმატებით დასრულდა</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>მონიშნეთ პასუხისმგებელი ამ პაკეტებისთვის</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>ატვირთეთ tab გამოყოფილი ფაილი საჭირო საიდენტიფიკაციო მონაცემებით. სურვილისამებრ, დააკონკრეტეთ ზედამხედველების ან მომხსენებლების მომხმარებლის სახელწოდება საპასუხისმგებლო სვეტში, _ სურვილისამებრ სვეტში შეგიძლიათ მიუთითოთ დავალების მოცულობა.</value>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>ხოლოდ მონაცემების იდენტიფიცირება</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>შეიქმნა 1 დავალება</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 დავალება ვერ შეიქმნა</value>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>ნაპოვნია 1 შეცდომა</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 ინტერვიუ შექმნა</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 ინტერვიუ ვერ შეიქმნა</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>სტატუსი</value>
+  </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>ზედამხედველი ან ინტერვიუერი უნდა შეირჩეს</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>ატვირთვა</value>
+  </data>
+  <data name="UploadDate" xml:space="preserve">
+    <value>ატვირთვის თარიღი</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>ატვირთეთ ფაილი ადეკვატური მონაცემებით, რათა შეიქმნას ახალი დავალებები.
+მიუთითეთ ზედამხედველების ან დამწერლების მომხმარებლის სახელები, რათა სურათების დავალებები გააკეთონ. </value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>ატვირთულია</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>ახალი მონაცემების ატვირთვა</value>
+  </data>
+  <data name="UploadNewFile" xml:space="preserve">
+    <value>ახალი ფაილის ატვირთვა</value>
+  </data>
+  <data name="UploadSample" xml:space="preserve">
+    <value>ატვირთვის ნიმუში</value>
+  </data>
+  <data name="UploadSampleDescription" xml:space="preserve">
+    <value>გასაუბრებისთვის ნიმუშის ატვირთვისთვის, გთხოვთ, მოამზადოთ ფაილები (ზომის მდე 300 მბ) tab- განცალკევებული ღირებულებით (.tab ფაილი), რომელიც შეესაბამება ქვემოთ მოცემულ თარგს, რომელიც შეიცავს თქვენს კითხვარისგან იმ ცვლადების მნიშვნელობას, რომლებიც იდენტიფიცირებულია.</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>ატვირთვა. Tab ფაილი</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Batch მომხმარებელი ატვირთვა</value>
+  </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>ატვირთვისთვის დაშვებულია მხოლოდ ფაილი {0} და {1} გაგრძელება.</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>ფაილების სია ახლიდან ჩატვირთულ მომხმარებლებით</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>ქვემოთ მოყვანილ შაბლონთან დაკავშირებული ფაილების მომზადება tab- განცალკევებული მნიშვნელობებით (.tab ფაილი). აუცილებელია სტრიქონების ჩვენება (*). მხოლოდ "ხელმძღვანელი" ან "ინტერვიუერი" ნებადართულია "როლის" სვეტში.</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>ატვირთვა. Zip ფაილი</value>
+  </data>
+  <data name="UserBatchUploads" xml:space="preserve">
+    <value>Batch მომხმარებელი ატვირთვა</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>მომხმარებელი თავიდან ჩატვირთვის პროცესი არ არის</value>
+  </data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve">
+    <value>მომხმარებელი/მომხმარებლები შეიქმნა</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>დამტკიცებული</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>დამტკიცება</value>
+  </data>
+  <data name="ValidationFinishedWithError" xml:space="preserve">
+    <value>დამტკიცებული</value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>შემოწმება დასრულებულია</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>შემოწმება</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>პანელის მონაცემების შემოწმება</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>მონაცემების შემოწმება</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>საჭირო საიდენტიფიკაციო მონაცემების ნახვა</value>
+  </data>
+</root>
