@@ -177,7 +177,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId);
 
         IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
-        
+        IEnumerable<IInterviewTreeNode> GetAllInterviewNodes();
+
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
 
         bool AcceptsInterviewerAnswers();
