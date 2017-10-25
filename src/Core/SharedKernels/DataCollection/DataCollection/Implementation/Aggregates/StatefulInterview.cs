@@ -569,6 +569,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
 
+        public IEnumerable<IInterviewTreeNode> GetAllInterviewNodes()
+        {
+            return this.Tree.GetAllNodesInEnumeratorOrder();
+        }
+
         public InterviewTreeSection FirstSection => this.Tree.Sections.First();
 
         public Guid CurrentResponsibleId

@@ -1649,6 +1649,7 @@
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
+    <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.ka.designer.cs">
       <AutoGen>True</AutoGen>

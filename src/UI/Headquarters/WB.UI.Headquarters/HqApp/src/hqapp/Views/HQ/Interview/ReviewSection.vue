@@ -1,6 +1,6 @@
 <template>
 <div>
-    <Section />
+    <Section noBreadcrumbs />
 </div>
 </template>
 <script>

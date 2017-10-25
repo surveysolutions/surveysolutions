@@ -5,6 +5,8 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using System.Collections.Generic;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -36,7 +38,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.Clients.Caller.markAnswerAsNotSaved(command.Question.ToString(), message);
             }
         }
-       
+
         public void ChangeLanguage(ChangeLanguageRequest request)
             => this.commandService.Execute(new SwitchTranslation(this.GetCallerInterview().Id, request.Language,
                 this.CommandResponsibleId));
@@ -152,7 +154,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
                 this.commandService.Execute(command);
             }
-            else if(this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
+            else if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
             {
                 var command = new HqApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
                 this.commandService.Execute(command);
@@ -179,6 +181,63 @@ namespace WB.UI.Headquarters.API.WebInterview
                 var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
                 this.commandService.Execute(command);
             }
+
         }
+
+        public SearchResults Search(FilteringFlags[] flags, long skip = 0, long limit = 50)
+        {
+            var interview = GetCallerInterview();
+
+            var result = new SearchResults()
+            {
+                TotalCount = new Random().Next(0, 10000)
+            };
+
+            long count = 0;
+
+            SearchResult searchResult = null;
+
+            IEnumerable<Link> getBreadcrumbs(InterviewTreeSection section)
+            {
+                yield return new Link(section.Identity.ToString(), section.Title.ToString());
+            }
+
+            foreach (var node in interview.GetAllInterviewNodes())
+            {
+                switch (node)
+                {
+                    case InterviewTreeSection section:
+                        searchResult = new SearchResult
+                        {
+                           
+                            SectionId = section.Identity.ToString(),
+                            Sections = getBreadcrumbs(section).ToList()
+                        };
+
+                        result.Results.Add(searchResult);
+                        break;
+                    case InterviewTreeQuestion question:
+                        searchResult.Questions.Add(new Link(question.Identity.ToString(), question.Title.ToString()));
+                        break;
+                }
+
+                if (count++ > limit) break;
+            }
+
+            return result;
+        }
+    }
+
+    public enum FilteringFlags
+    {
+        Flagged,
+        NotFlagged,
+        WithComments,
+        Invalid,
+        Valid,
+        Answered,
+        Unanswered,
+        ForSupervisor,
+        ForInterviewer
     }
 }
