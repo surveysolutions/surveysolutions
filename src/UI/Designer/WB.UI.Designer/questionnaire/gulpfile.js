@@ -162,7 +162,14 @@ gulp.task('copyFilesNeededForBundler', function(){
   ])
     //.pipe(debug({ title: 'copyFilesNeededForBundler task:' }))
     .pipe(gulp.dest('../Content/plugins'));
-})
+});
+
+gulp.task('copyFontsNeededForBundler', function(){
+  gulp.src([
+    'node_modules/jquery-contextmenu/dist/font/**'
+  ])
+    .pipe(gulp.dest('../Content/plugins/font'));
+});
 
 gulp.task('devJs', function () {
     return gulp.src(paths.scripts)
@@ -192,11 +199,11 @@ gulp.task('index', function () {
     		   .pipe(gulp.dest('./details'));
 });
 
-gulp.task("dev", ["resx2json", "copyFilesNeededForBundler"]);
+gulp.task("dev", ["resx2json", "copyFilesNeededForBundler", "copyFontsNeededForBundler"]);
 
 gulp.task('default', function(callback){
 	runSequence('clean', 
-		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss', 'resx2json', 'copyFilesNeededForBundler'],
+		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss', 'resx2json', 'copyFilesNeededForBundler', 'copyFontsNeededForBundler'],
 		'index', 
 		callback);
 });

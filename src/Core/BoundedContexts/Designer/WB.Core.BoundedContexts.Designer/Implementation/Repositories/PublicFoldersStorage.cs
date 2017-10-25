@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.Infrastructure.PlainStorage;
@@ -30,15 +31,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             {
                 new QuestionnaireListViewFolder()
                 {
-                    Title = "Public Questionnaires",
-                    //Title = QuestionnaireController.PublicQuestionnaires,
+                    Title = Common.PublicQuestionnaires,
                 }, 
             };
-
-//            return folderStorage.Query(_ =>
-//            {
-//                return _.Where(f => !f.Parent.HasValue);
-//            }).ToArray();
         }
 
         public QuestionnaireListViewFolder CreateFolder(Guid folderId, string title, Guid? parentId, Guid userId)

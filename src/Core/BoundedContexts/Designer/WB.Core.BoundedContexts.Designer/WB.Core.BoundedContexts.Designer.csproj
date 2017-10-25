@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
@@ -95,6 +95,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Common.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Common.resx</DependentUpon>
+    </Compile>
      <Compile Update="Resources\ExceptionMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -122,6 +127,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+	<EmbeddedResource Update="Resources\Common.ru.resx">
+	  <DependentUpon>Common.resx</DependentUpon>
+	  <Generator>ResXFileCodeGenerator</Generator>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\Common.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>Common.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
 	<EmbeddedResource Update="Resources\Roster.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
 	  <DependentUpon>Roster.resx</DependentUpon>
