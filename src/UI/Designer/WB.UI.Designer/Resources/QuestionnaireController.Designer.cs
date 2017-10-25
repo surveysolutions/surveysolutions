@@ -286,6 +286,27 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:
+        ///&lt;br/&gt;- &quot;Create folder&quot; use for creating subfolder 
+        ///&lt;br/&gt;- &quot;Edit&quot; to rename folder name
+        ///&lt;br/&gt;- &quot;Remove&quot; to delete folder with subfolders.
+        /// </summary>
+        public static string FoldersDescription {
+            get {
+                return ResourceManager.GetString("FoldersDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folders Management.
+        /// </summary>
+        public static string FoldersManagement {
+            get {
+                return ResourceManager.GetString("FoldersManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have permission to edit this questionnaire.
         /// </summary>
         public static string Forbidden {
