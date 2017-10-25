@@ -14,7 +14,7 @@
         extensions: ["contextMenu", "edit", "glyph"],
         icon: true,
         glyph: glyph_opts,
-        selectMode: 2,
+        selectMode: 1,
         /*wide: {
             iconWidth: "1em",       // Adjust this if fancy-icon-width != "16px"
             iconSpacing: "0.5em",   // Adjust this if fancy-icon-spacing != "3px"
@@ -39,11 +39,6 @@
             }
         },
         contextMenu: {
-            /*menu: {
-                "createSubFolder": { "name": "Create Folder", "icon": "create" },
-                "edit": { "name": "Edit", "icon": "edit" },
-                "delete": { "name": "Delete", "icon": "delete" },
-            },*/
             menu: function (node) {
                 if (node.key === "00000000-0000-0000-0000-000000000000")
                     return { "createSubFolder": { "name": "Create Folder", "icon": "create" } };
@@ -53,13 +48,6 @@
                     "edit": { "name": "Edit", "icon": "edit" },
                     "delete": { "name": "Delete", "icon": "delete" }
                 };
-            },
-            beforeOpen: function (event, ui) {
-                var node = $.ui.fancytree.getNode(ui.target);
-                var isTopNode = node.isTopNode();
-                element.contextmenu("showEntry", "edit", isTopNode);
-                element.contextmenu("showEntry", "delete", isTopNode);
-                node.setActive();
             },
             actions: function (node, action, options) {
                 if (action === "createSubFolder") {
@@ -123,20 +111,11 @@
 
     self.postRequest = function(url, params, callback) {
         $.post({
-            //type: "POST",
             url: url,
-            //data: JSON.stringify(params),
             data: params,
             success: callback,
             dataType: 'json'
         });
-
-        /*$.ajax({
-            method: 'POST',
-            url: url,
-            data: params,
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
-        });*/
     }
 }
 
