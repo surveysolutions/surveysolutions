@@ -14,12 +14,12 @@
     </script>
 
     <script type="text/javascript">
-        $(function(){
-            var subFoldersUrl =  '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "QuestionnaireTreeApi", action= "GetFolders" })';// '/api/questionnairetreeapi/getfolders';
-            var rootFoldersUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "QuestionnaireTreeApi", action= "GetRootFolders" })'; //'/api/questionnairetreeapi/getrootfolders';
-            var addNodeUrl =     '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "QuestionnaireTreeApi", action= "CreateFolder" })';// '/api/questionnairetreeapi/createfolder';
-            var renameNodeUrl =  '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "QuestionnaireTreeApi", action= "RenameFolder" })';//'/api/questionnairetreeapi/RenameFolder';
-            var removeNodeUrl =  '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "QuestionnaireTreeApi", action= "RemoveFolder" })'; //'/api/questionnairetreeapi/RemoveFolder';
+        $(function () {
+            var subFoldersUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetFolders" })';
+            var rootFoldersUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetRootFolders" })';
+            var addNodeUrl     = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "CreateFolder" })';
+            var renameNodeUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RenameFolder" })';
+            var removeNodeUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RemoveFolder" })';
 
             window.foldersModel = new FoldersModel($("#jstree"), rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
         });

@@ -2,26 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.UI.Designer.Filters;
 using WB.UI.Shared.Web.Filters;
+
 
 namespace WB.UI.Designer.Api
 {
     [Authorize]
     [ApiNoCache]
     //[Authorize(Roles = "Administrator")]
-    [RoutePrefix("questionnairetree")]
-    public class QuestionnaireTreeApiController : ApiController
+    public class PublicFoldersApiController : ApiController
     {
         private readonly IPublicFoldersStorage publicFoldersStorage;
         private readonly IMembershipUserService userService;
 
-        public QuestionnaireTreeApiController(IPublicFoldersStorage publicFoldersStorage,
+        public PublicFoldersApiController(IPublicFoldersStorage publicFoldersStorage,
             IMembershipUserService userService)
         {
             this.publicFoldersStorage = publicFoldersStorage;
