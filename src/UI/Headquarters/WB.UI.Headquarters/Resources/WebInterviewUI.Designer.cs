@@ -538,15 +538,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updated {{ date }}.
-        /// </summary>
-        internal static string LastUpdated {
-            get {
-                return ResourceManager.GetString("LastUpdated", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
         internal static string Loading {
@@ -705,15 +696,6 @@ namespace WB.UI.Headquarters.Resources {
         internal static string Reload {
             get {
                 return ResourceManager.GetString("Reload", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Responsible: {{ responsible }}.
-        /// </summary>
-        internal static string Responsible {
-            get {
-                return ResourceManager.GetString("Responsible", resourceCulture);
             }
         }
         

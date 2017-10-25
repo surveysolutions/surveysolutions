@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
-    <value>Interview has no responsible. Please, choose responsible interviewer</value>
+    <value>Ответственный не назначен. Выберите интервьюера</value>
   </data>
   <data name="LastUpdated" xml:space="preserve">
-    <value>Updated {{ date }}</value>
+    <value>Обновлено {{ date }}</value>
   </data>
   <data name="Responsible" xml:space="preserve">
-    <value>Responsible: {{ responsible }}</value>
+    <value>Ответственный: {{ responsible }}</value>
   </data>
 </root>
