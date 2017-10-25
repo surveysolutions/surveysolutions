@@ -68,5 +68,23 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("ChooseResponsibleInterviewer", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated {{ date }}.
+        /// </summary>
+        public static string LastUpdated {
+            get {
+                return ResourceManager.GetString("LastUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Responsible: {{ responsible }}.
+        /// </summary>
+        public static string Responsible {
+            get {
+                return ResourceManager.GetString("Responsible", resourceCulture);
+            }
+        }
     }
 }

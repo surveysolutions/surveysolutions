@@ -55,7 +55,7 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
     <DocumentationFile>bin\WB.UI.Headquarters.XML</DocumentationFile>
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
-	<PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <MvcBuildViews>true</MvcBuildViews>
   </PropertyGroup>
   <ItemGroup>
@@ -924,6 +924,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Details.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Details.ru.resx" />
     <EmbeddedResource Include="Resources\Details.zh.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
