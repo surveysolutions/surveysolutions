@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using Esri.ArcGISRuntime.Mapping;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.UI.Headquarters.Resources;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -45,9 +44,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
                 FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
-                InterviewKey = statefulInterview.GetInterviewKey().ToString(),
-                StatusesHistory = this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id)
+                InterviewKey = statefulInterview.GetInterviewKey().ToString()
             };
+        }
+
+        public List<CommentedStatusHistroyView> GetStatusesHistory()
+        {
+            var statefulInterview = this.GetCallerInterview();
+            return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
         }
 
         public bool IsEnabled(string id)

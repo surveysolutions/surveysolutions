@@ -40,6 +40,10 @@ const store = {
             filterState.forSupervisor = !filterState.forSupervisor;
 
             commit("CHANGE_FILTERS", filter)
+        },
+
+        async getStatusesHistory({ commit }) {
+            return await Vue.$api.call(api => api.getStatusesHistory());
         }
     },
 
