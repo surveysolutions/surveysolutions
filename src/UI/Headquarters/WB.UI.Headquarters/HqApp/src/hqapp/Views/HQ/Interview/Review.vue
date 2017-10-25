@@ -9,7 +9,6 @@
                     <router-view></router-view>
                 </section>
             </div>
-            <StatusesHistory />
         </div>
          <slot name="modals" />
     </main>
@@ -17,7 +16,6 @@
 
 <script>
 import Facets from "./Facets"
-import StatusesHistory from "./StatusesHistory"
 import SearchResults from "./SearchResults"
 import Sidebar from "~/webinterview/components/Sidebar"
 
@@ -76,7 +74,6 @@ export default {
     },
     components: {
         Facets,
-        StatusesHistory,
         SearchResults,
         Sidebar
     },

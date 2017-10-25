@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -18,7 +16,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string QuestionnaireTitle { get; set; }
         public string FirstSectionId { get; set; }
         public string InterviewKey { get; set; }
-        public List<CommentedStatusHistroyView> StatusesHistory { get; set; }
     }
 
     public class LanguageInfo

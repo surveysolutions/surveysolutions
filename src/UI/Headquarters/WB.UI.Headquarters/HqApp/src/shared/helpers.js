@@ -6,5 +6,6 @@ export function getLocationHash(questionid) {
 
 export const DateFormats = {
     dateTime: 'YYYY-MM-DD HH:mm:ss',
-    date: 'YYYY-MM-DD'
+    date: 'YYYY-MM-DD',
+    dateTimeInList: 'MMM DD, YYYY HH:mm'
 }

@@ -25,7 +25,7 @@
                             {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
                         </button>
 
-                        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#statusHistoryModal">History</button>
+                        <button type="button" class="btn btn-link" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                     </div>
                 </div>
                 <SwitchLanguage />
@@ -33,6 +33,7 @@
                 <button type="button" class="btn btn-link" @click="showSearchResults">show search results</button>
             </div>
         </aside>
+        <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals"/>
         <Confirm ref="confirmApprove" id="confirmApprove" slot="modals" :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
             <label for="txtApproveComment">
                 {{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:
@@ -52,6 +53,7 @@
 <script>
 import FacetFilters from "./FacetFilters";
 import SwitchLanguage from "./SwitchLanguage";
+import StatusesHistory from "./StatusesHistory";
 
 export default {
   data() {
@@ -86,6 +88,9 @@ export default {
     // temporaly to test panels
     showSearchResults() {
       this.$store.dispatch("showSearchResults");
+    },
+    showStatusesHistory(){
+      this.$refs.statusesHistory.show();
     }
   },
   computed: {
@@ -119,7 +124,8 @@ export default {
 
   components: {
     FacetFilters,
-    SwitchLanguage
+    SwitchLanguage,
+    StatusesHistory
   }
 };
 </script>
