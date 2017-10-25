@@ -289,4 +289,7 @@
   <data name="Filters_Unflagged" xml:space="preserve">
     <value>Без флага</value>
   </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
+  </data>
 </root>
