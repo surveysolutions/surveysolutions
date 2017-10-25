@@ -35,6 +35,23 @@ gulp.task("build", ["resx2json", "vendor"], (done) => {
     return webpack(merge(config, opts), onBuild(done));
 })
 
+gulp.task("hot", ["resx2json", "vendor"], (done) => {
+    const webpackDevServer = require("webpack-dev-server")
+    
+    process.env.NODE_ENV = "hot"
+
+    const config = require('./webpack.config.js');
+    const options = config.devServer;
+
+    webpackDevServer.addDevServerEntrypoints(config, options);
+    const compiler = webpack(config);
+    const server = new webpackDevServer(compiler, options);
+
+    server.listen(config.devServer.port, 'localhost', () => {
+        utils.log('Dev server listening on port ' + config.devServer.port + " for hot reload");
+        utils.log(utils.colors.bgBlue("Waiting for webpack compilation"));
+    });
+})
 
 gulp.task("test", (done) => {
     var exec = require('child_process').exec;
@@ -80,7 +97,7 @@ gulp.task("vendor", ["cleanup"], (done) => {
             }
 
             const dllConfig = require("./webpack.vendor.config");
-            
+
             webpack(dllConfig, done, "Shared vendor dll build done", true);
         } else {
             done()
