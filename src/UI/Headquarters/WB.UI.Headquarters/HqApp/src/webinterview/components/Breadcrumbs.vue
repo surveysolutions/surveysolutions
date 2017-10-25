@@ -12,11 +12,11 @@
 <script lang="js">
     export default {
         name: 'breadcrumbs-view',
-        beforeMount() {
+        created() {
             this.fetchBreadcrumbs()
         },
         watch: {
-            "store.getters.sectionId"() {
+            "$store.state.route.params.sectionId"() {
                 this.fetchBreadcrumbs()
             }
         },
@@ -25,7 +25,7 @@
                 return this.$store.state.webinterview.breadcrumbs
             },
             showBreadcrumbs() {
-                return this.$store.getters.sectionId != null && this.info.title != null
+                return this.$store.state.route.params.sectionId != null && this.info.title != null
             },
             entities() {
                 if (!this.info) return {}
