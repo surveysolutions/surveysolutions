@@ -163,8 +163,16 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             if (this.authorizedUser.IsSupervisor)
             {
-                var command = new RejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
-                this.commandService.Execute(command);
+                if (assignTo.HasValue)
+                {
+                    var command = new RejectInterviewToInterviewerCommand(this.CommandResponsibleId, this.GetCallerInterview().Id, assignTo.Value, comment, DateTime.UtcNow);
+                    this.commandService.Execute(command);
+                }
+                else
+                {
+                    var command = new RejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
+                    this.commandService.Execute(command);
+                }
             }
             if (this.authorizedUser.IsHeadquarter)
             {

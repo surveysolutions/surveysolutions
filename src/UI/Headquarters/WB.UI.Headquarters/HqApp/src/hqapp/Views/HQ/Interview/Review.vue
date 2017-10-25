@@ -10,7 +10,6 @@
                 </section>
             </div>
         </div>
-         <slot name="modals" />
     </main>
 </template>
 

@@ -41,7 +41,23 @@
             <textarea class="form-control" rows="10" :maxlength="commentMaxLength" id="txtApproveComment" v-model="approveComment"></textarea>
             <span class="countDown">{{approveCharsLeft}}</span>
         </Confirm>
-        <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" :title="$t('Pages.ApproveRejectPartialView_RejectLabel')">
+
+        <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" 
+            :title="$t('Pages.ApproveRejectPartialView_RejectLAbel')"
+            :disableOk="interviewerShouldbeSelected && !newResponsibleId">
+            <form v-if="interviewerShouldbeSelected" onsubmit="return false;">
+                <div class="form-group">
+                    <label class="control-label"
+                           for="newResponsibleId">{{ $t("Details.ChooseResponsibleInterviewer") }}</label>
+                    <Typeahead :placeholder="$t('Common.Responsible')"
+                               control-id="newResponsibleId"
+                               :value="newResponsibleId"
+                               @selected="newResponsibleSelected"
+                               :fetch-url="this.$config.model.approveReject.interviewersListUrl">
+                    </Typeahead>
+                </div>
+            </form>
+
             <label for="txtApproveComment">
                 {{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:
             </label>
@@ -60,7 +76,8 @@ export default {
     return {
       approveComment: "",
       rejectComment: "",
-      commentMaxLength: 1500
+      commentMaxLength: 1500,
+      newResponsibleId: null
     };
   },
   methods: {
@@ -74,11 +91,12 @@ export default {
       });
     },
     reject() {
-      this.$refs.rejectConfirm.promt(ok => {
+      this.$refs.rejectConfirm.promt(async ok => {
         if (ok) {
-          this.$store.dispatch("reject", this.reject).then(() => {
-            window.location = this.$config.model.interviewsUrl;
-          });
+            var dispatchResult = this.$store.dispatch("reject", { comment: this.rejectComment, assignTo: this.newResponsibleId.key});
+            dispatchResult.then(() => {
+                window.location = this.$config.model.interviewsUrl;
+            });
         }
       });
     },
@@ -88,6 +106,9 @@ export default {
     // temporaly to test panels
     showSearchResults() {
       this.$store.dispatch("showSearchResults");
+    },
+    newResponsibleSelected(newValue) {
+        this.newResponsibleId = newValue;
     },
     showStatusesHistory(){
       this.$refs.statusesHistory.show();
