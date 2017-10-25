@@ -153,7 +153,12 @@ gulp.task('copyFilesNeededForBundler', function(){
     'node_modules/bootstrap/dist/js/bootstrap.min.js',
     'node_modules/jquery-validation/dist/jquery.validate.js',
     'node_modules/jquery-mousewheel/jquery.mousewheel.js',
-    'node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js'
+    'node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js',
+    'node_modules/jquery.fancytree/dist/jquery.fancytree-all-deps.min.js',
+    'node_modules/jquery.fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js',
+    'node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css',
+    'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js',
+    'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css'
   ])
     //.pipe(debug({ title: 'copyFilesNeededForBundler task:' }))
     .pipe(gulp.dest('../Content/plugins'));
