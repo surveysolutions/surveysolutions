@@ -1,7 +1,7 @@
 <template>
     <ModalFrame :id="id" :title="confirm_title">
         <slot />
-        <button slot="actions" type="button" class="btn btn-primary" @click="confirm">{{$t("Common.Ok")}}</button>
+        <button slot="actions" type="button" class="btn btn-primary" :disabled="disableOk" @click="confirm">{{$t("Common.Ok")}}</button>
         <button slot="actions" type="button" class="btn btn-link" @click="cancel">{{$t("Common.Cancel")}}</button>
     </ModalFrame>
 </template>
@@ -13,6 +13,11 @@ export default {
         title: {
             type: String,
             required: false
+        },
+        disableOk: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
 
