@@ -378,10 +378,4 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
-  <data name="LastUpdated" xml:space="preserve">
-    <value>Updated {{ date }}</value>
-  </data>
-  <data name="Responsible" xml:space="preserve">
-    <value>Responsible: {{ responsible }}</value>
-  </data>
 </root>

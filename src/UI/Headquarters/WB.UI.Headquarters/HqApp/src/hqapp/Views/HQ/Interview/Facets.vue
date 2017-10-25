@@ -14,7 +14,7 @@
                             <strong>{{lastUpdateDate}}</strong>
                         </li>
                         <li>
-                            <strong>{{ this.$t('WebInterviewUI.Responsible', { responsible: this.$config.model.responsible }) }}</strong>
+                            <strong>{{ this.$t('Details.Responsible', { responsible: this.$config.model.responsible }) }}</strong>
                         </li>
                     </ul>
                     <div class="filter-actions-block">
@@ -89,6 +89,9 @@ export default {
     }
   },
   computed: {
+    interviewerShouldbeSelected() {
+        return this.$config.model.approveReject.interviewerShouldbeSelected;
+    },
     approveCharsLeft() {
       return `${this.approveComment.length} / ${this.commentMaxLength}`;
     },
@@ -108,7 +111,7 @@ export default {
       );
     },
     lastUpdateDate() {
-      return this.$t("WebInterviewUI.LastUpdated", {
+      return this.$t("Details.LastUpdated", {
         date: moment.utc(this.$config.model.lastUpdatedAtUtc).fromNow()
       });
     }

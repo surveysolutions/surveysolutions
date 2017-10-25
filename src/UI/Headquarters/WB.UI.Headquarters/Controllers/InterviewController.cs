@@ -127,8 +127,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 HqOrAdminRejectAllowed = interviewSummary.Status == InterviewStatus.ApprovedBySupervisor &&
                                          (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
-
-                
             };
             approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
             return approveRejectAllowed;
