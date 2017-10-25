@@ -40,5 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public bool HqOrAdminUnapproveAllowed { get; set; }
 
         public bool InterviewerShouldbeSelected { get; set; }
+
+        public string InterviewersListUrl { get; set; }
     }
 }

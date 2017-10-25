@@ -25,12 +25,12 @@ const store = {
     actions: {
         approve({commit}, comment) {
             return Vue.$api.call(api => {
-                api.approve(comment);
+                return api.approve(comment);
             });
         },
-        reject({commit}, comment, assignTo) {
+        reject({commit}, rejection) {
             return Vue.$api.call(api => {
-                api.reject(comment, assignTo);
+                return api.reject(rejection.comment, rejection.assignTo);
             });
         },
 
