@@ -1,12 +1,8 @@
 <template>
-    <div class="unit-section"
-         :class="sectionClass">
+    <div class="unit-section" :class="sectionClass">
         <SectionLoadingProgress />
-        <Breadcrumbs />
-        <component v-for="entity in entities"
-                   :key="entity.identity"
-                   :is="entity.entityType"
-                   :id="entity.identity"></component>
+        <Breadcrumbs v-if="!noBreadcrumbs" />
+        <component v-for="entity in entities" :key="entity.identity" :is="entity.entityType" :id="entity.identity"></component>
     </div>
 </template>
 
@@ -16,6 +12,11 @@
 
     export default {
         name: 'section-view',
+
+        props: {
+            noBreadcrumbs: Boolean
+        },
+
         beforeMount() {
             this.loadSection()
         },

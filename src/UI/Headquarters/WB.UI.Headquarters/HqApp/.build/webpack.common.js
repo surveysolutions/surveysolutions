@@ -80,7 +80,7 @@ module.exports = function (appConfig) {
             chunks: false
         },
 
-        devtool: '#source-map', // '#cheap-module-eval-source-map',
+        devtool: 'source-map', // '#cheap-module-eval-source-map',
 
         module: {
             rules: [
