@@ -230,6 +230,15 @@
   </data>  
   <data name="QuestionnaireTreeFolders" xml:space="preserve">
     <value>Folders</value>
+  </data>  
+  <data name="FoldersManagement" xml:space="preserve">
+    <value>Folders Management</value>
+  </data> 
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:
+&lt;br/&gt;- "Create folder" use for creating subfolder 
+&lt;br/&gt;- "Edit" to rename folder name
+&lt;br/&gt;- "Remove" to delete folder with subfolders</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
     <value>Questionnaire Title</value>
