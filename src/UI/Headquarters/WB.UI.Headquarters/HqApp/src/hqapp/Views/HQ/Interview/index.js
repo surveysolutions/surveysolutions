@@ -3,8 +3,6 @@ import localStore from "./store"
 import Vue from 'vue'
 import Cover from "~/webinterview/components/Cover"
 import ReviewSection from "./ReviewSection"
-import { getLocationHash } from "~/shared/helpers"
-
 
 export default class ReviewComponent {
     constructor(rootStore) {
