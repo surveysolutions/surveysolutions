@@ -24,7 +24,7 @@
                 <h4 class="gray-uppercase">{{commentsTitle}}</h4>
                 <ul class="list-unstyled marked-questions">
                     <li v-for="commentedQuestion in commentedQuestions" :key="commentedQuestion.id">
-                        <a href="#" @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title }}</a>
+                        <a href="javascript:void(0);" @click="navigateTo(commentedQuestion)">{{ commentedQuestion.title }}</a>
                     </li>
                 </ul>
             </div>
@@ -57,6 +57,13 @@ import { isEmpty } from "lodash"
 
 export default {
     name: "cover-readonly-view",
+    props: {
+        navigateToPrefilled: {
+            type: Boolean,
+            required: false,
+            default: false
+        }
+    },
     beforeMount() {
         this.fetch()
     },
@@ -93,7 +100,7 @@ export default {
             return `http://maps.google.com/maps?q=${question.answer}`
         },
         navigateTo(commentedQuestion) {
-            if (commentedQuestion.isPrefilled) {
+            if (commentedQuestion.isPrefilled && !this.navigateToPrefilled) {
                 this.$router.push({ name: "prefilled" })
                 return;
             }

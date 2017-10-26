@@ -665,8 +665,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
 
-        public int CountCommentedQuestionsVisibledToInterviewer() => this.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Count();
-
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
                 userId: commentDto.UserId,
