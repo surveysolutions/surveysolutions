@@ -5,19 +5,28 @@
     @include transition(background, 0.2s);
     word-break: break-word;
 	&:disabled, &.disabled{
-		border-color: transparent !important;	
-		color: #fff !important;
+		border-color: #d7d7d7 !important;	
+		//color: #fff !important;
+		color: $gray_light !important;
 		cursor: not-allowed;
-		@include stripe-gradient(#d7d7d7, $gray_light);
+		@include stripe-gradient(#d7d7d7, transparent);
+		&.btn-clear{
+			background: none;
+			border-color: transparent !important;
+		}
 		&:hover, &:focus{
-			border-color: $gray-super-light;
+			border-color: #d7d7d7;
 			outline: none;
+			box-shadow: none !important;
 		}
 	}
 }
 a.disabled{
 	pointer-events: none;
 	cursor: not-allowed;
+	&.btn{
+		background-color: $gray-highlighting;
+	}
 }
 .btn-link{
 	@extend %gray-uppercase;

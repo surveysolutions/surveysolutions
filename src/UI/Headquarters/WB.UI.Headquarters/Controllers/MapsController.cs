@@ -6,8 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -85,24 +87,24 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public ActionResult UploadMaps(MapFileUploadModel model)
+        public async Task<ActionResult> UploadMaps(MapFileUploadModel model)
         {
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (!this.ModelState.IsValid)
             {
+                this.Error(Maps.MapsLoadingError);
                 return this.RedirectToAction(nameof(Index));
             }
             
             if (".zip" != this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower())
             {
-                this.Error("Error occurred. File is not a .zip archive");
+                this.Error(Maps.MapLoadingNotZipError);
                 return this.RedirectToAction(nameof(Index));
             }
 
             string tempStore = null;
             var invalidMaps = new List<string>();
-            bool genericErrorOccurred = false;
             try
             {
                 tempStore = mapRepository.StoreData(model.File.InputStream, model.File.FileName);
@@ -112,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     try
                     {
-                        mapRepository.SaveOrUpdateMap(map);
+                        await mapRepository.SaveOrUpdateMapAsync(map);
                     }
                     catch (Exception e)
                     {
@@ -120,22 +122,22 @@ namespace WB.UI.Headquarters.Controllers
                         invalidMaps.Add(map);
                     }
                 }
+
+                if (invalidMaps.Count > 0)
+                {
+                    this.Error(Maps.MapLoadingInvalidFilesError + string.Join(", ", invalidMaps));
+                }
             }
             catch (Exception e)
             {
                 Logger.Error("Error on maps import", e);
-                genericErrorOccurred = true;
+                this.Error(Maps.MapsLoadingError);
+
             }
             finally
             {
                 if(tempStore!=null)
-                    mapRepository.DeleteTempData(tempStore);
-            }
-
-            if (genericErrorOccurred || invalidMaps.Count > 0)
-            {
-
-                this.Error("Error occurred");
+                    mapRepository.DeleteData(tempStore);
             }
 
             return this.RedirectToAction("Index");

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -149,13 +150,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return unzippedFiles;
         }
 
-        public void SaveOrUpdateMap(string map)
+        public async Task SaveOrUpdateMapAsync(string map)
         {
 
             this.fileSystemAccessor.CopyFileOrDirectory(map, this.mapsFolderPath, true);
 
             var filename = this.fileSystemAccessor.GetFileName(map);
-            var properties = mapPropertiesProvider.GetMapPropertiesFromFile(map);
+            var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(map);
 
             var mapItem = new MapBrowseItem()
             {
@@ -176,7 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
         }
 
-        public void DeleteTempData(string id)
+        public void DeleteData(string id)
         {
             var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
 

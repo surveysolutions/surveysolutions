@@ -41,13 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 {
                     pagedResults = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
                 }
-
-                var itemIds = pagedResults.Select(x => x.Id).ToArray();
-                var actualItems = queryable.Where(x => itemIds.Contains(x.Id))
-                                           .OrderUsingSortExpression(input.Order)
-                                           .ToList();
-
-                return new MapsView(){Page = input.Page , PageSize = input.PageSize , TotalCount = queryResult.Count() ,Items = actualItems };
+                
+                return new MapsView(){Page = input.Page , PageSize = input.PageSize , TotalCount = queryResult.Count(), Items = pagedResults.ToList() };
             });
             
         }

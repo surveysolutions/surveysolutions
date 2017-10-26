@@ -711,6 +711,10 @@
     <Content Include="App_GlobalResources\Settings.ka.resx" />
     <Content Include="App_GlobalResources\TakeNewInterview.ka.resx" />
     <Content Include="App_GlobalResources\Users.ka.resx" />
+    <Content Include="App_GlobalResources\Maps.ru.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Maps.ru.designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -1016,7 +1020,9 @@
     <EmbeddedResource Include="Resources\Pages.fr.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Pages.ka.resx" />
+    <EmbeddedResource Include="Resources\Pages.ka.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.pt.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1616,6 +1622,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Maps.ru.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.ru.resx</DependentUpon>
+    </Compile>
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
@@ -2206,7 +2217,7 @@
   </Target>
   <Target Name="DeleteEsriExtra" AfterTargets="CopyAllFilesToSingleFolderForPackage;CopyAllFilesToSingleFolderForMsdeploy" Condition="'$(NCrunch)' != '1'">
     <Message Text="Delete Esri Extra folder" Importance="high" />
-	<RemoveDir Directories="$(_PackageTempDir)\ArcGISRuntime100.1" /> 	
+    <RemoveDir Directories="$(_PackageTempDir)\ArcGISRuntime100.1" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

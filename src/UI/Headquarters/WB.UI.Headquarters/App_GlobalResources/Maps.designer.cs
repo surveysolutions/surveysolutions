@@ -70,6 +70,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred. Following files were ignored:.
+        /// </summary>
+        internal static string MapLoadingInvalidFilesError {
+            get {
+                return ResourceManager.GetString("MapLoadingInvalidFilesError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred. File is not a .zip archive.
+        /// </summary>
+        internal static string MapLoadingNotZipError {
+            get {
+                return ResourceManager.GetString("MapLoadingNotZipError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred on map loading..
+        /// </summary>
+        internal static string MapsLoadingError {
+            get {
+                return ResourceManager.GetString("MapsLoadingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max Scale.
         /// </summary>
         internal static string MaxScale {
