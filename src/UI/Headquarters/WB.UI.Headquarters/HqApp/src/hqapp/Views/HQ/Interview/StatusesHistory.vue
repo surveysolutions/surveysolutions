@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import * as format from "date-fns/format";
 import { DateFormats } from "~/shared/helpers";
 
 export default {
@@ -53,7 +52,7 @@ export default {
   },
   methods: {
     formatDate(d) {
-      return format(d, DateFormats.dateTimeInList);
+      return moment(d).format(DateFormats.dateTimeInList);
     },
     hide() {
       $(this.$refs.modal).modal("hide");

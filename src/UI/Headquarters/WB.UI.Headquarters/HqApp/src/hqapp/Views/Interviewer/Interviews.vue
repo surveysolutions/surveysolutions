@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { DateFormats } from "~/shared/helpers";
 
 export default {
     data() {
@@ -215,7 +216,10 @@ export default {
                     data: "lastEntryDate",
                     name: "UpdateDate",
                     title: this.$t("Assignments.UpdatedAt"),
-                    searchable: false
+                    searchable: false,
+                    render(data){
+                        return moment(data).format(DateFormats.dateTimeInList);
+                    }
                 }
             ]
 

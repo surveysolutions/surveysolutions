@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import * as diffInMinutes from "date-fns/difference_in_minutes";
 import modal from "./components/modal";
 
 export default {
@@ -16,10 +15,7 @@ export default {
   beforeMount() {
     setInterval(() => {
       if (!this.shown) {
-        const minutesAfterLastAction = diffInMinutes(
-          new Date(),
-          this.lastActivity
-        );
+        const minutesAfterLastAction = moment().diff(this.lastActivity, 'minutes');
 
         if (Math.abs(minutesAfterLastAction) > this.minutes) {
           this.show();
