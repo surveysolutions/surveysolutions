@@ -1562,7 +1562,6 @@
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\when_getting_interview_file_which_is_present.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ResourceControllerTests\ResourceControllerTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\TabularDataToExternalStatPackageExportServiceTests\TabularDataToExternalStatPackageExportServiceTestContext.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\ReadSideToTabularFormatExportServiceTests\when_creating_template_for_preloading_from_questionnaire_export_structure.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\StataEnvironmentContentGeneratorTestContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_level_labels.cs" />
     <Compile Include="SharedKernels\SurveyManagement\ServiceTests\DataExport\StataEnvironmentContentGeneratorTests\when_HeaderStructureForLevel_has_no_questions.cs" />
