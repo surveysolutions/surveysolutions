@@ -101,6 +101,7 @@
     ],
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
-    }
+    },
+    "setupTestFrameworkScriptFile": "<rootDir>/tests/setup.js"
   }
 }
