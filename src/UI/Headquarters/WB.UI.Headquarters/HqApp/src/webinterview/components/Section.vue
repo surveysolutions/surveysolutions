@@ -34,7 +34,7 @@
                 // scrolls current section view when all fetch actions are done
                 scroll: debounce(function () {
                     this.$store.dispatch("scroll")
-                }, 300)
+                }, 200)
             }
         },
         computed: {

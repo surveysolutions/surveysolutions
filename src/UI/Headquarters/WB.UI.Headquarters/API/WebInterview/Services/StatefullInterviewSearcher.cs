@@ -2,12 +2,20 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class StatefullInterviewSearcher : IStatefullInterviewSearcher
     {
+        private readonly IInterviewFactory interviewFactory;
+
+        public StatefullInterviewSearcher(IInterviewFactory interviewFactory)
+        {
+            this.interviewFactory = interviewFactory;
+        }
+
         public SearchResults Search(IStatefulInterview interview, FilteringFlags[] flags, long skip, long take)
         {
             var nodes = GetFilteredNodes(flags, interview);
@@ -19,6 +27,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var results = new SearchResults();
             SearchResult currentResult = null;
 
+            
             foreach (var node in nodes)
             {
                 if (currentResult == null)
@@ -118,27 +127,25 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private IEnumerable<IInterviewTreeNode> GetFilteredNodes(FilteringFlags[] flags, IStatefulInterview interview)
         {
-            var nodes = interview.GetAllInterviewNodes()
-                .Where(n => n is InterviewTreeQuestion
-                    || n is InterviewTreeStaticText);
+            var flagged = interviewFactory.GetFlaggedQuestionIds(interview.Id).ToLookup(k => k.ToString());
+
+            var nodes = interview.GetAllInterviewNodes();
 
             foreach (var node in nodes)
             {
-                if (flags.Any() == false && node is InterviewTreeStaticText)
-                {
-                    yield return node;
-                    continue;
-                };
-
                 if (!(node is InterviewTreeQuestion question)) continue;
+
                 var found = true;
+
                 foreach (var flag in flags)
                 {
                     switch (flag)
                     {
                         case FilteringFlags.Flagged:
+                            found &= flagged.Contains(question.Identity.ToString());
                             break;
                         case FilteringFlags.NotFlagged:
+                            found &= !flagged.Contains(question.Identity.ToString());
                             break;
 
                         case FilteringFlags.WithComments:
