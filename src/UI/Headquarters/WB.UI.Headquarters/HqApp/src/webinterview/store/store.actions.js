@@ -198,8 +198,8 @@ export default {
         }
     }, 200),
 
-    fetchBreadcrumbs: debounce(async ({ commit }) => {
-        const crumps = await Vue.$api.call(api => api.getBreadcrumbs())
+    fetchBreadcrumbs: debounce(async ({ commit, rootState }) => {
+        const crumps = await Vue.$api.call(api => api.getBreadcrumbs(rootState.route.params.sectionId))
         commit("SET_BREADCRUMPS", crumps)
     }, 200),
 
