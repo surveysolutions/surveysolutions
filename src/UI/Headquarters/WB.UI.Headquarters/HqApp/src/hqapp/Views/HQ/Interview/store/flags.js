@@ -5,9 +5,7 @@ Vue.use(Vuex)
 
 export default {
     state: {
-        state: {
-
-        }
+        state: []
     },
     actions:{
         setFlag({commit}, {questionId, hasFlag}) {
