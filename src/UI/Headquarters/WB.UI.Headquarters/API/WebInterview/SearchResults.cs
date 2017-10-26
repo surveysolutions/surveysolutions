@@ -5,7 +5,6 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public class SearchResult
     {
-
         public string SectionId { get; set; }
         public List<Link> Sections { get; set; } = new List<Link>();
         public List<Link> Questions { get; set; } = new List<Link>();
@@ -13,12 +12,6 @@ namespace WB.UI.Headquarters.API.WebInterview
 
     public class Link
     {
-        public Link(string target, string title)
-        {
-            Target = target;
-            Title = title;
-        }
-
         public string Target { get; set; }
         public string Title { get; set; }
     }

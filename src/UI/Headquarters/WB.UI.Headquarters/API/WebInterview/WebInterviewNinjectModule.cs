@@ -1,15 +1,11 @@
-using System;
 using System.Collections.Concurrent;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNet.SignalR.Ninject;
-using Ninject;
 using Ninject.Modules;
 using Prometheus.Advanced;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
@@ -32,6 +28,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewLazyNotificationService>().InSingletonScope();
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
+            this.Bind<IStatefullInterviewSearcher>().To<StatefullInterviewSearcher>();
 
             DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new IOnDemandCollector[]
             {
