@@ -1,6 +1,5 @@
 // import * as forEach from "lodash/foreach"
 import Vue from "vue"
-import * as format from "date-fns/format"
 import { DateFormats } from "~/shared/helpers"
 import { forEach } from "lodash"
 
@@ -13,11 +12,11 @@ Vue.directive("dateTimeFormatting", {
             
             if (dateTimeAttr) {
                 const dateTime = new Date(dateTimeAttr)
-                timeElement.innerHTML =  format(dateTime, DateFormats.dateTime)
+                timeElement.innerHTML = moment(dateTime).format(DateFormats.dateTime)
             }
             else {
                 const date = timeElement.getAttribute("date")
-                timeElement.innerHTML =  format(date, DateFormats.date)
+                timeElement.innerHTML =  moment(date).format(DateFormats.date)
             }
         })
     }

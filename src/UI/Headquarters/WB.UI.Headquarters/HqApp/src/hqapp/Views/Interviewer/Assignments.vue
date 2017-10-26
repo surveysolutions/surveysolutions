@@ -6,6 +6,8 @@
 
 <script>
 
+import { DateFormats } from "~/shared/helpers";
+
 export default {
     computed: {
         title() {
@@ -101,7 +103,7 @@ export default {
                     searchable: false,
                     render(data) {
                         var date = moment.utc(data);
-                        return date.local().format(self.$config.model.dateFormat);
+                        return date.local().format(DateFormats.dateTimeInList);
                     }
                 },
                 {
@@ -111,7 +113,7 @@ export default {
                     searchable: false,
                     render: function (data) {
                         var date = moment.utc(data);
-                        return date.local().format(self.$config.model.dateFormat);
+                        return date.local().format(DateFormats.dateTimeInList);
                     }
                 }]
 
