@@ -1,7 +1,7 @@
 <template>
     <div class="filters-container">
         <h4>{{$t("Pages.InterviewDetails_TranslationLabel")}}</h4>
-        <div class="dropdown" v-if="canChangeLanguage">
+        <div class="dropdown">
             <button class="btn btn-default dropdown-toggle" type="button" id="languageMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 {{currentLanguage}}
                 <span class="caret"></span>
@@ -20,12 +20,6 @@
 <script>
 export default {
   computed: {
-    canChangeLanguage() {
-      return (
-        this.$store.state.webinterview.languages != undefined &&
-        this.$store.state.webinterview.languages.length > 0
-      );
-    },
     currentLanguage() {
       return (
         this.$store.state.webinterview.currentLanguage ||
