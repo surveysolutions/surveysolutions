@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
@@ -24,9 +25,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         protected override void OnAfterConnect(IHub hub)
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
+            var isReview = hub.Context.QueryString[@"review"].ToBool(false);
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
-            hub.Clients.OthersInGroup(interviewId).closeInterview();
+            if (!isReview)
+            {
+                hub.Clients.OthersInGroup(interviewId).closeInterview();
+            }
 
             hub.Groups.Add(hub.Context.ConnectionId, interview.QuestionnaireIdentity.ToString());
 
