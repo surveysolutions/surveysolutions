@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
     [DebuggerDisplay("{Title} | public: {IsPublic}, shared with {SharedPersons.Count} persons")]
-    public class QuestionnaireListViewItem
+    public class QuestionnaireListViewItem : IQuestionnaireListItem
     {
         public virtual DateTime CreationDate { get; set; }
 

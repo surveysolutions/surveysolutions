@@ -33,12 +33,14 @@ namespace WB.UI.Designer.Api
         }
 
         [HttpGet]
-        public List<TreeNode> GetFolders(Guid parentId)
+        public List<TreeNode> GetFolders(Guid? parentId)
         {
+            if (parentId == Guid.Empty)
+                parentId = null;
             return this.publicFoldersStorage.GetSubFolders(parentId)
                     .Select(i => new TreeNode()
                     {
-                        key = i.Id,
+                        key = i.PublicId,
                         title = i.Title
                     }).ToList();
         }
@@ -49,7 +51,7 @@ namespace WB.UI.Designer.Api
             return this.publicFoldersStorage.GetRootFolders()
                 .Select(i => new TreeNode()
                 {
-                    key = i.Id,
+                    key = i.PublicId,
                     title = i.Title
                 }).ToList();
         }
@@ -65,10 +67,11 @@ namespace WB.UI.Designer.Api
         {
             var id = Guid.NewGuid();
             var userId = userService.WebUser.UserId;
-            var folder = this.publicFoldersStorage.CreateFolder(id, model.Title, model.ParentId, userId);
+            var parentId = model.ParentId == Guid.Empty ? null : model.ParentId;
+            var folder = this.publicFoldersStorage.CreateFolder(id, model.Title, parentId, userId);
             return new TreeNode()
             {
-                key = folder.Id,
+                key = folder.PublicId,
                 title = folder.Title
             };
         }
