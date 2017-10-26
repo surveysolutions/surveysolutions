@@ -20,14 +20,6 @@ const store = {
             return Vue.$api.call(api => {
                 return api.reject(rejection.comment, rejection.assignTo);
             });
-        },
-
-        applyFiltering( {commit, state}, filter){
-            const filterState = state.filter;
-
-            filterState.forSupervisor = !filterState.forSupervisor;
-
-            commit("CHANGE_FILTERS", filter)
         }
     },
 
