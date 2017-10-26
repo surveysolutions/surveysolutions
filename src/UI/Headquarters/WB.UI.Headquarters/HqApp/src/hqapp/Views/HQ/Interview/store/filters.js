@@ -1,10 +1,18 @@
 import Vue from "vue"
 
+function getSelectedFlags(state) {
+    const filters = state.filter;
+    const flags = Object.keys(state.filter)
+        .filter((flag) => state.filter[flag])
+        .map(_.capitalize);
+    return flags;
+}
+
 export default {
     state: {
         filter: {
             flagged: false,
-            unflagged: false,
+            notFlagged: false,
             withComments: false,
 
             invalid: false,
@@ -16,27 +24,28 @@ export default {
             forSupervisor: false,
             forInterviewer: false,
         },
+
         search: {
             results: [],
-            count: 0
+            count: 0,
+            skip: 0,
+            pageSize: 100
         }
     },
 
     actions: {
-        async updateSearchResults({ commit }) {
+        async updateSearchResults({ commit, state }) {
             const res = await Vue.$api.call(api => {
-                return api.search(["Flagged"], 0, 100)
+                const flags = getSelectedFlags(state);
+                return api.search(flags, state.search.skip, state.search.pageSize)
             })
 
             commit("SET_SEARCH_RESULT", res)
         },
 
         applyFiltering({ commit, dispatch, state }, filter) {
-            const filterState = state.filter;
-
-            filterState.forSupervisor = !filterState.forSupervisor;
-
             commit("CHANGE_FILTERS", filter)
+            commit("CLEAR_SEARCH_RESULTS")
             dispatch("showSearchResults");
         },
 
@@ -47,42 +56,28 @@ export default {
 
     mutations: {
         SET_SEARCH_RESULT(state, results) {
-            /*
-                ===>>>
-                state
-                [
-                    { sectionid: 1, sections: [1], questions: [a, b, c] },
-                    { sectionid: 2, sections: [2], questions: [d, e, f] }
-                ] 
-                +
-                results 
-                [
-                    { sectionid: 2, questions: [g, h,j] }
-                ]
-                ===
-                [
-                    { sectionid: 1, sections: [1], questions: [a, b, c] },
-                    { sectionid: 2, sections: [2], questions: [d, e, f, g, h, j] }
-                ]
-
-             */
-
             results.results.forEach((res) => {
-                const section = _.find(state.search.results, (r) => r.sectionId == res.sectionId);
+                const section = _.find(state.search.results, { sectionId: res.sectionId });
 
                 if (section == null) {
                     state.search.results.push(res);
                 } else {
-                    section.questions.push(res.questions)
+                    section.questions = _.unionBy(section.questions, res.questions, "target")
                 }
+
+                state.search.count = res.totalCount;
             });
+
+            state.search.skip = _.sumBy(state.search.results, 'questions.length');
         },
 
         CLEAR_SEARCH_RESULTS(state) {
             state.search.results = [];
+            state.search.count = 0;
+            state.search.skip = 0;
         },
-        CHANGE_FILTERS(state, payload) {
-            state.filter = payload
+        CHANGE_FILTERS(state, { filter, value }) {
+            state.filter[filter] = value;
         }
     },
     getters: {
