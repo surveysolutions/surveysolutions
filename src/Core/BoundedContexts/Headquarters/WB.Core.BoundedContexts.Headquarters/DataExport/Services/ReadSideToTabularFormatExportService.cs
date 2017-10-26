@@ -206,9 +206,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewLevelHeader.AddRange(level.ReferencedNames);
                 }
 
-                foreach (ExportedQuestionHeaderItem question in level.HeaderItems.Values)
+                foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
                 {
-                    interviewLevelHeader.AddRange(question.ColumnNames);
+                    interviewLevelHeader.AddRange(headerItem.ColumnNames);
                 }
 
                 if (level.LevelScopeVector.Length == 0)
