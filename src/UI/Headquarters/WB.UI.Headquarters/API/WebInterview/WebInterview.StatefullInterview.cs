@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
@@ -52,6 +53,26 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var statefulInterview = this.GetCallerInterview();
             return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
+        }
+
+        public void SetFlag(string questionId, bool hasFlag)
+        {
+            var statefulInterview = this.GetCallerInterview();
+            this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
+        }
+
+        public IEnumerable<string> GetFlags(string sectionId)
+        {
+            if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
+
+            Identity sectionIdentity = Identity.Parse(sectionId);
+
+            var statefulInterview = this.GetCallerInterview();
+            var questionnaire = this.GetCallerQuestionnaire();
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
+
+            return this.interviewFactory.GetQuestionsWithFlagBySectionId(questionnaireIdentity, statefulInterview.Id, sectionIdentity)
+                .Select(x => x.ToString());
         }
 
         public bool IsEnabled(string id)
