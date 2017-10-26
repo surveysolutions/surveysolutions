@@ -31,7 +31,7 @@
                         <button type="button" class="btn btn-link" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                     </div>
                 </div>
-                <SwitchLanguage />
+                <SwitchLanguage v-if="canChangeLanguage"/>
                 <FacetFilters />
                 <button type="button" class="btn btn-link" @click="showSearchResults">show search results</button>
             </div>
@@ -143,6 +143,12 @@ export default {
       return this.$t("Details.LastUpdated", {
         date: moment.utc(this.$config.model.lastUpdatedAtUtc).fromNow()
       });
+    },
+    canChangeLanguage() {
+      return (
+        this.$store.state.webinterview.languages != undefined &&
+        this.$store.state.webinterview.languages.length > 0
+      );
     }
   },
 
