@@ -4,12 +4,13 @@ export default {
     state: {
         filter: {
             flagged: false,
+            unflagged: false,
             withComments: false,
 
-            invalid: true,
+            invalid: false,
             valid: false,
 
-            answered: true,
+            answered: false,
             unanswered: false,
 
             forSupervisor: false,
@@ -22,11 +23,12 @@ export default {
     },
 
     actions: {
-        getSearchResults({ commit }) {
-            Vue.$api.call(api => api.search(["Flagged"], 0, 100))
-                .then((res) => {
-                    commit("SET_SEARCH_RESULT", res)
-                })
+        async updateSearchResults({ commit }) {
+            const res = await Vue.$api.call(api => {
+                return api.search(["Flagged"], 0, 100)
+            })
+
+            commit("SET_SEARCH_RESULT", res)
         },
 
         applyFiltering({ commit, dispatch, state }, filter) {
@@ -75,6 +77,7 @@ export default {
                 }
             });
         },
+
         CLEAR_SEARCH_RESULTS(state) {
             state.search.results = [];
         },

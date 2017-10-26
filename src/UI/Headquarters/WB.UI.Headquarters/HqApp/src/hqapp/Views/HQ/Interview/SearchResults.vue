@@ -4,12 +4,13 @@
             <button class="btn btn-link close-btn" type="button" @click="hideSearchResults">
                 <span class="cancel"></span>
             </button>
+            
             <h2>{{questionsCount}} questions found:</h2>
             
-            <SearchSectionResult 
+            <search-section-result 
                 v-for="search in searchResults"
                 :key="search.sectionId"
-                :search="search"></SearchSectionResult>
+                :search="search"></search-section-result>
         </div>
     </aside>
 </template>
