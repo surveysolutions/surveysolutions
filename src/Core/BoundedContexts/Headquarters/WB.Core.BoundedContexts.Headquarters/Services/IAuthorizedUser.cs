@@ -18,4 +18,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         string DeviceId { get; }
         UserRoles Role { get; }
     }
+
+    public static class AuthorizedUserHelpers
+    {
+        public static bool CanConductInterviewReview(this IAuthorizedUser authorizedUser)
+        {
+            return authorizedUser.IsAuthenticated && (
+                       authorizedUser.IsAdministrator 
+                       || authorizedUser.IsHeadquarter 
+                       || authorizedUser.IsSupervisor
+            );
+        }
+    }
 }
