@@ -671,8 +671,12 @@ namespace WB.UI.Headquarters.API.WebInterview
         public CoverInfo GetCoverInfo()
         {
             var interview = this.GetCallerInterview();
-            var commentedQuestionsCount = interview.CountCommentedQuestionsVisibledToInterviewer();
-            var commentedQuestions = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Take(30).ToArray();
+
+            var allCommented = IsReviewMode ? interview.GetAllCommentedEnabledQuestions().ToList() : 
+                                              interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToList();
+
+            var commentedQuestionsCount = allCommented.Count;
+            var commentedQuestions = allCommented.Take(30).ToArray();
 
             var entitiesWithComments = commentedQuestions.Select(identity =>
             {

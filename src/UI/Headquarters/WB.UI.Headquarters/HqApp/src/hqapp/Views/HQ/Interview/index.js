@@ -17,12 +17,18 @@ export default class ReviewComponent {
                 children: [
                     {
                         path: '',
-                        component: Cover
+                        component: Cover,
+                        props: {
+                            navigateToPrefilled: true
+                        }
                     },
                     {
                         path: 'Cover',
                         name: 'prefilled',
-                        component: Cover
+                        component: Cover,
+                        props: {
+                            navigateToPrefilled: true
+                        }
                     },
                     {
                         path: 'Section/:sectionId',
