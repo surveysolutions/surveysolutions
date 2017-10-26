@@ -33,8 +33,9 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
+
         private bool IsReviewMode => 
-            this.authorizedUser.IsHeadquarter || this.authorizedUser.IsSupervisor || this.authorizedUser.IsAdministrator &&
+            this.authorizedUser.CanConductInterviewReview() &&
             this.Context.QueryString[@"review"].ToBool(false);
 
         private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
