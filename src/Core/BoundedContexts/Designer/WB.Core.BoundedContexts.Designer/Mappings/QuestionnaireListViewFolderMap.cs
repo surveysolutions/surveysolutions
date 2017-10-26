@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
     {
         public QuestionnaireListViewFolderMap()
         {
-            Id(x => x.Id, idMap =>
+            Id(x => x.PublicId, idMap =>
             {
                 idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");

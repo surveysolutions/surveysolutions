@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
-    public class QuestionnaireListView
+    public class QuestionnaireListView 
     {
         public QuestionnaireListView(
-            int page, int pageSize, int totalCount, IEnumerable<QuestionnaireListViewItem> items, string order)
+            int page, int pageSize, int totalCount, IEnumerable<IQuestionnaireListItem> items, string order)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             this.Order = order ?? string.Empty;
         }
 
-        public IEnumerable<QuestionnaireListViewItem> Items { get; private set; }
+        public IEnumerable<IQuestionnaireListItem> Items { get; private set; }
         
         public string Order { get; set; }
       

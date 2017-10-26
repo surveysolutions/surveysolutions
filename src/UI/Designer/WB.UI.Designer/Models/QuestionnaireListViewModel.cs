@@ -7,6 +7,8 @@ namespace WB.UI.Designer.Models
     {
         public override bool CanPreview => false;
 
+        public bool IsFolder { get; set; }
+
         [Key]
         public string Id { get; set; }
 

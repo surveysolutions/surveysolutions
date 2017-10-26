@@ -26,13 +26,7 @@
 
         public bool CanExportToPdf { get; set; }
 
-        public virtual bool CanCopy
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public virtual bool CanCopy { get; set; }
 
         public virtual bool CanPrint
         {

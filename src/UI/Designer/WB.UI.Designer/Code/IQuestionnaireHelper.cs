@@ -10,12 +10,12 @@ namespace WB.UI.Designer.Code
             Guid viewerId,
             bool isAdmin, 
             bool showPublic,
+            Guid? folderId,
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
             string searchFor = null);
 
-        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId,
-            bool isAdmin);
+        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId);
     }
 }
