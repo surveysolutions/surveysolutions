@@ -15,7 +15,6 @@ module.exports = merge(shared(packageName, devMode), {
             "bootbox",
             "babel-polyfill",
             "bootstrap/dist/js/bootstrap.js",
-            "date-fns",
             "flatpickr",
             "flatpickr/dist/l10n",
             "lodash",
