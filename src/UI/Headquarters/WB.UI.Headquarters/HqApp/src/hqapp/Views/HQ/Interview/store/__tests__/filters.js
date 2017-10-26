@@ -106,16 +106,19 @@ describe("filters store search", () => {
         function emptyState() {
             return {
                 search: {
-                    results: []
+                    results: [],
+                    count: 0,
+                    skip: 0,
+                    pageSize: 20
                 }
             }
         }
 
         const searchResultA1 = {
+            totalCount: 9,
             results: [
                 {
                     sectionId: "sectionA",
-                    totalCount: 9,
                     sections: [{ target: "SectionATarget", title: "Section A" }],
                     questions: [
                         { target: "QuestionAId", title: "Question A" },
@@ -127,6 +130,7 @@ describe("filters store search", () => {
         }
 
         const searchResultA2 = {
+            totalCount: 8,
             results: [
                 {
                     sectionId: "sectionA",
@@ -142,10 +146,10 @@ describe("filters store search", () => {
         }
 
         const searchResult2 = {
+            totalCount: 11,
             results: [
                 {
                     sectionId: "sectionB",
-                    totalCount: 11,
                     sections: [{ target: "SectionBTarget", title: "Section B" }],
                     questions: [
                         { target: "QuestionDId", title: "Question D" },
