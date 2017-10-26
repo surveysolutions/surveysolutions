@@ -250,9 +250,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         }
 
-        public BreadcrumbInfo GetBreadcrumbs()
+        public BreadcrumbInfo GetBreadcrumbs(string sectionIdArg)
         {
-            var sectionId = CallerSectionid;
+            var sectionId = CallerSectionid ?? sectionIdArg;
 
             if (sectionId == null) return new BreadcrumbInfo();
 
