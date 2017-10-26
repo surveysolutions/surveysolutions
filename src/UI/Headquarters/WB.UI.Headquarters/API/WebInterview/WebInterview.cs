@@ -9,6 +9,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -27,6 +28,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
+        private readonly IInterviewFactory interviewFactory;
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
@@ -47,7 +49,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IQuestionnaireStorage questionnaireRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
             IAuthorizedUser authorizedUser,
-            IChangeStatusFactory changeStatusFactory)
+            IChangeStatusFactory changeStatusFactory,
+            IInterviewFactory interviewFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
@@ -56,6 +59,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
+            this.interviewFactory = interviewFactory;
         }
 
 

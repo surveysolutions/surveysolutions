@@ -8,3 +8,4 @@ Vue.component("wb-remove-answer",   () => import(/* webpackChunkName: "questions
 Vue.component("wb-progress",        () => import(/* webpackChunkName: "questions" */ "./Progress"))
 Vue.component("wb-attachment",      () => import(/* webpackChunkName: "questions" */ "./Attachment"))
 Vue.component("wb-lock",            () => import(/* webpackChunkName: "questions" */ "./Lock"))
+Vue.component("wb-flag",            () => import(/* webpackChunkName: "questions" */ "./Flag"))

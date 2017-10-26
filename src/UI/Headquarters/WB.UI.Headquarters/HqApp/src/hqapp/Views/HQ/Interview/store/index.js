@@ -2,10 +2,14 @@ import Vue from "vue"
 
 import webinterview from "~/webinterview/store"
 import filters from "./filters"
+import flags from "./flags"
 
 const store = {
-    modules: { filters },
-    
+    modules:{
+        filters,
+        flags
+    },
+
     state: {
     },
 

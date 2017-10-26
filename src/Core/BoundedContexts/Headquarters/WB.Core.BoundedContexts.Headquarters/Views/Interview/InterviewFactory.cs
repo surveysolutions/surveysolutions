@@ -93,6 +93,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.jsonSerializer = jsonSerializer;
         }
 
+        public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity sectionId)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
+            var questionsInSection = questionnaire.GetChildQuestions(sectionId.Id);
+
+            return this.sessionProvider.GetSession().Connection.Query(
+                    $"SELECT {EntityIdColumn}, {RosterVectorColumn} " +
+                    $"FROM {InterviewsTableName} " +
+                    $"WHERE {InterviewIdColumn} = @InterviewId " +
+                    $"AND {FlagColumn} = true " +
+                    $"AND {EntityIdColumn} IN ({string.Join(",", questionsInSection.Select(x => $"'{x}'"))})" +
+                    $"AND {RosterVectorColumn} = @RosterVector",
+                    new {InterviewId = interviewId, RosterVector = sectionId.RosterVector.Array})
+                .Select(x => Identity.Create((Guid) x.entityid, (int[]) x.rostervector))
+                .ToArray();
+        }
+
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
             => this.sessionProvider.GetSession().Connection.Query(
                     $"SELECT {EntityIdColumn}, {RosterVectorColumn} FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId AND {FlagColumn} = true",

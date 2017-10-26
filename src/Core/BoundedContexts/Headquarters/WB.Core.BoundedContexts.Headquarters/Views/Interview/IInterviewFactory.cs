@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public interface IInterviewFactory
     {
+        Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity sectionId);
         Identity[] GetFlaggedQuestionIds(Guid interviewId);
         void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged);
         void RemoveInterview(Guid interviewId);

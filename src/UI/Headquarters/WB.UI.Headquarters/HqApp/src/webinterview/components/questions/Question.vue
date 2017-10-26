@@ -6,12 +6,17 @@
                 <span></span>
             </button>
             <ul class="dropdown-menu">
-                <li v-if="!isShowingAddCommentDialog"><a href="javascript:void(0)" @click="showAddComment">{{ $t("WebInterviewUI.CommentAdd") }}</a></li>
-                <li v-else><a href="javascript:void(0)" @click="hideAddComment">{{ $t("WebInterviewUI.CommentHide") }}</a></li>
+                <li v-if="!isShowingAddCommentDialog">
+                    <a href="javascript:void(0)" @click="showAddComment">{{ $t("WebInterviewUI.CommentAdd") }}</a>
+                </li>
+                <li v-else>
+                    <a href="javascript:void(0)" @click="hideAddComment">{{ $t("WebInterviewUI.CommentHide") }}</a>
+                </li>
             </ul>
         </div>
 
         <div class="question-editor" :class="questionEditorClass">
+            <wb-flag v-if="$store.state.review && !noFlag" />
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
             <slot />
@@ -27,7 +32,7 @@
 
     export default {
         name: 'wb-question',
-        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled'],
+        props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
         data() {
             return {
                 isShowingAddCommentDialogFlag: undefined
@@ -62,8 +67,13 @@
             disabled() {
                 return this.isDisabled || this.question.isDisabled;
             },
+            hasFlag(){
+                if(this.$store.state.review == undefined) return false;
+                
+                return this.$store.getters.flags.indexOf(this.id) > -1;
+            },
             questionClass() {
-                return [{ 'disabled-question': this.disabled }]
+                return [{ 'disabled-question': this.disabled, 'with-flag': this.hasFlag}]
             },
             questionEditorClass() {
                 return [{
