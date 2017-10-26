@@ -697,62 +697,20 @@
       <LastGenOutput>Maps.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_GlobalResources\BatchUpload.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>BatchUpload.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Common.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Common.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Dashboard.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Dashboard.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\DataExport.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>DataExport.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\HQ.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>HQ.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Import.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Import.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\MainMenu.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MainMenu.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\MapReport.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MapReport.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireClonning.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>QuestionnaireClonning.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\QuestionnaireImport.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>QuestionnaireImport.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Reports.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Reports.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Settings.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Settings.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\TakeNewInterview.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>TakeNewInterview.ka.designer.cs</LastGenOutput>
-    </Content>
-    <Content Include="App_GlobalResources\Users.ka.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Users.ka.designer.cs</LastGenOutput>
-    </Content>
+    <Content Include="App_GlobalResources\BatchUpload.ka.resx" />
+    <Content Include="App_GlobalResources\Common.ka.resx" />
+    <Content Include="App_GlobalResources\Dashboard.ka.resx" />
+    <Content Include="App_GlobalResources\DataExport.ka.resx" />
+    <Content Include="App_GlobalResources\HQ.ka.resx" />
+    <Content Include="App_GlobalResources\Import.ka.resx" />
+    <Content Include="App_GlobalResources\MainMenu.ka.resx" />
+    <Content Include="App_GlobalResources\MapReport.ka.resx" />
+    <Content Include="App_GlobalResources\QuestionnaireClonning.ka.resx" />
+    <Content Include="App_GlobalResources\QuestionnaireImport.ka.resx" />
+    <Content Include="App_GlobalResources\Reports.ka.resx" />
+    <Content Include="App_GlobalResources\Settings.ka.resx" />
+    <Content Include="App_GlobalResources\TakeNewInterview.ka.resx" />
+    <Content Include="App_GlobalResources\Users.ka.resx" />
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -1651,80 +1609,10 @@
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
-    <Compile Include="App_GlobalResources\BatchUpload.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BatchUpload.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Common.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Common.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Dashboard.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Dashboard.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\DataExport.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DataExport.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\HQ.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>HQ.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Import.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Import.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\MainMenu.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MainMenu.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\MapReport.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MapReport.ka.resx</DependentUpon>
-    </Compile>
     <Compile Include="App_GlobalResources\Maps.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\QuestionnaireClonning.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireClonning.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\QuestionnaireImport.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>QuestionnaireImport.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Reports.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reports.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Settings.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Settings.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\TakeNewInterview.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TakeNewInterview.ka.resx</DependentUpon>
-    </Compile>
-    <Compile Include="App_GlobalResources\Users.ka.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users.ka.resx</DependentUpon>
     </Compile>
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
