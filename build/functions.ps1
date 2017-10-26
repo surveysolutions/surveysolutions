@@ -277,7 +277,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
     Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
-    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' /nologo | Write-Host
+    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false /p:ExcludeGeneratedDebugSymbol=true /p:DebugSymbols=false "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' /nologo | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
