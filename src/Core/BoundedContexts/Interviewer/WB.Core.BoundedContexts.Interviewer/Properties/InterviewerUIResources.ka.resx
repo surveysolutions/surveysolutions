@@ -144,9 +144,6 @@
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>უარყოფა</value>
   </data>
-  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
-    <value>დავალება #{0}</value>
-  </data>
   <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
     <value>ახალი ({0})</value>
   </data>
