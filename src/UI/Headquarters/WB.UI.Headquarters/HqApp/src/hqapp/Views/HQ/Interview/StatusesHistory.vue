@@ -43,6 +43,7 @@
 
 <script>
 import { DateFormats } from "~/shared/helpers";
+import vue from "vue"
 
 export default {
   data: function() {
@@ -59,7 +60,7 @@ export default {
     },
     async show() {
       if (this.items == null)
-        this.items = await this.$api.call(api => api.getStatusesHistory());
+        this.items = await vue.$api.call(api => api.getStatusesHistory());
         
       this.$refs.modal.modal();
     }
