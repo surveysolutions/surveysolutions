@@ -1,6 +1,3 @@
-using System;
-using System.Security.Principal;
-
 namespace WB.UI.Headquarters.API.WebInterview
 {
     public interface IWebInterviewAllowService
