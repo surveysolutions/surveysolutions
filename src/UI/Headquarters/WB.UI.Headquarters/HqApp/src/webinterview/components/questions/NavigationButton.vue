@@ -1,5 +1,5 @@
 <template>
-    <div class="action-container" v-if="$me">
+    <div class="action-container" v-if="$me && visible">
         <a class="btn btn-lg" :class="css" @click="navigate">
             <span v-html="buttonTitle"></span>
         </a>
@@ -13,6 +13,9 @@
         mixins: [entityDetails],
         name: "NavigationButton",
         computed: {
+            visible(){
+                return !this.$store.state.review || this.$me.type != ButtonType.Complete
+            },
             css() {
                 return [{
                     'btn-success': this.$me.status == GroupStatus.Completed,
