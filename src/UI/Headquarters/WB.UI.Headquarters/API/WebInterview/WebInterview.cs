@@ -29,6 +29,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewFactory interviewFactory;
+        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
@@ -50,7 +51,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IWebInterviewNotificationService webInterviewNotificationService,
             IAuthorizedUser authorizedUser,
             IChangeStatusFactory changeStatusFactory,
-            IInterviewFactory interviewFactory)
+            IInterviewFactory interviewFactory,
+            IStatefullInterviewSearcher statefullInterviewSearcher)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
@@ -60,6 +62,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.interviewFactory = interviewFactory;
+            this.statefullInterviewSearcher = statefullInterviewSearcher;
         }
 
 

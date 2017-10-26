@@ -57,7 +57,7 @@ export default {
   methods: {
     change({ id, value }) {
       this.$store.dispatch("applyFiltering", { filter: id, value });
-      this.$store.dispatch("updateSearchResults");
+      this.$store.dispatch("fetchSearchResults");
     },
   },
   components: {

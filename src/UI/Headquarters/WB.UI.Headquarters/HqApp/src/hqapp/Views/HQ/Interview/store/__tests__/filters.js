@@ -32,7 +32,7 @@ describe("filters store search", () => {
 
     });
 
-    describe("actions.updateSearchResults", () => {
+    describe("actions.fetchSearchResults", () => {
 
         const actions = filtersStore.actions;
 
@@ -78,7 +78,7 @@ describe("filters store search", () => {
 
             search.mockReturnValue(searchResult);
 
-            await actions.updateSearchResults({ commit, state })
+            await actions.fetchSearchResults({ commit, state })
 
             expect(commit.mock.calls.length).toBe(1)
             const call = commit.mock.calls[0];
@@ -90,7 +90,7 @@ describe("filters store search", () => {
         it("call search api", async () => {
             const searchResult = { some: { search: "result" } };
 
-            await actions.updateSearchResults({ commit, state })
+            await actions.fetchSearchResults({ commit, state })
 
             expect(search.mock.calls.length).toBe(1)
             const call = search.mock.calls[0];

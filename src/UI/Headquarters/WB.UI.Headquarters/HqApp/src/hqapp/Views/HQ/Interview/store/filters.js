@@ -34,7 +34,7 @@ export default {
     },
 
     actions: {
-        async updateSearchResults({ commit, state }) {
+        async fetchSearchResults({ commit, state }) {
             const res = await Vue.$api.call(api => {
                 const flags = getSelectedFlags(state);
                 return api.search(flags, state.search.skip, state.search.pageSize)
@@ -85,8 +85,8 @@ export default {
             return state.filter;
         },
 
-        searchResults(state) {
-            return state.search.results;
+        searchResult(state) {
+            return state.search;
         }
     }
 }
