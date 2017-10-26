@@ -50,7 +50,7 @@
     self.deleteMap = function (key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
 
-        notifier.confirm('Confirmation Needed', input.settings.messages.deleteMapConfirmationMessage,
+        notifier.confirm(input.settings.messages.confirmationNeededTitle, input.settings.messages.deleteMapConfirmationMessage,
             // confirm
             function () { self.sendDeleteMapCommand(selectedRow); },
             // cancel

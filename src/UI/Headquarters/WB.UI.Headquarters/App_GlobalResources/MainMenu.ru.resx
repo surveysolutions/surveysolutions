@@ -138,6 +138,9 @@
   <data name="Interviews" xml:space="preserve">
     <value>Интервью</value>
   </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Карты</value>
+  </data>
   <data name="MapReport" xml:space="preserve">
     <value>Карта</value>
   </data>

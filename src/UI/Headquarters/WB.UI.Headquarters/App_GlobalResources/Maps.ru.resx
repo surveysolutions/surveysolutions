@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Levels" xml:space="preserve">
-    <value>Levels</value>
+    <value>Уровни</value>
   </data>
   <data name="MapLoadingInvalidFilesError" xml:space="preserve">
-    <value>Error occurred. Following files were ignored:</value>
+    <value>Произошла ошибка. Следующие файлы были проигнорированы:</value>
   </data>
   <data name="MapLoadingNotZipError" xml:space="preserve">
-    <value>Error occurred. File is not a .zip archive</value>
+    <value>Произошла ошибка. Файл не является .zip архивом</value>
   </data>
   <data name="MapsLoadingError" xml:space="preserve">
-    <value>Error occurred on map loading.</value>
+    <value>Произошла ошибка при загрузке карт.</value>
   </data>
   <data name="MaxScale" xml:space="preserve">
-    <value>Max Scale</value>
+    <value>Максимальный масштаб</value>
   </data>
   <data name="MinScale" xml:space="preserve">
-    <value>Min Scale</value>
+    <value>Минимальный масштаб</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>Имя</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Размер</value>
   </data>
   <data name="UpdateDate" xml:space="preserve">
-    <value>Update Date</value>
+    <value>Дата изменения</value>
   </data>
 </root>

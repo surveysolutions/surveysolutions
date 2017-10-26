@@ -6514,21 +6514,27 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   transition: background 0.2s linear 0s;
   word-break: break-word; }
   .btn:disabled, .btn.disabled {
-    border-color: transparent !important;
-    color: #fff !important;
+    border-color: #d7d7d7 !important;
+    color: #a6a8a9 !important;
     cursor: not-allowed;
-    background-image: -webkit-linear-gradient(-45deg, #d7d7d7 15%, #a6a8a9 15%, #a6a8a9 50%, #d7d7d7 50%, #d7d7d7 65%, #a6a8a9 65%, #a6a8a9);
-    background-image: -o-linear-gradient(-45deg, #d7d7d7 15%, #a6a8a9 15%, #a6a8a9 50%, #d7d7d7 50%, #d7d7d7 65%, #a6a8a9 65%, #a6a8a9);
-    background-image: -moz-linear-gradient(-45deg, #d7d7d7 15%, #a6a8a9 15%, #a6a8a9 50%, #d7d7d7 50%, #d7d7d7 65%, #a6a8a9 65%, #a6a8a9);
-    background-image: linear-gradient(-45deg, #d7d7d7 15%, #a6a8a9 15%, #a6a8a9 50%, #d7d7d7 50%, #d7d7d7 65%, #a6a8a9 65%, #a6a8a9);
+    background-image: -webkit-linear-gradient(-45deg, #d7d7d7 15%, transparent 15%, transparent 50%, #d7d7d7 50%, #d7d7d7 65%, transparent 65%, transparent);
+    background-image: -o-linear-gradient(-45deg, #d7d7d7 15%, transparent 15%, transparent 50%, #d7d7d7 50%, #d7d7d7 65%, transparent 65%, transparent);
+    background-image: -moz-linear-gradient(-45deg, #d7d7d7 15%, transparent 15%, transparent 50%, #d7d7d7 50%, #d7d7d7 65%, transparent 65%, transparent);
+    background-image: linear-gradient(-45deg, #d7d7d7 15%, transparent 15%, transparent 50%, #d7d7d7 50%, #d7d7d7 65%, transparent 65%, transparent);
     background-size: 8px 8px; }
+    .btn:disabled.btn-clear, .btn.disabled.btn-clear {
+      background: none;
+      border-color: transparent !important; }
     .btn:disabled:hover, .btn:disabled:focus, .btn.disabled:hover, .btn.disabled:focus {
-      border-color: #ececec;
-      outline: none; }
+      border-color: #d7d7d7;
+      outline: none;
+      box-shadow: none !important; }
 
 a.disabled {
   pointer-events: none;
   cursor: not-allowed; }
+  a.disabled.btn {
+    background-color: #f3f3f3; }
 
 .btn-link {
   color: #2a81cb; }
@@ -9387,7 +9393,7 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
     .info-block p:only-of-type {
       margin-bottom: 20px; }
 
-table.dataTable span.highlight {
+.table .highlight {
   background-color: #ff8;
   color: #3f3f3f;
   border-radius: 0.28571429rem; }
@@ -9747,6 +9753,9 @@ main.hidden.display-block {
 
   .main-information-no-filter {
     padding: 0 5px; } }
+.reset-margin {
+  margin: 0; }
+
 .questionnaire-statistics {
   margin-bottom: 30px; }
   .questionnaire-statistics ul {
