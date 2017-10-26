@@ -98,6 +98,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
             var questionsInSection = questionnaire.GetChildQuestions(sectionId.Id);
 
+            if (!questionsInSection.Any()) return Array.Empty<Identity>();
+
             return this.sessionProvider.GetSession().Connection.Query(
                     $"SELECT {EntityIdColumn}, {RosterVectorColumn} " +
                     $"FROM {InterviewsTableName} " +
