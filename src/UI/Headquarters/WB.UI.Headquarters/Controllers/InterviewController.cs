@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -108,6 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 Id = id.FormatGuid(),
                 Key = interviewSummary.Key,
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
+                StatusName = interviewSummary.Status.ToLocalizeString(),
                 Responsible = interviewSummary.ResponsibleName,
                 ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
                 InterviewsUrl = authorizedUser.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ")
@@ -180,6 +182,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public DateTime LastUpdatedAtUtc { get; set; }
 
         public ApproveRejectAllowed ApproveReject { get; }
+
+        public string StatusName { get; set; }
 
         public string Responsible { get; set; }
 
