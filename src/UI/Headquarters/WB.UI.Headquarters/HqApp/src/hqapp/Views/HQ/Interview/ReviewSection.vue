@@ -7,7 +7,10 @@
 export default {
   watch: {
     "$store.state.route.params.sectionId"() {
-      this.$store.dispatch("getFlags");
+        this.$store.dispatch("getFlags");
+    },
+    "$store.state.route.query.question"(to) {
+         this.$store.dispatch("sectionRequireScroll", { id: to })
     }
   },
   mounted() {
