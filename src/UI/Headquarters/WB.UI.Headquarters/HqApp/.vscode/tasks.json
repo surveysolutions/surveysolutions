@@ -52,6 +52,11 @@
             "type": "gulp",
             "task": "vendor",
             "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "hot",
+            "problemMatcher": []
         }
     ]
 }

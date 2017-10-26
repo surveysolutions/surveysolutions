@@ -5,7 +5,7 @@
 
             <filters-block>
                 <filter-item id="flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change" :state="state.flagged" />
-                <filter-item id="unflagged" :title="$t('WebInterview.Filters_Unflagged')" @change="change" :state="state.unflagged" />
+                <filter-item id="notFlagged" :title="$t('WebInterview.Filters_Unflagged')" @change="change" :state="state.notFlagged" />
                 <filter-item id="withComments" :title="$t('WebInterview.Filters_WithComments')" @change="change" :state="state.withComments" />
             </filters-block>
 
@@ -20,7 +20,7 @@
             </filters-block>
 
             <filters-block>
-                <filter-item id="forSupevisor" :title="$t('WebInterview.Filters_ForSupervisor')" @change="change" :state="state.forSupevisor" />
+                <filter-item id="forSupervisor" :title="$t('WebInterview.Filters_ForSupervisor')" @change="change" :state="state.forSupervisor" />
                 <filter-item id="forInterviewer" :title="$t('WebInterview.Filters_ForInterviewer')" @change="change" :state="state.forInterviewer" />
             </filters-block>
 
