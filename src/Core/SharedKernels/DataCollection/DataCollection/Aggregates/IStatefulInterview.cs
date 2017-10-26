@@ -154,8 +154,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
 
-        int CountCommentedQuestionsVisibledToInterviewer();
-
         IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer();
 
         IEnumerable<Identity> GetCommentedBySupervisorAllQuestions();
