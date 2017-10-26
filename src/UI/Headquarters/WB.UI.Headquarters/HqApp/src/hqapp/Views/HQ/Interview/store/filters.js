@@ -64,10 +64,9 @@ export default {
                 } else {
                     section.questions = _.unionBy(section.questions, res.questions, "target")
                 }
-
-                state.search.count = res.totalCount;
             });
 
+            state.search.count = results.totalCount;
             state.search.skip = _.sumBy(state.search.results, 'questions.length');
         },
 
