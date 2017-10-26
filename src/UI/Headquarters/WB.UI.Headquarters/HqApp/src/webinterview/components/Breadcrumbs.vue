@@ -12,9 +12,11 @@
 <script lang="js">
     export default {
         name: 'breadcrumbs-view',
-        created() {
+
+        mounted() {
             this.fetchBreadcrumbs()
         },
+
         watch: {
             "$store.state.route.params.sectionId"() {
                 this.fetchBreadcrumbs()
