@@ -217,11 +217,11 @@ namespace WB.UI.Designer.Controllers
 
         [ValidateInput(false)]
         public ActionResult Index(int? p, string sb, int? so, string f) 
-            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: false));
+            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: false, folderId: null));
 
         [ValidateInput(false)]
-        public ActionResult Public(int? p, string sb, int? so, string f) 
-            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: true));
+        public ActionResult Public(int? p, string sb, int? so, string f, Guid? id) 
+            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: true, folderId: id));
 
         [ValidateInput(false)]
         public ActionResult PublicFolders() 
@@ -485,7 +485,7 @@ namespace WB.UI.Designer.Controllers
             return questionnaire;
         }
 
-        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, bool showPublic)
+        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, bool showPublic, Guid? folderId)
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
 
@@ -494,6 +494,7 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy,
                 sortOrder: sortOrder,
                 searchFor: searchFor,
+                folderId: folderId,
                 viewerId: UserHelper.WebUser.UserId,
                 isAdmin: UserHelper.WebUser.IsAdmin,
                 showPublic: showPublic);

@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IPublicFoldersStorage
     {
-        IEnumerable<QuestionnaireListViewFolder> GetSubFolders(Guid folderId);
+        IEnumerable<QuestionnaireListViewFolder> GetSubFolders(Guid? folderId);
 
         IEnumerable<QuestionnaireListViewFolder> GetRootFolders();
 

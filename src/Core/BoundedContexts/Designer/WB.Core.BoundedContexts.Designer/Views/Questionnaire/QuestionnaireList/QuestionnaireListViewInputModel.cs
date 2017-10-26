@@ -32,5 +32,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public Guid ViewerId { get; set; }
         public bool IsPublic { get; set; }
         public string SearchFor { get; set; }
+        public Guid? FolderId { get; set; }
     }
 }

@@ -40,10 +40,11 @@
                     var pdfStatusUrl = Url.Action("status", "Pdf", routevalues);
                     var pdfRetryUrl = Url.Action("Retry", "Pdf", routevalues);
                     var getLanguagesUrl = Url.Action("GetLanguages", "Questionnaire", routevalues);
+                    var openActionName = listViewModel.IsFolder ? "Public" : "Details";
 
                     <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                         <td class="search-value">
-                            @Html.ActionLink(listViewModel.Title, "Details", "Questionnaire", routevalues, null)
+                            @Html.ActionLink(listViewModel.Title, openActionName, "Questionnaire", routevalues, null)
                         </td>
                         <td class="date">
                             @listViewModel.LastEntryDate.FormatDate()
@@ -67,7 +68,7 @@
                                                 <span class="caret"></span>
                                             </a>
                                             <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink(QuestionnaireController.Open, "Details", "Questionnaire", routevalues, null)</li>
+                                                <li>@Html.ActionLink(QuestionnaireController.Open, openActionName, "Questionnaire", routevalues, null)</li>
                                                 @{
                                                     if (actionModel.CanCopy)
                                                     {

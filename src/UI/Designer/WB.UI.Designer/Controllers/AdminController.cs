@@ -512,7 +512,7 @@ namespace WB.UI.Designer.Controllers
             DesignerMembershipUser account = (DesignerMembershipUser)Membership.GetUser(id, false);
 
             var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id,
-                    isAdmin: this.UserHelper.WebUser.IsAdmin);
+                    isAdmin: this.UserHelper.WebUser.IsAdmin, folderId: null);
             questionnaires.ToList().ForEach(
                 x =>
                     {

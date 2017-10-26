@@ -12,12 +12,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     {
         private readonly IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage;
 
+        QuestionnaireListViewFolder publicQuestionnairesFolder = new QuestionnaireListViewFolder()
+        {
+            Title = Common.PublicQuestionnaires,
+        };
+
+
         public PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage )
         {
             this.folderStorage = folderStorage;
         }
 
-        public IEnumerable<QuestionnaireListViewFolder> GetSubFolders(Guid folderId)
+        public IEnumerable<QuestionnaireListViewFolder> GetSubFolders(Guid? folderId)
         {
             return folderStorage.Query(_ =>
             {
@@ -27,20 +33,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public IEnumerable<QuestionnaireListViewFolder> GetRootFolders()
         {
-            return new QuestionnaireListViewFolder[]
-            {
-                new QuestionnaireListViewFolder()
-                {
-                    Title = Common.PublicQuestionnaires,
-                }, 
-            };
+            return new QuestionnaireListViewFolder[]  { publicQuestionnairesFolder };
         }
 
         public QuestionnaireListViewFolder CreateFolder(Guid folderId, string title, Guid? parentId, Guid userId)
         {
             var folder = new QuestionnaireListViewFolder()
             {
-                Id = folderId,
+                PublicId = folderId,
                 Title = title,
                 Parent = parentId,
                 CreateDate = DateTime.UtcNow,
