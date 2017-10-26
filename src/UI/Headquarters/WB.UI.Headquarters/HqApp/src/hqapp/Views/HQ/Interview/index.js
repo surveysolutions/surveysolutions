@@ -3,6 +3,8 @@ import localStore from "./store"
 import Vue from 'vue'
 import Cover from "~/webinterview/components/Cover"
 import ReviewSection from "./ReviewSection"
+import { getLocationHash } from "~/shared/helpers"
+
 
 export default class ReviewComponent {
     constructor(rootStore) {
@@ -65,11 +67,6 @@ export default class ReviewComponent {
     initialize() {
         const installApi = require("~/webinterview/api").install
         installApi(Vue, { store: this.rootStore });
-
-        this.rootStore.subscribe((mutation, state) => {
-            if(mutation.type == "route/ROUTE_CHANGED")
-                this.rootStore.dispatch("changeSection", state.route.params.sectionId)
-        })
     }
 
     get modules() { return localStore; }
