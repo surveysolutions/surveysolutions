@@ -259,7 +259,7 @@
     <value>Открыть</value>
   </data>
   <data name="ShowStatusHistory" xml:space="preserve">
-    <value>Показать историю статусов</value>
+    <value>История</value>
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Открыть профиль ответственного</value>

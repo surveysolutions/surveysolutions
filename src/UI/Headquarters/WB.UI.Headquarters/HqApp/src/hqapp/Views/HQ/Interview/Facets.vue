@@ -11,6 +11,9 @@
                     <h2>{{$config.model.key}}</h2>
                     <ul class="list-unstyled about-questionnaire">
                         <li>
+                            <strong>{{this.$t('Details.Status', {name: this.$config.model.statusName})}}</strong>
+                        </li>
+                        <li>
                             <strong>{{lastUpdateDate}}</strong>
                         </li>
                         <li>

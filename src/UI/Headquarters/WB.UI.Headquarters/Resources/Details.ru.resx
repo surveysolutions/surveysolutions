@@ -126,4 +126,7 @@
   <data name="Responsible" xml:space="preserve">
     <value>Ответственный: {{ responsible }}</value>
   </data>
+  <data name="Status" xml:space="preserve">
+    <value>Статус: {{ name }}</value>
+  </data>
 </root>
