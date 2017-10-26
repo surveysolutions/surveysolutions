@@ -23,7 +23,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -270,15 +269,16 @@ namespace WB.UI.Designer.Controllers
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             var options = editQuestionView?.Options.Select(
-                              option => new Option(Guid.NewGuid(), option.Value.HasValue? null : option.Value.Value.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
+                              option => new Option(Guid.NewGuid(), option.Value?.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
+            var optionsList = options.ToList();
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
             {
                 QuestionnaireId = id,
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
-                Options = options,
-                SourceOptions = options
+                Options = optionsList,
+                SourceOptions = optionsList
             };
         }
 
@@ -410,12 +410,12 @@ namespace WB.UI.Designer.Controllers
         {
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
-            public IEnumerable<Option> Options { get; set; }
-            public IEnumerable<Option> SourceOptions { get; set; }
+            public List<Option> Options { get; set; }
+            public List<Option> SourceOptions { get; set; }
             public string QuestionTitle { get; set; }
         }
 
-        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream, bool isCascade)
+        private List<Option> ExtractOptionsFromStream(Stream inputStream, bool isCascade)
         {
             var importedOptions = new List<Option>();
 
