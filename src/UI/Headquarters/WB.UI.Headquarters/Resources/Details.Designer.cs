@@ -86,5 +86,14 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("Responsible", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status: {{ name }}.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
     }
 }
