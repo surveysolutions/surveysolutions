@@ -29,7 +29,7 @@ export default {
             results: [],
             count: 0,
             skip: 0,
-            pageSize: 100
+            pageSize: 20
         }
     },
 

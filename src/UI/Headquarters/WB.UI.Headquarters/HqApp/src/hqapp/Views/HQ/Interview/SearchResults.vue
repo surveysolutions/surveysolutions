@@ -12,7 +12,7 @@
                 :key="search.sectionId"
                 :search="search"></search-section-result>
 
-            <infinite-loading ref="loader" @infinite="infiniteHandler"></infinite-loading>
+            <infinite-loading ref="loader" @infinite="infiniteHandler" :distance="250"></infinite-loading>
         </div>
     </aside>
 </template>

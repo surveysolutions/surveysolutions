@@ -33,7 +33,6 @@
                 </div>
                 <SwitchLanguage v-if="canChangeLanguage"/>
                 <FacetFilters />
-                <button type="button" class="btn btn-link" @click="showSearchResults">show search results</button>
             </div>
         </aside>
         <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals"/>
@@ -105,10 +104,6 @@ export default {
     },
     hideFacets() {
       this.$store.dispatch("hideFacets");
-    },
-    // temporaly to test panels
-    showSearchResults() {
-      this.$store.dispatch("showSearchResults");
     },
     newResponsibleSelected(newValue) {
         this.newResponsibleId = newValue;
