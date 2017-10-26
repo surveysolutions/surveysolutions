@@ -712,6 +712,9 @@
 	.field{
 		background: rgba(248, 248, 248, 0.8);
 		border-radius: 5px;
+		&:hover, &:focus, &:active{
+			box-shadow: none;
+		}
 	}
 }
 .audio-question{
@@ -727,14 +730,25 @@
 	}
 	.btn-action-questionnaire{
 		border-width: 2px;
-		background-image: url("#{$assetsPath}/img/icon-mic-1x.png");
-		@include image-2x("#{$assetsPath}/img/icon-mic-2x.png", 21px, 31px);
-		background-size: 21px 31px;
-		background-repeat: no-repeat;
-		background-position: 10px 4px;
+		position: relative;
+		// background-image: url("#{$assetsPath}/img/icon-mic-1x.png");
+		// @include image-2x("#{$assetsPath}/img/icon-mic-2x.png", 21px, 31px);
+		// background-size: 21px 31px;
+		// background-repeat: no-repeat;
+		// background-position: 10px 4px;
 		padding-left: 40px;
 		&:hover, &:focus, &:active{
 			border-color: $gray_form;
+		}
+		span{
+			background-image: url("#{$assetsPath}/img/icon-mic-1x.png");
+			@include image-2x("#{$assetsPath}/img/icon-mic-2x.png", 21px, 31px);
+			display: block;
+			position: absolute;
+			top: 4px;
+			left: 10px;
+			width: 21px;
+			height: 31px;
 		}
 	}
 	.block-with-data{

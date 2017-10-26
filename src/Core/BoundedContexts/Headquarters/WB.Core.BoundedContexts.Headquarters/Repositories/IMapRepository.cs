@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
@@ -9,8 +10,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         MapFileDescription[] GetMapsMetaInformation(string id);
         string[] UnzipAndGetFileList(string id);
 
-        void SaveOrUpdateMap(string map);
-        void DeleteTempData(string id);
+        Task SaveOrUpdateMapAsync(string map);
+        void DeleteData(string id);
 
         void DeleteMap(string map);
 

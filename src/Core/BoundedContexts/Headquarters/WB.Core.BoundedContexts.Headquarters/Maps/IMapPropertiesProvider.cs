@@ -1,7 +1,9 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Maps
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.BoundedContexts.Headquarters.Maps
 {
     public interface IMapPropertiesProvider
     {
-        MapProperties GetMapPropertiesFromFile(string pathToFile);
+        Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToFile);
     }
 }
