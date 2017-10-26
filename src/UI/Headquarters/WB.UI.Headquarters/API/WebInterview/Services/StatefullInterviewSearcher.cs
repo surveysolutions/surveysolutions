@@ -77,6 +77,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 }
             }
 
+            if (currentResult != null)
+            {
+                results.Results.Add(currentResult);
+            }
+
             results.TotalCount = total;
 
             return results;
@@ -126,7 +131,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 };
 
                 if (!(node is InterviewTreeQuestion question)) continue;
-
+                var found = true;
                 foreach (var flag in flags)
                 {
                     switch (flag)
@@ -137,39 +142,37 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                             break;
 
                         case FilteringFlags.WithComments:
-                            if (question.AnswerComments.Any())
-                                yield return node;
-                            continue;
+                            found &= question.AnswerComments.Any();
+                            break;
 
                         case FilteringFlags.Invalid:
-                            if (question.IsValid == false)
-                                yield return node;
-                            continue;
+                            found &= !question.IsValid;
+                            break;
 
                         case FilteringFlags.Valid:
-                            if (question.IsValid)
-                                yield return node;
-                            continue;
+                            found &= question.IsValid;
+                            break;
                         case FilteringFlags.Answered:
-                            if (question.IsAnswered())
-                                yield return node;
-                            continue;
+                            found &= question.IsAnswered();
+                            break;
+
                         case FilteringFlags.Unanswered:
-                            if (question.IsAnswered() == false)
-                                yield return node;
-                            continue;
+                            found &= !question.IsAnswered();
+                            break;
+
                         case FilteringFlags.ForSupervisor:
-                            if (question.IsSupervisors)
-                                yield return node;
-                            continue;
+                            found &= question.IsSupervisors;
+                            break;
+
                         case FilteringFlags.ForInterviewer:
-                            if (question.IsSupervisors == false)
-                                yield return node;
-                            continue;
+                            found &= !question.IsSupervisors;
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(flags));
                     }
                 }
+
+                if (found) yield return node;
             }
         }
     }

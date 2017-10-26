@@ -12,7 +12,7 @@
                 :key="search.sectionId"
                 :search="search"></search-section-result>
 
-            <infinite-loading @infinite="infiniteHandler"></infinite-loading>
+            <infinite-loading ref="loader" @infinite="infiniteHandler"></infinite-loading>
         </div>
     </aside>
 </template>
@@ -33,7 +33,7 @@ export default {
                 .then(() => { 
                     $state.loaded();
                     
-                    if(self.searchResult.skip <= self.searchResult.count) {
+                    if(self.searchResult.skip >= self.searchResult.count) {
                         $state.complete();
                     }
                  });
@@ -46,11 +46,17 @@ export default {
         },
 
         questionsCount() {
-            return this.$store.state.review.filters.search.count;
+            return this.$store.getters.searchResult.count;
         },
 
         searchResult() {
             return this.$store.getters.searchResult;
+        }
+    },
+
+    watch:{
+        "questionsCount"() {
+            this.$refs.loader.$emit('$InfiniteLoading:reset');
         }
     },
 
