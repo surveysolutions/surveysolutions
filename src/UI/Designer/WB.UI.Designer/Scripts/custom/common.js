@@ -16,6 +16,19 @@
         $('#delete-modal-questionnaire-title').html(self.itemName);
     };
 
+    self.assignFolder = function (id, type, name) {
+        var encName = decodeURIComponent(name);
+        self.itemName = encName;
+        self.itemType = type;
+        self.itemId = id;
+
+        folderstree
+
+
+        $('#assign-folder-modal-questionnaire-id').val(self.itemId);
+        $('#assign-folder-modal-questionnaire-title').html(self.itemName);
+    };
+
     self.exportItemAsPdf = function (id, type, name, pdfDownloadUrl, pdfStatusUrl, pdfRetryUrl, getLanguagesUrl) {
         var encName = decodeURIComponent(name);
         self.itemName = encName;

@@ -277,4 +277,20 @@
     <value>Без имени</value>
     <comment>Без имени</comment>
   </data>
+  <data name="AssignFolder" xml:space="preserve">
+    <value>Назначить папку</value>
+    <comment>Назначить папку</comment>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Назначить</value>
+    <comment>Назначить</comment>
+  </data>
+  <data name="Assigning" xml:space="preserve">
+    <value>Назначение</value>
+    <comment>Назначение</comment>
+  </data>
+  <data name="AssignFolderText" xml:space="preserve">
+    <value>Укажите папку для опросника "{0}"</value>
+    <comment>Укажите папку для опросника "{0}"</comment>
+  </data>
 </root>
