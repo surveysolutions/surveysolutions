@@ -66,8 +66,8 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     FileName = x.FileName,
                     ImportDate = x.ImportDate?.FormatDateWithTime(),
-                    MaxScale = x.MaxScale,
-                    MinScale = x.MinScale,
+                    /*MaxScale = x.MaxScale,
+                    MinScale = x.MinScale,*/
                     Size = x.Size
                 })
             };
