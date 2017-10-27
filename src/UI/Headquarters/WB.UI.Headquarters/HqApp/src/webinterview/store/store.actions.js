@@ -218,9 +218,10 @@ export default {
         commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
-    fetchQuestionComments: debounce(async ({ commit }, questionId) => {
-        const comments = await Vue.$api.call(api => api.getQuestionComments(questionId))
-        commit("SET_QUESTION_COMMENTS", { questionId, comments })
+    fetchQuestionComments: debounce(({ commit }, questionId) => {
+        return Vue.$api.call(api => api.getQuestionComments(questionId)).then((comments) => {
+            commit("SET_QUESTION_COMMENTS", { questionId, comments })
+        })
     }, 200),
 
     completeInterview({ dispatch }, comment) {
