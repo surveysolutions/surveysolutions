@@ -82,8 +82,11 @@ export default {
     removeAnswer({ dispatch }, questionId) {
         Vue.$api.callAndFetch(questionId, api => api.removeAnswer(questionId))
     },
-    sendNewComment({ dispatch }, { questionId, comment }) {
-        Vue.$api.call(api => api.sendNewComment(questionId, comment))
+    sendNewComment({ dispatch, commit }, { questionId, comment }) {
+        commit("POSTING_COMMENT", {questionId: questionId})
+        return Vue.$api.call(api => {
+            return api.sendNewComment(questionId, comment)
+        })
     },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
@@ -219,9 +222,11 @@ export default {
     }, 200),
 
     fetchQuestionComments: debounce(({ commit }, questionId) => {
-        return Vue.$api.call(api => api.getQuestionComments(questionId)).then((comments) => {
-            commit("SET_QUESTION_COMMENTS", { questionId, comments })
-        })
+        return Vue.$api.call(api => {
+            return api.getQuestionComments(questionId)})
+            .then((comments) => {
+                commit("SET_QUESTION_COMMENTS", { questionId, comments })
+            })
     }, 200),
 
     completeInterview({ dispatch }, comment) {

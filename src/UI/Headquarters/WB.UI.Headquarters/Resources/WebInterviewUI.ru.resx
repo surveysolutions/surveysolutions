@@ -369,4 +369,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Отправка...</value>
+  </data>
 </root>
