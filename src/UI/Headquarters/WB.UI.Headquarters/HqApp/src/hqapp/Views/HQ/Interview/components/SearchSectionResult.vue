@@ -7,7 +7,7 @@
             active-class=""
             :to="{ name: 'section', params: { sectionId: search.sectionId }, query: {question: link.target}}"
              class="question short-row"
-        >{{ link.title }}</router-link>
+             v-html="link.title"></router-link>
     </div>
 </template>
 
