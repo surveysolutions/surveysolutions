@@ -16,8 +16,10 @@
                          <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
                             :placeholder='$t("WebInterviewUI.CommentEnter")' />
                         <div class="input-group-btn">
-                             <button type="button" class="btn btn-default btn-post-comment"
-                                :class="buttonClass" @click="postComment($event)">{{ $t("WebInterviewUI.CommentPost") }}</button>
+                            <button type="button" class="btn btn-default btn-post-comment"
+                                :class="buttonClass" @click="postComment($event)" :disabled="!allowPostComment">
+                                {{ postBtnText }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -76,9 +78,15 @@
             }
         },
         computed: {
+            allowPostComment() {
+                return this.comment && this.comment.trim().length > 0 && !this.$me.postingComment;
+            },
+
             buttonClass() {
-                const isActive = this.comment && this.comment.trim().length > 0
-                return isActive ? 'comment-added' : null
+                return this.isActive ? 'comment-added' : null
+            },
+            postBtnText() {
+                return this.$me.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
             }
         }
     }

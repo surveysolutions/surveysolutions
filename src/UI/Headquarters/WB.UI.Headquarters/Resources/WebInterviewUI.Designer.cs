@@ -232,6 +232,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Posting....
+        /// </summary>
+        internal static string CommentPosting {
+            get {
+                return ResourceManager.GetString("CommentPosting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor comment.
         /// </summary>
         internal static string CommentSupervisor {

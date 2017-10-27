@@ -58,8 +58,14 @@ export default {
     SET_HAS_COVER_PAGE(state, hasCoverPage) {
         state.hasCoverPage = hasCoverPage
     },
+    POSTING_COMMENT(state, {questionId}){
+        const question = state.entityDetails[questionId]
+        Vue.set(question, "postingComment", true)
+    },
+
     SET_QUESTION_COMMENTS(state, { questionId, comments }) {
         const question = state.entityDetails[questionId]
         question.comments = comments
+        Vue.set(question, "postingComment", false)
     }
 }

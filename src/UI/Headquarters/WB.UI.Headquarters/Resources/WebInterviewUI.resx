@@ -378,4 +378,7 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Posting...</value>
+  </data>
 </root>
