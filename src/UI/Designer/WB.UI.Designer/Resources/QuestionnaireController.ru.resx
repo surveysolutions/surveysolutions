@@ -273,4 +273,8 @@
 - «Изменить», чтобы переименовать название папки
 - «Удалить» для удаления папки с подпапками</comment>
   </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Без имени</value>
+    <comment>Без имени</comment>
+  </data>
 </root>
