@@ -70,6 +70,42 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign.
+        /// </summary>
+        public static string Assign {
+            get {
+                return ResourceManager.GetString("Assign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign Folder.
+        /// </summary>
+        public static string AssignFolder {
+            get {
+                return ResourceManager.GetString("AssignFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please assign folder for &quot;{0}&quot; questionnaire.
+        /// </summary>
+        public static string AssignFolderText {
+            get {
+                return ResourceManager.GetString("AssignFolderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assigning.
+        /// </summary>
+        public static string Assigning {
+            get {
+                return ResourceManager.GetString("Assigning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to List.
         /// </summary>
         public static string BackToList {

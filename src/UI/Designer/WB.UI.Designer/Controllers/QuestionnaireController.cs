@@ -535,5 +535,13 @@ namespace WB.UI.Designer.Controllers
                 );
             return this.Json(comboBoxItems);
         }
+
+        [HttpPost]
+        public ActionResult AssignFolder(Guid id, Guid folderId)
+        {
+            var questionnaire = GetQuestionnaireOrThrow404(id);
+
+            return this.Redirect(this.Request.UrlReferrer.ToString());
+        }
     }
 }
