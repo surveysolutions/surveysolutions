@@ -11,7 +11,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
-$MainSolution = 'src\WB.sln'
+$MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
 
 versionCheck
@@ -30,9 +30,9 @@ If (Test-Path "$artifactsFolder") {
 
 New-Item $artifactsFolder -Type Directory -Force
 
-
 try {
-    $buildSuccessful = BuildSolution -Solution 'src\WB without Xamarin.sln' -BuildConfiguration $BuildConfiguration
+    $buildSuccessful = BuildSolution -Solution $MainSolution -BuildConfiguration $BuildConfiguration
+
     if ($buildSuccessful) { 
 
         New-Item "$artifactsFolder\stats" -Type Directory -Force
@@ -57,14 +57,15 @@ try {
 
             Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
             Move-Item ".\dist\shared_vendor.stats.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
+            New-Item "$artifactsFolder\coverage" -Type Directory -Force
             Move-Item ".\src\coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
         }}
 
-        #Compress-Archive -Path "$artifactsFolder\stats" -DestinationPath "$artifactsFolder\stats.zip" -CompressionLevel Optimal -ErrorAction SilentlyContinue
-        #Compress-Archive -Path "$artifactsFolder\coverage" -DestinationPath "$artifactsFolder\coverage.zip" -CompressionLevel Optimal -ErrorAction SilentlyContinue
+        CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
+        CreateZip "$artifactsFolder\coverage" "$artifactsFolder\coverage.zip"
 
-        # Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
-        # Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$artifactsFolder\stats" -Recurse -Force -ErrorAction SilentlyContinue
+        Remove-Item -Path "$artifactsFolder\coverage" -Recurse -Force -ErrorAction SilentlyContinue
 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
