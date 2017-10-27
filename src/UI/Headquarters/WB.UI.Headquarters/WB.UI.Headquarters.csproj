@@ -1636,6 +1636,7 @@
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <Content Include="Views\Maps\Details.cshtml" />
     <Content Include="Views\Maps\MapPreview.cshtml" />
+    <Content Include="Views\Maps\UserMapsLink.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

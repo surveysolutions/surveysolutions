@@ -133,7 +133,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update Date.
+        ///   Looks up a localized string similar to Imported on.
         /// </summary>
         internal static string UpdateDate {
             get {
