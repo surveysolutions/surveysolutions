@@ -11,27 +11,6 @@ describe("filters store search", () => {
         expect(filtersStore.state.search.results).toEqual([])
     });
 
-    describe("mutations", () => {
-        const mutations = filtersStore.mutations;
-
-        it("can clear search result", () => {
-            const state = {
-                search: {
-                    results: [1, 2, 3],
-                    skip: 200,
-                    count: 323
-                }
-            }
-
-            mutations.CLEAR_SEARCH_RESULTS(state);
-
-            expect(state.search.results).toEqual([])
-            expect(state.search.skip).toEqual(0)
-            expect(state.search.count).toEqual(0)
-        })
-
-    });
-
     describe("actions.fetchSearchResults", () => {
 
         const actions = filtersStore.actions;
@@ -52,7 +31,7 @@ describe("filters store search", () => {
                 notAnswered: false,
 
                 forSupervisor: false,
-                forInterviewer: false,
+                forInterviewer: false
             },
             search: {
                 count: 22,

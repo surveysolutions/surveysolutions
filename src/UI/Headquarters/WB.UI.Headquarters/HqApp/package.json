@@ -7,7 +7,7 @@
         "dev": "gulp",
         "production": "gulp --production",
         "test": "jest",
-        "postinstall": "rimraf dist",
+        "postinstall": "rimraf dist && rimraf locale",
         "hot": "gulp hot"
     },
     "author": "World Bank Group",
