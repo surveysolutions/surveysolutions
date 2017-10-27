@@ -187,20 +187,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string Filters_NotAnswered {
+            get {
+                return ResourceManager.GetString("Filters_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No flag.
+        /// </summary>
+        public static string Filters_NotFlagged {
+            get {
+                return ResourceManager.GetString("Filters_NotFlagged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter Questions.
         /// </summary>
         public static string Filters_Title {
             get {
                 return ResourceManager.GetString("Filters_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unanswered.
-        /// </summary>
-        public static string Filters_Unanswered {
-            get {
-                return ResourceManager.GetString("Filters_Unanswered", resourceCulture);
             }
         }
         
@@ -435,6 +444,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PleaseFillCaptcha {
             get {
                 return ResourceManager.GetString("PleaseFillCaptcha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Powered by.
+        /// </summary>
+        public static string PoweredBy {
+            get {
+                return ResourceManager.GetString("PoweredBy", resourceCulture);
             }
         }
         

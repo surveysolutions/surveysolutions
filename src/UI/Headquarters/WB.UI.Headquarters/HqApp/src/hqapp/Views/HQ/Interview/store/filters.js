@@ -19,7 +19,7 @@ export default {
             valid: false,
 
             answered: false,
-            unanswered: false,
+            notAnswered: false,
 
             forSupervisor: false,
             forInterviewer: false,
