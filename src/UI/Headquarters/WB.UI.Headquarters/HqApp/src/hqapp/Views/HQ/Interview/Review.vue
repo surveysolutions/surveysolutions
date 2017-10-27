@@ -4,7 +4,7 @@
             <div class="row">
                 <Facets />
                 <SearchResults />
-                <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false"/>
+                <Sidebar :showComplete="false" :show-foldback-button-as-hamburger="false" />
                 <section class="questionnaire details-interview">
                     <router-view></router-view>
                 </section>
@@ -14,62 +14,44 @@
 </template>
 
 <script>
-import Facets from "./Facets"
-import SearchResults from "./SearchResults"
-import Sidebar from "~/webinterview/components/Sidebar"
+import Facets from "./Facets";
+import SearchResults from "./SearchResults";
+import Sidebar from "~/webinterview/components/Sidebar";
 
 export default {
     data() {
-        return {}
+        return {};
     },
     computed: {
         classes() {
-            var cssClass = "";
-            if (this.$store.state.webinterview.sidebar.screenWidth < 1210)
-            {
-                if (!this.$store.state.webinterview.sidebar.sidebarHidden)
-                {
-                    cssClass+= " show-content";
-                }
+            const sidebar = this.$store.state.webinterview.sidebar;
+            const smallWidth = sidebar.screenWidth < 1210;
 
-                if (!this.$store.state.webinterview.sidebar.facetHidden)
-                {
-                    cssClass+= " show-filters";
-                }
-            }
-            else{
-                if (this.$store.state.webinterview.sidebar.sidebarHidden)
-                {
-                    cssClass+= " fullscreen-hidden-content";
-                }
-                if (this.$store.state.webinterview.sidebar.facetHidden)
-                {
-                    cssClass+= " fullscreen-hidden-filters";
-                }
-            }
-            if (!this.$store.state.webinterview.sidebar.searchResultsHidden)
-            {
-                cssClass+= " filters-results-are-shown";
-            }
-            return cssClass;
+            return {
+                "show-content": smallWidth && !sidebar.sidebarHidden,
+                "show-filters": smallWidth && !sidebar.facetHidden,
+                "fullscreen-hidden-content": !smallWidth && sidebar.searchResultsHidden,
+                "fullscreen-hidden-filters": !smallWidth && sidebar.facetHidden,
+                "filters-results-are-shown": !sidebar.searchResultsHidden
+            };
         }
     },
     methods: {
         onResize() {
             var screenWidth = document.documentElement.clientWidth;
             this.$store.dispatch("screenWidthChanged", screenWidth);
-        },
+        }
     },
     beforeMount() {
-        this.$store.dispatch("getLanguageInfo")
-        this.$store.dispatch("loadInterview")
+        this.$store.dispatch("getLanguageInfo");
+        this.$store.dispatch("loadInterview");
     },
     mounted() {
         const self = this;
-        this.$nextTick(function() {
-            window.addEventListener('resize', self.onResize);
+        this.$nextTick(function () {
+            window.addEventListener("resize", self.onResize);
             self.onResize();
-        })
+        });
     },
     components: {
         Facets,
@@ -77,8 +59,7 @@ export default {
         Sidebar
     },
     beforeDestroy() {
-        window.removeEventListener('resize', this.onResize);
+        window.removeEventListener("resize", this.onResize);
     }
-}
-
-</script> 
+};
+</script>
