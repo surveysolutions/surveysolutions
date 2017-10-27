@@ -57,6 +57,13 @@ namespace WB.UI.Headquarters.Controllers
             return View();
         }
 
+
+        public ActionResult UserMapsLink()
+        {
+            this.ViewBag.ActivePage = MenuItem.Maps;
+            return View();
+        }
+
         [HttpGet]
         public ActionResult Details(string mapName)
         {
