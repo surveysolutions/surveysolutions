@@ -22,14 +22,15 @@ export default {
             notAnswered: false,
 
             forSupervisor: false,
-            forInterviewer: false,
+            forInterviewer: false
         },
 
         search: {
             results: [],
             count: 0,
             skip: 0,
-            pageSize: 20
+            pageSize: 20,
+            needToClear: false
         }
     },
 
@@ -37,25 +38,36 @@ export default {
         async fetchSearchResults({ commit, state }) {
             const res = await Vue.$api.call(api => {
                 const flags = getSelectedFlags(state);
-                return api.search(flags, state.search.skip, state.search.pageSize)
+                const skip = state.search.needToClear ? 0 : state.search.skip;
+                return api.search(flags, skip, state.search.pageSize)
             })
 
             commit("SET_SEARCH_RESULT", res)
         },
 
-        applyFiltering({ commit, dispatch, state }, filter) {
+        applyFiltering({ commit, dispatch }, filter) {
             commit("CHANGE_FILTERS", filter)
-            commit("CLEAR_SEARCH_RESULTS")
             dispatch("showSearchResults");
         },
 
-        async getStatusesHistory({ commit }) {
+        async getStatusesHistory() {
             return await Vue.$api.call(api => api.getStatusesHistory());
         }
     },
 
     mutations: {
         SET_SEARCH_RESULT(state, results) {
+            
+            if(state.search.needToClear) {
+                state.search.results = [];
+                state.search.count = 0;
+                state.search.skip = 0;
+                state.search.needToClear = false;
+                console.log("Search data cleared")
+            }
+
+            console.log(">> Search data", getSelectedFlags(state), results, state.search)
+
             results.results.forEach((res) => {
                 const section = _.find(state.search.results, { sectionId: res.sectionId });
 
@@ -66,17 +78,17 @@ export default {
                 }
             });
 
-            state.search.count = results.totalCount;
-            state.search.skip = _.sumBy(state.search.results, 'questions.length');
+            state.search.count = results.totalCount
+
+            // amount of questions to skip next time
+            state.search.skip = _.sum(state.search.results.map(r => r.questions.length))
+
+            console.log("<< Search data", getSelectedFlags(state), state.search)
         },
 
-        CLEAR_SEARCH_RESULTS(state) {
-            state.search.results = [];
-            state.search.count = 0;
-            state.search.skip = 0;
-        },
         CHANGE_FILTERS(state, { filter, value }) {
             state.filter[filter] = value;
+            state.search.needToClear = true;
         }
     },
     getters: {

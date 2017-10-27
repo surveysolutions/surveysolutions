@@ -22,11 +22,11 @@ namespace WB.Tests.Abc.TestFactories
                 new Identity(id ?? Guid.NewGuid(), rosterVector ?? new decimal[0]),
             });
 
-        public AnswersDeclaredInvalid AnswersDeclaredInvalid(Identity[] questions)
+        public AnswersDeclaredInvalid AnswersDeclaredInvalid(params Identity[] questions)
             => new AnswersDeclaredInvalid(questions);
 
 
-        public AggregateRootEvent AggregateRootEvent(WB.Core.Infrastructure.EventBus.IEvent evnt)
+        public AggregateRootEvent AggregateRootEvent(Core.Infrastructure.EventBus.IEvent evnt)
         {
             var rnd = new Random();
             return new AggregateRootEvent(new CommittedEvent(Guid.NewGuid(), "origin", Guid.NewGuid(), Guid.NewGuid(),
@@ -246,7 +246,7 @@ namespace WB.Tests.Abc.TestFactories
             => new SingleOptionQuestionAnswered(userId ?? Guid.NewGuid(), questionId, rosterVector, answerDate ?? DateTime.UtcNow, answer);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(params Identity[] staticTexts)
-            => this.StaticTextsDeclaredInvalid(new[] {0}, staticTexts);
+            => StaticTextsDeclaredInvalid(new[] {0}, staticTexts);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> arg)
            => new StaticTextsDeclaredInvalid(arg);
@@ -286,9 +286,21 @@ namespace WB.Tests.Abc.TestFactories
             => new TextQuestionAnswered(
                 userId ?? Guid.NewGuid(),
                 questionId ?? Guid.NewGuid(),
-                rosterVector ?? WB.Core.SharedKernels.DataCollection.RosterVector.Empty,
+                rosterVector ?? RosterVector.Empty,
                 answerTime??DateTime.Now,
                 answer ?? "answer");
+
+        public AnswerCommented AnswerCommented(
+            Guid? questionId = null, 
+            decimal[] rosterVector = null, 
+            string comment = null, 
+            Guid? userId = null,
+            DateTime? answerTime = null)
+            => new AnswerCommented(userId ?? Guid.NewGuid(), 
+                questionId ?? Guid.NewGuid(),
+                rosterVector ?? RosterVector.Empty,
+                answerTime ?? DateTime.Now,
+                comment ?? "Comment");
 
         public TextListQuestionAnswered TextListQuestionAnswered(
            Guid? questionId = null, decimal[] rosterVector = null, Tuple<decimal, string>[] answers = null, DateTime? answerTimeUtc = null)
@@ -312,7 +324,7 @@ namespace WB.Tests.Abc.TestFactories
             => new YesNoQuestionAnswered(
                 userId: Guid.NewGuid(),
                 questionId: questionId ?? Guid.NewGuid(),
-                rosterVector: Core.SharedKernels.DataCollection.RosterVector.Empty,
+                rosterVector: RosterVector.Empty,
                 answerTimeUtc: DateTime.UtcNow,
                 answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] {});
 
