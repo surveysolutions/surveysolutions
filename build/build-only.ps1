@@ -58,7 +58,7 @@ try {
             Move-Item ".\dist\stats.html" "$artifactsFolder\stats\HqApp.html" -ErrorAction SilentlyContinue
             Move-Item ".\dist\shared_vendor.stats.html" "$artifactsFolder\stats\HqApp.vendor.html" -ErrorAction SilentlyContinue
             New-Item "$artifactsFolder\coverage" -Type Directory -Force
-            Move-Item ".\src\coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
+            Move-Item ".\.coverage" "$artifactsFolder\coverage\hqapp" -ErrorAction SilentlyContinue
         }}
 
         CreateZip "$artifactsFolder\stats" "$artifactsFolder\stats.zip"
