@@ -37,7 +37,8 @@ namespace WB.UI.Designer
                 new ScriptBundle("~/list").Include(
                     "~/Content/plugins/jquery.mousewheel.js",
                     "~/Content/plugins/perfect-scrollbar.jquery.js",
-                    "~/Scripts/custom/common.js"));
+                    "~/Scripts/custom/common.js",
+                    "~/Content/plugins/moment-with-locales.min.js"));
             bundles.Add(
                 new ScriptBundle("~/folders").Include(new[] {
                     "~/Content/plugins/jquery.fancytree-all-deps.min.js",

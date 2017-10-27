@@ -47,10 +47,11 @@
                             @Html.ActionLink(listViewModel.Title, openActionName, "Questionnaire", routevalues, null)
                         </td>
                         <td class="date">
-                            @listViewModel.LastEntryDate.FormatDate()
+                            <time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.FormatDate()</time>
+                            
                         </td>
                         <td class="date">
-                            @listViewModel.CreationDate.FormatDate()
+                            <time datetime="@listViewModel.CreationDate.ToString("o")">@listViewModel.CreationDate.FormatDate()</time>
                         </td>
                         <td class="email">
                             @listViewModel.Owner

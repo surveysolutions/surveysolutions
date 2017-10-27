@@ -23,10 +23,22 @@
     @this.RenderSection("Scripts", required: false)
 
     <script type="text/javascript">
-    function FrameCheck() {
-        if (top != self)
-            top.location.replace(self.location.href);
-    }
+        function FrameCheck() {
+            if (top != self)
+                top.location.replace(self.location.href);
+        }
+
+        $(function() {
+            if (window.moment) {
+                moment.locale('@UICulture');
+
+                $('time').each(function() {
+                    var date = $(this).attr('datetime');
+                    var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
+                    $(this).text(momentDate);
+                });
+            }
+        });
     </script>
 
 </head>
