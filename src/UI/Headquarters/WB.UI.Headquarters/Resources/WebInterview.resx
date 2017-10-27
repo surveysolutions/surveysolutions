@@ -277,8 +277,8 @@
   <data name="Filters_Answered" xml:space="preserve">
     <value>Answered</value>
   </data>
-  <data name="Filters_Unanswered" xml:space="preserve">
-    <value>Unanswered</value>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
   </data>
   <data name="Filters_ForSupervisor" xml:space="preserve">
     <value>For supervisor</value>
@@ -286,8 +286,8 @@
   <data name="Filters_ForInterviewer" xml:space="preserve">
     <value>For interviewer</value>
   </data>
-  <data name="Filters_Unflagged" xml:space="preserve">
-    <value>Без флага</value>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>No flag</value>
   </data>
   <data name="PoweredBy" xml:space="preserve">
     <value>Powered by</value>

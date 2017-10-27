@@ -4,10 +4,10 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public interface IStatefullInterviewSearcher
     {
-        SearchResults Search(IStatefulInterview interview, FilteringFlags[] flags, long skip, long take);
+        SearchResults Search(IStatefulInterview interview, FilterOption[] flags, long skip, long take);
     }
 
-    public enum FilteringFlags
+    public enum FilterOption
     {
         Flagged,
         NotFlagged,
@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         Invalid,
         Valid,
         Answered,
-        Unanswered,
+        NotAnswered,
         ForSupervisor,
         ForInterviewer
     }
