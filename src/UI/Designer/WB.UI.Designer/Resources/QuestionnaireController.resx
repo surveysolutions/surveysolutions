@@ -197,13 +197,13 @@
   </data>
   <data name="GeneratingPdf" xml:space="preserve">
     <value>Generating pdf for "{0}"</value>
-  </data>  
+  </data>
   <data name="GeneratePdf" xml:space="preserve">
     <value>Generate pdf</value>
-  </data>  
+  </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
     <value>Please choose language to render pdf questionnaire on it</value>
-  </data> 
+  </data>
   <data name="ChooseLanguage" xml:space="preserve">
     <value>Choose language</value>
   </data>
@@ -227,13 +227,13 @@
   </data>
   <data name="PublicQuestionnaires" xml:space="preserve">
     <value>Public Questionnaires</value>
-  </data>  
+  </data>
   <data name="QuestionnaireTreeFolders" xml:space="preserve">
     <value>Folders</value>
-  </data>  
+  </data>
   <data name="FoldersManagement" xml:space="preserve">
     <value>Folders Management</value>
-  </data> 
+  </data>
   <data name="FoldersDescription" xml:space="preserve">
     <value>You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:
 &lt;br/&gt;- "Create folder" use for creating subfolder 
@@ -263,5 +263,8 @@
   </data>
   <data name="You" xml:space="preserve">
     <value>you</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Untitled</value>
   </data>
 </root>
