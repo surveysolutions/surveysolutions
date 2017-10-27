@@ -63,10 +63,7 @@ export default {
                 state.search.count = 0;
                 state.search.skip = 0;
                 state.search.needToClear = false;
-                console.log("Search data cleared")
             }
-
-            console.log(">> Search data", getSelectedFlags(state), results, state.search)
 
             results.results.forEach((res) => {
                 const section = _.find(state.search.results, { sectionId: res.sectionId });
@@ -82,8 +79,6 @@ export default {
 
             // amount of questions to skip next time
             state.search.skip = _.sum(state.search.results.map(r => r.questions.length))
-
-            console.log("<< Search data", getSelectedFlags(state), state.search)
         },
 
         CHANGE_FILTERS(state, { filter, value }) {
