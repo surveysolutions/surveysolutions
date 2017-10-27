@@ -40,6 +40,9 @@
         },
         contextMenu: {
             menu: function (node) {
+                if (node.isLazy())
+                    node.load();
+
                 if (node.key === "00000000-0000-0000-0000-000000000000")
                     return { "createSubFolder": { "name": "Create Folder", "icon": "add" } };
 
@@ -53,11 +56,12 @@
                 if (action === "createSubFolder") {
                     var defaultFolderName = "New folder";
                     self.postRequest(addNodeUrl, { 'parentId': node.key, 'title': defaultFolderName }, function (data) {
-                        node.editCreateNode("child", {
-                            key: data.key,
-                            title: data.title,
-                            folder: true
-                        });
+                        node.editCreateNode("child",
+                            {
+                                key: data.key,
+                                title: data.title,
+                                folder: true
+                            });
                     });
                 } else if (action === "edit") {
                     node.editStart();

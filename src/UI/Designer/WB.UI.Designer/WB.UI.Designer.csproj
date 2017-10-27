@@ -472,6 +472,7 @@
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="Content\identity\favicon-designer.png" />
+    <Content Include="Content\images\DR-2017-folders-icons-2x.png" />
     <Content Include="Content\images\pdf-question-legend.png" />
     <Content Include="Content\images\pdf-roster-legend.png" />
     <Content Include="Content\images\pdf_logo.png" />
