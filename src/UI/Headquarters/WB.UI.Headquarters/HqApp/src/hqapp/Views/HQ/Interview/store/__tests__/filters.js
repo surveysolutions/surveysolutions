@@ -49,7 +49,7 @@ describe("filters store search", () => {
                 valid: false,
 
                 answered: true,
-                unanswered: false,
+                notAnswered: false,
 
                 forSupervisor: false,
                 forInterviewer: false,

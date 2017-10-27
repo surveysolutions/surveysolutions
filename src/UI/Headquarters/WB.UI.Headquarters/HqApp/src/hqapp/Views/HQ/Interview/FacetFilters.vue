@@ -4,9 +4,13 @@
             <h4>{{ $t("WebInterview.Filters_Title") }}</h4>
 
             <filters-block>
-                <filter-item id="flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change" :state="state.flagged" />
-                <filter-item id="notFlagged" :title="$t('WebInterview.Filters_Unflagged')" @change="change" :state="state.notFlagged" />
                 <filter-item id="withComments" :title="$t('WebInterview.Filters_WithComments')" @change="change" :state="state.withComments" />
+            </filters-block>
+
+            <filters-block>
+                <filter-item id="flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change" :state="state.flagged" />
+                <filter-item id="notFlagged" :title="$t('WebInterview.Filters_NotFlagged')" @change="change" :state="state.notFlagged" />
+                
             </filters-block>
 
             <filters-block>
@@ -16,7 +20,7 @@
 
             <filters-block>
                 <filter-item id="answered" :title="$t('WebInterview.Filters_Answered')" @change="change" :state="state.answered" />
-                <filter-item id="unanswered" :title="$t('WebInterview.Filters_Unanswered')" @change="change" :state="state.unanswered" />
+                <filter-item id="notAnswered" :title="$t('WebInterview.Filters_NotAnswered')" @change="change" :state="state.notAnswered" />
             </filters-block>
 
             <filters-block>
@@ -41,27 +45,27 @@ import FiltersBlock from "./components/FiltersBlock";
 import FilterItem from "./components/FilterItem";
 
 export default {
-  computed: {
-    state() {
-      return this.$store.getters.filteringState;
-    },
+    computed: {
+        state() {
+            return this.$store.getters.filteringState;
+        },
 
-    oldPageUrl() {
-      return (
-        window.input.settings.config.basePath +
-        "Interview/Details/" +
-        this.$route.params.interviewId
-      );
+        oldPageUrl() {
+            return (
+                window.input.settings.config.basePath +
+                "Interview/Details/" +
+                this.$route.params.interviewId
+            );
+        },
     },
-  },
-  methods: {
-    change({ id, value }) {
-      this.$store.dispatch("applyFiltering", { filter: id, value });
-      this.$store.dispatch("fetchSearchResults");
+    methods: {
+        change({ id, value }) {
+            this.$store.dispatch("applyFiltering", { filter: id, value });
+            this.$store.dispatch("fetchSearchResults");
+        },
     },
-  },
-  components: {
-      FilterItem, FiltersBlock
-  }
+    components: {
+        FilterItem, FiltersBlock
+    }
 };
 </script>

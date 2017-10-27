@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
@@ -14,9 +15,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         public StatefullInterviewSearcher(IInterviewFactory interviewFactory)
         {
             this.interviewFactory = interviewFactory;
+
         }
 
-        public SearchResults Search(IStatefulInterview interview, FilteringFlags[] flags, long skip, long take)
+        public SearchResults Search(IStatefulInterview interview, FilterOption[] flags, long skip, long take)
         {
             var nodes = GetFilteredNodes(flags, interview);
 
@@ -26,7 +28,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             var results = new SearchResults();
             SearchResult currentResult = null;
-
             
             foreach (var node in nodes)
             {
@@ -125,9 +126,21 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }
         }
 
-        private IEnumerable<IInterviewTreeNode> GetFilteredNodes(FilteringFlags[] flags, IStatefulInterview interview)
+        private static readonly Func<InterviewQuestionFilter, bool> FilteringRule = node => 
+            node.Is(FilterOption.WithComments)
+            && node.Or(FilterOption.Flagged, FilterOption.NotFlagged)
+            && node.Or(FilterOption.Valid, FilterOption.Invalid)
+            && node.Or(FilterOption.Answered, FilterOption.NotAnswered)
+            && node.Or(FilterOption.ForSupervisor, FilterOption.ForInterviewer);
+
+        private IEnumerable<IInterviewTreeNode> GetFilteredNodes(FilterOption[] flags, IStatefulInterview interview)
         {
-            var flagged = interviewFactory.GetFlaggedQuestionIds(interview.Id).ToLookup(k => k.ToString());
+            var flagged = interviewFactory.GetFlaggedQuestionIds(interview.Id);
+
+            var rule = new InterviewQuestionFilter(
+                new HashSet<Identity>(flagged), 
+                new HashSet<FilterOption>(flags), 
+                FilteringRule);
 
             var nodes = interview.GetAllInterviewNodes();
 
@@ -135,49 +148,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             {
                 if (!(node is InterviewTreeQuestion question)) continue;
 
-                var found = true;
-
-                foreach (var flag in flags)
-                {
-                    switch (flag)
-                    {
-                        case FilteringFlags.Flagged:
-                            found &= flagged.Contains(question.Identity.ToString());
-                            break;
-                        case FilteringFlags.NotFlagged:
-                            found &= !flagged.Contains(question.Identity.ToString());
-                            break;
-
-                        case FilteringFlags.WithComments:
-                            found &= question.AnswerComments.Any();
-                            break;
-
-                        case FilteringFlags.Invalid:
-                            found &= !question.IsValid;
-                            break;
-
-                        case FilteringFlags.Valid:
-                            found &= question.IsValid;
-                            break;
-                        case FilteringFlags.Answered:
-                            found &= question.IsAnswered();
-                            break;
-
-                        case FilteringFlags.Unanswered:
-                            found &= !question.IsAnswered();
-                            break;
-
-                        case FilteringFlags.ForSupervisor:
-                            found &= question.IsSupervisors;
-                            break;
-
-                        case FilteringFlags.ForInterviewer:
-                            found &= !question.IsSupervisors;
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException(nameof(flags));
-                    }
-                }
+                var found = rule.Evaluate(question);
 
                 if (found) yield return node;
             }
