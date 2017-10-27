@@ -830,7 +830,9 @@
     <EmbeddedResource Include="Resources\Archived.fr.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Archived.ka.resx" />
+    <EmbeddedResource Include="Resources\Archived.ka.resx">
+      <DependentUpon>Archived.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.pt.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
@@ -848,7 +850,9 @@
     <EmbeddedResource Include="Resources\Assignments.fr.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Assignments.ka.resx" />
+    <EmbeddedResource Include="Resources\Assignments.ka.resx">
+      <DependentUpon>Assignments.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Assignments.pt.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
@@ -867,8 +871,12 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AuditLog.ru.resx" />
-    <EmbeddedResource Include="Resources\DataTables.ka.resx" />
+    <EmbeddedResource Include="Resources\AuditLog.ru.resx">
+      <DependentUpon>AuditLog.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataTables.ka.resx">
+      <DependentUpon>DataTables.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -880,17 +888,23 @@
     <EmbeddedResource Include="Resources\DataTables.zh.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.ka.resx" />
+    <EmbeddedResource Include="Resources\Details.ka.resx">
+      <DependentUpon>Details.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Details.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Details.ru.resx" />
+    <EmbeddedResource Include="Resources\Details.ru.resx">
+      <DependentUpon>Details.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.zh.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\DevicesInterviewers.ka.resx" />
+    <EmbeddedResource Include="Resources\DevicesInterviewers.ka.resx">
+      <DependentUpon>DevicesInterviewers.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>DevicesInterviewers.Designer.cs</LastGenOutput>
@@ -901,7 +915,9 @@
     <EmbeddedResource Include="Resources\EnumNames.fr.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\EnumNames.ka.resx" />
+    <EmbeddedResource Include="Resources\EnumNames.ka.resx">
+      <DependentUpon>EnumNames.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\EnumNames.pt.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
@@ -922,7 +938,9 @@
     <EmbeddedResource Include="Resources\FieldsAndValidations.fr.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FieldsAndValidations.ka.resx" />
+    <EmbeddedResource Include="Resources\FieldsAndValidations.ka.resx">
+      <DependentUpon>FieldsAndValidations.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\FieldsAndValidations.pt.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
@@ -938,7 +956,9 @@
     <EmbeddedResource Include="Resources\FieldsAndValidations.zh.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImportQuestionnaire.ka.resx" />
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.ka.resx">
+      <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -953,7 +973,9 @@
     <EmbeddedResource Include="Resources\Interviews.fr.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Interviews.ka.resx" />
+    <EmbeddedResource Include="Resources\Interviews.ka.resx">
+      <DependentUpon>Interviews.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Interviews.pt.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
@@ -971,7 +993,9 @@
     <EmbeddedResource Include="Resources\LimitsIndicator.fr.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LimitsIndicator.ka.resx" />
+    <EmbeddedResource Include="Resources\LimitsIndicator.ka.resx">
+      <DependentUpon>LimitsIndicator.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LimitsIndicator.pt.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
@@ -988,7 +1012,9 @@
     <EmbeddedResource Include="Resources\LoginToDesigner.fr.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\LoginToDesigner.ka.resx" />
+    <EmbeddedResource Include="Resources\LoginToDesigner.ka.resx">
+      <DependentUpon>LoginToDesigner.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\LoginToDesigner.pt.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
@@ -1003,7 +1029,9 @@
     <EmbeddedResource Include="Resources\LoginToDesigner.zh.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\OutdatedBrowser.ka.resx" />
+    <EmbeddedResource Include="Resources\OutdatedBrowser.ka.resx">
+      <DependentUpon>OutdatedBrowser.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>OutdatedBrowser.Designer.cs</LastGenOutput>
@@ -1022,6 +1050,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.ka.resx">
       <SubType>Designer</SubType>
+      <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Pages.pt.resx">
       <DependentUpon>Pages.resx</DependentUpon>
@@ -1042,7 +1071,9 @@
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PeriodicStatusReport.ka.resx" />
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.ka.resx">
+      <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\PeriodicStatusReport.pt.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
@@ -1064,7 +1095,9 @@
     <EmbeddedResource Include="Resources\SyncLogMessages.fr.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SyncLogMessages.ka.resx" />
+    <EmbeddedResource Include="Resources\SyncLogMessages.ka.resx">
+      <DependentUpon>SyncLogMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.pt.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1082,7 +1115,9 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.fr.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\TabletSyncMessages.ka.resx" />
+    <EmbeddedResource Include="Resources\TabletSyncMessages.ka.resx">
+      <DependentUpon>TabletSyncMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\TabletSyncMessages.pt.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1097,7 +1132,9 @@
     <EmbeddedResource Include="Resources\TabletSyncMessages.zh.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Troubleshooting.ka.resx" />
+    <EmbeddedResource Include="Resources\Troubleshooting.ka.resx">
+      <DependentUpon>Troubleshooting.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Troubleshooting.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1113,7 +1150,9 @@
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.fr.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ka.resx" />
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ka.resx">
+      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1136,7 +1175,9 @@
     <EmbeddedResource Include="Resources\WebInterview.fr.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.ka.resx" />
+    <EmbeddedResource Include="Resources\WebInterview.ka.resx">
+      <DependentUpon>WebInterview.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterview.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1157,7 +1198,9 @@
     <EmbeddedResource Include="Resources\WebInterviewSetup.fr.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewSetup.ka.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewSetup.ka.resx">
+      <DependentUpon>WebInterviewSetup.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -1179,7 +1222,9 @@
     <EmbeddedResource Include="Resources\WebInterviewUI.fr.resx">
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterviewUI.ka.resx" />
+    <EmbeddedResource Include="Resources\WebInterviewUI.ka.resx">
+      <DependentUpon>WebInterviewUI.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewUI.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
