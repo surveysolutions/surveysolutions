@@ -10,9 +10,10 @@ export default {
     actions:{
         setFlag({commit}, {questionId, hasFlag}) {
             Vue.$api.call(api => {
-                return api.setFlag(questionId, hasFlag);
+                return api.setFlag(questionId, hasFlag).then(function(){
+                    commit("SET_FLAG", {questionId, hasFlag})
+                });
             });
-            commit("SET_FLAG", {questionId, hasFlag})
         },
         async getFlags({commit, rootState}){
             const flags = await Vue.$api.call(api => {
