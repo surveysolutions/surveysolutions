@@ -531,7 +531,7 @@ namespace WB.UI.Designer.Controllers
             var questionnaire = GetQuestionnaireOrThrow404(id);
             var comboBoxItems =
                 new ComboItem { Name = QuestionnaireHistoryResources.Translation_Original, Value = null }.ToEnumerable().Concat(
-                    questionnaire.Source.Translations.Select(i => new ComboItem { Name = i.Name, Value = i.Id })
+                    questionnaire.Source.Translations.Select(i => new ComboItem { Name = i.Name ?? Resources.QuestionnaireController.Untitled, Value = i.Id })
                 );
             return this.Json(comboBoxItems);
         }
