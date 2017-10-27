@@ -24,6 +24,7 @@
         }     
     ],
     "html.format.wrapAttributes": "force-aligned",
-    "vetur.format.defaultFormatter.js": "prettier",
+    "vetur.format.defaultFormatter.js": "vscode-typescript",
+    
     "vetur.format.defaultFormatter.html": "js-beautify-html"
 }
