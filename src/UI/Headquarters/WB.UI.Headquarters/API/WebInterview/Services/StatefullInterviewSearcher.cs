@@ -22,33 +22,31 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         {
             var nodes = GetFilteredNodes(flags, interview);
 
-            long taken = 0;
-            long skipped = 0;
-            long total = 0;
+            long taken = 0, skipped = 0, total = 0;
 
             var results = new SearchResults();
             SearchResult currentResult = null;
             
             foreach (var node in nodes)
             {
-                if (currentResult == null)
-                {
-                    currentResult = NewResult();
-                }
-
-                if (CanTake() && currentResult.SectionId != node.Parent.Identity.ToString())
-                {
-                    results.Results.Add(currentResult);
-                    currentResult = NewResult();
-                }
-
                 if (CanTake())
                 {
+                    if (currentResult == null || currentResult.SectionId != node.Parent.Identity.ToString())
+                    {
+                        if (currentResult != null)
+                        {
+                            results.Results.Add(currentResult);
+                        }
+
+                        currentResult = NewResult();
+                    }
+                
                     currentResult.Questions.Add(new Link
                     {
                         Target = node.Identity.ToString(),
                         Title = GetCurrentNodeTitle()
                     });
+
                     taken++;
                 }
                 else
