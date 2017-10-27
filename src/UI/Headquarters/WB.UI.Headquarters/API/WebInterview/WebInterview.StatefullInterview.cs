@@ -18,6 +18,7 @@ using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -57,6 +58,9 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public void SetFlag(string questionId, bool hasFlag)
         {
+            if (this.authorizedUser.IsObserver)
+                throw new WebInterviewAccessException(InterviewAccessExceptionReason.Forbidden, Strings.ObserverNotAllowed);
+
             var statefulInterview = this.GetCallerInterview();
             this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
         }
