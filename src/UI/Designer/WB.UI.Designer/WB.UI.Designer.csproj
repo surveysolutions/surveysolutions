@@ -306,9 +306,10 @@
     <Compile Include="Migrations\PlainStore\M001-100\M012_MigrateSharedPersonsToListStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M014_AddCanImportOnHQColumnToUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M015_AddAllowedAddressesTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M019_AddRelationsForFolders.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M017_AddQuestionnaireListViewFolderTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M2001710241530_AddFolderIdToQuestionnaireListViewItemTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
@@ -796,6 +797,7 @@
     <Content Include="questionnaire\content\fonts\OpenSans300.woff" />
     <Content Include="questionnaire\content\fonts\Roboto300.woff" />
     <Content Include="Views\Questionnaire\PublicFolders.cshtml" />
+    <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -981,16 +983,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>False</AutoAssignPort>
-          <DevelopmentServerPort>8011</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/Designer</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

@@ -86,6 +86,11 @@
                                                     {
                                                         <li>@Html.ActionLink(QuestionnaireController.Backup, "BackupQuestionnaire", "Admin", routevalues, null)</li>
                                                     }
+                                                    if (actionModel.CanAssignFolder)
+                                                    {
+                                                        <li class="divider"></li>
+                                                        <li><a href="#mAssignFolder" onclick='questionnaireActionModel.assignFolder("@itemId", "@itemType", "@itemName")' data-toggle="modal">@QuestionnaireController.AssignFolder</a></li>
+                                                    }
                                                     if (actionModel.CanDelete)
                                                     {
                                                         <li class="divider"></li>

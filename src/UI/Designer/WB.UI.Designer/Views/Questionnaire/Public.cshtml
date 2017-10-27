@@ -5,6 +5,8 @@
 }
 @section Scripts {
     @Scripts.Render("~/list")
+    @Styles.Render("~/folders/lib/tree/skin")
+    @Scripts.Render("~/folders")
 }
 
 @Html.Partial("QuestionnairesList")
@@ -16,5 +18,8 @@
     </div>
     <div>
         @Html.Partial("ExportPdfModalDialog")
+    </div>    
+    <div>
+        @Html.Partial("AssignFolderDialog")
     </div>
 }

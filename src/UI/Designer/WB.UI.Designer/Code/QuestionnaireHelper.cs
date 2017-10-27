@@ -59,6 +59,7 @@ namespace WB.UI.Designer.Code
                 CanDelete = x.CreatedBy == viewerId && !x.IsDeleted,
                 CanExport = true,
                 CanCopy = true,
+                CanAssignFolder = showPublic && isAdmin,
                 CanOpen = (showPublic || x.CreatedBy == viewerId || x.SharedPersons.Any(s => s.UserId == viewerId)) && !x.IsDeleted,
                 CanSynchronize = isAdmin,
                 CanExportToPdf = true,

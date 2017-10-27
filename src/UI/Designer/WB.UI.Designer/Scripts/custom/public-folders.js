@@ -1,4 +1,4 @@
-﻿function FoldersModel(element, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl) {
+﻿function FoldersModel(element, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton) {
     var self = this;
 
     var glyph_opts = {
@@ -12,6 +12,7 @@
 
     element.fancytree({
         extensions: ["contextMenu", "edit", "glyph"],
+        checkbox: supportRadioButton ? "radio" : false,
         icon: true,
         glyph: glyph_opts,
         selectMode: 1,
@@ -120,6 +121,16 @@
             success: callback,
             dataType: 'json'
         });
+    }
+
+    self.getSelectedFolderId = function() {
+        return element.fancytree('getTree').getSelectedNodes();
+    }
+
+    self.setSelectedFolderId = function() {
+        var tree = element.fancytree('getTree');
+        var node = tree.getNodeByKey(n);
+        node.setSelected(true);
     }
 }
 

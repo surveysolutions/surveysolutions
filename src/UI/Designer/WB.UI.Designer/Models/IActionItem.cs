@@ -19,5 +19,7 @@
         bool CanSynchronize { get; }
 
         bool CanExportToPdf { get; }
+
+        bool CanAssignFolder { get; }
     }
 }
