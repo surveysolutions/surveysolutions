@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual void UpdateQuantity(int? quantity)
         {
-            this.Quantity = quantity;
+            this.Quantity = quantity == -1 ? null : quantity;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
         
