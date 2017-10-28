@@ -5,14 +5,14 @@
                 <span class="cancel"></span>
             </button>
             
-            <h2>{{questionsCount}} questions found:</h2>
+            <h2>{{searchResult.count}} questions found:</h2>
             
             <search-section-result 
                 v-for="search in searchResult.results"
                 :key="search.sectionId"
                 :search="search"></search-section-result>
 
-            <infinite-loading ref="loader" @infinite="infiniteHandler" :distance="250"></infinite-loading>
+            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250"></infinite-loading>
         </div>
     </aside>
 </template>
@@ -27,8 +27,10 @@ export default {
         hideSearchResults() {
             this.$store.dispatch("hideSearchResults");
         },
+
         infiniteHandler($state) {
             const self = this;
+
             this.$store.dispatch("fetchSearchResults")
                 .then(() => { 
                     $state.loaded();
@@ -43,10 +45,6 @@ export default {
     computed: {
         searchResultsAreVisible() {
             return !this.$store.state.webinterview.sidebar.searchResultsHidden;
-        },
-
-        questionsCount() {
-            return this.$store.getters.searchResult.count;
         },
 
         searchResult() {

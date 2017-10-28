@@ -1,7 +1,6 @@
 import Vue from "vue"
 
 function getSelectedFlags(state) {
-    const filters = state.filter;
     const flags = Object.keys(state.filter)
         .filter((flag) => state.filter[flag])
         .map(_.capitalize);
