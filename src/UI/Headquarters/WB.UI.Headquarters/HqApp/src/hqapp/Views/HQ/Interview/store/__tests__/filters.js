@@ -176,7 +176,7 @@ describe("filters store search", () => {
                     { target: "QuestionBId", title: "Question B" },
                     { target: "QuestionCId", title: "Question C" },
                     { target: "QuestionDId", title: "Question D" },
-                    { target: "QuestionEId", title: "Question E" },
+                    { target: "QuestionEId", title: "Question E" }
                 ])
             });
 

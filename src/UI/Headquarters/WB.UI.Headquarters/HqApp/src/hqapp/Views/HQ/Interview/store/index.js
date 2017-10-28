@@ -10,24 +10,18 @@ const store = {
         flags
     },
 
-    state: {
-    },
-
     actions: {
-        approve({ commit }, comment) {
+        approve(_, comment) {
             return Vue.$api.call(api => {
                 return api.approve(comment);
             });
         },
 
-        reject({commit}, rejection) {
+        reject(_, rejection) {
             return Vue.$api.call(api => {
                 return api.reject(rejection.comment, rejection.assignTo);
             });
         }
-    },
-
-    mutations: {
     }
 }
 
