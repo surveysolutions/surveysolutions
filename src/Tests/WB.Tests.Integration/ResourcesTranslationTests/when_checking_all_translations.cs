@@ -19,7 +19,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 foreach (KeyValuePair<string, string> translation in GetStringResourcesFromResX(resourceFile))
                 {
-                    if (string.IsNullOrWhiteSpace(translation.Value))
+                    if (translation.Key != "InfoPostFix" && string.IsNullOrWhiteSpace(translation.Value))
                     {
                         emptyTranslations.Add($"{Path.GetFileName(resourceFile)}.{translation.Key}");
                     }
