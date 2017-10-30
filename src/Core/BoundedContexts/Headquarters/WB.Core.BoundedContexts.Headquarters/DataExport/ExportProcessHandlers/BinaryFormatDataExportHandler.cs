@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -25,7 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IAudioFileStorage audioFileStorage;
 
         private readonly ITransactionManager transactionManager;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         
@@ -37,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings,
             ITransactionManager transactionManager,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             IInterviewFactory interviewFactory,
             IDataExportProcessesService dataExportProcessesService,
             IQuestionnaireStorage questionnaireStorage,
@@ -49,7 +44,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
             this.imageFileRepository = imageFileRepository;
             this.transactionManager = transactionManager;
-            this.interviewSummaries = interviewSummaries;
             this.interviewFactory = interviewFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.audioFileStorage = audioFileStorage;
@@ -67,12 +61,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             cancellationToken.ThrowIfCancellationRequested();
             
             var allMultimediaAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetAllMultimediaAnswers(multimediaQuestionIds));
+                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, multimediaQuestionIds));
 
             cancellationToken.ThrowIfCancellationRequested();
 
             var allAudioAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetAllAudioAnswers());
+                () => this.interviewFactory.GetAudioAnswersByQuestionnaire(questionnaireIdentity));
 
             var interviewIds = allMultimediaAnswers.Select(x => x.InterviewId)
                 .Union(allAudioAnswers.Select(x => x.InterviewId)).Distinct().ToList();

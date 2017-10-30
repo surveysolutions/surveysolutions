@@ -24,8 +24,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void RemoveAnswers(Guid interviewId, Identity[] questionIds);
         
         InterviewData GetInterviewData(Guid interviewId);
-        InterviewStringAnswer[] GetAllMultimediaAnswers(Guid[] multimediaQuestionIds);
-        InterviewStringAnswer[] GetAllAudioAnswers();
+
+        InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
+            Guid[] multimediaQuestionIds);
+
+        InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
         Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
 
         InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
