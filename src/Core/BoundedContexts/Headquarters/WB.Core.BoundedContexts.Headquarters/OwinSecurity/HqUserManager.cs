@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 var identityResult = await this.CreateAsync(user);
                 if (identityResult.Succeeded && RolesToIncludeInAuditLog.Contains(role))
                 {
-                    this.auditLog.Append($"{role} user '{user.UserName}' created");
+                    this.auditLog.UserCreated(role, user.UserName);
                 }
                 return identityResult;
             }

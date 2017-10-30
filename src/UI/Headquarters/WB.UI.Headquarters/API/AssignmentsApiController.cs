@@ -166,7 +166,7 @@ namespace WB.UI.Headquarters.API
                 return this.BadRequest(WB.UI.Headquarters.Resources.Assignments.InvalidSize);
 
             assignment.UpdateQuantity(request.Quantity);
-            this.auditLog.Append($"Assignment {id} size changed to {(request.Quantity == null ? -1 : request.Quantity.Value)}");
+            this.auditLog.AssignmentSizeChanged(id, request.Quantity);
             return this.Ok();
         }
 

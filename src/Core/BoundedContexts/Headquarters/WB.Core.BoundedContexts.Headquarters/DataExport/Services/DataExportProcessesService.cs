@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             if (this.processes.GetOrNull(newProcess.NaturalId)?.IsQueuedOrRunning() ?? false)
                 return;
 
-            this.auditLog.Append($"Export of {newProcess.Name} started. Format {newProcess.Format}");
+            this.auditLog.ExportStared(newProcess.Name, newProcess.Format);
             this.processes[newProcess.NaturalId] = newProcess;
         }
 

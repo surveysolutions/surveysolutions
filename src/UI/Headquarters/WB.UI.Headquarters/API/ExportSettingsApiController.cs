@@ -70,8 +70,7 @@ namespace WB.UI.Headquarters.API
                 this.ClearExportData();
             }
 
-            this.auditLog.Append($"Export settings were changed. Encription changed to '{(changeSettingsState.EnableState ? "enabled" : "disabled")}'");
-
+            this.auditLog.ExportEncriptionChanged(changeSettingsState.EnableState);
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
             return Request.CreateResponse(newExportSettingsModel);
         }
