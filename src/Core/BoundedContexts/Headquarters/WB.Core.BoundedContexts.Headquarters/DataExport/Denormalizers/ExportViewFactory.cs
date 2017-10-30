@@ -365,14 +365,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnNames = new string[columnCount];
-            exportedHeaderItem.ColumnValues = new decimal[columnCount];
+            exportedHeaderItem.ColumnValues = new int[columnCount];
             exportedHeaderItem.Titles = new string[columnCount];
 
             for (int i = 0; i < columnCount; i++)
             {
                 if (!IsQuestionLinked(question) && question is IMultyOptionsQuestion)
                 {
-                    var columnValue = decimal.Parse(question.Answers[i].AnswerValue);
+                    var columnValue = int.Parse(question.Answers[i].AnswerValue);
 
                     exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat,
                         question.StataExportCaption, DecimalToHeaderConverter.ToHeader(columnValue));
