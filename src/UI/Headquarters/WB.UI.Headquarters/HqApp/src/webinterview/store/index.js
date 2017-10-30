@@ -14,6 +14,7 @@ const store = safeStore({
         questionnaireTitle: "",
         interviewKey: "",
         firstSectionId: "",
+        isReviewMode: false,
         entities: [], /* IInterviewEntity[] */
         entityDetails: { /* string: object */ },
         breadcrumbs: {
