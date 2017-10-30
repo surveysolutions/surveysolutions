@@ -16,15 +16,17 @@ namespace WB.Tests.Unit.DataExportTests
         public void when_export_text_list_question()
         {
             //arrange
-            var interviewTextListAnswers = new[] { new InterviewTextListAnswer(1, "List 1"), new InterviewTextListAnswer(2, "List 2") };
-
+            var interviewTextListAnswers = new[] { new InterviewTextListAnswer(1, "line1"), new InterviewTextListAnswer(2, "line2") };
+            
             //act
-            var textListAnswers = CreateFilledExportedQuestion(QuestionType.TextList, interviewTextListAnswers,
-                columnNames: new[] {"List comumn 1", "List column 2"});
+            var filledQuestion = CreateFilledExportedQuestion(QuestionType.TextList, 3, interviewTextListAnswers);
+            var disabledQuestion = CreateDisabledExportedQuestion(QuestionType.TextList, columnsCount: 3);
+            var missingQuestion = CreateMissingValueExportedQuestion(QuestionType.TextList, columnsCount: 3);
 
             //assert
-            Assert.AreEqual(2, textListAnswers.Length);
-            Assert.That(textListAnswers, Is.EquivalentTo(interviewTextListAnswers.Select(x => x.Answer)));
+            Assert.That(filledQuestion, Is.EquivalentTo(new[] { "line1", "line2", MissingStringQuestionValue }));
+            Assert.That(disabledQuestion, Is.EquivalentTo(new[] { DisableValue, DisableValue, DisableValue }));
+            Assert.That(missingQuestion, Is.EquivalentTo(new[] { MissingStringQuestionValue, MissingStringQuestionValue, MissingStringQuestionValue }));
         }
 
         [Test]
