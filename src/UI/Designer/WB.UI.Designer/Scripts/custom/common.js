@@ -22,9 +22,6 @@
         self.itemType = type;
         self.itemId = id;
 
-        folderstree
-
-
         $('#assign-folder-modal-questionnaire-id').val(self.itemId);
         $('#assign-folder-modal-questionnaire-title').html(self.itemName);
     };

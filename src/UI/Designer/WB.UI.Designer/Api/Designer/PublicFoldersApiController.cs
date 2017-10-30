@@ -98,5 +98,17 @@ namespace WB.UI.Designer.Api
         {
             this.publicFoldersStorage.RemoveFolder(model.Id);
         }
+
+        public class AssignFolderToQuestionnaireModel
+        {
+            public Guid QuestionnaireId { get; set; }
+            public Guid? Id { get; set; }
+        }
+
+        [HttpPost]
+        public void AssignFolderToQuestionnaire(AssignFolderToQuestionnaireModel model)
+        {
+            this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, model.Id);
+        }
     }
 }

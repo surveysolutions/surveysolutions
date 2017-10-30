@@ -15,5 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void RenameFolder(Guid id, string newName);
 
         void RemoveFolder(Guid id);
+
+        void AssignFolderToQuestionnaire(Guid questionnaireId, Guid? folderId);
     }
 }
