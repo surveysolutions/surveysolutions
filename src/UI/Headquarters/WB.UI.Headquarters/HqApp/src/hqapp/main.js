@@ -33,8 +33,10 @@ export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
     }).router;
     
     router.afterEach((to, from) => {
-        store.dispatch("changeSection", to.params.sectionId)
-        store.dispatch("onBeforeNavigate")
+        if(to.name === "section") {
+            store.dispatch("changeSection", to.params.sectionId)
+            store.dispatch("onBeforeNavigate")
+        }
     })
     sync(store, router)
 
