@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     options:
                         new[]
                         {
-                            Create.Entity.Answer("-23", -23), Create.Entity.Answer("70.3", (decimal)70.3), Create.Entity.Answer("-44.4", (decimal) -44.4),
+                            Create.Entity.Answer("-23", -23), Create.Entity.Answer("70", 70), Create.Entity.Answer("-44", -44),
                             Create.Entity.Answer("2", 2)
                         }));
 
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         };
 
         It should_create_header_where_negative_sign_and_decimal_separator_of_a_multioption_question_value_replaced_with_n_and_underscore_respectively = () =>
-            multiOptionQuestionColumnNames.ShouldEqual(new[] { "mul__n23", "mul__70_3", "mul__n44_4", "mul__2" });
+            multiOptionQuestionColumnNames.ShouldEqual(new[] { "mul__n23", "mul__70", "mul__n44", "mul__2" });
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static ExportViewFactory exportViewFactory;
