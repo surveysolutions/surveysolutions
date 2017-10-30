@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -300,7 +301,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
                 return formattable.ToString(isTimestampQuestion ? ExportFormatSettings.ExportDateTimeFormat : isDateTimeQuestion ? ExportFormatSettings.ExportDateFormat : null, exportCulture);
             }
-            return  obj.ToString();
+
+            if (questionType == QuestionType.Audio)
+                return ((AudioAnswer) obj)?.FileName;
+
+            if (questionType == QuestionType.TextList)
+                return ((InterviewTextListAnswer) obj)?.Answer;
+
+
+            return obj.ToString();
         }
     }
 }
