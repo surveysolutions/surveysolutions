@@ -1,4 +1,4 @@
-﻿function FoldersModel(element, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback) {
+﻿function FoldersModel(element, locolizes, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback) {
     var self = this;
 
     var glyph_opts = {
@@ -45,12 +45,12 @@
                     node.load();
 
                 if (node.key === "00000000-0000-0000-0000-000000000000")
-                    return { "createSubFolder": { "name": "Create Folder", "icon": "add" } };
+                    return { "createSubFolder": { "name": locolizes.CreateSubFolder, "icon": "add" } };
 
                 return {
-                    "createSubFolder": { "name": "Create Folder", "icon": "add" },
-                    "edit": { "name": "Edit", "icon": "edit" },
-                    "delete": { "name": "Delete", "icon": "delete" }
+                    "createSubFolder": { "name": locolizes.CreateSubFolder, "icon": "add" },
+                    "edit": { "name": locolizes.Edit, "icon": "edit" },
+                    "delete": { "name": locolizes.Delete, "icon": "delete" }
                 };
             },
             actions: function (node, action, options) {
@@ -127,9 +127,9 @@
         return element.fancytree('getTree').getSelectedNodes();
     }
 
-    self.setSelectedFolderId = function() {
+    self.setSelectedFolderId = function(folderId) {
         var tree = element.fancytree('getTree');
-        var node = tree.getNodeByKey(n);
+        var node = tree.getNodeByKey(folderId);
         node.setSelected(true);
     }
 }
