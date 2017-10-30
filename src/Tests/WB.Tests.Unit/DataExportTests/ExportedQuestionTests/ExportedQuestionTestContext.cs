@@ -42,11 +42,9 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,
             object value,
-            QuestionSubtype? questionSubType = null)
-        {
-            var columnNames = new []{ "single column" };
-            return CreateExportedQuestion(questionType, value, columnNames, questionSubType, false);
-        }
+            QuestionSubtype? questionSubType = null,
+            string[] columnNames = null)
+            => CreateExportedQuestion(questionType, value, columnNames ?? new[] {"single column"}, questionSubType, false);
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,
             int columnsCount,
