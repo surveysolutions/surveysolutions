@@ -108,10 +108,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
 
                 var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaire.PublicKey);
+                var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion);
                 if (questionnaire.Translations?.Count > 0)
                 {
-                    var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion);
-
                     this.translationManagementService.Delete(questionnaireIdentity);
 
                     var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
@@ -137,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireAssembly,
                     questionnaireContentVersion,
                     questionnaireVersion));
-                this.auditLog.Append($"Questionnaire '{questionnaire.Title} (ver. {questionnaireVersion})' was imported");
+                this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
                 return new QuestionnaireImportResult();
             }
             catch (RestException ex)

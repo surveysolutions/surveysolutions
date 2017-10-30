@@ -338,7 +338,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             assignment.UpdateQuantity(quantity);
             assignmentsStorage.Store(assignment, id);
-            this.auditLog.Append($"Assignment {id} size changed to {(quantity == null ? -1 : quantity.Value)} using public API");
+            this.auditLog.AssignmentSizeChanged(id, quantity);
 
             return this.mapper.Map<AssignmentDetails>(assignmentsStorage.GetById(id));
         }
