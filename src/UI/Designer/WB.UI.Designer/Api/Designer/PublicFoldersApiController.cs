@@ -108,7 +108,8 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public void AssignFolderToQuestionnaire(AssignFolderToQuestionnaireModel model)
         {
-            this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, model.Id);
+            var folderId = model.Id == Guid.Empty ? null : model.Id;
+            this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, folderId);
         }
     }
 }
