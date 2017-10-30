@@ -95,7 +95,8 @@ export default {
     reject() {
       this.$refs.rejectConfirm.promt(async ok => {
         if (ok) {
-            var dispatchResult = this.$store.dispatch("reject", { comment: this.rejectComment, assignTo: this.newResponsibleId.key});
+            var newId = (this.newResponsibleId || {}).key
+            var dispatchResult = this.$store.dispatch("reject", { comment: this.rejectComment, assignTo: newId});
             dispatchResult.then(() => {
                 window.location = this.$config.model.interviewsUrl;
             });
