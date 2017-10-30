@@ -85,11 +85,13 @@
         <div class="row">
             @Html.Partial("_alerts")
             <div class="page-header clearfix">
-                <div class="neighbor-block-to-search">
+                <ol class="breadcrumb">
+                    <li>
+                        @Html.ActionLink(MainMenu.Maps, "Index", "Maps")
+                    </li>
+                </ol>
                     <h1>Map: @Model.FileName</h1>
-                </div>
             </div>
-            
         </div>
         <div class="row">
             <div class="col-md-7 col-sm-12">
@@ -108,7 +110,7 @@
                     </div>
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li>ImportDate: <span>@Model.ImportDate</span></li>
+                            <li><b>ImportDate:</b> <span>@Model.ImportDate</span></li>
                         </ul>
                     </div>
                 </div>
