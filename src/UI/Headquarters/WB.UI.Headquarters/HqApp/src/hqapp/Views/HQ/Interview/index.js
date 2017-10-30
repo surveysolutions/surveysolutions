@@ -47,7 +47,6 @@ export default class ReviewComponent {
             review: true
         }).then(() => {
             if (to.name === "section") {
-                this.rootStore.dispatch("changeSection", to.params.sectionId)
                 Vue.$api.call(api => api.isEnabled(to.params["sectionId"])).then((isEnabled) => {
                     if (!isEnabled) {
                         next(false);
