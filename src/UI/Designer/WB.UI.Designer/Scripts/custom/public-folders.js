@@ -16,12 +16,6 @@
         icon: true,
         glyph: glyph_opts,
         selectMode: 1,
-        /*wide: {
-            iconWidth: "1em",       // Adjust this if fancy-icon-width != "16px"
-            iconSpacing: "0.5em",   // Adjust this if fancy-icon-spacing != "3px"
-            labelSpacing: "0.1em",  // Adjust this if padding between icon and label != "3px"
-            levelOfs: "1.5em"       // Adjust this if ul padding != "16px"
-        },*/
         /*icon: function (event, data) {
             if (data.node.isFolder()) {
                 return "glyphicon glyphicon-book";

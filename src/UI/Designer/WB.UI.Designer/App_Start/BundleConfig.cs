@@ -7,6 +7,7 @@ namespace WB.UI.Designer
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.UseCdn = false;
+            //BundleTable.EnableOptimizations = true;
 
             bundles.IgnoreList.Clear();
             bundles.IgnoreList.Ignore("*-vsdoc.js");
@@ -46,7 +47,7 @@ namespace WB.UI.Designer
                     "~/Content/plugins/jquery.contextMenu.min.js",
                     "~/Scripts/custom/public-folders.js" }));
             bundles.Add(
-                new StyleBundle("~/folders/lib/tree/skin").Include( new [] {
+                new StyleBundle("~/Content/plugins/skin").Include( new [] {
                     "~/Content/plugins/ui.fancytree.min.css",
                     "~/Content/plugins/jquery.contextMenu.min.css"
                 }));
