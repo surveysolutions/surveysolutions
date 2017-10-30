@@ -22,6 +22,7 @@
         self.itemType = type;
         self.itemId = id;
 
+        $('#assign-folder-modal-folder-id').val('');
         $('#assign-folder-modal-questionnaire-id').val(self.itemId);
         $('#assign-folder-modal-questionnaire-title').html(self.itemName);
     };
