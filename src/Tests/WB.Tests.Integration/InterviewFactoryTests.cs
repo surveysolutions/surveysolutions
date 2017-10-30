@@ -439,42 +439,60 @@ namespace WB.Tests.Integration
         }
 
         [Test]
-        public void when_getting_all_enabled_multimedia_answers()
+        public void when_getting_all_enabled_multimedia_answers_by_questionnaire()
         {
             //arrange
             var interviewId = Guid.NewGuid();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 55);
             var expectedMultimediaAnswers = new[]
             {
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector()),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 1", InterviewId = interviewId},
-                    Enabled = true
+                    Enabled = true,
+                    QuestionnaireId = questionnaireId
                 },
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 2", InterviewId = interviewId},
-                    Enabled = true
+                    Enabled = true,
+                    QuestionnaireId = questionnaireId
                 },
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1,2)),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 3", InterviewId = Guid.NewGuid()},
-                    Enabled = false
+                    Enabled = false,
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777)
                 },
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1,2,3)),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 4", InterviewId = Guid.NewGuid()},
-                    Enabled = true
+                    Enabled = true,
+                    QuestionnaireId = questionnaireId
                 },
             };
 
-            var factory = CreateInterviewFactory();
+            var interviewSummaryRepository = GetPostgresInterviewSummaryRepository();
+            var factory = CreateInterviewFactory(interviewSummaryRepository);
 
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
+                foreach (var expectedMultimediaAnswer in expectedMultimediaAnswers.GroupBy(x => x.Answer.InterviewId))
+                {
+                    interviewSummaryRepository.Store(new InterviewSummary
+                    {
+                        InterviewId = expectedMultimediaAnswer.Key,
+                        Status = InterviewStatus.Completed,
+                        ReceivedByInterviewer = false,
+                        QuestionnaireIdentity = expectedMultimediaAnswer.FirstOrDefault().QuestionnaireId.ToString()
+
+                    }, expectedMultimediaAnswer.Key);
+                }
+
                 foreach (var expectedMultimediaAnswer in expectedMultimediaAnswers)
                 {
                     factory.UpdateAnswer(expectedMultimediaAnswer.Answer.InterviewId, expectedMultimediaAnswer.QuestionId,
@@ -488,50 +506,69 @@ namespace WB.Tests.Integration
 
             //act
             var allMultimediaAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetAllMultimediaAnswers(expectedMultimediaAnswers.Select(x => x.QuestionId.Id).ToArray()));
+                () => factory.GetMultimediaAnswersByQuestionnaire(questionnaireId, expectedMultimediaAnswers.Select(x => x.QuestionId.Id).ToArray()));
 
             //assert
             Assert.That(allMultimediaAnswers.Length, Is.EqualTo(3));
-            Assert.That(allMultimediaAnswers, Is.EquivalentTo(expectedMultimediaAnswers.Where(x=>x.Enabled).Select(x=>x.Answer)));
+            Assert.That(allMultimediaAnswers, Is.EquivalentTo(expectedMultimediaAnswers.Where(x=>x.QuestionnaireId == questionnaireId && x.Enabled).Select(x=>x.Answer)));
         }
 
         [Test]
-        public void when_getting_all_enabled_audio_answers()
+        public void when_getting_all_enabled_audio_answers_by_questionnaire()
         {
             //arrange
             var interviewId = Guid.NewGuid();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 55);
+
             var expectedAudioAnswers = new[]
             {
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector()),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 1", InterviewId = interviewId},
-                    Enabled = true
+                    Enabled = true,
+                    QuestionnaireId = questionnaireId
                 },
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 2", InterviewId = interviewId},
-                    Enabled = true
+                    Enabled = true,
+                    QuestionnaireId = questionnaireId
                 },
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1,2)),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 3", InterviewId = Guid.NewGuid()},
-                    Enabled = false
+                    Enabled = false,
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777)
                 },
                 new
                 {
                     QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1,2,3)),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 4", InterviewId = Guid.NewGuid()},
-                    Enabled = true
+                    Enabled = true,
+                    QuestionnaireId = questionnaireId
                 },
             };
 
-            var factory = CreateInterviewFactory();
+            var interviewSummaryRepository = GetPostgresInterviewSummaryRepository();
+            var factory = CreateInterviewFactory(interviewSummaryRepository);
 
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
+                foreach (var expectedAudioAnswer in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
+                {
+                    interviewSummaryRepository.Store(new InterviewSummary
+                    {
+                        InterviewId = expectedAudioAnswer.Key,
+                        Status = InterviewStatus.Completed,
+                        ReceivedByInterviewer = false,
+                        QuestionnaireIdentity = expectedAudioAnswer.FirstOrDefault().QuestionnaireId.ToString()
+
+                    }, expectedAudioAnswer.Key);
+                }
+
                 foreach (var expectedMultimediaAnswer in expectedAudioAnswers)
                 {
                     factory.UpdateAnswer(expectedMultimediaAnswer.Answer.InterviewId, expectedMultimediaAnswer.QuestionId,
@@ -544,11 +581,13 @@ namespace WB.Tests.Integration
             });
 
             //act
-            var allAudioAnswers = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetAllAudioAnswers());
+            var allAudioAnswers = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetAudioAnswersByQuestionnaire(questionnaireId));
 
             //assert
             Assert.That(allAudioAnswers.Length, Is.EqualTo(3));
-            Assert.That(allAudioAnswers, Is.EquivalentTo(expectedAudioAnswers.Where(x => x.Enabled).Select(x => x.Answer)));
+            Assert.That(allAudioAnswers,
+                Is.EquivalentTo(expectedAudioAnswers.Where(x => x.QuestionnaireId == questionnaireId && x.Enabled)
+                    .Select(x => x.Answer)));
         }
 
         [Test]

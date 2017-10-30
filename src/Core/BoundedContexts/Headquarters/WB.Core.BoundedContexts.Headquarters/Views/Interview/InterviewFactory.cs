@@ -325,24 +325,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     EntityType = EntityType.Question
                 }));
 
-        public InterviewStringAnswer[] GetAllMultimediaAnswers(Guid[] multimediaQuestionIds)
+        public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity, Guid[] multimediaQuestionIds)
         {
             if (!multimediaQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
 
             return this.sessionProvider.GetSession().Connection
-                .Query<InterviewStringAnswer>($"SELECT {InterviewIdColumn}, {AsStringColumn} as answer " +
-                                              $"FROM {InterviewsTableName} " +
-                                              $"WHERE {EnabledColumn} = true " +
+                .Query<InterviewStringAnswer>($"SELECT i.{InterviewIdColumn}, i.{AsStringColumn} as answer " +
+                                              $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
+                                              $"WHERE questionnaireidentity = '{questionnaireIdentity}' " +
+                                              $"AND {EnabledColumn} = true " +
                                               $"AND {AsStringColumn} IS NOT NULL " +
                                               $"AND {EntityIdColumn} IN ({string.Join(",", multimediaQuestionIds.Select(x => $"'{x}'"))})")
                 .ToArray();
         }
 
-        public InterviewStringAnswer[] GetAllAudioAnswers()
+        public InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
             => this.sessionProvider.GetSession().Connection.Query<InterviewStringAnswer>(
-                $"SELECT {InterviewIdColumn}, {AsAudioColumn}->>'{nameof(AudioAnswer.FileName)}' as Answer " +
-                $"FROM {InterviewsTableName} " +
-                $"WHERE {AsAudioColumn} IS NOT NULL " +
+                $"SELECT i.{InterviewIdColumn}, i.{AsAudioColumn}->>'{nameof(AudioAnswer.FileName)}' as Answer " +
+                $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
+                $"WHERE questionnaireidentity = '{questionnaireIdentity}' " +
+                $"AND {AsAudioColumn} IS NOT NULL " +
                 $"AND {EnabledColumn} = true").ToArray();
 
         public Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
