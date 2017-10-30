@@ -107,7 +107,10 @@ export default {
 
     navigeToRoute() { },
 
-    closeInterview({ dispatch }) {
+    setupReviewMode({commit}){
+        commit("SET_REVIEW_MODE")
+    },
+
         modal.alert({
             title: Vue.$t("WebInterviewUI.CloseInterviewTitle"),
             message: Vue.$t("WebInterviewUI.CloseInterviewMessage"),

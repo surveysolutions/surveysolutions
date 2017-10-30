@@ -25,8 +25,10 @@ const scriptIncludedPromise = new Promise(resolve =>
         }
 
         interviewProxy.client.closeInterview = () => {
-            store.dispatch("closeInterview")
-            store.dispatch("stop")
+            if(!store.state.webinterview.isReviewMode) {
+                store.dispatch("closeInterview")
+                store.dispatch("stop")
+            }
         }
 
         interviewProxy.client.finishInterview = () => {
@@ -121,6 +123,11 @@ function hubStarter(options) {
             routeInteviewId = store.route.params.interviewId;
         }
         
+        if(options.review)
+        {
+            store.dispatch("setupReviewMode")
+        }
+
         const queryString = {
             interviewId: routeInteviewId,
             appVersion: config.appVersion
