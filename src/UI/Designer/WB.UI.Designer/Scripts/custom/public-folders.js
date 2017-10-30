@@ -40,11 +40,10 @@
             }
         },
         select: function (event, data) {
-            if (selectFolderCallback)
-                selectFolderCallback(data.node.key)
-//            logEvent(event, data, "current state=" + data.node.isSelected());
-//            var s = data.tree.getSelectedNodes().join(", ");
-//            $("#echoSelected").text(s);
+            if (selectFolderCallback) {
+                var nodeKey = data.node.isSelected() ? data.node.key : null;
+                selectFolderCallback(nodeKey);
+            }
         },
         contextMenu: {
             menu: function (node) {
