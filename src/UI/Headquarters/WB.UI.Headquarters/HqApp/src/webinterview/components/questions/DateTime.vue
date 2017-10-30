@@ -84,9 +84,9 @@
                         }
                         else {
                             this.$store.dispatch('answerDateQuestion', { 
-                                    identity: this.$me.id,
-                                    date: format(new Date(), DateFormats.dateTime)
-                                    });
+                                identity: this.$me.id,
+                                date: moment().format(DateFormats.dateTime)
+                            });
                         }
                     }
                 });
