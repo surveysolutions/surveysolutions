@@ -1090,4 +1090,10 @@
   <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
     <value>Вы хотите удалить карту?</value>
   </data>
+  <data name="MapDetails_DelinkUser" xml:space="preserve">
+    <value>Отвязать пользователя от карты</value>
+  </data>
+  <data name="MapDetails_InterviewerName" xml:space="preserve">
+    <value>Имя интервьюера</value>
+  </data>
 </root>
