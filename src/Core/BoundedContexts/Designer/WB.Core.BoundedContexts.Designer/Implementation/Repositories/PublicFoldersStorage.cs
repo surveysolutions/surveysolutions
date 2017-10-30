@@ -4,6 +4,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
@@ -11,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     public class PublicFoldersStorage : IPublicFoldersStorage
     {
         private readonly IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage;
+        private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage;
 
         QuestionnaireListViewFolder publicQuestionnairesFolder = new QuestionnaireListViewFolder()
         {
@@ -18,9 +20,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         };
 
 
-        public PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage )
+        public PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage,
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage)
         {
             this.folderStorage = folderStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public IEnumerable<QuestionnaireListViewFolder> GetSubFolders(Guid? folderId)
@@ -60,6 +64,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
         public void RemoveFolder(Guid id)
         {
             folderStorage.Remove(id);
+        }
+
+        public void AssignFolderToQuestionnaire(Guid questionnaireId, Guid? folderId)
+        {
+            var item = questionnaireStorage.GetById(questionnaireId.FormatGuid());
+            item.FolderId = folderId;
+            questionnaireStorage.Store(item, item.QuestionnaireId);
         }
     }
 }
