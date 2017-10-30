@@ -110,7 +110,7 @@ export default {
     setupReviewMode({commit}){
         commit("SET_REVIEW_MODE")
     },
-
+    closeInterview({ dispatch }) {
         modal.alert({
             title: Vue.$t("WebInterviewUI.CloseInterviewTitle"),
             message: Vue.$t("WebInterviewUI.CloseInterviewMessage"),
