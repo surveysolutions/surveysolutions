@@ -293,4 +293,12 @@
     <value>Укажите папку для опросника "{0}"</value>
     <comment>Укажите папку для опросника "{0}"</comment>
   </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Переименовать</value>
+    <comment>Переименовать</comment>
+  </data>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Создать подпапку</value>
+    <comment>Создать подпапку</comment>
+  </data>
 </root>

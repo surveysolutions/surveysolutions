@@ -168,6 +168,12 @@
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Create SubFolder</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
   <data name="AssignFolder" xml:space="preserve">
     <value>Assign Folder</value>
   </data>

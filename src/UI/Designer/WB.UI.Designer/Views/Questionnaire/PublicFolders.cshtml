@@ -11,13 +11,18 @@
 
     <script type="text/javascript">
         $(function () {
+            var locolizes = {
+                CreateSubFolder: "@QuestionnaireController.CreateSubFolder",
+                Edit: '@QuestionnaireController.Rename',
+                Delete: "@QuestionnaireController.Delete"
+            };
             var subFoldersUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetFolders" })';
             var rootFoldersUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetRootFolders" })';
             var addNodeUrl     = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "CreateFolder" })';
             var renameNodeUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RenameFolder" })';
             var removeNodeUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RemoveFolder" })';
 
-            window.foldersModel = new FoldersModel($("#jstree"), rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
+            window.foldersModel = new FoldersModel($("#jstree"), locolizes, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
         });
     </script>
 }

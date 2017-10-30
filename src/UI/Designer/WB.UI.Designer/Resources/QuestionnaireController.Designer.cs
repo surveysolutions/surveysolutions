@@ -241,6 +241,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create SubFolder.
+        /// </summary>
+        public static string CreateSubFolder {
+            get {
+                return ResourceManager.GetString("CreateSubFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -465,6 +474,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionnaireTreeFolders {
             get {
                 return ResourceManager.GetString("QuestionnaireTreeFolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        public static string Rename {
+            get {
+                return ResourceManager.GetString("Rename", resourceCulture);
             }
         }
         
