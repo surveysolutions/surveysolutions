@@ -114,7 +114,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interview.Levels["#"].QuestionsSearchCache.Add(rosterSizeQuestionId, new InterviewQuestion(rosterSizeQuestionId));
 
             var textListQuestion = interview.Levels["#"].QuestionsSearchCache[rosterSizeQuestionId];
-            textListQuestion.Answer = new string[] { "a1", "a2" };
+            textListQuestion.Answer = new[]{new InterviewTextListAnswer(1, "a1"), new InterviewTextListAnswer(2, "a2")};
 
             for (int i = 0; i < levelCount; i++)
             {

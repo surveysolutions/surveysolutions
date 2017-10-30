@@ -523,7 +523,6 @@
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_ordered_multi_option_question.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_qr_barcode_question.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_multi_option_question.cs" />
-    <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_text_list_question.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_time_question.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_integer_question.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_single_option_question.cs" />
