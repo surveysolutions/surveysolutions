@@ -10,7 +10,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 
         Because of = () =>
         {
-            filledQuestion = CreateFilledExportedQuestion(QuestionType.MultyOption, 3, new object[] {2m, 0m}, QuestionSubtype.MultyOption_Ordered);
+            filledQuestion = CreateFilledExportedQuestion(QuestionType.MultyOption, 3, new [] {2, 0}, QuestionSubtype.MultyOption_Ordered);
             disabledQuestion = CreateDisabledExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultyOption_Ordered, columnsCount: 3);
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.MultyOption, QuestionSubtype.MultyOption_Ordered, columnsCount: 3);
         };
