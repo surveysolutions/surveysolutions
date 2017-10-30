@@ -46,12 +46,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public QuestionnaireListView Load(QuestionnaireListInputModel input)
         {
-            var count = questionnaireListViewItemStorage.Query(_ => FilterQuestionnaires(_, input).Count());
+            var count = questionnaireListViewItemStorage.Query(_ => FilterQuestionnaires(_, input, isSupportFolders: false).Count());
 
             var sortOrder = input.Order.IsNullOrEmpty() ? "LastEntryDate  Desc" : input.Order;
 
             var records = questionnaireListViewItemStorage.Query(_ =>
-                FilterQuestionnaires(_, input).Select(x => new QuestionnaireListViewItem()
+                FilterQuestionnaires(_, input, isSupportFolders: false).Select(x => new QuestionnaireListViewItem()
                     {
                         CreatedBy = x.CreatedBy,
                         CreationDate = x.CreationDate,
@@ -79,8 +79,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             List<QuestionnaireListViewFolder> folders = Enumerable.Empty<QuestionnaireListViewFolder>().ToList();
             List<QuestionnaireListViewItem> questionnaires = Enumerable.Empty<QuestionnaireListViewItem>().ToList();
             int foldersCount = 0, questionnairesCount = 0;
+            var isSupportFolders = input.IsPublic;
 
-            if (input.IsPublic)
+            if (isSupportFolders)
             {
                 foldersCount = publicFoldersStorage.Query(_ => FilterFolders(_, input).Count());
                 folders = publicFoldersStorage.Query(_ => FilterFolders(_, input)
@@ -89,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                     .ToList());
             }
 
-            questionnairesCount = questionnaireListViewItemStorage.Query(_ => FilterQuestionnaires(_, input).Count());
+            questionnairesCount = questionnaireListViewItemStorage.Query(_ => FilterQuestionnaires(_, input, isSupportFolders: isSupportFolders).Count());
             var count = foldersCount + questionnairesCount;
 
             if (folders.Count < input.PageSize)
@@ -101,7 +102,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                 var sortOrder = input.Order.IsNullOrEmpty() ? "LastEntryDate  Desc" : input.Order;
 
                 questionnaires = questionnaireListViewItemStorage.Query(_ =>
-                    FilterQuestionnaires(_, input).Select(x => new QuestionnaireListViewItem()
+                    FilterQuestionnaires(_, input, isSupportFolders: isSupportFolders).Select(x => new QuestionnaireListViewItem()
                         {
                             CreatedBy = x.CreatedBy,
                             CreationDate = x.CreationDate,
@@ -126,9 +127,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         }
 
         private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> _,
-            QuestionnaireListInputModel input)
+            QuestionnaireListInputModel input, bool isSupportFolders)
         {
-            var result = _.Where(x => x.IsDeleted == false && x.FolderId == input.FolderId);
+            var result = _.Where(x => x.IsDeleted == false);
+            
+            if (isSupportFolders)
+                result = result.Where(x => x.FolderId == input.FolderId);
+
             if (!string.IsNullOrEmpty(input.SearchFor))
             {
                 var filterLowerCase = input.SearchFor.Trim().ToLower();
