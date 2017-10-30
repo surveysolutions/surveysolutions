@@ -2059,6 +2059,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delink User from map.
+        /// </summary>
+        public static string MapDetails_DelinkUser {
+            get {
+                return ResourceManager.GetString("MapDetails_DelinkUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer name.
+        /// </summary>
+        public static string MapDetails_InterviewerName {
+            get {
+                return ResourceManager.GetString("MapDetails_InterviewerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No results found.
         /// </summary>
         public static string NoResults {

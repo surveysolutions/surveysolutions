@@ -51,7 +51,7 @@
                         <text>
                         items["delete"] =
                         {
-                            name: "@Dashboard.DeleteMapUser",
+                            name: "@Pages.MapDetails_DelinkUser",
                             callback: model.deleteMapUser
                         };
                         </text>
@@ -96,14 +96,14 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li>MaxScale: <span>@Model.MaxScale</span></li>
-                            <li>MinScale: <span>@Model.MinScale</span></li>
+                            <li><b>MaxScale:</b> <span>@Model.MaxScale</span></li>
+                            <li><b>MinScale:</b> <span>@Model.MinScale</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li>Size: <span>@Model.Size</span></li>
-                            <li>Wkid: <span>@Model.Wkid</span></li>
+                            <li><b>Size:</b> <span>@Model.Size</span></li>
+                            <li><b>Wkid:</b> <span>@Model.Wkid</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
@@ -120,7 +120,7 @@
                        data-order="[[ 0, &quot;asc&quot; ]]" data-searching="true">
                     <thead>
                         <tr>
-                            <th>@Pages.Interviewers_UserNameTitle</th>
+                            <th>@Pages.MapDetails_InterviewerName</th>
                         </tr>
                     </thead>
                 </table>
