@@ -1,4 +1,4 @@
-﻿function FoldersModel(element, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton) {
+﻿function FoldersModel(element, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback) {
     var self = this;
 
     var glyph_opts = {
@@ -38,6 +38,13 @@
                 url: subNodesUrl,
                 data: { parentId: node.key }
             }
+        },
+        select: function (event, data) {
+            if (selectFolderCallback)
+                selectFolderCallback(data.node.key)
+//            logEvent(event, data, "current state=" + data.node.isSelected());
+//            var s = data.tree.getSelectedNodes().join(", ");
+//            $("#echoSelected").text(s);
         },
         contextMenu: {
             menu: function (node) {

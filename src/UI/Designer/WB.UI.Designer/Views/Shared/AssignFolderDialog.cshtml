@@ -9,10 +9,23 @@
         var addNodeUrl      = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "CreateFolder" })';
         var renameNodeUrl   = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RenameFolder" })';
         var removeNodeUrl   = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RemoveFolder" })';
-        var assignFolderUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RemoveFolder" })';
+        var assignFolderUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "AssignFolderToQuestionnaire" })';
         var supportRadioButton = true;
+        var selectFolderCallback = function (folderId) {
+            var questionnaireId = $('#assign-folder-modal-questionnaire-id').val();
+            window.foldersModel.postRequest(
+                assignFolderUrl,
+                {
+                    id: folderId,
+                    questionnaireId: questionnaireId
+                },
+                function() {
+                    location.reload(); 
+                });
 
-        window.foldersModel = new FoldersModel($("#folderstree"), rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, assignFolderUrl);
+        };
+
+        window.foldersModel = new FoldersModel($("#folderstree"), rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback);
     });
 </script>
 
