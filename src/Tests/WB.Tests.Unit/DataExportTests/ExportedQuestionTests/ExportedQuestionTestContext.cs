@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
                 Answer = value,
                 QuestionState = isDisabled ? QuestionState.Valid : QuestionState.Valid | QuestionState.Enabled,
             };
-            decimal columnIndex = 0;
+            int columnIndex = 0;
             var columnValues = columnNames.Select(v => columnIndex++).ToArray();
             ExportedQuestionHeaderItem headerItem = new ExportedQuestionHeaderItem()
             {
