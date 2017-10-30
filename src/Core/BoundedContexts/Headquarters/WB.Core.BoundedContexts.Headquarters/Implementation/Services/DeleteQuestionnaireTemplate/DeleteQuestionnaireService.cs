@@ -56,12 +56,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             this.logger.Warn($"Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user");
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
             var questionnaire =
-                this.questionnaireBrowseItemReader.GetById(new QuestionnaireIdentity(questionnaireId, questionnaireVersion).ToString());
+                this.questionnaireBrowseItemReader.GetById(questionnaireIdentity.ToString());
 
             if (questionnaire != null)
             {
-                this.auditLog.Append($"Questionnaire \"{questionnaire.Title} ver. {questionnaire.Version}\" delete was triggered");
+                this.auditLog.QuestionnaireDeleted(questionnaire.Title, questionnaireIdentity);
 
                 if (!questionnaire.Disabled)
                 {
