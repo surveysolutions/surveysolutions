@@ -166,7 +166,6 @@ function hubStarter(options) {
 export async function getInstance(options) {
     await scriptIncludedPromise
     return await hubStarter(options)
-    //return jQuery.signalR.interview
 }
 
 async function getInterviewHub() {

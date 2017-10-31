@@ -24,9 +24,9 @@ function wrap(name, method, section) {
             if (window.CONFIG.verboseMode && !(window).NODEBUG) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
                 if (argument && argument.hasOwnProperty("source"))
-                    console.debug("call", section, "from", argument.source, name, argument)
+                    console.debug("call", section, "from", argument.source, name, argument, new Error())
                 else
-                    console.debug("call", section, name, argument)
+                    console.debug("call", section, name, argument, new Error())
             }
 
             const result = method.apply(this, arguments)

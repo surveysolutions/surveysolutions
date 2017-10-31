@@ -27,13 +27,13 @@ const store = safeStore({
     actions,
     mutations,
     getters: {
-        interviewId(state) {
-            if(state.route == null) return null;
-            return state.route.params.interviewId;
-        },
-        sectionId(state){
-            if(state.route == null) return null;
-            return state.route.params.sectionId;
+        loadingProgress(state) {
+            const loadedCount = state.loadedEntitiesCount
+            const totalCount = state.entities != null 
+                ? state.entities.length
+                : 0
+
+            return loadedCount === 0 || totalCount === 0 || (loadedCount < totalCount)
         }
     }
 })

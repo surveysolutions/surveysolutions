@@ -73,7 +73,7 @@
                 this.fetchInterviewStatus()
         },
         watch: {
-            $route() {
+            ["$route.params.sectionId"]() {
                 this.fetchSidebar();
                 this.fetchInterviewStatus()
             }

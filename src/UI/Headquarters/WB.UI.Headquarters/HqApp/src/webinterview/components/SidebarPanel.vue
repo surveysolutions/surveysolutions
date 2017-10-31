@@ -71,10 +71,10 @@
             }
         },
         watch: {
-            $route(to, from) {
+             ["$route.params.sectionId"]() {
                 this.update()
             },
-            "panel"(to, from) {
+            "panel"() {
                 this.update()
             }
         },
