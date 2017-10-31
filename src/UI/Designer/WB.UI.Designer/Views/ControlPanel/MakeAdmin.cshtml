@@ -4,11 +4,17 @@
     this.ViewBag.Title = "Control Panel: Make the user an administrator";
 }
 
+@section scripts
+{
+    @Scripts.Render("~/editform")
+}
+
 <div class="page-header">
     <h3>
         Make the user an administrator
     </h3>
 </div>
+@Html.Partial("_alerts")
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
