@@ -23,7 +23,7 @@ export default {
     watch: {
         ["$route.params.sectionId"](to) {
             this.$store.dispatch("changeSection", to)
-            this.$store.dispatch("getFlags");
+            this.$store.dispatch("fetchFlags");
             this.$store.dispatch("onBeforeNavigate")
         },
 

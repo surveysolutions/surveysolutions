@@ -16,7 +16,7 @@
         </div>
 
         <div class="question-editor" :class="questionEditorClass">
-            <wb-flag v-if="$store.state.review && !noFlag" />
+            <wb-flag v-if="$store.getters.isReviewMode === true && !noFlag" />
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
             <slot />

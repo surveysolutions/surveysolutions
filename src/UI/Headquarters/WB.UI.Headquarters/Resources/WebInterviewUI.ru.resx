@@ -372,4 +372,7 @@
   <data name="CommentPosting" xml:space="preserve">
     <value>Отправка...</value>
   </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Интервью получено интервьюером и не может быть изменено</value>
+  </data>
 </root>
