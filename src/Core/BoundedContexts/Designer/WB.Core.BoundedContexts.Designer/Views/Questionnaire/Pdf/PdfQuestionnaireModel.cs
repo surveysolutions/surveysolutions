@@ -308,15 +308,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             switch (variable.Type)
             {
                 case VariableType.String:
-                    return PdfStrings.VariableType_String;
+                    return "string";
                 case VariableType.Boolean:
-                    return PdfStrings.VariableType_Boolean;
+                    return "boolean";
                 case VariableType.DateTime:
-                    return PdfStrings.VariableType_Date;
+                    return "datetime";
                 case VariableType.Double:
-                    return PdfStrings.VariableType_Double;
+                    return "double";
                 case VariableType.LongInteger:
-                    return PdfStrings.VariableType_Long;
+                    return "long";
                 default:
                     return string.Empty;
             }
@@ -415,11 +415,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetQuestionScope(IQuestion question)
         {
-            if (question.QuestionScope == QuestionScope.Interviewer && question.Featured)
+            switch (question.QuestionScope)
             {
-                return PdfStrings.QuestionScope_Identifying;
+                case QuestionScope.Interviewer:
+                    if (question.Featured)
+                    {
+                        return PdfStrings.QuestionScope_Identifying;
+                    }
+                    return string.Empty;
+                case QuestionScope.Supervisor:
+                    return PdfStrings.QuestionScope_Supervisor;
+                case QuestionScope.Headquarter:
+                    return PdfStrings.QuestionScope_Identifying;
+                case QuestionScope.Hidden:
+                    return PdfStrings.QuestionScope_Hidden;
+                default:
+                    return string.Empty;
             }
-            return question.QuestionScope.ToString();
         }
 
         public bool IsInterviewerQuestion(IQuestion question) => question.QuestionScope == QuestionScope.Interviewer && !question.Featured;

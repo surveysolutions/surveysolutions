@@ -294,22 +294,13 @@
   <data name="Variable" xml:space="preserve">
     <value>Переменная</value>
   </data>
-  <data name="VariableType_Boolean" xml:space="preserve">
-    <value>логическая</value>
-  </data>
-  <data name="VariableType_Date" xml:space="preserve">
-    <value>дата-время</value>
-  </data>
-  <data name="VariableType_Double" xml:space="preserve">
-    <value>вещественная</value>
-  </data>
-  <data name="VariableType_Long" xml:space="preserve">
-    <value>целая</value>
-  </data>
-  <data name="VariableType_String" xml:space="preserve">
-    <value>строковая</value>
-  </data>
   <data name="Legend" xml:space="preserve">
     <value>Легенда</value>
+  </data>
+  <data name="QuestionScope_Hidden" xml:space="preserve">
+    <value>скрытый</value>
+  </data>
+  <data name="QuestionScope_Supervisor" xml:space="preserve">
+    <value>супервизор</value>
   </data>
 </root>
