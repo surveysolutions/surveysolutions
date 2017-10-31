@@ -30,6 +30,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasEditableIdentifyingQuestions { get; }
 
+        bool ReceivedByInterviewer { get; }
+
         InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
 

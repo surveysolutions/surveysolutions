@@ -26,8 +26,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
             var interview = this.statefulInterviewRepository.Get(interviewId);
+            var isReview = hub.Context.QueryString[@"review"].ToBool(false);
 
-            hub.Clients.OthersInGroup(interviewId).closeInterview();
+            if (!isReview)
+            {
+                hub.Clients.OthersInGroup(interviewId).closeInterview();
+            }
 
             hub.Groups.Add(hub.Context.ConnectionId, interview.QuestionnaireIdentity.ToString());
 

@@ -356,6 +356,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
+        public bool ReceivedByInterviewer => this.properties.IsReceivedByInterviewer;
+
         public bool HasGroup(Identity group) => this.Tree.GetGroup(group) != null;
 
         public string GetRosterTitle(Identity rosterIdentity)

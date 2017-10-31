@@ -70,6 +70,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flagged.
+        /// </summary>
+        public static string FlagTitleFlagged {
+            get {
+                return ResourceManager.GetString("FlagTitleFlagged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not flagged.
+        /// </summary>
+        public static string FlagTitleUnflagged {
+            get {
+                return ResourceManager.GetString("FlagTitleUnflagged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Updated {{ date }}.
         /// </summary>
         public static string LastUpdated {

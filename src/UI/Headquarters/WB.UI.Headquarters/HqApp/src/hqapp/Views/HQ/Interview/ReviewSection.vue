@@ -6,7 +6,7 @@
 <script>
 export default {
   mounted() {
-    this.$store.dispatch("getFlags");
+    this.$store.dispatch("fetchFlags");
   }
 };
 </script>
