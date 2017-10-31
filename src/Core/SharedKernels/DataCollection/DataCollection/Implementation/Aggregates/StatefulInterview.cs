@@ -339,7 +339,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
 
-            var answeredQuestions = this.Tree.AllNodes.OfType<InterviewTreeQuestion>().Where(q => q.IsAnswered()).Select(q => q.Identity);
             this.UpdateTreeWithDependentChanges(this.Tree, questionnaire);
         }
 

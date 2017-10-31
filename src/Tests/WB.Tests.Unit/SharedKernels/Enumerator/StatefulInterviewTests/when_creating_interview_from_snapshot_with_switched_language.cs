@@ -11,13 +11,12 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    internal class when_creating_interview_from_snapshot_with_questions_answer : StatefulInterviewTestsContext
+    internal class when_creating_interview_from_snapshot_with_switched_language : StatefulInterviewTestsContext
     {
         [OneTimeSetUp]
         public void Establish()
@@ -50,27 +49,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 questionnaireRepository: questionnaireRepository, shouldBeInitialized: false
                 );
 
-            var answersDtos = new[]
-            {
-                CreateAnsweredQuestionSynchronizationDto(integerQuestionId, rosterVector, 1),
-            };
-
-            var rosterInstances = new Dictionary<InterviewItemId, RosterSynchronizationDto[]>
-            {
-                {
-                    Create.Entity.InterviewItemId(fixedRosterIdentity.Id, fixedRosterIdentity.RosterVector),
-                    new[] {Create.Entity.RosterSynchronizationDto(fixedRosterIdentity.Id, fixedRosterIdentity.RosterVector.Shrink(), fixedRosterIdentity.RosterVector.Last())}
-                },
-                {
-                    Create.Entity.InterviewItemId(fixedNestedRosterIdentity.Id, fixedNestedRosterIdentity.RosterVector),
-                    new[] {Create.Entity.RosterSynchronizationDto(fixedNestedRosterIdentity.Id, fixedNestedRosterIdentity.RosterVector.Shrink(), fixedNestedRosterIdentity.RosterVector.Last())}
-                }
-            };
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
-                userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
+                userId: userId);
 
             command = Create.Command.CreateInterviewFromSnapshot(userId, synchronizationDto);
-
+            command.SynchronizedInterview.Language = "42";
             Because();
         }
 
@@ -85,20 +68,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.GetFailedValidationMessages(questionIdentity, "Error").Count().ShouldEqual(0);
 
         [Test]
-        public void It_should_create_roster_instance() => 
-            interview.GetRoster(fixedRosterIdentity).ShouldNotBeNull();
-
-        [Test]
-        public void It_should_create_nested_roster_instance() => 
-            interview.GetRoster(fixedNestedRosterIdentity).ShouldNotBeNull();
-
-        [Test]
-        public void It_should_set_answer() => 
-            interview.GetQuestion(questionIdentity).GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.ShouldEqual(1);
-
-        [Test]
-        public void It_should_not_switch_translation() =>
-            Assert.IsEmpty(this.eventContext.GetEvents<TranslationSwitched>());
+        public void It_should_switch_translation() =>
+            Assert.That(this.eventContext.GetEvent<TranslationSwitched>().Language, Is.EqualTo("42"));
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;
