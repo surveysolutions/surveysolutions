@@ -297,19 +297,10 @@
   <data name="Variable" xml:space="preserve">
     <value>Variable</value>
   </data>
-  <data name="VariableType_Boolean" xml:space="preserve">
-    <value>boolean</value>
+  <data name="QuestionScope_Hidden" xml:space="preserve">
+    <value>hidden</value>
   </data>
-  <data name="VariableType_Date" xml:space="preserve">
-    <value>datetime</value>
-  </data>
-  <data name="VariableType_Double" xml:space="preserve">
-    <value>double</value>
-  </data>
-  <data name="VariableType_Long" xml:space="preserve">
-    <value>long</value>
-  </data>
-  <data name="VariableType_String" xml:space="preserve">
-    <value>string</value>
+  <data name="QuestionScope_Supervisor" xml:space="preserve">
+    <value>supervisor</value>
   </data>
 </root>
