@@ -619,6 +619,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\Review\when_getting_entities_for_review.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StatefullInterview.InvalidQuestions.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_creating_interview_from_snapshot_when_question_type_is_wrong.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_creating_interview_from_snapshot_with_switched_language.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_all_enabled_questions_and_census_interview_and_has_prefilled_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_all_enabled_questions_and_interview_is_not_census_and_has_prefilled_question.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_count_of_enabled_questions_and_interview_not_census_and_has_prefilled_question.cs" />
@@ -627,6 +628,7 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_supervisor_leaves_a_comment.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_restoring_interview_state_from_sync_package_for_questionnaire_with_numeric_rosters.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_creating_interview_from_snapshot_with_questions_answer.cs" />
+    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_synchronizing_interview_with_set_language.cs" />
     <Compile Include="SharedKernels\Enumerator\Utils\ObservableRangeCollectionTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\AnsweringModelTests.cs" />
     <Compile Include="SharedKernels\Enumerator\ViewModels\AudioQuestionViewModelTests.cs" />
