@@ -1,4 +1,6 @@
-﻿@using WB.Core.BoundedContexts.Headquarters.Services
+﻿@using WB.Core.BoundedContexts.Headquarters
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @model WB.Core.BoundedContexts.Headquarters.Views.Maps.MapBrowseItem
 
@@ -98,19 +100,19 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>MaxScale:</b> <span>@Model.MaxScale</span></li>
-                            <li><b>MinScale:</b> <span>@Model.MinScale</span></li>
+                            <li><b>Max Scale:</b> <span>@Model.MaxScale</span></li>
+                            <li><b>Min Scale:</b> <span>@Model.MinScale</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>Size:</b> <span>@Model.Size</span></li>
+                            <li><b>Size:</b> <span>@FileSizeUtils.SizeInMegabytes(Model.Size) </span></li>
                             <li><b>Wkid:</b> <span>@Model.Wkid</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>ImportDate:</b> <span>@Model.ImportDate</span></li>
+                            <li><b>Imported on:</b> <span>@(Model.ImportDate.HasValue ? Model.ImportDate.Value.FormatDateWithTime():"")</span></li>
                         </ul>
                     </div>
                 </div>
