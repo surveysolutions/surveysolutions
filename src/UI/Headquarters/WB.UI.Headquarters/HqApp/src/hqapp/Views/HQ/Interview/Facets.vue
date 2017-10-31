@@ -17,7 +17,12 @@
                             <strong>{{lastUpdateDate}}</strong>
                         </li>
                         <li>
-                            <strong>{{ this.$t('Details.Responsible', { responsible: this.$config.model.responsible }) }}</strong>
+                            <b>
+                                {{ this.$t('Details.Responsible') }}
+                                <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">
+                                    {{this.$config.model.responsible}}
+                                </a>
+                            </b>
                         </li>
                     </ul>
                     <div class="filter-actions-block">
@@ -114,6 +119,9 @@ export default {
     }
   },
   computed: {
+    responsibleRole() {
+        return this.$config.model.responsibleRole.toLowerCase();
+    },
     interviewerShouldbeSelected() {
         return this.$config.model.approveReject.interviewerShouldbeSelected;
     },
