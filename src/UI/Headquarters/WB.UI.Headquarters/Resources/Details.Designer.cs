@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Responsible: {{ responsible }}.
+        ///   Looks up a localized string similar to Responsible .
         /// </summary>
         public static string Responsible {
             get {
