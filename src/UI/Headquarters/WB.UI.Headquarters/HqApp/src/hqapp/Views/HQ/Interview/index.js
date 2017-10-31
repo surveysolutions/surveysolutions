@@ -1,8 +1,11 @@
-import Review from "./Review"
-import localStore from "./store"
 import Vue from 'vue'
-import Cover from "~/webinterview/components/Cover"
-import ReviewSection from "./ReviewSection"
+
+import localStore from "./store"
+
+const Review = () => import(/* webpackChunkName: "review" */"./Review")
+const Cover = () => import(/* webpackChunkName: "review" */"~/webinterview/components/Cover")
+const ReviewSection = () => import(/* webpackChunkName: "review" */"./ReviewSection")
+
 
 export default class ReviewComponent {
     constructor(rootStore) {
@@ -48,6 +51,7 @@ export default class ReviewComponent {
     }
 
     initialize() {
+
         const installApi = require("~/webinterview/api").install
         installApi(Vue, {
             store: this.rootStore
