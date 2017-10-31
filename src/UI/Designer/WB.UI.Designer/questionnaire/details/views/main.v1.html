@@ -355,7 +355,7 @@
                                                 <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default"
                                                     target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
                                         
-                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                                <button ng-hide="translation.form.$dirty" ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                                                     ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
                                                     <span ng-i18next>Update</span>
                                                 </button>
