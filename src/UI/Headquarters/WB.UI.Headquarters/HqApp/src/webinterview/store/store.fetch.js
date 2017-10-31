@@ -3,7 +3,11 @@ import { getLocationHash } from "~/shared/helpers"
 
 const fetch = {
     state: {
-        scroll: null
+        scroll: null,
+        fetchState: {
+            uploaded: null,
+            total: null
+        }
     },
     actions: {
         fetch({ commit, rootState }, {id, ids, done}) {
@@ -18,8 +22,8 @@ const fetch = {
             commit("SET_FETCH_IN_PROGRESS", amount)
         },
 
-        sectionRequireScroll({commit}, scroll) {
-            commit("SET_SCROLL_TARGET", scroll)
+        sectionRequireScroll({commit}, { id }) {
+            commit("SET_SCROLL_TARGET", { id })
         },
         uploadProgress({ commit, rootState }, {id, now, total}) {
             commit("SET_UPLOAD_PROGRESS", {

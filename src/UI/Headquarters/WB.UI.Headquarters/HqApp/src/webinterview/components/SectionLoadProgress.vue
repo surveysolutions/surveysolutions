@@ -27,7 +27,7 @@
                     this.visible = this.to
                 }
             },
-            '$store.state.webinterview.connection.isDisconnected' (to, from) {
+            '$store.state.webinterview.connection.isDisconnected' (to) {
                 if (to) {
                     this.visible = false
                 }
@@ -35,12 +35,7 @@
         },
         computed: {
             isLoading() {
-                const loadedCount = this.$store.state.webinterview.loadedEntitiesCount
-                const totalCount = this.$store.state.webinterview.entities != null 
-                    ? this.$store.state.webinterview.entities.length
-                    : 0
-
-                return loadedCount === 0 || totalCount === 0 || (loadedCount < totalCount)
+                return this.$store.getters.loadingProgress;
             }
         }
     }

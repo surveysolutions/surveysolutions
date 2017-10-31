@@ -10,62 +10,51 @@ export default class ReviewComponent {
     }
 
     get routes() {
-        return [
-            {
-                path: '/Interview/Review/:interviewId',
-                component: Review,
-                children: [
-                    {
-                        path: '',
-                        component: Cover,
-                        props: {
-                            navigateToPrefilled: true
-                        }
-                    },
-                    {
-                        path: 'Cover',
-                        name: 'prefilled',
-                        component: Cover,
-                        props: {
-                            navigateToPrefilled: true
-                        }
-                    },
-                    {
-                        path: 'Section/:sectionId',
-                        name: 'section',
-                        component: ReviewSection
+        return [{
+            path: '/Interview/Review/:interviewId',
+            component: Review,
+            children: [{
+                    path: '',
+                    component: Cover,
+                    props: {
+                        navigateToPrefilled: true
                     }
-                ]
-            }
-        ]
+                },
+                {
+                    path: 'Cover',
+                    name: 'prefilled',
+                    component: Cover,
+                    props: {
+                        navigateToPrefilled: true
+                    }
+                },
+                {
+                    path: 'Section/:sectionId',
+                    name: 'section',
+                    component: ReviewSection
+                }
+            ]
+        }]
     }
 
-    beforeEnter(to, from, next) {
+    async beforeEnter(to, from, next) {
 
-        Vue.$api.hub({
+        await Vue.$api.hub({
             interviewId: to.params["interviewId"],
             review: true
-        }).then(() => {
-            if (to.name === "section") {
-                Vue.$api.call(api => api.isEnabled(to.params["sectionId"])).then((isEnabled) => {
-                    if (!isEnabled) {
-                        next(false);
-                    } else {
-                        next();
-                    }
-                });
-            } else {
-                next();
-            }
-
-            next();
         })
+        
+        next();
     }
 
     initialize() {
         const installApi = require("~/webinterview/api").install
-        installApi(Vue, { store: this.rootStore });
+        installApi(Vue, {
+            store: this.rootStore
+        });
     }
 
-    get modules() { return localStore; }
+    get modules() {
+        return localStore;
+    }
 }

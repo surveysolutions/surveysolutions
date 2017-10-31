@@ -16,27 +16,41 @@
         beforeMount() {
             this.loadSection()
         },
+
         watch: {
-            $route() {
-                this.loadSection()
+            ["$route.params.sectionId"]() {
+                 this.loadSection()
             },
+
+            ["$store.state.webinterview.fetch.scroll"](to) {
+                if(to != null) {
+                    this.scroll();
+                }
+            },
+
+            ["$store.getters.loadingProgress"]() {
+                this.scroll()
+            },
+
             fetchProgress(to) {
                 if (to === 0) {
                     this.scroll()
                 } else {
-                    // cancel scroll - there is still some fetch activity occure
+                    // cancel scroll - there is still some fetch activity occur
                     this.scroll.cancel()
                 }
             }
         },
+
         data: () => {
             return {
                 // scrolls current section view when all fetch actions are done
                 scroll: debounce(function () {
                     this.$store.dispatch("scroll")
-                }, 200)
+                }, 100)
             }
         },
+
         computed: {
             entities() {
                 return this.$store.state.webinterview.entities

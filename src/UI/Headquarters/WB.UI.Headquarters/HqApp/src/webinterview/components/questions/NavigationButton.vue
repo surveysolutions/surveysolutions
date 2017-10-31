@@ -49,7 +49,7 @@
             }
         },
         watch: {
-            $route(to, fro, ) {
+            ["$route.params.sectionId"]() {
                 this.fetch();
             }
         },
