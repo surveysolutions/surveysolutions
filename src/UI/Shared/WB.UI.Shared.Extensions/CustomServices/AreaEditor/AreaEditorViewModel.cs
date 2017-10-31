@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
@@ -166,7 +165,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
        
-        public IMvxCommand SwitchMapCommand => new MvxCommand<MapDescription>((MapDescription map) => { this.SelectedMap = map.MapName; });
+        public IMvxCommand SwitchMapCommand => 
+            new MvxCommand<MapDescription>(mapDescription =>
+            {
+                this.SelectedMap = mapDescription.MapName;
+                IsPanelVisible = false;
+            });
 
        
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
@@ -243,44 +247,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public IMvxCommand ShowPanelCommand => new MvxCommand(() =>
         {
             IsPanelVisible = !IsPanelVisible;
-        });
-
-        
-
-        public IMvxAsyncCommand UpdateMapsCommand => new MvxAsyncCommand(async () =>
-        {
-            try
-            {
-                if (!this.IsInProgress)
-                {
-                    this.IsInProgress = true;
-                    this.cancellationTokenSource = new CancellationTokenSource();
-                    await this.mapService.SyncMaps(this.cancellationTokenSource.Token).ConfigureAwait(false);
-
-                    this.AvailableMaps = new MvxObservableCollection<MapDescription>(this.mapService.GetAvailableMaps());
-                    this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
-
-                    if (this.Map == null)
-                    {
-                        this.ReloadMap();
-                        this.StartEditAreaCommand.Execute();
-                    }
-                }
-                else
-                {
-                    if (this.cancellationTokenSource != null && this.cancellationTokenSource.Token.CanBeCanceled)
-                        this.cancellationTokenSource.Cancel();
-                }
-            }
-            catch (Exception exc)
-            {
-                logger.Error("Error occured on map update.", exc);
-                this.userInteractionService.ShowToast(UIResources.AreaMap_UpdateFailed);
-            }
-            finally
-            {
-                this.IsInProgress = false;
-            }
         });
 
         private CancellationTokenSource cancellationTokenSource;
