@@ -798,6 +798,7 @@
     <Content Include="questionnaire\content\fonts\Roboto300.woff" />
     <Content Include="Views\Questionnaire\PublicFolders.cshtml" />
     <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
+    <Content Include="Views\Shared\_alerts.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
