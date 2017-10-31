@@ -30,6 +30,12 @@ export default {
         }
     },
 
+    watch: {
+        state(value) {
+            this.value = value;
+        }
+    },
+
     methods: {
         change() {
             this.$emit("change", { id: this.id, value: this.value });
