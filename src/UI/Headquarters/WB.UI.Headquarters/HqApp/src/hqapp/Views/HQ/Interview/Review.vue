@@ -17,6 +17,7 @@
 import Facets from "./Facets";
 import SearchResults from "./SearchResults";
 import Sidebar from "~/webinterview/components/Sidebar";
+import Vue from "vue"
 
 export default {
 
@@ -66,6 +67,9 @@ export default {
             window.addEventListener("resize", self.onResize);
             self.onResize();
         });
+        Vue.nextTick(() => {
+            window.ajustNoticeHeight()
+        })
     },
 
     components: {
