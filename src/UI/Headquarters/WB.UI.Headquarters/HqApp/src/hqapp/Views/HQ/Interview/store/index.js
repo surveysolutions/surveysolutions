@@ -22,6 +22,11 @@ const store = {
                 return api.reject(rejection.comment, rejection.assignTo);
             });
         }
+    },
+    getters: {
+        isReviewMode() {
+            return true;
+        }
     }
 }
 

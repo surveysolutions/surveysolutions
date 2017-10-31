@@ -25,10 +25,10 @@ const scriptIncludedPromise = new Promise(resolve =>
         }
 
         interviewProxy.client.closeInterview = () => {
-            if(!store.state.webinterview.isReviewMode) {
-                store.dispatch("closeInterview")
-                store.dispatch("stop")
-            }
+            if(store.getters.isReviewMode === true) 
+                return
+            store.dispatch("closeInterview")
+            store.dispatch("stop")
         }
 
         interviewProxy.client.finishInterview = () => {
