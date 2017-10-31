@@ -168,9 +168,6 @@
   <data name="SearchPlaceholder" xml:space="preserve">
     <value>Search...</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
   <data name="ZeroRecords" xml:space="preserve">
     <value>No matching records found</value>
   </data>
