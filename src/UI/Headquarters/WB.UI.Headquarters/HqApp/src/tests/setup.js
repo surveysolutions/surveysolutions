@@ -27,6 +27,4 @@ class ApiMocker {
    
 }
 
-//console.log(jest);
-
 global.ApiMocker = ApiMocker;

@@ -19,9 +19,21 @@ import SearchResults from "./SearchResults";
 import Sidebar from "~/webinterview/components/Sidebar";
 
 export default {
-    data() {
-        return {};
+
+    watch: {
+        ["$route.params.sectionId"](to) {
+            this.$store.dispatch("changeSection", to)
+            this.$store.dispatch("getFlags");
+            this.$store.dispatch("onBeforeNavigate")
+        },
+
+        ["$route.query.question"](to) {
+            if (to != null) {
+                this.$store.dispatch("sectionRequireScroll", { id: to })
+            }
+        }
     },
+
     computed: {
         classes() {
             const sidebar = this.$store.state.webinterview.sidebar;
@@ -36,12 +48,14 @@ export default {
             };
         }
     },
+
     methods: {
         onResize() {
             var screenWidth = document.documentElement.clientWidth;
             this.$store.dispatch("screenWidthChanged", screenWidth);
         }
     },
+
     beforeMount() {
         this.$store.dispatch("getLanguageInfo");
         this.$store.dispatch("loadInterview");
@@ -53,11 +67,13 @@ export default {
             self.onResize();
         });
     },
+
     components: {
         Facets,
         SearchResults,
         Sidebar
     },
+
     beforeDestroy() {
         window.removeEventListener("resize", this.onResize);
     }
