@@ -381,4 +381,7 @@
   <data name="CommentPosting" xml:space="preserve">
     <value>Posting...</value>
   </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Interview is received by interviewer and cannot be modified</value>
+  </data>
 </root>

@@ -13,8 +13,10 @@
                 <label>{{ $t("WebInterviewUI.CommentYours") }}</label>
                 <div class="form-group">
                     <div class="input-group comment-field">
-                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
-                            :placeholder='$t("WebInterviewUI.CommentEnter")' />
+                        <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
+                            :placeholder='$t("WebInterviewUI.CommentEnter")' 
+                            :disabled="$store.state.webinterview.receivedByInterviewer"
+                            :title="inputTitle"/>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default btn-post-comment"
                                 :class="buttonClass" @click="postComment($event)" :disabled="!allowPostComment">
@@ -34,7 +36,6 @@
 
     export default {
         mixins: [entityPartial],
-        name: "wb-remove-answer",
         data() {
             return {
                 comment: null,
@@ -79,9 +80,16 @@
         },
         computed: {
             allowPostComment() {
-                return this.comment && this.comment.trim().length > 0 && !this.$me.postingComment;
+                return this.comment && 
+                       this.comment.trim().length > 0 &&
+                       !this.$me.postingComment;
             },
-
+            inputTitle() {
+                if (this.$store.state.webinterview.receivedByInterviewer === true) {
+                    return this.$t('WebInterviewUI.InterviewReceivedCantModify')
+                }
+                return "";
+            },
             buttonClass() {
                 return this.isActive ? 'comment-added' : null
             },

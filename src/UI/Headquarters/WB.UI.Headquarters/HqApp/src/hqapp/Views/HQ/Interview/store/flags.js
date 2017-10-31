@@ -15,7 +15,7 @@ export default {
                 });
             });
         },
-        async getFlags({commit, rootState}){
+        async fetchFlags({commit, rootState}){
             const flags = await Vue.$api.call(api => {
                 return api.getFlags(rootState.route.params.sectionId);
             });

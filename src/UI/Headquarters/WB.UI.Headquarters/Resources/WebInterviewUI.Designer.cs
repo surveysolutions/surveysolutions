@@ -547,6 +547,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview is received by interviewer and cannot be modified.
+        /// </summary>
+        internal static string InterviewReceivedCantModify {
+            get {
+                return ResourceManager.GetString("InterviewReceivedCantModify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading....
         /// </summary>
         internal static string Loading {
