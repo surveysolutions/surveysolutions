@@ -123,11 +123,6 @@ function hubStarter(options) {
             routeInteviewId = store.route.params.interviewId;
         }
         
-        if(options.review)
-        {
-            store.dispatch("setupReviewMode")
-        }
-
         const queryString = {
             interviewId: routeInteviewId,
             appVersion: config.appVersion
