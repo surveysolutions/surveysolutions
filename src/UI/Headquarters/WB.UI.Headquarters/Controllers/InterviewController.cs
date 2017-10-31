@@ -112,6 +112,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 StatusName = interviewSummary.Status.ToLocalizeString(),
                 Responsible = interviewSummary.ResponsibleName,
                 ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
+                ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
+                                            Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
+                                            "javascript:void(0);",
                 InterviewsUrl = authorizedUser.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ")
             });
         }
@@ -190,5 +193,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string ResponsibleRole { get; set; }
 
         public string InterviewsUrl { get; set; }
+
+        public string ResponsibleProfileUrl { get; set; }
     }
 }
