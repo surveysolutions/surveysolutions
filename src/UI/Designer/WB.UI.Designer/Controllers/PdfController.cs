@@ -87,7 +87,7 @@ namespace WB.UI.Designer.Controllers
                 Thread.CurrentThread.CurrentCulture = culture;
                 Thread.CurrentThread.CurrentUICulture = culture;
             }
-            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName, translation);
+            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName, translation, false);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -98,9 +98,9 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
-        public ActionResult PrintPreview(Guid id, Guid? translation)
+        public ActionResult PrintPreview(Guid id)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation: null, useDefaultTranslation: true);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -229,9 +229,9 @@ namespace WB.UI.Designer.Controllers
             return path;
         }
 
-        private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation)
+        private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
-            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName, translation);
+            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
             if (questionnaire == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

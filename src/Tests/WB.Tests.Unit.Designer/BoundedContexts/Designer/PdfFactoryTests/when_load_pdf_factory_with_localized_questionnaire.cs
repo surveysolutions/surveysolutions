@@ -67,7 +67,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
                 questionnaireTranslator: this.translator.Object);
         }
 
-        private void BecauseOf() => view = factory.Load(questionnaireId.FormatGuid(), userId, userName, null);
+        private void BecauseOf() => view = factory.Load(questionnaireId.FormatGuid(), userId, userName, null, true);
 
         [Test]
         public void should_translate_document_according_to_default_translation()
