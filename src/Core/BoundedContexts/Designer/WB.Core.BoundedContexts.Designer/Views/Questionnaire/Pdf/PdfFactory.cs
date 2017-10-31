@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation);
+        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
         string LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
             this.questionnaireTranslator = questionnaireTranslator;
         }
 
-        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation)
+        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
             
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 var translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             } 
-            else if (questionnaire.DefaultTranslation != null)
+            else if (useDefaultTranslation && questionnaire.DefaultTranslation != null)
             {
                 var translationData = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
                 questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);

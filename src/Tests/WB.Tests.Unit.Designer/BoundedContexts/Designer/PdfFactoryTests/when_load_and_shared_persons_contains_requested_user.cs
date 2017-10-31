@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.PdfFactoryTests
             BecauseOf();
         }
 
-        private void BecauseOf() => view = factory.Load(questionnaireId.FormatGuid(), userId, userName, null);
+        private void BecauseOf() => view = factory.Load(questionnaireId.FormatGuid(), userId, userName, null, true);
 
         [Test]
         public void should_shared_persons_be_empty() => Assert.False(view.SharedPersons.Any());
