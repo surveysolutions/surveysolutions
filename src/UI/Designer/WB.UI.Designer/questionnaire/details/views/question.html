@@ -162,10 +162,10 @@
                         <span class="path">{{activeQuestion.linkedToEntity.breadcrumbs}}</span>
                         <span class="chosen-item" ng-if="activeQuestion.linkedToEntity.type!=='roster'">
                             <i class="dropdown-icon" ng-class="'icon-'+activeQuestion.linkedToEntity.type"></i>
-                            {{activeQuestion.linkedToEntity.title}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            {{activeQuestion.linkedToEntity.title | escape}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
                         </span>
                         <span class="linked-roster-source" ng-if="activeQuestion.linkedToEntity.type==='roster'">
-                            {{activeQuestion.linkedToEntity.title}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
+                            {{activeQuestion.linkedToEntity.title | escape}}  (<span class="var-name-line">{{activeQuestion.linkedToEntity.varName}}</span>)
                         </span>
                     </span>
                     <span class="dropdown-arrow"></span>
@@ -183,7 +183,7 @@
                             href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon icon-{{breadCrumb.questionType || 'none'}}"></i>
-                                <span ng-bind-html="breadCrumb.title"></span>
+                                <span ng-bind-html="breadCrumb.title | escape"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
@@ -198,7 +198,7 @@
                             href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
-                                <span ng-bind-html="breadCrumb.title"></span>
+                                <span ng-bind-html="breadCrumb.title | escape"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" ng-bind-html="breadCrumb.varName"></span>

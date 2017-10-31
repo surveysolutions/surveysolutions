@@ -67,7 +67,7 @@
                     <span class="select-placeholder" ng-if="selectedListQuestion == null">{{ 'SelectQuestion' | i18next}}</span>
                     <span class="selected-item" ng-if="selectedListQuestion !== null">
                         <span class="path">{{selectedListQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title}}
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedListQuestion.type"></i>{{selectedListQuestion.title | escape}}
                             (<span class="var-name-line">{{selectedListQuestion.varName}}</span>)
                         </span>
                     </span>
@@ -85,7 +85,7 @@
                            href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
-                                <span ng-bind-html="breadCrumb.title"></span>
+                                <span ng-bind-html="breadCrumb.title | escape"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
@@ -107,7 +107,7 @@
                     <span class="select-placeholder" ng-if="selectedNumericQuestion == null">{{'SelectQuestion'|i18next}}</span>
                     <span class="selected-item" ng-if="selectedNumericQuestion !== null">
                         <span class="path">{{selectedNumericQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title}}
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedNumericQuestion.type"></i>{{selectedNumericQuestion.title | escape}}
                             (<span class="var-name-line">{{selectedNumericQuestion.varName}}</span>)
                         </span>
                     </span>
@@ -125,7 +125,7 @@
                            href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
-                                <span ng-bind-html="breadCrumb.title"></span>
+                                <span ng-bind-html="breadCrumb.title | escape"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
@@ -143,7 +143,7 @@
                     <span class="select-placeholder" ng-if="selectedTitleQuestion == null" ng-i18next="SelectQuestion"></span>
                     <span class="selected-item" ng-if="selectedTitleQuestion !== null">
                         <span class="path">{{selectedTitleQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title}}
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedTitleQuestion.type"></i>{{selectedTitleQuestion.title | escape}}
                             (<span class="var-name-line">{{selectedTitleQuestion.varName}}</span>)
                         </span>
                     </span>
@@ -161,7 +161,7 @@
                            href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
-                                <span ng-bind-html="breadCrumb.title"></span>
+                                <span ng-bind-html="breadCrumb.title | escape"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
@@ -231,7 +231,7 @@
                     <span class="select-placeholder" ng-if="selectedMultiQuestion == null" ng-i18next="SelectQuestion"></span>
                     <span class="selected-item" ng-if="selectedMultiQuestion !== null">
                         <span class="path">{{selectedMultiQuestion.breadcrumbs}}</span>
-                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title}}
+                        <span class="chosen-item"><i class="dropdown-icon" ng-class="'icon-'+selectedMultiQuestion.type"></i>{{selectedMultiQuestion.title | escape}}
                             (<span class="var-name-line">{{selectedMultiQuestion.varName}}</span>)
                         </span>
                     </span>
@@ -249,7 +249,7 @@
                            href="javascript:void(0);">
                             <div>
                                 <i class="dropdown-icon icon-{{breadCrumb.type}}"></i>
-                                <span ng-bind-html="breadCrumb.title"></span>
+                                <span ng-bind-html="breadCrumb.title | escape"></span>
                             </div>
                             <div class="var-block">
                                 <span class="var-name" ng-bind-html="breadCrumb.varName"></span>
