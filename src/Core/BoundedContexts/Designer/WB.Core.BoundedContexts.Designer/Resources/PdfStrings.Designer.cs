@@ -214,11 +214,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to hidden.
+        /// </summary>
+        public static string QuestionScope_Hidden {
+            get {
+                return ResourceManager.GetString("QuestionScope_Hidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to identifying.
         /// </summary>
         public static string QuestionScope_Identifying {
             get {
                 return ResourceManager.GetString("QuestionScope_Identifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to supervisor.
+        /// </summary>
+        public static string QuestionScope_Supervisor {
+            get {
+                return ResourceManager.GetString("QuestionScope_Supervisor", resourceCulture);
             }
         }
         
@@ -597,51 +615,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string Variable {
             get {
                 return ResourceManager.GetString("Variable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to boolean.
-        /// </summary>
-        public static string VariableType_Boolean {
-            get {
-                return ResourceManager.GetString("VariableType_Boolean", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to datetime.
-        /// </summary>
-        public static string VariableType_Date {
-            get {
-                return ResourceManager.GetString("VariableType_Date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to double.
-        /// </summary>
-        public static string VariableType_Double {
-            get {
-                return ResourceManager.GetString("VariableType_Double", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to long.
-        /// </summary>
-        public static string VariableType_Long {
-            get {
-                return ResourceManager.GetString("VariableType_Long", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to string.
-        /// </summary>
-        public static string VariableType_String {
-            get {
-                return ResourceManager.GetString("VariableType_String", resourceCulture);
             }
         }
     }
