@@ -79,7 +79,7 @@
             };
 
             utilityService.createQuestionForDeleteConfirmationPopup = function (title) {
-                var trimmedTitle = title.substring(0, 25) + (title.length > 25 ? "..." : "");
+                var trimmedTitle = title.substring(0, 50) + (title.length > 50 ? "..." : "");
                 var message = $i18next.t('DeleteConfirmQuestion',  {trimmedTitle: trimmedTitle});
                 return {
                     title: message,
