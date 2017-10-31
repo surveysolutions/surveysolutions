@@ -67,8 +67,5 @@ export default {
         const question = state.entityDetails[questionId]
         question.comments = comments
         Vue.set(question, "postingComment", false)
-    },
-    SET_REVIEW_MODE(state) {
-        state.isReviewMode = true;
     }
 }
