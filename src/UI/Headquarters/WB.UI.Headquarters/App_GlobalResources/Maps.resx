@@ -139,7 +139,7 @@
     <value>Name</value>
   </data>
   <data name="Size" xml:space="preserve">
-    <value>Size</value>
+    <value>Size (MB)</value>
   </data>
   <data name="UpdateDate" xml:space="preserve">
     <value>Imported on</value>

@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -66,9 +67,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     FileName = x.FileName,
                     ImportDate = x.ImportDate?.FormatDateWithTime(),
-                    /*MaxScale = x.MaxScale,
-                    MinScale = x.MinScale,*/
-                    Size = x.Size
+                    Size = FileSizeUtils.SizeInMegabytes(x.Size)
                 })
             };
 
