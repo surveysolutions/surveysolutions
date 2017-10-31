@@ -176,7 +176,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     this.commandService.Execute(command);
                 }
             }
-            if (this.authorizedUser.IsHeadquarter)
+            if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
             {
                 var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
                 this.commandService.Execute(command);
