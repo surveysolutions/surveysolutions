@@ -151,6 +151,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View all (reset all filters).
+        /// </summary>
+        public static string Filters_ClearSelection {
+            get {
+                return ResourceManager.GetString("Filters_ClearSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flagged.
         /// </summary>
         public static string Filters_Flagged {
@@ -489,6 +498,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Resume_WelcomeText {
             get {
                 return ResourceManager.GetString("Resume_WelcomeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{ count }} questions found.
+        /// </summary>
+        public static string SearchResult_Count {
+            get {
+                return ResourceManager.GetString("SearchResult_Count", resourceCulture);
             }
         }
         

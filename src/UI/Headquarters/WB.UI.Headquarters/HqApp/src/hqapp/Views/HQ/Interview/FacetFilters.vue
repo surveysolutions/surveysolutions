@@ -3,37 +3,39 @@
         <div class="filters-container">
             <h4>{{ $t("WebInterview.Filters_Title") }}</h4>
 
-            <filters-block>
+            <filters-block separate>
                 <filter-item id="withComments" :title="$t('WebInterview.Filters_WithComments')" @change="change" :state="state.withComments" />
             </filters-block>
 
-            <filters-block>
+            <filters-block separate>
                 <filter-item id="flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change" :state="state.flagged" />
                 <filter-item id="notFlagged" :title="$t('WebInterview.Filters_NotFlagged')" @change="change" :state="state.notFlagged" />
-                
             </filters-block>
 
-            <filters-block>
+            <filters-block separate>
                 <filter-item id="invalid" :title="$t('WebInterview.Filters_Invalid')" @change="change" :state="state.invalid" />
                 <filter-item id="valid" :title="$t('WebInterview.Filters_Valid')" @change="change" :state="state.valid" />
             </filters-block>
 
-            <filters-block>
+            <filters-block separate>
                 <filter-item id="answered" :title="$t('WebInterview.Filters_Answered')" @change="change" :state="state.answered" />
                 <filter-item id="notAnswered" :title="$t('WebInterview.Filters_NotAnswered')" @change="change" :state="state.notAnswered" />
             </filters-block>
 
-            <filters-block>
+            <filters-block separate>
                 <filter-item id="forSupervisor" :title="$t('WebInterview.Filters_ForSupervisor')" @change="change" :state="state.forSupervisor" />
                 <filter-item id="forInterviewer" :title="$t('WebInterview.Filters_ForInterviewer')" @change="change" :state="state.forInterviewer" />
             </filters-block>
 
+            <filters-block>
+                <button type="button" @click="resetFilters" class="btn btn-link btn-looks-like-link reset-filters">
+                    {{ $t("WebInterview.Filters_ClearSelection") }}
+                </button>
+            </filters-block>
         </div>
         <div class="preset-filters-container">
             <div class="block-filter">
-                <button type="button" class="btn btn-link btn-looks-like-link reset-filters">View all (reset all filters)
-                </button>
-                <a :href="oldPageUrl">Old interview details</a>
+                <a :href="oldPageUrl">{{ $t("WebInterview.Filters_OldDetailsLink")}}</a>
             </div>
         </div>
     </div>
@@ -56,13 +58,17 @@ export default {
                 "Interview/Details/" +
                 this.$route.params.interviewId
             );
-        },
+        }
     },
     methods: {
         change({ id, value }) {
             this.$store.dispatch("applyFiltering", { filter: id, value });
             this.$store.dispatch("fetchSearchResults");
         },
+
+        resetFilters() {
+            this.$store.dispatch("resetAllFilters")
+        }
     },
     components: {
         FilterItem, FiltersBlock

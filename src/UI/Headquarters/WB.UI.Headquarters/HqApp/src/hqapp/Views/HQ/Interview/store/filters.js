@@ -51,6 +51,11 @@ export default {
 
         async getStatusesHistory() {
             return await Vue.$api.call(api => api.getStatusesHistory());
+        },
+
+        resetAllFilters({ commit, dispatch }) {
+            commit("RESET_FILTERS")
+            dispatch("fetchSearchResults")
         }
     },
 
@@ -83,6 +88,12 @@ export default {
         CHANGE_FILTERS(state, { filter, value }) {
             state.filter[filter] = value;
             state.search.needToClear = true;
+        },
+
+        RESET_FILTERS(state) {
+            Object.keys(state.filter).forEach(key => {
+                Vue.set(state.filter, key, false)
+            })
         }
     },
     getters: {

@@ -289,4 +289,13 @@
   <data name="Filters_NotFlagged" xml:space="preserve">
     <value>Без флага</value>
   </data>
+  <data name="SearchResult_Count">
+    <value>{{ count }} вопросов найдено</value>
+  </data>
+  <data name="Filters_ClearSelection">
+    <value>Посмотреть всё (сбросить фильтры)</value>
+  </data>
+  <data name="Filters_OldDetailsLink" xml:space="preserve">
+    <value>Старые интервью детали</value>
+  </data>
 </root>

@@ -38,11 +38,13 @@ const fetch = {
             const query = "#" + getLocationHash(state.scroll.id)
             const el = document.querySelector(query)
 
-            if (el != null) {
-                window.scrollTo({ top: el.offsetTop, behavior: "smooth" })
-            } else {
-                window.scrollTo({ top: state.scroll.top })
-            }
+            setTimeout(() => {
+                if (el != null) {
+                    window.scrollTo({ top: el.offsetTop, behavior: "smooth" })
+                } else {
+                    window.scrollTo({ top: state.scroll.top })
+                }
+            }, 0)
 
             commit("SET_SCROLL_TARGET", null)
         }

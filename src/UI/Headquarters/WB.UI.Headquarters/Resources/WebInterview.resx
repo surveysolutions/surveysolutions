@@ -292,4 +292,13 @@
   <data name="PoweredBy" xml:space="preserve">
     <value>Powered by</value>
   </data>
+  <data name="SearchResult_Count">
+    <value>{{ count }} questions found</value>
+  </data>
+  <data name="Filters_ClearSelection">
+    <value>View all (reset all filters)</value>
+  </data>
+  <data name="Filters_OldDetailsLink" xml:space="preserve">
+    <value>Old interview details</value>
+  </data>
 </root>
