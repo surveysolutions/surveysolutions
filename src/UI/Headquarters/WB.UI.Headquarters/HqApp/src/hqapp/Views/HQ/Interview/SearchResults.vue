@@ -5,7 +5,7 @@
                 <span class="cancel"></span>
             </button>
             
-            <h2>{{searchResult.count}} questions found:</h2>
+            <h2>{{ $t("WebInterview.SearchResult_Count", { count: searchResult.count })}}:</h2>
             
             <search-section-result 
                 v-for="search in searchResult.results"

@@ -71,7 +71,6 @@ function NewRouter(store) {
     })
 
     router.afterEach((to) => {
-
         store.dispatch("changeSection", to.params.sectionId)
         store.dispatch("onBeforeNavigate")
 

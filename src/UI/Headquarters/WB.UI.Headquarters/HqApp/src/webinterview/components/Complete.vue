@@ -126,7 +126,7 @@
                     name: 'section',
                     params: {
                         sectionId: entityWithError.parentId,
-                        interviewId: this.$store.route.params.interviewId
+                        interviewId: this.$route.params.interviewId
                     }
                 }
 
