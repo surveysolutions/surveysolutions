@@ -15,8 +15,6 @@
 </template>
 
 <script lang="js">
-    import "toastr/build/toastr.css"
-    
     export default {
         name: 'app'
     }
