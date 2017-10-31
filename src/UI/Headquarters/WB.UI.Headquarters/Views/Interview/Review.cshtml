@@ -9,7 +9,8 @@
     <link rel='stylesheet' href='@Url.Content("~/Dependencies/build/webinterview.css")' >
     <!-- endinject -->    
 }
-
-@Html.RenderHqConfig(Model)
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
 
 <div id="vueApp"></div>
