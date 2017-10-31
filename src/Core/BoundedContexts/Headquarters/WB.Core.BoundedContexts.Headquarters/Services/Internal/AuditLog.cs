@@ -21,12 +21,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void QuestionnaireDeleted(string title, QuestionnaireIdentity questionnaire)
         {
-            this.Append($"Questionnaire \"{title} ver. {questionnaire.Version}\"", "deleted");
+            this.Append($"(ver. {questionnaire.Version}) {title}", "deleted");
         }
 
         public void QuestionnaireImported(string title, QuestionnaireIdentity questionnaire)
         {
-            this.Append($"Questionnaire \"{title} (ver. {questionnaire.Version})\"", "imported");
+            this.Append($"(ver. {questionnaire.Version}) {title}", "imported");
         }
 
         public void UserCreated(UserRoles role, string userName)
