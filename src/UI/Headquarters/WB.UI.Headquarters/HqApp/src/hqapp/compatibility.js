@@ -17,7 +17,7 @@ $.fn.preventDoubleSubmission = function () {
     return this;
 };
 
-var ajustNoticeHeight = function () {
+window.ajustNoticeHeight = function () {
     var height = $(".view-mode").outerHeight();
     $('.view-mode + main').css("margin-top", height + "px");
     $('.wrapper-view-mode').css("padding-top", height);
@@ -89,13 +89,13 @@ $(function() {
 
     $(".view-mode + main .container-fluid .filters").wrapInner("<div class='wrapper-view-mode'></div>");
     $(".view-mode + main .container-fluid .content").wrapInner("<div class='wrapper-view-mode'></div>");
-    ajustNoticeHeight();
+    window.ajustNoticeHeight();
 
     $('.view-mode .alerts .alert').on('closed.bs.alert', function() {
-        ajustNoticeHeight();
+        window.ajustNoticeHeight();
     });
 });
 
 $(window).resize(function () {
-    ajustNoticeHeight();
+    window.ajustNoticeHeight();
 });
