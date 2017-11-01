@@ -6,6 +6,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public class SearchResult
     {
+        public long Id { get; set; }
         public string SectionId { get; set; }
         public List<Link> Sections { get; set; } = new List<Link>();
         public List<Link> Questions { get; set; } = new List<Link>();
