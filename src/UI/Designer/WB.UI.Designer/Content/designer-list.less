@@ -624,3 +624,135 @@ table.table-content {
     user-select: none;
     outline: 0;
 }
+
+
+
+
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-node {
+    display: block;
+    overflow: hidden;
+    margin: 0;
+}
+
+.folder-tree .fancytree-expander,
+.folder-tree .fancytree-checkbox {
+    margin: 8px 5px 8px 0;
+    color: #a6a8a9;
+}
+
+.folder-tree .fancytree-expander:hover,
+.folder-tree .fancytree-expander:focus,
+.folder-tree .fancytree-expander:active,
+.folder-tree .fancytree-checkbox:hover,
+.folder-tree .fancytree-checkbox:focus,
+.folder-tree .fancytree-checkbox:active {
+    color: #000;
+}
+
+.folder-tree .fancytree-node:hover .fancytree-title {
+    text-decoration: underline;
+}
+
+.folder-tree .fancytree-container {
+    border: none;
+}
+
+.folder-tree .tree-icon,
+.tree-icon {
+    background: url("images/DR-2017-folders-icons.png-2x") no-repeat;
+    background-size: 30px 90px;
+    vertical-align: top;
+    background-position: 0 -60px;
+}
+
+.folder-tree .tree-icon {
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    background-position: 0 -60px;
+    display: inline-block;
+}
+
+.folder-tree .tree-icon.folder-open,
+.tree-icon.folder-open {
+    background-position: 0 -30px;
+}
+
+.folder-tree .tree-icon.folder-closed,
+.tree-icon.folder-closed {
+    background-position: 0 0;
+}
+
+.folder-tree .fancytree-title {
+    width: calc(100% - 50px);
+    font: 18px/20px "Roboto-Bold";
+    padding: 5px 0;
+    margin: 0;
+    color: #4d4d4d;
+    border: none;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+}
+
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active:hover span.fancytree-title {
+    background: transparent;
+}
+
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active span.fancytree-title {
+    background-color: transparent;
+    font-weight: bold;
+    color: #4d4d4d;
+}
+
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-title:hover {
+    background: transparent;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb {
+    border-top: 1px solid #ddd;
+    height: 36px;
+    font-weight: bold;
+    background-color: transparent;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding-left: 45px;
+    border-left: 13px solid #bcc3c8;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb.tree-icon {
+    background-position: 10px -28px;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb a {
+    color: #777;
+}
+
+.container-wb-list section#designer-list #table-content-holder.list-with-icons {
+    top: 81px;
+}
+
+table.table-header.page-with-breadcrumbs {
+    border-top: none;
+}
+
+.list-with-icons .search-value {
+    position: relative;
+}
+
+.list-with-icons .search-value a {
+    padding-left: 40px;
+}
+
+.list-with-icons .tree-icon {
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+}
+
+.folder-tree .fancytree-checkbox ~ .fancytree-title {
+    width: calc(100% - 65px);
+}

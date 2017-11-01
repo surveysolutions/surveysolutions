@@ -13,14 +13,15 @@
     element.fancytree({
         extensions: ["contextMenu", "edit", "glyph"],
         checkbox: supportRadioButton ? "radio" : false,
-        icon: true,
         glyph: glyph_opts,
         selectMode: 1,
-        /*icon: function (event, data) {
-            if (data.node.isFolder()) {
-                return "glyphicon glyphicon-book";
+        //icon: true,
+        icon: function (event, data) {
+            if (data.node.isExpanded()) {
+                return "tree-icon folder-open";
             }
-        },*/
+            return "tree-icon folder-closed";
+        },
         source: {
             url: rootNodesUrl,
             cache: false

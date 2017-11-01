@@ -313,10 +313,12 @@
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
+    <Compile Include="Models\FolderBreadcrumbsModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\LogonModel.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
+    <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
     <Compile Include="Models\VerificationReferenceEnriched.cs" />
@@ -474,6 +476,7 @@
     <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="Content\identity\favicon-designer.png" />
     <Content Include="Content\images\DR-2017-folders-icons-2x.png" />
+    <Content Include="Content\images\DR-2017-folders-icons.png" />
     <Content Include="Content\images\pdf-question-legend.png" />
     <Content Include="Content\images\pdf-roster-legend.png" />
     <Content Include="Content\images\pdf_logo.png" />

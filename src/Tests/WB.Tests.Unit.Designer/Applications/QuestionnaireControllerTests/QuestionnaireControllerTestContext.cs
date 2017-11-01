@@ -40,7 +40,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 Mock.Of<IQuestionnaireChangeHistoryFactory>(),
                 Mock.Of<ILookupTableService>(),
-                Mock.Of<IQuestionnaireInfoViewFactory>());
+                Mock.Of<IQuestionnaireInfoViewFactory>(),
+                Mock.Of<IPublicFoldersStorage>());
         }
 
         protected static void SetControllerContextWithSession(Controller controller, string key, object value)
