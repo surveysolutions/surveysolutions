@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private readonly Func<InterviewQuestionFilter, bool> rule;
         private readonly HashSet<Identity> flaggedQuestionsSet;
         private readonly HashSet<FilterOption> filters;
-        private InterviewTreeQuestion question;
+        private IInterviewTreeNode node;
 
         public InterviewQuestionFilter(HashSet<Identity> flaggedQuestionsSetQuestions,
             HashSet<FilterOption> filters,
@@ -22,9 +22,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.filters = filters;
         }
 
-        public bool Evaluate(InterviewTreeQuestion questionToEvaluate)
+        public bool Evaluate(IInterviewTreeNode questionToEvaluate)
         {
-            this.question = questionToEvaluate;
+            this.node = questionToEvaluate;
             return rule(this);
         }
 
@@ -48,20 +48,35 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         {
             if (!filters.Contains(option)) return @default;
 
-            switch (option)
+            if (node is InterviewTreeStaticText staticText)
             {
-                case FilterOption.Flagged: return flaggedQuestionsSet.Contains(question.Identity);
-                case FilterOption.NotFlagged: return !flaggedQuestionsSet.Contains(question.Identity);
-                case FilterOption.WithComments: return question.AnswerComments.Any();
-                case FilterOption.Invalid: return !question.IsValid;
-                case FilterOption.Valid: return question.IsValid;
-                case FilterOption.Answered: return question.IsAnswered();
-                case FilterOption.NotAnswered: return !question.IsAnswered();
-                case FilterOption.ForSupervisor: return question.IsSupervisors;
-                case FilterOption.ForInterviewer: return !question.IsSupervisors;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(option));
+                switch (option)
+                {
+                    case FilterOption.Invalid: return staticText.IsValid;
+                    case FilterOption.Valid: return staticText.IsValid;
+                    default:
+                        return @default;
+                }
             }
+            if(node is InterviewTreeQuestion question)
+            {
+                switch (option)
+                {
+                    case FilterOption.Flagged: return flaggedQuestionsSet.Contains(question.Identity);
+                    case FilterOption.NotFlagged: return !flaggedQuestionsSet.Contains(question.Identity);
+                    case FilterOption.WithComments: return question.AnswerComments.Any();
+                    case FilterOption.Invalid: return question.IsValid;
+                    case FilterOption.Valid: return question.IsValid;
+                    case FilterOption.Answered: return question.IsAnswered();
+                    case FilterOption.NotAnswered: return !question.IsAnswered();
+                    case FilterOption.ForSupervisor: return question.IsSupervisors;
+                    case FilterOption.ForInterviewer: return !question.IsSupervisors;
+                    default:
+                        return @default;
+                }
+            }
+
+            return @default;
         }
     }
 }

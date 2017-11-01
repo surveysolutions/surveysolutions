@@ -140,13 +140,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 new HashSet<FilterOption>(flags), 
                 FilteringRule);
 
-            var nodes = interview.GetAllInterviewNodes();
+            var nodes = interview.GetAllInterviewNodes()
+                .Where(n => n is InterviewTreeQuestion || n is InterviewTreeStaticText);
 
             foreach (var node in nodes)
             {
-                if (!(node is InterviewTreeQuestion question)) continue;
-
-                var found = rule.Evaluate(question);
+                var found = rule.Evaluate(node);
 
                 if (found) yield return node;
             }
