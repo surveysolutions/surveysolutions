@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Union(SpssReservedKeywords)
                 .Union(new[] { substitutionService.RosterTitleSubstitutionReference })
                 .Union(SurveySolutionsServiceVariablesKeywords)
-                .Union(ServiceColumns.SystemVariables.Select(x=>x.VariableExportColumnName))
+                .Union(ServiceColumns.SystemVariables.Values.Select(x=>x.VariableExportColumnName))
                 .Select(x => x.ToLower())
                 .ToArray();
         }

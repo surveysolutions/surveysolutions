@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 if (level.LevelScopeVector.Length == 0)
                 {
-                    interviewLevelHeader.AddRange(ServiceColumns.SystemVariables.Select(systemVariable => systemVariable.VariableExportColumnName));
+                    interviewLevelHeader.AddRange(ServiceColumns.SystemVariables.Values.Select(systemVariable => systemVariable.VariableExportColumnName));
                 }
 
                 for (int i = 0; i < level.LevelScopeVector.Length; i++)
