@@ -3,6 +3,8 @@
     public enum ServiceVariableType
     {
         InterviewRandom = 0,
-        InterviewKey = 10
+        InterviewKey = 1,
+        HasAnyError = 2,
+        InterviewStatus = 3
     }
 }
