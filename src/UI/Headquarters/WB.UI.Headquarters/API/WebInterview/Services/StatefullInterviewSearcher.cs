@@ -22,7 +22,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         {
             var nodes = GetFilteredNodes(flags, interview);
 
-            long taken = 0, skipped = 0, total = 0, searchResultId = 0;
+            long taken = 0, skipped = 0, total = 0;
+            int searchResultId = 0;
+
             Identity lastSection = null;
             
             var results = new SearchResults();
