@@ -1,10 +1,14 @@
-﻿namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
+﻿using System.Collections.Generic;
+
+namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
 {
     public static class ServiceColumns
     {
         //Id of the row
-        public const string Id = "Id";
-        public const string Key = "interview__key";
+        public static readonly string Id = "Id";
+        public static readonly string HasAnyError = "has__error";
+        public static readonly string Key = "interview__key";
+        public static readonly string InterviewStatus = "interview__status";
 
         //prefix to identify parent record
         public const string ParentId = "ParentId";
@@ -13,11 +17,12 @@
         public const string AssignmentsCountColumnName = "_quantity";
 
         //system generated
-
-        public static readonly ServiceVariable[] SystemVariables = new []
+        public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>
         {
-            new ServiceVariable(ServiceVariableType.InterviewRandom, "ssSys_IRnd"), //random number generated for interview
-            new ServiceVariable(ServiceVariableType.InterviewKey, ServiceColumns.Key), 
+            { ServiceVariableType.InterviewRandom,  new ServiceVariable(ServiceVariableType.InterviewRandom, "ssSys_IRnd", 0)},
+            { ServiceVariableType.InterviewKey,  new ServiceVariable(ServiceVariableType.InterviewKey, ServiceColumns.Key, 1)},
+            { ServiceVariableType.HasAnyError,  new ServiceVariable(ServiceVariableType.HasAnyError, ServiceColumns.HasAnyError, 2)},
+            { ServiceVariableType.InterviewStatus,  new ServiceVariable(ServiceVariableType.InterviewStatus, ServiceColumns.InterviewStatus, 3)},
         };
     }
 }

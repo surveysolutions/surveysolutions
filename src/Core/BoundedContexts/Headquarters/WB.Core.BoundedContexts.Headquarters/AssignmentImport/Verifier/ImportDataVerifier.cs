@@ -248,7 +248,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
             var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure).ToArray();
             var listOfPermittedExtraColumns = this.GetListOfPermittedExtraColumnsForLevel(levelExportStructure).ToArray(); 
-            var listOfServiceVariableNames = ServiceColumns.SystemVariables.Select(x => x.VariableExportColumnName).ToList();
+            var listOfServiceVariableNames = ServiceColumns.SystemVariables.Values.Select(x => x.VariableExportColumnName).ToList();
 
             foreach (var columnName in levelData.Header)
             {

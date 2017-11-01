@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 string[] systemVariableValues = new string[0];
                 if (vectorLength == 0)
-                    systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables);
+                    systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
 
                 string[] parentRecordIds = new string[dataByLevel.RosterVector.Length];
                 if (parentRecordIds.Length > 0)
@@ -172,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return vector.Length == 0 ? "#" : vector.CreateLeveKeyFromPropagationVector();
         }
 
-        private string[] GetSystemValues(InterviewData interview, ServiceVariable[] variables)
+        private string[] GetSystemValues(InterviewData interview, IEnumerable<ServiceVariable> variables)
         {
             List<string> values = new List<string>();
 
