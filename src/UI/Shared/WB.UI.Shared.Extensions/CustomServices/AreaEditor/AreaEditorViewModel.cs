@@ -249,8 +249,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             IsPanelVisible = !IsPanelVisible;
         });
 
-        private CancellationTokenSource cancellationTokenSource;
-
         public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () =>
         {
             if (this.IsEditing || this.Map == null)
