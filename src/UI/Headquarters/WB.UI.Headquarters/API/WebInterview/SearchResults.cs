@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -10,6 +11,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         public List<Link> Questions { get; set; } = new List<Link>();
     }
 
+    [DebuggerDisplay("{Title} : {Target}")]
     public class Link
     {
         public string Target { get; set; }

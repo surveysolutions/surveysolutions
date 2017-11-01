@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
                 if (node is InterviewTreeRoster roster)
                 {
-                    link.Title = roster.Title.ToString();
+                    link.Title = $@"{roster.Title} - {roster.RosterTitle}";
                     yield return link;
                     continue;
                 }
