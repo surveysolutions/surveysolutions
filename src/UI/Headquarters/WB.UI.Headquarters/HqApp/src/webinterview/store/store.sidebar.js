@@ -2,7 +2,6 @@ import { forEach, groupBy } from "lodash"
 import Vue from "vue"
 
 import { batchedAction } from "../helpers"
-const mediumScreenThreshold = 1210;
 
 export default {
     state: {
@@ -13,7 +12,8 @@ export default {
         sidebarHidden: false,
         facetHidden: false,
         searchResultsHidden: true,
-        screenWidth: 1400
+        screenWidth: 1400,
+        mediumScreenThreshold: 1210
     },
 
     actions: {
@@ -33,7 +33,7 @@ export default {
         toggleSidebarPanel({ commit, state }, newState = null) {
             const sidebarPanelNewState = newState == null ? !state.sidebarHidden : newState;
             let panelBeingClosed = !sidebarPanelNewState;
-            if (state.screenWidth < mediumScreenThreshold && panelBeingClosed){
+            if (state.screenWidth < state.mediumScreenThreshold && panelBeingClosed){
                 commit("SET_FACET_HIDDEN", true)
                 commit("SET_SEARCH_RESULTS_HIDDEN", true)
             }
@@ -42,34 +42,34 @@ export default {
         hideFacets({ commit, state }, newState = null) {
             const facetPanelNewState = newState == null ? !state.facetHidden : newState;
             let panelBeingClosed = !facetPanelNewState;
-            if (state.screenWidth < mediumScreenThreshold && panelBeingClosed){
+            if (state.screenWidth < state.mediumScreenThreshold && panelBeingClosed){
                 commit("SET_SIDEBAR_HIDDEN", true)
                 commit("SET_SEARCH_RESULTS_HIDDEN", true)
             }
             commit("SET_FACET_HIDDEN", facetPanelNewState)
         },
         hideSearchResults({ commit, state }, newState = null) {
-            if (state.screenWidth >= mediumScreenThreshold){
+            if (state.screenWidth >= state.mediumScreenThreshold){
                 commit("SET_FACET_HIDDEN", false)
             }
             commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? !state.searchResultsHidden : newState)
         },
         showSearchResults({ commit, state }) {
             commit("SET_SEARCH_RESULTS_HIDDEN", false)
-            if (state.screenWidth < mediumScreenThreshold){
+            if (state.screenWidth < state.mediumScreenThreshold){
                 commit("SET_FACET_HIDDEN", true)
                 commit("SET_SIDEBAR_HIDDEN", true)
             }
         },
         screenWidthChanged({ commit, state }, newWidth) {
             // close all panels for S and M sceen sizes
-            if (state.screenWidth > mediumScreenThreshold && newWidth <= mediumScreenThreshold) {
+            if (state.screenWidth > state.mediumScreenThreshold && newWidth <= state.mediumScreenThreshold) {
                 commit("SET_FACET_HIDDEN", true)
                 commit("SET_SIDEBAR_HIDDEN", true)
                 commit("SET_SEARCH_RESULTS_HIDDEN", true)
             }
             // return default state if screen size is L and XL
-            if (state.screenWidth < mediumScreenThreshold && newWidth >= mediumScreenThreshold)
+            if (state.screenWidth < state.mediumScreenThreshold && newWidth >= state.mediumScreenThreshold)
             {
                 commit("SET_FACET_HIDDEN", false)
                 commit("SET_SIDEBAR_HIDDEN", false)

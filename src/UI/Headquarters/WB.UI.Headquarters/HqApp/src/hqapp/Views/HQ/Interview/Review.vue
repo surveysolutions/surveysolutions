@@ -38,13 +38,13 @@ export default {
     computed: {
         classes() {
             const sidebar = this.$store.state.webinterview.sidebar;
-            const smallWidth = sidebar.screenWidth < 1210;
+            const smallOrMedioumScreenWidth = sidebar.screenWidth < sidebar.mediumScreenThreshold;
 
             return {
-                "show-content": smallWidth && !sidebar.sidebarHidden,
-                "show-filters": smallWidth && !sidebar.facetHidden,
-                "fullscreen-hidden-content": !smallWidth && sidebar.searchResultsHidden,
-                "fullscreen-hidden-filters": !smallWidth && sidebar.facetHidden,
+                "show-content": smallOrMedioumScreenWidth && !sidebar.sidebarHidden,
+                "show-filters": smallOrMedioumScreenWidth && !sidebar.facetHidden,
+                "fullscreen-hidden-content": !smallOrMedioumScreenWidth && sidebar.searchResultsHidden,
+                "fullscreen-hidden-filters": !smallOrMedioumScreenWidth && sidebar.facetHidden,
                 "filters-results-are-shown": !sidebar.searchResultsHidden
             };
         }
