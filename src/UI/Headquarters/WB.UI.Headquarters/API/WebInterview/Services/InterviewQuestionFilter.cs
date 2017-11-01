@@ -50,14 +50,17 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             if (node is InterviewTreeStaticText staticText)
             {
+                
                 switch (option)
                 {
-                    case FilterOption.Invalid: return staticText.IsValid;
+                    case FilterOption.WithComments: return false;
+                    case FilterOption.Invalid: return !staticText.IsValid;
                     case FilterOption.Valid: return staticText.IsValid;
                     default:
                         return @default;
                 }
             }
+
             if(node is InterviewTreeQuestion question)
             {
                 switch (option)
@@ -65,7 +68,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     case FilterOption.Flagged: return flaggedQuestionsSet.Contains(question.Identity);
                     case FilterOption.NotFlagged: return !flaggedQuestionsSet.Contains(question.Identity);
                     case FilterOption.WithComments: return question.AnswerComments.Any();
-                    case FilterOption.Invalid: return question.IsValid;
+                    case FilterOption.Invalid: return !question.IsValid;
                     case FilterOption.Valid: return question.IsValid;
                     case FilterOption.Answered: return question.IsAnswered();
                     case FilterOption.NotAnswered: return !question.IsAnswered();
