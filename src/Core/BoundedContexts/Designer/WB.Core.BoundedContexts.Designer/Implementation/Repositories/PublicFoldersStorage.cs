@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public IEnumerable<QuestionnaireListViewFolder> GetRootFolders()
         {
-            return new QuestionnaireListViewFolder[]  { publicQuestionnairesFolder };
+            return new[]  { publicQuestionnairesFolder };
         }
 
         public QuestionnaireListViewFolder CreateFolder(Guid folderId, string title, Guid? parentId, Guid userId)
@@ -71,6 +71,20 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
             var item = questionnaireStorage.GetById(questionnaireId.FormatGuid());
             item.FolderId = folderId;
             questionnaireStorage.Store(item, item.QuestionnaireId);
+        }
+
+        public IEnumerable<QuestionnaireListViewFolder> GetFoldersPath(Guid? folderId)
+        {
+            List<QuestionnaireListViewFolder> folders = new List<QuestionnaireListViewFolder>();
+            while (folderId.HasValue)
+            {
+                var folder = folderStorage.GetById(folderId.Value);
+                folders.Add(folder);
+                folderId = folder.Parent;
+            }
+            folders.Add(publicQuestionnairesFolder);
+            folders.Reverse();
+            return folders;
         }
     }
 }
