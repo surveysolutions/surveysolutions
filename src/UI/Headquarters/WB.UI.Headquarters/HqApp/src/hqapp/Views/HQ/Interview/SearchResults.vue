@@ -12,7 +12,10 @@
                 :key="search.sectionId"
                 :search="search"></search-section-result>
 
-            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250"></infinite-loading>
+            <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
+                 <span slot="no-more"></span>
+                 <span slot="no-results"></span>
+            </infinite-loading>
         </div>
     </aside>
 </template>
@@ -53,7 +56,7 @@ export default {
     },
 
     watch:{
-        "questionsCount"() {
+        "searchResult.count"() {
             this.$refs.loader.$emit('$InfiniteLoading:reset');
         }
     },
