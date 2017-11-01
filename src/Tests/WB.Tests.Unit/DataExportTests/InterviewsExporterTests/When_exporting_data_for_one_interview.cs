@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 Create.Entity.NumericIntegerQuestion(variable: "q1")
             );
 
-            interviewSummaries = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), Create.Entity.InterviewSummary(interviewId, key: interviewKey));
+            var interviewSummaries = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), Create.Entity.InterviewSummary(interviewId, key: interviewKey));
 
             exporter = new InterviewsExporter(
                 fileSystemAccessor.Object,
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 Create.Entity.NumericIntegerQuestion(variable: "q1")
             );
 
-            interviewSummaries = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), 
+            var interviewSummaries = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), 
                 Create.Entity.InterviewSummary(interviewId, hasErrors: true, status: InterviewStatus.Completed));
 
             exporter = new InterviewsExporter(
@@ -117,7 +117,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             logger = new Mock<ILogger>();
             csvWriter = new Mock<ICsvWriter>();
             rowReader = new Mock<InterviewExportredDataRowReader>();
-            interviewSummaries = new TestInMemoryWriter<InterviewSummary>();
+            var interviewSummaries = new TestInMemoryWriter<InterviewSummary>();
             transactionManagerProvider = new Mock<ITransactionManagerProvider>();
             transactionManagerProvider.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
 
@@ -144,7 +144,6 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
         private InterviewDataExportSettings interviewDataExportSettings = new InterviewDataExportSettings("folder", false, 1, 1, 1, 1);
         private Mock<ICsvWriter> csvWriter;
         private Mock<InterviewExportredDataRowReader> rowReader;
-        private TestInMemoryWriter<InterviewSummary> interviewSummaries;
         private Mock<ITransactionManagerProvider> transactionManagerProvider;
 
         class CsvData
