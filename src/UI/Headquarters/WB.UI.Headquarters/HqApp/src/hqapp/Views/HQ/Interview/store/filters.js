@@ -61,7 +61,6 @@ export default {
 
     mutations: {
         SET_SEARCH_RESULT(state, results) {
-            
             if(state.search.needToClear) {
                 state.search.results = [];
                 state.search.count = 0;
@@ -70,7 +69,7 @@ export default {
             }
 
             results.results.forEach((res) => {
-                const section = _.find(state.search.results, { sectionId: res.sectionId });
+                const section = _.find(state.search.results, { id: res.id });
 
                 if (section == null) {
                     state.search.results.push(res);
