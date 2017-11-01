@@ -40,7 +40,7 @@
                 <FacetFilters />
             </div>
         </aside>
-        <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals"/>
+        <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals" class="statusHistoryModal"/>
         <Confirm ref="confirmApprove" id="confirmApprove" slot="modals" :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
             <label for="txtApproveComment">
                 {{$t("Pages.ApproveRejectPartialView_CommentLabel")}}:
