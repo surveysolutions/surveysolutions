@@ -30,6 +30,9 @@ script.
         locales: !{options.locales}
     }
 |
+| 
+link(href!='@Url.Content("~/signalr/hubs")' rel="preload" as="script")
+|
 |
 script(src!=urlContent(options.manifest) type="text/javascript")
 |
