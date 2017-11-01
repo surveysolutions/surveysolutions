@@ -11,6 +11,7 @@ Vue.directive("numericFormatting", {
     bind: (el, binding) => {
         const settings = $.extend( {}, defaults, binding.value )
         numerics.init(el, settings)// $(el).autoNumeric("init", settings)
+        numerics.update(el, settings) // $(el).autoNumeric("update", settings)
     },
     update: (el, binding) => {
         if (binding.value) {
