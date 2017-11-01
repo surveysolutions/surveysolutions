@@ -22,13 +22,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         {
             var nodes = GetFilteredNodes(flags, interview);
 
-            long taken = 0, skipped = 0, total = 0;
-
+            long taken = 0, skipped = 0, total = 0, searchResultId = 0;
+            Identity lastSection = null;
+            
             var results = new SearchResults();
             SearchResult currentResult = null;
-            
+
             foreach (var node in nodes)
             {
+                IncrementSectionId();
+
                 if (CanTake())
                 {
                     if (currentResult == null || currentResult.SectionId != node.Parent.Identity.ToString())
@@ -60,9 +63,25 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 {
                     return new SearchResult
                     {
+                        Id = searchResultId,
                         SectionId = node.Parent.Identity.ToString(),
                         Sections = GetBreadcrumbs(node.Parents).ToList()
                     };
+                }
+
+                // need to generate consistent search result id, independed on skip/take values
+                void IncrementSectionId()
+                {
+                    if (lastSection == null)
+                    {
+                        lastSection = node.Parent.Identity;
+                    }
+
+                    if (lastSection != node.Parent.Identity)
+                    {
+                        lastSection = node.Parent.Identity;
+                        searchResultId += 1;
+                    }
                 }
 
                 string GetCurrentNodeTitle()
