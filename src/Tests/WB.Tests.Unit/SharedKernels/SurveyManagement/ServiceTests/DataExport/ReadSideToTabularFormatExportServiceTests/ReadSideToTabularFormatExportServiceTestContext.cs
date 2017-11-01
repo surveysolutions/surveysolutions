@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             Assert.That(rows[0].First(), 
                 Is.EqualTo(new object[]
                 {
-                    ServiceColumns.Id, "1", "a", "long__var", "ssSys_IRnd", ServiceColumns.Key, ServiceColumns.HasAnyError
+                    ServiceColumns.Id, "1", "a", "long__var", "ssSys_IRnd", ServiceColumns.Key, ServiceColumns.HasAnyError, ServiceColumns.InterviewStatus
                 }));
 
             Assert.That(rows[1].First(), 
