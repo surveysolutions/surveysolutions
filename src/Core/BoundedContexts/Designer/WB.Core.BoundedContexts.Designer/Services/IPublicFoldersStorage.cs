@@ -17,5 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
         void RemoveFolder(Guid id);
 
         void AssignFolderToQuestionnaire(Guid questionnaireId, Guid? folderId);
+
+        IEnumerable<QuestionnaireListViewFolder> GetFoldersPath(Guid? folderId);
     }
 }

@@ -43,6 +43,7 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
+        private readonly IPublicFoldersStorage publicFoldersStorage;
 
         public QuestionnaireController(
             ICommandService commandService,
@@ -54,7 +55,8 @@ namespace WB.UI.Designer.Controllers
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
             ILookupTableService lookupTableService, 
-            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory)
+            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
+            IPublicFoldersStorage publicFoldersStorage)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -66,6 +68,7 @@ namespace WB.UI.Designer.Controllers
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
             this.lookupTableService = lookupTableService;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
+            this.publicFoldersStorage = publicFoldersStorage;
         }
 
         [NoCache]
@@ -220,8 +223,27 @@ namespace WB.UI.Designer.Controllers
             => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: false, folderId: null));
 
         [ValidateInput(false)]
-        public ActionResult Public(int? p, string sb, int? so, string f, Guid? id) 
-            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: true, folderId: id));
+        public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
+        {
+            var questionnaires = this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
+                showPublic: true, folderId: id);
+
+            var folderPath = publicFoldersStorage.GetFoldersPath(folderId: id);
+            var breadcrumbs = folderPath.Select(folder => new FolderBreadcrumbsModel()
+            {
+                FolderId = folder.PublicId,
+                Title = folder.Title
+            }).ToArray();
+
+            var model = new QuestionnaireListModel()
+            {
+                CurrentFolderId = id,
+                Breadcrumbs = breadcrumbs,
+                Questionnaires = questionnaires
+            };
+
+            return this.View(model);
+        }
 
         [ValidateInput(false)]
         public ActionResult PublicFolders() 

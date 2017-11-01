@@ -1,5 +1,6 @@
 ﻿@using WB.UI.Designer.Resources
 
+@model WB.UI.Designer.Models.QuestionnaireListModel
 @{
     ViewBag.Title = QuestionnaireController.PublicQuestionnaires;
 }
@@ -9,7 +10,25 @@
     @Scripts.Render("~/folders")
 }
 
-@Html.Partial("QuestionnairesList")
+<ol class="breadcrumb tree-icon public-questionnaires-breadcrumb">
+    @foreach (var folder in Model.Breadcrumbs)
+    {
+        if (folder.FolderId.HasValue && folder.FolderId != Guid.Empty)
+        {
+             <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new {id = folder.FolderId}, null)</li>
+        }
+        else if (folder.FolderId == Model.CurrentFolderId)
+        {
+            <li class="active">@folder.Title</li>
+        }
+        else 
+        {
+            <li>@Html.ActionLink(folder.Title, "Public", "Questionnaire", new { }, null)</li>
+        }
+    }
+</ol>
+
+@Html.Partial("QuestionnairesList", Model.Questionnaires)
 
 @section Modal
 {

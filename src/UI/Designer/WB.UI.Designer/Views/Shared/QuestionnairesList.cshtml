@@ -7,7 +7,12 @@
 @using WB.UI.Shared.Web.Extensions
 @model IPagedList<QuestionnaireListViewModel>
 
-<table id="questionnaire-table-header" class="table  table-header">
+@{
+    bool isSupportFolders = true;// Model.Any(i => i.IsPublic)
+
+}
+
+<table id="questionnaire-table-header" class="table table-header  page-with-breadcrumbs">
     <thead>
         <tr>
             @ShowTableHeaderCell("Title", QuestionnaireController.Title, true)
@@ -19,7 +24,7 @@
         </tr>
     </thead>
 </table>
-<div id="table-content-holder">
+<div id="table-content-holder" class="list-with-icons">
     <div class="scroller-container">
         @ShowNotificationToUserIfNeeded()
         @if (Model.TotalCount == 0)
@@ -41,10 +46,14 @@
                     var pdfRetryUrl = Url.Action("Retry", "Pdf", routevalues);
                     var getLanguagesUrl = Url.Action("GetLanguages", "Questionnaire", routevalues);
                     var openActionName = listViewModel.IsFolder ? "Public" : "Details";
+                    var iconCssClass = listViewModel.IsFolder ? "tree-icon folder-closed" : "tree-icon";
 
                     <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                         <td class="search-value">
-                            @Html.ActionLink(listViewModel.Title, openActionName, "Questionnaire", routevalues, null)
+                            <a href="@Url.Action(openActionName, "Questionnaire", routevalues)">
+                                <span class="@iconCssClass"></span>
+                                @listViewModel.Title
+                            </a>
                         </td>
                         <td class="date">
                             <time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.FormatDate()</time>
