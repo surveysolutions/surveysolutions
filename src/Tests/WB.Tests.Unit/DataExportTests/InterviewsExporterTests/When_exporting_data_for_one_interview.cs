@@ -28,7 +28,6 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
         public void It_should_export_service_column_with_interview_key()
         {
             //arrange
-            SetUp();
             Guid interviewId = Id.g1;
             var interviewKey = "11-11-11-11";
 
@@ -38,7 +37,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
 
             var interviewSummaries = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), Create.Entity.InterviewSummary(interviewId, key: interviewKey));
 
-            exporter = new InterviewsExporter(
+            var exporter = new InterviewsExporter(
                 fileSystemAccessor.Object,
                 logger.Object,
                 interviewDataExportSettings,
@@ -71,7 +70,6 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
         public void It_should_export_service_column_with_has_error_and_status()
         {
             //arrange
-            SetUp();
             Guid interviewId = Id.g1;
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -81,7 +79,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             var interviewSummaries = new TestInMemoryWriter<InterviewSummary>(interviewId.FormatGuid(), 
                 Create.Entity.InterviewSummary(interviewId, hasErrors: true, status: InterviewStatus.Completed));
 
-            exporter = new InterviewsExporter(
+            var exporter = new InterviewsExporter(
                 fileSystemAccessor.Object,
                 logger.Object,
                 interviewDataExportSettings,
@@ -111,13 +109,16 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(true.ToString()));
             Assert.That(dataInCsvFile[1].Data[0][5], Is.EqualTo(InterviewStatus.Completed.ToString()));
         }
-        private void SetUp()
+
+        [SetUp]
+        public void SetUp()
         {
+            dataInCsvFile = new List<CsvData>();
+
             fileSystemAccessor = new Mock<IFileSystemAccessor>();
             logger = new Mock<ILogger>();
             csvWriter = new Mock<ICsvWriter>();
             rowReader = new Mock<InterviewExportredDataRowReader>();
-            var interviewSummaries = new TestInMemoryWriter<InterviewSummary>();
             transactionManagerProvider = new Mock<ITransactionManagerProvider>();
             transactionManagerProvider.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
 
@@ -137,8 +138,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 .Returns((string b, string p) => p);
         }
 
-        private List<CsvData> dataInCsvFile = new List<CsvData>();
-        private InterviewsExporter exporter;
+        private List<CsvData> dataInCsvFile;
         private Mock<IFileSystemAccessor> fileSystemAccessor;
         private Mock<ILogger> logger;
         private InterviewDataExportSettings interviewDataExportSettings = new InterviewDataExportSettings("folder", false, 1, 1, 1, 1);
