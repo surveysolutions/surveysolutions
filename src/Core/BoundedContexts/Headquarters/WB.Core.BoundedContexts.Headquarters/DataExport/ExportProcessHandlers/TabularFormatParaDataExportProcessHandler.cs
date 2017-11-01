@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
                 IEnumerable<CommittedEvent> events = eventSlice;
-                this.logger.Info($"Processing export slice. Sequrce of last event: {eventSlice.Position.SequenceOfLastEvent}, EventSource: ${eventSlice.Position.EventSourceIdOfLastEvent}");
+                this.logger.Info($"Processing export slice. Sequence of last event: {eventSlice.Position.SequenceOfLastEvent}, EventSource: ${eventSlice.Position.EventSourceIdOfLastEvent}");
                 this.TransactionManager.ExecuteInQueryTransaction(
                     () =>
                     {
