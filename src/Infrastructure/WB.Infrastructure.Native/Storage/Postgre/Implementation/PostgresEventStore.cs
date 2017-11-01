@@ -267,9 +267,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     globalSequence = (int)lastGlobalSequenceCommand.ExecuteScalar();
                 }
 
-                long eventsCountAfterPosition = this.GetEventsCountAfterPosition(position);
                 long processed = 0;
-                while (processed < eventsCountAfterPosition)
+                long loadedBatchSize = BatchSize;
+                while (loadedBatchSize == BatchSize)
                 {
                     var npgsqlCommand = connection.CreateCommand();
                     npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE globalsequence > :globalSequence ORDER BY globalsequence LIMIT :batchSize OFFSET :processed";
@@ -290,9 +290,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     }
 
                     var committedEvent = events.Last();
-                    yield return new EventSlice(events, new EventPosition(0, 0, committedEvent.EventSourceId, committedEvent.EventSequence), false);
+                    loadedBatchSize = events.Count;
+                    yield return new EventSlice(events, new EventPosition(0, 0, committedEvent.EventSourceId, committedEvent.EventSequence), loadedBatchSize != BatchSize);
 
-                    processed += BatchSize;
+                    processed += events.Count;
                 }
 
             }
