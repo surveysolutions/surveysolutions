@@ -5,8 +5,10 @@
         preset: "bootstrap3",
         map: {
             expanderClosed: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
-            expanderLazy: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
-            expanderOpen: "glyphicon glyphicon-menu-down"  // glyphicon-minus-sign
+            expanderLazy  : "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
+            expanderOpen  : "glyphicon glyphicon-menu-down",  // glyphicon-minus-sign
+            folder        : "tree-icon folder-closed",
+            folderOpen    : "tree-icon folder-open",
         }
     };
 
@@ -15,13 +17,7 @@
         checkbox: supportRadioButton ? "radio" : false,
         glyph: glyph_opts,
         selectMode: 1,
-        //icon: true,
-        icon: function (event, data) {
-            if (data.node.isExpanded()) {
-                return "tree-icon folder-open";
-            }
-            return "tree-icon folder-closed";
-        },
+        icon: true,
         source: {
             url: rootNodesUrl,
             cache: false
