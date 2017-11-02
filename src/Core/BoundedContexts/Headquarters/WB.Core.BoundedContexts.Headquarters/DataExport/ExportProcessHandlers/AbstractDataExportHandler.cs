@@ -56,8 +56,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
                 dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus);
+            
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
+            this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
 
-            dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName);
+            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName, exportProgress);
 
             this.DeleteExportTempDirectory();
         }

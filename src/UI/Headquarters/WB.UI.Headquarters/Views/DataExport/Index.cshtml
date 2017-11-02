@@ -196,7 +196,7 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
         </div>
 
         <div class="cell-data progress-block">
-            <div class="cancelable-progress queued" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) < 1)">
+            <div class="cancelable-progress queued" data-bind="visible: isInQueue(@exportParameters)">
                 <div class="wrapper-progress">
                     <span>@DataExport.QueuedTitle</span>
                     <div class="progress">
@@ -208,16 +208,21 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
                 <button type="button" class="btn btn-link" data-bind="click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
             </div>
 
-            <div class="cancelable-progress" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) > 0)">
+            <div class="cancelable-progress" data-bind="visible: isRunning(@exportParameters) || isCompessing(@exportParameters)">
                 <div class="wrapper-progress">
-                    <span data-bind="text:'@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                    <!-- ko if: isCompessing(@Html.Raw(exportParameters)) -->
+                    <span data-bind="text: '@DataExport.Compressing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                    <!-- /ko -->
+                    <!-- ko if: isRunning(@Html.Raw(exportParameters)) -->
+                    <span data-bind="text: '@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                    <!-- /ko -->
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">
                             <span class="sr-only" data-bind="text: getProgressInPercents(@exportParameters) + '% @DataExport.Completed'"></span>
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-link" data-bind="click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
+                <button type="button" class="btn btn-link" data-bind="visible: isRunning(@exportParameters); click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
             </div>
         </div>
 

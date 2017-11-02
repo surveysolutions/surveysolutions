@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -32,15 +33,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.logger = logger;
         }
 
-        public void RecreateExportArchive(string folderForDataExport, string archiveFilePath)
+        public void RecreateExportArchive(string folderForDataExport, string archiveFilePath, IProgress<int> progress = null)
         {
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-            {
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-            }
-
             var password = this.GetPasswordFromSettings();
-            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath, password);
+            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath, password, progress);
         }
 
         public void RecreateExportArchive(IEnumerable<string> filesToArchive, string archiveFilePath)
