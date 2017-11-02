@@ -57,8 +57,15 @@ export default {
 
     watch:{
         "searchResult.count"() {
-            this.$refs.loader.$emit('$InfiniteLoading:reset');
+            if(this.$refs.loader != null)
+                this.$refs.loader.$emit('$InfiniteLoading:reset');
         }
+    },
+
+    mounted() {
+        this.$nextTick(() => {
+           this.$store.dispatch("fetchSearchResults")
+        })
     },
 
     components: { SearchSectionResult,InfiniteLoading}
