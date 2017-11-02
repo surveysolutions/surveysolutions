@@ -5,6 +5,7 @@
         NotStarted = 1,
         Queued,
         Running,
+        Compressing,
         Finished,
         FinishedWithError
     }
