@@ -1,5 +1,6 @@
 import Vue from "vue"
 import { getLocationHash } from "~/shared/helpers"
+import { debounce } from "lodash"
 
 const fetch = {
     state: {
@@ -30,24 +31,22 @@ const fetch = {
                 entity: rootState.webinterview.entityDetails[id], now, total
             })
         },
-        scroll({commit, state}) {
+        scroll: debounce(({commit, state}) => {
             if (state.scroll == null) {
                 return
             }
-
+            
             const query = "#" + getLocationHash(state.scroll.id)
             const el = document.querySelector(query)
 
-            setTimeout(() => {
-                if (el != null) {
-                    window.scrollTo({ top: el.offsetTop, behavior: "smooth" })
-                } else {
-                    window.scrollTo({ top: state.scroll.top })
-                }
-            }, 0)
-
+            if (el != null) {
+                window.scrollTo({ top: el.offsetTop, behavior: "smooth" })
+            } else {
+                window.scrollTo({ top: state.scroll.top })
+            }
+            
             commit("SET_SCROLL_TARGET", null)
-        }
+        }, 200)
     },
     mutations: {
         SET_UPLOAD_PROGRESS(state, { entity, now, total }) {
