@@ -33,9 +33,13 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeQuestion, InterviewAudioQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.Filename, opts => opts.MapFrom(x => x.GetAsInterviewTreeAudioQuestion().GetAnswer() != null
+                        ? x.GetAsInterviewTreeAudioQuestion().GetAnswer().FileName
+                        : null))
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsInterviewTreeAudioQuestion().GetAnswer()!=null
                     ? (long)x.GetAsInterviewTreeAudioQuestion().GetAnswer().Length.TotalMilliseconds
                     : (long?)null));
+
 
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()

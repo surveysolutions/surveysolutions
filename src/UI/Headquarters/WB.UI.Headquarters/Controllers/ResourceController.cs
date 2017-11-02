@@ -41,12 +41,17 @@ namespace WB.UI.Headquarters.Controllers
             return this.File(file, "image/jpeg", fileName);
         }
 
-        public ActionResult AudioRecord(Guid interviewId, string fileName)
+        public ActionResult AudioRecord(string interviewId, string fileName)
         {
+            if (!Guid.TryParse(interviewId, out var id))
+            {
+                return HttpNotFound();
+            }
+
             AudioFile file = null;
             if (fileName != null)
             {
-                file = this.audioFileStorage.Query(_=> _.FirstOrDefault(x => x.InterviewId == interviewId && x.FileName == fileName));
+                file = this.audioFileStorage.Query(_=> _.FirstOrDefault(x => x.InterviewId == id && x.FileName == fileName));
             }
 
             if (file == null || file.Data.Length == 0)
