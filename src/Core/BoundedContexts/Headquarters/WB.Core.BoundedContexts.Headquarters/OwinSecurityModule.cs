@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IIdentityValidator<string>>().To<HqPasswordValidator>();
 
             //this.Bind<IOwinContext>().ToMethod(context => HttpContext.Current.GetOwinContext());
+            this.Bind<IAuthenticationManager>().ToMethod(context => HttpContext.Current.GetOwinContext().Authentication);
 
             // no on per request scope required - lifetime managed by their parents controllers/handlers
             this.Bind<HQIdentityDbContext>().ToSelf();
