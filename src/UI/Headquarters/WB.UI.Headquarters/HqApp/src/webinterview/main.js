@@ -9,45 +9,44 @@ import config from "~/shared/config"
 Vue.use(config)
 
 import Vuei18n from "~/shared/plugins/locale"
+import { browserLanguage } from "~/shared/helpers"
+const i18n = Vuei18n.initialize(browserLanguage);
+Vue.use(Vuei18n)
 
 import './init'
-
 import "./errors"
 import box from "./components/modal"
 
-import { browserLanguage } from "~/shared/helpers"
+require("./componentsRegistry")
 
-export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
-    Vue.use(Vuei18n)
+const createRouter = require("./router").default;
 
-    require("./componentsRegistry")
-    
-    const createRouter = require("./router").default;
-    
-    const store = new Vuex.Store({
-        modules: { 
-            webinterview: require("./store").default
-        }
-    });
+const store = new Vuex.Store({
+    modules: {
+        webinterview: require("./store").default
+    }
+});
 
-    const router = createRouter(store);
+const router = createRouter(store);
 
-    sync(store, router)
-    
-    const App = require("./App").default;
-    const installApi = require("./api").install
-    
-    installApi(Vue, { store })
+sync(store, router)
 
-    box.init(i18n, browserLanguage)
+const App = require("./App").default;
+const installApi = require("./api").install
 
-    return new Vue({
-        el: "#app",
-        render: h => h(App),
-        components: { App },
-        store,
-        router,
-        i18n
-    });
+installApi(Vue, {
+    store
 })
 
+box.init(i18n, browserLanguage)
+
+export default new Vue({
+    el: "#app",
+    render: h => h(App),
+    components: {
+        App
+    },
+    store,
+    router,
+    i18n
+})
