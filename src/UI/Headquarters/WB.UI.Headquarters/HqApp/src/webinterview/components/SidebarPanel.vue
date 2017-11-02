@@ -36,7 +36,7 @@
                 }
             },
             title() {
-                return decodeURIComponent(this.panel.title + (this.panel.isRoster ? (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` :" - [...]") : ""))
+                return this.panel.title + (this.panel.isRoster ? (this.panel.rosterTitle ? ` - ${this.panel.rosterTitle}` :" - [...]") : "")
             },
             to() {
                 if (this.panel.to) {
