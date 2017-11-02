@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         public AuthorizedUser(IAuthenticationManager authenticationManager)
         {
-            this.authenticationManager = authenticationManager;
+            this.authenticationManager = authenticationManager ?? throw new ArgumentNullException(nameof(authenticationManager));
         }
 
         public bool IsSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);

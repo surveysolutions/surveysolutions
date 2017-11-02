@@ -10,7 +10,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         private readonly IProductVersion productVersion;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
-        public WebInterviewStateManager(IProductVersion productVersion, IStatefulInterviewRepository statefulInterviewRepository)
+        public WebInterviewStateManager(IProductVersion productVersion, 
+            IStatefulInterviewRepository statefulInterviewRepository)
         {
             this.productVersion = productVersion;
             this.statefulInterviewRepository = statefulInterviewRepository;

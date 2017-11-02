@@ -9,6 +9,8 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using AutoMapper;
 using Main.DenormalizerStorage;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Security;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
