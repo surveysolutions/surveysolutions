@@ -26,6 +26,9 @@
         ReceivedBySupervisor,
         VariableSet,
         VariableEnabled,
-        VariableDisabled
+        VariableDisabled,
+        Paused,
+        Resumed,
+        KeyAssigned
     }
 }

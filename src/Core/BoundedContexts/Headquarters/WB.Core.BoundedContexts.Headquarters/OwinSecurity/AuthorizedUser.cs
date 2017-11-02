@@ -2,7 +2,6 @@ using System;
 using System.Security.Claims;
 using System.Threading;
 using Main.Core.Entities.SubEntities;
-using Microsoft.Owin.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -12,15 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public const string ObserverClaimType = "observer";
         public const string DeviceClaimType = "device";
 
-        public AuthorizedUser(IAuthenticationManager authenticationManager)
-        {
-            
-        }
-
-        private ClaimsPrincipal User
-        {
-            get { return Thread.CurrentPrincipal as ClaimsPrincipal; }
-        }
+        private ClaimsPrincipal User => Thread.CurrentPrincipal as ClaimsPrincipal;
 
         public bool IsSupervisor => this.IsCurrentUserInRole(UserRoles.Supervisor);
 

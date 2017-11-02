@@ -63,7 +63,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, AudioQuestionAnswered>,
         IUpdateHandler<InterviewHistoryView, VariablesChanged>,
         IUpdateHandler<InterviewHistoryView, VariablesEnabled>,
-        IUpdateHandler<InterviewHistoryView, VariablesDisabled>
+        IUpdateHandler<InterviewHistoryView, VariablesDisabled>,
+        IUpdateHandler<InterviewHistoryView, InterviewKeyAssigned>,
+        IUpdateHandler<InterviewHistoryView, InterviewPaused>,
+        IUpdateHandler<InterviewHistoryView, InterviewResumed>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
@@ -718,6 +721,33 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     this.CreateVariableParameters(variable.Id, variable.RosterVector));
             }
             return view;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewKeyAssigned> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.KeyAssigned, null,
+                @event.EventTimeStamp, new Dictionary<string, string>
+                {
+                    {"Key", @event.Payload.Key.ToString()}
+                });
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewPaused> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.Paused, null,
+                @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewResumed> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, null,
+                @event.EventTimeStamp);
+
+            return state;
         }
 
         private Dictionary<string, string> CreateVariableParameters(Guid variableId, decimal[] propagationVector)
