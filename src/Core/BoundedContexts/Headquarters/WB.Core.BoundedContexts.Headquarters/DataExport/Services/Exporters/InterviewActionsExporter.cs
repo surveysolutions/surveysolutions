@@ -54,10 +54,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         public void Export(QuestionnaireIdentity questionnaireIdentity, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
         {
-            this.ExportActionsInTabularFormatAsync(interviewIdsToExport, basePath, progress);
+            this.ExportActionsInTabularFormat(interviewIdsToExport, basePath, progress);
         }
 
-        private void ExportActionsInTabularFormatAsync(List<Guid> interviewIdsToExport,
+        private void ExportActionsInTabularFormat(List<Guid> interviewIdsToExport,
             string basePath,
             IProgress<int> progress)
         {

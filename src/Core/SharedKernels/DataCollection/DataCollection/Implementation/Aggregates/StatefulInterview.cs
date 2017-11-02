@@ -167,6 +167,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.IsCompleted = true;
         }
 
+        private void Apply(InterviewPaused @event)
+        {
+        }
+
+        private void Apply(InterviewResumed @event)
+        {
+        }
+
         public new void Apply(InterviewRejected @event)
         {
             base.Apply(@event);
@@ -825,5 +833,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             return this.properties.AssignmentId;
         }
+
+        public void Pause(PauseInterviewCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+
+            ApplyEvent(new InterviewPaused(command.UserId));
+        }
+
+        public void Resume(ResumeInterviewCommand command) { }
     }
 }
