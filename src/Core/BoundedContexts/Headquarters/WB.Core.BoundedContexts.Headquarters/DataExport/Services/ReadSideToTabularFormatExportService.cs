@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -216,9 +217,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     interviewLevelHeader.AddRange(ServiceColumns.SystemVariables.Values.Select(systemVariable => systemVariable.VariableExportColumnName));
                 }
 
-                for (int i = 0; i < level.LevelScopeVector.Length; i++)
+                for (int i = 1; i < level.LevelScopeVector.Length; i++)
                 {
-                    interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
+                    var parentLevelScopeVector = ValueVector.Create(level.LevelScopeVector.Take(level.LevelScopeVector.Count - i).ToArray());
+                    var parentLevelName =
+                        questionnaireExportStructure.HeaderToLevelMap.GetOrNull(parentLevelScopeVector)?.LevelName ??
+                        $"{ServiceColumns.ParentId}{i + 1}";
+
+                    interviewLevelHeader.Add($"{parentLevelName}__id");
+                }
+
+                if (level.LevelScopeVector.Length != 0)
+                {
+                    interviewLevelHeader.Add(ServiceColumns.InterviewId);
                 }
 
                 this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
