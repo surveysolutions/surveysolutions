@@ -634,8 +634,7 @@ table.table-content {
     margin: 0;
 }
 
-.folder-tree .fancytree-expander,
-.folder-tree .fancytree-checkbox {
+.folder-tree .fancytree-expander {
     margin: 8px 5px 8px 0;
     color: #a6a8a9;
 }
@@ -696,10 +695,11 @@ table.table-content {
     white-space: pre-line;
 }
 
+.folder-tree .fancytree-plain.fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-active:hover span.fancytree-title,
 .folder-tree .fancytree-plain.fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-active span.fancytree-title,
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active:hover span.fancytree-title {
     background: transparent;
-    border: none;
+    border-color: transparent;
 }
 
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active span.fancytree-title {
@@ -760,5 +760,26 @@ table.table-header.page-with-breadcrumbs {
     width: calc(100% - 65px);
 }
 
+.folder-tree .fancytree-checkbox {
+    margin: 6px 5px 6px 0;
+    cursor: pointer;
+    width: 24px;
+    height: 18px;
+    background: transparent url("images/chekboxes.png") no-repeat;
+    background-size: 68px 350px;
+    background-position: 0 0px;
+}
 
+.folder-tree .fancytree-checkbox:hover,
+.folder-tree .fancytree-checkbox:focus {
+    background-position: 0 -36px;
+}
 
+.folder-tree .fancytree-checkbox.tree-checkbox-checked {
+    background-position: 0 -72px;
+}
+
+.folder-tree .fancytree-checkbox.tree-checkbox-checked:hover,
+.folder-tree .fancytree-checkbox.tree-checkbox-checked:focus {
+    background-position: 0 -108px;
+}
