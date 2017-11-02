@@ -27,5 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         void DeleteDataExport(string processId);
 
         void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, DataExportType exportType);
+
+        void ChangeStatusType(string processId, DataExportStatus status);
     }
 }

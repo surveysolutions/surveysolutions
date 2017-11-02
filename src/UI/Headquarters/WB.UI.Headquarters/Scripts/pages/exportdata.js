@@ -225,6 +225,26 @@
         return dataReference.ProgressInPercents();
     }
 
+    self.isInQueue = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+
+        return dataReference.StatusOfLatestExportProcess() === 2;
+    }
+
+    self.isRunning = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+
+        return dataReference.StatusOfLatestExportProcess() === 3;
+    }
+
+    self.isCompessing = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+
+        return dataReference.StatusOfLatestExportProcess() === 4;
+    }
 
     self.updateDataExportInfo(true);
 };

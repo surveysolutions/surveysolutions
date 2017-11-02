@@ -17,17 +17,12 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public void ZipDirectory(string directory, string archiveFile)
-        {
-            ZipDirectory(directory, archiveFile, password: null);
-        }
+        public void ZipDirectory(string directory, string archiveFile) 
+            => this.ZipDirectory(directory, archiveFile, password: null);
 
-        public void ZipDirectory(string directory, string archiveFile, string password)
+        public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
         {
-            if (this.fileSystemAccessor.IsFileExists(archiveFile))
-                throw new InvalidOperationException("zip file exists");
-
-            using (var zipFile = new ZipFile()
+            using (var zipFile = new ZipFile
             {
                 ParallelDeflateThreshold = -1,
                 AlternateEncoding = Encoding.UTF8,
@@ -39,6 +34,16 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                     zipFile.Password = password;
 
                 zipFile.AddDirectory(directory, "");
+
+                if (progress != null)
+                {
+                    zipFile.SaveProgress += (o, e) =>
+                    {
+                        if (e.EventType == ZipProgressEventType.Saving_AfterWriteEntry)
+                            progress.Report(e.EntriesSaved * 100 / e.EntriesTotal);
+                    };
+                }
+
                 zipFile.Save(archiveFile);
             }
         }

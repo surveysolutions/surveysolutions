@@ -135,12 +135,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.DeleteDataExport(process.NaturalId);
         }
 
+        public void ChangeStatusType(string processId, DataExportStatus status)
+        {
+            var dataExportProcess = this.processes.GetOrNull(processId);
+
+            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
+
+            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
+            dataExportProcess.Status = status;
+        }
+
         private static void ThrowIfProcessIsNullOrNotRunningNow(IDataExportProcessDetails dataExportProcess, string processId)
         {
             if (dataExportProcess == null)
                 throw new InvalidOperationException($"Process with id '{processId}' is absent");
 
-            if (dataExportProcess.Status != DataExportStatus.Running)
+            if (dataExportProcess.Status != DataExportStatus.Running &&
+                dataExportProcess.Status != DataExportStatus.Compressing)
                 throw new InvalidOperationException(
                     $"Process '{dataExportProcess.Name}' should be in Running state, but it is in state {dataExportProcess.Status}");
         }

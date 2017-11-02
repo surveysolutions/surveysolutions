@@ -6,7 +6,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
     {
         public static bool IsQueuedOrRunning(this IDataExportProcessDetails process)
         {
-            return process.Status == DataExportStatus.Queued || process.Status == DataExportStatus.Running;
+            return process.Status == DataExportStatus.Queued || process.Status == DataExportStatus.Running ||
+                   process.Status == DataExportStatus.Compressing;
         }
     }
 }
