@@ -90,7 +90,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaire.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaire.AsReadOnly());
             }
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? 
+                Create.Entity.QuestionnaireDocumentWithOneQuestion());
 
             var statefulInterview = new StatefulInterview(
                 questionnaireRepository,
