@@ -18,30 +18,31 @@ import 'flatpickr/dist/flatpickr.css'
 import "toastr/build/toastr.css"
 
 import { browserLanguage } from "~/shared/helpers"
+
 moment.locale(browserLanguage);
 
-export default Vuei18n.initializeAsync(browserLanguage).then((i18n) => {
-    Vue.use(config);
-    Vue.use(http);
-    Vue.use(Vuei18n);
+const i18n = Vuei18n.initialize(browserLanguage)
 
-    const viewsProvider = require("./views").default;
-    const Router = require('./router').default;
+Vue.use(config);
+Vue.use(http);
+Vue.use(Vuei18n);
 
-    const views = viewsProvider(store);
+const viewsProvider = require("./views").default;
+const Router = require('./router').default;
 
-    const router = new Router({
-        routes: views.routes
-    }).router;
+const views = viewsProvider(store);
 
-    sync(store, router)
+const router = new Router({
+    routes: views.routes
+}).router;
 
-    box.init(i18n, browserLanguage);
-    new Vue({
-        el: "#vueApp",
-        render: h => h('router-view'),
-        store,
-        router,
-        i18n
-    });
-})
+sync(store, router)
+
+box.init(i18n, browserLanguage);
+export default new Vue({
+    el: "#vueApp",
+    render: h => h('router-view'),
+    store,
+    router,
+    i18n
+});

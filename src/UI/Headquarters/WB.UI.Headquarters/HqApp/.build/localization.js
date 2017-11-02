@@ -104,13 +104,13 @@ module.exports = {
                 const content = JSON.stringify(entryResult[lang]);
                 const filename = 
                     process.env.NODE_ENV == "production" 
-                    ? `${key}/${lang}.${getHash(content)}.json`
-                    : `${key}/${lang}.json`
+                    ? `${key}/${lang}.${getHash(content)}.js`
+                    : `${key}/${lang}.js`
 
                 const jsonPath = `./dist/${filename}`;
                 
                 ensureDirectoryExistence(jsonPath);
-                fs.writeFileSync(jsonPath, content);
+                fs.writeFileSync(jsonPath, `__setLocaleData__(${content})`);
 
                 localizationInfo[key][lang] = filename;
             });

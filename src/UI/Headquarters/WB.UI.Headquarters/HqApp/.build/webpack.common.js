@@ -204,7 +204,7 @@ module.exports = function (appConfig) {
                     template: '!!pug-loader!src/template.pug',
 
                     // provide list of available locales to template and app
-                    locales: JSON.stringify(localizationInfo[entryName]),
+                    locales: localizationInfo[entryName],
                     entry: entryName,
                     cache: false,
                     // provide path to shared_vendor.dll
