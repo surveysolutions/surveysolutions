@@ -8,6 +8,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public static readonly string Id = "Id";
         public static readonly string HasAnyError = "has__error";
         public static readonly string Key = "interview__key";
+        public static readonly string InterviewId = "interview__id";
         public static readonly string InterviewStatus = "interview__status";
 
         //prefix to identify parent record
