@@ -627,7 +627,6 @@ table.table-content {
 
 
 
-
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node {
     display: block;
     overflow: hidden;
@@ -704,7 +703,7 @@ table.table-content {
 
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active span.fancytree-title {
     background-color: transparent;
-    font-weight: bold;
+    text-decoration: underline;
     color: #4d4d4d;
 }
 
@@ -765,7 +764,7 @@ table.table-header.page-with-breadcrumbs {
     cursor: pointer;
     width: 24px;
     height: 18px;
-    background: transparent url("images/chekboxes.png") no-repeat;
+    background: transparent url("images/chekboxes2k.png") no-repeat;
     background-size: 68px 350px;
     background-position: 0 0px;
 }
@@ -782,4 +781,9 @@ table.table-header.page-with-breadcrumbs {
 .folder-tree .fancytree-checkbox.tree-checkbox-checked:hover,
 .folder-tree .fancytree-checkbox.tree-checkbox-checked:focus {
     background-position: 0 -108px;
+}
+
+.modal-body .folder-tree {
+    max-height: 500px;
+    overflow: auto;
 }
