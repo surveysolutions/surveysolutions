@@ -708,7 +708,6 @@ table.table-content tr th:last-child {
     color: #000;
 }
 
-
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node {
     display: block;
     overflow: hidden;
@@ -720,15 +719,15 @@ table.table-content tr th:last-child {
     color: #a6a8a9;
 }
 
-.folder-tree span.fancytree-node span.fancytree-expander:hover,
-.folder-tree span.fancytree-node span.fancytree-expander:focus,
-.folder-tree span.fancytree-node span.fancytree-expander:active,
-.folder-tree .fancytree-expander:active,
-.folder-tree .fancytree-checkbox:hover,
-.folder-tree .fancytree-checkbox:focus,
-.folder-tree .fancytree-checkbox:active {
-    color: #000;
-}
+    .folder-tree span.fancytree-node span.fancytree-expander:hover,
+    .folder-tree span.fancytree-node span.fancytree-expander:focus,
+    .folder-tree span.fancytree-node span.fancytree-expander:active,
+    .folder-tree .fancytree-expander:active,
+    .folder-tree .fancytree-checkbox:hover,
+    .folder-tree .fancytree-checkbox:focus,
+    .folder-tree .fancytree-checkbox:active {
+        color: #000;
+    }
 
 .folder-tree .fancytree-node:hover .fancytree-title {
     text-decoration: underline;
@@ -754,15 +753,15 @@ table.table-content tr th:last-child {
     display: inline-block;
 }
 
-.folder-tree .tree-icon.folder-open,
-.tree-icon.folder-open {
-    background-position: 0 -30px;
-}
+    .folder-tree .tree-icon.folder-open,
+    .tree-icon.folder-open {
+        background-position: 0 -30px;
+    }
 
-.folder-tree .tree-icon.folder-closed,
-.tree-icon.folder-closed {
-    background-position: 0 0;
-}
+    .folder-tree .tree-icon.folder-closed,
+    .tree-icon.folder-closed {
+        background-position: 0 0;
+    }
 
 .folder-tree .fancytree-title {
     width: calc(100% - 50px);
@@ -785,7 +784,7 @@ table.table-content tr th:last-child {
 
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active span.fancytree-title {
     background-color: transparent;
-    font-weight: bold;
+    text-decoration: underline;
     color: #4d4d4d;
 }
 
@@ -804,13 +803,13 @@ table.table-content tr th:last-child {
     border-left: 13px solid #bcc3c8;
 }
 
-.breadcrumb.public-questionnaires-breadcrumb.tree-icon {
-    background-position: 10px -28px;
-}
+    .breadcrumb.public-questionnaires-breadcrumb.tree-icon {
+        background-position: 10px -28px;
+    }
 
-.breadcrumb.public-questionnaires-breadcrumb a {
-    color: #777;
-}
+    .breadcrumb.public-questionnaires-breadcrumb a {
+        color: #777;
+    }
 
 .container-wb-list section#designer-list #table-content-holder.page-with-breadcrumbs {
     top: 81px;
@@ -824,9 +823,9 @@ table.table-header.page-with-breadcrumbs {
     position: relative;
 }
 
-.list-with-icons .search-value a {
-    padding-left: 40px;
-}
+    .list-with-icons .search-value a {
+        padding-left: 40px;
+    }
 
 .list-with-icons .tree-icon {
     display: block;
@@ -846,21 +845,26 @@ table.table-header.page-with-breadcrumbs {
     cursor: pointer;
     width: 24px;
     height: 18px;
-    background: transparent url("images/chekboxes.png") no-repeat;
+    background: transparent url("images/chekboxes2k.png") no-repeat;
     background-size: 68px 350px;
     background-position: 0 0px;
 }
 
-.folder-tree .fancytree-checkbox:hover,
-.folder-tree .fancytree-checkbox:focus {
-    background-position: 0 -36px;
-}
+    .folder-tree .fancytree-checkbox:hover,
+    .folder-tree .fancytree-checkbox:focus {
+        background-position: 0 -36px;
+    }
 
-.folder-tree .fancytree-checkbox.tree-checkbox-checked {
-    background-position: 0 -72px;
-}
+    .folder-tree .fancytree-checkbox.tree-checkbox-checked {
+        background-position: 0 -72px;
+    }
 
-.folder-tree .fancytree-checkbox.tree-checkbox-checked:hover,
-.folder-tree .fancytree-checkbox.tree-checkbox-checked:focus {
-    background-position: 0 -108px;
+        .folder-tree .fancytree-checkbox.tree-checkbox-checked:hover,
+        .folder-tree .fancytree-checkbox.tree-checkbox-checked:focus {
+            background-position: 0 -108px;
+        }
+
+.modal-body .folder-tree {
+    max-height: 500px;
+    overflow: auto;
 }
