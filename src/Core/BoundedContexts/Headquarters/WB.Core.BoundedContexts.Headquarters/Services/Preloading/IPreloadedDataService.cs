@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -33,5 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
         bool IsQuestionRosterSize(string variableName);
 
         bool IsRosterSizeQuestionForLongRoster(Guid questionId);
+        bool IsVariableColumn(string columnName);
     }
 }

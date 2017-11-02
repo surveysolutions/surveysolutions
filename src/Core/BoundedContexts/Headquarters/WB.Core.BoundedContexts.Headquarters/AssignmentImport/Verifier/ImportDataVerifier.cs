@@ -616,6 +616,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 for (int columnIndex = 0; columnIndex < levelData.Header.Length; columnIndex++)
                 {
                     var columnName = levelData.Header[columnIndex];
+                    if (preloadedDataService.IsVariableColumn(columnName))
+                        continue;
 
                     for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
                     {
