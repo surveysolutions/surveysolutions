@@ -12,6 +12,7 @@
                 <li v-else>
                     <a href="javascript:void(0)" @click="hideAddComment">{{ $t("WebInterviewUI.CommentHide") }}</a>
                 </li>
+                <slot name="sideMenu"></slot>
             </ul>
         </div>
 

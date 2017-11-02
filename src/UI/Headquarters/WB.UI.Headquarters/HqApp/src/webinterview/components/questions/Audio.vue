@@ -14,6 +14,12 @@
                     <wb-remove-answer />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
+                    <div v-if="$store.state.review != null">
+                        <audio controls preload="auto" 
+                            style="width:300px" 
+                            :src="audioRecordPath">
+                        </audio>
+                    </div>
                     <button v-if="!isRecording" 
                         v-on:click="startRecording" 
                         :disabled="!$me.acceptAnswer" 
@@ -48,6 +54,9 @@
         </div>
         <div class="modal-backdrop in" style="display: none"></div>
         <!-- /.modal -->
+        <li slot="sideMenu">
+            <a :href="audioRecordPath">{{$t("Common.Download")}}</a>
+        </li>
     </wb-question>
 </template>
 <script lang="js">
@@ -55,6 +64,7 @@
 import { entityDetails } from "../mixins"
 import moment from "moment"
 import "~/shared/misc/audioRecorder.js"
+import api from "~/shared/api"
 
 const AudioRecorder = new window.AudioRecorder
 
@@ -74,6 +84,9 @@ export default {
         }
     },
     computed: {
+            audioRecordPath() {
+                return api.resources.audioRecordUri(this.interviewId, this.$me.filename)
+            },
             formattedLength() {
                 if (this.$me.isAnswered){
                     var d = moment.utc(this.$me.answer);
