@@ -68,5 +68,9 @@ export default {
         const question = state.entityDetails[questionId]
         question.comments = comments
         Vue.set(question, "postingComment", false)
+    },
+
+    COMPLETE_INTERVIEW(state) {
+        state.interviewCompleted = true;
     }
 }
