@@ -8,7 +8,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -21,33 +23,36 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 CreateQuestionnaireDocumentWithOneChapter(
 
                     Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "rosterGroup",  variable: "rosterGroup",
-                        obsoleteFixedTitles: new[] {"1", "2"},
+                        fixedTitles: new []{ Create.Entity.FixedTitle(1), Create.Entity.FixedTitle(2) },
                         children: new IComposite[]
                         {
-                            Create.Entity.FixedRoster(rosterId: nestedRosterId, variable: "nestedRoster",
-                                obsoleteFixedTitles: new[] {"a"}, title: "nestedRoster")
+                            Create.Entity.FixedRoster(rosterId: nestedRosterId, variable: "nestedRoster", fixedTitles: new []{ Create.Entity.FixedTitle(3), Create.Entity.FixedTitle(4) }, title: "nestedRoster")
                         }));
 
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of =
-            () =>
-                result =
-                    importDataParsingService.GetAvailableIdListForParent(
-                        CreatePreloadedDataByFile(new string[] { "Id", "ParentId1",  }, new string[][] { new string[] { "1", "1"} },
-                            "rosterGroup"), new ValueVector<Guid> { rosterGroupId, nestedRosterId }, new[] { "1", "1" }, new PreloadedDataByFile[0]);
+        Because of = () => 
+            result = importDataParsingService.GetAvailableIdListForParent(
+                CreatePreloadedDataByFile(
+                    header: new string[] { "Id", "rosterGroup__id", ServiceColumns.InterviewId  },
+                    content: new string[][]
+                    {
+                        new string[] { "1", "1", "1"}
+                    }, 
+                    fileName: "nestedRoster"), 
+                new ValueVector<Guid> { rosterGroupId, nestedRosterId }, new[] { "1", "1", "1" }, new PreloadedDataByFile[0]);
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();
 
-        It should_result_have_2_ids_1_and_2 = () =>
-            result.SequenceEqual(new [] { 1, 2 });
+        It should_result_have_2_ids_3_and_4 = () =>
+            result.SequenceEqual(new [] { 3, 4 });
 
         private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
         private static int[] result;
-        private static Guid rosterGroupId = Guid.NewGuid();
-        private static Guid nestedRosterId = Guid.NewGuid();
+        private static readonly Guid rosterGroupId = Id.g1;
+        private static readonly Guid nestedRosterId = Id.g2;
     }
 }
