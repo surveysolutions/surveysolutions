@@ -229,7 +229,11 @@ export default {
             })
     }, 200),
 
-    completeInterview({ dispatch }, comment) {
+    completeInterview({state, commit }, comment) {
+        if(state.interviewCompleted) return;
+
+        commit("COMPLETE_INTERVIEW");
+
         Vue.$api.call(api => api.completeInterview(comment))
     },
 
