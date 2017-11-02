@@ -24,6 +24,10 @@ export default {
             forInterviewer: false
         },
 
+        stats: {
+
+        },
+
         search: {
             results: [],
             count: 0,
@@ -79,6 +83,7 @@ export default {
             });
 
             state.search.count = results.totalCount
+            state.stats = results.stats
 
             // amount of questions to skip next time
             state.search.skip = _.sum(state.search.results.map(r => r.questions.length))

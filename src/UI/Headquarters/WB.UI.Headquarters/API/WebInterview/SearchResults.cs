@@ -23,5 +23,6 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public List<SearchResult> Results { get; set; } = new List<SearchResult>();
         public long TotalCount { get; set; }
+        public Dictionary<FilterOption, int> Stats { get; set; }
     }
 }
