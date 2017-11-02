@@ -722,14 +722,15 @@ table.table-content tr th:last-child {
     color: #a6a8a9;
 }
 
-.folder-tree .fancytree-expander:hover,
-.folder-tree .fancytree-expander:focus,
-.folder-tree .fancytree-expander:active,
-.folder-tree .fancytree-checkbox:hover,
-.folder-tree .fancytree-checkbox:focus,
-.folder-tree .fancytree-checkbox:active {
-    color: #000;
-}
+    .folder-tree span.fancytree-node span.fancytree-expander:hover,
+    .folder-tree span.fancytree-node span.fancytree-expander:focus,
+    .folder-tree span.fancytree-node span.fancytree-expander:active,
+    .folder-tree .fancytree-expander:active,
+    .folder-tree .fancytree-checkbox:hover,
+    .folder-tree .fancytree-checkbox:focus,
+    .folder-tree .fancytree-checkbox:active {
+        color: #000;
+    }
 
 .folder-tree .fancytree-node:hover .fancytree-title {
     text-decoration: underline;
@@ -768,7 +769,7 @@ table.table-content tr th:last-child {
 .folder-tree .fancytree-title {
     width: calc(100% - 50px);
     font: 18px/20px "Roboto-Bold";
-    padding: 5px 0;
+    padding: 5px 10px;
     margin: 0;
     color: #4d4d4d;
     border: none;
@@ -777,8 +778,10 @@ table.table-content tr th:last-child {
     white-space: pre-line;
 }
 
+.folder-tree .fancytree-plain.fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-active span.fancytree-title,
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active:hover span.fancytree-title {
     background: transparent;
+    border: none;
 }
 
 .folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active span.fancytree-title {
@@ -810,7 +813,7 @@ table.table-content tr th:last-child {
     color: #777;
 }
 
-.container-wb-list section#designer-list #table-content-holder.list-with-icons {
+.container-wb-list section#designer-list #table-content-holder.page-with-breadcrumbs {
     top: 81px;
 }
 
@@ -838,5 +841,6 @@ table.table-header.page-with-breadcrumbs {
 .folder-tree .fancytree-checkbox ~ .fancytree-title {
     width: calc(100% - 65px);
 }
+
 
 
