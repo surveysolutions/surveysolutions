@@ -80,15 +80,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(
                     questionnaireId,
                     questionnaireVersion,
-                    CreateHeaderStructureForLevel("main level"),
-                    CreateHeaderStructureForLevel("nested roster level", referenceNames: new[] { "r1", "r2" },
-                        levelScopeVector: new ValueVector<Guid>(new[] { Guid.NewGuid(), Guid.NewGuid() })));
+                    CreateHeaderStructureForLevel("main_level", levelScopeVector: ValueVector.Create(new Guid[0])),
+                    CreateHeaderStructureForLevel("first_roster_level", referenceNames: new[] { "r1", "r2" }, levelScopeVector: ValueVector.Create(Id.g1)),
+                    CreateHeaderStructureForLevel("second_roster_level", referenceNames: new[] { "r1", "r2" }, levelScopeVector: ValueVector.Create(Id.g1, Id.g2)),
+                    CreateHeaderStructureForLevel("third_roster_level", referenceNames: new[] { "r1", "r2" }, levelScopeVector: ValueVector.Create(Id.g1, Id.g2, Id.g3)));
 
             List<IEnumerable<string[]>> rows = new List<IEnumerable<string[]>>();
             Mock<ICsvWriter> csvWriterMock = new Mock<ICsvWriter>();
 
             csvWriterMock.Setup(
-                    x => x.WriteData(Moq.It.IsAny<string>(), Moq.It.IsAny<IEnumerable<string[]>>(), Moq.It.IsAny<string>()))
+                    x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
                     .Callback<string, IEnumerable<string[]>, string>((filePath, data, delimiter) => { rows.Add(data); });
 
             ReadSideToTabularFormatExportService readSideToTabularFormatExportService = Create.Service.ReadSideToTabularFormatExportService(csvWriter: csvWriterMock.Object,
@@ -99,17 +100,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             readSideToTabularFormatExportService.CreateHeaderStructureForPreloadingForQuestionnaire(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "");
             
             //aaa
-            Assert.That(rows.Count, Is.EqualTo(2));
+            Assert.That(rows.Count, Is.EqualTo(4));
             Assert.That(rows[0].First(), 
                 Is.EqualTo(new object[]
                 {
                     ServiceColumns.Id, "1", "a", "long__var", "ssSys_IRnd", ServiceColumns.Key, ServiceColumns.HasAnyError, ServiceColumns.InterviewStatus
                 }));
 
-            Assert.That(rows[1].First(), 
-                Is.EqualTo(new object[]
+            Assert.That(rows[1].First(),
+                Is.EqualTo(new string[]
                 {
-                    ServiceColumns.Id, "r1", "r2", "1", "a", "long__var", "ParentId1", "ParentId2"
+                    ServiceColumns.Id, "r1", "r2", "1", "a", "long__var", ServiceColumns.InterviewId, ServiceColumns.Key
+                }));
+
+            Assert.That(rows[2].First(), 
+                Is.EqualTo(new string[]
+                {
+                    ServiceColumns.Id, "r1", "r2", "1", "a", "long__var", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
+                }));
+
+            Assert.That(rows[3].First(),
+                Is.EqualTo(new string[]
+                {
+                    ServiceColumns.Id, "r1", "r2", "1", "a", "long__var", "second_roster_level__id", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
                 }));
         }
     }

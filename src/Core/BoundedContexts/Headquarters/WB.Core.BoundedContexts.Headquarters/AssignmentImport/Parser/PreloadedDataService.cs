@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
@@ -207,30 +209,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         public int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile)
         {
             var levelExportStructure = this.FindLevelInPreloadedData(dataFile.FileName);
-            if (levelExportStructure == null || levelExportStructure.LevelScopeVector == null ||
-                levelExportStructure.LevelScopeVector.Length == 0)
+            if (levelExportStructure?.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
                 return null;
 
-            var columnIndexOfParentIdindexMap = new Dictionary<int,int>();
-            var listOfAvailableParentIdIndexes = levelExportStructure.LevelScopeVector.Select((l, i) => i + 1).ToArray();
+            var parentColumnIndexes = this.GetAllParentColumnNamesForLevel(levelExportStructure.LevelScopeVector)
+                .Where(x => x!=ServiceColumns.Key)
+                .Select(x => Array.IndexOf(dataFile.Header, x))
+                .ToArray();
 
-            for (int i = 0; i < dataFile.Header.Length; i++)
-            {
-                var columnName = dataFile.Header[i];
-                if (!columnName.StartsWith(ServiceColumns.ParentId, StringComparison.InvariantCultureIgnoreCase))
-                    continue;
-
-                var parentNumberString = columnName.Substring(ServiceColumns.ParentId.Length);
-                int parentNumber;
-                if (int.TryParse(parentNumberString, out parentNumber))
-                {
-                    if (listOfAvailableParentIdIndexes.Contains(parentNumber))
-                        columnIndexOfParentIdindexMap.Add(i, parentNumber);
-                }
-            }
-            if (columnIndexOfParentIdindexMap.Values.Distinct().Count() != levelExportStructure.LevelScopeVector.Length)
+            if (parentColumnIndexes.Contains(-1))
                 return null;
-            return columnIndexOfParentIdindexMap.OrderBy(x => x.Value).Select(x => x.Key).ToArray();
+
+            if (parentColumnIndexes.Distinct().Count() != levelExportStructure.LevelScopeVector.Length)
+                return null;
+
+            return parentColumnIndexes;
         }
 
         public PreloadedDataByFile GetTopLevelData(PreloadedDataByFile[] allLevels)
@@ -490,7 +483,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     .Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty))
                 .ToArray();
 
-            foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
+            foreach (IExportedHeaderItem exportedHeaderItem in levelExportStructure.HeaderItems.Values)
             {
                 if (AnswerShouldBeSkipped(exportedHeaderItem as ExportedQuestionHeaderItem))
                     continue;

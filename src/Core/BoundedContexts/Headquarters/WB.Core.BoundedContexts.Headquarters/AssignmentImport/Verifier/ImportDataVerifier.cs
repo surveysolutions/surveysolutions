@@ -219,19 +219,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>>> AtomicVerifiers => new[]
         {
-            this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
-                PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion,
-                PreloadedDataVerificationReferenceType.Column),
-            this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004",
-                PreloadingVerificationMessages.PL0004_FileWasntMappedRoster,
-                PreloadedDataVerificationReferenceType.File),
-            this.Verifier(this.ServiceColumnsAreAbsent, "PL0007",
-                PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent,
-                PreloadedDataVerificationReferenceType.Column),
+            this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003", PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
+            this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004", PreloadingVerificationMessages.PL0004_FileWasntMappedRoster, PreloadedDataVerificationReferenceType.File),
+            this.Verifier(this.ServiceColumnsAreAbsent, "PL0007", PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent, PreloadedDataVerificationReferenceType.Column),
             this.Verifier(this.IdDuplication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
             this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
-            this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
-                PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
+            this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009", PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             this.ErrorsByQuestionsWasntParsed,
             this.Verifier(this.ColumnDuplications),
             this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
@@ -245,6 +238,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
                 yield break;
+
+            var parentColumnNames = preloadedDataService.GetAllParentColumnNamesForLevel(levelExportStructure.LevelScopeVector).ToList();
             var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
             var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure).ToArray();
             var listOfPermittedExtraColumns = this.GetListOfPermittedExtraColumnsForLevel(levelExportStructure).ToArray(); 
@@ -252,6 +247,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var columnName in levelData.Header)
             {
+                if (parentColumnNames.Any(x => string.Equals(columnName, x, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
                 if (string.Equals(columnName, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
@@ -613,9 +611,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if(exportedLevel==null)
                     continue;
 
+                var parentColumnNames = preloadedDataService.GetAllParentColumnNamesForLevel(exportedLevel.LevelScopeVector).ToList();
                 for (int columnIndex = 0; columnIndex < levelData.Header.Length; columnIndex++)
                 {
                     var columnName = levelData.Header[columnIndex];
+                    if (parentColumnNames.Contains(columnName))
+                        continue;
+
                     if (preloadedDataService.IsVariableColumn(columnName))
                         continue;
 
