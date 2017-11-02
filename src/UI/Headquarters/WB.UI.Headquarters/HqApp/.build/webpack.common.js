@@ -201,7 +201,7 @@ module.exports = function (appConfig) {
 
                     // we dont need webinterview chunk in hq output and vice versa
                     excludeChunks: entryNames.filter((name) => name !== entryName),
-                    template: '!!pug-loader!src/template.pug',
+                    template: '!!pug-loader!.build/partial.template.pug',
 
                     // provide list of available locales to template and app
                     locales: localizationInfo[entryName],
