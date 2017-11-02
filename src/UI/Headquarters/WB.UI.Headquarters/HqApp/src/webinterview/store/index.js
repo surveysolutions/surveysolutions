@@ -22,7 +22,8 @@ const store = safeStore({
         coverInfo: {
             entitiesWithComments: [],
             identifyingQuestions: []
-        }
+        },
+        interviewCompleted: false
     },
     actions,
     mutations,
