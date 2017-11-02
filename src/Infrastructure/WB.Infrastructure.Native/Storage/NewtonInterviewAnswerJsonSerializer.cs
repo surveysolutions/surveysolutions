@@ -22,7 +22,8 @@ namespace WB.Infrastructure.Native.Storage
                 NullValueHandling = NullValueHandling.Include,
                 FloatParseHandling = FloatParseHandling.Decimal,
                 Formatting = Formatting.Indented,
-                Binder = new InterviewAnswerSerializationBinder()
+                SerializationBinder = new InterviewAnswerSerializationBinder(),
+                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead
             };
         }
 
