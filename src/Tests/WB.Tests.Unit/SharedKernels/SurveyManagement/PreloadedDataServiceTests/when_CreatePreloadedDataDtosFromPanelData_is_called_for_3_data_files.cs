@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -33,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         PublicKey = Guid.NewGuid()
                     },
                     Create.Entity.FixedRoster(rosterId: rosterGroupId,
-                        obsoleteFixedTitles: new[] {"a", "b"}, title: "Roster Group", variable: "Roster Group",
+                        obsoleteFixedTitles: new[] {"a", "b"}, title: "Roster Group", variable: "roster",
                         children: new IComposite[]
                         {
                             new NumericQuestion()
@@ -69,13 +66,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                             new[] { "top1", "2" },
                             new[] { "top2", "3" }
                         }, questionnaireDocument.Title),
-                        CreatePreloadedDataByFile(new[] { "Id", "nq2", "ParentId1" }, new[]
+                        CreatePreloadedDataByFile(new[] { "Id", "nq2", ServiceColumns.InterviewId  }, new[]
                         {
                             new[] { "1", "11", "top1" },
                             new[] { "1", "21", "top2" },
                             new[] { "2", "22", "top2" }
-                        }, "Roster Group"),
-                        CreatePreloadedDataByFile(new[] { "Id", "nq3", "ParentId1", "ParentId2" }, new[]
+                        }, "roster"),
+                        CreatePreloadedDataByFile(new[] { "Id", "nq3", "roster__id", ServiceColumns.InterviewId  }, new[]
                         {
                             new[] { "1", "11", "1", "top1" },
                             new[] { "2", "12", "1", "top1" },
