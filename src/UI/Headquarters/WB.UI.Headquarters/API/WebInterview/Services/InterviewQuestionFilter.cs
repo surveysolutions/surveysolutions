@@ -10,21 +10,22 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
     {
         private readonly Func<InterviewQuestionFilter, bool> rule;
         private readonly HashSet<Identity> flaggedQuestionsSet;
-        private readonly HashSet<FilterOption> filters;
+        private HashSet<FilterOption> filters;
         private IInterviewTreeNode node;
 
         public InterviewQuestionFilter(HashSet<Identity> flaggedQuestionsSetQuestions,
-            HashSet<FilterOption> filters,
             Func<InterviewQuestionFilter, bool> rule)
         {
             this.rule = rule;
             this.flaggedQuestionsSet = flaggedQuestionsSetQuestions;
-            this.filters = filters;
+            
         }
 
-        public bool Evaluate(IInterviewTreeNode questionToEvaluate)
+        public bool Evaluate(IInterviewTreeNode questionToEvaluate, HashSet<FilterOption> filters)
         {
             this.node = questionToEvaluate;
+            this.filters = filters;
+
             return rule(this);
         }
 

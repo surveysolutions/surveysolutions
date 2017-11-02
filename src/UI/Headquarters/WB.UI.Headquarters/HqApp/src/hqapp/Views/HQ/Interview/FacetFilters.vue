@@ -4,27 +4,27 @@
             <h4>{{ $t("WebInterview.Filters_Title") }}</h4>
 
             <filters-block separate>
-                <filter-item id="withComments" :title="$t('WebInterview.Filters_WithComments')" @change="change" :state="state.withComments" />
+                <filter-item option="withComments" :title="$t('WebInterview.Filters_WithComments')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item id="flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change" :state="state.flagged" />
-                <filter-item id="notFlagged" :title="$t('WebInterview.Filters_NotFlagged')" @change="change" :state="state.notFlagged" />
+                <filter-item option="flagged" :title="$t('WebInterview.Filters_Flagged')" @change="change"/>
+                <filter-item option="notFlagged" :title="$t('WebInterview.Filters_NotFlagged')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item id="invalid" :title="$t('WebInterview.Filters_Invalid')" @change="change" :state="state.invalid" />
-                <filter-item id="valid" :title="$t('WebInterview.Filters_Valid')" @change="change" :state="state.valid" />
+                <filter-item option="invalid" :title="$t('WebInterview.Filters_Invalid')" @change="change"/>
+                <filter-item option="valid" :title="$t('WebInterview.Filters_Valid')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item id="answered" :title="$t('WebInterview.Filters_Answered')" @change="change" :state="state.answered" />
-                <filter-item id="notAnswered" :title="$t('WebInterview.Filters_NotAnswered')" @change="change" :state="state.notAnswered" />
+                <filter-item option="answered" :title="$t('WebInterview.Filters_Answered')" @change="change" />
+                <filter-item option="notAnswered" :title="$t('WebInterview.Filters_NotAnswered')" @change="change" />
             </filters-block>
 
             <filters-block separate>
-                <filter-item id="forSupervisor" :title="$t('WebInterview.Filters_ForSupervisor')" @change="change" :state="state.forSupervisor" />
-                <filter-item id="forInterviewer" :title="$t('WebInterview.Filters_ForInterviewer')" @change="change" :state="state.forInterviewer" />
+                <filter-item option="forSupervisor" :title="$t('WebInterview.Filters_ForSupervisor')" @change="change" />
+                <filter-item option="forInterviewer" :title="$t('WebInterview.Filters_ForInterviewer')" @change="change" />
             </filters-block>
 
             <filters-block>

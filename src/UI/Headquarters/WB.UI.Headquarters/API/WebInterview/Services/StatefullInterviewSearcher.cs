@@ -20,14 +20,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         public SearchResults Search(IStatefulInterview interview, FilterOption[] flags, long skip, long take)
         {
-            var nodes = GetFilteredNodes(flags, interview);
+            var stats = new Dictionary<FilterOption, int>();
+            var nodes = GetFilteredNodes(flags, interview, stats);
 
             long taken = 0, skipped = 0, total = 0;
             int searchResultId = 0;
 
             Identity lastSection = null;
-            
-            var results = new SearchResults();
+
+            var results = new SearchResults
+            {
+                Stats = stats
+            };
+
             SearchResult currentResult = null;
 
             foreach (var node in nodes)
@@ -152,23 +157,46 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             && node.Or(FilterOption.Answered, FilterOption.NotAnswered)
             && node.Or(FilterOption.ForSupervisor, FilterOption.ForInterviewer);
 
-        private IEnumerable<IInterviewTreeNode> GetFilteredNodes(FilterOption[] flags, IStatefulInterview interview)
+        private static readonly FilterOption[] AllFilterOptions =
+            Enum.GetValues(typeof(FilterOption)).Cast<FilterOption>().ToArray();
+
+        private IEnumerable<IInterviewTreeNode> GetFilteredNodes(FilterOption[] flags, IStatefulInterview interview, Dictionary<FilterOption, int> stats)
         {
             var flagged = interviewFactory.GetFlaggedQuestionIds(interview.Id);
 
+            foreach (var option in AllFilterOptions)
+            {
+                stats.Add(option, 0);
+            }
+            
             var rule = new InterviewQuestionFilter(
                 new HashSet<Identity>(flagged), 
-                new HashSet<FilterOption>(flags), 
                 FilteringRule);
 
             var nodes = interview.GetAllInterviewNodes()
                 .Where(n => n is InterviewTreeQuestion || n is InterviewTreeStaticText);
 
+            var flagsSet = new HashSet<FilterOption>(flags);
+
             foreach (var node in nodes)
             {
-                var found = rule.Evaluate(node);
+                var found = rule.Evaluate(node, flagsSet);
 
                 if (found) yield return node;
+
+                UpdateStats(node);
+            }
+
+            void UpdateStats(IInterviewTreeNode node)
+            {
+                foreach (var option in AllFilterOptions)
+                {
+                    var statsFlag = new HashSet<FilterOption>(flagsSet) { option };
+
+                    var ruleValue = rule.Evaluate(node, statsFlag);
+
+                    if (ruleValue) stats[option] += 1;
+                }
             }
         }
     }
