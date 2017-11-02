@@ -492,12 +492,32 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
             foreach (var exportedHeaderItem in levelExportStructure.HeaderItems.Values)
             {
+                if (AnswerShouldBeSkipped(exportedHeaderItem as ExportedQuestionHeaderItem))
+                    continue;
+
                 var parsedAnswer = this.BuildAnswerByVariableName(levelExportStructure, exportedHeaderItem.VariableName, header, rowWithoutMissingValues);
 
                 if (parsedAnswer!=null)
                     result.Add(exportedHeaderItem.PublicKey, parsedAnswer);
             }
             return result;
+        }
+
+        private bool AnswerShouldBeSkipped(ExportedQuestionHeaderItem exportedHeaderItem)
+        {
+            if (exportedHeaderItem == null)
+                return true;
+
+            var questionTypesToSlip = new HashSet<QuestionType>{QuestionType.Area, QuestionType.Audio, QuestionType.Multimedia};
+            var questionSubTypesToSlip = new HashSet<QuestionSubtype> { QuestionSubtype.SingleOption_Linked, QuestionSubtype.MultyOption_Linked };
+
+            if (questionTypesToSlip.Contains(exportedHeaderItem.QuestionType))
+                return true;
+
+            if (exportedHeaderItem.QuestionSubType.HasValue && questionSubTypesToSlip.Contains(exportedHeaderItem.QuestionSubType.Value))
+                return true;
+
+            return false;
         }
 
         private AbstractAnswer BuildAnswerByVariableName(HeaderStructureForLevel levelExportStructure, string variableName, string[] header, string[] row)
