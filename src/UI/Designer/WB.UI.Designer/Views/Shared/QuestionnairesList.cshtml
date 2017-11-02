@@ -7,12 +7,7 @@
 @using WB.UI.Shared.Web.Extensions
 @model IPagedList<QuestionnaireListViewModel>
 
-@{
-    bool isSupportFolders = true;// Model.Any(i => i.IsPublic)
-
-}
-
-<table id="questionnaire-table-header" class="table table-header  page-with-breadcrumbs">
+<table id="questionnaire-table-header" class="table table-header @ViewBag.TableCssClass">
     <thead>
         <tr>
             @ShowTableHeaderCell("Title", QuestionnaireController.Title, true)
@@ -24,7 +19,7 @@
         </tr>
     </thead>
 </table>
-<div id="table-content-holder" class="list-with-icons">
+<div id="table-content-holder" class="list-with-icons @ViewBag.TableCssClass">
     <div class="scroller-container">
         @ShowNotificationToUserIfNeeded()
         @if (Model.TotalCount == 0)
