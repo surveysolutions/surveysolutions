@@ -509,7 +509,7 @@ namespace WB.UI.Designer.Controllers
 
         private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, bool showPublic, Guid? folderId)
         {
-            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
+            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor, folderId: folderId);
 
             return this.questionnaireHelper.GetQuestionnaires(
                 pageIndex: pageIndex,
@@ -522,12 +522,13 @@ namespace WB.UI.Designer.Controllers
                 showPublic: showPublic);
         }
         
-        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor)
+        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor, Guid? folderId)
         {
             this.ViewBag.PageIndex = pageIndex;
             this.ViewBag.SortBy = sortBy;
             this.ViewBag.SearchFor = searchFor;
             this.ViewBag.SortOrder = sortOrder;
+            this.ViewBag.FolderId = folderId;
 
             if (sortOrder.ToBool())
             {
