@@ -5,8 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -191,6 +190,16 @@ namespace WB.UI.Headquarters.API.WebInterview
             var result = this.statefullInterviewSearcher.Search(interview, flags, skip, limit);
 
             return result;
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            if (!IsReviewMode && this.authorizedUser.IsInterviewer)
+            {
+                this.commandService.Execute(new PauseInterviewCommand(Guid.Parse(CallerInterviewId), this.CommandResponsibleId));
+            }
+
+            return Task.CompletedTask;
         }
     }
 }
