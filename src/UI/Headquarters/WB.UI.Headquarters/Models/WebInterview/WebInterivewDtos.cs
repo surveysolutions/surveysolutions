@@ -84,6 +84,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewAudioQuestion : GenericQuestion
     {
         public long? Answer { get; set; }
+        public string Filename { get; set; }
     }
     
     public class InterviewDateQuestion : GenericQuestion

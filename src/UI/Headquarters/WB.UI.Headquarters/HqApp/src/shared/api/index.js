@@ -42,6 +42,10 @@ export default {
             }
 
             return await axios.get(resolve('hqapp/dist', localizationFile));
+        },
+
+        audioRecordUri(interviewId, filename) {
+            return resolve("Resource/AudioRecord") + `?interviewId=${interviewId}&filename=${filename}`
         }
     }
 }
