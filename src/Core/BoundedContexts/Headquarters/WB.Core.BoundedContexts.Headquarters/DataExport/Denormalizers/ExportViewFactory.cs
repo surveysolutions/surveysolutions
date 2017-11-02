@@ -327,11 +327,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
             }
 
-            var dateTimeQuestion = question as DateTimeQuestion;
-            if (dateTimeQuestion != null)
+            if (question is DateTimeQuestion dateTimeQuestion)
             {
                 if (dateTimeQuestion.IsTimestamp)
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.DateTime_Timestamp;
+            }
+
+            if (question is SingleQuestion singleQuestion)
+            {
+                if (singleQuestion.LinkedToQuestionId.HasValue || singleQuestion.LinkedToRosterId.HasValue)
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.SingleOption_Linked;
             }
 
             exportedHeaderItem.VariableName = question.StataExportCaption;
