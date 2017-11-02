@@ -728,24 +728,24 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                                             levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedLinkedQuestion:
-                                yield return
-                                    new PanelImportVerificationError("PL0010",
-                                        PreloadingVerificationMessages.PL0010_UnsupportedLinkedQuestion,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
+                                //yield return
+                                //    new PanelImportVerificationError("PL0010",
+                                //        PreloadingVerificationMessages.PL0010_UnsupportedLinkedQuestion,
+                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                //            PreloadedDataVerificationReferenceType.Cell,
+                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                //                row[columnIndex]),
+                                //            levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedMultimediaQuestion:
-                                yield return
-                                    new PanelImportVerificationError("PL0023",
-                                        PreloadingVerificationMessages.PL0023_UnsupportedMultimediaQuestion,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
+                                //yield return
+                                //    new PanelImportVerificationError("PL0023",
+                                //        PreloadingVerificationMessages.PL0023_UnsupportedMultimediaQuestion,
+                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                //            PreloadedDataVerificationReferenceType.Cell,
+                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                //                row[columnIndex]),
+                                //            levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedAreaQuestion:
                                 yield return
@@ -758,14 +758,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                                             levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedAudioQuestion:
-                                yield return
-                                    new PanelImportVerificationError("PL0039",
-                                        PreloadingVerificationMessages.PL0039_UnsupportedAudioQuestion,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
+                                //yield return
+                                //    new PanelImportVerificationError("PL0039",
+                                //        PreloadingVerificationMessages.PL0039_UnsupportedAudioQuestion,
+                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                //            PreloadedDataVerificationReferenceType.Cell,
+                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                //                row[columnIndex]),
+                                //            levelData.FileName));
                                 break;
                             case ValueParsingResult.GeneralErrorOccured:
                             default:
