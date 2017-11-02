@@ -51,6 +51,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             }
         }
 
+        private Dictionary<string, IVariable> variablesCache = null;
+        private Dictionary<string, IVariable> VariablesCache
+        {
+            get
+            {
+                return this.variablesCache ??
+                       (this.variablesCache =
+                           this.questionnaireDocument.GetEntitiesByType<IVariable>()
+                               .ToDictionary(x => x.Name, x => x));
+            }
+        }
 
         public ImportDataParsingService(QuestionnaireExportStructure exportStructure,
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes,
@@ -389,6 +400,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     return false;
             }
             return true;
+        }
+
+        public IEnumerable<string> GetAllParentColumnNamesForLevel(ValueVector<Guid> levelScopeVector)
+        {
+            return exportStructure.GetAllParentColumnNamesForLevel(levelScopeVector);
+        }
+
+        public bool IsVariableColumn(string columnName)
+        {
+            return VariablesCache.ContainsKey(columnName);
         }
 
         private IEnumerable<IGroup> GetParentGroups(IGroup roster)
