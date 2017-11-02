@@ -148,7 +148,8 @@ var isTableSortedByThisField = ViewBag.SortBy == field;
                 p = ViewBag.PageIndex,
                 sb = sortField,
                 so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
-                f = ViewBag.Filter
+                f = ViewBag.Filter,
+                id = ViewBag.FolderId
             });
     }
 
