@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Api
 
         public class TreeNode
         {
-            public Guid key { get; set; }
+            public string key { get; set; }
             public string title { get; set; }
             public bool lazy { get; set; } = true;
             public bool folder { get; set; } = true;
@@ -35,12 +35,10 @@ namespace WB.UI.Designer.Api
         [HttpGet]
         public List<TreeNode> GetFolders(Guid? parentId)
         {
-            if (parentId == Guid.Empty)
-                parentId = null;
             return this.publicFoldersStorage.GetSubFolders(parentId)
                     .Select(i => new TreeNode()
                     {
-                        key = i.PublicId,
+                        key = i.PublicId.ToString(),
                         title = i.Title
                     }).ToList();
         }
@@ -51,7 +49,7 @@ namespace WB.UI.Designer.Api
             return this.publicFoldersStorage.GetRootFolders()
                 .Select(i => new TreeNode()
                 {
-                    key = i.PublicId,
+                    key = "root",
                     title = i.Title
                 }).ToList();
         }
@@ -67,11 +65,10 @@ namespace WB.UI.Designer.Api
         {
             var id = Guid.NewGuid();
             var userId = userService.WebUser.UserId;
-            var parentId = model.ParentId == Guid.Empty ? null : model.ParentId;
-            var folder = this.publicFoldersStorage.CreateFolder(id, model.Title, parentId, userId);
+            var folder = this.publicFoldersStorage.CreateFolder(id, model.Title, model.ParentId, userId);
             return new TreeNode()
             {
-                key = folder.PublicId,
+                key = folder.PublicId.ToString(),
                 title = folder.Title
             };
         }
@@ -108,8 +105,7 @@ namespace WB.UI.Designer.Api
         [HttpPost]
         public void AssignFolderToQuestionnaire(AssignFolderToQuestionnaireModel model)
         {
-            var folderId = model.Id == Guid.Empty ? null : model.Id;
-            this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, folderId);
+            this.publicFoldersStorage.AssignFolderToQuestionnaire(model.QuestionnaireId, model.Id);
         }
     }
 }

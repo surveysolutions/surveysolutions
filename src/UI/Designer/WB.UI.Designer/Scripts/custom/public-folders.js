@@ -9,6 +9,8 @@
             expanderOpen  : "glyphicon glyphicon-menu-down",  // glyphicon-minus-sign
             folder        : "tree-icon folder-closed",
             folderOpen    : "tree-icon folder-open",
+            checkbox      : "tree-checkbox-unchecked",
+            checkboxSelected: "tree-checkbox-checked"
         }
     };
 
@@ -41,7 +43,7 @@
                 if (node.isLazy())
                     node.load();
 
-                if (node.key === "00000000-0000-0000-0000-000000000000")
+                if (node.key == "root")
                     return { "createSubFolder": { "name": locolizes.CreateSubFolder, "icon": "add" } };
 
                 return {
@@ -74,7 +76,7 @@
             triggerStart: ["f2", /*"dblclick",*/ "shift+click", "mac+enter"],
             beforeEdit: function (event, data) {
                 // Return false to prevent edit mode
-                if (data.node.key === "00000000-0000-0000-0000-000000000000")
+                if (data.node.key === "root")
                     return false;
             },
             edit: function (event, data) {
