@@ -58,6 +58,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IMapSynchronizer, MapSynchronizer>();
             registry.Bind<IMapService, MapService>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
+            registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
             registry.Bind<LoginViewModel>();
             registry.Bind<PrefilledQuestionsViewModel>();
