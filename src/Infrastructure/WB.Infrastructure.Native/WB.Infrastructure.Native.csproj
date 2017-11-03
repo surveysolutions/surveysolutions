@@ -25,10 +25,10 @@
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NHibernate" Version="5.0.0" />
-    <PackageReference Include="Ninject" Version="3.2.2.0" />
-    <PackageReference Include="Ninject.MVC5" Version="3.2.1.0" />
-    <PackageReference Include="Ninject.Web.Common" Version="3.2.3.0" />
-    <PackageReference Include="Ninject.Web.Common.WebHost" Version="3.2.3.0" />
+    <PackageReference Include="Ninject" Version="3.3.3" />
+    <PackageReference Include="Ninject.MVC5" Version="3.3.0" />
+    <PackageReference Include="Ninject.Web.Common" Version="3.3.0" />
+    <PackageReference Include="Ninject.Web.Common.WebHost" Version="3.3.0" />
     <PackageReference Include="NLog" Version="4.4.11" />
     <PackageReference Include="Npgsql" Version="3.2.5" />
     <PackageReference Include="System.Collections" Version="4.3.0" />

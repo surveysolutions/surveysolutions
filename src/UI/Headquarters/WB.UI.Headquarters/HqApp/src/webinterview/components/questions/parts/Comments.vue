@@ -15,7 +15,7 @@
                     <div class="input-group comment-field">
                         <input type="text" class="form-control" v-on:keyup.enter="postComment" v-model="comment"
                             :placeholder='$t("WebInterviewUI.CommentEnter")' 
-                            :disabled="$store.state.webinterview.receivedByInterviewer"
+                            :disabled="!$store.webinterview.getters.addCommentsAllowed"
                             :title="inputTitle"/>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default btn-post-comment"
