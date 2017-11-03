@@ -43,7 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, PictureQuestionAnswered>,
         IUpdateHandler<InterviewSummary, UnapprovedByHeadquarters>,
         IUpdateHandler<InterviewSummary, AreaQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>
+        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, InterviewResumed>,
+        IUpdateHandler<InterviewSummary, InterviewPaused>
     {
         private readonly IUserViewFactory users;
         private readonly string unknown = "Unknown";
@@ -374,6 +376,30 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AudioQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewResumed> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.Resumed,
+                @event.Payload.LocalTime,
+                null);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewPaused> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.Paused,
+                @event.Payload.LocalTime,
+                null);
         }
     }
 }
