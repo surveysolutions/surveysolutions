@@ -26,6 +26,8 @@
                     <div class="action-btn-holder time-question"
                          @click="answerDate">
                         <button type="button"
+                                :disabled="!$me.acceptAnswer"
+                    
                                 class="btn btn-default btn-lg btn-action-questionnaire">
                             {{ $t("WebInterviewUI.RecordCurrentTime") }}
                         </button>
