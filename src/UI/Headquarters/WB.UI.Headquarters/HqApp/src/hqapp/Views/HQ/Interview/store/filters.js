@@ -50,7 +50,8 @@ export default {
 
         applyFiltering({ commit, dispatch }, filter) {
             commit("CHANGE_FILTERS", filter)
-            dispatch("showSearchResults");
+            commit("SEARCH_NEED_TO_CLEAR")
+            dispatch("showSearchResults")
         },
 
         async getStatusesHistory() {
@@ -60,12 +61,17 @@ export default {
         resetAllFilters({ commit, dispatch }) {
             commit("RESET_FILTERS")
             dispatch("fetchSearchResults")
+        },
+
+        refreshSearchResults({ dispatch, commit }) {
+            commit("SEARCH_NEED_TO_CLEAR")
+            dispatch("fetchSearchResults")
         }
     },
 
     mutations: {
         SET_SEARCH_RESULT(state, results) {
-            if(state.search.needToClear) {
+            if (state.search.needToClear) {
                 state.search.results = [];
                 state.search.count = 0;
                 state.search.skip = 0;
@@ -91,6 +97,9 @@ export default {
 
         CHANGE_FILTERS(state, { filter, value }) {
             state.filter[filter] = value;
+        },
+
+        SEARCH_NEED_TO_CLEAR(state) {
             state.search.needToClear = true;
         },
 

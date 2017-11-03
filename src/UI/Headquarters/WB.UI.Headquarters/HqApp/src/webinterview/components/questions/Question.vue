@@ -77,7 +77,7 @@
             hasFlag(){
                 if(this.$store.state.review == undefined) return false;
                 
-                return this.$store.getters.flags.indexOf(this.id) > -1;
+                return this.$store.getters.flags[this.id]
             },
             questionClass() {
                 return [{ 'disabled-question': this.disabled, 'with-flag': this.hasFlag}]
