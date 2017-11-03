@@ -1,4 +1,4 @@
-
+import { safeStore } from "~/webinterview/errors"
 /**
  * Components provider combine all view components and expose routes for router
  * Each component expect to have following interface
@@ -49,7 +49,7 @@ export default class ComponentsProvider {
 
                             if(component.modules != null) {
                                 Object.keys(component.modules).forEach((module) => {
-                                    this.rootStore.registerModule(module, component.modules[module]);
+                                    this.rootStore.registerModule(module, safeStore(component.modules[module]));
                                 });
                             }
 
