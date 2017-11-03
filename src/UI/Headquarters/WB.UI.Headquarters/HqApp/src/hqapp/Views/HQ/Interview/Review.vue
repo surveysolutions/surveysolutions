@@ -24,7 +24,6 @@ export default {
     watch: {
         ["$route.params.sectionId"](to) {
             this.$store.dispatch("changeSection", to)
-            this.$store.dispatch("fetchFlags");
             this.$store.dispatch("onBeforeNavigate")
         },
 
@@ -63,13 +62,17 @@ export default {
     },
     mounted() {
         const self = this;
+
         this.$nextTick(function () {
             window.addEventListener("resize", self.onResize);
             self.onResize();
         });
+
         Vue.nextTick(() => {
             window.ajustNoticeHeight()
         })
+
+        this.$store.dispatch("fetchFlags")
     },
 
     components: {
