@@ -481,6 +481,7 @@
     <Content Include="Content\images\chekboxes.png" />
     <Content Include="Content\images\chekboxes2k.png" />
     <Content Include="Content\images\DR-2017-folders-icons-2x.png" />
+    <Content Include="Content\images\DR-2017-folders-icons-G2-color.png" />
     <Content Include="Content\images\DR-2017-folders-icons.png" />
     <Content Include="Content\images\pdf-question-legend.png" />
     <Content Include="Content\images\pdf-roster-legend.png" />
