@@ -7,13 +7,13 @@
                     <input class="wb-checkbox" type="checkbox" 
                         :id="$me.id + '_' + option.value" 
                         :name="$me.id" 
-                        :value="option.value" 
+                        :value="option.value"
+                        :disabled="!$me.acceptAnswer"
                         v-model="answer"
-                        v-disabledWhenUnchecked="allAnswersGiven"
-                        :disabled="!$me.acceptAnswer">
+                        v-disabledWhenUnchecked="allAnswersGiven || !$me.acceptAnswer">
                         <label :for="$me.id + '_' + option.value">
-                        <span class="tick"></span> {{option.title}}
-                    </label>
+                            <span class="tick"></span> {{option.title}}
+                        </label>
                     <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
                 </div>
                 <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
