@@ -94,20 +94,39 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         {
             var search = Subject.Search(interview, @case.Options.ToArray(), 0, 100);
             AssertSearchReturnFollowingIds(search, @case.Results.Select(id => id).ToArray());
+
+            if (@case.StatsCounter != null)
+            {
+                for (var index = 0; index < AllFilterOptions.Length; index++)
+                {
+                    var option = AllFilterOptions[index];
+                    
+                    Assert.That(search.Stats[option], Is.EqualTo(@case.StatsCounter[index]));
+                }
+                Console.WriteLine();
+            }
         }
 
         public static FilterTestCase[] MultipleFilteringCaseData =
         {
-            Case(FilterOption.Flagged, FilterOption.WithComments).Result(Id.Identity5),
-            Case(FilterOption.Flagged, FilterOption.NotAnswered).Result(Id.Identity1),
+            Case(FilterOption.Flagged, FilterOption.WithComments)
+                .Result(Id.Identity5).Stats(1, 2, 1, 0, 1, 1, 0, 0, 1),
+            Case(FilterOption.Flagged, FilterOption.NotAnswered)
+                .Result(Id.Identity1).Stats(1, 6, 0, 0, 1, 2, 1, 0, 1),
 
-            Case(FilterOption.Flagged, FilterOption.Valid).Result(Id.Identity1, Id.Identity5),
+            Case(FilterOption.Flagged, FilterOption.Valid)
+                .Result(Id.Identity1, Id.Identity5).Stats(2, 7, 1, 2, 2, 1, 1, 0, 2),
 
-            Case(FilterOption.NotFlagged, FilterOption.Invalid).Result(Id.Identity7),
-            Case(FilterOption.Valid, FilterOption.Invalid).ResultExcept(), // all results
-            Case(FilterOption.Flagged, FilterOption.NotFlagged).ResultExcept(Id.Identity4, Id.Identity9), // all results
-            Case(FilterOption.Answered, FilterOption.NotAnswered).ResultExcept(Id.Identity4, Id.Identity9), // all results
-            Case(FilterOption.ForSupervisor, FilterOption.ForInterviewer).ResultExcept(Id.Identity4, Id.Identity9), // all results
+            Case(FilterOption.NotFlagged, FilterOption.Invalid)
+                .Result(Id.Identity7).Stats(1, 1, 0, 1, 6, 1, 0, 0, 1),
+            Case(FilterOption.Valid, FilterOption.Invalid)
+                .ResultExcept().Stats(2, 6, 2, 10, 10, 2, 6, 2, 6), // all results
+            Case(FilterOption.Flagged, FilterOption.NotFlagged)
+                .ResultExcept(Id.Identity4, Id.Identity9).Stats(8, 8, 2, 1, 7, 2, 6, 2, 6), // all results
+            Case(FilterOption.Answered, FilterOption.NotAnswered)
+                .ResultExcept(Id.Identity4, Id.Identity9).Stats(2, 6, 2, 1, 7, 8, 8, 2, 6), // all results
+            Case(FilterOption.ForSupervisor, FilterOption.ForInterviewer)
+                .ResultExcept(Id.Identity4, Id.Identity9).Stats(2, 6, 2, 1, 7, 2, 6, 8, 8), // all results
         };
 
         [Test]
@@ -118,7 +137,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             Assert.That(search.TotalCount, Is.EqualTo(6)); //4,7,8
             Assert.That(search.Results, Has.Count.EqualTo(2));
 
-            AssertSearchReturnFollowingIds(search, Create.Identity(Id.g6, new []{1}), Id.Identity7, Id.Identity8);
+            AssertSearchReturnFollowingIds(search, Create.Identity(Id.g6, 1), Id.Identity7, Id.Identity8);
         }
 
         [TestCase(1, 2)]
@@ -133,7 +152,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             var map = new Dictionary<int, string>
             {
                 {0, Id.IdentityA.ToString()},
-                {1, Create.Identity(Id.gD, new []{1}).ToString()},
+                {1, Create.Identity(Id.gD, 1).ToString()},
                 {2, Id.IdentityA.ToString()},
                 {3, Id.IdentityB.ToString()}
             };
@@ -171,6 +190,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
 
             public List<FilterOption> Options { get; set; } = new List<FilterOption>();
             public List<Identity> Results { get; set; } = new List<Identity>();
+            public int[] StatsCounter { get; set; }
             public long Skip { get; set; }
             public long Take { get; set; }
 
@@ -191,6 +211,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                 return this;
             }
 
+            public FilterTestCase Stats(params int[] counts)
+            {
+                StatsCounter = counts;
+                return this;
+            }
+
             public FilterTestCase ResultExcept(params Identity[] ids)
             {
                 this.Results.AddRange(allAnswers.Except(ids));
@@ -202,9 +228,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         {
             var result = search.Results.SelectMany(r => r.Questions).Select(q => q.Target).ToArray();
             var expect = ids.Select(id => id.ToString()).ToArray();
-            Console.WriteLine("Result: " + string.Join(", ", result));
-            Console.WriteLine("Expect: " + string.Join(", ", expect));
-            Assert.That(result.ToArray(), Is.EqualTo(expect));
+            var message = "Result: " + string.Join(", ", result) + "\r\n" + "Expect: " + string.Join(", ", expect);
+            Assert.That(result.ToArray(), Is.EqualTo(expect), message);
         }
+
+        private static readonly FilterOption[] AllFilterOptions =
+            Enum.GetValues(typeof(FilterOption)).Cast<FilterOption>().ToArray();
     }
 }
