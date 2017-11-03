@@ -14,7 +14,7 @@
         name: "NavigationButton",
         computed: {
             visible(){
-                return !this.$store.state.review || this.$me.type != ButtonType.Complete
+                return !(this.$store.getters.isReviewMode === true) || this.$me.type != ButtonType.Complete
             },
             css() {
                 return [{
