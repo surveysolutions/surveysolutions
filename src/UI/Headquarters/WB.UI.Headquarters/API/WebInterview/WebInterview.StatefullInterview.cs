@@ -575,8 +575,10 @@ namespace WB.UI.Headquarters.API.WebInterview
                 result.AcceptAnswer = true;
                 return;
             }
-            // TODO: Fix this
-            result.AcceptAnswer = question.IsSupervisors && callerInterview.Status < InterviewStatus.ApprovedByHeadquarters;
+
+            result.AcceptAnswer = question.IsSupervisors && 
+                callerInterview.Status < InterviewStatus.ApprovedByHeadquarters && 
+                (this.authorizedUser.IsSupervisor && !this.authorizedUser.IsObserving);
         }
 
         private T Map<T>(InterviewTreeQuestion question, Action<T> afterMap = null)
