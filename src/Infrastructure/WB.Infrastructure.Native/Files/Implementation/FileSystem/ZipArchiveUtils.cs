@@ -17,9 +17,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public void ZipDirectory(string directory, string archiveFile) 
-            => this.ZipDirectory(directory, archiveFile, password: null);
-
         public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
         {
             using (var zipFile = new ZipFile
@@ -49,17 +46,16 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         }
 
         public void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath)
-        {
-            this.ZipDirectory(sourceDirectory, archiveFilePath);
-        }
+            => this.ZipDirectory(sourceDirectory, archiveFilePath, null);
 
         public void ZipFiles(IEnumerable<string> files, string archiveFilePath, string password)
         {
-            using (var zip = new ZipFile(this.fileSystemAccessor.GetFileName(archiveFilePath)))
+            using (var zip = new ZipFile
             {
-                zip.CompressionLevel = CompressionLevel.Default;
-                zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
-
+                CompressionLevel = CompressionLevel.Default,
+                UseZip64WhenSaving = Zip64Option.AsNecessary
+            })
+            {
                 if (password != null)
                     zip.Password = password;
 

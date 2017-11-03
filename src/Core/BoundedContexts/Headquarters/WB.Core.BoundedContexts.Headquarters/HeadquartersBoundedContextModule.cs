@@ -326,8 +326,6 @@ namespace WB.Core.BoundedContexts.Headquarters
           
 
             this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
-       
-            this.Bind<IParaDataAccessor>().To<TabularParaDataAccessor>();
 
             this.Bind<TabularFormatDataExportHandler>().ToSelf();
             this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();

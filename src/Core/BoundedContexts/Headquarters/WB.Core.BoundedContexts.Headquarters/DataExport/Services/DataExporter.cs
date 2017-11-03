@@ -28,8 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.logger = logger;
             this.serviceLocator = serviceLocator;
 
-            this.RegisterExporter<ParaDataExportProcessDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Paradata);
-            this.RegisterExporter<ParaDataExportProcessDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
+            this.RegisterExporter<DataExportProcessDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Paradata);
+            this.RegisterExporter<DataExportProcessDetails, TabularFormatParaDataExportProcessHandler>(DataExportFormat.Tabular);
             this.RegisterExporter<DataExportProcessDetails, TabularFormatDataExportHandler>(DataExportFormat.Tabular);
 
             this.RegisterExporter<DataExportProcessDetails, StataFormatExportHandler>(DataExportFormat.STATA);

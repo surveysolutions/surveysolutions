@@ -56,15 +56,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return process.NaturalId;
         }
 
-        public string AddParaDataExport(DataExportFormat exportFormat)
-        {
-            var process = new ParaDataExportProcessDetails(exportFormat);
-
-            this.EnqueueProcessIfNotYetInQueue(process);
-
-            return process.NaturalId;
-        }
-
         private void EnqueueProcessIfNotYetInQueue(IDataExportProcessDetails newProcess)
         {
             if (this.processes.GetOrNull(newProcess.NaturalId)?.IsQueuedOrRunning() ?? false)
@@ -128,9 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, DataExportType exportType)
         {
-            var process = exportType == DataExportType.Data
-                ? (IDataExportProcessDetails) new DataExportProcessDetails(exportFormat, questionnaire, null)
-                : new ParaDataExportProcessDetails(exportFormat);
+            var process = (IDataExportProcessDetails) new DataExportProcessDetails(exportFormat, questionnaire, null);
 
             this.DeleteDataExport(process.NaturalId);
         }

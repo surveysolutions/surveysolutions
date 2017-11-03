@@ -16,14 +16,12 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
         protected static DataExportStatusReader CreateDataExportStatusReader(
             IDataExportProcessesService dataExportProcessesService = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
-            IParaDataAccessor paraDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IQuestionnaireExportStructureStorage questionnaireReader =null)
         {
             var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
             return new DataExportStatusReader(dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(),
-                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
-                paraDataAccessor ?? Mock.Of<IParaDataAccessor>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(), fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ => _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure));
         }

@@ -4,6 +4,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
@@ -23,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             result.ShouldBeOfExactType<OkResult>();
 
         It should_call_add_paradata_export_method_in_data_export_processes_service = () =>
-            mockOfDataExportProcessesService.Verify(x=>x.AddParaDataExport(DataExportFormat.Tabular), Times.Once);
+            mockOfDataExportProcessesService.Verify(x=>x.AddDataExport(Moq.It.IsAny<QuestionnaireIdentity>(), DataExportFormat.Paradata, null), Times.Once);
 
         private static ExportController controller;
 

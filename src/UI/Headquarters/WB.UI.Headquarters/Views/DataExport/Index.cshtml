@@ -20,7 +20,6 @@
 
         var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"})';
         var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"})';
-        var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata"})';
         var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
 
         var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
@@ -50,7 +49,6 @@
             var model = new Supervisor.VM.ExportData(templates,
                 statuses,
                 $ExportedDataReferencesForQuestionnaireUrl,
-                $UpdateHistoryUrl,
                 exportFromats,
                 $DeleteDataExportProcessUrl,
                 $UpdateTabularDataUrl);
@@ -148,7 +146,7 @@
                                 <div class="cell-data size">@DataExport.FileSizeTitle</div>
                                 <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                             </div>
-                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl", styleName: "separated-data")
+                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Paradata, dataUrl: "$AllDataUrl", styleName: "separated-data", addFromat: true)
                         </div>
                     </div>
                 }
@@ -182,7 +180,7 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
             @formatTitle
         </div>
         <div class="cell-data  download-block">
-            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
+            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
             <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">@DataExport.Download</a>
             <div class="not-generated ">@DataExport.DataWasNotGenerated</div>
         </div>

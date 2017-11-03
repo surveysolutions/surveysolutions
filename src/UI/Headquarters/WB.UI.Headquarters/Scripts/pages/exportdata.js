@@ -1,9 +1,8 @@
-﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
-    self.HistoryUrl = $historyUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
     self.UpdateDataUrl = $updateDataUrl;
     self.Templates = templates;
@@ -72,16 +71,6 @@
             }
         });
     }
-
-    self.requestParaDataUpdate = function(format) {
-        return function() {
-            self.sendWebRequest(self.HistoryUrl,
-                [],
-                function (data) {
-                    self.updateDataExportInfo();
-                });
-        }
-    };
 
     self.requestDataUpdate = function(format) {
         var questionnaireId = self.selectedTemplateId();
