@@ -5,7 +5,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -65,16 +64,6 @@ namespace WB.UI.Interviewer.ViewModel
             }
         }
 
-        public override void ViewDisappearing()
-        {
-            var interview = interviewRepository.Get(this.interviewId);
-            if (!interview.IsCompleted)
-            {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now));
-            }
-            base.ViewDisappeared();
-        }
-
         protected override NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
         {
             if (HasNotEmptyNoteFromSupervior || HasCommentsFromSupervior || HasPrefilledQuestions)
@@ -102,6 +91,17 @@ namespace WB.UI.Interviewer.ViewModel
                 default:
                     return null;
             }
+        }
+
+        public override void ViewDisappearing()
+        {
+            var interview = interviewRepository.Get(this.interviewId);
+            if (!interview.IsCompleted)
+            {
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now));
+            }
+
+            base.ViewDisappeared();
         }
     }
 }
