@@ -25,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
-            this.EnsureBindingContextIsSet(savedInstanceState);
+            this.EnsureBindingContextIsSet(inflater);
             var view = this.BindingInflate(ViewResourceId, container, false);
             this.recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.interviewEntitiesList);
 
