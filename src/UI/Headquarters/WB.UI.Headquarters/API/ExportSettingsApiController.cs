@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -26,7 +25,6 @@ namespace WB.UI.Headquarters.API
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
         private readonly IAuditLog auditLog;
-        private readonly IParaDataAccessor paraDataAccessor;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
@@ -34,8 +32,7 @@ namespace WB.UI.Headquarters.API
             IFileSystemAccessor fileSystemAccessor,
             IDataExportProcessesService dataExportProcessesService,
             IDdiMetadataAccessor ddiMetadataAccessor,
-            IAuditLog auditLog,
-            IParaDataAccessor paraDataAccessor)
+            IAuditLog auditLog)
 
         {
             this.exportSettings = exportSettings;
@@ -44,7 +41,6 @@ namespace WB.UI.Headquarters.API
             this.dataExportProcessesService = dataExportProcessesService;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.auditLog = auditLog;
-            this.paraDataAccessor = paraDataAccessor;
             this.logger = logger;
         }
 
@@ -104,8 +100,6 @@ namespace WB.UI.Headquarters.API
             this.fileSystemAccessor.CreateDirectory(exportedDataDirectoryPath);
 
             this.ddiMetadataAccessor.ClearFiles();
-
-            this.paraDataAccessor.ClearParaDataFile();
         }
 
         private bool IsExistsDataExportInProgress()

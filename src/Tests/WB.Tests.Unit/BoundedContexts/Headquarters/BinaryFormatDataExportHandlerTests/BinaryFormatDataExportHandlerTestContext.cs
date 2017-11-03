@@ -50,8 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
         public static IDataExportFileAccessor CrerateDataExportFileAccessor(IFileSystemAccessor fileSystemAccessor = null,
             IProtectedArchiveUtils archiveUtils = null)
         {
-            return new DataExportFileAccessor(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                Mock.Of<IExportSettings>(),
+            return new DataExportFileAccessor(Mock.Of<IExportSettings>(),
                 Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 archiveUtils ?? Mock.Of<IProtectedArchiveUtils>(),
                 Mock.Of<ILogger>());

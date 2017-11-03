@@ -12,8 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status = null);
 
-        string AddParaDataExport(DataExportFormat exportFormat);
-
         IDataExportProcessDetails[] GetRunningExportProcesses();
 
         IDataExportProcessDetails[] GetAllProcesses();

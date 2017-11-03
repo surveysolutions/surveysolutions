@@ -296,13 +296,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public IDataExportStatusReader DataExportStatusReader(IDataExportProcessesService dataExportProcessesService = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
-            IParaDataAccessor paraDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
         {
             return new DataExportStatusReader(dataExportProcessesService: dataExportProcessesService ?? Substitute.For<IDataExportProcessesService>(),
                 filebasedExportedDataAccessor: filebasedExportedDataAccessor ?? Substitute.For<IFilebasedExportedDataAccessor>(),
-                paraDataAccessor: paraDataAccessor ?? Substitute.For<IParaDataAccessor>(),
                 fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
         }
