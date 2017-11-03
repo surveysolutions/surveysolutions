@@ -163,9 +163,9 @@ namespace WB.Tests.Abc.TestFactories
         public CompositeCollection<T> CompositeCollection<T>()
             => new CompositeCollection<T>();
 
-        public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null)
+        public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null, DataExportFormat? format = null)
             => new DataExportProcessDetails(
-                DataExportFormat.Tabular,
+                format ?? DataExportFormat.Tabular,
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
 
@@ -718,9 +718,6 @@ namespace WB.Tests.Abc.TestFactories
         {
             return values.Select(value => Create.Entity.Option(value));
         }
-
-        public ParaDataExportProcessDetails ParaDataExportProcess()
-            => new ParaDataExportProcessDetails(DataExportFormat.Tabular);
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
             => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);

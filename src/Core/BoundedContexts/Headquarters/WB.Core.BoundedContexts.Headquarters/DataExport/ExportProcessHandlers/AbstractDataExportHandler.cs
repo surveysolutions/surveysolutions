@@ -13,10 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
     abstract class AbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
-        private readonly string exportTempDirectoryPath;
-
         protected readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        protected readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
 
@@ -31,15 +30,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportProcessesService = dataExportProcessesService;
             this.dataExportFileAccessor = dataExportFileAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-
-            this.exportTempDirectoryPath = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, "ExportTemp");
+            this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
         public void ExportData(DataExportProcessDetails dataExportProcessDetails)
         {
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            this.RecreateExportTempDirectory();
+            if (this.CanDeleteTempFolder)
+                this.RecreateExportTempDirectory();
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
@@ -49,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
             this.ExportDataIntoDirectory(dataExportProcessDetails.Questionnaire,
-                dataExportProcessDetails.InterviewStatus, this.exportTempDirectoryPath, exportProgress,
+                dataExportProcessDetails.InterviewStatus, this.ExportTempDirectoryPath, exportProgress,
                 dataExportProcessDetails.CancellationToken);
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
@@ -60,10 +59,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
             this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
 
-            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName, exportProgress);
+            this.dataExportFileAccessor.RecreateExportArchive(this.ExportTempDirectoryPath, archiveName, exportProgress);
 
-            this.DeleteExportTempDirectory();
+            if (this.CanDeleteTempFolder)
+                this.DeleteExportTempDirectory();
         }
+
+        private string ExportTempDirectoryPath => this.fileSystemAccessor.CombinePath(
+            interviewDataExportSettings.DirectoryPath, this.ExportDirectoryName);
+
+        protected virtual string ExportDirectoryName => "ExportTemp";
+        protected virtual bool CanDeleteTempFolder => true;
 
         protected abstract DataExportFormat Format { get; }
 
@@ -73,14 +79,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         private void DeleteExportTempDirectory()
         {
-            if (this.fileSystemAccessor.IsDirectoryExists(this.exportTempDirectoryPath))
-                this.fileSystemAccessor.DeleteDirectory(this.exportTempDirectoryPath);
+            if (this.fileSystemAccessor.IsDirectoryExists(this.ExportTempDirectoryPath))
+                this.fileSystemAccessor.DeleteDirectory(this.ExportTempDirectoryPath);
         }
 
         private void RecreateExportTempDirectory()
         {
             this.DeleteExportTempDirectory();
-            this.fileSystemAccessor.CreateDirectory(this.exportTempDirectoryPath);
+            this.fileSystemAccessor.CreateDirectory(this.ExportTempDirectoryPath);
         }
     }
 }

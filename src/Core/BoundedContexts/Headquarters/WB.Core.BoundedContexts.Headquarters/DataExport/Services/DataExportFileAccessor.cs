@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public class DataExportFileAccessor : IDataExportFileAccessor
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExportSettings exportSettings;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IProtectedArchiveUtils archiveUtils;
@@ -20,13 +19,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
-        public DataExportFileAccessor(IFileSystemAccessor fileSystemAccessor, 
-            IExportSettings exportSettings, 
+        public DataExportFileAccessor(IExportSettings exportSettings, 
             IPlainTransactionManagerProvider plainTransactionManagerProvider, 
             IProtectedArchiveUtils archiveUtils,
             ILogger logger)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.exportSettings = exportSettings;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.archiveUtils = archiveUtils;
@@ -41,12 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void RecreateExportArchive(IEnumerable<string> filesToArchive, string archiveFilePath)
         {
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-            {
-                this.logger.Info($"{archiveFilePath} existed, deleting");
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-            }
-
             this.logger.Debug($"Starting creation of {Path.GetFileName(archiveFilePath)} archive");
             Stopwatch watch = Stopwatch.StartNew();
 

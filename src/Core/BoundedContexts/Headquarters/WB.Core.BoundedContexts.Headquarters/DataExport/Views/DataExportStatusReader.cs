@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -21,7 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
-        private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly Tuple<DataExportType, DataExportFormat>[] supportedDataExports = new[]
@@ -38,13 +36,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         public DataExportStatusReader(
             IDataExportProcessesService dataExportProcessesService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IParaDataAccessor paraDataAccessor, 
             IFileSystemAccessor fileSystemAccessor,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.paraDataAccessor = paraDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
@@ -75,7 +71,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
         private static RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportProcessDetails dataExportProcessDetails)
         {
-            var result = new RunningDataExportProcessView
+            var exportProcessDetails = (DataExportProcessDetails)dataExportProcessDetails;
+
+            return new RunningDataExportProcessView
             {
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
                 BeginDate = dataExportProcessDetails.BeginDate,
@@ -83,21 +81,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 DataExportProcessName = dataExportProcessDetails.Name,
                 Progress = dataExportProcessDetails.ProgressInPercents,
                 Format = dataExportProcessDetails.Format,
-                ProcessStatus = dataExportProcessDetails.Status
+                ProcessStatus = dataExportProcessDetails.Status,
+                Type = exportProcessDetails.Format == DataExportFormat.Paradata ? DataExportType.ParaData : DataExportType.Data,
+                QuestionnaireIdentity = exportProcessDetails.Questionnaire,
+                InterviewStatus = exportProcessDetails.InterviewStatus
             };
-
-            if (dataExportProcessDetails is ParaDataExportProcessDetails)
-            {
-                result.Type = DataExportType.ParaData;
-            }
-            else if (dataExportProcessDetails is DataExportProcessDetails)
-            {
-                result.Type = DataExportType.Data;
-                var exportProcessDetails = (DataExportProcessDetails) dataExportProcessDetails;
-                result.QuestionnaireIdentity = exportProcessDetails.Questionnaire;
-                result.InterviewStatus = exportProcessDetails.InterviewStatus;
-            }
-            return result;
         }
 
         private DataExportView CreateDataExportView(DataExportType dataType,
@@ -136,17 +124,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 dataExportView.ProgressInPercents = process?.Progress ?? 0;
             }
 
-            string path = string.Empty;
-            switch (dataType)
-            {
-                case DataExportType.ParaData:
-                    path = this.paraDataAccessor.GetPathToParaDataArchiveByQuestionnaire(
-                        questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-                    break;
-                case DataExportType.Data:
-                    path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus);
-                    break;
-            }
+            string path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus);
+
             SetDataExportLastUpdateTimeAndSizeIfFilePresent(dataExportView, path);
             return dataExportView;
         }

@@ -21,7 +21,6 @@ namespace WB.UI.Headquarters.API
     public class DataExportApiController : ApiController
     {
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
-        private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly IDataExportStatusReader dataExportStatusReader;
@@ -32,15 +31,13 @@ namespace WB.UI.Headquarters.API
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
-            IDataExportProcessesService dataExportProcessesService, 
-            IParaDataAccessor paraDataAccessor,
+            IDataExportProcessesService dataExportProcessesService,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IDdiMetadataAccessor ddiMetadataAccessor)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
         }
@@ -48,11 +45,9 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         [ObserverNotAllowedApi]
         public HttpResponseMessage Paradata(Guid id, long version)
-        {
-            return
-                CreateHttpResponseMessageWithFileContent(this.paraDataAccessor.GetPathToParaDataArchiveByQuestionnaire(id,
-                    version));
-        }
+            => CreateHttpResponseMessageWithFileContent(
+                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
+                    new QuestionnaireIdentity(id, version), DataExportFormat.Paradata));
 
         [HttpGet]
         [ObserverNotAllowedApi]
@@ -72,22 +67,6 @@ namespace WB.UI.Headquarters.API
                 CreateHttpResponseMessageWithFileContent(
                     this.ddiMetadataAccessor.GetFilePathToDDIMetadata(new QuestionnaireIdentity(id,
                         version)));
-        }
-
-        [HttpPost]
-        [ObserverNotAllowedApi]
-        public HttpResponseMessage RequestUpdateOfParadata()
-        {
-            try
-            {
-                this.dataExportProcessesService.AddParaDataExport(DataExportFormat.Tabular);
-            }
-            catch (Exception e)
-            {
-                return this.Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e.Message);
-            }
-
-            return Request.CreateResponse(true);
         }
 
         [HttpPost]
