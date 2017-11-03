@@ -71,7 +71,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NHibernate" Version="5.0.0" />
     <PackageReference Include="NSubstitute" Version="2.0.3" />
-    <PackageReference Include="NUnit" Version="3.6.1" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
     <PackageReference Include="Quartz" Version="2.5.0" />
     <PackageReference Include="RhinoMocks" Version="3.6.1" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />
