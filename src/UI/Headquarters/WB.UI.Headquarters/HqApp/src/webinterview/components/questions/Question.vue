@@ -8,13 +8,13 @@
             <ul class="dropdown-menu">
                 <li v-if="!isShowingAddCommentDialog">
                     <a href="javascript:void(0)" @click="showAddComment"
-                        :disabled="!$store.webinterview.getters.addCommentsAllowed">
+                        :disabled="!$store.getters.addCommentsAllowed">
                         {{ $t("WebInterviewUI.CommentAdd") }}
                     </a>
                 </li>
                 <li v-else>
                     <a href="javascript:void(0)" @click="hideAddComment"
-                        :disabled="!$store.webinterview.getters.addCommentsAllowed">
+                        :disabled="!$store.getters.addCommentsAllowed">
                         {{ $t("WebInterviewUI.CommentHide") }}
                     </a>
                 </li>
