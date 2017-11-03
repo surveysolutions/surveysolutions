@@ -14,7 +14,7 @@
                     <wb-remove-answer />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
-                    <div v-if="$store.state.review != null">
+                    <div v-if="$store.getters.isReviewMode">
                         <audio controls preload="auto" 
                             style="width:300px" 
                             :src="audioRecordPath">
