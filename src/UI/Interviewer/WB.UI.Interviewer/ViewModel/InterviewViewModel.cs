@@ -1,5 +1,6 @@
 using System;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -18,6 +19,7 @@ namespace WB.UI.Interviewer.ViewModel
     public class InterviewViewModel : BaseInterviewViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -35,12 +37,14 @@ namespace WB.UI.Interviewer.ViewModel
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
-            IEnumeratorSettings enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
         }
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
@@ -91,6 +95,16 @@ namespace WB.UI.Interviewer.ViewModel
                 default:
                     return null;
             }
+        }
+
+        public override void ViewAppeared()
+        {
+            if (!lastCreatedInterviewStorage.WasJustCreated(interviewId))
+            {
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now));
+            }
+
+            base.ViewAppeared();
         }
 
         public override void ViewDisappearing()
