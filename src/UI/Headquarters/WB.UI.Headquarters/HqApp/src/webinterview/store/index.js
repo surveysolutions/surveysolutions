@@ -37,7 +37,7 @@ const store = safeStore({
             return loadedCount === 0 || totalCount === 0 || (loadedCount < totalCount)
         },
         addCommentsAllowed(state){
-            return state.webinterview.receivedByInterviewer;
+            return !state.receivedByInterviewer;
         }
     }
 })
