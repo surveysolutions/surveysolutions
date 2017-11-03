@@ -29,6 +29,7 @@
         VariableDisabled,
         Paused,
         Resumed,
-        KeyAssigned
+        KeyAssigned,
+        TranslationSwitched
     }
 }

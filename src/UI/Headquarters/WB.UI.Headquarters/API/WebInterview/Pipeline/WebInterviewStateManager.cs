@@ -8,7 +8,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
@@ -88,7 +87,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             if (isInterviewer && !interview.IsCompleted)
             {
                 Guid userId = Guid.Parse(hub.Context.User.Identity.GetUserId());
-                var pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId);
+                var pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now);
 
                 var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
                 try

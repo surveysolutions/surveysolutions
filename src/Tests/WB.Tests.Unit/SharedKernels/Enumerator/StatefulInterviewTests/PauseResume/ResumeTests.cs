@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.PauseResume
 {
     [TestFixture]
-    internal class PauseTests : StatefulInterviewTestsContext
+    internal class ResumeTests : StatefulInterviewTestsContext
     {
         static readonly List<InterviewStatus> AllowedStatuses = new List<InterviewStatus>
         {
@@ -30,13 +30,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.PauseRes
             {
                 using (var context = new EventContext())
                 {
-                    interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now));
-                    context.ShouldContainEvent<InterviewPaused>();
+                    interview.Resume(new ResumeInterviewCommand(interviewId, Id.g2, DateTime.Now));
+                    context.ShouldContainEvent<InterviewResumed>();
                 }
             }
             else
             {
-                Assert.Throws<InterviewException>(() => interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now)));
+                Assert.Throws<InterviewException>(() => interview.Resume(new ResumeInterviewCommand(interviewId, Id.g2, DateTime.Now)));
             }
         }
     }
