@@ -19,9 +19,9 @@ function toastErr(err, message) {
 
 function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
-    return function () {
+    return function() {
         try {
-            if (window.CONFIG.verboseMode && !(window).NODEBUG) {
+            if (window.CONFIG.verboseMode) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
                 if (argument && argument.hasOwnProperty("source"))
                     console.debug("call", section, "from", argument.source, name, argument, new Error())
@@ -31,12 +31,16 @@ function wrap(name, method, section) {
 
             const result = method.apply(this, arguments)
 
-            // handle async exceptions
-            if (result && result.catch) {
-                result.catch(err => {
-                    console.error(name, err)
-                    toastErr(err, name + ": " + err.message)
-                })
+            if (result) {
+                var isPromise = typeof result.then == 'function'
+
+                // handle async exceptions
+                if (isPromise) {
+                    result.catch(err => {
+                        console.error(name, err)
+                        toastErr(err, name + ": " + err.message)
+                    })
+                }
             }
 
             return result
