@@ -5,15 +5,21 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class PauseInterviewCommand : InterviewCommand
     {
-        public PauseInterviewCommand(Guid interviewId, Guid userId) : base(interviewId, userId)
+        public PauseInterviewCommand(Guid interviewId, Guid userId, DateTime localTime) : base(interviewId, userId)
         {
+            LocalTime = localTime;
         }
+
+        public DateTime LocalTime { get; set; }
     }
 
     public class ResumeInterviewCommand : InterviewCommand
     {
-        public ResumeInterviewCommand(Guid interviewId, Guid userId) : base(interviewId, userId)
+        public ResumeInterviewCommand(Guid interviewId, Guid userId, DateTime localTime) : base(interviewId, userId)
         {
+            LocalTime = localTime;
         }
+
+        public DateTime LocalTime { get; set; }
     }
 }
