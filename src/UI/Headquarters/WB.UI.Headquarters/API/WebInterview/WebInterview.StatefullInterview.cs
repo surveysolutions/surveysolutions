@@ -66,18 +66,10 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
         }
 
-        public IEnumerable<string> GetFlags(string sectionId)
+        public IEnumerable<string> GetFlags()
         {
-            if (sectionId == null) throw new ArgumentNullException(nameof(sectionId));
-
-            Identity sectionIdentity = Identity.Parse(sectionId);
-
             var statefulInterview = this.GetCallerInterview();
-            var questionnaire = this.GetCallerQuestionnaire();
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
-
-            return this.interviewFactory.GetQuestionsWithFlagBySectionId(questionnaireIdentity, statefulInterview.Id, sectionIdentity)
-                .Select(x => x.ToString());
+            return this.interviewFactory.GetFlaggedQuestionIds(statefulInterview.Id).Select(x => x.ToString());
         }
 
         public bool IsEnabled(string id)

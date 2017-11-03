@@ -5,40 +5,45 @@ Vue.use(Vuex)
 
 export default {
     state: {
-        state: []
+        flagged: {}
     },
-    actions:{
-        setFlag({commit}, {questionId, hasFlag}) {
+
+    actions: {
+        setFlag({ commit, dispatch }, { questionId, hasFlag }) {
             Vue.$api.call(api => {
-                return api.setFlag(questionId, hasFlag).then(function(){
-                    commit("SET_FLAG", {questionId, hasFlag})
+                return api.setFlag(questionId, hasFlag).then(function () {
+                    commit("SET_FLAG", { questionId, hasFlag })
+                    dispatch("refreshSearchResults")
                 });
             });
         },
-        async fetchFlags({commit, rootState}){
+        async fetchFlags({ commit }) {
             const flags = await Vue.$api.call(api => {
-                return api.getFlags(rootState.route.params.sectionId);
+                return api.getFlags();
             });
-            commit("SET_FLAGS", {flags})
+
+            commit("SET_FLAGS", { flags })
         }
     },
-    mutations:{
-        SET_FLAG(state, {questionId, hasFlag}){
-            if(hasFlag)
-                state.state.push(questionId)
-            else{
-                var index = state.state.indexOf(questionId)
-                if(index > -1)
-                    state.state.splice(index, 1)
+
+    mutations: {
+        SET_FLAG(state, { questionId, hasFlag }) {
+
+            if (hasFlag) {
+                Vue.set(state.flagged, questionId, true)
+            } else {
+                Vue.delete(state.flagged, questionId);
             }
         },
-        SET_FLAGS(state, {flags}){
-            state.state = flags
+        SET_FLAGS(state, { flags }) {
+            state.flagged = {};
+            flags.forEach(flag => state.flagged[flag] = true)
         }
     },
-    getters:{
-        flags(state){
-            return state.state
+    
+    getters: {
+        flags(state) {
+            return state.flagged
         }
     }
 }

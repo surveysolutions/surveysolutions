@@ -24,7 +24,7 @@
                 return this.$store.state.webinterview.receivedByInterviewer;
             },
             hasFlag() {
-                return this.$store.getters.flags.indexOf(this.$me.id) > -1;
+                return this.$store.getters.flags[this.$me.id];
             }
         },
         methods:{
