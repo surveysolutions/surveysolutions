@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 if (!string.IsNullOrEmpty(input.SearchBy))
                 {
                     var filterLowerCase = input.SearchBy.ToLower();
-                    query = query.Where(x => x.UserName.ToLower().Contains(filterLowerCase));
+                    query = query.Where(x => x.Map.ToLower() == input.MapName.ToLower() && x.UserName.ToLower().Contains(filterLowerCase));
                 }
 
 
@@ -70,12 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     pagedResults = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
                 }
 
-                var itemIds = pagedResults.Select(x => x.Id).ToArray();
-                var actualItems = queryable.Where(x => itemIds.Contains(x.Id))
-                    .OrderUsingSortExpression(input.Order)
-                    .ToList();
-
-                return new MapUsersView() { Page = input.Page, PageSize = input.PageSize, TotalCount = queryResult.Count(), Items = actualItems.Select(x => x.UserName).ToList() };
+                return new MapUsersView() { Page = input.Page, PageSize = input.PageSize, TotalCount = queryResult.Count(), Items = pagedResults.Select(x => x.UserName).ToList() };
             });
         }
     }
