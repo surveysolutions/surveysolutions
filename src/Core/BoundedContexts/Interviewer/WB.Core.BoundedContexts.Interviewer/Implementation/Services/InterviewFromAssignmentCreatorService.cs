@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
+        private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
 
         public InterviewFromAssignmentCreatorService(IMvxMessenger messenger,
             ICommandService commandService,
@@ -39,7 +40,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IViewModelNavigationService viewModelNavigationService,
             IInterviewAnswerSerializer answerSerializer,
             IAssignmentDocumentsStorage assignmentsRepository,
-            IInterviewUniqueKeyGenerator keyGenerator)
+            IInterviewUniqueKeyGenerator keyGenerator,
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage)
         {
             this.messenger = messenger;
             this.commandService = commandService;
@@ -48,6 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.answerSerializer = answerSerializer;
             this.assignmentsRepository = assignmentsRepository;
             this.keyGenerator = keyGenerator;
+            this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
         }
 
         public async Task CreateInterviewAsync(int assignmentId)
@@ -75,7 +78,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 );
 
                 await this.commandService.ExecuteAsync(createInterviewCommand);
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+                var formatGuid = interviewId.FormatGuid();
+                this.lastCreatedInterviewStorage.Store(formatGuid);
+                this.viewModelNavigationService.NavigateToPrefilledQuestions(formatGuid);
             }
             catch (InterviewException e)
             {
