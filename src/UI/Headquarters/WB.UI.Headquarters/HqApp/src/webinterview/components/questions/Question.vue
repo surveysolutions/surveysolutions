@@ -75,9 +75,10 @@
                 return this.isDisabled || this.question.isDisabled;
             },
             hasFlag(){
-                if(this.$store.state.review == undefined) return false;
-                
-                return this.$store.getters.flags[this.id]
+                if(this.$store.getters.isReviewMode === true) 
+                    return this.$store.getters.flags[this.id]
+                    
+                return false
             },
             questionClass() {
                 return [{ 'disabled-question': this.disabled, 'with-flag': this.hasFlag}]

@@ -5,15 +5,13 @@
             <div class="options-group">
                 <div v-if="!$me.isTimestamp"
                      class="form-group">
-                    <div class="field"
-                         :class="{answered: $me.isAnswered}">
+                    <div class="field" :class="{answered: $me.isAnswered}">
                         <flat-pickr :config="pickerOpts"
                                     :value="answer"
                                     :disabled="!$me.acceptAnswer"
                                     class="field-to-fill"
                                     :placeholder="$t('WebInterviewUI.EnterDate')"
                                     :title="$t('WebInterviewUI.EnterDate')" />
-
                         <wb-remove-answer/>
                     </div>
                 </div>
