@@ -66,7 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, VariablesDisabled>,
         IUpdateHandler<InterviewHistoryView, InterviewKeyAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewPaused>,
-        IUpdateHandler<InterviewHistoryView, InterviewResumed>
+        IUpdateHandler<InterviewHistoryView, InterviewResumed>,
+        IUpdateHandler<InterviewHistoryView, TranslationSwitched>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
@@ -746,6 +747,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, null,
                 @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<TranslationSwitched> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.TranslationSwitched, null,
+                @event.EventTimeStamp, new Dictionary<string, string>
+                {
+                    {
+                        "translation", @event.Payload.Language
+                    }
+                });
 
             return state;
         }

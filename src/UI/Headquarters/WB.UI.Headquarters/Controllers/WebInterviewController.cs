@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Resources;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -31,7 +30,6 @@ using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -55,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAudioProcessingService audioProcessingService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
+        public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
@@ -184,6 +183,7 @@ namespace WB.UI.Headquarters.Controllers
             var interviewId = this.CreateInterview(assignment);
 
             RememberCapchaFilled(interviewId);
+            TempData[LastCreatedInterviewIdKey] = interviewId;
 
             return this.Redirect(GenerateUrl("Cover", interviewId));
         }
@@ -197,6 +197,12 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var returnUrl = GenerateUrl(nameof(Cover), id);
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
+            }
+
+            var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
+            if (lastCreatedInterview != id)
+            {
+                this.commandService.Execute(new ResumeInterviewCommand(Guid.Parse(id), interview.CurrentResponsibleId, DateTime.Now));
             }
 
             return View("Index");

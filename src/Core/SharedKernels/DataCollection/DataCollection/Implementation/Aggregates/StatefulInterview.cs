@@ -839,9 +839,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var invariants = new InterviewPropertiesInvariants(properties);
             invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
-            ApplyEvent(new InterviewPaused(command.UserId));
+            ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime));
         }
 
-        public void Resume(ResumeInterviewCommand command) { }
+        public void Resume(ResumeInterviewCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+
+            ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime));
+        }
     }
 }
