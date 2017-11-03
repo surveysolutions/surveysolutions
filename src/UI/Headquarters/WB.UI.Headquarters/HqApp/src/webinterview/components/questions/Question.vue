@@ -100,8 +100,9 @@
             }
         },
         methods : {
-            showAddComment(){
-                this.isShowingAddCommentDialogFlag = true;
+            showAddComment() {
+                if (this.$store.getters.addCommentsAllowed)
+                    this.isShowingAddCommentDialogFlag = true;
             },
             hideAddComment(){
                 this.isShowingAddCommentDialogFlag = false;
