@@ -102,9 +102,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         i.StatusHistory.StatusChangeOriginatorRole,
                         i.StatusHistory.Timestamp,
                         i.StatusHistory.SupervisorName,
-                        i.StatusHistory.InterviewerName
+                        i.StatusHistory.InterviewerName,
+                        i.StatusHistory.Position
                     })
-                    .OrderBy(i => i.Timestamp).ToList());
+                    .OrderBy(x => x.InterviewId).ThenBy(x => x.Position).ToList());
 
             var result = new List<string[]>();
 

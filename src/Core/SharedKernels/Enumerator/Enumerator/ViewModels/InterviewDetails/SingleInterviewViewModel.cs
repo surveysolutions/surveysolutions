@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public abstract class SingleInterviewViewModel : BaseViewModel
     {
-        private readonly ICommandService commandService;
+        protected readonly ICommandService commandService;
         private readonly VibrationViewModel vibrationViewModel;
 
         protected SingleInterviewViewModel(

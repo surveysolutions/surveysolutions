@@ -80,6 +80,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         protected override bool OnBeforeDisconnect(IHub hub, bool stopCalled)
         {
+            RecordInterviewPause(hub);
+
+            return base.OnBeforeDisconnect(hub, stopCalled);
+        }
+
+        private void RecordInterviewPause(IHub hub)
+        {
             var isInterviewer = hub.Context.User.IsInRole(UserRoles.Interviewer.ToString());
             var interviewId = hub.Context.QueryString[@"interviewId"];
             var interview = this.statefulInterviewRepository.Get(interviewId);
@@ -89,6 +96,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                 Guid userId = Guid.Parse(hub.Context.User.Identity.GetUserId());
                 var pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now);
 
+                // There is no request scope so no other way to get scoped transaction
                 var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
                 try
                 {
@@ -102,8 +110,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                     throw;
                 }
             }
-
-            return base.OnBeforeDisconnect(hub, stopCalled);
         }
     }
 }
