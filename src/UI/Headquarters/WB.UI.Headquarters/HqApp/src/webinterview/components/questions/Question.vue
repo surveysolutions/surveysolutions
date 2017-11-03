@@ -7,10 +7,16 @@
             </button>
             <ul class="dropdown-menu">
                 <li v-if="!isShowingAddCommentDialog">
-                    <a href="javascript:void(0)" @click="showAddComment">{{ $t("WebInterviewUI.CommentAdd") }}</a>
+                    <a href="javascript:void(0)" @click="showAddComment"
+                        :disabled="!$store.webinterview.getters.addCommentsAllowed">
+                        {{ $t("WebInterviewUI.CommentAdd") }}
+                    </a>
                 </li>
                 <li v-else>
-                    <a href="javascript:void(0)" @click="hideAddComment">{{ $t("WebInterviewUI.CommentHide") }}</a>
+                    <a href="javascript:void(0)" @click="hideAddComment"
+                        :disabled="!$store.webinterview.getters.addCommentsAllowed">
+                        {{ $t("WebInterviewUI.CommentHide") }}
+                    </a>
                 </li>
                 <slot name="sideMenu"></slot>
             </ul>
