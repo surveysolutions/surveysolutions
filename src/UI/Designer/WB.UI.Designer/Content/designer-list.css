@@ -739,7 +739,7 @@ table.table-content tr th:last-child {
 
 .folder-tree .tree-icon,
 .tree-icon {
-    background: url("images/DR-2017-folders-icons-2x.png") no-repeat;
+    background: url("images/DR-2017-folders-icons-G2-color.png") no-repeat;
     background-size: 30px 90px;
     vertical-align: top;
     background-position: 0 -60px;
@@ -755,12 +755,12 @@ table.table-content tr th:last-child {
 
     .folder-tree .tree-icon.folder-open,
     .tree-icon.folder-open {
-        background-position: 0 -30px;
+        background-position: 0 0;
     }
 
     .folder-tree .tree-icon.folder-closed,
     .tree-icon.folder-closed {
-        background-position: 0 0;
+        background-position: 0 -30px;
     }
 
 .folder-tree .fancytree-title {
@@ -804,7 +804,7 @@ table.table-content tr th:last-child {
 }
 
     .breadcrumb.public-questionnaires-breadcrumb.tree-icon {
-        background-position: 10px -28px;
+        background-position: 10px 0px;
     }
 
     .breadcrumb.public-questionnaires-breadcrumb a {
