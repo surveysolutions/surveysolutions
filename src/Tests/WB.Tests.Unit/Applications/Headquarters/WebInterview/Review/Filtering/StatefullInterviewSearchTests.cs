@@ -7,16 +7,27 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
 {
-    public class StatefullInterviewSearchTests
+    public partial class StatefullInterviewSearchTests
     {
         StatefulInterview interview;
+
+        private static readonly Identity TextFlagged = Id.Identity1;
+        private static readonly Identity TextSupervisor = Id.Identity2;
+        private static readonly Identity TextComment = Id.Identity3;
+        private static readonly Identity TextInRosterFlagged = Create.Identity(Id.g6, 1);
+        private static readonly Identity StaticTextInvalid = Id.Identity4;
+        private static readonly Identity TextCommentFlaggedAnswered = Id.Identity5;
+        private static readonly Identity TextAnsweredInvalid = Id.Identity7;
+        private static readonly Identity TextSuper = Id.Identity8;
+        private static readonly Identity StaticText = Id.Identity9;
+        private static readonly Identity Text = Id.Identity10;
+
 
         [OneTimeSetUp]
         public void Setup()
@@ -25,120 +36,117 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                 Create.Entity.Group(Id.IdentityA.Id, "Group A", children: new IComposite[]
                 {
                     Create.Entity.Variable(), // should not count
-                    Create.Entity.TextQuestion(Id.Identity1.Id, text: "Text 1 Flagged", variable: "text1"),
-                    Create.Entity.TextQuestion(Id.Identity2.Id, text: "Text Super A", variable: "text2", scope: Main.Core.Entities.SubEntities.QuestionScope.Supervisor),
-                    Create.Entity.TextQuestion(Id.Identity3.Id, text: "Text 3 With Comment", variable: "text3"),
+                    Create.Entity.TextQuestion(TextFlagged.Id, text: "Text 1 Flagged", variable: "text1"),
+                    Create.Entity.TextQuestion(TextSupervisor.Id, text: "Text Super A", variable: "text2", scope: Main.Core.Entities.SubEntities.QuestionScope.Supervisor),
+                    Create.Entity.TextQuestion(TextComment.Id, text: "Text 3 With Comment", variable: "text3"),
                     Create.Entity.FixedRoster(Id.IdentityD.Id, title: "roster", children: new IComposite[]
                     {
-                        Create.Entity.TextQuestion(Id.Identity6.Id, text: "Text Roster Flagged", variable: "textInRoster"),
+                        Create.Entity.TextQuestion(TextInRosterFlagged.Id, text: "Text Roster Flagged", variable: "textInRoster"),
                     }, fixedTitles: new [] { Create.Entity.FixedTitle(1.0m, "Test") }),
-                    Create.Entity.StaticText(Id.Identity4.Id, text: "StaticText 4 Invalid"),
-                    Create.Entity.TextQuestion(Id.Identity5.Id, text: "Text 5 With Comment Flagged Answered", variable: "text5")
+                    Create.Entity.StaticText(StaticTextInvalid.Id, "StaticText 4 Invalid"),
+                    Create.Entity.TextQuestion(TextCommentFlaggedAnswered.Id, text: "Text 5 With Comment Flagged Answered", variable: "text5")
                 }),
                 Create.Entity.Group(Id.gB, "Group B", children: new IComposite[]
                 {
-                    Create.Entity.TextQuestion(Id.Identity7.Id, text: "Text 7 Answered Invalid", variable: "text6"),
-                    Create.Entity.TextQuestion(Id.Identity8.Id, text: "Text Super B", variable: "text7", scope: Main.Core.Entities.SubEntities.QuestionScope.Supervisor),
-                    Create.Entity.StaticText(Id.Identity9.Id, text: "StaticText 9"),
-                    Create.Entity.TextQuestion(Id.Identity10.Id, text: "Text 10", variable: "text9")
+                    Create.Entity.TextQuestion(TextAnsweredInvalid.Id, text: "Text 7 Answered Invalid", variable: "text6"),
+                    Create.Entity.TextQuestion(TextSuper.Id, text: "Text Super B", variable: "text7", scope: Main.Core.Entities.SubEntities.QuestionScope.Supervisor),
+                    Create.Entity.StaticText(StaticText.Id, "StaticText 9"),
+                    Create.Entity.TextQuestion(Text.Id, text: "Text 10", variable: "text9")
                 }));
 
             interview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: document);
 
-            interview.Apply(Create.Event.AnswersDeclaredInvalid(Id.Identity7));
-            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(Id.Identity4));
-            interview.Apply(Create.Event.TextQuestionAnswered(Id.Identity5.Id));
-            interview.Apply(Create.Event.TextQuestionAnswered(Id.Identity7.Id));
-            interview.Apply(Create.Event.AnswerCommented(Id.Identity3.Id));
-            interview.Apply(Create.Event.AnswerCommented(Id.Identity5.Id));
+            interview.Apply(Create.Event.AnswersDeclaredInvalid(TextAnsweredInvalid));
+            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(StaticTextInvalid));
+            interview.Apply(Create.Event.TextQuestionAnswered(TextCommentFlaggedAnswered.Id));
+            interview.Apply(Create.Event.TextQuestionAnswered(TextAnsweredInvalid.Id));
+            interview.Apply(Create.Event.AnswerCommented(TextComment.Id));
+            interview.Apply(Create.Event.AnswerCommented(TextCommentFlaggedAnswered.Id));
 
             var interviewFactory = Mock.Of<IInterviewFactory>(f => f.GetFlaggedQuestionIds(interview.Id) == new[]
             {
-                Id.Identity1,
-                Id.Identity5,
-                Id.Identity6
+                TextFlagged,
+                TextCommentFlaggedAnswered,
+                TextInRosterFlagged
             });
 
             Subject = new StatefullInterviewSearcher(interviewFactory);
         }
 
-        public StatefullInterviewSearcher Subject { get; set; }
-
-        [TestCaseSource(nameof(SingleFilteringCaseData))]
-        public void ShouldFilterBySingleOption(FilterTestCase @case)
-        {
-            var search = Subject.Search(interview, @case.Options.ToArray(), 0, 100);
-
-            AssertSearchReturnFollowingIds(search, @case.Results.Select(id => id).ToArray());
-        }
-
-        public static FilterTestCase[] SingleFilteringCaseData =
-        {
-            Case(FilterOption.Flagged).Result(Id.Identity1, Id.Identity5),
-            Case(FilterOption.NotFlagged).ResultExcept(Id.Identity1, Id.Identity5, Id.Identity4, Id.Identity9),
-
-            Case(FilterOption.Answered).Result(Id.Identity5, Id.Identity7),
-            Case(FilterOption.NotAnswered).ResultExcept(Id.Identity5, Id.Identity7, Id.Identity4, Id.Identity9),
-
-            Case(FilterOption.Invalid).Result(Id.Identity4, Id.Identity7),
-            Case(FilterOption.Valid).ResultExcept(Id.Identity4, Id.Identity7),
-
-            Case(FilterOption.ForSupervisor).Result(Id.Identity2, Id.Identity8),
-            Case(FilterOption.ForInterviewer).ResultExcept(Id.Identity2, Id.Identity8, Id.Identity4, Id.Identity9),
-
-            Case(FilterOption.WithComments).Result(Id.Identity3, Id.Identity5)
+        private static readonly Identity[] AllQuestions = {
+            TextFlagged,
+            TextSupervisor,
+            TextComment,
+            TextInRosterFlagged,
+            StaticTextInvalid,
+            TextCommentFlaggedAnswered,
+            TextAnsweredInvalid, TextSuper,
+            StaticText, Text,
         };
 
-        [TestCaseSource(nameof(MultipleFilteringCaseData))]
-        public void ShouldFilterByMultipleOption(FilterTestCase @case)
+        private static Identity[] AllQuestionsBut(params Identity[] ids) => AllQuestions.Except(ids).ToArray();
+
+        public StatefullInterviewSearcher Subject { get; set; }
+
+        [TestCaseSource(nameof(TestCaseData))]
+        public void ShouldFilterResults(FilterTestCase @case)
         {
             var search = Subject.Search(interview, @case.Options.ToArray(), 0, 100);
             AssertSearchReturnFollowingIds(search, @case.Results.Select(id => id).ToArray());
 
             if (@case.StatsCounter != null)
             {
-                for (var index = 0; index < AllFilterOptions.Length; index++)
-                {
-                    var option = AllFilterOptions[index];
-                    
-                    Assert.That(search.Stats[option], Is.EqualTo(@case.StatsCounter[index]));
-                }
-                Console.WriteLine();
+                var resultedStats = AllFilterOptions.Select(option => search.Stats[option]).ToList();
+
+                Assert.That(resultedStats, Is.EqualTo(@case.StatsCounter), 
+                    "\r\nExpected: " + string.Join(", ", @case.StatsCounter) + "\r\n" +
+                    "Actual  : " + string.Join(", ", resultedStats));
             }
         }
 
-        public static FilterTestCase[] MultipleFilteringCaseData =
+        public static FilterTestCase[] TestCaseData =
         {
-            Case(FilterOption.Flagged, FilterOption.WithComments)
-                .Result(Id.Identity5).Stats(1, 2, 1, 0, 1, 1, 0, 0, 1),
-            Case(FilterOption.Flagged, FilterOption.NotAnswered)
-                .Result(Id.Identity1).Stats(1, 6, 0, 0, 1, 2, 1, 0, 1),
-
-            Case(FilterOption.Flagged, FilterOption.Valid)
-                .Result(Id.Identity1, Id.Identity5).Stats(2, 7, 1, 2, 2, 1, 1, 0, 2),
-
-            Case(FilterOption.NotFlagged, FilterOption.Invalid)
-                .Result(Id.Identity7).Stats(1, 1, 0, 1, 6, 1, 0, 0, 1),
-            Case(FilterOption.Valid, FilterOption.Invalid)
-                .ResultExcept().Stats(2, 6, 2, 10, 10, 2, 6, 2, 6), // all results
-            Case(FilterOption.Flagged, FilterOption.NotFlagged)
-                .ResultExcept(Id.Identity4, Id.Identity9).Stats(8, 8, 2, 1, 7, 2, 6, 2, 6), // all results
-            Case(FilterOption.Answered, FilterOption.NotAnswered)
-                .ResultExcept(Id.Identity4, Id.Identity9).Stats(2, 6, 2, 1, 7, 8, 8, 2, 6), // all results
-            Case(FilterOption.ForSupervisor, FilterOption.ForInterviewer)
-                .ResultExcept(Id.Identity4, Id.Identity9).Stats(2, 6, 2, 1, 7, 2, 6, 8, 8), // all results
+            new FilterTestCase(FilterOption.Flagged)
+                .ExpectedQuestions(TextFlagged, TextInRosterFlagged, TextCommentFlaggedAnswered),
+            new FilterTestCase(FilterOption.NotFlagged)
+                .ExpectedQuestions(AllQuestionsBut(TextFlagged, TextInRosterFlagged, TextCommentFlaggedAnswered, StaticTextInvalid, StaticText)),
+            new FilterTestCase(FilterOption.Answered)
+                .ExpectedQuestions(TextCommentFlaggedAnswered, TextAnsweredInvalid),
+            new FilterTestCase(FilterOption.NotAnswered)
+                .ExpectedQuestions(AllQuestionsBut(TextCommentFlaggedAnswered, TextAnsweredInvalid, StaticTextInvalid, StaticText)),
+            new FilterTestCase(FilterOption.Invalid)
+                .ExpectedQuestions(StaticTextInvalid, TextAnsweredInvalid),
+            new FilterTestCase(FilterOption.Valid)
+                .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid,TextAnsweredInvalid)),
+            new FilterTestCase(FilterOption.ForSupervisor).ExpectedQuestions(TextSupervisor, TextSuper),
+            new FilterTestCase(FilterOption.ForInterviewer)
+                .ExpectedQuestions(AllQuestionsBut(TextSupervisor, TextSuper, StaticTextInvalid, StaticText)),
+            new FilterTestCase(FilterOption.WithComments).ExpectedQuestions(TextComment, TextCommentFlaggedAnswered),
+            new FilterTestCase(FilterOption.Flagged, FilterOption.WithComments)
+                .ExpectedQuestions(TextCommentFlaggedAnswered)
+                .ExpectedStats(1, 2, 1, 0, 1, 1, 0, 0, 1),
+            new FilterTestCase(FilterOption.Flagged, FilterOption.NotAnswered)
+                .ExpectedQuestions(TextFlagged, TextInRosterFlagged)
+                .ExpectedStats(2, 6, 0, 0, 2, 3, 2, 0, 2),
+            new FilterTestCase(FilterOption.Flagged, FilterOption.Valid)
+                .ExpectedQuestions(TextFlagged, TextInRosterFlagged, TextCommentFlaggedAnswered)
+                .ExpectedStats(3, 7, 1, 3, 3, 1, 2, 0, 3),
+            new FilterTestCase(FilterOption.NotFlagged, FilterOption.Invalid)
+                .ExpectedQuestions(TextAnsweredInvalid)
+                .ExpectedStats(1, 1, 0, 1, 5, 1, 0, 0, 1),
+            new FilterTestCase(FilterOption.Valid, FilterOption.Invalid)
+                .ExpectedQuestions(AllQuestions)
+                .ExpectedStats(3, 5, 2, 10, 10, 2, 6, 2, 6),
+            new FilterTestCase(FilterOption.Flagged, FilterOption.NotFlagged)
+                .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
+                .ExpectedStats(8, 8, 2, 1, 7, 2, 6, 2, 6),
+            new FilterTestCase(FilterOption.Answered, FilterOption.NotAnswered)
+                .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
+                .ExpectedStats(3, 5, 2, 1, 7, 8, 8, 2, 6),
+            new FilterTestCase(FilterOption.ForSupervisor, FilterOption.ForInterviewer)
+                .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
+                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 8, 8)
         };
-
-        [Test]
-        public void ShouldApplyProperSkipPatterns()
-        {
-            var search = Subject.Search(interview, new[] { FilterOption.NotFlagged }, 2, 3);
-
-            Assert.That(search.TotalCount, Is.EqualTo(6)); //4,7,8
-            Assert.That(search.Results, Has.Count.EqualTo(2));
-
-            AssertSearchReturnFollowingIds(search, Create.Identity(Id.g6, 1), Id.Identity7, Id.Identity8);
-        }
 
         [TestCase(1, 2)]
         [TestCase(2, 8)]
@@ -149,6 +157,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         public void ShouldReturnConsistentSearchResultIds(long skip, long take)
         {
             var search = Subject.Search(interview, Array.Empty<FilterOption>(), skip, take);
+
+            // no matter of what skip/take values provided result id should always point to same sectionId
             var map = new Dictionary<int, string>
             {
                 {0, Id.IdentityA.ToString()},
@@ -160,67 +170,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             foreach (var result in search.Results)
             {
                 Assert.That(map[result.Id], Is.EqualTo(result.SectionId));
-            }
-        }
-
-        private static FilterTestCase Case(params FilterOption[] options)
-        {
-            var allQuestions
-                = //Enumerable.Range(1, 10).Select(id => Create.Entity.Identity(id, RosterVector.Empty)).ToArray();
-                new[]
-                {
-                    Id.Identity1, Id.Identity2,
-                    Id.Identity3, Create.Entity.Identity(Id.g6, new []{ 1 }), Id.Identity4,
-                    Id.Identity5, 
-                    Id.Identity7, Id.Identity8,
-                    Id.Identity9, Id.Identity10,
-                };
-            return new FilterTestCase(allQuestions, options);
-        }
-
-        public class FilterTestCase
-        {
-            private readonly Identity[] allAnswers;
-
-            public FilterTestCase(Identity[] allAnswers, FilterOption[] options)
-            {
-                this.allAnswers = allAnswers;
-                Options.AddRange(options);
-            }
-
-            public List<FilterOption> Options { get; set; } = new List<FilterOption>();
-            public List<Identity> Results { get; set; } = new List<Identity>();
-            public int[] StatsCounter { get; set; }
-            public long Skip { get; set; }
-            public long Take { get; set; }
-
-            public override string ToString()
-            {
-                return string.Join(", ", Options);
-            }
-
-            public FilterTestCase WithOptions(params FilterOption[] options)
-            {
-                this.Options.AddRange(options);
-                return this;
-            }
-
-            public FilterTestCase Result(params Identity[] ids)
-            {
-                this.Results.AddRange(ids);
-                return this;
-            }
-
-            public FilterTestCase Stats(params int[] counts)
-            {
-                StatsCounter = counts;
-                return this;
-            }
-
-            public FilterTestCase ResultExcept(params Identity[] ids)
-            {
-                this.Results.AddRange(allAnswers.Except(ids));
-                return this;
             }
         }
 
