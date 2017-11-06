@@ -241,7 +241,7 @@ gulp.task('inject', ['styles', 'libsJs'],
                 const conf = config.css[key];
                 
                 const injectKey = "css_" + _.camelCase(key); // css_markup, css_markupWebInterview, css_markupSpecific
-                const cssApp = gulp.src(config.buildDistDir + '/' + key + '-*.min.css', { read: false });
+                const cssApp = gulp.src(config.buildDistDir + '/' + key + '-[a-f0-9]*.min.css', { read: false });
 
                 pipe = pipe.pipe(inject(cssApp, injectKey))
             })
