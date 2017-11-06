@@ -109,8 +109,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 var newItems = this.mapService.GetAvailableMaps().Select(x => new MapItem()
                 {
-                    MapName = x.MapName
-                }  ).ToList();
+                    MapName = x.MapName,
+                    CreationDate = x.CreationDate,
+                    Size = x.Size
+                }  
+                ).ToList();
                 this.Maps.ReplaceWith(newItems);
             }
             finally
@@ -243,7 +246,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
                 this.ProcessOperation = syncProgressInfo.Title;
-                
+                this.ProcessOperationDescription = syncProgressInfo.Description;
                 this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
                 
                 if (!syncProgressInfo.IsRunning)
@@ -268,6 +271,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             get => mapName;
             set => SetProperty(ref mapName, value);
+        }
+
+        private long size;
+        public long Size {
+            get => size;
+            set => SetProperty(ref size, value);
+        }
+
+        private DateTime creationDate;
+        public DateTime CreationDate
+        {
+            get => creationDate;
+            set => SetProperty(ref creationDate, value);
         }
     }
 }
