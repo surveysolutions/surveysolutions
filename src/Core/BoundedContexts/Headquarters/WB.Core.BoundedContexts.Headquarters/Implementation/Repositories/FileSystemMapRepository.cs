@@ -279,5 +279,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
             return true;
         }
+
+        public string[] GetAllMapsForUser(string userName)
+        {
+            return userMapsStorage.Query(q =>
+            {
+                return q.Where(x => x.UserName.ToLower() == userName.ToLower()).Select(y => y.Map).ToList();
+            }).ToArray();
+        }
+
+        public byte[] GetMapContent(string mapName)
+        {
+            var filePath = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapName);
+
+            if (!this.fileSystemAccessor.IsFileExists(filePath))
+                return null;
+
+            return this.fileSystemAccessor.ReadAllBytes(filePath);
+        }
     }
 }

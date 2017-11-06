@@ -15,13 +15,14 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
-using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 
 namespace WB.UI.Interviewer.ServiceLocation
 {
@@ -55,7 +56,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
             registry.Bind<AttachmentsCleanupService>();
             registry.Bind<CompanyLogoSynchronizer>();
-            registry.Bind<IMapSynchronizer, MapSynchronizer>();
+            registry.Bind<IMapSyncProvider, MapSyncProvider>();
             registry.Bind<IMapService, MapService>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
@@ -71,8 +72,10 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<FinishInstallationViewModel>();
             registry.Bind<InterviewerCompleteInterviewViewModel>();
             registry.Bind<SynchronizationViewModel>();
+            registry.Bind<MapSynchronizationViewModel>();
             registry.Bind<RelinkDeviceViewModel>();
             registry.Bind<DashboardViewModel>();
+            registry.Bind<MapsViewModel>();
             registry.Bind<CompletedInterviewsViewModel>();
             registry.Bind<RejectedInterviewsViewModel>();
             registry.Bind<StartedInterviewsViewModel>();

@@ -2,7 +2,8 @@
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.UI.Shared.Enumerator.Services.Internals.MapService;
+using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Implementation.Services;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
 
@@ -13,10 +14,8 @@ namespace WB.UI.Tester.ServiceLocation
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
-            registry.Bind<IMapSynchronizer, TesterMapSynchronizer>();
-            registry.Bind<IMapService, MapService>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
-
+            registry.Bind<IMapService, MapService>();
             registry.Bind<TesterSettings>();
 
 #if EXCLUDEEXTENSIONS

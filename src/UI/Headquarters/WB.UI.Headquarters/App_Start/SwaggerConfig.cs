@@ -5,7 +5,7 @@ using WB.UI.Headquarters;
 using Swashbuckle.Application;
 using Swashbuckle.Swagger;
 
-[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
+//[assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
 namespace WB.UI.Headquarters
 {

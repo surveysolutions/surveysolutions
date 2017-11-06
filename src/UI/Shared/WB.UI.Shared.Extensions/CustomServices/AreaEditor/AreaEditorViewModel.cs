@@ -13,8 +13,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
