@@ -693,4 +693,10 @@
   <data name="Dashboard_StartNewInterview" xml:space="preserve">
     <value>Начать новое интервью</value>
   </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Карты</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Карты</value>
+  </data>
 </root>
