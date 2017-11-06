@@ -42,7 +42,7 @@ export default class ReviewComponent {
 
     async beforeEnter(to, from, next) {
 
-        await Vue.$api.hub({
+        Vue.$api.hub({
             interviewId: to.params["interviewId"],
             review: true
         })
@@ -53,6 +53,7 @@ export default class ReviewComponent {
     initialize() {
 
         const installApi = require("~/webinterview/api").install
+
         installApi(Vue, {
             store: this.rootStore
         });
