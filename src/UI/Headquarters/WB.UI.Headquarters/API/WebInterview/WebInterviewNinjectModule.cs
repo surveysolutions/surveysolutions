@@ -22,7 +22,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             pipiline.AddModule(new SignalrErrorHandler());
             pipiline.AddModule(new PlainSignalRTransactionManager());
-            pipiline.AddModule(new WebInterviewAllowedModule());
+            pipiline.AddModule(new InterviewAuthorizationModule());
             pipiline.AddModule(new WebInterviewStateManager(
                 GlobalHost.DependencyResolver.Resolve<IProductVersion>(), 
                 GlobalHost.DependencyResolver.Resolve<IStatefulInterviewRepository>()

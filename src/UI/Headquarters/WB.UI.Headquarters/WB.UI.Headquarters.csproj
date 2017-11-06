@@ -1659,10 +1659,12 @@
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
+    <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\InterviewQuestionFilter.cs" />
+    <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="App_GlobalResources\Maps.designer.cs">
@@ -1724,7 +1726,7 @@
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />
-    <Compile Include="API\WebInterview\Pipeline\WebInterviewAllowedModule.cs" />
+    <Compile Include="API\WebInterview\Pipeline\InterviewAuthorizationModule.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewNotificationService.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
@@ -1899,7 +1901,7 @@
     <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
-    <Compile Include="Code\WebInterviewAccessException.cs" />
+    <Compile Include="Code\InterviewAccessException.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />

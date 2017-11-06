@@ -4,10 +4,11 @@ using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
-    public class WebInterviewAllowedModule : HubPipelineModule
+    public class InterviewAuthorizationModule : HubPipelineModule
     {
         private IWebInterviewNotificationService webInterviewNotificationService =>
             ServiceLocator.Current.GetInstance<IWebInterviewNotificationService>();
@@ -15,9 +16,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         private IWebInterviewAllowService webInterviewAllowService =>
             ServiceLocator.Current.GetInstance<IWebInterviewAllowService>();
 
+        private IReviewAllowedService reviewAllowedService =>
+            ServiceLocator.Current.GetInstance<IReviewAllowedService>();
+
+
         protected override bool OnBeforeConnect(IHub hub)
         {
-            this.CheckWebInterviewAccessPermissions(hub);
+            this.CheckPermissions(hub);
 
             return base.OnBeforeConnect(hub);
         }
@@ -28,9 +33,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             try
             {
-                this.CheckWebInterviewAccessPermissions(hub);
+                CheckPermissions(hub);
             }
-            catch (WebInterviewAccessException)
+            catch (InterviewAccessException)
             {
                 var interviewId = hub.Context.QueryString.Get(@"interviewId");
                 if (!interviewId.IsNullOrWhiteSpace())
@@ -42,9 +47,18 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             return base.OnBeforeIncoming(context);
         }
 
-        private void CheckWebInterviewAccessPermissions(IHub hub)
+        private void CheckPermissions(IHub hub)
         {
-            webInterviewAllowService.CheckWebInterviewAccessPermissions(hub.Context.QueryString.Get(@"interviewId"));
+            var isReview = hub.Context.QueryString[@"review"].ToBool(false);
+            var interviewId = hub.Context.QueryString.Get(@"interviewId");
+            if (!isReview)
+            {
+                this.webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);
+            }
+            else
+            {
+                this.reviewAllowedService.CheckIfAllowed(Guid.Parse(interviewId));
+            }
         }
     }
 }
