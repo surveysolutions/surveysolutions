@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                                  this.Status == MapSyncStatus.Started;
 
         public string Title { get; set; }
+        public string Description { get; set; }
         public int TotalMapsCount { get; set; }
 
 
