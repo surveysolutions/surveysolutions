@@ -213,21 +213,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        public IEnumerable<CommittedEvent> GetAllEvents()
-        {
-            int processed = 0;
-            IEnumerable<CommittedEvent> eventsBatch;
-            do
-            {
-                eventsBatch = this.ReadEventsBatch(processed).ToList();
-                foreach (var committedEvent in eventsBatch)
-                {
-                    processed++;
-                    yield return committedEvent;
-                }
-            } while (eventsBatch.Any());
-        }
-
         private IEnumerable<CommittedEvent> ReadEventsBatch(int processed)
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(this.connectionSettings.ConnectionString))
@@ -248,79 +233,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                             yield return singleEvent;
                     }
                 }
-            }
-        }
-
-        public IEnumerable<EventSlice> GetEventsAfterPosition(EventPosition? position)
-        {
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-
-                int globalSequence = 0;
-                if (position.HasValue && position.Value.EventSourceIdOfLastEvent != Guid.Empty)
-                {
-                    var lastGlobalSequenceCommand = connection.CreateCommand();
-                    lastGlobalSequenceCommand.CommandText = $"SELECT globalsequence FROM {tableNameWithSchema} WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
-                    lastGlobalSequenceCommand.Parameters.AddWithValue("eventSourceId", position.Value.EventSourceIdOfLastEvent);
-                    lastGlobalSequenceCommand.Parameters.AddWithValue("sequence", position.Value.SequenceOfLastEvent);
-                    globalSequence = (int)lastGlobalSequenceCommand.ExecuteScalar();
-                }
-
-                long processed = 0;
-                long loadedBatchSize = BatchSize;
-                while (loadedBatchSize == BatchSize)
-                {
-                    var npgsqlCommand = connection.CreateCommand();
-                    npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE globalsequence > :globalSequence ORDER BY globalsequence LIMIT :batchSize OFFSET :processed";
-                    npgsqlCommand.Parameters.AddWithValue("globalSequence", globalSequence);
-                    npgsqlCommand.Parameters.AddWithValue("batchSize", BatchSize);
-                    npgsqlCommand.Parameters.AddWithValue("processed", processed);
-
-                    List<CommittedEvent> events = new List<CommittedEvent>();
-
-                    using (var reader = npgsqlCommand.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            var singleEvent = this.ReadSingleEvent(reader);
-                            if (singleEvent != null)
-                                events.Add(singleEvent);
-                        }
-                    }
-
-                    var committedEvent = events.Last();
-                    loadedBatchSize = events.Count;
-                    yield return new EventSlice(events, new EventPosition(0, 0, committedEvent.EventSourceId, committedEvent.EventSequence), loadedBatchSize != BatchSize);
-
-                    processed += events.Count;
-                }
-
-            }
-        }
-
-        public long GetEventsCountAfterPosition(EventPosition? position)
-        {
-            if (!position.HasValue || position.Value.EventSourceIdOfLastEvent == Guid.Empty)
-                return this.CountOfAllEvents();
-
-            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
-            {
-                connection.Open();
-
-                var npgsqlCommand = connection.CreateCommand();
-                npgsqlCommand.CommandText = $"SELECT globalsequence FROM {tableNameWithSchema} WHERE eventsourceid=:eventSourceId AND eventsequence = :sequence";
-                var positionValue = position.Value;
-                npgsqlCommand.Parameters.AddWithValue("eventSourceId", positionValue.EventSourceIdOfLastEvent);
-                npgsqlCommand.Parameters.AddWithValue("sequence", positionValue.SequenceOfLastEvent);
-
-                int globalSequence = (int) npgsqlCommand.ExecuteScalar();
-
-                NpgsqlCommand countCommand = connection.CreateCommand();
-                countCommand.CommandText = $"SELECT COUNT(*) FROM {tableNameWithSchema} WHERE globalsequence > :globalSequence";
-                countCommand.Parameters.AddWithValue("globalSequence", globalSequence);
-
-                return (long) countCommand.ExecuteScalar();
             }
         }
 
