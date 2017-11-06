@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.processes.TryRemove(processId);
         }
 
-        public void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, DataExportType exportType)
+        public void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat)
         {
             var process = (IDataExportProcessDetails) new DataExportProcessDetails(exportFormat, questionnaire, null);
 
