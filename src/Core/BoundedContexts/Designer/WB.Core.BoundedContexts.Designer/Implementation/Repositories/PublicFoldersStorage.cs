@@ -42,13 +42,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
         public QuestionnaireListViewFolder CreateFolder(Guid folderId, string title, Guid? parentId, Guid userId)
         {
+            var parentFolder = parentId.HasValue
+                ? folderStorage.GetById(parentId.Value)
+                : null;
+            string path = (parentFolder?.Path ?? String.Empty) + "/" + folderId;
+            int depth = parentFolder?.Depth + 1 ?? 0;
+
             var folder = new QuestionnaireListViewFolder()
             {
                 PublicId = folderId,
                 Title = title,
                 Parent = parentId,
                 CreateDate = DateTime.UtcNow,
-                CreatedBy = userId
+                CreatedBy = userId,
+                Depth = depth,
+                Path = path
             };
             folderStorage.Store(folder, folderId);
             return folder;
