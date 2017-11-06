@@ -42,5 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public virtual string Owner { get; set; }
 
         public virtual Guid? FolderId { get; set; }
+
+        public virtual QuestionnaireListViewFolder Folder { get; set; }
     }
 }

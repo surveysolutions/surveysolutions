@@ -47,6 +47,14 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
                 e.Property(x => x.IsOwner);
                 e.Property(x => x.ShareType);
             }));
+
+            ManyToOne(x => x.Folder, m =>
+            {
+                m.Column(nameof(QuestionnaireListViewItem.FolderId).ToLower());
+                m.Cascade(Cascade.None);
+                m.Update(false);
+                m.Insert(false);
+            });
         }
     }
 }
