@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
         {
             dataExportProcessesService.Setup(x => x.GetRunningExportProcesses())
                 .Returns(new IDataExportProcessDetails[]
-                {Create.Entity.DataExportProcessDetails(format:DataExportFormat.Paradata), Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity), Create.Entity.DataExportProcessDetails()});
+                {Create.Entity.DataExportProcessDetails(format:DataExportFormat.Paradata, questionnaireIdentity: questionnaireIdentity), Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity), Create.Entity.DataExportProcessDetails()});
 
             var tabularDataExportFilePath = "tabularDataExportFilePath";
 
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
 
         It should_first_running_process_be_of_type_ParaData = () => result.RunningDataExportProcesses[0].Type.ShouldEqual(DataExportType.ParaData);
 
-        It should_second_running_process_QuestionnaireIdentity_be_null = () => result.RunningDataExportProcesses[0].QuestionnaireIdentity.ShouldBeNull();
+        It should_second_running_process_QuestionnaireIdentity_not_be_null = () => result.RunningDataExportProcesses[0].QuestionnaireIdentity.ShouldEqual(questionnaireIdentity);
 
         It should_second_running_process_be_of_type_Data = () => result.RunningDataExportProcesses[1].Type.ShouldEqual(DataExportType.Data);
 

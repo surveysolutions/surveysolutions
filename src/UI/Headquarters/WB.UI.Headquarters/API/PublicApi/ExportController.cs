@@ -166,30 +166,16 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            DataExportType dataExportType;
-            if (exportType == DataExportFormat.Paradata)
-            {
-                exportType = DataExportFormat.Tabular;
-                dataExportType = DataExportType.ParaData;
-            }
-            else
-            {
-                dataExportType = DataExportType.Data;
-            }
-
             var allExportStatuses = this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity);
 
             var exportStatusByExportType = allExportStatuses?.DataExports?.FirstOrDefault(x =>
-                x.DataExportFormat == exportType &&
-                x.DataExportType == dataExportType);
+                x.DataExportFormat == exportType);
 
             if (exportStatusByExportType == null)
                 return this.NotFound();
 
             var runningExportStatus = allExportStatuses.RunningDataExportProcesses.FirstOrDefault(x =>
-                (x.QuestionnaireIdentity == null || x.QuestionnaireIdentity.Equals(questionnaireIdentity)) &&
-                x.Format == exportType &&
-                x.Type == dataExportType);
+                x.QuestionnaireIdentity.Equals(questionnaireIdentity) && x.Format == exportType);
 
             return this.Ok(new ExportDetails
             {
