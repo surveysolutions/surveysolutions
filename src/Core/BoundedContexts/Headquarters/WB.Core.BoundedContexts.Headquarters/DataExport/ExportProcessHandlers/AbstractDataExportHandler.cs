@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
 
+        private readonly string exportTempDirectoryPath;
+
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
@@ -31,14 +33,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.interviewDataExportSettings = interviewDataExportSettings;
+
+            exportTempDirectoryPath = this.fileSystemAccessor.CombinePath(
+                interviewDataExportSettings.DirectoryPath, "ExportTemp");
         }
 
         public void ExportData(DataExportProcessDetails dataExportProcessDetails)
         {
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            if (this.CanDeleteTempFolder)
-                this.RecreateExportTempDirectory();
+            this.RecreateExportTempDirectory();
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
@@ -48,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
             this.ExportDataIntoDirectory(dataExportProcessDetails.Questionnaire,
-                dataExportProcessDetails.InterviewStatus, this.ExportTempDirectoryPath, exportProgress,
+                dataExportProcessDetails.InterviewStatus, this.exportTempDirectoryPath, exportProgress,
                 dataExportProcessDetails.CancellationToken);
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
@@ -59,18 +63,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
             this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
 
-            this.dataExportFileAccessor.RecreateExportArchive(this.ExportTempDirectoryPath, archiveName, exportProgress);
+            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName, exportProgress);
 
-            if (this.CanDeleteTempFolder)
-                this.DeleteExportTempDirectory();
+            this.DeleteExportTempDirectory();
         }
-
-        private string ExportTempDirectoryPath => this.fileSystemAccessor.CombinePath(
-            interviewDataExportSettings.DirectoryPath, this.ExportDirectoryName);
-
-        protected virtual string ExportDirectoryName => "ExportTemp";
-        protected virtual bool CanDeleteTempFolder => true;
-
+        
         protected abstract DataExportFormat Format { get; }
 
         protected abstract void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity,
@@ -79,14 +76,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         private void DeleteExportTempDirectory()
         {
-            if (this.fileSystemAccessor.IsDirectoryExists(this.ExportTempDirectoryPath))
-                this.fileSystemAccessor.DeleteDirectory(this.ExportTempDirectoryPath);
+            if (this.fileSystemAccessor.IsDirectoryExists(this.exportTempDirectoryPath))
+                this.fileSystemAccessor.DeleteDirectory(this.exportTempDirectoryPath);
         }
 
         private void RecreateExportTempDirectory()
         {
             this.DeleteExportTempDirectory();
-            this.fileSystemAccessor.CreateDirectory(this.ExportTempDirectoryPath);
+            this.fileSystemAccessor.CreateDirectory(this.exportTempDirectoryPath);
         }
     }
 }
