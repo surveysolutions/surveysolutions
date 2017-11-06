@@ -15,7 +15,8 @@ const gulp = require('gulp'),
     glob = require('glob'),
     es = require('event-stream'),
     cleanCSS = require('gulp-clean-css'),
-    _ = require('lodash')
+    _ = require('lodash');
+
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
@@ -233,18 +234,13 @@ gulp.task('inject', ['styles', 'libsJs'],
             var target = gulp.src(fileToInject.folder + fileToInject.file);
 
             var pipe = target
-                // .pipe(inject(cssApp, config.cssAppInject))
                 .pipe(inject(cssLibs, config.cssLibsInject))
                 .pipe(inject(jsLibs, config.jsLibsInject))
 
             Object.keys(config.css).forEach(key => {
                 const conf = config.css[key];
-                /* 
-                css_markup
-                css_markupWebInterview
-                css_markupSpecific
-                */
-                const injectKey = "css_" + _.camelCase(key);
+                
+                const injectKey = "css_" + _.camelCase(key); // css_markup, css_markupWebInterview, css_markupSpecific
                 const cssApp = gulp.src(config.buildDistDir + '/' + key + '-*.min.css', { read: false });
 
                 pipe = pipe.pipe(inject(cssApp, injectKey))
