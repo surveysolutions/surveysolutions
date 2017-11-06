@@ -41,7 +41,10 @@ namespace WB.UI.Shared.Enumerator.Services
                 .Select(x => new MapDescription()
                 {
                     MapFullPath = x,
-                    MapName = this.fileSystemAccessor.GetFileNameWithoutExtension(x)
+                    Size = this.fileSystemAccessor.GetFileSize(x),
+                    MapName = this.fileSystemAccessor.GetFileNameWithoutExtension(x),
+                    CreationDate = this.fileSystemAccessor.GetCreationTime(x)
+
                 }).ToList();
         }
 
