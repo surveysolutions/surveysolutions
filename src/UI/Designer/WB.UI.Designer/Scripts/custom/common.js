@@ -44,6 +44,7 @@
         $('#pdfDownloadButton').hide();
         $('#pdfRetryGenerate').hide();
 
+        self.ExportDialogClosed = false;
         self.selectedTransalation = null;
         var dropButton = $('#dropdownMenuButton');
         dropButton.text(dropButton[0].title);
@@ -52,7 +53,7 @@
     };
 
     self.retryPdfExport = function() {
-        $.post(self.pdfRetryUrl, { id: self.itemId });
+        $.post(self.pdfRetryUrl, { id: self.itemId, translation: self.selectedTransalation });
         $('#pdfRetryGenerate').hide();
         self.setPdfMessage("Retrying export as PDF.");
     };
@@ -89,8 +90,9 @@
     }
 
     self.updateExportPdfStatusNeverending = function (translation) {
-        $.when(self.updateExportPdfStatus(translation)).always(function () {
-            setTimeout(self.updateExportPdfStatusNeverending(translation), 1000);
+        $.when(self.updateExportPdfStatus(translation)).done(function () {
+            if (!self.ExportDialogClosed)
+                setTimeout(self.updateExportPdfStatusNeverending(translation), 1000);
         });
     }
 
@@ -113,9 +115,7 @@
                 $('#export-pdf-modal-status').hide();
                 $('#pdfDownloadButton').hide();
             } else {
-                $('.start-pdf-generation').hide();
-                $('#export-pdf-modal-status').show();
-                self.updateExportPdfStatusNeverending(null);
+                self.startExportProcess(null);
             }
         }).fail(function (xhr, status, error) {
             self.pdfStatusUrl = '';
@@ -143,9 +143,19 @@
         $('#pdfGenerateButton').prop('disabled', true);
         $('#pdfGenerateButton').unbind('click');
         $('#pdfGenerateButton').click(function(evn) {
-            self.updateExportPdfStatusNeverending(self.selectedTransalation);
-            $('.start-pdf-generation').hide();
-            $('#export-pdf-modal-status').show();
+            self.startExportProcess(self.selectedTransalation);
+        });
+    }
+
+    self.startExportProcess = function (translation) {
+        $('.start-pdf-generation').hide();
+        $('#export-pdf-modal-status').show();
+
+        self.updateExportPdfStatusNeverending(self.selectedTransalation);
+
+        $('.close-pdf-dialog').unbind('click');
+        $('.close-pdf-dialog').click(function (evn) {
+            self.ExportDialogClosed = true;
         });
     }
 }

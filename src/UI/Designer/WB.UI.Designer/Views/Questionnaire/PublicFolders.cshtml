@@ -10,7 +10,7 @@
 
     <script type="text/javascript">
         $(function () {
-            var locolizes = {
+            var localization = {
                 CreateSubFolder: "@QuestionnaireController.CreateSubFolder",
                 Edit: '@QuestionnaireController.Rename',
                 Delete: "@QuestionnaireController.Delete"
@@ -21,7 +21,7 @@
             var renameNodeUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RenameFolder" })';
             var removeNodeUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RemoveFolder" })';
 
-            window.foldersModel = new FoldersModel($("#jstree"), locolizes, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
+            window.foldersModel = new FoldersModel($("#jstree"), localization, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl);
         });
     </script>
 }

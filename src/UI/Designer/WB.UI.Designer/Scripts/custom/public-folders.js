@@ -1,4 +1,4 @@
-﻿function FoldersModel(element, locolizes, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback) {
+﻿function FoldersModel(element, localization, rootNodesUrl, subNodesUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback) {
     var self = this;
 
     var glyph_opts = {
@@ -44,12 +44,12 @@
                     node.load();
 
                 if (node.key == "root")
-                    return { "createSubFolder": { "name": locolizes.CreateSubFolder, "icon": "add" } };
+                    return { "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" } };
 
                 return {
-                    "createSubFolder": { "name": locolizes.CreateSubFolder, "icon": "add" },
-                    "edit": { "name": locolizes.Edit, "icon": "edit" },
-                    "delete": { "name": locolizes.Delete, "icon": "delete" }
+                    "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" },
+                    "edit": { "name": localization.Edit, "icon": "edit" },
+                    "delete": { "name": localization.Delete, "icon": "delete" }
                 };
             },
             actions: function (node, action, options) {

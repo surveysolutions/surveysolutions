@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var locolizes = {
+        var localization = {
             CreateSubFolder: "@QuestionnaireController.CreateSubFolder",
             Edit: '@QuestionnaireController.Rename',
             Delete: "@QuestionnaireController.Delete"
@@ -34,7 +34,7 @@
                 });
         };
 
-        window.foldersModel = new FoldersModel($("#folderstree"), locolizes, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback);
+        window.foldersModel = new FoldersModel($("#folderstree"), localization, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback);
     });
 </script>
 
