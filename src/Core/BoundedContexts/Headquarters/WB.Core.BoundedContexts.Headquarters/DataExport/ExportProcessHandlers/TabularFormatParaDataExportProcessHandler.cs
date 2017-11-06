@@ -94,72 +94,54 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            long totalInterviewsProcessed = 0;
-            foreach (var interviewId in interviewsToExport)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
+            var exportFilePath = this.fileSystemAccessor.CombinePath(directoryPath, "paradata.tab");
 
-                var eventsByInterview = this.eventStore.Read(interviewId, 0);
-
-                InterviewHistoryView paradata = null;
-                try
-                {
-                    this.ExecuteInTransaction(() => eventsByInterview.ForEach(interviewParaDataEventHandler.Handle));
-
-                    paradata = paradataReader.Query(_ => _.FirstOrDefault());
-                }
-                catch (Exception e)
-                {
-                    this.logger.Error($"Paradata unhandled exception for interview {interviewId}", e);
-                }
-                finally
-                {
-                    this.SaveParadataToFile(interviewId, paradata, directoryPath);
-                    paradataReader.Clear();
-                }
-
-                totalInterviewsProcessed++;
-                progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
-            }
-        }
-
-        public void SaveParadataToFile(Guid interviewId, InterviewHistoryView view, string pathToTempDirectory)
-        {
-            var interviewFilePath = this.fileSystemAccessor.CombinePath(pathToTempDirectory, $"{interviewId.FormatGuid()}.tab");
-
-            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(interviewFilePath, true))
+            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(exportFilePath, true))
             using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.DataFileSeparator.ToString()))
             {
-                if (view == null)
+                writer.WriteField("id");
+                writer.WriteField("event");
+                writer.WriteField("responsible");
+                writer.WriteField("role");
+                writer.WriteField("timestamp");
+                writer.WriteField("parameters");
+                writer.NextRecord();
+
+                long totalInterviewsProcessed = 0;
+                foreach (var interviewId in interviewsToExport)
                 {
-                    writer.WriteField("No data. Please contact to Survey Solutions support team.");
-                    writer.NextRecord();
-                }
-                else
-                {
-                    foreach (var interviewHistoricalRecordView in view.Records)
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var eventsByInterview = this.eventStore.Read(interviewId, 0);
+
+                    try
                     {
-                        writer.WriteField(interviewHistoricalRecordView.Action);
-                        writer.WriteField(interviewHistoricalRecordView.OriginatorName);
-                        writer.WriteField(interviewHistoricalRecordView.OriginatorRole);
-                        if (interviewHistoricalRecordView.Timestamp.HasValue)
+                        this.ExecuteInTransaction(() => eventsByInterview.ForEach(interviewParaDataEventHandler.Handle));
+
+                        var paradata = paradataReader.Query(_ => _.FirstOrDefault());
+                        foreach (var evnt in paradata?.Records)
                         {
-                            writer.WriteField(interviewHistoricalRecordView.Timestamp.Value.ToString("d",
-                                CultureInfo.InvariantCulture));
-                            writer.WriteField(interviewHistoricalRecordView.Timestamp.Value.ToString("T",
-                                CultureInfo.InvariantCulture));
+                            writer.WriteField(interviewId);
+                            writer.WriteField(evnt.Action);
+                            writer.WriteField(evnt.OriginatorName);
+                            writer.WriteField(evnt.OriginatorRole);
+                            writer.WriteField(evnt.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
+                            foreach (var value in evnt.Parameters.Values)
+                            {
+                                writer.WriteField(value ?? string.Empty);
+                            }
+                            writer.NextRecord();
                         }
-                        else
-                        {
-                            writer.WriteField(string.Empty);
-                            writer.WriteField(string.Empty);
-                        }
-                        foreach (var value in interviewHistoricalRecordView.Parameters.Values)
-                        {
-                            writer.WriteField(value ?? string.Empty);
-                        }
-                        writer.NextRecord();
+
+                        paradataReader.Clear();
                     }
+                    catch (Exception e)
+                    {
+                        this.logger.Error($"Paradata unhandled exception for interview {interviewId}", e);
+                    }
+
+                    totalInterviewsProcessed++;
+                    progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
                 }
             }
         }

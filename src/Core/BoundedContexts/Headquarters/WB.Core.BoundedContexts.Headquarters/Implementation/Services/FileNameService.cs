@@ -34,12 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return $"template_{questionnaireTitle}_v{identity.Version}.zip";
         }
 
-        public string GetFolderNameForParaDataByQuestionnaire(QuestionnaireIdentity identity, string pathToHistoryFiles)
-        {
-            var questionnaireTitle = GetQuestionnaireTitle(identity);
-            return this.fileSystemAccessor.CombinePath(pathToHistoryFiles, $"{questionnaireTitle}_{identity.Version}");
-        }
-
         public string GetFileNameForDdiByQuestionnaire(QuestionnaireIdentity identity, string pathToDdiMetadata)
         {
             var questionnaireTitle = GetQuestionnaireTitle(identity);
