@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select file.
+        ///   Looks up a localized string similar to Please select a file.
         /// </summary>
         public static string BatchUploadModel_ValidationErrorMessage {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character and one lower case character.
+        ///   Looks up a localized string similar to Password must contain at least one number, one upper case character, and one lower case character.
         /// </summary>
         public static string PasswordErrorMessage {
             get {
@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person name has invalid characters. Only letters, dots, spaces and apostrophe are allowed.
+        ///   Looks up a localized string similar to Person name has invalid characters. Only letters, dots, spaces, and apostrophes are allowed.
         /// </summary>
         public static string PersonNameAllowedCharactersErrorMessage {
             get {
@@ -286,7 +286,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person name should not contain more than {1} characters.
+        ///   Looks up a localized string similar to Person name cannot contain more than {1} characters.
         /// </summary>
         public static string PersonNameErrorMessage {
             get {
@@ -304,7 +304,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Phone number should not contain more than {1} characters.
+        ///   Looks up a localized string similar to Phone number cannot contain more than {1} characters.
         /// </summary>
         public static string PhoneErrorLength {
             get {
@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter valid Guid in format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, please.
+        ///   Looks up a localized string similar to Please enter a valid GUID in the following format xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.
         /// </summary>
         public static string TroubleshootModel_InterviewId_ErrorMessage {
             get {
@@ -412,6 +412,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User is locked by Headquarter.
+        /// </summary>
+        public static string UserIsLockedByHq {
+            get {
+                return ResourceManager.GetString("UserIsLockedByHq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please choose another username.
         /// </summary>
         public static string UserName_Taken {
@@ -421,7 +430,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name needs to be between 3 and 15 characters and contains only letters, digits and underscore symbol.
+        ///   Looks up a localized string similar to Name needs to be between 3 and 15 characters, and may contain only letters, digits and the underscore symbol.
         /// </summary>
         public static string UserNameErrorMessage {
             get {
