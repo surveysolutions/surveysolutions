@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Filters
             ExceptionsLogged.Inc();
             base.OnException(actionExecutedContext);
 
-            if (actionExecutedContext.Exception is WebInterviewAccessException)
+            if (actionExecutedContext.Exception is InterviewAccessException)
                 return;
 
             actionExecutedContext.Exception.Log(HttpContext.Current);

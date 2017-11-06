@@ -2,9 +2,9 @@
 
 namespace WB.UI.Headquarters.Code
 {
-    public class WebInterviewAccessException : Exception
+    public class InterviewAccessException : Exception
     {
-        public WebInterviewAccessException(InterviewAccessExceptionReason reason, string message) : base(message)
+        public InterviewAccessException(InterviewAccessExceptionReason reason, string message) : base(message)
         {
             this.Reason = reason;
         }

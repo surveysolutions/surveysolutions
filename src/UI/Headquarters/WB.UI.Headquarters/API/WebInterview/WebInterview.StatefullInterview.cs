@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         public void SetFlag(string questionId, bool hasFlag)
         {
             if (this.authorizedUser.IsObserver)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.Forbidden, Strings.ObserverNotAllowed);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.Forbidden, Strings.ObserverNotAllowed);
 
             var statefulInterview = this.GetCallerInterview();
             this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);

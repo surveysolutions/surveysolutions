@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             this.logger.Error(message, exceptionContext.Error);
 
-            if (!(exceptionContext.Error is WebInterviewAccessException))
+            if (!(exceptionContext.Error is InterviewAccessException))
                 new Exception(message, exceptionContext.Error)
                     .Log(HttpContext.Current, customData: data);
 

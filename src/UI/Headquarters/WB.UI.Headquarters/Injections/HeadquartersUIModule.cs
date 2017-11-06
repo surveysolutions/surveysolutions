@@ -116,6 +116,7 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
             this.Bind<IInterviewerVersionReader>().To<InterviewerVersionReader>().InSingletonScope();
             this.Bind<IWebInterviewAllowService>().To<WebInterviewAllowService>();
+            this.Bind<IReviewAllowedService>().To<ReviewAllowedService>();
         }
     }
 }

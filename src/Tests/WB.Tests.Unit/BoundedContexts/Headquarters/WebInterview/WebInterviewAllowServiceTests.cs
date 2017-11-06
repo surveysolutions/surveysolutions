@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             {
                 Act();
             }
-            catch(WebInterviewAccessException)
+            catch(InterviewAccessException)
             {
                 return false;
             }
@@ -125,7 +125,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             ArrangeTest(UserRoles.Interviewer, InterviewStatus.InterviewerAssigned, 
                 webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId:Id.g2);
 
-            Assert.Throws<WebInterviewAccessException>(Act);
+            Assert.Throws<InterviewAccessException>(Act);
         }
 
         [Test]
@@ -145,7 +145,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         }
 
         [TestCase(UserRoles.Interviewer, ExpectedResult = true)]
-        [TestCase(UserRoles.Headquarter, ExpectedResult = true)]
+        [TestCase(UserRoles.Headquarter, ExpectedResult = false)]
         public bool should_allow_access_for_interviewerOnly_when_webInterview_disabled(UserRoles userRole)
         {
             ArrangeTest(userRole, webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId: Id.g1);
@@ -154,28 +154,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             {
                 Act();
             }
-            catch(WebInterviewAccessException)
+            catch(InterviewAccessException)
             {
                 return false;
             }
             return true;
         }
 
-        [Test]
-        public void should_allow_access_for_team_supervisor()
-        {
-            var supervisorId = Id.g2;
-            ArrangeTest(UserRoles.Supervisor, webInterviewEnabled: false, loggedInUserId: supervisorId, teamLeadId: supervisorId);
-
-            Assert.DoesNotThrow(Act);
-        }
 
         [Test]
         public void should_not_allow_access_if_interview_is_not_exists()
         {
             ArrangeTest(interviewStatus: null);
 
-            Assert.Throws<WebInterviewAccessException>(Act);
+            Assert.Throws<InterviewAccessException>(Act);
         }
 
         [Test]
@@ -183,7 +175,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         {
             ArrangeTest(interviewStatus: InterviewStatus.Deleted);
 
-            Assert.Throws<WebInterviewAccessException>(Act);
+            Assert.Throws<InterviewAccessException>(Act);
         }
     }
 }
