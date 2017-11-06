@@ -30,8 +30,11 @@
     <!-- cssLibs:css -->
     <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
     <!-- endinject -->
-    <!-- cssApp:css -->
-    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
+    <!-- css_markup:css -->
+    <link rel="stylesheet" async href="@Url.Content("~/Dependencies/build/markup.css")">
+    <!-- endinject -->
+    <!-- css_markupSpecific:css -->
+    <link rel='stylesheet' async href='@Url.Content("~/Dependencies/build/markup-specific.css")' >
     <!-- endinject -->
     @RenderSection("styles", false)
     

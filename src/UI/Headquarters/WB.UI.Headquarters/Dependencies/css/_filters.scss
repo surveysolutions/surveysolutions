@@ -6,7 +6,7 @@
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
-	padding: 100px 5px 50px 5px;
+	padding: 30px 5px 50px 5px;
 	margin-left: 12px;
 	.input-group.date{
 		margin-left: 0 !important;
@@ -170,10 +170,11 @@
 	.fullscreen-hidden-filters{
 		.filters{
 			border: none;
-			margin: 0;
+			margin-left: 0;
 			@include absolute(0px, 0, 0, 0);
 			width: 100%;
 			overflow: auto;
+			height: auto;
 		   	@include visible-foldback-button();
 		   	.foldback-button{
 		   		right: 10px;
