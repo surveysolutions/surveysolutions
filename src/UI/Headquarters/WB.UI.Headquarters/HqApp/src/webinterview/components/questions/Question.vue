@@ -1,5 +1,5 @@
 <template>
-    <div class="question" v-if="isEnabled" :class="questionClass" :id="hash">
+    <div class="question" v-if="isVisible" :class="questionClass" :id="hash">
         <button class="section-blocker" disabled="disabled" v-if="isFetchInProgress"></button>
         <div class="dropdown aside-menu" v-if="showSideMenu">
             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-link">
@@ -68,8 +68,9 @@
             isFetchInProgress() {
                 return this.question.fetching
             },
-            isEnabled() {
-                return !this.question.isLoading && !(this.question.isDisabled && this.question.hideIfDisabled)
+            isVisible() {
+                return !this.question.isLoading && 
+                    !(this.question.isDisabled && this.question.hideIfDisabled && !this.$store.getters.isReviewMode)
             },
             disabled() {
                 return this.isDisabled || this.question.isDisabled;
