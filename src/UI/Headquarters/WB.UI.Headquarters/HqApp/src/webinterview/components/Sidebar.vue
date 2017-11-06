@@ -24,7 +24,7 @@
             showFoldbackButtonAsHamburger: {
                 type: Boolean,
                 default: true
-            },
+            }
         },
         components: { SidebarPanel },
         data() {
@@ -69,8 +69,8 @@
             }
         },
         beforeMount() {
-            this.fetchSidebar(),
-                this.fetchInterviewStatus()
+            this.fetchSidebar()
+            this.fetchInterviewStatus()
         },
         watch: {
             ["$route.params.sectionId"]() {
