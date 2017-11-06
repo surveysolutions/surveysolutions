@@ -3,5 +3,7 @@
     ViewBag.Title = Html.ActivePage();
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
-@Html.RenderHqConfig(Model)
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
 <div id="vueApp"></div>
