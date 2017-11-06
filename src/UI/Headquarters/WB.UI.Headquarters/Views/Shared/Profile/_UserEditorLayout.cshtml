@@ -30,7 +30,15 @@
             @RenderSection(@"LockWarningSection", false)
             @if (!isOwnAccoutEditing)
             {
-                @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? new {} : (object) new {@disabled = @"disabled"})
+                if (Model.IsLockedDisabled && Model.IsLocked) {
+                    <p class="text-danger">
+                        @FieldsAndValidations.UserIsLockedByHq
+                    </p>
+                }
+                else if(!Model.IsLockedDisabled)
+                {
+                    @Html.EditorFor(x => x.IsLocked, "CheckboxFormField", Model.IsLockedDisabled ? new {} : (object) new {@disabled = @"disabled"})
+                }
             }
             @RenderSection(@"PostDetailsSection", false)
             @Html.Partial("Profile/ValidationSummary")
