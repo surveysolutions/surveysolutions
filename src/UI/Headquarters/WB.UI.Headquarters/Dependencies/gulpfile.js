@@ -14,7 +14,8 @@ const gulp = require('gulp'),
     rename = require('gulp-rename'),
     glob = require('glob'),
     es = require('event-stream'),
-    cleanCSS = require('gulp-clean-css');
+    cleanCSS = require('gulp-clean-css'),
+    _ = require('lodash')
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
  * Wrap gulp streams into fail-safe function for better error reporting
@@ -73,11 +74,14 @@ const config = {
     ],
     cssFilesToWatch: './css/*.scss"',
     cssSource: './css/markup.scss',
-    webInterviewSource: './css/webinterview.scss',
     cssAppInject: 'cssApp',
-    cssWebinterviewInject: "cssWebinterview",
     cssLibsInject: 'cssLibs',
-    jsLibsInject: 'jsLibs'
+    jsLibsInject: 'jsLibs',
+    css: {
+        markup: "./css/markup.scss",
+        ["markup-web-interview"]: "./css/markup-web-interview.scss",
+        ["markup-specific"]: "./css/markup-specific.scss"
+    }
 };
 
 config.sourceFiles = [
@@ -130,8 +134,8 @@ function compressJs(error) {
 
 function compressCss(error) {
     return config.production
-    ? cleanCSS({ compatibility: 'ie9' }).on('error', error)
-    : util.noop()
+        ? cleanCSS({ compatibility: 'ie9' }).on('error', error)
+        : util.noop()
 }
 
 gulp.task("checkSources", (done, error) => {
@@ -147,8 +151,8 @@ gulp.task('move-bootstrap-fonts', wrapPipe(function (success, error) {
         .pipe(gulp.dest(config.fontsDir).on('error', error));
 }));
 
-gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
-    return gulp.src(config.cssSource)
+function compileCss(sources, error) {
+    return gulp.src(sources)
         .pipe(sass().on('error', error))
         .pipe(autoprefixer('last 2 version').on('error', error))
         .pipe(gulp.dest(config.buildDir).on('error', error))
@@ -156,18 +160,25 @@ gulp.task('styles', ['move-bootstrap-fonts'], wrapPipe(function (success, error)
         .pipe(compressCss(error))
         .pipe(plugins.rev().on('error', error))
         .pipe(gulp.dest(config.buildDistDir));
+}
+
+gulp.task('styles:markup', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
+    return compileCss(config.css.markup, error);
 }));
 
-gulp.task('styles.webinterview', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
-    return gulp.src(config.webInterviewSource)
-        .pipe(sass().on('error', error))
-        .pipe(autoprefixer('last 2 version').on('error', error))
-        .pipe(gulp.dest(config.buildDir).on('error', error))
-        .pipe(rename({ suffix: '.min' }).on('error', error))
-        .pipe(compressCss(error))
-        .pipe(plugins.rev().on('error', error))
-        .pipe(gulp.dest(config.buildDistDir));
+gulp.task('styles:webinterview', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
+    return compileCss(config.css["markup-web-interview"], error)
 }));
+
+gulp.task('styles:specific', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
+    return compileCss(config.css["markup-specific"], error)
+}));
+
+gulp.task('styles', [
+    'styles:markup',
+    'styles:specific',
+    'styles:webinterview',
+    'libsCss']);
 
 gulp.task('libsJs', ["checkSources"], wrapPipe((success, error) => {
     return gulp.src(config.sourceFiles)
@@ -193,7 +204,7 @@ gulp.task('libsCss', ["checkSources"], wrapPipe(function (success, error) {
         .pipe(gulp.dest(config.buildDistDir));
 }));
 
-gulp.task('inject', ['styles', 'libsCss', 'libsJs', 'styles.webinterview'],
+gulp.task('inject', ['styles', 'libsJs'],
     wrapPipe((success, error) => {
         if (!config.production) return util.noop();
 
@@ -201,7 +212,7 @@ gulp.task('inject', ['styles', 'libsCss', 'libsJs', 'styles.webinterview'],
             const url = '@Url.Content("~/Dependencies' + filepath + '")';
 
             if (filepath.endsWith(".css")) {
-                return "<link rel='stylesheet' href='" + url + "' >";
+                return "<link rel='stylesheet' async href='" + url + "' >";
             }
             else if (filepath.endsWith(".js")) {
                 return " <script type='text/javascript' src='" + url + "'></script>";
@@ -210,10 +221,8 @@ gulp.task('inject', ['styles', 'libsCss', 'libsJs', 'styles.webinterview'],
             return inject.transform.apply(inject.transform, arguments);
         }
 
-        var cssApp = gulp.src(config.buildDistDir + '/markup-*.min.css', { read: false });
         var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
         var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
-        var cssWebInterview = gulp.src(config.buildDistDir + "/webinterview-*.min.css", { read: false })
 
         function inject(files, name) {
             const options = { relative: false, name, transform };
@@ -223,12 +232,27 @@ gulp.task('inject', ['styles', 'libsCss', 'libsJs', 'styles.webinterview'],
         var tasks = config.filesToInject.map(function (fileToInject) {
             var target = gulp.src(fileToInject.folder + fileToInject.file);
 
-            return target
-                .pipe(inject(cssApp, config.cssAppInject))
+            var pipe = target
+                // .pipe(inject(cssApp, config.cssAppInject))
                 .pipe(inject(cssLibs, config.cssLibsInject))
                 .pipe(inject(jsLibs, config.jsLibsInject))
-                .pipe(inject(cssWebInterview, config.cssWebinterviewInject))
-                .pipe(gulp.dest(fileToInject.folder));
+
+            Object.keys(config.css).forEach(key => {
+                const conf = config.css[key];
+                /* 
+                css_markup
+                css_markupWebInterview
+                css_markupSpecific
+                */
+                const injectKey = "css_" + _.camelCase(key);
+                const cssApp = gulp.src(config.buildDistDir + '/' + key + '-*.min.css', { read: false });
+
+                pipe = pipe.pipe(inject(cssApp, injectKey))
+            })
+
+            pipe = pipe.pipe(gulp.dest(fileToInject.folder));
+
+            return pipe
         });
 
         return tasks;
@@ -238,8 +262,6 @@ gulp.task('clean', function () {
     return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());
 });
 
-gulp.task('css', ['styles', 'styles.webinterview']);
-
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'styles.webinterview', 'libsCss', 'libsJs', 'inject');
+    gulp.start('move-bootstrap-fonts', 'styles', 'libsJs', 'inject');
 });

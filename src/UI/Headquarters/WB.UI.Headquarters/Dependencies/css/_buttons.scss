@@ -9,7 +9,7 @@
 		//color: #fff !important;
 		color: $gray_light !important;
 		cursor: not-allowed;
-		@include stripe-gradient(#d7d7d7, transparent);
+		@include stripe-gradient(#d7d7d7, #fff);
 		&.btn-clear{
 			background: none;
 			border-color: transparent !important;
@@ -18,6 +18,7 @@
 			border-color: #d7d7d7;
 			outline: none;
 			box-shadow: none !important;
+			//background-color: green;
 		}
 	}
 }
@@ -40,7 +41,7 @@ a.disabled{
 	display: none;
 	@include size($width-foldback-button, $height-foldback-button);
 	cursor: pointer;
-	@include absolute(75px, 0, null, null);
+	@include absolute(5px, 0, null, null);
 	border-radius: 4px;
 	z-index: 3;
 	@include transition(all, 0.2s);
@@ -138,7 +139,8 @@ a.disabled{
 	&.btn-post-comment{
 		@include transition(all, 0.2s);
 		padding: 12px;
-		color: $gray_form;
+		background-color: #fff;
+		color: $gray_light;
 		border-color: $gray_form;
 		border-radius: 5px;
 		&:hover, &:focus, &:active, &.comment-added{
@@ -159,18 +161,22 @@ a.disabled{
 	.btn.btn-post-comment{
 		@include transition(all, 0.2s);
 		padding: 12px;
-		color: $gray_form;
+		color: $gray_light;
+		background-color: #fff;
 		border-color: $gray_form;
 		border-radius: 5px;
-		border-left: 1px solid;
+		border-left: 1px solid $gray_form;
 		&:hover, &:focus, &:active, &.comment-added{
 			color: $blue;
 			border-color: $blue;
-			background-color: transparent;
+			background-color: #fff;
 		}
 		&:active{
 			background-color: #dfeaf4;
 			box-shadow: none;
+		}
+		&:disabled{
+			@include stripe-gradient($gray_form, #fff);
 		}
 	}
 }

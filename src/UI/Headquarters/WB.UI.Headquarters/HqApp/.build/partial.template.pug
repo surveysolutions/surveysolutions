@@ -91,10 +91,10 @@ script(src!=urlContent(options.manifest) type="text/javascript")
 |
 |
 each file in htmlWebpackPlugin.files.css
-    link(href!=urlContent(devPublicPath + file) rel="stylesheet")
+    link(href!=urlContent(devPublicPath + file) async rel="stylesheet")
 |
 |
 each js in htmlWebpackPlugin.files.js
-    script(src!=urlContent(devPublicPath + js)  type="text/javascript")
+    script(src!=urlContent(devPublicPath + js) async type="text/javascript")
     |
     |

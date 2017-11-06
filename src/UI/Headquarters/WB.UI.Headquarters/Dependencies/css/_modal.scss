@@ -96,7 +96,8 @@ body > .ui-pnotify{
     }
 }
 @media only screen and (max-width: 840px){
-    #statusHistoryModal .modal-dialog {
+    #statusHistoryModal .modal-dialog,
+    .statusHistoryModal .modal-dialog {
 		width: calc(100% - 40px) !important;
         margin: 20px; 
 	}
@@ -157,7 +158,8 @@ body > .ui-pnotify{
 		@extend %hover;
 	}	
 }
-#statusHistoryModal .modal-dialog { 
+#statusHistoryModal .modal-dialog,
+.statusHistoryModal .modal-dialog { 
     width: 800px; 
 }
 .modal-dialog {
