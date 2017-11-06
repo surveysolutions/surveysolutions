@@ -4,5 +4,7 @@
     ViewBag.Title = Pages.Assignments_PageTitle;
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
-@Html.RenderHqConfig(Model)
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
 <div id="vueApp"></div>

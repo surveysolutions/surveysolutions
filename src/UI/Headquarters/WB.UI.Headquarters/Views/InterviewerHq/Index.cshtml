@@ -3,9 +3,13 @@
     ViewBag.ActivePage = MenuItem.CreateNew;
     Layout = @"~/Views/Shared/_MainLayoutHq.cshtml";
 }
-@Html.RenderHqConfig(new
-{
-    AssignmentsEndpoint = Url.Content(@"~/api/Assignments"),
-    InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
-})
+@section Scripts{
+    @Html.RenderHqConfig(new
+    {
+        AssignmentsEndpoint = Url.Content(@"~/api/Assignments"),
+        InterviewerHqEndpoint = Url.Content(@"~/interviewerHq")
+    })
+}
+
+
 <div id="vueApp"></div>
