@@ -130,9 +130,22 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             QuestionnaireListInputModel input, bool isSupportFolders)
         {
             var result = _.Where(x => x.IsDeleted == false);
-            
+
             if (isSupportFolders)
-                result = result.Where(x => x.FolderId == input.FolderId);
+            {
+                if (!string.IsNullOrEmpty(input.SearchFor))
+                {
+                    if (input.FolderId.HasValue)
+                    {
+                        var folderId = input.FolderId.Value.ToString();
+                        result = result.Where(x => x.Folder.Path.Contains(folderId));
+                    }
+                }
+                else
+                {
+                    result = result.Where(x => x.FolderId == input.FolderId);
+                }
+            }
 
             if (!string.IsNullOrEmpty(input.SearchFor))
             {
@@ -176,6 +189,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             {
                 var filterLowerCase = input.SearchFor.Trim().ToLower();
                 result = result.Where(x => x.Title.ToLower().Contains(filterLowerCase));
+
+                if (input.FolderId.HasValue)
+                {
+                    var folderId = input.FolderId.Value.ToString();
+                    result = result.Where(f => f.Path.Contains(folderId));
+                }
             }
             else 
             {
