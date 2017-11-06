@@ -83,8 +83,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
             if (isSupportFolders)
             {
+                var sortOrder = ConvertToFolderSortOrder(input);
+
                 foldersCount = publicFoldersStorage.Query(_ => FilterFolders(_, input).Count());
                 folders = publicFoldersStorage.Query(_ => FilterFolders(_, input)
+                    .OrderUsingSortExpression(sortOrder)
                     .Skip((input.Page - 1) * input.PageSize)
                     .Take(input.PageSize)
                     .ToList());
@@ -124,6 +127,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
                 items: folders.Concat(questionnaires.Cast<IQuestionnaireListItem>()).ToList(), 
                 order: input.Order);
+        }
+
+        private static string ConvertToFolderSortOrder(QuestionnaireListInputModel input)
+        {
+            switch (input.Order)
+            {
+                case "CreationDate  Desc":
+                case "LastEntryDate  Desc":
+                    return nameof(QuestionnaireListViewFolder.CreateDate) + "  Desc";
+                case "CreationDate":
+                case "LastEntryDate":
+                    return nameof(QuestionnaireListViewFolder.CreateDate);
+                case "Title  Desc":
+                    return nameof(QuestionnaireListViewFolder.Title) + "  Desc";
+                default:
+                    return nameof(QuestionnaireListViewFolder.Title);
+            }
         }
 
         private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> _,
