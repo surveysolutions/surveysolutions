@@ -688,7 +688,6 @@
     <Content Include="Content\img\google-maps-markers\m5.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\loading.gif" />
-    <Content Include="Dependencies\build\webinterview.css" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
@@ -724,16 +723,6 @@
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Content\popover-extra-placements.min.css" />
     <EmbeddedResource Include="Content\swagger.css" />
-    <Content Include="Dependencies\css\jqplot-override.css" />
-    <Content Include="Dependencies\build\libs.css" />
-    <Content Include="Dependencies\build\libs.js" />
-    <Content Include="Dependencies\build\markup.css" />
-    <Content Include="Dependencies\css\markup.css">
-      <DependentUpon>markup.scss</DependentUpon>
-    </Content>
-    <Content Include="Dependencies\css\markup.min.css">
-      <DependentUpon>markup.css</DependentUpon>
-    </Content>
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Dependencies\fonts\RobotoBold.svg" />
     <Content Include="Dependencies\fonts\RobotoItalic.svg" />
@@ -1238,17 +1227,7 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="Dependencies\css\markup.scss" />
     <Content Include="Dependencies\package.json" />
-    <Content Include="Dependencies\css\_add-interviews.scss" />
-    <Content Include="Dependencies\css\_batch-upload.scss" />
-    <Content Include="Dependencies\css\_common.scss" />
-    <Content Include="Dependencies\css\_export.scss" />
-    <Content Include="Dependencies\css\_import-questionnaires.scss" />
-    <Content Include="Dependencies\css\_login.scss" />
-    <Content Include="Dependencies\css\_mixins.scss" />
-    <Content Include="Dependencies\css\_two-column-form.scss" />
-    <Content Include="Dependencies\css\_variables.scss" />
     <Content Include="Dependencies\fonts\RobotoBold.ttf" />
     <Content Include="Dependencies\fonts\RobotoBold.woff" />
     <Content Include="Dependencies\fonts\RobotoBold.woff2" />
@@ -1272,33 +1251,13 @@
     <Content Include="Dependencies\fonts\ufonts_com_lucidaconsole.woff2" />
     <Content Include="Scripts\bloodhound.min.js" />
     <Content Include="Configuration\vgl.Headquarters.Web.config" />
-    <Content Include="Dependencies\css\_filters.scss" />
-    <Content Include="Dependencies\css\_interview-details.scss" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Dependencies\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Dependencies\css\_buttons.scss" />
-    <Content Include="Dependencies\css\_forms.scss" />
-    <Content Include="Dependencies\css\_navbar.scss" />
-    <Content Include="Dependencies\css\_progress-bars.scss" />
-    <Content Include="Dependencies\css\_tables.scss" />
     <Content Include="Dependencies\fonts\RobotoMedium.ttf" />
     <Content Include="Dependencies\fonts\RobotoMedium.woff" />
     <Content Include="Dependencies\fonts\RobotoMedium.woff2" />
-    <Content Include="Dependencies\css\_dropdown.scss" />
-    <Content Include="Dependencies\css\_accordion.scss" />
-    <Content Include="Dependencies\css\_zoomimg.scss" />
-    <Content Include="Dependencies\css\_panels.scss" />
-    <Content Include="Dependencies\css\common-markup.scss" />
-    <Content Include="Dependencies\css\_survey-setup.scss" />
-    <Content Include="Dependencies\css\_web-interview-first-last-chapter.scss" />
-    <Content Include="Dependencies\css\_web-interview-start.scss" />
-    <Content Include="Dependencies\css\_bootstrap-mvc-validation.scss" />
-    <Content Include="Dependencies\css\_interviews.scss" />
-    <Content Include="Dependencies\css\_main-information.scss" />
-    <Content Include="Dependencies\css\_modal.scss" />
-    <Content Include="Dependencies\css\markup-detalica.scss" />
     <Content Include="Content\bootstrap-datepicker3.standalone.min.css.map" />
     <Content Include="Content\bootstrap-datepicker3.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker3.min.css.map" />
