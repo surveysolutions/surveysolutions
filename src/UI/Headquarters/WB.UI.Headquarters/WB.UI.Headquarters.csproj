@@ -1997,7 +1997,6 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessesView.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessState.cs" />
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
-    <Compile Include="Models\EnumeratorProfileModel.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\WebInterview\InterviewEntityType.cs" />

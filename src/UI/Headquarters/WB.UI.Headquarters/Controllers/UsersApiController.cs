@@ -1,18 +1,26 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using Resources;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Api;
 
@@ -25,20 +33,26 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory usersFactory;
         private readonly HqUserManager userManager;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IExportFactory exportFactory;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public UsersApiController(
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger logger,
             IUserViewFactory usersFactory,
-            HqUserManager userManager, 
-            IInterviewerVersionReader interviewerVersionReader)
+            HqUserManager userManager,
+            IInterviewerVersionReader interviewerVersionReader,
+            IExportFactory exportFactory, 
+            IFileSystemAccessor fileSystemAccessor)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
             this.usersFactory = usersFactory;
             this.userManager = userManager;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.exportFactory = exportFactory;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         [HttpPost]
@@ -59,15 +73,18 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewerApkVersion = interviewerVersionReader.Version;
 
-            var interviewers = this.usersFactory.GetInterviewers(reqest.PageIndex, 
-                reqest.PageSize, 
-                reqest.GetSortOrder(), 
-                reqest.Search.Value, 
-                reqest.Archived, 
+            var pageIndex = reqest.PageIndex;
+            var pageSize = reqest.PageSize;
+
+            var interviewers = this.usersFactory.GetInterviewers(pageIndex,
+                pageSize,
+                reqest.GetSortOrder(),
+                reqest.Search.Value,
+                reqest.Archived,
                 interviewerApkVersion,
                 supervisorId,
                 reqest.Facet);
-            
+
             return new DataTableResponse<InterviewerListItem>
             {
                 Draw = reqest.Draw + 1,
@@ -77,7 +94,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate =  x.CreationDate.FormatDateWithTime(),
+                    CreationDate = x.CreationDate.FormatDateWithTime(),
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
                     DeviceId = x.DeviceId,
@@ -86,7 +103,51 @@ namespace WB.UI.Headquarters.Controllers
                     IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild
                 })
             };
+        }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+        public async Task<HttpResponseMessage> AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType = null)
+        {
+            Guid? supervisorId = null;
+
+            if (!string.IsNullOrWhiteSpace(reqest.SupervisorName))
+                supervisorId = this.userManager.FindByName(reqest.SupervisorName)?.Id;
+
+            // Headquarter and Admin can view interviewers by any supervisor
+            // Supervisor can view only their interviewers
+            var currentUserRole = this.authorizedUser.Role;
+            if (currentUserRole == UserRoles.Supervisor)
+                supervisorId = this.authorizedUser.Id;
+
+            var interviewerApkVersion = interviewerVersionReader.Version;
+
+            var interviewersReport = await this.usersFactory.GetInterviewersReportAsync(
+                1,
+                int.MaxValue,
+                reqest.GetSortOrder(),
+                reqest.Search.Value,
+                reqest.Archived,
+                interviewerApkVersion,
+                supervisorId,
+                reqest.Facet);
+            return this.CreateReportResponse(exportType, interviewersReport, Reports.Interviewers);
+        }
+
+        private HttpResponseMessage CreateReportResponse(string exportType, ReportView report, string reportName)
+        {
+            Enum.TryParse(exportType, true, out ExportFileType type);
+
+            var exportFile = this.exportFactory.CreateExportFile(type);
+
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
+            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
+
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            {
+                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
+            };
+            return result;
         }
 
         public class InterviewerListItem
@@ -178,7 +239,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.GetUsersInRoleForDataTable(request, UserRoles.ApiUser);
         }
 
-        private DataTableResponse<InterviewerListItem> GetUsersInRoleForDataTable(DataTableRequest request, UserRoles userRoles)
+        private DataTableResponse<InterviewerListItem> GetUsersInRoleForDataTable(DataTableRequest request,
+            UserRoles userRoles)
         {
             var users = this.usersFactory.GetUsersByRole(request.PageIndex, request.PageSize, request.GetSortOrder(),
                 request.Search.Value, false, userRoles);
@@ -226,7 +288,7 @@ namespace WB.UI.Headquarters.Controllers
         public bool Archive { get; set; }
     }
 
-    public class DeleteSupervisorCommandRequest 
+    public class DeleteSupervisorCommandRequest
     {
         public Guid SupervisorId { get; set; }
     }

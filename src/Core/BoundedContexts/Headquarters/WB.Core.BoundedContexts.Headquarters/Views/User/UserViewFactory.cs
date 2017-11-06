@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -16,12 +18,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
     internal class UserViewFactory : IUserViewFactory
     {
         private readonly IUserRepository userRepository;
+        private readonly IInterviewerProfileFactory interviewerProfileFactory;
 
         protected IUserRepository UserRepository => this.userRepository ?? ServiceLocator.Current.GetInstance<IUserRepository>();
 
-        public UserViewFactory(IUserRepository userRepository)
+        protected IInterviewerProfileFactory InterviewerProfileFactory => this.interviewerProfileFactory ?? ServiceLocator.Current.GetInstance<IInterviewerProfileFactory>();
+
+        public UserViewFactory(
+            IUserRepository userRepository, 
+            IInterviewerProfileFactory interviewerProfileFactory)
         {
             this.userRepository = userRepository;
+            this.interviewerProfileFactory = interviewerProfileFactory;
         }
 
         public UserViewFactory()
@@ -267,6 +275,108 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 TotalCountByQuery = query.Invoke(this.UserRepository.Users).Count(),
                 Users = filteredUsers.ToList()
             };
+        }
+
+        public async Task<ReportView> GetInterviewersReportAsync(int pageIndex, int pageSize, string getSortOrder, string searchValue,
+            bool reqestArchived, int? interviewerApkVersion, Guid? supervisorId, InterviewerFacet reqestFacet)
+        {
+            InterviewersView view = this.GetInterviewers(pageIndex, pageSize, getSortOrder, searchValue, reqestArchived, interviewerApkVersion, supervisorId, reqestFacet);
+
+            var userProfiles = await GetProfilesForInterviewers(view.Items.Select(x => x.UserId).ToArray());
+
+            return new ReportView
+            {
+                Headers = new[]
+                {
+                    "InterviewerName",
+                    "InterviewerId",
+                    "SupervisorName",
+                    "InterviewerAppVersion",
+                    "HasUpdateForInterviewerApp",
+                    "DeviceAssignmentDate",
+                    "TotalNumberOfSuccessSynchronizations",
+                    "TotalNumberOfFailedSynchronizations",
+                    "AverageSynchSpeed",
+                    "LastSuccessfulSync",
+                    "LastCommunicationDate",
+                    "DeviceID",
+                    "DeviceSerialNumber",
+                    "DeviceType",
+                    "DeviceManufacturer",
+                    "DeviceModel",
+                    "DeviceBuildNumber",
+                    "DeviceLanguage",
+                    "AndroidVersion",
+                    "SurveySolutionsVersion",
+                    "LastSurveySolutionsUpdatedDate",
+                    "DeviceLocationOrLastKnownLocation",
+                    "DeviceOrientation",
+                    "BatteryStatus",
+                    "BatteryPowerSource",
+                    "IsPowerSaveMode",
+                    "StorageFreeInBytes",
+                    "StorageTotalInBytes",
+                    "RAMFreeInBytes",
+                    "RAMTotalInBytes",
+                    "Database",
+                    "ServerTimeAtTheBeginningOfSynchronization",
+                    "TabletTimeAtTeBeginningOfSynchronization",
+                    "ConnectionType",
+                    "ConnectionSubType",
+                    "QuestionnairesReceived",
+                    "InterviewsReceived",
+                    "CompletedInterviewsReceivedFromInterviewer",
+                    "AssignmentsThatHaveBeenStarted"
+
+                },
+                Data = userProfiles.Select(x => new object[]
+                {
+                    x.LoginName,
+                    x.Id,
+                    x.SupervisorName,
+                    x.LastSuccessDeviceInfo?.AppVersion,
+                    x.DeviceAssignmentDate,
+                    x.HasUpdateForInterviewerApp,
+                    x.TotalSuccessSynchronizationCount,
+                    x.TotalFailedSynchronizationCount,
+                    x.AverageSyncSpeedBytesPerSecond,
+                    x.LastSyncronizationDate,
+                    x.LastSyncronizationDate,
+                    x.LastSuccessDeviceInfo?.DeviceId,
+                    x.LastSuccessDeviceInfo?.DeviceType,
+                    x.LastSuccessDeviceInfo?.DeviceType,
+                    x.LastSuccessDeviceInfo?.DeviceManufacturer,
+                    x.LastSuccessDeviceInfo?.DeviceModel,
+                    x.LastSuccessDeviceInfo?.DeviceBuildNumber,
+                    x.LastSuccessDeviceInfo?.DeviceLanguage,
+                    $"{x.LastSuccessDeviceInfo?.AndroidVersion} {x.LastSuccessDeviceInfo?.AndroidSdkVersionName}({x.LastSuccessDeviceInfo?.AndroidSdkVersion})",
+                    x.LastSuccessDeviceInfo?.AppVersion,
+                    x.LastSuccessDeviceInfo?.LastAppUpdatedDate,
+                    $"{x.LastSuccessDeviceInfo?.DeviceLocationLat} {x.LastSuccessDeviceInfo?.DeviceLocationLong}",
+                    x.LastSuccessDeviceInfo?.AppOrientation,
+                    x.LastSuccessDeviceInfo?.BatteryChargePercent,
+                    x.LastSuccessDeviceInfo?.BatteryPowerSource,
+                    x.LastSuccessDeviceInfo?.IsPowerInSaveMode,
+                    x.LastSuccessDeviceInfo?.StorageFreeInBytes,
+                    x.LastSuccessDeviceInfo?.StorageTotalInBytes,
+                    x.LastSuccessDeviceInfo?.RAMFreeInBytes,
+                    x.LastSuccessDeviceInfo?.RAMTotalInBytes,
+                    x.LastSuccessDeviceInfo?.DBSizeInfo,
+                    x.LastSuccessDeviceInfo?.SyncDate,
+                    x.LastSuccessDeviceInfo?.DeviceDate,
+                    x.LastSuccessDeviceInfo?.NetworkType,
+                    x.LastSuccessDeviceInfo?.NetworkSubType,
+                    x.LastSuccessDeviceInfo?.Statistics?.DownloadedQuestionnairesCount,
+                    x.LastSuccessDeviceInfo?.Statistics?.DownloadedInterviewsCount,
+                    x.LastSuccessDeviceInfo?.Statistics?.UploadedInterviewsCount,
+                    x.LastSuccessDeviceInfo?.NumberOfStartedInterviews
+                }).ToArray()
+            };
+        }
+
+        private Task<InterviewerProfileModel[]> GetProfilesForInterviewers(Guid[] interviewersIds)
+        {
+            return Task.WhenAll(from interviewerId in interviewersIds select InterviewerProfileFactory.GetInterviewerProfileAsync(interviewerId));
         }
 
         public UsersView GetAllSupervisors(int pageSize, string searchBy, bool showLocked = false)
