@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.logger.Info($"Export with all steps (Interviews, Comments, Actions) finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
         }
 
-        private List<Guid> GetInterviewIdsToExport(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, CancellationToken cancellationToken)
+        public List<Guid> GetInterviewIdsToExport(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, CancellationToken cancellationToken)
         {
             Expression<Func<InterviewSummary, bool>> expression;
             if (status.HasValue)
