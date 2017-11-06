@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNet.Identity;
 using Moq;
 using SQLite;
+using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -30,10 +31,12 @@ namespace WB.Tests.Abc.TestFactories
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
         public TestInMemoryWriter<TEntity> InMemoryReadeSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
 
-        public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(this.UserRepository(users));
+        public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(this.UserRepository(users), this.UserProfileFactory());
 
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
+
+        public IInterviewerProfileFactory UserProfileFactory() => Mock.Of<IInterviewerProfileFactory>();
 
         public HqUserManager HqUserManager(IUserStore<HqUser, Guid> userStore = null,
             IHashCompatibilityProvider hashCompatibilityProvider = null,

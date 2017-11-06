@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
-namespace WB.UI.Headquarters.Models
+namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 {
     public class InterviewerProfileModel
     {

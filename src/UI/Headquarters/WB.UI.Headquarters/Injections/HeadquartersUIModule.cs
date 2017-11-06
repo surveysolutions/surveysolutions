@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Web.Mvc;
-using Main.DenormalizerStorage;
 using Ninject;
-using Ninject.Activation;
 using Ninject.Modules;
 using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
@@ -18,21 +13,18 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAccessors;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -117,6 +109,7 @@ namespace WB.UI.Headquarters.Injections
             this.Bind<IInterviewerVersionReader>().To<InterviewerVersionReader>().InSingletonScope();
             this.Bind<IWebInterviewAllowService>().To<WebInterviewAllowService>();
             this.Bind<IReviewAllowedService>().To<ReviewAllowedService>();
+            this.Bind<IInterviewerProfileFactory>().To<InterviewerProfileFactory>();
         }
     }
 }
