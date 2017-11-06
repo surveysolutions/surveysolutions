@@ -135,11 +135,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            var dataExportType = exportType == DataExportFormat.Paradata
-                ? DataExportType.ParaData
-                : DataExportType.Data;
-
-            this.dataExportProcessesService.DeleteProcess(questionnaireIdentity, exportType, dataExportType);
+            this.dataExportProcessesService.DeleteProcess(questionnaireIdentity, exportType);
 
             return this.Ok();
         }
