@@ -50,6 +50,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
         
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
-        Task<byte[]> GetMapContent(string url, CancellationToken cancellationToken);
+        Task<byte[]> GetMapContent(string url, CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null);
     }
 }

@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
 
-        private readonly string mapsListUrl = "/configuration/maps.json";
+        private readonly string mapsController = string.Concat(interviewerApiUrl, apiVersion, "/maps"); 
 
         private readonly IPrincipal principal;
         private readonly IRestService restService;
@@ -235,17 +235,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
         {
             return  this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<MapView>>(
-                url: this.mapsListUrl, token: cancellationToken));
+                url: this.mapsController, token: cancellationToken, credentials: this.restCredentials));
         }
         
-        public Task<byte[]> GetMapContent(string url,CancellationToken cancellationToken)
+        public Task<byte[]> GetMapContent(string mapName, CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
-                    url: url,
+                    url: $"{this.mapsController}/{mapName}",
                     token: cancellationToken,
-                    credentials: this.restCredentials).ConfigureAwait(false);
+                    credentials: this.restCredentials,
+                    onDownloadProgressChanged: onDownloadProgressChanged).ConfigureAwait(false);
 
                 return restFile.Content;
             });

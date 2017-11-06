@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class InterviewerUIResources {
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment {0}.
+        ///   Looks up a localized string similar to Assignment #{0}.
         /// </summary>
         public static string Dashboard_Interview_AssignmentLabelFormat {
             get {
@@ -300,7 +300,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete this interview #{0}?.
+        ///   Looks up a localized string similar to Are you sure you want to delete this interview {0}?.
         /// </summary>
         public static string Dashboard_RemoveInterviewQuestion {
             get {
@@ -922,6 +922,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string Maps_Title {
+            get {
+                return ResourceManager.GetString("Maps_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard.
         /// </summary>
         public static string MenuItem_Title_Dashboard {
@@ -963,6 +972,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string MenuItem_Title_Login {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string MenuItem_Title_Maps {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Maps", resourceCulture);
             }
         }
         
