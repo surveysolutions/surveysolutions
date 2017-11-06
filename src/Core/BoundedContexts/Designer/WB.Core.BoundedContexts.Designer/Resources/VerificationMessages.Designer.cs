@@ -1196,7 +1196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
+        ///   Looks up a localized string similar to Option title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
         /// </summary>
         public static string WB0129_AnswerTitleIsTooLong {
             get {
@@ -1727,7 +1727,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question cannot have empty text..
+        ///   Looks up a localized string similar to Question cannot have empty title..
         /// </summary>
         public static string WB0269_QuestionTitleIsEmpty {
             get {
