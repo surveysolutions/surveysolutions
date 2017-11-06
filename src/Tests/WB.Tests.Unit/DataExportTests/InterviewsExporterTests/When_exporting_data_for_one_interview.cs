@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             Assert.That(dataInCsvFile.Count, Is.EqualTo(2));
             Assert.That(dataInCsvFile[0].File, Is.EqualTo("Questionnaire.tab"));
             Assert.That(dataInCsvFile[0].Data[0][4], Is.EqualTo(ServiceColumns.HasAnyError));
-            Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo(true.ToString()));
+            Assert.That(dataInCsvFile[1].Data[0][4], Is.EqualTo("1"));
             Assert.That(dataInCsvFile[1].Data[0][5], Is.EqualTo(InterviewStatus.Completed.ToString()));
         }
 

@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                             systemVariableValues[interviewKeyIndex] = interviewKey;
 
                         systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.HasAnyError].Index,
-                            interviewSummary.HasErrors.ToString());
+                            interviewSummary.HasErrors ? "1" : "0");
                         systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.InterviewStatus].Index,
                             interviewSummary.Status.ToString());
                     }
