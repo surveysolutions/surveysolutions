@@ -526,7 +526,7 @@ namespace WB.UI.Designer.Controllers
         {
             this.ViewBag.PageIndex = pageIndex;
             this.ViewBag.SortBy = sortBy;
-            this.ViewBag.SearchFor = searchFor;
+            this.ViewBag.Filter = searchFor;
             this.ViewBag.SortOrder = sortOrder;
             this.ViewBag.FolderId = folderId;
 
