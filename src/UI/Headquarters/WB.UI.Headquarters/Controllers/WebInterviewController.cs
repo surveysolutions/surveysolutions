@@ -141,12 +141,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.Archived || assignment.IsCompleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.Controllers
             var assignment = this.assignments.GetById(id);
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             if (!this.connectionLimiter.CanConnect())
             {
@@ -267,10 +267,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!isAuthorizedUser)
             {
                 if (!webInterviewConfig.Started)
-                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
                 if(interview.Status == InterviewStatus.Completed)
-                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
             }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -343,7 +343,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             return new ResumeWebInterview
@@ -361,7 +361,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             var view = new StartWebInterview
@@ -379,7 +379,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             return new FinishWebInterview
@@ -433,7 +433,7 @@ namespace WB.UI.Headquarters.Controllers
                 return;
             }
 
-            if (filterContext.Exception is WebInterviewAccessException interviewAccessException)
+            if (filterContext.Exception is InterviewAccessException interviewAccessException)
             {
                 if (interviewAccessException.Reason == InterviewAccessExceptionReason.UserNotAuthorised)
                 {
