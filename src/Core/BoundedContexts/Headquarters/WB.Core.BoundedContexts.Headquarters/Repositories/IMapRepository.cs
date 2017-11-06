@@ -20,5 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         string[][] GetAllMapUsers();
 
         bool UpdateUserMaps(string mapName, string[] users);
+
+        string[] GetAllMapsForUser(string userName);
+
+        byte[] GetMapContent(string mapName);
     }
 }

@@ -37,6 +37,9 @@ namespace WB.UI.Interviewer.Activities
                 case Resource.Id.menu_login:
                     this.ViewModel.NavigateToLoginCommand.Execute();
                     break;
+                case Resource.Id.menu_maps:
+                    this.ViewModel.NavigateToMapsCommand.Execute();
+                    break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
                     break;
@@ -59,6 +62,7 @@ namespace WB.UI.Interviewer.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_login, InterviewerUIResources.MenuItem_Title_Login);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
+            menu.LocalizeMenuItem(Resource.Id.menu_maps, InterviewerUIResources.MenuItem_Title_Maps);
 
             if (this.ViewModel.IsAuthenticated)
             {

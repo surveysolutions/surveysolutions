@@ -1,29 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.MapService;
 
-namespace WB.UI.Shared.Enumerator.Services.Internals.MapService
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class MapService : IMapService
     {
         private readonly IPermissions permissions;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IMapSynchronizer mapSynchronizer;
+       
         private readonly string mapsLocation;
+        private readonly ILogger logger;
 
         string filesToSearch = "*.tpk";
         
         public MapService(IPermissions permissions, 
             IFileSystemAccessor fileSystemAccessor,
-            IMapSynchronizer mapSynchronizer)
+            ILogger logger)
         {
             this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.mapSynchronizer = mapSynchronizer;
+            this.logger = logger;
             
             this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
         }
@@ -41,27 +45,24 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.MapService
                 }).ToList();
         }
 
-        public async Task SyncMaps(CancellationToken cancellationToken)
+        public bool DoesMapExist(string mapName)
         {
-            await this.permissions.AssureHasPermission(Permission.Storage);
-
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
-                this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
-            
-            var items = await this.mapSynchronizer.GetMapList(cancellationToken).ConfigureAwait(false);
+                return false;
 
-            foreach (var mapDescription in items)
+            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
+
+            return this.fileSystemAccessor.IsFileExists(filename);
+        }
+
+        public void SaveMap(string mapName, byte[] content)
+        {
+            if (!DoesMapExist(mapName))
             {
-                var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapDescription.MapName);
+                var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
 
-                if (this.fileSystemAccessor.IsFileExists(filename))
-                    continue;
-
-                var mapContent = await this.mapSynchronizer.GetMapContent(mapDescription.URL, cancellationToken).ConfigureAwait(false);
-
-                this.fileSystemAccessor.WriteAllBytes(filename, mapContent);
+                this.fileSystemAccessor.WriteAllBytes(filename, content);
             }
-
         }
     }
 }

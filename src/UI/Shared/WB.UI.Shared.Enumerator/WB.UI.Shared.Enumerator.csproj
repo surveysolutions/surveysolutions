@@ -346,9 +346,6 @@
     <Compile Include="Services\DevicePasswordHasher.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
-    <Compile Include="Services\Internals\MapService\IMapService.cs" />
-    <Compile Include="Services\Internals\MapService\MapDescription.cs" />
-    <Compile Include="Services\Internals\MapService\MapService.cs" />
     <Compile Include="Services\Internals\ModernHttpClientFactory.cs" />
     <Compile Include="Services\Internals\AutofacServiceLocatorAdapter.cs" />
     <Compile Include="Services\Internals\PictureChooser.cs" />
@@ -357,6 +354,7 @@
     <Compile Include="Services\Internals\PortableJsonSerializer.cs" />
     <Compile Include="Services\Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Services\Internals\QRBarcodeScanService.cs" />
+    <Compile Include="Services\MapService.cs" />
     <Compile Include="Services\Ninject\ModuleExtensions.cs" />
     <Compile Include="Autofac\AutofacModuleAdapter.cs" />
     <Compile Include="Services\PermissionsExtensions.cs" />
