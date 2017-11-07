@@ -33,5 +33,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             get { return this.supervisorId; }
             set { this.supervisorId = value.NullIfEmpty(); }
         }
+
+        public bool IsValid { get; set; }
     }
 }
