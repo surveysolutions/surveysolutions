@@ -43,6 +43,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
         }
 
+        public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
+        {
+            var syncWithNotEmptyStat = this.dbContext.DeviceSyncInfo
+                .OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Where(x => interviewerIds.Contains(x.InterviewerId))
+                .Where(d => d.StatisticsId != null && d.Statistics.DownloadedInterviewsCount +
+                            d.Statistics.UploadedInterviewsCount +
+                            d.Statistics.DownloadedQuestionnairesCount +
+                            d.Statistics.RejectedInterviewsOnDeviceCount > 0)
+                .GroupBy(x => x.InterviewerId)
+                .Select(x => new {
+                    x.Key,
+                    DeciveInfo = x.FirstOrDefault()
+                })
+                .ToList();
+
+            var lastSync = this.dbContext.DeviceSyncInfo
+                .OrderByDescending(deviceInfo => deviceInfo.Id)
+                .Where(x => interviewerIds.Contains(x.InterviewerId))
+                .GroupBy(x => x.InterviewerId)
+                .Select(x => new {
+                    x.Key,
+                    DeciveInfo = x.FirstOrDefault()
+                })
+                .ToList();
+
+            foreach (var interviewerId in interviewerIds)
+            {
+                var notEmptyStat = syncWithNotEmptyStat.FirstOrDefault(x => x.Key == interviewerId);
+                if (notEmptyStat != null)
+                {
+                    yield return notEmptyStat.DeciveInfo;
+                    continue;
+                }
+
+                var lastStat = lastSync.FirstOrDefault(x => x.Key == interviewerId);
+                if (lastStat!=null)
+                    yield return lastStat.DeciveInfo;
+            }
+        }
+
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)
                 .Where(d => d.InterviewerId == interviewerId && d.StatisticsId != null)        

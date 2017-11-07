@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -46,7 +47,9 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
-            InterviewerProfileModel profile = this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor) as InterviewerProfileModel;
+            var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
+
+            InterviewerProfileModel profile = this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -176,15 +179,20 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                 .Where(x => x != null)
                 .ToDictionary(x => x.Id, x => x);
 
+            var deviceSyncInfos = this.deviceSyncInfoRepository
+                .GetLastSyncByInterviewersList(interviewersIds)
+                .ToDictionary(x => x.InterviewerId, x => x);
+
             return interviewerProfiles
                 .Select(interviewer => FillInterviewerProfileForExport(
                         new InterviewerProfileToExport(), 
                         interviewer, 
-                        interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null))
+                        interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null,
+                    deviceSyncInfos.GetOrNull(interviewer.Id)))
                 .ToArray();
         }
 
-        private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile, HqUser interviewer, HqUser supervisor)
+        private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile, HqUser interviewer, HqUser supervisor, DeviceSyncInfo lastSuccessDeviceInfo)
         {
             var interviewerId = interviewer.Id;
 
@@ -197,7 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                 supervisorName = supervisor.UserName;
             }
 
-            var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(interviewerId);
+            //var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(interviewerId);
             var lastFailedDeviceInfo = this.deviceSyncInfoRepository.GetLastFailedByInterviewerId(interviewerId);
             var hasUpdateForInterviewerApp = false;
 
