@@ -2037,7 +2037,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (validStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTextIdentities));
             if (invalidStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTextIdentities));
 
-            if (invalidQuestionIdentities.Any() || invalidStaticTextIdentities.Any() || HasInvalidAnswers() || HasInvalidStaticTexts)
+            if (HasInvalidAnswers() || HasInvalidStaticTexts)
             {
                 if (this.properties.IsValid)
                 {
