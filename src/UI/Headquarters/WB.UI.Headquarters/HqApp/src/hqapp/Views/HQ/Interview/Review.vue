@@ -27,11 +27,11 @@ export default {
             this.$store.dispatch("onBeforeNavigate")
         },
 
-        ["$route.query.question"](to) {
-            if (to != null) {
-                this.$store.dispatch("sectionRequireScroll", { id: to })
-            }
-        }
+         ["$route.hash"](to) {
+             if (to != null) {
+                 this.$store.dispatch("sectionRequireScroll", { id: to })
+             }
+         }
     },
 
     computed: {
@@ -50,6 +50,7 @@ export default {
     },
 
     methods: {
+   
         onResize() {
             var screenWidth = document.documentElement.clientWidth;
             this.$store.dispatch("screenWidthChanged", screenWidth);

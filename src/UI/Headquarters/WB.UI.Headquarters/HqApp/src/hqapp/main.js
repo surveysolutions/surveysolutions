@@ -16,9 +16,10 @@ import "~/webinterview/componentsRegistry"
 import box from "~/webinterview/components/modal"
 import 'flatpickr/dist/flatpickr.css'
 import "toastr/build/toastr.css"
+import * as poly from "smoothscroll-polyfill"
+poly.polyfill()
 
 import { browserLanguage } from "~/shared/helpers"
-
 moment.locale(browserLanguage);
 
 const i18n = Vuei18n.initialize(browserLanguage)
