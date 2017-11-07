@@ -6,6 +6,8 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -15,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
     {
         Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid interviewerId);
 
-        Task<ReportView> GetInterviewersReportAsync(Guid[] interviewersIdsToExport);
+        ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -38,7 +40,13 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
         public async Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid userId)
         {
-            InterviewerProfileModel profile = await this.FillInterviewerProfileForExportAsync(new InterviewerProfileModel(), userId) as InterviewerProfileModel;
+            var interviewer = await this.userManager.FindByIdAsync(userId);
+
+            if (interviewer == null) return null;
+
+            var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
+
+            InterviewerProfileModel profile = this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -56,10 +64,9 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
             return profile;
         }
-
-        public async Task<ReportView> GetInterviewersReportAsync(Guid[] interviewersIdsToExport)
+        public ReportView GetInterviewersReport(Guid[] interviewersIdsToExport)
         {
-            var userProfiles = await GetProfilesForInterviewers(interviewersIdsToExport);
+            var userProfiles = GetProfilesForInterviewers(interviewersIdsToExport);
 
             return new ReportView
             {
@@ -154,26 +161,40 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             };
         }
 
-        private Task<InterviewerProfileToExport[]> GetProfilesForInterviewers(Guid[] interviewersIds)
+        private InterviewerProfileToExport[] GetProfilesForInterviewers(Guid[] interviewersIds)
         {
-            return Task.WhenAll(from interviewerId in interviewersIds
-                select FillInterviewerProfileForExportAsync(new InterviewerProfileToExport(), interviewerId));
+            var interviewerProfiles = this.userManager.Users.Where(x => interviewersIds.Contains(x.Id))
+                .Where(x => x!= null)
+                .ToList();
+
+            var supervisorIds = interviewerProfiles
+                .Where(x => x.Profile.SupervisorId.HasValue)
+                .Select(x => x.Profile.SupervisorId.Value)
+                .ToArray();
+            
+            var supervisorsProfiles = this.userManager.Users.Where(x => supervisorIds.Contains(x.Id))
+                .Where(x => x != null)
+                .ToDictionary(x => x.Id, x => x);
+
+            return interviewerProfiles
+                .Select(interviewer => FillInterviewerProfileForExport(
+                        new InterviewerProfileToExport(), 
+                        interviewer, 
+                        interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null))
+                .ToArray();
         }
 
-        private async Task<InterviewerProfileToExport> FillInterviewerProfileForExportAsync(
-            InterviewerProfileToExport profile, Guid interviewerId)
+        private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile, HqUser interviewer, HqUser supervisor)
         {
-            var interviewer = await this.userManager.FindByIdAsync(interviewerId).ConfigureAwait(false);
-
-            if (interviewer == null) return null;
+            var interviewerId = interviewer.Id;
 
             string supervisorName = String.Empty;
             Guid supervisorId = Guid.Empty;
 
-            if (interviewer.Profile.SupervisorId.HasValue)
+            if (supervisor!=null)
             {
-                supervisorId = interviewer.Profile.SupervisorId.Value;
-                supervisorName = (await this.userManager.FindByIdAsync(supervisorId).ConfigureAwait(false)).UserName;
+                supervisorId = supervisor.Id;
+                supervisorName = supervisor.UserName;
             }
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(interviewerId);

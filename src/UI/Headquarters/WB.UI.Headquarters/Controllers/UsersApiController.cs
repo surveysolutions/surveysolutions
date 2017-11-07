@@ -111,7 +111,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<HttpResponseMessage> AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType)
+        public HttpResponseMessage AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType)
         {
             Guid? supervisorId = null;
 
@@ -134,7 +134,7 @@ namespace WB.UI.Headquarters.Controllers
                 supervisorId,
                 reqest.Facet);
 
-            var interviewersReport = await this.interviewerProfileFactory.GetInterviewersReportAsync(filteredInterviewerIdsToExport);
+            var interviewersReport = this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
 
             var exportFile = this.exportFactory.CreateExportFile(type);
 
