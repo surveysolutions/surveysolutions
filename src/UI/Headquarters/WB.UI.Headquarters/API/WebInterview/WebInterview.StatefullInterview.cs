@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ASP;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -19,6 +20,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -42,9 +44,12 @@ namespace WB.UI.Headquarters.API.WebInterview
         public InterviewInfo GetInterviewDetails()
         {
             var statefulInterview = this.GetCallerInterview();
+            var questionnaire = this.GetCallerQuestionnaire();
             return new InterviewInfo
             {
-                QuestionnaireTitle = this.GetCallerQuestionnaire().Title,
+                QuestionnaireTitle = this.IsReviewMode ? 
+                                            string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) :
+                                            this.GetCallerQuestionnaire().Title,
                 FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer
