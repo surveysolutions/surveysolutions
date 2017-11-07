@@ -356,6 +356,12 @@
                 }
             };
 
+            var fixIfNeedCurrentSelectionAfterDelete = function(id) {
+                if ($scope.highlightedId == id) {
+                    $scope.highlightedId = null;
+                }
+            };
+
             $scope.deleteQuestion = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
@@ -367,6 +373,7 @@
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
                             $rootScope.$emit('questionDeleted', itemIdToDelete);
+                            fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
                         });
                     }
                 });
@@ -385,6 +392,7 @@
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
                             $rootScope.$emit('varibleDeleted', itemIdToDelete);
+                            fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
                         });
                     }
                 });
@@ -444,6 +452,7 @@
                                     });
                                 }
                             });
+                        fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
                     }
                 });
             };
@@ -463,6 +472,7 @@
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
                                     $rootScope.$emit('staticTextDeleted');
+                                    fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
                                 }
                             });
                     }
