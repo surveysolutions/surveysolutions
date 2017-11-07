@@ -26,6 +26,7 @@
                   local:MvxBind="Text CreationDate;"
                   android:textSize ="@dimen/textsize_14"
                   android:paddingLeft="14dp"
+                  android:paddingRight="14dp"
                   android:paddingTop="6dp"
                   android:textStyle="italic"
                   android:fontFamily="Georgia"/>

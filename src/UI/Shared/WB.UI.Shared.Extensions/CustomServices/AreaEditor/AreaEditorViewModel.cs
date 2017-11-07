@@ -6,15 +6,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid.Platform;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -32,35 +30,62 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private readonly IMapService mapService;
         private readonly IUserInteractionService userInteractionService;
 
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
         public AreaEditorViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
             IUserInteractionService userInteractionService,
-            ILogger logger)
+            ILogger logger,
+            IFileSystemAccessor fileSystemAccessor)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
             this.mapService = mapService;
             this.logger = logger;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public override void Load()
         {
-            var localmaps = this.mapService.GetAvailableMaps();
-
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                 ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                 : AndroidPathUtils.GetPathToExternalDirectory();
 
-            var defaultMap = new MapDescription() { MapName = "Worldmap[default]", MapFullPath = basePath + "/Maps/Worldmap(default).tpk" };
+            string mapFolderPath = this.fileSystemAccessor.CombinePath(basePath, "maps");
+            string mapPath = this.fileSystemAccessor.CombinePath(mapFolderPath, "worldmap(default).tpk");
 
+            if (!this.fileSystemAccessor.IsFileExists(mapPath))
+            {
+                if(!this.fileSystemAccessor.IsDirectoryExists(mapFolderPath))
+                    this.fileSystemAccessor.CreateDirectory(mapFolderPath);
+
+                using (var br = new BinaryReader(Application.Context.Assets.Open("worldmap(default).tpk")))
+                {
+                    using (var bw = new BinaryWriter(new FileStream(mapPath, FileMode.Create)))
+                    {
+                        byte[] buffer = new byte[2048];
+                        int length = 0;
+                        while ((length = br.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            bw.Write(buffer, 0, length);
+                        }
+                    }
+                }
+            }
+
+            var defaultMap = new MapDescription() { MapName = "Worldmap[default]", MapFullPath = mapPath };
+
+            var localmaps = this.mapService.GetAvailableMaps();
             localmaps.Add(defaultMap);
             
 
             this.AvailableMaps = new MvxObservableCollection<MapDescription>(localmaps);
             this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
-            if (this.AvailableMaps.Count == 0) return;
+            if (this.AvailableMaps.Count == 0)
+                    return;
+
             this.ReloadMap();
         }
 
