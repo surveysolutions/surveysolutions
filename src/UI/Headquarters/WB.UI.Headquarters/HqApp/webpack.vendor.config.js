@@ -23,6 +23,7 @@ module.exports = merge(shared(packageName, devMode), {
             "moment",
             "scriptjs",
             "signalr",
+            "smoothscroll-polyfill",
             "toastr",
             "vue-i18n",
             "vue-router",

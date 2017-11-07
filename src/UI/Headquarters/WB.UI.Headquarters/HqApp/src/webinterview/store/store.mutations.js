@@ -7,6 +7,7 @@ export default {
         forEach(entities, entity => {
             if (entity != null) {
                 state.loadedEntitiesCount++
+                entity.updatedAt = new Date()
                 Vue.set(state.entityDetails, entity.id, entity)
             }
         })

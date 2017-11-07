@@ -39,12 +39,12 @@ export default class ComponentsProvider {
     get routes() {
         return flatten(this.components.map((component) => {
             const init = component.initialize ? () => component.initialize() : null;
-            const beforeEnter = component.beforeEnter ? (from, to, next) => component.beforeEnter(from, to, next) : null;
+            const beforeEnter = component.beforeEnter ? (to, from, next) => component.beforeEnter(to, from, next) : null;
             const routes = component.routes || [];
 
             if(init || beforeEnter || component.modules) {
                 routes.forEach((route) => {
-                    route.beforeEnter = (from, to, next) => {
+                    route.beforeEnter = (to, from, next) => {
                         if(component._isInitialized !== true) {
 
                             if(component.modules != null) {
@@ -59,7 +59,7 @@ export default class ComponentsProvider {
                         }
 
                         if(beforeEnter != null){ 
-                            beforeEnter(from, to, next); 
+                            beforeEnter(to, from, next); 
                         }
                         else next();
                     };
