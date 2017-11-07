@@ -39,6 +39,7 @@
             }
         },
         contextMenu: {
+            selector: 'fancytree-title, .tree-icon',
             menu: function (node) {
                 if (node.isLazy())
                     node.load();
@@ -73,7 +74,7 @@
             }
         },
         edit: {
-            triggerStart: ["f2", /*"dblclick",*/ "shift+click", "mac+enter"],
+            triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
             beforeEdit: function (event, data) {
                 // Return false to prevent edit mode
                 if (data.node.key === "root")
