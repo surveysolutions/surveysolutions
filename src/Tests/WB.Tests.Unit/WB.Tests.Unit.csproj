@@ -884,7 +884,6 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_completing_interview_with_disabled_variable.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_completing_interview_with_enabled_variable.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_completing_interview_with_linked_questions.cs" />
-    <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_completing_interview_with_valid_static_texts.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_static_text_declated_invalid.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_static_text_declated_valid.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\StaticText\when_static_text_disabled_after_enabling.cs" />
