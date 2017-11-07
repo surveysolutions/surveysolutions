@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Android.App;
+using Android.Content;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Droid.Platform;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -40,7 +46,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public override void Load()
         {
-            this.AvailableMaps = new MvxObservableCollection<MapDescription>(this.mapService.GetAvailableMaps());
+            var localmaps = this.mapService.GetAvailableMaps();
+
+            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
+                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
+                : AndroidPathUtils.GetPathToExternalDirectory();
+
+            var defaultMap = new MapDescription() { MapName = "Worldmap[default]", MapFullPath = basePath + "/Maps/Worldmap(default).tpk" };
+
+            localmaps.Add(defaultMap);
+            
+
+            this.AvailableMaps = new MvxObservableCollection<MapDescription>(localmaps);
             this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
             if (this.AvailableMaps.Count == 0) return;

@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                 progress.Report(new MapSyncProgress
                 {
-                    Title = "Synchronization finished",
+                    Title = "Map synchronization succesfuly finished",
                     Status = MapSyncStatus.Success,
                 });
             }
