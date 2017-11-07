@@ -583,9 +583,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(InterviewRejectedByHQ @event) { }
 
-        public virtual void Apply(InterviewDeclaredValid @event) { }
+        public virtual void Apply(InterviewDeclaredValid @event)
+        {
+            this.properties.IsValid = true;
+        }
 
-        public virtual void Apply(InterviewDeclaredInvalid @event) { }
+        public virtual void Apply(InterviewDeclaredInvalid @event)
+        {
+            this.properties.IsValid = false;
+        }
 
         public virtual void Apply(AnswersRemoved @event)
         {
@@ -2030,6 +2036,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (validStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTextIdentities));
             if (invalidStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTextIdentities));
+
+            if (invalidQuestionIdentities.Any() || invalidStaticTextIdentities.Any() || HasInvalidAnswers() || HasInvalidStaticTexts)
+            {
+                if (this.properties.IsValid)
+                {
+                    this.ApplyEvent(new InterviewDeclaredInvalid());
+                }
+            }
+            else if(!this.properties.IsValid)
+            {
+                this.ApplyEvent(new InterviewDeclaredValid());
+            }
         }
 
         private void ApplyEnablementEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
