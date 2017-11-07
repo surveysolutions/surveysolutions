@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     this.GetUserRole(interview.StatusChangeOriginatorRole),
                     this.GetResponsibleName(interview.Status, interview.InterviewerName, interview.SupervisorName, interview.StatusChangeOriginatorName),
                     this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole, interview.InterviewerName),
-                    interview.Timestamp.ToString("d", CultureInfo.InvariantCulture),
+                    interview.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
                     interview.Timestamp.ToString("T", CultureInfo.InvariantCulture)
                 };
                 result.Add(resultRow.ToArray());
