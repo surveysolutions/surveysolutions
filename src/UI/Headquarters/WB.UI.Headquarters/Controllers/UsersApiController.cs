@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -35,6 +36,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IExportFactory exportFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IInterviewerProfileFactory interviewerProfileFactory;
 
         public UsersApiController(
             ICommandService commandService,
@@ -44,7 +46,8 @@ namespace WB.UI.Headquarters.Controllers
             HqUserManager userManager,
             IInterviewerVersionReader interviewerVersionReader,
             IExportFactory exportFactory, 
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor, 
+            IInterviewerProfileFactory interviewerProfileFactory)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -53,6 +56,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewerVersionReader = interviewerVersionReader;
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.interviewerProfileFactory = interviewerProfileFactory;
         }
 
         [HttpPost]
@@ -107,9 +111,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<HttpResponseMessage> AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType = null)
+        public async Task<HttpResponseMessage> AllInterviewers([FromUri] DataTableRequestWithFilter reqest, [FromUri] string exportType)
         {
             Guid? supervisorId = null;
+
+            Enum.TryParse(exportType, true, out ExportFileType type);
 
             if (!string.IsNullOrWhiteSpace(reqest.SupervisorName))
                 supervisorId = this.userManager.FindByName(reqest.SupervisorName)?.Id;
@@ -122,30 +128,22 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewerApkVersion = interviewerVersionReader.Version;
 
-            var interviewersReport = await this.usersFactory.GetInterviewersReportAsync(
-                1,
-                int.MaxValue,
-                reqest.GetSortOrder(),
-                reqest.Search.Value,
+            var filteredInterviewerIdsToExport = this.usersFactory.GetInterviewersIds(reqest.Search.Value,
                 reqest.Archived,
                 interviewerApkVersion,
                 supervisorId,
                 reqest.Facet);
-            return this.CreateReportResponse(exportType, interviewersReport, Reports.Interviewers);
-        }
 
-        private HttpResponseMessage CreateReportResponse(string exportType, ReportView report, string reportName)
-        {
-            Enum.TryParse(exportType, true, out ExportFileType type);
+            var interviewersReport = await this.interviewerProfileFactory.GetInterviewersReportAsync(filteredInterviewerIdsToExport);
 
             var exportFile = this.exportFactory.CreateExportFile(type);
 
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(interviewersReport.Headers, interviewersReport.Data));
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
+                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(Reports.Interviewers)}{exportFile.FileExtension}"
             };
             return result;
         }

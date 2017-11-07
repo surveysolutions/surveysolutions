@@ -1,5 +1,6 @@
 ﻿@using Humanizer
 @using Main.Core.Entities.SubEntities
+@using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.Device
 @using WB.Core.GenericSubdomains.Portable
@@ -9,67 +10,53 @@
 @{
     ViewBag.ActivePage = MenuItem.Interviewers;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.LoginName);
+    ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.InterviewerName);
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-    var responsibleOfAssignments = authorizedUser.IsSupervisor ? Model.LoginName : Model.SupervisorName;
-    var interviewsControllerOfAssignments = authorizedUser.IsSupervisor ? "Survey" : "HQ";
-    var newInterviewsOnDeviceCount = 0;
-    var rejectedInterviewsOnDeviceCount = 0;
-    if (Model.LastSuccessDeviceInfo != null && Model.LastSuccessDeviceInfo.Statistics != null)
+}
+@helper ConnectionType(InterviewerProfileSyncStatistics syncInfo)
+{
+    if (syncInfo.NetworkType == @"WIFI")
     {
-        newInterviewsOnDeviceCount = Model.LastSuccessDeviceInfo.Statistics.NewInterviewsOnDeviceCount;
-        rejectedInterviewsOnDeviceCount = Model.LastSuccessDeviceInfo.Statistics.RejectedInterviewsOnDeviceCount;
+        <text>(@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, syncInfo.NetworkType))</text>
+    }
+    else
+    {
+        <text>(@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, syncInfo.NetworkType, syncInfo.NetworkSubType, syncInfo.MobileOperator))</text>
     }
 }
-@helper ConnectionType(DeviceSyncInfo deviceSync)
+@helper ConnectionStats(string prefix, InterviewerProfileSyncStatistics syncInfo)
 {
-if (deviceSync.NetworkType == @"WIFI")
-{
-        <text>(@string.Format(Pages.InterviewerProfile_ConnectionWifiFormat, deviceSync.NetworkType))</text>
-}
-else
-{
-        <text>(@string.Format(Pages.InterviewerProfile_ConnectionMobileFormat, deviceSync.NetworkType, deviceSync.NetworkSubType, deviceSync.MobileOperator))</text>
-}
-}
-@helper ConnectionStats(string prefix, DeviceSyncInfo deviceSyncInfo)
-{
-    <ul class="list-unstyled">
-        <li>@prefix: @deviceSyncInfo.SyncDate.ToString(@"MMM dd, hh:mm") (@deviceSyncInfo.SyncDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
-        @{
-            var syncStatistics = deviceSyncInfo.Statistics;
-        }
-        @if (syncStatistics != null)
-        {
-            <li>@Pages.InterviewerProfile_TotalSyncTime: @syncStatistics.TotalSyncDuration.Humanize()</li>
-            <li>
-                @Pages.InterviewerProfile_ConnectionSpeed: @syncStatistics.TotalConnectionSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")
-                @ConnectionType(deviceSyncInfo)
-            </li>
-                <li>
-                    @string.Format(Pages.InterviewerProfile_DataStatsFormat,
-               syncStatistics.TotalUploadedBytes.Bytes().Humanize(@"0.00"),
-               syncStatistics.TotalDownloadedBytes.Bytes().Humanize(@"0.00"))
-            </li>
-        }
-    </ul>
+     if (syncInfo.SyncDate.HasValue)
+     {
+         <ul class="list-unstyled">
+             <li>@prefix: @syncInfo.SyncDate.Value.ToString(@"MMM dd, hh:mm") (@syncInfo.SyncDate.Value.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
+
+             @if (syncInfo.HasStatistics)
+             {
+                 <li>@Pages.InterviewerProfile_TotalSyncTime: @syncInfo.TotalSyncDuration.Humanize()</li>
+                 <li>
+                     @Pages.InterviewerProfile_ConnectionSpeed: @syncInfo.TotalConnectionSpeed.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00")
+                     @ConnectionType(syncInfo)
+                 </li>
+                 <li>
+                     @string.Format(Pages.InterviewerProfile_DataStatsFormat,
+                         syncInfo.TotalUploadedBytes.Bytes().Humanize(@"0.00"),
+                         syncInfo.TotalDownloadedBytes.Bytes().Humanize(@"0.00"))
+                 </li>
+             }
+         </ul>
+     }
 }
 @section scripts
 {
-    <script type="text/javascript">
-        $('#umbrella').hide();
-    </script>
-    @if (Model.LastSuccessDeviceInfo != null && Model.LastSuccessDeviceInfo.DeviceLocationLat.HasValue && Model.LastSuccessDeviceInfo.DeviceLocationLong.HasValue)
+    <script type="text/javascript">$('#umbrella').hide();</script>
+    @if (Model.DeviceLocationOrLastKnownLocationLat.HasValue && Model.DeviceLocationOrLastKnownLocationLon.HasValue)
     {
         <script>
             function getAddress() {
-                var latlng = {
-                    lat: @Model.LastSuccessDeviceInfo.DeviceLocationLat.Value,
-                    lng: @Model.LastSuccessDeviceInfo.DeviceLocationLong.Value
-                    };
-
                 var geocoder = new google.maps.Geocoder;
-                geocoder.geocode({ 'location': latlng },
+                geocoder.geocode(
+                    { 'location': { lat: @Model.DeviceLocationOrLastKnownLocationLat.Value, lng: @Model.DeviceLocationOrLastKnownLocationLon.Value } },
                     function(results, status) {
                         if (status === 'OK') {
                             if (results[0]) {
@@ -100,7 +87,7 @@ else
                 {
                     <span class="badge">@Common.Archived</span>
                 }
-                @string.Format(Pages.InterviewerProfile_AssignedToFormat, Model.LoginName, Model.SupervisorName)
+                @string.Format(Pages.InterviewerProfile_AssignedToFormat, Model.InterviewerName, Model.SupervisorName)
             </h1>
 
             <ul class="list-unstyled">
@@ -116,13 +103,13 @@ else
                     {
                         if (!Model.IsArchived)
                         {
-                            <a href="@Url.Action("Edit", new {Id = Model.Id})">@Pages.InterviewerProfile_Info</a>
+                            <a href="@Url.Action("Edit", new {Id = Model.InterviewerId})">@Pages.InterviewerProfile_Info</a>
                         }
                         else
                         {
                             if (authorizedUser.IsAdministrator)
                             {
-                                <form action="@Url.Action("UnArchive", new {Id = Model.Id})" method="post">
+                                <form action="@Url.Action("UnArchive", new {Id = Model.InterviewerId})" method="post">
                                     <input class="btn btn-success" type="submit" value="@Pages.Unarchive"/>
                                 </form>
                             }
@@ -138,11 +125,11 @@ else
             <div class="col-sm-12">
                 <div class="interviews-information clearfix">
                     <div class="number-information">
-                        <div class="amount-of-questionnaires">@newInterviewsOnDeviceCount</div>
+                        <div class="amount-of-questionnaires">@Model.NewInterviewsOnDevice</div>
                         <div class="description">@Pages.InterviewerProfile_NewOnDevice</div>
                     </div>
                     <div class="number-information">
-                        <div class="amount-of-questionnaires">@rejectedInterviewsOnDeviceCount</div>
+                        <div class="amount-of-questionnaires">@Model.RejectedInterviewsOnDevice</div>
                         <div class="description">@Pages.InterviewerProfile_Rejected</div>
                     </div>
                     <div class="number-information">
@@ -157,7 +144,7 @@ else
             </div>
         </div>
     </div>
-    @if (Model.LastSuccessDeviceInfo != null)
+    @if (Model.HasDeviceInfo)
     {
         <div class="container-fluid">
             <div class="row">
@@ -259,10 +246,10 @@ else
                 <div class="col-sm-6 connection-statistics">
                     <h3>@Pages.InterviewerProfile_DeviceAndConnectionStatistics</h3>
                     <ul class="list-unstyled">
-                        <li><b>@Pages.InterviewerProfile_DeviceId: @Model.LastSuccessDeviceInfo.DeviceType @Model.LastSuccessDeviceInfo.DeviceManufacturer @Model.LastSuccessDeviceInfo.DeviceModel (@Model.LastSuccessDeviceInfo.DeviceBuildNumber)</b></li>
+                        <li><b>@Pages.InterviewerProfile_DeviceModel: @Model.DeviceType @Model.DeviceManufacturer @Model.DeviceModel (@Model.DeviceBuildNumber)</b></li>
                         <li>
                             <b>
-                                @Pages.InterviewerProfile_InterviewerAppVersion: @Model.LastSuccessDeviceInfo.AppVersion —
+                                @Pages.InterviewerProfile_InterviewerAppVersion: @Model.InterviewerAppVersion —
                                 @if (!Model.HasUpdateForInterviewerApp)
                                 {
                                     <span class="success-text">@Pages.InterviewerProfile_InterviewerUpToDate</span>
@@ -279,25 +266,25 @@ else
                         }
                     </ul>
                     <ul class="list-unstyled">
-                        <li>@Pages.InterviewerProfile_NumberOfSuccessSynchronizations: @Model.TotalSuccessSynchronizationCount</li>
-                        <li>@Pages.InterviewerProfile_NumberOfFailedSynchronizations: @Model.TotalFailedSynchronizationCount</li>
+                        <li>@Pages.InterviewerProfile_NumberOfSuccessSynchronizations: @Model.TotalNumberOfSuccessSynchronizations</li>
+                        <li>@Pages.InterviewerProfile_NumberOfFailedSynchronizations: @Model.TotalNumberOfFailedSynchronizations</li>
                         <li>
-                            @Pages.InterviewerProfile_AverageSyncSpeed: @(Model.AverageSyncSpeedBytesPerSecond == null
+                            @Pages.InterviewerProfile_AverageSyncSpeed: @(!Model.AverageSyncSpeedBytesPerSecond.HasValue
                                                                               ? "n/a"
                                                                               : Model.AverageSyncSpeedBytesPerSecond.Value.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00"))
                         </li>
                     </ul>
-                    @ConnectionStats(Pages.InterviewerProfile_LastSuccessSync, Model.LastSuccessDeviceInfo)
+                    @ConnectionStats(Pages.InterviewerProfile_LastSuccessSync, Model.LastSuccessfulSync)
 
-                    @if (Model.LastFailedDeviceInfo != null)
+                    @if (Model.LastFailedSync != null)
                     {
-                        @ConnectionStats(Pages.InterviewerProfile_LastFailedSync, Model.LastFailedDeviceInfo)
+                        @ConnectionStats(Pages.InterviewerProfile_LastFailedSync, Model.LastFailedSync)
                     }
                     
-                    @if (Model.LastSyncronizationDate.HasValue)
+                    @if (Model.LastCommunicationDate.HasValue)
                     {
                         <ul class="list-unstyled">
-                            <li>@Pages.InterviewerProfile_LastSyncronizationDate: @Model.LastSyncronizationDate.Value.ToString(@"MMM dd, hh:mm") (@Model.LastSyncronizationDate.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
+                            <li>@Pages.InterviewerProfile_LastSyncronizationDate: @Model.LastCommunicationDate.Value.ToString(@"MMM dd, hh:mm") (@Model.LastCommunicationDate.Value.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
                         </ul>
                     }
                 </div>
@@ -310,64 +297,58 @@ else
                         <tbody>
                         <tr>
                             <td>@Pages.InterviewerProfile_DeviceId</td>
-                            <td>@Model.LastSuccessDeviceInfo.DeviceId</td>
+                            <td>@Model.DeviceId</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_DeviceSerial</td>
-                            <td>@Model.LastSuccessDeviceInfo.DeviceSerialNumber</td>
+                            <td>@Model.DeviceSerialNumber</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_DeviceModel</td>
-                            <td>@Model.LastSuccessDeviceInfo.DeviceType @Model.LastSuccessDeviceInfo.DeviceManufacturer @Model.LastSuccessDeviceInfo.DeviceModel (@Model.LastSuccessDeviceInfo.DeviceBuildNumber)</td>
+                            <td>@Model.DeviceType @Model.DeviceManufacturer @Model.DeviceModel (@Model.DeviceBuildNumber)</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_DeviceLanguage</td>
-                            <td>@Model.LastSuccessDeviceInfo.DeviceLanguage</td>
+                            <td>@Model.DeviceLanguage</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_AndroidVersion</td>
-                            <td>@string.Format(@"{0} {1}({2})", Model.LastSuccessDeviceInfo.AndroidVersion, Model.LastSuccessDeviceInfo.AndroidSdkVersionName, Model.LastSuccessDeviceInfo.AndroidSdkVersion)</td>
+                            <td>Model.AndroidVersion</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_InterviewerVersion</td>
-                            <td>@Model.LastSuccessDeviceInfo.AppVersion</td>
+                            <td>@Model.SurveySolutionsVersion</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_InterviewerUpdatedDate</td>
-                            <td>@Model.LastSuccessDeviceInfo.LastAppUpdatedDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
+                            <td>@Model.LastSurveySolutionsUpdatedDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_DeviceLocation</td>
-                            <td id="device-address">
-                                @if (Model.LastSuccessDeviceInfo.DeviceLocationLat.HasValue && Model.LastSuccessDeviceInfo.DeviceLocationLong.HasValue)
-                                {
-                                    <text>@Model.LastSuccessDeviceInfo.DeviceLocationLat, @Model.LastSuccessDeviceInfo.DeviceLocationLong</text>
-                                }
-                            </td>
+                            <td id="device-address">@Model.DeviceLocationOrLastKnownLocationLat @Model.DeviceLocationOrLastKnownLocationLon</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_DeviceOrientation</td>
-                            <td>@Model.LastSuccessDeviceInfo.AppOrientation</td>
+                            <td>@Model.DeviceOrientation</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_BatteryStatus</td>
-                            <td>@string.Format(Pages.InterviewerProfile_BatteryStatusFormat, Model.LastSuccessDeviceInfo.BatteryChargePercent, Model.LastSuccessDeviceInfo.BatteryPowerSource, Model.LastSuccessDeviceInfo.IsPowerInSaveMode ? Pages.InterviewerProfile_BatteryStatus_SaverIsOn : Pages.InterviewerProfile_BatteryStatus_SaverIsOff)</td>
+                            <td>@string.Format(Pages.InterviewerProfile_BatteryStatusFormat, Model.BatteryStatus, Model.BatteryPowerSource, Model.IsPowerSaveMode == true ? Pages.InterviewerProfile_BatteryStatus_SaverIsOn : Pages.InterviewerProfile_BatteryStatus_SaverIsOff)</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_StorageInfo</td>
-                            <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.StorageFreeInBytes)/@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.StorageTotalInBytes)</td>
+                            <td>@FileSizeUtils.SizeSuffix(Model.StorageFreeInBytes ?? 0)/@FileSizeUtils.SizeSuffix(Model.StorageTotalInBytes ?? 0)</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_MemoryInfo</td>
-                            <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.RAMFreeInBytes)/@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.RAMTotalInBytes)</td>
+                            <td>@FileSizeUtils.SizeSuffix(Model.RamFreeInBytes ?? 0)/@FileSizeUtils.SizeSuffix(Model.RamTotalInBytes ?? 0)</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_DatabaseInfo</td>
-                            <td>@FileSizeUtils.SizeSuffix(Model.LastSuccessDeviceInfo.DBSizeInfo)</td>
+                            <td>@FileSizeUtils.SizeSuffix(Model.DatabaseSizeInBytes ?? 0)</td>
                         </tr>
                         </tbody>
                     </table>
-
                 </div>
             </div>
             <div class="row">
@@ -377,41 +358,31 @@ else
                         <tbody>
                         <tr>
                             <td>@Pages.InterviewerProfile_ServerDate</td>
-                            <td>@Model.LastSuccessDeviceInfo.SyncDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
+                            <td>@Model.ServerTimeAtTheBeginningOfSync.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_DeviceDate</td>
-                            <td>@Model.LastSuccessDeviceInfo.DeviceDate.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
+                            <td>@Model.TabletTimeAtTeBeginningOfSync.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</td>
                         </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_ConnectionType</td>
-                            <td>@Model.LastSuccessDeviceInfo.NetworkType @Model.LastSuccessDeviceInfo.NetworkSubType</td>
+                            <td>@Model.ConnectionType @Model.ConnectionSubType</td>
                         </tr>
-                        @*@if (Model.LastSuccessDeviceInfo.NetworkType != @"WIFI")
-                                {
-                                    <tr>
-                                        <td>@Pages.InterviewerProfile_SignalStrength</td>
-                                        <td>@Model.LastSuccessDeviceInfo.MobileSignalStrength/5</td>
-                                    </tr>
-                                }*@
-                        @if (Model.LastSuccessDeviceInfo.Statistics != null)
-                        {
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DownloadedQuestionnairesCount</td>
-                                <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedQuestionnairesCount</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_DownloadedInterviewsCount</td>
-                                <td>@Model.LastSuccessDeviceInfo.Statistics.DownloadedInterviewsCount</td>
-                            </tr>
-                            <tr>
-                                <td>@Pages.InterviewerProfile_UploadedInterviewsCount</td>
-                                <td>@Model.LastSuccessDeviceInfo.Statistics.UploadedInterviewsCount</td>
-                            </tr>
-                        }
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DownloadedQuestionnairesCount</td>
+                            <td>@Model.QuestionnairesReceived</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_DownloadedInterviewsCount</td>
+                            <td>@Model.InterviewsReceived</td>
+                        </tr>
+                        <tr>
+                            <td>@Pages.InterviewerProfile_UploadedInterviewsCount</td>
+                            <td>@Model.CompletedInterviewsReceivedFromInterviewer</td>
+                        </tr>
                         <tr>
                             <td>@Pages.InterviewerProfile_StartedAssignments</td>
-                            <td>@Model.LastSuccessDeviceInfo.NumberOfStartedInterviews</td>
+                            <td>@Model.AssignmentsThatHaveBeenStarted</td>
                         </tr>
                         </tbody>
                     </table>
