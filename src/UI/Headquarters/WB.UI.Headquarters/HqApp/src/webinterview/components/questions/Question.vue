@@ -7,14 +7,12 @@
             </button>
             <ul class="dropdown-menu">
                 <li v-if="!isShowingAddCommentDialog">
-                    <a href="javascript:void(0)" @click="showAddComment"
-                        :disabled="!$store.getters.addCommentsAllowed">
+                    <a href="javascript:void(0)" @click="showAddComment" :disabled="!$store.getters.addCommentsAllowed">
                         {{ $t("WebInterviewUI.CommentAdd") }}
                     </a>
                 </li>
                 <li v-else>
-                    <a href="javascript:void(0)" @click="hideAddComment"
-                        :disabled="!$store.getters.addCommentsAllowed">
+                    <a href="javascript:void(0)" @click="hideAddComment" :disabled="!$store.getters.addCommentsAllowed">
                         {{ $t("WebInterviewUI.CommentHide") }}
                     </a>
                 </li>
@@ -36,6 +34,7 @@
 
 <script lang="js">
     import { getLocationHash } from "~/shared/helpers"
+    import { debounce } from "lodash"
 
     export default {
         name: 'wb-question',
@@ -45,9 +44,30 @@
                 isShowingAddCommentDialogFlag: undefined
             }
         },
+
+        watch: {
+            ["$store.getters.scrollState"]() {
+                 this.scroll();
+            },
+
+            "question.updatedAt"() {
+                 this.scroll();
+            }
+        },
+
+        mounted() {
+            this.scroll();
+        },
+
         computed: {
             id() {
                 return this.question.id
+            },
+
+            highlight() {
+                if(!this.$store.getters.isReviewMode) return false;
+                
+                return !this.$store.state.webinterview.sidebar.searchResultsHidden && this.$store.state.route.hash === '#' + this.id
             },
 
             valuenow() {
@@ -82,7 +102,10 @@
                 return false
             },
             questionClass() {
-                return [{ 'disabled-question': this.disabled, 'with-flag': this.hasFlag}]
+                return [{ 
+                    'mark': this.highlight,
+                    'disabled-question': this.disabled, 
+                    'with-flag': this.hasFlag}]
             },
             questionEditorClass() {
                 return [{
@@ -102,6 +125,19 @@
             }
         },
         methods : {
+            doScroll: debounce(function() {
+                if(this.$store.getters.scrollState ==  "#" + this.id){
+                    window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
+                    this.$store.dispatch("resetScroll")
+                }
+            }, 200),
+
+            scroll() {
+                if(this.$store && this.$store.state.route.hash === "#" + this.id) {
+                    this.doScroll(); 
+                }
+            },
+
             showAddComment() {
                 if (this.$store.getters.addCommentsAllowed)
                     this.isShowingAddCommentDialogFlag = true;

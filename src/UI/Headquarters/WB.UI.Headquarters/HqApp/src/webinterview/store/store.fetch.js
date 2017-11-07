@@ -4,14 +4,21 @@ import { debounce } from "lodash"
 
 const fetch = {
     state: {
-        scroll: null,
+        scroll: {
+            id: null
+        },
         fetchState: {
             uploaded: null,
             total: null
         }
     },
+    getters: {
+        scrollState(state) {
+            return state.scroll.id;
+        }
+    },
     actions: {
-        fetch({ commit, rootState }, {id, ids, done}) {
+        fetch({ commit, rootState }, { id, ids, done }) {
             commit("SET_FETCH", {
                 entityDetails: rootState.webinterview.entityDetails,
                 id, ids,
@@ -19,34 +26,22 @@ const fetch = {
             })
         },
 
-        fetchProgress({commit}, amount) {
+        fetchProgress({ commit }, amount) {
             commit("SET_FETCH_IN_PROGRESS", amount)
         },
 
-        sectionRequireScroll({commit}, { id }) {
-            commit("SET_SCROLL_TARGET", { id })
+        sectionRequireScroll({ commit }, { id }) {
+            commit("SET_SCROLL_TARGET", id)
         },
-        uploadProgress({ commit, rootState }, {id, now, total}) {
+
+        uploadProgress({ commit, rootState }, { id, now, total }) {
             commit("SET_UPLOAD_PROGRESS", {
                 entity: rootState.webinterview.entityDetails[id], now, total
             })
         },
-        scroll: debounce(({commit, state}) => {
-            if (state.scroll == null) {
-                return
-            }
-            
-            const query = "#" + getLocationHash(state.scroll.id)
-            const el = document.querySelector(query)
-
-            if (el != null) {
-                window.scrollTo({ top: el.offsetTop, behavior: "smooth" })
-            } else {
-                window.scrollTo({ top: state.scroll.top })
-            }
-            
+        resetScroll({ commit }) {
             commit("SET_SCROLL_TARGET", null)
-        }, 200)
+        }
     },
     mutations: {
         SET_UPLOAD_PROGRESS(state, { entity, now, total }) {
@@ -54,7 +49,7 @@ const fetch = {
             Vue.set(entity.fetchState, "uploaded", now)
             Vue.set(entity.fetchState, "total", total)
         },
-        SET_FETCH(state, {entityDetails, id, ids, done}) {
+        SET_FETCH(state, { entityDetails, id, ids, done }) {
             if (id && entityDetails[id]) {
                 Vue.set(entityDetails[id], "fetching", !done)
             }
@@ -71,12 +66,12 @@ const fetch = {
             const inProgress = state.inProgress || 0
             Vue.set(state, "inProgress", inProgress + amount)
         },
-        SET_SCROLL_TARGET(state, scroll) {
-            Vue.set(state, "scroll", scroll)
+        SET_SCROLL_TARGET(state, id) {
+            state.scroll.id = id
         }
     }
 }
 
 export {
-     fetch
+    fetch
 }
