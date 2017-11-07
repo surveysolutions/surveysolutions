@@ -39,10 +39,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.virbationService.Vibrate();
 
         }
+        public void Disable() => this.virbationService.Disable();
+        public void Enable() => this.virbationService.Enable();
 
-        public void Dispose()
-        {
-            this.eventRegistry.Unsubscribe(this);
-        }
+        public void Dispose() => this.eventRegistry.Unsubscribe(this);
     }
 }

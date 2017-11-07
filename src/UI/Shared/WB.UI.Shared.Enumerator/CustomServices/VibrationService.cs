@@ -17,9 +17,13 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         public void Vibrate()
         {
             var vibrator = (Vibrator) this.currentTopActivity?.Activity?.GetSystemService(Context.VibratorService);
-            if(vibrator == null || !vibrator.HasVibrator) return;
+            if(this.isDisabled || vibrator == null || !vibrator.HasVibrator) return;
 
             vibrator.Vibrate(100);
         }
+
+        private bool isDisabled;
+        public void Disable() => this.isDisabled = true;
+        public void Enable() => this.isDisabled = false;
     }
 }
