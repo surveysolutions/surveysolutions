@@ -1,12 +1,10 @@
 <template>
-    <aside class="content" v-if="sections" style="transform: translateZ(0);">
-        <div class="wrapper-view-mode">
-            <wb-humburger id="sidebarHamburger" :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
-            <div class="panel-group structured-content">
-                <SidebarPanel :panel="coverSection" v-if="showCover" />
-                <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel" />
-                <SidebarPanel :panel="completeSection" v-if="showComplete"/>
-            </div>
+    <aside class="content wrapper-view-mode" v-if="sections" style="transform: translateZ(0);">
+        <wb-humburger id="sidebarHamburger" :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
+        <div class="panel-group structured-content">
+            <SidebarPanel :panel="coverSection" v-if="showCover" />
+            <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel" />
+            <SidebarPanel :panel="completeSection" v-if="showComplete" />
         </div>
     </aside>
 </template>
