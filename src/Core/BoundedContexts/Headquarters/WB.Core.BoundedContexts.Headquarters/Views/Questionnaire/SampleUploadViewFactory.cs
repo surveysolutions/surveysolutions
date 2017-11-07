@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
                 return null;
 
             var topLevelOfQuestionnaire =
-                Enumerable.FirstOrDefault<HeaderStructureForLevel>(questionnaireExportStructure.HeaderToLevelMap.Values, level => level.LevelScopeVector.Count == 0);
+                questionnaireExportStructure.HeaderToLevelMap.Values.FirstOrDefault(level => level.LevelScopeVector.Count == 0);
             if (topLevelOfQuestionnaire == null)
                 return null;
 
@@ -53,8 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
                 var questionExportedColumn = topLevelOfQuestionnaire.HeaderItems[featuredQuestionItem.Id];
                 foreach (var columnName in questionExportedColumn.ColumnNames)
                 {
-                    columnListToPreload.Add(new FeaturedQuestionItem(featuredQuestionItem.Id, featuredQuestionItem.Title,
-                        columnName));
+                    columnListToPreload.Add(new FeaturedQuestionItem(featuredQuestionItem.Id, featuredQuestionItem.Title, columnName));
                 }
             }
             return new SampleUploadView(input.QuestionnaireId, input.Version, columnListToPreload);
