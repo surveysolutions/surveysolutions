@@ -73,6 +73,7 @@
         watch: {
              ["$route.params.sectionId"]() {
                 this.update()
+               
             },
             "panel"() {
                 this.update()
@@ -80,6 +81,8 @@
         },
         mounted() {
             this.update()
+            if(this.isActive)
+                this.$el.scrollIntoView({ behavior: 'smooth' })
         },
         methods: {
             fetchChild() {
