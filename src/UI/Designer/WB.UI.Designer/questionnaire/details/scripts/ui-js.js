@@ -1,8 +1,7 @@
 ﻿$(document).on("shown.bs.dropdown.position-calculator", function (event, data) {
     var $item = $('.dropdown-menu', event.target);
     if (!$item.parent().hasClass('dropup')) {
-
-        var target = data.relatedTarget;
+        var target = data ? data.relatedTarget : event.relatedTarget;
 
         // reset position
         $item.css({ top: 0, left: 0 });
