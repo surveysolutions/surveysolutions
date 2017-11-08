@@ -1137,6 +1137,13 @@
     <EmbeddedResource Include="Resources\Troubleshooting.zh.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UploadUsers.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UploadUsers.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UploadUsers.ru.resx">
+      <DependentUpon>UploadUsers.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.fr.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1597,6 +1604,7 @@
     <Content Include="Views\Maps\Details.cshtml" />
     <Content Include="Views\Maps\MapPreview.cshtml" />
     <Content Include="Views\Maps\UserMapsLink.cshtml" />
+    <Content Include="Views\Users\index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1813,6 +1821,7 @@
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Implementation\Maps\MapPropertiesProvider.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
@@ -2101,6 +2110,11 @@
       <DependentUpon>Troubleshooting.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Resources\UploadUsers.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UploadUsers.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\UserPreloadingVerificationMessages.Designer.cs">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
