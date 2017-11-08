@@ -250,6 +250,7 @@ export default {
     },
 
     changeSection(ctx, sectionId) {
+        ctx.dispatch("onBeforeNavigate")
         return Vue.$api.setState((state) => state.sectionId = sectionId)
     }
 

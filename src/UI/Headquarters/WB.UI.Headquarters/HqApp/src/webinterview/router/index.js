@@ -56,24 +56,12 @@ function NewRouter(store) {
     router.beforeEach(async (to, from, next) => {
         await Vue.$api.hub({ interviewId: to.params["interviewId"] })
 
-        // TODO: Section will not be checked on each secion
-        if (to.name === "section") {
-            const isEnabled = await Vue.$api.call(api => api.isEnabled(to.params["sectionId"]))
-            if (!isEnabled) {
-                next(false)
-                return
-            } else {
-                next()
-            }
-        } else {
-            next()
-        }
+        if(to.params.sectionId == null)
+            await store.dispatch("changeSection", null)
+        next();
     })
 
-    router.afterEach((to) => {
-        store.dispatch("changeSection", to.params.sectionId)
-        store.dispatch("onBeforeNavigate")
-
+    router.afterEach(() => {
         const hamburger = document.getElementById("sidebarHamburger")
 
         // check for button visibility.

@@ -17,13 +17,12 @@ export default {
     },
 
     actions: {
-        fetchSidebar: batchedAction(({ rootState, commit }, ids) => {
-            return Vue.$api.call(api => api.getSidebarChildSectionsOf(rootState.route.params.sectionId, ids))
+        fetchSidebar: batchedAction(({ commit }, ids) => {
+            return Vue.$api.call(api => api.getSidebarChildSectionsOf(ids))
                 .then((sideBar) => {
                     commit("SET_SIDEBAR_STATE", sideBar)
                 });
         }, null, null),
-
         toggleSidebar({ commit, dispatch }, { panel, collapsed }) {
             commit("SET_SIDEBAR_TOGGLE", { panel, collapsed })
 
@@ -31,7 +30,6 @@ export default {
                 dispatch("fetchSidebar", panel.id)
             }
         },
-
         toggleSidebarPanel({ commit, state }, newState = null) {
             const sidebarPanelNewState = newState == null ? !state.sidebarHidden : newState;
             let panelBeingClosed = !sidebarPanelNewState;
