@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -13,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -23,6 +25,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.Controllers
@@ -37,6 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IExportFactory exportFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewerProfileFactory interviewerProfileFactory;
+        private readonly IUserPreloadingService userPreloadingService;
 
         public UsersApiController(
             ICommandService commandService,
@@ -46,8 +50,9 @@ namespace WB.UI.Headquarters.Controllers
             HqUserManager userManager,
             IInterviewerVersionReader interviewerVersionReader,
             IExportFactory exportFactory, 
-            IFileSystemAccessor fileSystemAccessor, 
-            IInterviewerProfileFactory interviewerProfileFactory)
+            IInterviewerProfileFactory interviewerProfileFactory,
+            IFileSystemAccessor fileSystemAccessor,
+            IUserPreloadingService userPreloadingService)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -57,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewerProfileFactory = interviewerProfileFactory;
+            this.userPreloadingService = userPreloadingService;
         }
 
         [HttpPost]
@@ -278,6 +284,29 @@ namespace WB.UI.Headquarters.Controllers
                     }).ToList()
             };
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [Localizable(false)]
+        public HttpResponseMessage ImportUsersTemplate()
+            => this.CreateReportResponse(ExportFileType.Tab.ToString(), new ReportView
+            {
+                Headers = new[] {"login", "password", "role", "supervisor", "fullname", "email", "phonenumber"},
+                Data = new object[][] { }
+            }, "import-users-template");
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public void ImportUsers(ImportUsersRequest request)
+        {
+            this.userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(request.File.FileBytes),
+                request.File.FileName);
+        }
+    }
+
+    public class ImportUsersRequest
+    {
+        public HttpFile File { get; set; }
     }
 
     public class ArchiveUsersRequest
