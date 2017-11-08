@@ -126,6 +126,9 @@
   <data name="Interviewers" xml:space="preserve">
     <value>Interviewers</value>
   </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Import users template</value>
+  </data>
   <data name="DatesRange" xml:space="preserve">
     <value>Dates range</value>
   </data>
