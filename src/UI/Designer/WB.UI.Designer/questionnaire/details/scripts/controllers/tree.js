@@ -408,6 +408,7 @@
                             _.each(children, function (child) {
                                 publishDelete(child);
                             });
+                            removeSelectionIfHighlighted(deleted.itemId);
                         };
 
                         publishDelete(questionnaireService.findItem($scope.items, itemIdToDelete));
