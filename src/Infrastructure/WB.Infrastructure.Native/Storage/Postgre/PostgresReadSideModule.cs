@@ -31,11 +31,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     public class PostgresReadSideModule : PostgresModuleWithCache
     {
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
+        public static readonly string ReadSideSchemaName = "readside";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
         private readonly string schemaName;
         private readonly DbUpgradeSettings dbUpgradeSettings;
         private readonly IEnumerable<Assembly> mappingAssemblies;
+
 
         public PostgresReadSideModule(string connectionString, 
             string schemaName,
@@ -70,7 +72,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
             {
                 ConnectionString = this.connectionString,
-                SchemaName = "readside",
+                SchemaName = ReadSideSchemaName
             });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()
