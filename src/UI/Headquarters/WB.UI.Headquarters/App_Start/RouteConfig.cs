@@ -44,7 +44,11 @@ namespace WB.UI.Headquarters
                 action = "Review"
             });
 
-            routes.MapRoute("UploadUsers", "Users/Upload", new {controller = "Users", action = "Index"});
+            routes.MapRoute("Users", "users/{*url}", new
+            {
+                controller = "Users",
+                action = "Index"
+            });
 
             routes.MapRoute("Default", "{controller}/{action}/{id}",
                 new { controller = "Account", action = "Index", id = UrlParameter.Optional });

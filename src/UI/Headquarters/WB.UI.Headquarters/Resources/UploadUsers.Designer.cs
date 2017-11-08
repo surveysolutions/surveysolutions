@@ -79,6 +79,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back to import.
+        /// </summary>
+        internal static string BackToImport {
+            get {
+                return ResourceManager.GetString("BackToImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alernatively, you can .
         /// </summary>
         internal static string Description {
@@ -115,11 +133,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Importing user information from.
+        /// </summary>
+        internal static string ImportingUserInfo {
+            get {
+                return ResourceManager.GetString("ImportingUserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to create user profiles manually.
         /// </summary>
         internal static string ManualUserCreateLink {
             get {
                 return ResourceManager.GetString("ManualUserCreateLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No user accounts was created.
+        /// </summary>
+        internal static string NoCreatedUsers {
+            get {
+                return ResourceManager.GetString("NoCreatedUsers", resourceCulture);
             }
         }
         
@@ -178,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reupload .tsv file.
+        /// </summary>
+        internal static string ReUploadTabFile {
+            get {
+                return ResourceManager.GetString("ReUploadTabFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Role.
         /// </summary>
         internal static string Role {
@@ -205,6 +250,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploading and verifying.
+        /// </summary>
+        internal static string UploadingAndVerifying {
+            get {
+                return ResourceManager.GetString("UploadingAndVerifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User name.
         /// </summary>
         internal static string UserName {
@@ -219,6 +273,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string UserNameDescription {
             get {
                 return ResourceManager.GetString("UserNameDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification failed.
+        /// </summary>
+        internal static string VerificationFailed {
+            get {
+                return ResourceManager.GetString("VerificationFailed", resourceCulture);
             }
         }
     }

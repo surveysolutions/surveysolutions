@@ -171,4 +171,25 @@
   <data name="UserNameDescription" xml:space="preserve">
     <value>used as login, should be between 3 and 15 characters and contain only letters , digits and underscore symbol</value>
   </data>
+  <data name="VerificationFailed" xml:space="preserve">
+    <value>Verification failed</value>
+  </data>
+  <data name="NoCreatedUsers" xml:space="preserve">
+    <value>No user accounts was created</value>
+  </data>
+  <data name="ImportingUserInfo" xml:space="preserve">
+    <value>Importing user information from</value>
+  </data>
+  <data name="ReUploadTabFile" xml:space="preserve">
+    <value>Reupload .tsv file</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Back to import</value>
+  </data>
+  <data name="UploadingAndVerifying" xml:space="preserve">
+    <value>Uploading and verifying</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
