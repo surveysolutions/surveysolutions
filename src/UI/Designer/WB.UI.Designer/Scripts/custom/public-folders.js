@@ -74,7 +74,7 @@
             }
         },
         edit: {
-            triggerStart: ["f2", "dblclick", "shift+click", "mac+enter"],
+            triggerStart: ["f2", "shift+click", "mac+enter"],
             beforeEdit: function (event, data) {
                 // Return false to prevent edit mode
                 if (data.node.key === "root")
