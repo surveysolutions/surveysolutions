@@ -142,16 +142,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewersReport = this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
 
-            var exportFile = this.exportFactory.CreateExportFile(type);
-
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(interviewersReport.Headers, interviewersReport.Data));
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
-
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(Reports.Interviewers)}{exportFile.FileExtension}"
-            };
-            return result;
+            return this.CreateReportResponse(type, interviewersReport, Reports.Interviewers);
         }
 
         public class InterviewerListItem
@@ -288,19 +279,33 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [Localizable(false)]
-        public HttpResponseMessage ImportUsersTemplate()
-            => this.CreateReportResponse(ExportFileType.Tab.ToString(), new ReportView
-            {
-                Headers = new[] {"login", "password", "role", "supervisor", "fullname", "email", "phonenumber"},
-                Data = new object[][] { }
-            }, "import-users-template");
+        public HttpResponseMessage ImportUsersTemplate() => this.CreateReportResponse(ExportFileType.Tab, new ReportView
+        {
+            Headers = new[] {"login", "password", "role", "supervisor", "fullname", "email", "phonenumber"},
+            Data = new object[][] { }
+        }, Reports.ImportUsersTemplate);
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public void ImportUsers(ImportUsersRequest request)
+        public string ImportUsers(ImportUsersRequest request)
         {
-            this.userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(request.File.FileBytes),
+            return this.userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(request.File.FileBytes),
                 request.File.FileName);
+        }
+
+        private HttpResponseMessage CreateReportResponse(ExportFileType type, ReportView report, string reportName)
+        {
+            var exportFile = this.exportFactory.CreateExportFile(type);
+
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
+            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
+
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            {
+                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
+            };
+
+            return result;
         }
     }
 

@@ -257,4 +257,8 @@
   <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
     <value>Количество интервью обработанных супервизором</value>
   </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Шаблон импорта пользователей</value>
+    <comment>Шаблон импорта пользователей</comment>
+  </data>
 </root>
