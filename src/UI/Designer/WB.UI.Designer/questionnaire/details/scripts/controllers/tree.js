@@ -356,7 +356,7 @@
                 }
             };
 
-            var fixIfNeedCurrentSelectionAfterDelete = function(id) {
+            var removeSelectionIfHighlighted = function(id) {
                 if ($scope.highlightedId == id) {
                     $scope.highlightedId = null;
                 }
@@ -373,7 +373,7 @@
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
                             $rootScope.$emit('questionDeleted', itemIdToDelete);
-                            fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
+                            removeSelectionIfHighlighted(itemIdToDelete);
                         });
                     }
                 });
@@ -392,7 +392,7 @@
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
                             $rootScope.$emit('varibleDeleted', itemIdToDelete);
-                            fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
+                            removeSelectionIfHighlighted(itemIdToDelete);
                         });
                     }
                 });
@@ -452,7 +452,7 @@
                                     });
                                 }
                             });
-                        fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
+                        removeSelectionIfHighlighted(itemIdToDelete);
                     }
                 });
             };
@@ -472,7 +472,7 @@
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
                                     $rootScope.$emit('staticTextDeleted');
-                                    fixIfNeedCurrentSelectionAfterDelete(itemIdToDelete);
+                                    removeSelectionIfHighlighted(itemIdToDelete);
                                 }
                             });
                     }
