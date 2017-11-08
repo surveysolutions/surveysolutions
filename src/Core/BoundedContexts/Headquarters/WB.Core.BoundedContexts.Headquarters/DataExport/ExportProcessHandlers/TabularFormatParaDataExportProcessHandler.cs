@@ -84,8 +84,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var interviewsToExport = this.tabularFormatExportService.GetInterviewIdsToExport(
                 questionnaireIdentity, status, cancellationToken);
 
-            cancellationToken.ThrowIfCancellationRequested();
-
             var paradataReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
 
             var interviewParaDataEventHandler = new InterviewParaDataEventHandler(paradataReader,
