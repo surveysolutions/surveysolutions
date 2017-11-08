@@ -90,8 +90,8 @@ export default {
 
       this.$http
         .post(this.config.api.importUsersUrl, formData)
-        .then(response => {})
-        .catch(() => {});
+        .then(() => this.$router.push({ name: 'uploadprogress'}))
+        .catch(() => this.$router.push({ name: 'uploadverification'}));
     }
   }
 };
