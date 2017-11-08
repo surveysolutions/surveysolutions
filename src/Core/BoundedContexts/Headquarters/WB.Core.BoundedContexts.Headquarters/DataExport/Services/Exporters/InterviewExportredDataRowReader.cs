@@ -5,6 +5,7 @@ using Dapper;
 using NHibernate;
 using NHibernate.Impl;
 using Ninject;
+using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -12,26 +13,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
     public class InterviewExportredDataRowReader
     {
-        private readonly ISessionFactory sessionFactory;
+        private readonly PostgreConnectionSettings connectionSettings;
 
         protected InterviewExportredDataRowReader()
         {
         }
 
-        public InterviewExportredDataRowReader([Named(PostgresReadSideModule.ReadSideSessionFactoryName)]ISessionFactory sessionFactory)
+        public InterviewExportredDataRowReader(PostgreConnectionSettings connectionSettings)
         {
-            this.sessionFactory = sessionFactory;
+            this.connectionSettings = connectionSettings;
         }
 
         public virtual IList<InterviewDataExportRecord> ReadExportDataForInterview(Guid interviewId)
         {
-            IList<InterviewDataExportRecord> records = null;
+            List<InterviewDataExportRecord> records;
 
-            var schemaName = ((SessionFactoryImpl) sessionFactory).Settings.DefaultSchemaName;
-
-            using (var session = this.sessionFactory.OpenStatelessSession())
+            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
-                records = session.Connection.Query<InterviewDataExportRecord>($"SELECT * FROM {schemaName}.interviewdataexportrecords WHERE interviewid = @interviewId",
+                records = connection.Query<InterviewDataExportRecord>($"SELECT * FROM {this.connectionSettings.SchemaName}.interviewdataexportrecords WHERE interviewid = @interviewId",
                                                                               new { interviewId = interviewId })
                                             .ToList();
             }

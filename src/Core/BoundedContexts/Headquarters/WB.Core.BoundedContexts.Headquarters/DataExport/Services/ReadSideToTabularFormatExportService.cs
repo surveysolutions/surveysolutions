@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly InterviewDataExportSettings exportSettings;
         private readonly IProductVersion productVersion;
+        private InterviewErrorsExporter errorsExporter;
 
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter, 
@@ -69,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
 
             this.commentsExporter = ServiceLocator.Current.GetInstance<CommentsExporter>();
+            this.errorsExporter = ServiceLocator.Current.GetInstance<InterviewErrorsExporter>();
 
             this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
         }
@@ -107,11 +109,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             var exportInterviewsProgress = new Progress<int>();
             var exportCommentsProgress = new Progress<int>();
             var exportInterviewActionsProgress = new Progress<int>();
+            var exportErrorsProgress = new Progress<int>();
 
             ProggressAggregator proggressAggregator = new ProggressAggregator();
-            proggressAggregator.Add(exportInterviewsProgress, 0.8);
+            proggressAggregator.Add(exportInterviewsProgress, 0.7);
             proggressAggregator.Add(exportCommentsProgress, 0.1);
             proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
+            proggressAggregator.Add(exportErrorsProgress, 0.1);
 
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
@@ -124,7 +128,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             Task.WaitAll(new[] {
                 Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
                 Task.Run(() => this.commentsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportCommentsProgress), cancellationToken),
-                Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress), cancellationToken)
+                Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress), cancellationToken),
+                Task.Run(() => this.errorsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportErrorsProgress, cancellationToken), cancellationToken),
             }, cancellationToken);
             exportWatch.Stop();
 
