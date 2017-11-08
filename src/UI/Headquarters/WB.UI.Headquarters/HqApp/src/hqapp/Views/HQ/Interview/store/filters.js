@@ -58,9 +58,11 @@ export default {
             return await Vue.$api.call(api => api.getStatusesHistory());
         },
 
-        resetAllFilters({ commit, dispatch }) {
+        resetAllFilters({ commit, state, dispatch }) {
             commit("RESET_FILTERS")
-            dispatch("fetchSearchResults")
+
+            if(state.search.needToClear)
+                dispatch("fetchSearchResults")
         },
 
         refreshSearchResults({ dispatch, commit }) {
@@ -105,6 +107,8 @@ export default {
 
         RESET_FILTERS(state) {
             Object.keys(state.filter).forEach(key => {
+                if(state.filter[key] != false) state.search.needToClear = true;
+
                 Vue.set(state.filter, key, false)
             })
         }
