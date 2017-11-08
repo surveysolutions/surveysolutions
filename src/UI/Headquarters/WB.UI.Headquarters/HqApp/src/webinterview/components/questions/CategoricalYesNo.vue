@@ -4,7 +4,7 @@
             <div class="yes-no-mark">{{ $t("WebInterviewUI.Yes") }} <b>/</b> {{ $t("WebInterviewUI.No")}}</div>
             <div class="options-group">
                 <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
-                    <div class="field">
+                    <div class="field" :class="{answered: $me.isAnswered}">
                         <input class="wb-radio" type="radio" 
                             :name="$me.id + '_' + option.value" 
                             :id="$me.id + '_' + option.value + '_yes'" 
