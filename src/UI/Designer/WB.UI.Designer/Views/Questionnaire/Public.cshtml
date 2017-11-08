@@ -11,7 +11,7 @@
     @Scripts.Render("~/folders")
 }
 
-<ol class="breadcrumb tree-icon public-questionnaires-breadcrumb">
+<ol class="breadcrumb public-questionnaires-breadcrumb">
     @foreach (var folder in Model.Breadcrumbs)
     {
         if (folder.FolderId.HasValue && folder.FolderId != Guid.Empty)
