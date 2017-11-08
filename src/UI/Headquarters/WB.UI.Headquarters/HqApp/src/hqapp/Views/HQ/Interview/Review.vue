@@ -22,11 +22,6 @@ import Vue from "vue"
 export default {
 
     watch: {
-        ["$route.params.sectionId"](to) {
-            this.$store.dispatch("changeSection", to)
-            this.$store.dispatch("onBeforeNavigate")
-        },
-
          ["$route.hash"](to) {
              if (to != null) {
                  this.$store.dispatch("sectionRequireScroll", { id: to })
@@ -61,6 +56,7 @@ export default {
         this.$store.dispatch("getLanguageInfo");
         this.$store.dispatch("loadInterview");
     },
+
     mounted() {
         const self = this;
 

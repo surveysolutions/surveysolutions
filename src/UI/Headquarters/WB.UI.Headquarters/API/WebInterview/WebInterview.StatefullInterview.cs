@@ -592,8 +592,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
         }
 
-        public Sidebar GetSidebarChildSectionsOf(string sectionId, string[] parentIds)
+        public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
         {
+            var sectionId = this.CallerSectionid;
             var interview = this.GetCallerInterview();
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();
