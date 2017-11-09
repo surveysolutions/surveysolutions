@@ -6,14 +6,10 @@ export default {
         state.lastActivityTimestamp = lastActivityTimestamp
         forEach(entities, entity => {
             if (entity != null) {
-                state.loadedEntitiesCount++
                 entity.updatedAt = new Date()
                 Vue.set(state.entityDetails, entity.id, entity)
             }
         })
-    },
-    RESET_LOADED_ENTITIES_COUNT(state) {
-        state.loadedEntitiesCount = 0
     },
     SET_SECTION_DATA(state, sectionData) {
         state.entities = sectionData

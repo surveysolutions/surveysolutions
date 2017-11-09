@@ -17,12 +17,13 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
+using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
 {
     [TestFixture]
     [TestOf(typeof(InterviewsExporter))]
-    class When_exporting_data_for_one_interview
+    internal class When_exporting_data_for_one_interview
     {
         [Test]
         public void It_should_export_service_column_with_interview_key()
@@ -41,7 +42,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 fileSystemAccessor.Object,
                 logger.Object,
                 interviewDataExportSettings,
-                csvWriter.Object,
+                csvWriter,
                 rowReader.Object,
                 interviewSummaries,
                 transactionManagerProvider.Object);
@@ -83,7 +84,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 fileSystemAccessor.Object,
                 logger.Object,
                 interviewDataExportSettings,
-                csvWriter.Object,
+                csvWriter,
                 rowReader.Object,
                 interviewSummaries,
                 transactionManagerProvider.Object);
@@ -117,21 +118,10 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
 
             fileSystemAccessor = new Mock<IFileSystemAccessor>();
             logger = new Mock<ILogger>();
-            csvWriter = new Mock<ICsvWriter>();
+            csvWriter = Create.Service.CsvWriter(dataInCsvFile);
             rowReader = new Mock<InterviewExportredDataRowReader>();
             transactionManagerProvider = new Mock<ITransactionManagerProvider>();
             transactionManagerProvider.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
-
-            csvWriter
-                .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
-                .Callback<string, IEnumerable<string[]>, string>((string s, IEnumerable<string[]> p, string t) =>
-                {
-                    dataInCsvFile.Add(new CsvData
-                    {
-                        File = s,
-                        Data = p.ToList()
-                    });
-                });
 
             fileSystemAccessor
                 .Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>()))
@@ -142,14 +132,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
         private Mock<IFileSystemAccessor> fileSystemAccessor;
         private Mock<ILogger> logger;
         private InterviewDataExportSettings interviewDataExportSettings = new InterviewDataExportSettings("folder", false, 1, 1, 1, 1);
-        private Mock<ICsvWriter> csvWriter;
+        private ICsvWriter csvWriter;
         private Mock<InterviewExportredDataRowReader> rowReader;
         private Mock<ITransactionManagerProvider> transactionManagerProvider;
-
-        class CsvData
-        {
-            public string File { get; set; }
-            public List<string[]> Data { get; set; }
-        }
     }
 }

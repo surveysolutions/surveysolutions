@@ -204,17 +204,14 @@ export async function apiCaller(action) {
 }
 
 export function install(Vue, options) {
-    //Object.
     store = options.store;
     const api = {
         call: apiCaller,
         hub: getInstance,
         stop: apiStop,
         callAndFetch: apiCallerAndFetch,
-        setState: async (callback) => {
-            const hub = await getInstance()
-            
-            callback(hub.state);
+        setState: (callback) => {
+            callback(jQuery.signalR.interview.state);
         }
     };
 

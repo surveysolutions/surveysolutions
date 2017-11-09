@@ -7,30 +7,31 @@
 @using WB.UI.Shared.Web.Extensions
 @model IPagedList<QuestionnaireListViewModel>
 
-<table id="questionnaire-table-header" class="table table-header @ViewBag.TableCssClass">
-    <thead>
-        <tr>
-            @ShowTableHeaderCell("Title", QuestionnaireController.Title, true)
-            @ShowTableHeaderCell("LastEntryDate", QuestionnaireController.LastModified)
-            @ShowTableHeaderCell("CreationDate", QuestionnaireController.CreatedDate)
-            @ShowTableHeaderCell("CreatorName", QuestionnaireController.CreatedBy)
-            <th>
-            </th>
-        </tr>
-    </thead>
-</table>
-<div id="table-content-holder" class="list-with-icons @ViewBag.TableCssClass">
-    <div class="scroller-container">
-        @ShowNotificationToUserIfNeeded()
-        @if (Model.TotalCount == 0)
-        {
-            <p class="text-center" style="line-height: 10em">@QuestionnaireController.EmptyList</p>
-        }
-        else
-        {
-            <table id="questionnaire-table-content" class="table table-content ">
-                <tbody>
-                @foreach (var listViewModel in Model)
+<div class="wrapper-questionnaire-table clearfix">
+    <table id="questionnaire-table-header" class="table table-header @ViewBag.TableCssClass">
+        <thead>
+            <tr>
+                @ShowTableHeaderCell("Title", QuestionnaireController.Title, true)
+                @ShowTableHeaderCell("LastEntryDate", QuestionnaireController.LastModified)
+                @ShowTableHeaderCell("CreationDate", QuestionnaireController.CreatedDate)
+                @ShowTableHeaderCell("CreatorName", QuestionnaireController.CreatedBy)
+                <th>
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <div id="table-content-holder" class="list-with-icons @ViewBag.TableCssClass">
+        <div class="scroller-container">
+            @ShowNotificationToUserIfNeeded()
+            @if (Model.TotalCount == 0)
+            {
+                <p class="text-center" style="line-height: 10em">@QuestionnaireController.EmptyList</p>
+            }
+            else
+            {
+                <table id="questionnaire-table-content" class="table table-content ">
+                    <tbody>
+                        @foreach (var listViewModel in Model)
                 {
                     var routevalues = listViewModel.GetIdValue();
                     var itemId = listViewModel.GetId();
@@ -43,81 +44,82 @@
                     var openActionName = listViewModel.IsFolder ? "Public" : "Details";
                     var iconCssClass = listViewModel.IsFolder ? "tree-icon folder-closed" : "tree-icon";
 
-                    <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
-                        <td class="search-value">
-                            <a href="@Url.Action(openActionName, "Questionnaire", routevalues)">
-                                <span class="@iconCssClass"></span>
-                                @listViewModel.Title
-                            </a>
-                        </td>
-                        <td class="date">
-                            <time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.FormatDate()</time>
-                            
-                        </td>
-                        <td class="date">
-                            <time datetime="@listViewModel.CreationDate.ToString("o")">@listViewModel.CreationDate.FormatDate()</time>
-                        </td>
-                        <td class="email">
-                            @listViewModel.Owner
-                        </td>
-                        <td>
-                            @{
-                                var actionModel = listViewModel as IActionItem;
-                                if (actionModel != null)
-                                {
-                                    if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanExport || actionModel.CanSynchronize || actionModel.CanOpen)
-                                    {
-                                        <div class="btn-group pull-right">
-                                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                                                @QuestionnaireController.Action
-                                                <span class="caret"></span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li>@Html.ActionLink(QuestionnaireController.Open, openActionName, "Questionnaire", routevalues, null)</li>
-                                                @{
-                                                    if (actionModel.CanCopy)
-                                                    {
-                                                        <li>@Html.ActionLink(QuestionnaireController.Copy, "Clone", "Questionnaire", routevalues, null)</li>
-                                                    }
-                                                    if (actionModel.CanExportToPdf)
-                                                    {
-                                                        <li class="divider"></li>
-                                                        <li>
-                                                            <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl", "@getLanguagesUrl")' data-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
-                                                        </li>
-                                                    }
-                                                    if (actionModel.CanSynchronize)
-                                                    {
-                                                        <li>@Html.ActionLink(QuestionnaireController.Backup, "BackupQuestionnaire", "Admin", routevalues, null)</li>
-                                                    }
-                                                    if (actionModel.CanAssignFolder)
-                                                    {
-                                                        <li class="divider"></li>
-                                                        <li><a href="#mAssignFolder" onclick='questionnaireActionModel.assignFolder("@itemId", "@itemType", "@itemName")' data-toggle="modal">@QuestionnaireController.AssignFolder</a></li>
-                                                    }
-                                                    if (actionModel.CanDelete)
-                                                    {
-                                                        <li class="divider"></li>
-                                                        <li><a href="#mDelete" onclick='questionnaireActionModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">@QuestionnaireController.Delete</a></li>
-                                                    }
-                                                }
-                                            </ul>
-                                        </div>
+                            <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
+                                <td class="search-value">
+                                    <a href="@Url.Action(openActionName, "Questionnaire", routevalues)">
+                                        <span class="@iconCssClass"></span>
+                                        @listViewModel.Title
+                                    </a>
+                                </td>
+                                <td class="date">
+                                    <time datetime="@listViewModel.LastEntryDate.ToString("o")">@listViewModel.LastEntryDate.FormatDate()</time>
+
+                                </td>
+                                <td class="date">
+                                    <time datetime="@listViewModel.CreationDate.ToString("o")">@listViewModel.CreationDate.FormatDate()</time>
+                                </td>
+                                <td class="email">
+                                    @listViewModel.Owner
+                                </td>
+                                <td>
+                                    @{
+                                        var actionModel = listViewModel as IActionItem;
+                                        if (actionModel != null)
+                                        {
+                                            if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanExport || actionModel.CanSynchronize || actionModel.CanOpen)
+                                            {
+                                                <div class="btn-group pull-right">
+                                                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                                        @QuestionnaireController.Action
+                                                        <span class="caret"></span>
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>@Html.ActionLink(QuestionnaireController.Open, openActionName, "Questionnaire", routevalues, null)</li>
+                                                        @{
+                                                            if (actionModel.CanCopy)
+                                                            {
+                                                                <li>@Html.ActionLink(QuestionnaireController.Copy, "Clone", "Questionnaire", routevalues, null)</li>
+                                                            }
+                                                            if (actionModel.CanExportToPdf)
+                                                            {
+                                                                <li class="divider"></li>
+                                                                <li>
+                                                                    <a href="#mExportPdf" onclick='questionnaireActionModel.exportItemAsPdf("@itemId", "@itemType", "@itemName", "@pdfDownloadUrl", "@pdfStatusUrl", "@pdfRetryUrl", "@getLanguagesUrl")' data-toggle="modal">@QuestionnaireController.ExportAsPDF</a>
+                                                                </li>
+                                                            }
+                                                            if (actionModel.CanSynchronize)
+                                                            {
+                                                                <li>@Html.ActionLink(QuestionnaireController.Backup, "BackupQuestionnaire", "Admin", routevalues, null)</li>
+                                                            }
+                                                            if (actionModel.CanAssignFolder)
+                                                            {
+                                                                <li class="divider"></li>
+                                                                <li><a href="#mAssignFolder" onclick='questionnaireActionModel.assignFolder("@itemId", "@itemType", "@itemName")' data-toggle="modal">@QuestionnaireController.AssignFolder</a></li>
+                                                            }
+                                                            if (actionModel.CanDelete)
+                                                            {
+                                                                <li class="divider"></li>
+                                                                <li><a href="#mDelete" onclick='questionnaireActionModel.deleteItem("@itemId", "@itemType", "@itemName")' data-toggle="modal">@QuestionnaireController.Delete</a></li>
+                                                            }
+                                                        }
+                                                    </ul>
+                                                </div>
+                                                                }
+                                                            }
                                     }
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
-                </tbody>
-            </table>
-            @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new {p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter}), 2)
-        }
+                                </td>
+                            </tr>
+                                                            }
+                    </tbody>
+                </table>
+                @Html.Pager(Model.PageIndex + 1, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), 2)
+                                                            }
+        </div>
     </div>
 </div>
 
-@helper ShowTableHeaderCell(string field, string title, bool showSearch = false)
-{
+    @helper ShowTableHeaderCell(string field, string title, bool showSearch = false)
+    {
 var isTableSortedByThisField = ViewBag.SortBy == field;
     <th class="@(isTableSortedByThisField ? "ordered" : "")">
         <a href="@ActionWithOrderField(field)">
@@ -136,26 +138,26 @@ var isTableSortedByThisField = ViewBag.SortBy == field;
     </th>
 }
 
-@functions
+    @functions
 {
-    private string ActionWithOrderField(string sortField)
-    {
-        var sortOrder = (int?)ViewBag.SortOrder;
-        return Url.Action(
-            WB.UI.Designer.GlobalHelper.CurrentAction,
-            new
-            {
-                p = ViewBag.PageIndex,
-                sb = sortField,
-                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
-                f = ViewBag.Filter,
-                id = ViewBag.FolderId
-            });
-    }
+        private string ActionWithOrderField(string sortField)
+        {
+            var sortOrder = (int?)ViewBag.SortOrder;
+            return Url.Action(
+                WB.UI.Designer.GlobalHelper.CurrentAction,
+                new
+                {
+                    p = ViewBag.PageIndex,
+                    sb = sortField,
+                    so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
+                    f = ViewBag.Filter,
+                    id = ViewBag.FolderId
+                });
+        }
 
-}
-@helper ShowNotificationToUserIfNeeded()
-{
+    }
+    @helper ShowNotificationToUserIfNeeded()
+    {
 if (!string.IsNullOrWhiteSpace(ViewData["UserNotification"] as string)
     || TempData.ContainsKey(Alerts.SUCCESS)
     || TempData.ContainsKey(Alerts.ERROR))

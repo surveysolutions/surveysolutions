@@ -815,6 +815,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetVariableLabel(Guid variableId) => this.GetVariable(variableId).Label;
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
+        public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
 
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;

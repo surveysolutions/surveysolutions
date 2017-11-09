@@ -521,5 +521,29 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewStatusTimeSpanDenormalizer();
         }
+
+        public InterviewsErrorsReader InterviewsErrorsReader(IEnumerable<ExportedError> errors)
+        {
+            var resultList = new List<ExportedError>(errors);
+            var errorsReader = Mock.Of<InterviewsErrorsReader>(x =>
+                x.GetErrors(It.IsAny<List<Guid>>()) == resultList);
+            return errorsReader;
+        }
+
+        public ICsvWriter CsvWriter(List<CsvData> writeTo)
+        {
+            var csvWriterMock = new Mock<ICsvWriter>();
+            csvWriterMock
+                .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
+                .Callback((string s, IEnumerable<string[]> p, string t) =>
+                {
+                    writeTo.Add(new CsvData
+                    {
+                        File = s,
+                        Data = p.ToList()
+                    });
+                });
+            return csvWriterMock.Object;
+        }
     }
 }

@@ -9,7 +9,7 @@
                         :value="option.value" 
                         :disabled="!$me.acceptAnswers"
                         v-model="answer"
-                        v-disabledWhenUnchecked="allAnswersGiven">
+                        v-disabledWhenUnchecked="allAnswersGiven || !$me.acceptAnswers">
                         <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>

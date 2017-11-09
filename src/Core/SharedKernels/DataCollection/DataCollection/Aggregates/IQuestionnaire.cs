@@ -258,5 +258,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         List<Guid> GetExpressionsPlayOrder();
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
+        string GetRosterVariableName(Guid id);
     }
 }
