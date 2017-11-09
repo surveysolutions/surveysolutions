@@ -45,12 +45,13 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var statefulInterview = this.GetCallerInterview();
             var questionnaire = this.GetCallerQuestionnaire();
+
             return new InterviewInfo
             {
-                QuestionnaireTitle = this.IsReviewMode ? 
-                                            string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) :
-                                            this.GetCallerQuestionnaire().Title,
-                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
+                QuestionnaireTitle = this.IsReviewMode 
+                    ? string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) 
+                    : questionnaire.Title,
+                FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer
             };
@@ -103,10 +104,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             return GetInterviewSimpleStatus().ToString();
         }
 
-        private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview)
+        private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
         {
             var result = new IdentifyingQuestion();
-            var entityType = this.GetEntityType(questionId);
+            var entityType = this.GetEntityType(questionId, questionnaire);
+
             result.Type = entityType.ToString();
             var questionIdentity = new Identity(questionId, RosterVector.Empty);
             result.Identity = questionIdentity.ToString();
@@ -118,7 +120,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             if (entityType == InterviewEntityType.Gps)
             {
                 GpsAnswer questionAnswer = interviewQuestion.GetAsInterviewTreeGpsQuestion().GetAnswer();
-                string answer = questionAnswer?.Value != null ? $"{questionAnswer.Value.Latitude},{questionAnswer.Value.Longitude}" : null;
+                string answer = questionAnswer?.Value != null ? $@"{questionAnswer.Value.Latitude},{questionAnswer.Value.Longitude}" : null;
                 result.Answer = answer;
             }
             if (entityType == InterviewEntityType.DateTime && (interviewQuestion.GetAsInterviewTreeDateTimeQuestion()).IsTimestamp)
@@ -139,18 +141,21 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public PrefilledPageData GetPrefilledEntities()
         {
-            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
+            var questionnaire = this.GetCallerQuestionnaire();
+
+            var interviewEntityWithTypes = questionnaire
                 .GetPrefilledQuestions()
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
-                    EntityType = this.GetEntityType(x).ToString()
+                    EntityType = this.GetEntityType(x, questionnaire).ToString()
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
+
             var result = new PrefilledPageData
             {
-                FirstSectionId = this.GetCallerQuestionnaire().GetFirstSectionId().FormatGuid(),
+                FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 Entities = interviewEntityWithTypes,
                 HasAnyQuestions = interviewEntityWithTypes.Length > 1
             };
@@ -168,12 +173,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             var ids = IsReviewMode ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity) : 
                                      statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
             var questionarie = this.GetCallerQuestionnaire();
+
             var entities = ids
                 .Where(id => !questionarie.IsVariable(id.Id))
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
-                    EntityType = this.GetEntityType(x.Id).ToString()
+                    EntityType = this.GetEntityType(x.Id, questionarie).ToString()
                 })
                 .Union(ActionButtonsDefinition)
                 .ToArray();
@@ -181,13 +187,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             return entities;
         }
 
-        public ButtonState GetNavigationButtonState(string id)
+        public ButtonState GetNavigationButtonState(string id, IQuestionnaire questionnaire = null)
         {
             var sectionId = CallerSectionid;
+            var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire();
 
             var statefulInterview = this.GetCallerInterview();
 
-            var sections = this.GetCallerQuestionnaire().GetAllSections()
+            var sections = callerQuestionnaire.GetAllSections()
                 .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
                 .ToArray();
 
@@ -331,7 +338,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 IsRoster = currentTreeGroupAsRoster != null
             };
         }
-
+        
         private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
         {
             if (interview.HasEnabledInvalidQuestionsAndStaticTexts(group))
@@ -354,22 +361,23 @@ namespace WB.UI.Headquarters.API.WebInterview
         public InterviewEntity[] GetEntitiesDetails(string[] ids)
         {
             var callerInterview = this.GetCallerInterview();
-            return ids.Select(id => GetEntityDetails(id, callerInterview)).ToArray();
+            var questionnaire = this.GetCallerQuestionnaire();
+            return ids.Select(id => GetEntityDetails(id, callerInterview, questionnaire)).ToArray();
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
-        private InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview)
+        private InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire)
         {
             if (id == "NavigationButton")
             {
-                return this.GetNavigationButtonState(id);
+                return this.GetNavigationButtonState(id, questionnaire);
             }
 
             var identity = Identity.Parse(id);
 
             InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
-            var questionnaire = this.GetCallerQuestionnaire();
+            
             if (question != null)
             {
                 GenericQuestion result = this.Map<StubEntity>(question);
@@ -718,9 +726,11 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             }).ToArray();
 
-            var interviewEntityWithTypes = this.GetCallerQuestionnaire()
+            var questionnaire = this.GetCallerQuestionnaire();
+
+            var interviewEntityWithTypes = questionnaire
                 .GetPrefilledQuestions()
-                .Select(x => this.GetIdentifyingQuestion(x, interview))
+                .Select(x => this.GetIdentifyingQuestion(x, interview, questionnaire))
                 .ToList();
 
 
@@ -794,13 +804,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             }));
         }
 
-        private InterviewEntityType GetEntityType(Guid entityId)
+        private InterviewEntityType GetEntityType(Guid entityId, IQuestionnaire callerQuestionnaire)
         {
-            var callerQuestionnaire = this.GetCallerQuestionnaire();
-
             if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
+
             if (callerQuestionnaire.HasGroup(entityId) || callerQuestionnaire.IsRosterGroup(entityId))
                 return InterviewEntityType.Group;
+
             if (callerQuestionnaire.IsStaticText(entityId)) return InterviewEntityType.StaticText;
 
             switch (callerQuestionnaire.GetQuestionType(entityId))
