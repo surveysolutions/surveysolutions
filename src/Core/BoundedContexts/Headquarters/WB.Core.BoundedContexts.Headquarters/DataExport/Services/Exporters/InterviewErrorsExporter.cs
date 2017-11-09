@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -22,6 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ILogger logger;
         private readonly ICsvWriter csvWriter;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ITransactionManagerProvider transactionManager;
         private const string FileName = "interview__errors.tab";
 
         protected InterviewErrorsExporter()
@@ -31,12 +33,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         public InterviewErrorsExporter(IInterviewFactory interviewFactory,
             ILogger logger,
             ICsvWriter csvWriter,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            ITransactionManagerProvider transactionManager)
         {
             this.interviewFactory = interviewFactory;
             this.logger = logger;
             this.csvWriter = csvWriter;
             this.questionnaireStorage = questionnaireStorage;
+            this.transactionManager = transactionManager;
         }
 
         public void Export(QuestionnaireExportStructure exportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -55,7 +59,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             foreach (var interviewsBatch in interviewIdsToExport.Batch(40))
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var exportedErrors = this.interviewFactory.GetErrors(interviewsBatch.ToList());
+               
+                var exportedErrors =
+                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                        this.interviewFactory.GetErrors(interviewsBatch.ToList()));
                 List<string[]> exportRecords = new List<string[]>();
                 foreach (var error in exportedErrors)
                 {
