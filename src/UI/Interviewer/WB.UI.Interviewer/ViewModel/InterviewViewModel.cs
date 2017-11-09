@@ -101,7 +101,7 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (!lastCreatedInterviewStorage.WasJustCreated(interviewId))
             {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now));
+                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now));
             }
 
             base.ViewAppeared();
