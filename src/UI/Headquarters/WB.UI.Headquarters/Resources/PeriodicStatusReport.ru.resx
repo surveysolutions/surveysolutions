@@ -232,4 +232,7 @@
   <data name="PeriodUnit" xml:space="preserve">
     <value>Длительность</value>
   </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>командой {0}</value>
+  </data>
 </root>

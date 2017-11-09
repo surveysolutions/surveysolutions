@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 {
@@ -69,23 +70,39 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 
                     foreach (LabeledVariable variableLabel in questionnaireLevelLabels.LabeledVariable)
                     {
-                        if (variableLabel.QuestionId.HasValue)
+                        if (variableLabel.EntityId.HasValue)
                         {
-                            var questionItem =
-                                bigTemplateObject.Find<IQuestion>(variableLabel.QuestionId.Value);
+                            var questionItem = bigTemplateObject.Find<IQuestion>(variableLabel.EntityId.Value);
 
-                            if (questionItem == null)
-                                continue;
-
-                            var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
-                                this.GetDdiDataType(questionItem.QuestionType), variableLabel.Label, questionItem.Instructions,
-                                questionItem.QuestionText, this.GetDdiVariableScale(questionItem.QuestionType));
-
-                            foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
+                            if (questionItem != null)
                             {
-                                decimal value;
-                                if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
-                                    metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);
+                                var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
+                                    this.GetDdiDataType(questionItem.QuestionType), variableLabel.Label, questionItem.Instructions,
+                                    questionItem.QuestionText, this.GetDdiVariableScale(questionItem.QuestionType));
+
+                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
+                                {
+                                    if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
+                                        metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);
+                                }   
+
+                                continue;
+                            }
+
+                            var variableItem = bigTemplateObject.Find<IVariable>(variableLabel.EntityId.Value);
+                            if (variableItem != null)
+                            {
+                                var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
+                                    this.GetDdiDataType(variableItem.Type), variableLabel.Label, null,
+                                    variableItem.Expression, this.GetDdiVariableScale(variableItem.Type));
+
+                                foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
+                                {
+                                    if (decimal.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
+                                        metadataWriter.AddValueLabelToVariable(variable, value, variableValueLabel.Label);
+                                }
+
+                                continue;
                             }
                         }
                         else
@@ -133,6 +150,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                     : DdiDataType.DynString;
         }
 
+        private DdiDataType GetDdiDataType(VariableType variableType)
+        {
+            return new[] {VariableType.Double, VariableType.LongInteger, VariableType.Boolean}.Contains(variableType)
+                    ? DdiDataType.Numeric
+                    : DdiDataType.DynString;
+        }
+
         private DdiVariableScale? GetDdiVariableScale(QuestionType questionType)
         {
             switch (questionType)
@@ -143,6 +167,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                 case QuestionType.SingleOption:
                 case QuestionType.MultyOption:
                     return DdiVariableScale.Nominal;
+            }
+            return null;
+        }
+
+        private DdiVariableScale? GetDdiVariableScale(VariableType variableType)
+        {
+            switch (variableType)
+            {
+                case VariableType.Double:
+                case VariableType.LongInteger:
+                case VariableType.Boolean:
+                    return DdiVariableScale.Scale;
             }
             return null;
         }

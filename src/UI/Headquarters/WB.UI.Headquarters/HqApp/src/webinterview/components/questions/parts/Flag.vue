@@ -1,7 +1,12 @@
 <template>
-    <button type="button" class="btn-link button-flag" @click="setFlag" :title="flagBtnTitle" :disabled="flagBtnDisabled">
+    <button type="button" class="btn-link button-flag" 
+        @click="setFlag"
+        :class="{ flagged: hasFlag }"
+        :title="flagBtnTitle"
+        :disabled="flagBtnDisabled">
     </button>
 </template>
+
 <script lang="js">
     import { entityPartial } from "~/webinterview/components/mixins"
 
@@ -24,7 +29,7 @@
                 return this.$store.state.webinterview.receivedByInterviewer;
             },
             hasFlag() {
-                return this.$store.getters.flags[this.$me.id];
+                return this.$store.getters.flags[this.$me.id] === true;
             }
         },
         methods:{

@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                    "readside", DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
+                    PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
                     mappingAssemblies)
             );

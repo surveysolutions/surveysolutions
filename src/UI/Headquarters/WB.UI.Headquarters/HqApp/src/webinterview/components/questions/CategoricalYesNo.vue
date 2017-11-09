@@ -8,10 +8,11 @@
                         <input class="wb-radio" type="radio" 
                             :name="$me.id + '_' + option.value" 
                             :id="$me.id + '_' + option.value + '_yes'" 
-                            :checked="isYesChecked(option.value)" value="true"
+                            :checked="isYesChecked(option.value)"
                             :disabled="!$me.acceptAnswer"
+                            value="true"                            
                             @click="answerYes(option.value)" 
-                            v-disabledWhenUnchecked="allAnswersGiven" />
+                            v-disabledWhenUnchecked="allAnswersGiven || !$me.acceptAnswer" />
                         <label :for="$me.id + '_' + option.value + '_yes'">
                             <span class="tick"></span>
                         </label>

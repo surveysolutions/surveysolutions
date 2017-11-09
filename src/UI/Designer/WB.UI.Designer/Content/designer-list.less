@@ -656,30 +656,30 @@ table.table-content {
     border: none;
 }
 
+.breadcrumb.public-questionnaires-breadcrumb:before,
 .folder-tree .tree-icon,
 .tree-icon {
     background: url("images/DR-2017-folders-icons-G2-color.png") no-repeat;
-    background-size: 30px 90px;
+    background-size: 32px 96px;
     vertical-align: top;
-    background-position: 0 -60px;
+    background-position: 0 -66px;
 }
 
 .folder-tree .tree-icon {
     width: 30px;
     height: 30px;
     margin: 0;
-    background-position: 0 -60px;
     display: inline-block;
 }
 
 .folder-tree .tree-icon.folder-open,
 .tree-icon.folder-open {
-    background-position: 0 0;
+    background-position: 0 -2px;
 }
 
 .folder-tree .tree-icon.folder-closed,
 .tree-icon.folder-closed {
-    background-position: 0 -30px;
+    background-position: 0 -34px;
 }
 
 .folder-tree .fancytree-title {
@@ -713,25 +713,28 @@ table.table-content {
 
 .breadcrumb.public-questionnaires-breadcrumb {
     border-top: 1px solid #ddd;
-    height: 36px;
     font-weight: bold;
     background-color: transparent;
     border-radius: 0;
     margin-bottom: 0;
-    padding-left: 45px;
+    padding-left: 55px;
     border-left: 13px solid #bcc3c8;
 }
 
+.public-questionnaires-breadcrumb li {
+    display: inline-block;
+    max-width: 400px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .breadcrumb.public-questionnaires-breadcrumb.tree-icon {
-    background-position: 10px 0px;
+    background-position: 10px -28px;
 }
 
 .breadcrumb.public-questionnaires-breadcrumb a {
     color: #777;
-}
-
-.container-wb-list section#designer-list #table-content-holder.page-with-breadcrumbs {
-    top: 81px;
 }
 
 table.table-header.page-with-breadcrumbs {
@@ -744,8 +747,10 @@ table.table-header.page-with-breadcrumbs {
 
 .list-with-icons .search-value a {
     padding-left: 40px;
+    display: inline-block;
 }
 
+.breadcrumb.public-questionnaires-breadcrumb:before,
 .list-with-icons .tree-icon {
     display: block;
     position: absolute;
@@ -753,6 +758,12 @@ table.table-header.page-with-breadcrumbs {
     left: 20px;
     width: 30px;
     height: 30px;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb:before {
+    content: "";
+    background-position: 0 -2px;
+    left: 30px;
 }
 
 .folder-tree .fancytree-checkbox ~ .fancytree-title {
@@ -785,5 +796,11 @@ table.table-header.page-with-breadcrumbs {
 
 .modal-body .folder-tree {
     max-height: 500px;
-    overflow: auto;
+    overflow-y: auto;
+}
+
+.container-wb-list .wrapper-questionnaire-table {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }

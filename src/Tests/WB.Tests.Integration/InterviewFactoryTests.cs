@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
@@ -49,7 +50,7 @@ namespace WB.Tests.Integration
                     typeof(InterviewSummaryMap),
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap)
-                }, true, "readside");
+                }, true, PostgresReadSideModule.ReadSideSchemaName);
 
             this.plainTransactionManager = new PlainPostgresTransactionManager(sessionFactory);
 

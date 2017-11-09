@@ -8,11 +8,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
     {
         private readonly Dictionary<string, VariableValueLabel> variableValueLabels;
 
-        public LabeledVariable(string variableName, string label, Guid? questionId, VariableValueLabel[] variableValueLabels)
+        public LabeledVariable(string variableName, string label, Guid? entityId, VariableValueLabel[] variableValueLabels)
         {
             this.VariableName = variableName;
             this.Label = label;
-            this.QuestionId = questionId;
+            this.EntityId = entityId;
             this.variableValueLabels = variableValueLabels.ToDictionary(x => x.Value, x => x);
         }
 
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
 
         public string VariableName { get; private set; }
         public string Label { get; private set; }
-        public Guid? QuestionId { get; private set; }
+        public Guid? EntityId { get; private set; }
         public VariableValueLabel[] VariableValueLabels => this.variableValueLabels.Values.ToArray();
     }
 }

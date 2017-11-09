@@ -24,9 +24,10 @@
                         this.timerId = null
                     }
 
-                    this.visible = this.to
+                    this.visible = to
                 }
             },
+            
             '$store.state.webinterview.connection.isDisconnected' (to) {
                 if (to) {
                     this.visible = false
