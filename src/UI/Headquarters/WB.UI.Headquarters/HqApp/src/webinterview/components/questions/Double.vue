@@ -3,7 +3,7 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field answered">
+                    <div class="field" :class="{ answered: $me.isAnswered}"> 
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
                             :placeholder="$t('WebInterviewUI.DecimalEnter')" :title="$t('WebInterviewUI.DecimalEnter')"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"

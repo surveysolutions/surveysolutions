@@ -97,8 +97,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(exportFilePath, true))
             using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.DataFileSeparator.ToString()))
             {
-                writer.WriteField("id");
-                writer.WriteField("event");
+                writer.WriteField("interview__id");
+                writer.WriteField("#");
+                writer.WriteField("action");
                 writer.WriteField("responsible");
                 writer.WriteField("role");
                 writer.WriteField("timestamp");
@@ -117,9 +118,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                         this.ExecuteInTransaction(() => eventsByInterview.ForEach(interviewParaDataEventHandler.Handle));
 
                         var paradata = paradataReader.Query(_ => _.FirstOrDefault());
-                        foreach (var evnt in paradata?.Records)
+                        for (int i = 0; i < paradata.Records.Count; i++)
                         {
+                            var evnt = paradata?.Records[i];
                             writer.WriteField(interviewId);
+                            writer.WriteField(i + 1);
                             writer.WriteField(evnt.Action);
                             writer.WriteField(evnt.OriginatorName);
                             writer.WriteField(evnt.OriginatorRole);

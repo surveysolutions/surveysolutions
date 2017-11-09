@@ -47,6 +47,8 @@ export default class ReviewComponent {
             review: true
         })
         
+        await this.rootStore.dispatch("changeSection", to.params.sectionId)
+        
         next();
     }
 

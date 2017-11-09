@@ -216,6 +216,7 @@
     <Compile Include="TestFactories\AggregateRootFactory.cs" />
     <Compile Include="TestFactories\CommandFactory.cs" />
     <Compile Include="TestFactories\ControllerFactory.cs" />
+    <Compile Include="TestFactories\CsvData.cs" />
     <Compile Include="TestFactories\EntityFactory.cs" />
     <Compile Include="TestFactories\EventFactory.cs" />
     <Compile Include="TestFactories\FakeFactory.cs" />

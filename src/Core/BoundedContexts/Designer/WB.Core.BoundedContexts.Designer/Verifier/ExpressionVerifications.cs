@@ -392,8 +392,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             };
         }
 
-
-
         private bool VariableUsesForbiddenDateTimeProperties(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
             => ExpressionUsesForbiddenDateTimeProperties(variable.Expression, questionnaire);
 
@@ -416,28 +414,41 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             var questionsWithOptionsFilter = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression));
             var variables = questionnaire.Find<IVariable>(question => !string.IsNullOrWhiteSpace(question.Expression));
 
+            void AddDependencies(string variable, IEnumerable<string> identifiers)
+            {
+                if (!dependencies.ContainsKey(variable))
+                {
+                    dependencies.Add(variable, identifiers.ToArray());
+                }
+                else
+                {
+                    var allDependencies = dependencies[variable].ToList().Union(identifiers).Distinct().ToArray();
+                    dependencies[variable] = allDependencies;
+                }
+            }
+
             foreach (var question in questionsWithConditions)
             {
-                if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
-                    dependencies.Add(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.ConditionExpression, questionnaire).ToArray());
+                if (question.StataExportCaption != null)
+                    AddDependencies(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.ConditionExpression, questionnaire).ToArray());
             }
 
             foreach (var question in questionsWithOptionsFilter)
             {
-                if (question.StataExportCaption != null && !dependencies.ContainsKey(question.StataExportCaption))
+                if (question.StataExportCaption != null)
                 {
                     var identifiers = this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire);
 
                     identifiers = ReplaceOwnVariableWithSelf(question, identifiers);
-
-                    dependencies.Add(question.StataExportCaption, identifiers.ToArray());
+                    
+                    AddDependencies(question.StataExportCaption, identifiers.ToArray());
                 }
             }
 
             foreach (var variable in variables)
             {
-                if (variable.Name != null && !dependencies.ContainsKey(variable.Name))
-                    dependencies.Add(variable.Name, this.GetIdentifiersUsedInExpression(variable.Expression, questionnaire).ToArray());
+                if (variable.Name != null)
+                    AddDependencies(variable.Name, this.GetIdentifiersUsedInExpression(variable.Expression, questionnaire).ToArray());
             }
 
             var cycles = topologicalSorter.DetectCycles(dependencies);
