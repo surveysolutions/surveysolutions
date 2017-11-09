@@ -45,7 +45,7 @@ const store = safeStore({
             return result;
         },
         addCommentsAllowed(state) {
-            return !state.receivedByInterviewer;
+            return !state.interviewCannotBeChanged;
         }
     }
 })

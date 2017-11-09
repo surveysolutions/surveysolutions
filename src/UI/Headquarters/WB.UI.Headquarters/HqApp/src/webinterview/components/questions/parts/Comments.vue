@@ -82,7 +82,8 @@
             allowPostComment() {
                 return this.comment && 
                        this.comment.trim().length > 0 &&
-                       !this.$me.postingComment;
+                       !this.$me.postingComment 
+                       && this.$store.getters.addCommentsAllowed;
             },
             inputTitle() {
                 if (this.$store.state.webinterview.receivedByInterviewer === true) {
