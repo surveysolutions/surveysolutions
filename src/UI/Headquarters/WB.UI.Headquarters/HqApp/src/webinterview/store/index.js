@@ -10,7 +10,6 @@ const store = safeStore({
     state: {
         lastActivityTimestamp: new Date(),
         hasCoverPage: false,
-        loadedEntitiesCount: 0,
         questionnaireTitle: "",
         interviewKey: "",
         firstSectionId: "",
@@ -29,14 +28,23 @@ const store = safeStore({
     mutations,
     getters: {
         loadingProgress(state) {
-            const loadedCount = state.loadedEntitiesCount
-            const totalCount = state.entities != null 
+            let loadedCount = 0;
+
+            state.entities.forEach(entity => {
+                if (state.entityDetails[entity.identity] != null) {
+                    loadedCount = loadedCount + 1;
+                }
+            })
+
+            const totalCount = state.entities != null
                 ? state.entities.length
                 : 0
+                
+            var result = loadedCount === 0 || totalCount === 0 || (loadedCount < totalCount);
 
-            return loadedCount === 0 || totalCount === 0 || (loadedCount < totalCount)
+            return result;
         },
-        addCommentsAllowed(state){
+        addCommentsAllowed(state) {
             return !state.receivedByInterviewer;
         }
     }

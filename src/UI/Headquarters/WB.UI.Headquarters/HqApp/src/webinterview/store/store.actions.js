@@ -6,10 +6,6 @@ import { batchedAction } from "../helpers"
 import modal from "../components/modal"
 
 export default {
-    onBeforeNavigate({ commit }) {
-        commit("RESET_LOADED_ENTITIES_COUNT")
-    },
-
     async loadInterview({ commit }) {
         const info = await Vue.$api.call(api => api.getInterviewDetails())
         commit("SET_INTERVIEW_INFO", info)
@@ -250,8 +246,6 @@ export default {
     },
 
     changeSection(ctx, sectionId) {
-        ctx.dispatch("onBeforeNavigate")
         return Vue.$api.setState((state) => state.sectionId = sectionId)
     }
-
 }
