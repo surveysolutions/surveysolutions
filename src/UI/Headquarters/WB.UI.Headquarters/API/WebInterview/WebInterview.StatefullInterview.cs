@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                     : questionnaire.Title,
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
+                InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.authorizedUser.IsObserving,
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer
             };
         }

@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string QuestionnaireTitle { get; set; }
         public string FirstSectionId { get; set; }
         public string InterviewKey { get; set; }
+        public bool InterviewCannotBeChanged { get; set; }
         public bool ReceivedByInterviewer { get; set; }
     }
 
