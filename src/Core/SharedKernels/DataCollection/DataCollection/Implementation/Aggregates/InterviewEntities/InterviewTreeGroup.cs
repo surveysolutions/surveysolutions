@@ -290,6 +290,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool HasUnansweredQuestions()
             => this.GetEnabledInterviewerQuestions().Any(question => !question.IsAnswered());
 
+        private IEnumerable<InterviewTreeQuestion> GetEnabledQuestionsForSupervisor()
+            => this.Children.OfType<InterviewTreeQuestion>()
+                .Where(x => !x.IsPrefilled && (x.IsSupervisors || x.IsInterviewer)&& !x.IsDisabled());
+        
+        public int CountEnabledAnsweredQuestionsForSupervisor() 
+            => this.GetEnabledQuestionsForSupervisor().Count(question => question.IsAnswered());
+
+        public int CountEnabledInvalidQuestionsAndStaticTextsForSupervisor()
+            => this.GetEnabledQuestionsForSupervisor().Count(question => !question.IsValid) +
+               this.GetEnabledStaticTexts().Count(staticText => !staticText.IsValid);
+
+        public bool HasUnansweredQuestionsForSupervisor()
+            => this.GetEnabledQuestionsForSupervisor().Any(question => !question.IsAnswered());
+
         public IEnumerable<Identity> GetEnabledSubGroups()
             => this.Children.OfType<InterviewTreeGroup>()
                 .Where(group => !group.IsDisabled())
