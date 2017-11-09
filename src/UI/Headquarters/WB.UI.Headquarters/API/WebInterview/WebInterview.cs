@@ -41,8 +41,10 @@ namespace WB.UI.Headquarters.API.WebInterview
         private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
         private IQuestionnaire GetCallerQuestionnaire()
-            => this.questionnaireRepository.GetQuestionnaire(this.GetCallerInterview().QuestionnaireIdentity,
-                this.GetCallerInterview().Language);
+        {
+            var interview = this.GetCallerInterview();
+            return this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+        }
 
         public WebInterview(
             IStatefulInterviewRepository statefulInterviewRepository,
