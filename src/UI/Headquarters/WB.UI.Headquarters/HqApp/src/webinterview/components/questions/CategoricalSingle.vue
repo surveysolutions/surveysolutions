@@ -3,7 +3,7 @@
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
-                    <div class="field" :class="{answered: $me.isAnswered}">
+                    <div class="field">
                         <input class="wb-radio" 
                             type="radio" 
                             :id="$me.id + '_' + option.value" 
