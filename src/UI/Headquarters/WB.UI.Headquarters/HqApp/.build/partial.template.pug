@@ -91,7 +91,7 @@ script(src!=urlContent(options.manifest) type="text/javascript")
 |
 |
 each file in htmlWebpackPlugin.files.css
-    link(href!=urlContent(devPublicPath + file) async rel="stylesheet")
+    link(href!=urlContent(devPublicPath + file) rel="stylesheet")
 |
 |
 each js in htmlWebpackPlugin.files.js
