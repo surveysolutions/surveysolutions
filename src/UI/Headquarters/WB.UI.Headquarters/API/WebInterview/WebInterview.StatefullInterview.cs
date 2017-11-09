@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using ASP;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -14,11 +13,9 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 
@@ -29,7 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private static InterviewEntityWithType[] ActionButtonsDefinition { get; } = {
             new InterviewEntityWithType
             {
-                Identity = "NavigationButton",
+                Identity = @"NavigationButton",
                 EntityType = InterviewEntityType.NavigationButton.ToString()
             }
         };
@@ -363,235 +360,15 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var callerInterview = this.GetCallerInterview();
             var questionnaire = this.GetCallerQuestionnaire();
-            return ids.Select(id => GetEntityDetails(id, callerInterview, questionnaire)).ToArray();
+            return ids.Select(id => 
+                id == @"NavigationButton"
+                    ? this.GetNavigationButtonState(id, questionnaire)
+                    : this.interviewEntityFactory.GetEntityDetails(id, callerInterview, questionnaire, IsReviewMode))
+                .ToArray();
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
-
-        private InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire)
-        {
-            if (id == "NavigationButton")
-            {
-                return this.GetNavigationButtonState(id, questionnaire);
-            }
-
-            var identity = Identity.Parse(id);
-
-            InterviewTreeQuestion question = callerInterview.GetQuestion(identity);
-            
-            if (question != null)
-            {
-                GenericQuestion result = this.Map<StubEntity>(question);
-
-                switch (question.InterviewQuestionType)
-                {
-                    case InterviewQuestionType.SingleFixedOption:
-                        if (questionnaire.IsQuestionFilteredCombobox(identity.Id))
-                        {
-                            result = this.Map<InterviewFilteredQuestion>(question);
-                        }
-                        else
-                        {
-                            result = this.Map<InterviewSingleOptionQuestion>(question, res =>
-                            {
-                                res.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
-                            });
-                        }
-                        break;
-                    case InterviewQuestionType.Cascading:
-                        result = this.Map<InterviewFilteredQuestion>(question);
-                        break;
-                    case InterviewQuestionType.SingleLinkedToList:
-                        result = this.Map<InterviewSingleOptionQuestion>(question, res =>
-                        {
-                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                                (question.GetAsInterviewTreeSingleOptionLinkedToListQuestion()).LinkedSourceId).ToList();
-                        });
-                        break;
-                    case InterviewQuestionType.Text:
-                        {
-                            InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
-                            result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
-                            var textQuestionMask = questionnaire.GetTextQuestionMask(identity.Id);
-                            if (!string.IsNullOrEmpty(textQuestionMask))
-                            {
-                                ((InterviewTextQuestion)result).Mask = textQuestionMask;
-                            }
-                        }
-                        break;
-                    case InterviewQuestionType.Integer:
-                        {
-                            InterviewTreeQuestion integerQuestion = callerInterview.GetQuestion(identity);
-                            var interviewIntegerQuestion = this.autoMapper.Map<InterviewIntegerQuestion>(integerQuestion);
-                            var callerQuestionnaire = questionnaire;
-
-                            interviewIntegerQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
-                            var isRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
-                            interviewIntegerQuestion.IsRosterSize = isRosterSize;
-
-                            if (isRosterSize)
-                            {
-                                var isRosterSizeOfLongRoster = callerQuestionnaire.IsQuestionIsRosterSizeForLongRoster(identity.Id);
-                                interviewIntegerQuestion.AnswerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
-                            }
-
-                            result = interviewIntegerQuestion;
-                        }
-                        break;
-                    case InterviewQuestionType.Double:
-                        {
-                            InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
-                            var interviewDoubleQuestion = this.autoMapper.Map<InterviewDoubleQuestion>(textQuestion);
-                            var callerQuestionnaire = questionnaire;
-                            interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
-                            interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
-                            result = interviewDoubleQuestion;
-                        }
-                        break;
-                    case InterviewQuestionType.MultiFixedOption:
-                        {
-                            result = this.autoMapper.Map<InterviewMutliOptionQuestion>(question);
-
-                            var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
-                            var typedResult = (InterviewMutliOptionQuestion)result;
-                            typedResult.Options = options;
-                            var callerQuestionnaire = questionnaire;
-                            typedResult.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                            typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                            typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
-                        }
-                        break;
-                    case InterviewQuestionType.MultiLinkedToList:
-                        result = this.Map<InterviewMutliOptionQuestion>(question, res =>
-                        {
-                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                                (question.GetAsInterviewTreeMultiOptionLinkedToListQuestion()).LinkedSourceId).ToList();
-                        });
-                        break;
-                    case InterviewQuestionType.DateTime:
-                        result = this.autoMapper.Map<InterviewDateQuestion>(question);
-                        break;
-                    case InterviewQuestionType.TextList:
-                        {
-                            result = this.autoMapper.Map<InterviewTextListQuestion>(question);
-                            var typedResult = (InterviewTextListQuestion)result;
-                            var callerQuestionnaire = questionnaire;
-                            typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id) ?? 200;
-                            typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
-                        }
-                        break;
-                    case InterviewQuestionType.YesNo:
-                        {
-                            var interviewYesNoQuestion = this.autoMapper.Map<InterviewYesNoQuestion>(question);
-                            var options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
-                            interviewYesNoQuestion.Options = options;
-                            var callerQuestionnaire = questionnaire;
-                            interviewYesNoQuestion.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                            interviewYesNoQuestion.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                            interviewYesNoQuestion.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
-
-                            result = interviewYesNoQuestion;
-                        }
-                        break;
-                    case InterviewQuestionType.Gps:
-                        result = this.autoMapper.Map<InterviewGpsQuestion>(question);
-                        break;
-                    case InterviewQuestionType.SingleLinkedOption:
-                        result = this.Map<InterviewLinkedSingleQuestion>(question, res =>
-                        {
-                            res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
-                        });
-                        break;
-                    case InterviewQuestionType.MultiLinkedOption:
-                        result = this.Map<InterviewLinkedMultiQuestion>(question, res =>
-                        {
-                            res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
-                            res.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                            res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                        });
-                        break;
-                    case InterviewQuestionType.Multimedia:
-                        result = Map<InterviewMultimediaQuestion>(question);
-                        break;
-                    case InterviewQuestionType.QRBarcode:
-                        InterviewTreeQuestion barcodeQuestion = callerInterview.GetQuestion(identity);
-                        result = this.autoMapper.Map<InterviewBarcodeQuestion>(barcodeQuestion);
-                        break;
-                    case InterviewQuestionType.Audio:
-                        InterviewTreeQuestion audioQuestion = callerInterview.GetQuestion(identity);
-                        result = this.autoMapper.Map<InterviewAudioQuestion>(audioQuestion);
-                        break;
-                }
-
-                this.PutValidationMessages(result.Validity, callerInterview, identity);
-                this.PutInstructions(result, identity);
-                this.ApplyDisablement(result, identity);
-                this.ApplyReviewState(result, question, callerInterview);
-                result.Comments = this.GetComments(question, callerInterview);
-
-                return result;
-            }
-
-            InterviewTreeStaticText staticText = callerInterview.GetStaticText(identity);
-            if (staticText != null)
-            {
-                InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText, map =>
-                {
-                    map.AfterMap((text, interviewStaticText) =>
-                    {
-                        var callerQuestionnaire = questionnaire;
-                        var attachment = callerQuestionnaire.GetAttachmentForEntity(identity.Id);
-                        if (attachment != null)
-                        {
-                            interviewStaticText.AttachmentContent = attachment.ContentId;
-                        }
-                    });
-                });
-
-                this.ApplyDisablement(result, identity);
-                this.PutValidationMessages(result.Validity, callerInterview, identity);
-                return result;
-            }
-
-            InterviewTreeGroup @group = callerInterview.GetGroup(identity);
-            if (@group != null)
-            {
-                var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@group);
-
-                this.ApplyDisablement(result, identity);
-                return result;
-            }
-
-            InterviewTreeRoster @roster = callerInterview.GetRoster(identity);
-            if (@roster != null)
-            {
-                var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(@roster);
-
-                this.ApplyDisablement(result, identity);
-                return result;
-            }
-
-            return null;
-        }
-
-        private void ApplyReviewState(GenericQuestion result, InterviewTreeQuestion question, IStatefulInterview callerInterview)
-        {
-            if (!IsReviewMode)
-            {
-                result.AcceptAnswer = true;
-                return;
-            }
-
-            result.AcceptAnswer = question.IsSupervisors && 
-                callerInterview.Status < InterviewStatus.ApprovedByHeadquarters && 
-                (this.authorizedUser.IsSupervisor && !this.authorizedUser.IsObserving);
-        }
-
-        private T Map<T>(InterviewTreeQuestion question, Action<T> afterMap = null)
-        {
-            return this.autoMapper.Map<InterviewTreeQuestion, T>(question, opts => opts.AfterMap((treeQuestion, target) => afterMap?.Invoke(target)));
-        }
-
+        
         public bool HasCoverPage()
         {
             var interview = this.GetCallerInterview();
@@ -605,43 +382,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             var sectionId = this.CallerSectionid;
             var interview = this.GetCallerInterview();
-            Sidebar result = new Sidebar();
-            HashSet<Identity> visibleSections = new HashSet<Identity>();
-
-            if (sectionId != null)
-            {
-                var currentOpenSection = interview.GetGroup(Identity.Parse(sectionId));
-
-                //roster instance could be removed
-                if (currentOpenSection != null)
-                {
-                    var shownPanels = currentOpenSection.Parents.Union(new[] { currentOpenSection });
-                    visibleSections = new HashSet<Identity>(shownPanels.Select(p => p.Identity));
-                }
-            }
-            foreach (var parentId in parentIds.Distinct())
-            {
-                var children = parentId == null
-                    ? interview.GetEnabledSections()
-                    : interview.GetGroup(Identity.Parse(parentId))?.Children.OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
-
-                foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
-                {
-                    var sidebar = this.autoMapper.Map<InterviewTreeGroup, SidebarPanel>(child, opts => SidebarMapOptions(opts, visibleSections));
-                    result.Groups.Add(sidebar);
-                }
-            }
-
-            return result;
-        }
-
-        private void SidebarMapOptions(IMappingOperationOptions<InterviewTreeGroup, SidebarPanel> opts, HashSet<Identity> shownLookup)
-        {
-            opts.AfterMap((g, sidebarPanel) =>
-            {
-                sidebarPanel.Collapsed = !shownLookup.Contains(g.Identity);
-                sidebarPanel.Current = shownLookup.Contains(g.Identity);
-            });
+            return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, parentIds, IsReviewMode);
         }
 
         public DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
@@ -699,7 +440,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             var interview = this.GetCallerInterview();
             InterviewTreeQuestion question = interview.GetQuestion(identity);
 
-            return GetComments(question, interview);
+            return this.interviewEntityFactory.GetComments(question, interview);
         }
 
         public CoverInfo GetCoverInfo()
@@ -734,7 +475,6 @@ namespace WB.UI.Headquarters.API.WebInterview
                 .Select(x => this.GetIdentifyingQuestion(x, interview, questionnaire))
                 .ToList();
 
-
             var completeInfo = new CoverInfo
             {
                 EntitiesWithComments = entitiesWithComments,
@@ -744,67 +484,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             };
             return completeInfo;
         }
-
-        private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
-        {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Strings.Error)
-                .ToArray();
-        }
-
-        private void ApplyDisablement(InterviewEntity result, Identity identity)
-        {
-            if (result.IsDisabled)
-            {
-                result.Title = HtmlRemovalRegex.Replace(result.Title, string.Empty);
-            }
-
-            result.HideIfDisabled = this.GetCallerQuestionnaire().ShouldBeHiddenIfDisabled(identity.Id);
-        }
-
-        private void PutInstructions(GenericQuestion result, Identity id)
-        {
-            var callerQuestionnaire = this.GetCallerQuestionnaire();
-
-            result.Instructions = callerQuestionnaire.GetQuestionInstruction(id.Id);
-            result.HideInstructions = callerQuestionnaire.GetHideInstructions(id.Id);
-        }
-
-        private Comment[] GetComments(InterviewTreeQuestion question, IStatefulInterview statefulInterview)
-        {
-            return question.AnswerComments.Select(ac
-                => new Comment()
-                {
-                    Text = ac.Comment,
-                    IsOwnComment = ac.UserId == statefulInterview.CurrentResponsibleId,
-                    UserRole = ac.UserRole,
-                    CommentTimeUtc = ac.CommentTime
-                })
-                .ToArray();
-        }
-
-        private static IEnumerable<LinkedOption> GetLinkedOptionsForLinkedQuestion(IStatefulInterview callerInterview,
-            Identity identity, List<RosterVector> options) => options.Select(x => new LinkedOption
-            {
-                Value = x.ToString(),
-                RosterVector = x,
-                Title = callerInterview.GetLinkedOptionTitle(identity, x)
-            });
-
-        private static IEnumerable<CategoricalOption> GetOptionsLinkedToListQuestion(IStatefulInterview callerInterview,
-            Identity identity, Guid linkedSourceId)
-        {
-            var listQuestion = callerInterview.FindQuestionInQuestionBranch(linkedSourceId, identity);
-
-            if ((listQuestion == null) || listQuestion.IsDisabled() || listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer()?.Rows == null)
-                return new List<CategoricalOption>();
-
-            return new List<CategoricalOption>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.Select(x => new CategoricalOption
-            {
-                Value = (int)x.Value,
-                Title = x.Text
-            }));
-        }
-
+        
         private InterviewEntityType GetEntityType(Guid entityId, IQuestionnaire callerQuestionnaire)
         {
             if (callerQuestionnaire.IsVariable(entityId)) return InterviewEntityType.Unsupported;
