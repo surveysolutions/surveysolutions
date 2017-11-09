@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -386,7 +385,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.TeamLeadId,
                 @event.Payload.UserId,
                 InterviewExportedAction.Resumed,
-                @event.Payload.LocalTime,
+                @event.EventTimeStamp,
                 null);
         }
 
@@ -398,7 +397,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.TeamLeadId,
                 @event.Payload.UserId,
                 InterviewExportedAction.Paused,
-                @event.Payload.LocalTime,
+                @event.EventTimeStamp,
                 null);
         }
     }
