@@ -243,7 +243,13 @@ namespace WB.Tests.Abc.TestFactories
                         fixedRosterTitles: fixedTitles,
                         fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
-        public FixedRosterTitle FixedTitle(decimal value, string title = null)
+
+        public FixedRosterTitle[] FixedTitles(params int[] codes)
+        {
+            return codes.Select(c => FixedTitle(c)).ToArray();
+        }
+
+        public FixedRosterTitle FixedTitle(int value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
 
         public GeoPosition GeoPosition()

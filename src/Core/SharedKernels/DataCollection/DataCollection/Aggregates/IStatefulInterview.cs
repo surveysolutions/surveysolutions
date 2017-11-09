@@ -192,5 +192,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewKey GetInterviewKey();
 
         int? GetAssignmentId();
+        bool IsParentOf(Identity parentIdentity, Identity childIdentity);
     }
 }

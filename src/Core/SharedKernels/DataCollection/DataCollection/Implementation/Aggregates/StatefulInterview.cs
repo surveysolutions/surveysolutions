@@ -830,6 +830,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.properties.AssignmentId;
         }
 
+        public bool IsParentOf(Identity parentIdentity, Identity childIdentity)
+        {
+            if ((parentIdentity ?? childIdentity) == null)
+                return false;
+
+            var childNode = this.Tree.GetNodeByIdentity(childIdentity);
+
+            return childNode != null && childNode.Parents.Select(x => x.Identity).ToHashSet().Contains(parentIdentity);
+        }
+
         public void Pause(PauseInterviewCommand command)
         {
             var invariants = new InterviewPropertiesInvariants(properties);
