@@ -159,7 +159,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 interviewFactory ?? Mock.Of<IInterviewFactory>(), 
                 Mock.Of<ILogger>(), 
                 csvWriter ??  Create.Service.CsvWriter(dataInCsvFile), 
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                Create.Service.TransactionManagerProvider());
         }
     }
 }
