@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -45,7 +44,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             return new InterviewInfo
             {
-                QuestionnaireTitle = this.IsReviewMode 
+                QuestionnaireTitle = IsReviewMode 
                     ? string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) 
                     : questionnaire.Title,
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
@@ -99,7 +98,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public string GetInterviewStatus()
         {
-            return GetInterviewSimpleStatus().ToString();
+            return this.GetInterviewSimpleStatus().ToString();
         }
 
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -125,7 +124,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 DateTimeAnswer questionAnswer = interviewQuestion.GetAsInterviewTreeDateTimeQuestion().GetAnswer();
                 string answer = questionAnswer?.Value != null
-                    ? $"<time datetime=\"{questionAnswer.Value:o}\">{interview.GetAnswerAsString(questionIdentity)}</time>"
+                    ? $@"<time datetime=""{questionAnswer.Value:o}"">{interview.GetAnswerAsString(questionIdentity)}</time>"
                     : null;
                 result.Answer = answer;
             }
@@ -203,7 +202,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return new ButtonState
                 {
                     Id = id,
-                    Status = CalculateSimpleStatus(firstSection.Identity, statefulInterview),
+                    Status = this.interviewEntityFactory.CalculateSimpleStatus(firstSection.Identity, statefulInterview, IsReviewMode),
                     Title = firstSection.Title.Text,
                     Target = firstSection.Identity.ToString(),
                     Type = ButtonType.Start
@@ -221,7 +220,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return new ButtonState
                 {
                     Id = id,
-                    Status = CalculateSimpleStatus(parent, statefulInterview),
+                    Status = this.interviewEntityFactory.CalculateSimpleStatus(parent, statefulInterview, IsReviewMode),
                     Title = parentGroup.Title.Text,
                     RosterTitle = parentRoster?.RosterTitle,
                     Target = parent.ToString(),
@@ -236,25 +235,23 @@ namespace WB.UI.Headquarters.API.WebInterview
                 return new ButtonState
                 {
                     Id = id,
-                    Title = WB.UI.Headquarters.Resources.WebInterview.CompleteInterview,
-                    Status = GetInterviewSimpleStatus(),
+                    Title = Headquarters.Resources.WebInterview.CompleteInterview,
+                    Status = this.GetInterviewSimpleStatus(),
                     Target = sectionIdentity.ToString(),
                     Type = ButtonType.Complete
                 };
             }
-            else
-            {
-                var nextSectionId = Identity.Create(sections[currentSectionIdx + 1], RosterVector.Empty);
 
-                return new ButtonState
-                {
-                    Id = id,
-                    Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
-                    Status = CalculateSimpleStatus(nextSectionId, statefulInterview),
-                    Target = nextSectionId.ToString(),
-                    Type = ButtonType.Next
-                };
-            }
+            var nextSectionId = Identity.Create(sections[currentSectionIdx + 1], RosterVector.Empty);
+
+            return new ButtonState
+            {
+                Id = id,
+                Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
+                Status = this.interviewEntityFactory.CalculateSimpleStatus(nextSectionId, statefulInterview, IsReviewMode),
+                Target = nextSectionId.ToString(),
+                Type = ButtonType.Next
+            };
         }
 
         public BreadcrumbInfo GetBreadcrumbs(string sectionIdArg)
@@ -324,7 +321,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             if (currentTreeGroup == null)
             {
-                webInterviewNotificationService.ReloadInterview(Guid.Parse(this.CallerInterviewId));
+                this.webInterviewNotificationService.ReloadInterview(Guid.Parse(CallerInterviewId));
             }
 
             return new BreadcrumbInfo
@@ -332,28 +329,9 @@ namespace WB.UI.Headquarters.API.WebInterview
                 Title = currentTreeGroup?.Title.Text,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
-                Status = CalculateSimpleStatus(group, statefulInterview).ToString(),
+                Status = this.interviewEntityFactory.CalculateSimpleStatus(group, statefulInterview, IsReviewMode).ToString(),
                 IsRoster = currentTreeGroupAsRoster != null
             };
-        }
-        
-        private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
-        {
-            if (interview.HasEnabledInvalidQuestionsAndStaticTexts(group))
-                return SimpleGroupStatus.Invalid;
-
-            if (interview.HasUnansweredQuestions(group))
-                return SimpleGroupStatus.Other;
-
-            bool isSomeSubgroupNotCompleted = interview
-                .GetEnabledSubgroups(group)
-                .Select(subgroup => CalculateSimpleStatus(subgroup, interview))
-                .Any(status => status != SimpleGroupStatus.Completed);
-
-            if (isSomeSubgroupNotCompleted)
-                return SimpleGroupStatus.Other;
-
-            return SimpleGroupStatus.Completed;
         }
 
         public InterviewEntity[] GetEntitiesDetails(string[] ids)
@@ -380,7 +358,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
         {
-            var sectionId = this.CallerSectionid;
+            var sectionId = CallerSectionid;
             var interview = this.GetCallerInterview();
             return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, parentIds, IsReviewMode);
         }
@@ -392,7 +370,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             var question = statefulInterview.GetQuestion(questionIdentity);
             var parentCascadingQuestion = question.GetAsInterviewTreeCascadingQuestion()?.GetCascadingParentQuestion();
             var parentCascadingQuestionAnswer = parentCascadingQuestion?.IsAnswered() ?? false
-                ? parentCascadingQuestion?.GetAnswer()?.SelectedValue
+                ? parentCascadingQuestion.GetAnswer()?.SelectedValue
                 : null;
 
             var topFilteredOptionsForQuestion = statefulInterview.GetTopFilteredOptionsForQuestion(questionIdentity, parentCascadingQuestionAnswer, filter, count);
