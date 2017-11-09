@@ -71,9 +71,9 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 FailedValidationConditions = new[] { 1 }
             };
 
-            var errorsReader = Create.Service.InterviewsErrorsReader(new []{questionError, staticTextError});
-
-            var exporter = CreateExporter(errorsReader, questionnaireStorage: questionnaire);
+            var interviewFactory = Mock.Of<IInterviewFactory>(x =>
+                x.GetErrors(It.IsAny<IEnumerable<Guid>>()) == new List<ExportedError> {questionError, staticTextError});
+            var exporter = CreateExporter(interviewFactory, questionnaireStorage: questionnaire);
 
             // Act
             exporter.Export(Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter), 
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
             // Assert
             Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "Variable", "Type", "InterviewId", "Message Number", "Message" }));
             Assert.That(dataInCsvFile[1].Data[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
-            Assert.That(dataInCsvFile[2].Data[0], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
+            Assert.That(dataInCsvFile[1].Data[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
         }
 
         [Test]
@@ -133,9 +133,10 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 FailedValidationConditions = new[] { 1 }
             };
 
-            var errorsReader = Create.Service.InterviewsErrorsReader(new[] { questionError, staticTextError });
+            var interviewFactory = Mock.Of<IInterviewFactory>(x =>
+                x.GetErrors(It.IsAny<IEnumerable<Guid>>()) == new List<ExportedError> {questionError, staticTextError});
             var questionnaire = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocumentWithOneChapter);
-            var exporter = CreateExporter(errorsReader, questionnaireStorage: questionnaire);
+            var exporter = CreateExporter(interviewFactory, questionnaireStorage: questionnaire);
 
             // Act
             exporter.Export(Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter),
@@ -147,15 +148,15 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
             // Assert
             Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "Variable", "Type", "Roster", "InterviewId", "Id1", "Id2", "Message Number", "Message" }));
             Assert.That(dataInCsvFile[1].Data[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(), "0", "1", "2", questionMsg }));
-            Assert.That(dataInCsvFile[2].Data[0], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "0", "", "1", staticTextInvalid }));
+            Assert.That(dataInCsvFile[1].Data[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "0", "", "1", staticTextInvalid }));
         }
 
-        private InterviewErrorsExporter CreateExporter(InterviewsErrorsReader errorsReader = null, 
+        private InterviewErrorsExporter CreateExporter(IInterviewFactory interviewFactory = null, 
             ICsvWriter csvWriter = null, 
             IQuestionnaireStorage questionnaireStorage = null)
         {
             return new InterviewErrorsExporter(
-                errorsReader ?? Mock.Of<InterviewsErrorsReader>(), 
+                interviewFactory ?? Mock.Of<IInterviewFactory>(), 
                 Mock.Of<ILogger>(), 
                 csvWriter ??  Create.Service.CsvWriter(dataInCsvFile), 
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
