@@ -5,6 +5,7 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -361,6 +362,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
                 $"WHERE {AsGpsColumn} is not null " +
                 $"GROUP BY questionnaireidentity").ToArray();
+
+        public List<ExportedError> GetErrors(IEnumerable<Guid> interveiws)
+        {
+            var connection = this.sessionProvider.GetSession().Connection;
+            var array = interveiws.ToArray();
+            var errors = connection.Query<ExportedError>(
+                $@"SELECT interviewid, entityid, rostervector, entitytype, invalidvalidations as FailedValidationConditions
+                          FROM {InterviewsTableName}
+                          WHERE interviewid = ANY(@interviews) AND entitytype IN(2, 3) AND array_length(invalidvalidations, 1) > 0
+                          ORDER BY interviewid",
+                new
+                {
+                    interviews = array
+                }).ToList();
+
+            return errors;
+        }
 
         public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude, double southWestCornerLatitude,
