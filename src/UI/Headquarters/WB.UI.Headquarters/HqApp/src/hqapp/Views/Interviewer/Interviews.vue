@@ -218,7 +218,7 @@ export default {
                     title: this.$t("Assignments.UpdatedAt"),
                     searchable: false,
                     render(data){
-                        return moment(data).format(DateFormats.dateTimeInList);
+                        return moment.utc(data).local().format(DateFormats.dateTimeInList);
                     }
                 }
             ]
