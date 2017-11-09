@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                     gpsQuestion.Longitude.ToString(exportCulture),
                     gpsQuestion.Accuracy.ToString(exportCulture),
                     gpsQuestion.Altitude.ToString(exportCulture),
-                    gpsQuestion.Timestamp.DateTime.ToString(ExportFormatSettings.ExportDateTimeFormat, exportCulture)
+                    gpsQuestion.Timestamp.UtcDateTime.ToString(ExportFormatSettings.ExportDateTimeFormat, exportCulture)
                 };
             }
 
