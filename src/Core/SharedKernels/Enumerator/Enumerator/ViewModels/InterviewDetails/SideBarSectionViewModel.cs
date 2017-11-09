@@ -12,6 +12,14 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
+    [DebuggerDisplay("Id = {SectionIdentity}, Expanded={IsExpandedNow}")]
+    public class ToggleSectionEventArgs : EventArgs
+    {
+        public Identity ToggledSection { get; set; }
+        public bool IsExpandedNow { get; set; }
+    }
+
+
     [DebuggerDisplay("Title = {Title.PlainText}, Id = {SectionIdentity}")]
     public class SideBarSectionViewModel : MvxNotifyPropertyChanged, ISideBarSectionItem,
         ILiteEventHandler<RosterInstancesAdded>,
@@ -137,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void Toggle()
         {
             this.Expanded = !this.Expanded;
-            this.OnSectionUpdated?.Invoke(this, EventArgs.Empty);
+            this.OnSectionUpdated?.Invoke(this, new ToggleSectionEventArgs{ ToggledSection = SectionIdentity, IsExpandedNow = Expanded });
         }
 
         private void NavigateToSection()
