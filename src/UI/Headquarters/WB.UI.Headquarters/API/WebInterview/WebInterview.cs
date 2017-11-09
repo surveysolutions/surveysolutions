@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Web.Extensions;
@@ -23,13 +22,13 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
-        private readonly IMapper autoMapper;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
+        private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
@@ -49,25 +48,24 @@ namespace WB.UI.Headquarters.API.WebInterview
         public WebInterview(
             IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
-            IMapper autoMapper,
             IQuestionnaireStorage questionnaireRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
             IAuthorizedUser authorizedUser,
             IChangeStatusFactory changeStatusFactory,
             IInterviewFactory interviewFactory,
-            IStatefullInterviewSearcher statefullInterviewSearcher)
+            IStatefullInterviewSearcher statefullInterviewSearcher,
+            IWebInterviewInterviewEntityFactory interviewEntityFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
-            this.autoMapper = autoMapper;
             this.questionnaireRepository = questionnaireRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.interviewFactory = interviewFactory;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
+            this.interviewEntityFactory = interviewEntityFactory;
         }
-
 
         public void FillExceptionData(Dictionary<string, string> data)
         {

@@ -1624,9 +1624,11 @@
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\InterviewQuestionFilter.cs" />
+    <Compile Include="API\WebInterview\IWebInterviewInterviewEntityFactory.cs" />
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
+    <Compile Include="API\WebInterview\Services\WebInterviewInterviewEntityFactory.cs" />
     <Compile Include="App_GlobalResources\Maps.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
