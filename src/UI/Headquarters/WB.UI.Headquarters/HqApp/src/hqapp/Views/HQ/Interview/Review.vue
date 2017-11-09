@@ -10,6 +10,7 @@
                 </section>
             </div>
         </div>
+        <IdleTimeoutService :minutes="60"/>
     </main>
 </template>
 
