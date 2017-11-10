@@ -857,7 +857,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var childNode = this.Tree.GetNodeByIdentity(childIdentity);
 
-            return childNode != null && childNode.Parents.Select(x => x.Identity).ToHashSet().Contains(parentIdentity);
+            return childNode != null && childNode.Parents.Select(x => x.Identity).Any(x => x.Equals(parentIdentity));
         }
 
         public void Pause(PauseInterviewCommand command)
