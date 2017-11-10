@@ -7,6 +7,7 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
 
@@ -25,6 +26,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         }
 
         [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetMapList)]
         public virtual HttpResponseMessage GetMaps()
         {
             var resultValue = this.mapRepository.GetAllMapsForUser(this.authorizedUser.UserName)
@@ -42,7 +44,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         }
 
         [HttpGet]
-        //[WriteToSyncLog(SynchronizationLogType.GetAttachmentContent)]
+        [WriteToSyncLog(SynchronizationLogType.GetMap)]
         public HttpResponseMessage GetMapContent(string id)
         {
             var mapContent = this.mapRepository.GetMapContent(id);

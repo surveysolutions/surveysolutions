@@ -26,21 +26,25 @@ namespace WB.UI.Interviewer.Services
 
                 this.thread = new Thread(() =>
                 {
-                    try
+                    if (!this.isSyncRunning)
                     {
-                        synchronizationProcess.SyncronizeMapsAsync(this.CurrentProgress.Progress, 
-                                                                   this.CurrentProgress.CancellationTokenSource.Token)
-                                              .WaitAndUnwrapException(); 
-                        // do not pass cancellationToken, since it will always throw operation cancelled here
-                    }
-                    catch (Exception e)
-                    {
-                        Mvx.Resolve<ILoggerProvider>().GetFor<MapDownloadBackgroundService>().Error(">!>Failed to sync maps", e);
-                    }
-                    finally
-                    {
-                        this.isSyncRunning = false;
-                        this.CurrentProgress = null;
+                        try
+                        {
+                            synchronizationProcess.SyncronizeMapsAsync(this.CurrentProgress.Progress,
+                                    this.CurrentProgress.CancellationTokenSource.Token)
+                                .WaitAndUnwrapException();
+                            // do not pass cancellationToken, since it will always throw operation cancelled here
+                        }
+                        catch (Exception e)
+                        {
+                            Mvx.Resolve<ILoggerProvider>().GetFor<MapDownloadBackgroundService>()
+                                .Error(">!>Failed to sync maps", e);
+                        }
+                        finally
+                        {
+                            this.isSyncRunning = false;
+                            this.CurrentProgress = null;
+                        }
                     }
                 });
 
