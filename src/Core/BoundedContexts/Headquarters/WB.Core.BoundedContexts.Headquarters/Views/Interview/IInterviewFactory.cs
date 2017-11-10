@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void MarkQuestionsAsReadOnly(Guid interviewId, Identity[] questionIds);
         void AddRosters(Guid interviewId, Identity[] rosterIds);
         void RemoveRosters(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity[] rosterIds);
-        void RemoveAnswers(Guid interviewId, Identity[] questionIds);
+        void RemoveAnswers(Guid interviewId, IEnumerable<Identity> questionIds);
         
         InterviewData GetInterviewData(Guid interviewId);
 
