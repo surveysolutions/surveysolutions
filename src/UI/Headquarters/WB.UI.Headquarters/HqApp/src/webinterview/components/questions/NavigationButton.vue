@@ -55,6 +55,10 @@
             }
         },
 
+        mounted() {
+            this.fetch()
+        },
+
         methods: {
             navigate() {
                 if (this.$me.type == ButtonType.Complete) {
