@@ -1,3 +1,17 @@
+.question{
+	&.with-flag{
+		display: block;
+		@include gradient-horizontal($gray-super-light, $gray-super-light);
+		background-repeat: repeat-y;
+		background-size: 12px 100%;
+		.question-editor .button-flag{
+			background-position: 0 0;
+				&:hover, &:focus{
+					background-position: -19px 0;
+				}
+		}
+	}
+}
 .web-interview-for-supervisor{
 	&.filters-results-are-shown{
 		.filters{
@@ -27,7 +41,14 @@
 	.filters{
 		width: $filter-width-details;
 		z-index: 6;
-		@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
+		@include box-shadow(20px 10px 40px 0px rgba(0, 0, 0, 0.2));
+	}
+	
+}
+.about-questionnaire{
+	font: 14px/16px "RobotoBold";
+	a{
+		font-weight: bold;
 	}
 	
 }
@@ -42,6 +63,47 @@
 		&.questionnaire{
 			@include width-questionnaire(($filter-width-details + $content-width));
 		}
+	}
+}
+.panel-details{
+	.aside-menu{
+		position: relative;
+		display: inline-block;
+		top: auto;
+		right: auto;
+		button{
+			height: 36px;
+		}
+	}
+	h2{
+		float: left;
+		margin-right: 20px;
+		margin-bottom: 5px;
+	}
+	.about-questionnaire{
+		width: calc(100% - 250px);
+		float: left;
+	}
+	.about-questionnaire-details{
+		float: left;
+		width: calc(100% - 180px);
+	}
+	h3{
+		margin-bottom: 5px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	p{
+		margin-bottom: 0;
+		.btn-link{
+			padding-top: 0;
+			padding-bottom: 0;
+			color: $gray_light;
+		}
+	}
+	.questionnaire-details-actions{
+		float: right;
 	}
 }
 @media only screen and (max-width: 1525px){
@@ -83,7 +145,7 @@
 	.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
 		.content{
 			left: $filter-width + 12px;
-			box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+			box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
 		}
 		.details-interview{
 			&.questionnaire{
@@ -100,7 +162,7 @@
 			}
 		}
 		.filters-results.active{
-			@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
+			@include box-shadow(20px 10px 40px 0px rgba(0, 0, 0, 0.2));
 		}
 		&.fullscreen-hidden-content{
 			.content{
@@ -118,7 +180,7 @@
 			}
 			.filters{
 				overflow: auto;
-				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
 			}
 			&.filters-results-are-shown{
 				.details-interview{
@@ -185,7 +247,10 @@
 	}
 }
 @media (max-width: $screen-md-min){
-		.web-interview-for-supervisor{
+	.filters-results{
+		margin-top: 60px;
+	}
+	.web-interview-for-supervisor{
 		.filters, .content{
 			@include hidden-foldback-button();
 			overflow: visible;
@@ -238,7 +303,7 @@
 			.filters{
 				@include visible-foldback-button();
 				overflow: auto;
-				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
 				left: 0;
 			}
 			&.filters-results-are-shown{
@@ -251,7 +316,7 @@
 			.content{
 				left: 12px;
 				@include visible-foldback-button();
-				box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
+				box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
 				z-index: 5;
 				.foldback-button{
 	                top: 5px;
@@ -266,9 +331,71 @@
 	}
 }
 @media (max-width: $screen-sm-min){
+	.web-interview{
+		&.filters-results-are-shown{
+			.filters-results.active{
+				overflow: auto;
+				height: auto;
+				width: calc(100% - 12px);
+				left: 12px;
+				.close-btn{
+					right: 10px;
+				}
+			}
+			.content, .filters{
+				display: none;
+			}
+			.questionnaire {
+				&.details-interview{
+					@include width-questionnaire(0px);
+					// display: none;
+				}
+			}
+		}
+		&.fullscreen-hidden-filters, &.show-filters{
+			.content, .questionnaire{
+				display: none;
+			}
+			.filters{
+				@include absolute(0, 0, 0, 12px);
+				width: calc(100% - 12px);
+			}
+		}
+		&.show-filters{
+			.filters{
+				margin-left: 0;
+				height: auto;
+				.filters-container, .preset-filters-container{
+					width: $filter-width-details;
+					margin: 0 auto;
+				}
+			}
+		}
+	}
 	.web-interview-for-supervisor{
 		.structured-content >.panel-default:first-of-type > .panel-heading h3 > a{
 	        margin-right: 0;
+		}
+	}
+	.panel-details{
+		.about-questionnaire{
+			width: 100%;
+			float: none;
+			margin-bottom: 10px;
+		}
+		h2{
+			float: none;
+		}
+		.about-questionnaire-details{
+			float: none;
+			width: 100%;
+		}
+		.questionnaire-details-actions{
+			float: none;
+		}
+		.aside-menu .dropdown-menu{
+			left: 35px;
+			right: auto;
 		}
 	}
 }
