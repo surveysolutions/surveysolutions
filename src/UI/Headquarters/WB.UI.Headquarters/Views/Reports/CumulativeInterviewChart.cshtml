@@ -14,7 +14,7 @@
     @Scripts.Render("~/js/chart")
 
     <script type="text/javascript">
-    var interviewChartUrl = '@Html.Raw(@Url.Action("InterviewsChart", "Reports", new { }, Request.Url.Scheme))';;
+    var interviewChartUrl = '@Url.Action("InterviewsChart", "Reports")';
         var chartApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "ChartStatistics" })';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
