@@ -23,30 +23,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.CreatedBy);
             Property(x => x.Path);
             Property(x => x.Depth);
-
-            Set(x => x.SubFolders, collection => {
-                collection.Key(c => {
-                    c.Column(nameof(QuestionnaireListViewFolder.Parent));
-                });
-                collection.OrderBy(x => x.Title);
-                collection.Inverse(true);
-                collection.Lazy(CollectionLazy.Lazy);
-            },
-            rel => {
-                rel.OneToMany();
-            });
-
-            Set(x => x.Questionnaires, collection => {
-                collection.Key(c => {
-                    c.Column(nameof(QuestionnaireListViewItem.FolderId));
-                });
-                collection.OrderBy(x => x.Title);
-                collection.Inverse(true);
-                collection.Lazy(CollectionLazy.Lazy);
-            },
-            rel => {
-                rel.OneToMany();
-            });
+            Property(x => x.CreatorName);
         }
     }
 }
