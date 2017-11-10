@@ -36,7 +36,7 @@
                                 }));
 
             var assignmentsApiUrl = "@Url.Content("~/api/Assignments/Create")";
-            var assignmentListUrl = '@Url.Action("Index", "Assignments", new {}, Request.Url.Scheme)';
+            var assignmentListUrl = '@Url.Action("Index", "Assignments")';
             var supervisorsUrl = "@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"})";
 
             var model = new Supervisor.VM.NewAssignment(questionnaire, assignmentListUrl, supervisorsUrl, assignmentsApiUrl);
