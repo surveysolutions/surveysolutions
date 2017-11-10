@@ -49,7 +49,9 @@
                                 @Html.FormatQuestionnaireHistoricalRecord(Url, Model.Id, listViewModel)
                             </td>
                             <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
-                            <td>@listViewModel.Timestamp.ToString("s")</td>
+                            <td>
+                                <time time="@listViewModel.Timestamp.ToString("s")Z"></time>
+                            </td>
                             @if (!Model.ReadonlyMode)
                             {
                                 <td>
