@@ -16,7 +16,7 @@
 {
     @Scripts.Render("~/js/interviews")
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("InterviewsRedesigned", "HQ", new {area = ""}, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Url.Action("InterviewsRedesigned", "HQ")';
         var $detailsUrl = '@Url.Action("Details", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "Reports")';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "CommandApi", action = "ExecuteCommands"})';
