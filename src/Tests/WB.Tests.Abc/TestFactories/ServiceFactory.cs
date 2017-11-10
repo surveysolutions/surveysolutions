@@ -537,5 +537,17 @@ namespace WB.Tests.Abc.TestFactories
                 });
             return csvWriterMock.Object;
         }
+
+        public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
+            IDeviceSyncInfoRepository deviceSyncInfoRepository = null, 
+            IInterviewerVersionReader interviewerVersionReader = null)
+        {
+            return new InterviewerProfileFactory(
+                userManager ?? Mock.Of<HqUserManager>(),
+                interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(), 
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>());
+        }
     }
 }

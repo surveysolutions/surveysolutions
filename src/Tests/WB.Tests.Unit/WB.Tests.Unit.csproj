@@ -493,6 +493,7 @@
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\when_sync_package_contains_unique_interview_key.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\when_sync_package_does_not_contain_interview_key.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewUniqueKeyGeneratorTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\IntreviewerProfileTests\InterviewerProfileFcatoryTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Repositories\DeviceSyncInfoRepositoryTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HashCompatibilityProviderTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HqUserManagerTests.cs" />
