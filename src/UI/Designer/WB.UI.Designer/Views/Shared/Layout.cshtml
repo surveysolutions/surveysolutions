@@ -34,7 +34,7 @@
 
                 $('time').each(function() {
                     var date = $(this).attr('datetime');
-                    var momentDate = moment.utc(date).local().format('D MMM YYYY, HH:mm');
+                    var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
                     $(this).text(momentDate);
                 });
             }
