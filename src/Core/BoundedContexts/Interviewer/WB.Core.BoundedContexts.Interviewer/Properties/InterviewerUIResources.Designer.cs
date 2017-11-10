@@ -931,6 +931,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking maps on server.
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map sync error.
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Map_sync_error {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Map_sync_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map synchronization succesfuly finished.
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Handling map {0}, {1} out of {2}. 
+        /// Downloaded {3} out of {4} ({5}%).
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard.
         /// </summary>
         public static string MenuItem_Title_Dashboard {

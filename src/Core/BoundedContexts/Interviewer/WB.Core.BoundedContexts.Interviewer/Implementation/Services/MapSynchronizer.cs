@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 progress.Report(new MapSyncProgress
                 {
-                    Title = $"Checking maps on server",
+                    Title = InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server,
                     Status = MapSyncStatus.Started
                 });
 
@@ -46,13 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     cancellationToken.ThrowIfCancellationRequested();
 
                     processedMapsCount++;
-                    progress.Report(new MapSyncProgress
-                    {
-                        Title = $"Handling map {mapDescription.MapName}, {processedMapsCount} out of {items.Count}",
-                        Status = MapSyncStatus.Download
-                    });
-
-
+                    
                     if (this.mapService.DoesMapExist(mapDescription.MapName))
                         continue;
 
@@ -63,7 +57,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                             progress.Report(new MapSyncProgress
                             {
                                 Title =
-                                    $"Handling map {mapDescription}, {processedMapsCount} out of {items.Count}. \r\n Downloaded {args.BytesReceived} out of {args.TotalBytesToReceive} ({args.ProgressPercentage}%)",
+                                    string.Format(InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format, 
+                                                    mapDescription, processedMapsCount, items.Count, args.BytesReceived, 
+                                                    args.TotalBytesToReceive, args.ProgressPercentage),
                                 Status = MapSyncStatus.Download
                             });
                         }
@@ -78,15 +74,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                 progress.Report(new MapSyncProgress
                 {
-                    Title = "Map synchronization succesfuly finished",
+                    Title = InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished,
                     Status = MapSyncStatus.Success,
                 });
             }
             catch (SynchronizationException ex)
             {
-                var errorTitle = "Map sync error";
+                var errorTitle = InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Map_sync_error;
                 var errorDescription = ex.Message;
-                logger.Error("Map sync error", ex);
+                logger.Error(InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Map_sync_error, ex);
 
                 switch (ex.Type)
                 {
@@ -127,12 +123,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
             catch (Exception e)
             {
-                logger.Error("Map sync error", e);
+                logger.Error(InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Map_sync_error, e);
                 progress.Report(new MapSyncProgress
                 {
                     Status = MapSyncStatus.Fail,
                     Description = e.Message,
-                    Title = "Map sync error"
+                    Title = InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Map_sync_error
                 });
             }
 

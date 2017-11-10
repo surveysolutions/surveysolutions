@@ -7,5 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MapService
         List<MapDescription> GetAvailableMaps();
         bool DoesMapExist(string mapName);
         void SaveMap(string mapName, byte[] content);
+        MapDescription PrepareAndGetDefaultMap();
     }
 }
