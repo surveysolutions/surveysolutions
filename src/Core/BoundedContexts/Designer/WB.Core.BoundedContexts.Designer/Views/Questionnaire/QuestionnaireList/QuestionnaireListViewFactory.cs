@@ -76,8 +76,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public QuestionnaireListView LoadFoldersAndQuestionnaires(QuestionnaireListInputModel input)
         {
-            List<QuestionnaireListViewFolder> folders = Enumerable.Empty<QuestionnaireListViewFolder>().ToList();
-            List<QuestionnaireListViewItem> questionnaires = Enumerable.Empty<QuestionnaireListViewItem>().ToList();
+            List<QuestionnaireListViewFolder> folders = new List<QuestionnaireListViewFolder>();
+            List<QuestionnaireListViewItem> questionnaires = new List<QuestionnaireListViewItem>(); 
             int foldersCount = 0, questionnairesCount = 0;
             var isSupportFolders = input.IsPublic;
 
