@@ -98,7 +98,6 @@ namespace WB.UI.Headquarters.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
-            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
