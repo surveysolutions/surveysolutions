@@ -18,6 +18,8 @@
     </div>
 </template>
 <script lang="js">
+    import { GroupStatus } from "./questions"
+
     export default {
         name: 'sidebar-panel',
         props: {
@@ -65,10 +67,14 @@
                 return [{
                     current: this.panel.current,
                     active: this.isActive,
-                    complete: this.panel.state === "Completed" && this.panel.validity.isValid,
-                    "has-error": !this.panel.validity.isValid
+                    complete: this.panel.status === GroupStatus.Completed && !this.hasError ,
+                    "has-error": this.hasError
                 }]
+            },
+            hasError() {
+                return this.panel.validity.isValid == false;
             }
+
         },
         watch: {
              ["$route.params.sectionId"]() {

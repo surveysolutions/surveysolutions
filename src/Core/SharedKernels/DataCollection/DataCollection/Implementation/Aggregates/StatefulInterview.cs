@@ -445,14 +445,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.GetEnabledNotHiddenQuestions().Where(question =>
                 question.IsInterviewer && !question.IsReadonly);
 
-        public int CountActiveAnsweredQuestionsInInterview()
-            => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
+        private IEnumerable<InterviewTreeQuestion> GetEnabledQuestionsForSupervisor()
+            => this.GetEnabledNotHiddenQuestions().Where(question =>
+                (question.IsInterviewer || question.IsSupervisors) && !question.IsReadonly);
 
-        public int CountActiveQuestionsInInterview() => this.GetEnabledInterviewerQuestions().Count();
 
-        public int CountAllEnabledUnansweredQuestions()
-            => this.GetEnabledNotHiddenQuestions().Count(question => !question.IsAnswered());
+        public int CountActiveAnsweredQuestionsInInterview() => 
+            this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
 
+        public int CountActiveQuestionsInInterview() => 
+            this.GetEnabledInterviewerQuestions().Count();
+
+        public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
+
+        public int CountActiveAnsweredQuestionsInInterviewForSupervisor() => 
+            this.GetEnabledQuestionsForSupervisor().Count(question => question.IsAnswered());
+
+        public int CountActiveQuestionsInInterviewForSupervisor() => 
+            this.GetEnabledQuestionsForSupervisor().Count();
+
+        public int CountInvalidEntitiesInInterviewForSupervisor() => this.GetInvalidEntitiesInInterviewForSupervisor().Count();
+
+
+        public int CountAllEnabledUnansweredQuestions() => 
+            this.GetEnabledNotHiddenQuestions().Count(question => !question.IsAnswered());
+        
         public int CountAllEnabledAnsweredQuestions()
             => this.GetEnabledNotHiddenQuestions().Count(question => question.IsAnswered());
         public int CountAllEnabledQuestions() => this.GetEnabledNotHiddenQuestions().Count();
@@ -463,9 +480,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int CountEnabledHiddenQuestions() => 
             this.Tree.FindQuestions().Where(question => !question.IsDisabled()).Count(question => question.IsHidden);
-
-        public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
-
+        
         public IEnumerable<Identity> GetAllInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions(true).Select(question => question.Identity));
@@ -473,6 +488,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer)
+                    .Select(question => question.Identity));
+
+        private IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor()
+            => this.GetEnabledInvalidStaticTexts()
+                .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer || question.IsSupervisors)
                     .Select(question => question.Identity));
 
         public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
