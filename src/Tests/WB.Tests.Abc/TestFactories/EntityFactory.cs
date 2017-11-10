@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -1847,6 +1848,45 @@ namespace WB.Tests.Abc.TestFactories
                 fileName: fileName ?? "file-" + randomstring,
                 header: header,
                 content: content);
+        }
+
+        public DeviceSyncInfo DeviceSyncInfo(Guid interviewerId, string deviceId)
+        {
+            return new DeviceSyncInfo
+            {
+                SyncDate = DateTime.UtcNow,
+                InterviewerId = interviewerId,
+                DeviceId = deviceId,
+                LastAppUpdatedDate = DateTime.UtcNow.AddDays(-30),
+                DeviceModel = "DeviceModel",
+                DeviceType = "DeviceType",
+                AndroidVersion = "Android",
+                DeviceLanguage = "DeviceLanguage",
+                DeviceBuildNumber = "DeviceBuildNumber",
+                DeviceSerialNumber = "DeviceSerialNumber",
+                DeviceManufacturer = "DeviceManufacturer",
+                DBSizeInfo = 73 * 1024 * 1024,
+                AndroidSdkVersion = 25,
+                AndroidSdkVersionName = "AndroidSdkVersionName",
+                DeviceDate = DateTime.UtcNow.AddHours(-1),
+                AppVersion = "AppVersion",
+                AppBuildVersion = 1697,
+                MobileSignalStrength = 7,
+                AppOrientation = "AppOrientation",
+                MobileOperator = "MobileOperator",
+                NetworkSubType = "NetworkSubType",
+                NetworkType = "NetworkType",
+                BatteryChargePercent = 88,
+                BatteryPowerSource = "BatteryPowerSource",
+                IsPowerInSaveMode = false,
+                DeviceLocationLat = 14.15,
+                DeviceLocationLong = 16.17,
+                NumberOfStartedInterviews = 10,
+                RAMFreeInBytes = 50 * 1024 * 1024,
+                RAMTotalInBytes = 1024 * 1024 * 1024,
+                StorageFreeInBytes = 5 * 1024 * 1024,
+                StorageTotalInBytes = 2000 * 1024 * 1024
+            };
         }
     }
 }
