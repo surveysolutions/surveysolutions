@@ -11,7 +11,7 @@ namespace WB.UI.Designer.Utils
             {
                 return string.Format("Today at {0}", localDate.ToString("HH:mm"));
             }
-            return localDate.ToString("d MMM yyyy, HH:mm");
+            return localDate.ToString("MMM dd, yyy HH:mm");
         }
     }
 }
