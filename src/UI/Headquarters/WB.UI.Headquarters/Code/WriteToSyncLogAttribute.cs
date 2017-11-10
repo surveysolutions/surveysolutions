@@ -166,6 +166,12 @@ namespace WB.UI.Headquarters.Code
                     case SynchronizationLogType.GetAssignment:
                         logItem.Log = GetAssignmentLogMessage(context);
                         break;
+                    case SynchronizationLogType.GetMapList:
+                        logItem.Log = this.GetMapListLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetMap:
+                        logItem.Log = SyncLogMessages.GetMap.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }
@@ -187,6 +193,17 @@ namespace WB.UI.Headquarters.Code
                 ? SyncLogMessages.NoNewInterviewPackagesToDownload
                 : string.Join("<br />", messagesByInterviews);
             return SyncLogMessages.GetInterviews.FormatString(readability);
+        }
+
+        private string GetMapListLogMessage(HttpActionExecutedContext context)
+        {
+            var mapsApiView = this.GetResponseObject<List<MapView>>(context);
+
+            var readability = !mapsApiView.Any()
+                ? SyncLogMessages.NoMapsForUser
+                : string.Join("<br />", mapsApiView.Select(x => x.MapName));
+
+            return SyncLogMessages.GetMaps.FormatString(readability);
         }
 
         private static string GetInterviewLink(Guid interviewId)
