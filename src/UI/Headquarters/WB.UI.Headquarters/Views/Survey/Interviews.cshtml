@@ -255,7 +255,7 @@
                                                 <span data-bind="text: ResponsibleName"></span>
                                                 <!-- /ko -->
                                             </td>
-                                            <td class="date last-update" data-bind="text: LastEntryDate"></td>
+                                            <td class="date last-update" data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)"></td>
                                             <td class="errors">
                                                 <!-- ko if:HasErrors -->
                                                 @Common.Yes
@@ -294,7 +294,7 @@
                             </div>
                             <ul class="list-unstyled">
                                 <li>@Pages.Survey_HasErrorsTitle:  <span data-bind="text: HasErrors() ? '@Common.Yes' : '@Common.No'"></span></li>
-                                <li>@Pages.Survey_LastUpdateTitle: <span data-bind="text: LastEntryDate"></span></li>
+                                <li>@Pages.Survey_LastUpdateTitle: <span data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)"></span></li>
                                 <li>@Pages.Survey_ReceivedByInterviewerTitle: <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Pages.Survey_ResponsibleTitle: <a class="interviewer" data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a></li>
                             </ul>
