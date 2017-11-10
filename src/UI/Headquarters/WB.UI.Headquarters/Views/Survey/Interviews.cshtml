@@ -22,7 +22,7 @@
     @Scripts.Render("~/js/common")
 
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "Survey", new { }, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Url.Action("Interviews", "Survey")';
         var $detailsUrl = '@Url.Action("Review", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatusesForSv", "Reports")';
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
