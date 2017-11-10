@@ -9,6 +9,7 @@
 <script lang="js">
     import SectionProgress from "./SectionLoadProgress"
     import Vue from 'vue'
+    import { GroupStatus } from "./questions"
     
     async function checkSectionPermission(to) {
           if (to.name === "section") {
@@ -58,12 +59,15 @@
             info() {
                 return this.$store.state.webinterview.breadcrumbs
             },
+            hasError() {
+                return this.info.validity && this.info.validity.isValid === false;
+            },
             sectionClass() {
                 if (this.info) {
                     return [
                         {
-                            'complete-section': this.info.status == "Completed",
-                            'section-with-error': this.info.status == "Invalid"
+                            'complete-section': this.info.status == GroupStatus.Completed && !this.hasError,
+                            'section-with-error': this.hasError
                         }
                     ]
                 }
