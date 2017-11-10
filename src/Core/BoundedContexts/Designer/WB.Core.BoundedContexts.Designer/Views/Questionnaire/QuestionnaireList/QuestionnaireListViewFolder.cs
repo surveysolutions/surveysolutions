@@ -20,5 +20,23 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public virtual int Depth { get; set; }
 
         public virtual string Path { get; set; }
+
+        protected bool Equals(QuestionnaireListViewFolder other)
+        {
+            return PublicId.Equals(other.PublicId);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((QuestionnaireListViewFolder) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return PublicId.GetHashCode();
+        }
     }
 }
