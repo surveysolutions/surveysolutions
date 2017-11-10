@@ -195,6 +195,9 @@
   <data name="EmptyList" xml:space="preserve">
     <value>This list does not contain any records</value>
   </data>
+  <data name="Location" xml:space="preserve">
+    <value>Location:  </value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>

@@ -309,6 +309,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M012_MigrateSharedPersonsToListStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M014_AddCanImportOnHQColumnToUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M015_AddAllowedAddressesTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M021_AddCreatorNameFieldForFolders.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddHierarhyFieldForFolders.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M019_AddRelationsForFolders.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M017_AddQuestionnaireListViewFolderTable.cs" />
