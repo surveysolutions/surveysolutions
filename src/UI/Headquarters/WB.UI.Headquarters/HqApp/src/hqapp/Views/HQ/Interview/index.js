@@ -13,6 +13,8 @@ export default class ReviewComponent {
     }
 
     get routes() {
+        var self = this;
+        
         return [{
             path: '/Interview/Review/:interviewId',
             component: Review,
@@ -21,6 +23,10 @@ export default class ReviewComponent {
                     component: Cover,
                     props: {
                         navigateToPrefilled: true
+                    },
+                    beforeEnter(to, from, next){
+                        self.changeSection(null)
+                        next()
                     }
                 },
                 {
@@ -29,31 +35,40 @@ export default class ReviewComponent {
                     component: Cover,
                     props: {
                         navigateToPrefilled: true
+                    },
+                    beforeEnter(to, from, next){
+                        self.changeSection(null)
+                        next()
                     }
                 },
                 {
                     path: 'Section/:sectionId',
                     name: 'section',
-                    component: ReviewSection
+                    component: ReviewSection,
+                    beforeEnter(to, from, next){
+                        self.changeSection(to.params.sectionId)
+                        next()
+                    }
                 }
             ]
         }]
     }
 
-    async beforeEnter(to, from, next) {
+    changeSection(sectionId){ 
+        return this.rootStore.dispatch("changeSection", sectionId)
+    }
 
+    async beforeEnter(to, from, next) {
         await Vue.$api.hub({
             interviewId: to.params["interviewId"],
             review: true
         })
         
-        await this.rootStore.dispatch("changeSection", to.params.sectionId)
-        
         next();
     }
 
     initialize() {
-
+        
         const installApi = require("~/webinterview/api").install
 
         installApi(Vue, {
