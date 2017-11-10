@@ -5,12 +5,12 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateSections();
         }
 
-        private void OnScreenChanged(ScreenChangedEventArgs e) => this.UpdateSections(true);
+        private void OnScreenChanged(ScreenChangedEventArgs e) => this.UpdateSections();
 
         public void Handle(GroupsEnabled @event)
         {
@@ -111,12 +111,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var args = e as ToggleSectionEventArgs;
 
-            this.UpdateSections(false, args);
+            this.UpdateSections(args);
         }
 
-        private void UpdateSections(bool force = false, ToggleSectionEventArgs toggledSection = null)
+        private void UpdateSections(ToggleSectionEventArgs toggledSection = null)
         {
-            var expectedSectionIdentities = this.GetSectionsAndExpandedSubSections(force, toggledSection).ToList();
+            var expectedSectionIdentities = this.GetSectionsAndExpandedSubSections(toggledSection).ToList();
             this.UpdateViewModels(expectedSectionIdentities);
             this.UpdateUI();
         }
@@ -160,43 +160,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.AllVisibleSections.Insert(this.items.IndexOf(addedSectionViewModel) + 1, addedSectionViewModel);
         });
 
-        internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(bool clearExpanded,
-            ToggleSectionEventArgs toggledSection = null)
+        internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(ToggleSectionEventArgs toggledSection = null)
         {
-            List<Identity> expandedSectionIdentities = new List<Identity>();
-
-            foreach (var sectionItem in this.items)
-            {
-                if (!sectionItem.Expanded) continue;
-                expandedSectionIdentities.Add(sectionItem.SectionIdentity);
-            }
-
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
-            var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup) ?? interview.FirstSection;
-            List<Identity> parentsOfCurrentGroup = new List<Identity>();
-            parentsOfCurrentGroup.AddRange(currentGroup.Parents?.Select(group => group.Identity));
-            parentsOfCurrentGroup.Add(currentGroup.Identity);
+            List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
+            List<Identity> parentsOfCurrentGroup = GetCurrentSectionAndItsParentsIdentities(interview, this.navigationState.CurrentGroup);
 
             List<Identity> itemsToBeEpanded = expandedSectionIdentities.Union(parentsOfCurrentGroup).Distinct().ToList();
 
-            if (toggledSection!=null && !toggledSection.IsExpandedNow)
+            var isSomeSectionBeingCollapled = toggledSection!=null && !toggledSection.IsExpandedNow;
+            if (isSomeSectionBeingCollapled)
             {
-                for (int i = itemsToBeEpanded.Count - 1; i >= 0; i--)
-                {
-                    var itemToBeEpanded = itemsToBeEpanded[i];
-                    if (itemToBeEpanded == toggledSection.ToggledSection)
-                        itemsToBeEpanded.RemoveAt(i);
-                    else if (interview.IsParentOf(toggledSection.ToggledSection, itemToBeEpanded))
-                        itemsToBeEpanded.RemoveAt(i);
-                }
+                RemoveItemsUnderSectionBeingCollapsed(itemsToBeEpanded, toggledSection.ToggledSection, interview);
             }
 
-            var itemsToBeEpandedAndTheirImmidiateChildren = new HashSet<Identity>();
+            var itemsToBeExpandedAndTheirImmidiateChildren = new HashSet<Identity>();
             foreach (var identity in itemsToBeEpanded)
             {
-                itemsToBeEpandedAndTheirImmidiateChildren.Add(identity);
-                interview.GetGroup(identity).GetEnabledSubGroups().ForEach(x => itemsToBeEpandedAndTheirImmidiateChildren.Add(x));
+                itemsToBeExpandedAndTheirImmidiateChildren.Add(identity);
+                interview.GetGroup(identity)?.GetEnabledSubGroups().ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x));
             }
 
             foreach (var sectionOrSubSection in interview.GetAllEnabledGroupsAndRosters())
@@ -206,20 +189,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 if (sectionOrSubSection.Parent == null) continue;
 
-                if (itemsToBeEpandedAndTheirImmidiateChildren.Contains(sectionOrSubSection.Identity))
+                if (itemsToBeExpandedAndTheirImmidiateChildren.Contains(sectionOrSubSection.Identity))
                     yield return sectionOrSubSection.Identity;
+            }
+        }
 
-                //if(sectionOrSubSection.Parent == null) continue;
+        private List<Identity> GetCurrentSectionAndItsParentsIdentities(IStatefulInterview interview, Identity currentGroupIdentity)
+        {
+            var currentGroup = interview.GetGroup(currentGroupIdentity) ?? interview.FirstSection;
+            List<Identity> parentsOfCurrentGroup = new List<Identity>{ currentGroup.Identity };
+            parentsOfCurrentGroup.AddRange(currentGroup.Parents?.Select(group => @group.Identity));
+            return parentsOfCurrentGroup;
+        }
 
-                //var isInCurrentSection = sectionOrSubSection.Parent.Identity == currentGroup?.Identity;
-                //var isParentOfCurrentSection = parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity);
-                //var isExpandedSection = expandedSectionIdentities.Contains(sectionOrSubSection.Parent.Identity);
+        private IEnumerable<Identity> CollectAllExpandedUiSections()
+        {
+            foreach (var sectionItem in this.items)
+            {
+                if (!sectionItem.Expanded) continue;
+                yield return sectionItem.SectionIdentity;
+            }
+        }
 
-                //if (clearExpanded && (isParentOfCurrentSection || isInCurrentSection))
-                //    yield return sectionOrSubSection.Identity;
-
-                //if (!clearExpanded && isExpandedSection)
-                //    yield return sectionOrSubSection.Identity;
+        private static void RemoveItemsUnderSectionBeingCollapsed(
+            List<Identity> itemsToBeEpanded,
+            Identity sectionBeingCollapsed,
+            IStatefulInterview interview)
+        {
+            for (int i = itemsToBeEpanded.Count - 1; i >= 0; i--)
+            {
+                if (itemsToBeEpanded[i] == sectionBeingCollapsed)
+                    itemsToBeEpanded.RemoveAt(i);
+                else if (interview.IsParentOf(sectionBeingCollapsed, itemsToBeEpanded[i]))
+                    itemsToBeEpanded.RemoveAt(i);
             }
         }
 

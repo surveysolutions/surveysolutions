@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             SideBarSectionsViewModel viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
 
             //act
-            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections(false, new ToggleSectionEventArgs
+            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections(new ToggleSectionEventArgs
             {
                 ToggledSection = Id.Identity1, 
                 IsExpandedNow = false
@@ -109,7 +109,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
 
             //act
-            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections(false).ToArray();
+            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections().ToArray();
 
             //assert
             //-Id.Identity1,
@@ -149,7 +149,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
 
             //act
-            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections(false).ToArray();
+            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections().ToArray();
 
             //assert
             //-Id.Identity1,
