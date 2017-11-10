@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.GpsCoordinates, columnsCount: 5);
         };
 
-        It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "1", "2", "3", "4", "0001-01-01T00:00:00Z" });
+        It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "1", "2", "3", "4", "0001-01-01T00:00:00" });
         It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableValue, DisableValue, DisableValue, DisableValue, DisableValue });
         It should_return_correct_missing_answer = () => missingQuestion.ShouldEqual(new []{ MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingStringQuestionValue });
 

@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         It should_create_record__with_one_gps_question_which_contains_composite_answer = () =>
           result.Levels[0].Records[0].GetPlainAnswers().First()
-                    .ShouldEqual(new[] { "1", "2", "3", "4", geoPosition.Timestamp.UtcDateTime.ToString(ExportFormatSettings.ExportDateTimeFormat) });
+                    .ShouldEqual(new[] { "1", "2", "3", "4", geoPosition.Timestamp.DateTime.ToString(ExportFormatSettings.ExportDateTimeFormat) });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;
