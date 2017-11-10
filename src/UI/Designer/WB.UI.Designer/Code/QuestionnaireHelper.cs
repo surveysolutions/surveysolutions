@@ -55,7 +55,7 @@ namespace WB.UI.Designer.Code
 
         private Dictionary<Guid, string> GetLocations(IEnumerable<IQuestionnaireListItem> modelItems)
         {
-            List<QuestionnaireListViewFolder> folders = new List<QuestionnaireListViewFolder>();
+            HashSet<QuestionnaireListViewFolder> folders = new HashSet<QuestionnaireListViewFolder>();
 
             foreach (var modelItem in modelItems)
             {
