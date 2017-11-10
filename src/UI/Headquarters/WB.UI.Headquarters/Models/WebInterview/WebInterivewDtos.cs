@@ -206,11 +206,20 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public bool IsRoster { set; get; }
         public string RosterTitle { get; set; }
-        public string Status { get; set; }
-        public string StatisticsByAnswersAndSubsections { get; set; }
-        public string StatisticsByInvalidAnswers { get; set; }
+        public GroupStatus Status { get; set; }
+
         public Validity Validity { get; set; } = new Validity();
+        public AnswersStats Stats { get; set; }
+
+        public class AnswersStats
+        {
+            public int InvalidCount { get; set; }
+            public int AnsweredCount { get; set; }
+            public int SubSectionsCount { get; set; }
+            public bool HasUnanswered { get; set; }
+        }
     }
+    
 
     public class Sidebar
     {
@@ -228,7 +237,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string ParentId { get; set; }
         public string Title { get; set;}
         public string RosterTitle { get; set; }
-        public string State { get;set; }
+        public GroupStatus Status { get;set; }
         public bool Collapsed { get; set; }
         public bool HasChildren { get; set; }
         public Validity Validity { get; set; } = new Validity();
@@ -240,7 +249,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         NotStarted = 1,
         Started,
-        Completed
+        Completed,
+        Invalid
     }
 
     public class DropdownItem

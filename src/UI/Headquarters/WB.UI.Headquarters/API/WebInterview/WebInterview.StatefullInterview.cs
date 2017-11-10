@@ -82,23 +82,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
-        private SimpleGroupStatus GetInterviewSimpleStatus()
-        {
-            var statefulInterview = this.GetCallerInterview();
-
-            if (statefulInterview.CountInvalidEntitiesInInterview() > 0)
-                return SimpleGroupStatus.Invalid;
-
-            return (statefulInterview.CountActiveQuestionsInInterview() 
-                == statefulInterview.CountActiveAnsweredQuestionsInInterview())
-                ? SimpleGroupStatus.Completed
-                : SimpleGroupStatus.Other;
-        }
-
-
         public string GetInterviewStatus()
         {
-            return this.GetInterviewSimpleStatus().ToString();
+            return this.interviewEntityFactory.GetInterviewSimpleStatus(this.GetCallerInterview(), IsReviewMode).ToString();
         }
 
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -186,6 +172,17 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public ButtonState GetNavigationButtonState(string id, IQuestionnaire questionnaire = null)
         {
+            ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target)
+            {
+                button.Id = id;
+                button.Target = target.Identity.ToString();
+                button.Status = this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode);
+
+                this.interviewEntityFactory.ApplyValidity(button.Validity, target, IsReviewMode);
+
+                return button;
+            }
+
             var sectionId = CallerSectionid;
             var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire();
 
@@ -199,14 +196,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 var firstSection = statefulInterview.GetGroup(Identity.Create(sections[0], RosterVector.Empty));
 
-                return new ButtonState
+                return NewButtonState(new ButtonState
                 {
-                    Id = id,
-                    Status = this.interviewEntityFactory.CalculateSimpleStatus(firstSection.Identity, statefulInterview, IsReviewMode),
                     Title = firstSection.Title.Text,
-                    Target = firstSection.Identity.ToString(),
                     Type = ButtonType.Start
-                };
+                }, firstSection);
             }
 
             Identity sectionIdentity = Identity.Parse(sectionId);
@@ -217,41 +211,32 @@ namespace WB.UI.Headquarters.API.WebInterview
                 var parentGroup = statefulInterview.GetGroup(parent);
                 var parentRoster = parentGroup as InterviewTreeRoster;
 
-                return new ButtonState
+                return NewButtonState(new ButtonState
                 {
-                    Id = id,
-                    Status = this.interviewEntityFactory.CalculateSimpleStatus(parent, statefulInterview, IsReviewMode),
                     Title = parentGroup.Title.Text,
                     RosterTitle = parentRoster?.RosterTitle,
-                    Target = parent.ToString(),
                     Type = ButtonType.Parent
-                };
+                }, parentGroup);
             }
 
             var currentSectionIdx = Array.IndexOf(sections, sectionIdentity.Id);
 
             if (currentSectionIdx + 1 >= sections.Length)
             {
-                return new ButtonState
+                return NewButtonState(new ButtonState
                 {
-                    Id = id,
                     Title = Headquarters.Resources.WebInterview.CompleteInterview,
-                    Status = this.GetInterviewSimpleStatus(),
-                    Target = sectionIdentity.ToString(),
                     Type = ButtonType.Complete
-                };
+                }, statefulInterview.GetGroup(sectionIdentity));
             }
 
             var nextSectionId = Identity.Create(sections[currentSectionIdx + 1], RosterVector.Empty);
 
-            return new ButtonState
+            return NewButtonState(new ButtonState
             {
-                Id = id,
                 Title = statefulInterview.GetGroup(nextSectionId).Title.Text,
-                Status = this.interviewEntityFactory.CalculateSimpleStatus(nextSectionId, statefulInterview, IsReviewMode),
-                Target = nextSectionId.ToString(),
                 Type = ButtonType.Next
-            };
+            }, statefulInterview.GetGroup(nextSectionId));
         }
 
         public BreadcrumbInfo GetBreadcrumbs(string sectionIdArg)
@@ -260,11 +245,11 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             if (sectionId == null) return new BreadcrumbInfo();
 
-            Identity group = Identity.Parse(sectionId);
+            Identity groupId = Identity.Parse(sectionId);
 
             var statefulInterview = this.GetCallerInterview();
             var callerQuestionnaire = this.GetCallerQuestionnaire();
-            ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(group.Id);
+            ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(groupId.Id);
 
             var breadCrumbs = new List<Breadcrumb>();
             int metRosters = 0;
@@ -274,7 +259,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 if (callerQuestionnaire.IsRosterGroup(parentId))
                 {
                     metRosters++;
-                    var itemRosterVector = group.RosterVector.Shrink(metRosters);
+                    var itemRosterVector = groupId.RosterVector.Shrink(metRosters);
                     var itemIdentity = new Identity(parentId, itemRosterVector);
                     var treeGroup = statefulInterview.GetGroup(itemIdentity);
                     var breadCrumb = new Breadcrumb
@@ -294,7 +279,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 }
                 else
                 {
-                    var itemIdentity = new Identity(parentId, group.RosterVector.Shrink(metRosters));
+                    var itemIdentity = new Identity(parentId, groupId.RosterVector.Shrink(metRosters));
 
                     var breadCrumb = new Breadcrumb
                     {
@@ -316,7 +301,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 breadCrumbs.Last().ScrollTo = sectionId;
             }
 
-            var currentTreeGroup = statefulInterview.GetGroup(group);
+            var currentTreeGroup = statefulInterview.GetGroup(groupId);
             var currentTreeGroupAsRoster = currentTreeGroup as InterviewTreeRoster;
 
             if (currentTreeGroup == null)
@@ -324,14 +309,18 @@ namespace WB.UI.Headquarters.API.WebInterview
                 this.webInterviewNotificationService.ReloadInterview(Guid.Parse(CallerInterviewId));
             }
 
-            return new BreadcrumbInfo
+            var info = new BreadcrumbInfo
             {
                 Title = currentTreeGroup?.Title.Text,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
-                Status = this.interviewEntityFactory.CalculateSimpleStatus(group, statefulInterview, IsReviewMode).ToString(),
+                Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode),
                 IsRoster = currentTreeGroupAsRoster != null
             };
+
+            this.interviewEntityFactory.ApplyValidity(info.Validity, currentTreeGroup, IsReviewMode);
+
+            return info;
         }
 
         public InterviewEntity[] GetEntitiesDetails(string[] ids)

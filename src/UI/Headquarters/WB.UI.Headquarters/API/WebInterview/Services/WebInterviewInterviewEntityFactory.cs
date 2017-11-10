@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -60,8 +61,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 {
                     opts.AfterMap((g, sidebarPanel) =>
                     {
-                        this.ApplyGroupValidity(sidebarPanel.Validity, g, isReviewMode);
-                        sidebarPanel.State = GetGroupStatus(g, isReviewMode).ToString();
+                        this.ApplyValidity(sidebarPanel.Validity, g, isReviewMode);
+                        sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                     });
@@ -258,7 +259,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyGroupStateData(result, group, isReviewMode);
-                this.ApplyGroupValidity(result.Validity, group, isReviewMode);
+                this.ApplyValidity(result.Validity, group, isReviewMode);
                 return result;
             }
 
@@ -269,7 +270,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyGroupStateData(result, roster, isReviewMode);
-                this.ApplyGroupValidity(result.Validity, roster, isReviewMode);
+                this.ApplyValidity(result.Validity, roster, isReviewMode);
                 return result;
             }
 
@@ -354,16 +355,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 .ToArray();
         }
 
-        private void ApplyGroupValidity(Validity validity, InterviewTreeGroup treeGroup, bool isReviewMode)
+        public void ApplyValidity(Validity validity, InterviewTreeGroup group, bool isReviewMode)
         {
-            validity.IsValid = !HasQuestionsWithInvalidAnswers(treeGroup, isReviewMode);
+            validity.IsValid = group.TreeToEnumerableDepthFirst(g => g.Children.OfType<InterviewTreeGroup>())
+                .All(g => !HasQuestionsWithInvalidAnswers(g, isReviewMode));
         }
 
         private void ApplyGroupStateData(InterviewGroupOrRosterInstance group, InterviewTreeGroup treeGroup, bool isReviewMode)
         {
-            group.StatisticsByAnswersAndSubsections = GetGroupStatisticsByAnswersAndSubsections(treeGroup, isReviewMode);
-            group.StatisticsByInvalidAnswers = this.GetGroupStatisticsByInvalidAnswers(treeGroup, isReviewMode);
-            group.Status = GetGroupStatus(treeGroup, isReviewMode).ToString();
+            group.Stats  = this.GetGroupStatistics(treeGroup, isReviewMode);
+            group.Status = this.CalculateSimpleStatus(  treeGroup, isReviewMode);
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group, bool isReviewMode) =>
@@ -386,104 +387,59 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor()
                 : group.CountEnabledInvalidQuestionsAndStaticTexts();
 
-        private static GroupStatus GetGroupStatus(InterviewTreeGroup group, bool isReviewMode)
+        public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode)
         {
-            if (HasUnansweredQuestions(group, isReviewMode) || HasSubgroupsWithUnansweredQuestions(group, isReviewMode))
-            {
-                return CountEnabledAnsweredQuestions(group, isReviewMode) > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
-            }
-
-            return GroupStatus.Completed;
-        }
-
-        public SimpleGroupStatus CalculateSimpleStatus(Identity groupId, IStatefulInterview interview, bool isReviewMode)
-        {
-            InterviewTreeGroup group = interview.GetGroup(groupId);
-
-            if (HasQuestionsWithInvalidAnswers(group, isReviewMode))
-                return SimpleGroupStatus.Invalid;
-
             if (HasUnansweredQuestions(group, isReviewMode))
-                return SimpleGroupStatus.Other;
+                return GroupStatus.NotStarted;
 
-            bool isSomeSubgroupNotCompleted = group.Children.OfType<InterviewTreeGroup>()
-                .Where(c => c.IsDisabled() == false)
-                .Select(subgroup => this.CalculateSimpleStatus(subgroup.Identity, interview, isReviewMode))
-                .Any(status => status != SimpleGroupStatus.Completed);
-
-            if (isSomeSubgroupNotCompleted)
-                return SimpleGroupStatus.Other;
-
-            return SimpleGroupStatus.Completed;
-        }
-
-        private static bool HasSubgroupsWithUnansweredQuestions(InterviewTreeGroup group, bool isReviewMode)
-            => group.Children
-                .OfType<InterviewTreeGroup>()
-                .Where(subGroup => !subGroup.IsDisabled())
-                .Any(subGroup => GetGroupStatus(subGroup, isReviewMode) != GroupStatus.Completed
-                    || HasQuestionsWithInvalidAnswers(subGroup, isReviewMode));
-
-        private string GetGroupStatisticsByInvalidAnswers(InterviewTreeGroup group, bool isReviewMode)
-            => HasQuestionsWithInvalidAnswers(group, isReviewMode)
-                ? GetInformationByInvalidAnswers(group, isReviewMode)
-                : null;
-
-        private static string GetGroupStatisticsByAnswersAndSubsections(InterviewTreeGroup group, bool isReviewMode)
-        {
-            switch (GetGroupStatus(group, isReviewMode))
+            if (GetSubgroupStatuses().Any(status => status != GroupStatus.Completed))
             {
-                case GroupStatus.NotStarted:
-                    return WebInterviewResources.Interview_Group_Status_NotStarted;
-
-                case GroupStatus.Started:
-                    return string.Format(WebInterviewResources.Interview_Group_Status_StartedIncompleteFormat,
-                        GetInformationByQuestionsAndAnswers(group, isReviewMode));
-
-                case GroupStatus.Completed:
-                    return string.Format(WebInterviewResources.Interview_Group_Status_CompletedFormat,
-                        GetInformationByQuestionsAndAnswers(group, isReviewMode));
+                return GroupStatus.NotStarted;
             }
+            
+            return GroupStatus.Completed;
 
-            return null;
-        }
-
-        private static string GetInformationByQuestionsAndAnswers(InterviewTreeGroup group, bool isReviewMode)
-        {
-            var subGroupsText = GetInformationBySubgroups(group);
-            var enabledAnsweredQuestionsCount = CountEnabledAnsweredQuestions(group, isReviewMode);
-
-            var answeredQuestionsText = enabledAnsweredQuestionsCount == 1 
-                ? WebInterviewResources.Interview_Group_AnsweredQuestions_One 
-                : string.Format(WebInterviewResources.Interview_Group_AnsweredQuestions_Many, enabledAnsweredQuestionsCount);
-
-            return $@"{answeredQuestionsText}, {subGroupsText}";
-        }
-
-        private static string GetInformationByInvalidAnswers(InterviewTreeGroup group, bool isReviewMode)
-        {
-            var countEnabledInvalidQuestionsAndStaticTexts = CountEnabledInvalidQuestionsAndStaticTexts(group, isReviewMode);
-
-            return countEnabledInvalidQuestionsAndStaticTexts == 1
-                ? WebInterviewResources.Interview_Group_InvalidAnswers_One
-                : string.Format(WebInterviewResources.Interview_Group_InvalidAnswers_ManyFormat,
-                    countEnabledInvalidQuestionsAndStaticTexts);
-        }
-
-        private static string GetInformationBySubgroups(InterviewTreeGroup group)
-        {
-            var subGroupsCount = group.Children.OfType<InterviewTreeGroup>().Count();
-            switch (subGroupsCount)
+            IEnumerable<GroupStatus> GetSubgroupStatuses()
             {
-                case 0:
-                    return WebInterviewResources.Interview_Group_Subgroups_Zero;
-
-                case 1:
-                    return WebInterviewResources.Interview_Group_Subgroups_One;
-
-                default:
-                    return string.Format(WebInterviewResources.Interview_Group_Subgroups_ManyFormat, subGroupsCount);
+                return group.Children.OfType<InterviewTreeGroup>()
+                    .Where(c => c.IsDisabled() == false)
+                    .Select(subgroup => this.CalculateSimpleStatus(subgroup, isReviewMode));
             }
+        }
+
+        public GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode)
+        {
+            if (InvalidEntities() > 0)
+                return GroupStatus.Invalid;
+
+            return ActiveQuestions() == AnsweredQuestions()
+                ? GroupStatus.Completed
+                : GroupStatus.NotStarted;
+
+            int InvalidEntities() => isReviewMode
+                ? interview.CountInvalidEntitiesInInterviewForSupervisor()
+                : interview.CountInvalidEntitiesInInterview();
+
+            int ActiveQuestions() => isReviewMode
+                ? interview.CountActiveQuestionsInInterviewForSupervisor()
+                : interview.CountActiveQuestionsInInterview();
+
+            int AnsweredQuestions() => isReviewMode
+                ? interview.CountActiveAnsweredQuestionsInInterviewForSupervisor()
+                : interview.CountActiveAnsweredQuestionsInInterview();
+        }
+
+        private InterviewGroupOrRosterInstance.AnswersStats GetGroupStatistics(InterviewTreeGroup group, bool isReviewMode)
+        {
+            var stats = new InterviewGroupOrRosterInstance.AnswersStats
+            {
+                AnsweredCount = CountEnabledAnsweredQuestions(group, isReviewMode),
+                HasUnanswered = HasUnansweredQuestions(group, isReviewMode),
+                InvalidCount = CountEnabledInvalidQuestionsAndStaticTexts(group, isReviewMode),
+                SubSectionsCount = group.Children.OfType<InterviewTreeGroup>().Count()
+            };
+
+            return stats;
         }
     }
 }
