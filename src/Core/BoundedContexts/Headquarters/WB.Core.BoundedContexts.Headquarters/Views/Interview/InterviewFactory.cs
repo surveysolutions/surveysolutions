@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             AnswerType.YesNoList
         };
 
-        private readonly Dictionary<AnswerType, string> AnswerColumnNameByAnswerType = new Dictionary<AnswerType, string>
+        private readonly Dictionary<AnswerType, string> answerColumnNameByAnswerType = new Dictionary<AnswerType, string>
         {
             {AnswerType.Area, AsAreaColumn},
             {AnswerType.Audio, AsAudioColumn},
@@ -148,13 +148,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => UpdateAnswer(interviewId, questionIdentity, answer, EntityType.Question);
 
         public void UpdateVariables(Guid interviewId, ChangedVariable[] variables)
-            => variables.ForEach(variable => this.UpdateAnswer(interviewId, variable.Identity, variable.NewValue,
-                EntityType.Variable));
+            => variables.ForEach(variable =>
+            {
+                if (variable.NewValue != null)
+                {
+                    this.UpdateAnswer(interviewId, variable.Identity, variable.NewValue, EntityType.Variable);
+                }
+                else
+                {
+                    this.RemoveAnswers(interviewId, variables.Select(x => x.Identity));
+                }
+            });
 
         private void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer, EntityType entityType)
         {
-            var answerType = InterviewEntity.GetAnswerType(answer);
-            var columnNameByAnswer = AnswerColumnNameByAnswerType[answerType.Value];
+            AnswerType? answerType = InterviewEntity.GetAnswerType(answer);
+            var columnNameByAnswer = answerColumnNameByAnswerType[answerType.Value];
             var isJsonAnswer = JsonAnswerTypes.Contains(answerType.Value);
             
             using (var command = this.sessionProvider.GetSession().Connection.CreateCommand())
@@ -299,7 +308,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         }
 
-        public void RemoveAnswers(Guid interviewId, Identity[] questionIds)
+        public void RemoveAnswers(Guid interviewId, IEnumerable<Identity> questionIds)
             => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
