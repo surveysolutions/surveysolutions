@@ -57,37 +57,58 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                         TotalCount = x.Count()
                     }));
 
-            var queryForTotalRow = this.interviewSummaryReader.Query(_ =>
-                FilterByResponsibleOrTeamLead(_, responsible, teamLead).Select(x => new
-                    {
-                        x.QuestionnaireId,
-                        x.QuestionnaireVersion,
-                        x.QuestionnaireTitle,
-                        x.ResponsibleName,
-                        x.TeamLeadName,
-                        SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
-                        InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
-                        Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
-                        RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
-                        ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
-                        RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
-                        ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
-                    })
-                    .GroupBy(x => 1)
-                    .Select(x => new HeadquarterSurveysAndStatusesReportLine
-                    {
-                        SupervisorAssignedCount = (int?)x.Sum(y => y.SupervisorAssigned) ?? 0,
-                        InterviewerAssignedCount = (int?)x.Sum(y => y.InterviewerAssigned) ?? 0,
-                        CompletedCount = (int?)x.Sum(y => y.Completed) ?? 0,
-                        RejectedBySupervisorCount = (int?)x.Sum(y => y.RejectedBySupervisor) ?? 0,
-                        ApprovedBySupervisorCount = (int?)x.Sum(y => y.ApprovedBySupervisor) ?? 0,
-                        RejectedByHeadquartersCount = (int?)x.Sum(y => y.RejectedByHeadquarters) ?? 0,
-                        ApprovedByHeadquartersCount = (int?)x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
-                        TotalCount = x.Count()
-                    }));
+            var reportLines = queryForItems.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
+                .Take(input.PageSize).ToList().Select(x => new HeadquarterSurveysAndStatusesReportLine
+                {
+                    QuestionnaireId = x.QuestionnaireId,
+                    QuestionnaireVersion = x.QuestionnaireVersion,
+                    QuestionnaireTitle = x.QuestionnaireTitle,
+                    SupervisorAssignedCount = x.SupervisorAssignedCount,
+                    InterviewerAssignedCount = x.InterviewerAssignedCount,
+                    CompletedCount = x.CompletedCount,
+                    RejectedBySupervisorCount = x.RejectedBySupervisorCount,
+                    ApprovedBySupervisorCount = x.ApprovedBySupervisorCount,
+                    RejectedByHeadquartersCount = x.RejectedByHeadquartersCount,
+                    ApprovedByHeadquartersCount = x.ApprovedByHeadquartersCount,
+                    TotalCount = x.TotalCount
+                }).ToList();
+
+            HeadquarterSurveysAndStatusesReportLine totalRow = null;
+
+            if (reportLines.Any())
+            {
+                var queryForTotalRow = this.interviewSummaryReader.Query(_ =>
+                    FilterByResponsibleOrTeamLead(_, responsible, teamLead).Select(x => new
+                        {
+                            x.QuestionnaireId,
+                            x.QuestionnaireVersion,
+                            x.QuestionnaireTitle,
+                            x.ResponsibleName,
+                            x.TeamLeadName,
+                            SupervisorAssigned = x.Status == InterviewStatus.SupervisorAssigned ? 1 : 0,
+                            InterviewerAssigned = x.Status == InterviewStatus.InterviewerAssigned ? 1 : 0,
+                            Completed = x.Status == InterviewStatus.Completed ? 1 : 0,
+                            RejectedBySupervisor = x.Status == InterviewStatus.RejectedBySupervisor ? 1 : 0,
+                            ApprovedBySupervisor = x.Status == InterviewStatus.ApprovedBySupervisor ? 1 : 0,
+                            RejectedByHeadquarters = x.Status == InterviewStatus.RejectedByHeadquarters ? 1 : 0,
+                            ApprovedByHeadquarters = x.Status == InterviewStatus.ApprovedByHeadquarters ? 1 : 0
+                        })
+                        .GroupBy(x => 1)
+                        .Select(x => new HeadquarterSurveysAndStatusesReportLine
+                        {
+                            SupervisorAssignedCount = (int?) x.Sum(y => y.SupervisorAssigned) ?? 0,
+                            InterviewerAssignedCount = (int?) x.Sum(y => y.InterviewerAssigned) ?? 0,
+                            CompletedCount = (int?) x.Sum(y => y.Completed) ?? 0,
+                            RejectedBySupervisorCount = (int?) x.Sum(y => y.RejectedBySupervisor) ?? 0,
+                            ApprovedBySupervisorCount = (int?) x.Sum(y => y.ApprovedBySupervisor) ?? 0,
+                            RejectedByHeadquartersCount = (int?) x.Sum(y => y.RejectedByHeadquarters) ?? 0,
+                            ApprovedByHeadquartersCount = (int?) x.Sum(y => y.ApprovedByHeadquarters) ?? 0,
+                            TotalCount = x.Count()
+                        }));
 
 
-            var totalRow = queryForTotalRow.FirstOrDefault();
+                totalRow = queryForTotalRow.FirstOrDefault();
+            }
 
             int totalCount = this.interviewSummaryReader.Query(_ => FilterByResponsibleOrTeamLead(_, responsible, teamLead)
                 .Select(x => x.QuestionnaireIdentity)
@@ -100,21 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return new SurveysAndStatusesReportView
             {
                 TotalCount = totalCount,
-                Items = queryForItems.OrderUsingSortExpression(input.Order).Skip((input.Page - 1) * input.PageSize)
-                    .Take(input.PageSize).ToList().Select(x=> new HeadquarterSurveysAndStatusesReportLine
-                    {
-                        QuestionnaireId = x.QuestionnaireId,
-                        QuestionnaireVersion = x.QuestionnaireVersion,
-                        QuestionnaireTitle = x.QuestionnaireTitle,
-                        SupervisorAssignedCount = x.SupervisorAssignedCount,
-                        InterviewerAssignedCount = x.InterviewerAssignedCount,
-                        CompletedCount = x.CompletedCount,
-                        RejectedBySupervisorCount = x.RejectedBySupervisorCount,
-                        ApprovedBySupervisorCount = x.ApprovedBySupervisorCount,
-                        RejectedByHeadquartersCount = x.RejectedByHeadquartersCount,
-                        ApprovedByHeadquartersCount = x.ApprovedByHeadquartersCount,
-                        TotalCount = x.TotalCount
-                    }),
+                Items = reportLines,
                 TotalRow = totalRow 
             };
         }
