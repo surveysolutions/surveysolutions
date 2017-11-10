@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -28,6 +31,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             try
             {
+                if (this.authorizedUser.IsObserving) throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Strings.ObserverNotAllowed);
+
                 this.commandService.Execute(command);
             }
             catch (Exception e)
@@ -128,18 +133,21 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public void RemoveAnswer(string questionId)
         {
+            if (this.authorizedUser.IsObserving) throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Strings.ObserverNotAllowed);
             Identity identity = Identity.Parse(questionId);
             this.ExecuteQuestionCommand(new RemoveAnswerCommand(this.GetCallerInterview().Id, CommandResponsibleId, identity, DateTime.UtcNow));
         }
 
         public void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
+            if (this.authorizedUser.IsObserving) throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Strings.ObserverNotAllowed);
             var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, completeInterviewRequest.Comment, DateTime.UtcNow);
             this.commandService.Execute(command);
         }
 
         public void SendNewComment(string questionIdentity, string comment)
         {
+            if (this.authorizedUser.IsObserving) throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Strings.ObserverNotAllowed);
             var identity = Identity.Parse(questionIdentity);
             var command = new CommentAnswerCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, comment);
             this.commandService.Execute(command);
@@ -147,6 +155,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public void Approve(string comment)
         {
+            if (this.authorizedUser.IsObserving) throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Strings.ObserverNotAllowed);
             if (this.authorizedUser.IsSupervisor)
             {
                 var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
@@ -161,6 +170,8 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public void Reject(string comment, Guid? assignTo)
         {
+            if (this.authorizedUser.IsObserving) throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Strings.ObserverNotAllowed);
+
             if (this.authorizedUser.IsSupervisor)
             {
                 if (assignTo.HasValue)

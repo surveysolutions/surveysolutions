@@ -25,7 +25,7 @@
                             </b>
                         </li>
                     </ul>
-                    <div class="filter-actions-block">
+                    <div class="filter-actions-block" v-if="!this.$store.state.webinterview.interviewCannotBeChanged">
                         <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve">
                             {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
                         </button>
