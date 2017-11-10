@@ -1,4 +1,4 @@
-import { map, debounce } from "lodash"
+import { map, debounce, uniq } from "lodash"
 import Vue from "vue"
 
 import { batchedAction } from "../helpers"
@@ -19,7 +19,7 @@ export default {
     },
 
     fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
-        const details = await Vue.$api.call(api => api.getEntitiesDetails(map(ids, "id")))
+        const details = await Vue.$api.call(api => api.getEntitiesDetails(uniq(map(ids, "id"))))
         dispatch("fetch", { ids, done: true })
         commit("SET_ENTITIES_DETAILS", {
             entities: details,
