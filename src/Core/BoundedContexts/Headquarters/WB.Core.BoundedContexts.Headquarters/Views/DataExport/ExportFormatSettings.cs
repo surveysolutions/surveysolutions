@@ -2,7 +2,7 @@
 {
     public static class ExportFormatSettings
     {
-        public const string ExportDateTimeFormat = "yyyy-MM-ddTHH:mm:ssK";
+        public const string ExportDateTimeFormat = "yyyy-MM-ddTHH:mm:ss";
         public const string ExportDateFormat = "yyyy-MM-dd";
         public const string DefaultDelimiter = "|";
         public const string DisableValue = "";
