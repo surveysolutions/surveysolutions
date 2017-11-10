@@ -213,7 +213,7 @@ export default {
                     responsivePriority: 4
                 },
                 {
-                    data: "lastEntryDate",
+                    data: "lastEntryDateUtc",
                     name: "UpdateDate",
                     title: this.$t("Assignments.UpdatedAt"),
                     searchable: false,
