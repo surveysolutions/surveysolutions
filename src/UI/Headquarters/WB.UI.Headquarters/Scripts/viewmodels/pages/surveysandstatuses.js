@@ -48,7 +48,7 @@
     };
 
     self.onDataTableDataReceived = function(data) {
-        if (data.data.length > 0) {
+        if (data.data.length > 0 && data.totalRow) {
             var totalRow = data.totalRow;
             totalRow.questionnaireVersion = "";
             totalRow.questionnaireTitle = $allQuestionnaires;
