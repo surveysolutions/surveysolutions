@@ -13,14 +13,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual DateTime CreateDate { get; set; }
 
+        public virtual string CreatorName { get; set; }
+
         public virtual Guid CreatedBy { get; set; }
 
         public virtual int Depth { get; set; }
 
         public virtual string Path { get; set; }
-
-        public virtual ISet<QuestionnaireListViewFolder> SubFolders { get; set; }
-
-        public virtual ISet<QuestionnaireListViewFolder> Questionnaires { get; set; }
     }
 }
