@@ -186,6 +186,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>
   </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
