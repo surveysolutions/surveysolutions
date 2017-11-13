@@ -20,7 +20,7 @@
                 return [{
                     'btn-success': this.$me.status == GroupStatus.Completed,
                     'btn-danger': this.$me.validity.isValid == false,
-                    'btn-primary': this.$me.status == GroupStatus.NotStarted,
+                    'btn-primary': this.$me.status == GroupStatus.NotStarted || this.$me.status == GroupStatus.Started, 
                     'btn-back': this.isParentButton
                 }]
             },

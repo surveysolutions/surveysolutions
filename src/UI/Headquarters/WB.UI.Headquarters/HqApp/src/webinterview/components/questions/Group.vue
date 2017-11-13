@@ -32,13 +32,13 @@
                 return this.$me.rosterTitle ? `${this.$me.rosterTitle}` : "[...]"
             },
             isNotStarted() {
-                return this.$me.status == GroupStatus.NotStarted
+                return this.$me.status === GroupStatus.NotStarted
             },
             isStarted() {
-                return this.$me.status == GroupStatus.Started
+                return this.$me.status === GroupStatus.Started
             },
             isCompleted() {
-                return this.$me.status == GroupStatus.Completed
+                return this.$me.status === GroupStatus.Completed
             },
             hasInvalidAnswers() {
                 return !this.$me.validity.isValid
