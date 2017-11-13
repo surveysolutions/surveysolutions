@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             HeadquarterSurveysAndStatusesReportLine totalRow = null;
 
-            if (reportLines.Any())
+            if (reportLines.Count != 1)
             {
                 var queryForTotalRow = this.interviewSummaryReader.Query(_ =>
                     FilterByResponsibleOrTeamLead(_, responsible, teamLead).Select(x => new
