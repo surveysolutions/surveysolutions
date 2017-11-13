@@ -11,7 +11,6 @@ Vue.use(config)
 import Vuei18n from "~/shared/plugins/locale"
 import { browserLanguage } from "~/shared/helpers"
 const i18n = Vuei18n.initialize(browserLanguage);
-Vue.use(Vuei18n)
 
 import './init'
 import "./errors"
@@ -47,6 +46,5 @@ export default new Vue({
         App
     },
     store,
-    router,
-    i18n
+    router
 })
