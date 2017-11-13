@@ -13,7 +13,9 @@
             var localization = {
                 CreateSubFolder: "@QuestionnaireController.CreateSubFolder",
                 Edit: '@QuestionnaireController.Rename',
-                Delete: "@QuestionnaireController.Delete"
+                Delete: "@QuestionnaireController.Delete",
+                DeleteConfirmation: "@QuestionnaireController.DeleteFolderConfirmation",
+                NewFolderName: "@QuestionnaireController.NewFolder",
             };
             var subFoldersUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetFolders" })';
             var rootFoldersUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetRootFolders" })';

@@ -159,7 +159,8 @@ gulp.task('copyFilesNeededForBundler', function(){
     'node_modules/jquery.fancytree/3rd-party/extensions/contextmenu/js/jquery.fancytree.contextMenu.js',
     'node_modules/jquery.fancytree/dist/skin-bootstrap/ui.fancytree.min.css',
     'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.js',
-    'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css'
+    'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css',
+    'node_modules/bootbox/bootbox.min.js'
   ])
     //.pipe(debug({ title: 'copyFilesNeededForBundler task:' }))
     .pipe(gulp.dest('../Content/plugins'));
