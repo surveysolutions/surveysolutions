@@ -4,11 +4,17 @@
 @{
     ViewBag.Title = QuestionnaireController.PublicQuestionnaires;
     ViewBag.TableCssClass = "page-with-breadcrumbs";
+
+    bool isSupportAssignFolders = Model.IsSupportAssignFolders;
 }
 @section Scripts {
     @Scripts.Render("~/list")
-    @Styles.Render("~/Content/plugins/skin")
-    @Scripts.Render("~/folders")
+
+    @if (isSupportAssignFolders)
+    {
+        @Styles.Render("~/Content/plugins/folders-skin")
+        @Scripts.Render("~/folders")
+    } 
 }
 
 <ol class="breadcrumb public-questionnaires-breadcrumb">
@@ -39,7 +45,11 @@
     <div>
         @Html.Partial("ExportPdfModalDialog")
     </div>    
-    <div>
-        @Html.Partial("AssignFolderDialog")
-    </div>
+    
+    @if (isSupportAssignFolders)
+    {
+        <div>
+            @Html.Partial("AssignFolderDialog")
+        </div>
+    }
 }

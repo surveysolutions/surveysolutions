@@ -237,6 +237,7 @@ namespace WB.UI.Designer.Controllers
 
             var model = new QuestionnaireListModel()
             {
+                IsSupportAssignFolders = UserHelper.WebUser.IsAdmin,
                 CurrentFolderId = id,
                 Breadcrumbs = breadcrumbs,
                 Questionnaires = questionnaires

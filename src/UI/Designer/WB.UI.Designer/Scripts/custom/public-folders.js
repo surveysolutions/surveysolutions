@@ -47,6 +47,14 @@
                 if (node.key == "root")
                     return { "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" } };
 
+                if (removeNodeUrl == null)
+                {
+                    return {
+                        "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" },
+                        "edit": { "name": localization.Edit, "icon": "edit" }
+                    };
+                }
+
                 return {
                     "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" },
                     "edit": { "name": localization.Edit, "icon": "edit" },
