@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             {
                 header.Add($"Id{i}");
             }
-            header.Add("Message Number");
+            header.Add("Message__Number");
             header.Add("Message");
 
             this.csvWriter.WriteData(filePath, new[] { header.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
