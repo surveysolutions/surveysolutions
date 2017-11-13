@@ -28,14 +28,14 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.authorizedUser = authorizedUser;
         }
 
-        public Sidebar GetSidebarChildSectionsOf(string sectionId, IStatefulInterview interview, string[] parentIds, bool isReviewMode)
+        public Sidebar GetSidebarChildSectionsOf(string currentSectionId, IStatefulInterview interview, string[] sectionIds, bool isReviewMode)
         {
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();
 
-            if (sectionId != null)
+            if (currentSectionId != null)
             {
-                var currentOpenSection = interview.GetGroup(Identity.Parse(sectionId));
+                var currentOpenSection = interview.GetGroup(Identity.Parse(currentSectionId));
 
                 //roster instance could be removed
                 if (currentOpenSection != null)
@@ -45,11 +45,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 }
             }
 
-            foreach (var parentId in parentIds.Distinct())
+            foreach (var parentId in sectionIds.Distinct())
             {
                 var children = parentId == null
                     ? interview.GetEnabledSections()
-                    : interview.GetGroup(Identity.Parse(parentId))?.Children.OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
+                    : interview.GetGroup(Identity.Parse(parentId))?.Children
+                        .OfType<InterviewTreeGroup>().Where(g => !g.IsDisabled());
 
                 foreach (var child in children ?? Array.Empty<InterviewTreeGroup>())
                 {
@@ -80,7 +81,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             if (question != null)
             {
-                GenericQuestion result = this.Map<StubEntity>(question);
+                GenericQuestion result;
 
                 switch (question.InterviewQuestionType)
                 {
@@ -219,6 +220,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     case InterviewQuestionType.Audio:
                         InterviewTreeQuestion audioQuestion = callerInterview.GetQuestion(identity);
                         result = this.autoMapper.Map<InterviewAudioQuestion>(audioQuestion);
+                        break;
+                    default:
+                        result = this.Map<StubEntity>(question);
                         break;
                 }
 
@@ -389,15 +393,29 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode)
         {
-            if (HasUnansweredQuestions(group, isReviewMode))
-                return GroupStatus.NotStarted;
-
-            if (GetSubgroupStatuses().Any(status => status != GroupStatus.Completed))
-            {
-                return GroupStatus.NotStarted;
-            }
+            GroupStatus status;
             
-            return GroupStatus.Completed;
+            if (HasUnansweredQuestions(group, isReviewMode))
+                status = CountEnabledAnsweredQuestions(group, isReviewMode) > 0
+                    ? GroupStatus.Started
+                    : GroupStatus.NotStarted;
+            else
+            {
+                status = GroupStatus.Completed;
+            }
+
+            foreach (var subGroup in GetSubgroupStatuses())
+            {
+                switch (status)
+                {
+                    case GroupStatus.Completed when subGroup != GroupStatus.Completed:
+                        return GroupStatus.Started;
+                    case GroupStatus.NotStarted when subGroup != GroupStatus.NotStarted:
+                        return GroupStatus.Started;
+                }
+            }
+
+            return status;
 
             IEnumerable<GroupStatus> GetSubgroupStatuses()
             {
