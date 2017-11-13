@@ -83,7 +83,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 CancellationToken.None);
 
             // Assert
-            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "Variable", "Type", "InterviewId", "Message Number", "Message" }));
+            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "Variable", "Type", "InterviewId", "Message__Number", "Message" }));
             Assert.That(dataInCsvFile[1].Data[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
             Assert.That(dataInCsvFile[1].Data[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
         }
@@ -146,7 +146,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 CancellationToken.None);
 
             // Assert
-            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "Variable", "Type", "Roster", "InterviewId", "Id1", "Id2", "Message Number", "Message" }));
+            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "Variable", "Type", "Roster", "InterviewId", "Id1", "Id2", "Message__Number", "Message" }));
             Assert.That(dataInCsvFile[1].Data[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(), "0", "1", "2", questionMsg }));
             Assert.That(dataInCsvFile[1].Data[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "0", "", "1", staticTextInvalid }));
         }
