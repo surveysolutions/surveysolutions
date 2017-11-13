@@ -289,9 +289,6 @@
   <data name="Filters_NotFlagged" xml:space="preserve">
     <value>Без флага</value>
   </data>
-  <data name="SearchResult_Count" xml:space="preserve">
-    <value>{{ count }} вопросов найдено</value>
-  </data>
   <data name="Filters_ClearSelection" xml:space="preserve">
     <value>Посмотреть всё (сбросить фильтры)</value>
   </data>

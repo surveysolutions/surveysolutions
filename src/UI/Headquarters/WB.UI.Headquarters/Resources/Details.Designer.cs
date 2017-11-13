@@ -97,11 +97,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No items found.
+        /// </summary>
+        public static string NoSearchResults {
+            get {
+                return ResourceManager.GetString("NoSearchResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Responsible .
         /// </summary>
         public static string Responsible {
             get {
                 return ResourceManager.GetString("Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{ count }} items found:.
+        /// </summary>
+        public static string SearchResult_Count {
+            get {
+                return ResourceManager.GetString("SearchResult_Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{ count }} items found:.
+        /// </summary>
+        public static string SearchResult_Count_plural {
+            get {
+                return ResourceManager.GetString("SearchResult_Count_plural", resourceCulture);
             }
         }
         

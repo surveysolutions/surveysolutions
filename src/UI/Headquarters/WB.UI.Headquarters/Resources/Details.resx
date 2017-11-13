@@ -129,8 +129,17 @@
   <data name="LastUpdated" xml:space="preserve">
     <value>Updated {{ date }}</value>
   </data>
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>No items found</value>
+  </data>
   <data name="Responsible" xml:space="preserve">
     <value>Responsible </value>
+  </data>
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>{{ count }} items found:</value>
+  </data>
+  <data name="SearchResult_Count_plural" xml:space="preserve">
+    <value>{{ count }} items found:</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status: {{ name }}</value>

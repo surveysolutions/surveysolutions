@@ -129,8 +129,20 @@
   <data name="LastUpdated" xml:space="preserve">
     <value>Обновлено {{ date }}</value>
   </data>
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
   <data name="Responsible" xml:space="preserve">
     <value>Ответственный</value>
+  </data>
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>{{ count }} объект найден:</value>
+  </data>
+  <data name="SearchResult_Count_1" xml:space="preserve">
+    <value>{{ count }} объекта найдено:</value>
+  </data>
+  <data name="SearchResult_Count_2" xml:space="preserve">
+    <value>{{ count }} объектов найдено:</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Статус: {{ name }}</value>

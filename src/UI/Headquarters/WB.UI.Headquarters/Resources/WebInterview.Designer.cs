@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterview {
@@ -210,6 +210,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Filters_NotFlagged {
             get {
                 return ResourceManager.GetString("Filters_NotFlagged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old interview details.
+        /// </summary>
+        public static string Filters_OldDetailsLink {
+            get {
+                return ResourceManager.GetString("Filters_OldDetailsLink", resourceCulture);
             }
         }
         
@@ -498,15 +507,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string Resume_WelcomeText {
             get {
                 return ResourceManager.GetString("Resume_WelcomeText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {{ count }} questions found.
-        /// </summary>
-        public static string SearchResult_Count {
-            get {
-                return ResourceManager.GetString("SearchResult_Count", resourceCulture);
             }
         }
         
