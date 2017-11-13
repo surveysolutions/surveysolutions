@@ -268,6 +268,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure to want to delete folder {0} ?.
+        /// </summary>
+        public static string DeleteFolderConfirmation {
+            get {
+                return ResourceManager.GetString("DeleteFolderConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Deleting.
         /// </summary>
         public static string Deleting {
@@ -447,6 +456,15 @@ namespace WB.UI.Designer.Resources {
         public static string MyQuestionnaires {
             get {
                 return ResourceManager.GetString("MyQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Folder.
+        /// </summary>
+        public static string NewFolder {
+            get {
+                return ResourceManager.GetString("NewFolder", resourceCulture);
             }
         }
         
