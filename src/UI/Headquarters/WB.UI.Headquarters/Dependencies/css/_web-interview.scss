@@ -339,24 +339,38 @@
 			background-color: transparent;
 		}
 	}
-	&.has-error .question-unit .options-group{
-		background-color: $red-super-light;
-		.form-group{
-			border-color: $red-super-light;
+	&.has-error {
+		.question-unit .options-group{
+			background-color: $red-super-light;
+			.form-group{
+				border-color: $red-super-light;
+			}
 		}
-	}
-	&.has-error .form-control:focus{
-		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		.form-control:focus{
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		}
+		.field-to-fill{
+			box-shadow: none;
+			&:hover, &:focus, &:active, &:active:focus {
+				border-color: transparent;
+				box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580; 
+			}
+		}
 	}
 	.question-unit{
 		.radio, .form-group{
-			border-color: transparent;
+			border-color: #eeeff0;
 		}
 	}
 	&.answered{
 		.question-unit{
 			.radio, .form-group{
 				border-color: $gray-form;
+			}
+		}
+		&.has-error .question-unit{
+			.radio, .form-group{
+				border-color: #f6d6d0;
 			}
 		}
 	}
