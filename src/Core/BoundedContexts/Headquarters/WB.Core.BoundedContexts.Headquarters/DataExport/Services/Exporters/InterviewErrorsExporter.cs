@@ -132,18 +132,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath)
         {
-            var header = new List<string> { "Variable", "Type" };
+            var header = new List<string> { "variable", "type" };
             if (hasAtLeastOneRoster)
-                header.Add("Roster");
+                header.Add("roster");
 
-            header.Add("InterviewId");
+            header.Add("interviewid");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
-                header.Add($"Id{i}");
+                header.Add($"id{i}");
             }
-            header.Add("Message__Number");
-            header.Add("Message");
+            header.Add("message_number");
+            header.Add("message");
 
             this.csvWriter.WriteData(filePath, new[] { header.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
         }
