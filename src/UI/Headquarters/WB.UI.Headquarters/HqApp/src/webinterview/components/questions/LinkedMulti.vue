@@ -9,7 +9,7 @@
                         :value="option.value" 
                         :disabled="!$me.acceptAnswers"
                         v-model="answer"
-                        v-disabledWhenUnchecked="allAnswersGiven || !$me.acceptAnswers">
+                        v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
                         <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
@@ -41,7 +41,8 @@
                 }
             },
             allAnswersGiven() {
-                return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount
+                const maxReached = this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;
+                return maxReached;               
             },
             noOptions() {
                 return this.$me.options == null || this.$me.options.length == 0
