@@ -148,17 +148,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => UpdateAnswer(interviewId, questionIdentity, answer, EntityType.Question);
 
         public void UpdateVariables(Guid interviewId, ChangedVariable[] variables)
-            => variables.ForEach(variable =>
+        {
+            var notNullVariables = variables.Where(x => x.NewValue != null).ToList();
+            notNullVariables.ForEach(variable =>
             {
-                if (variable.NewValue != null)
-                {
-                    this.UpdateAnswer(interviewId, variable.Identity, variable.NewValue, EntityType.Variable);
-                }
-                else
-                {
-                    this.RemoveAnswers(interviewId, variables.Select(x => x.Identity));
-                }
+                this.UpdateAnswer(interviewId, variable.Identity, variable.NewValue, EntityType.Variable);
             });
+
+            if (notNullVariables.Count != variables.Length)
+            {
+                var removeAnswersFrom = variables.Where(x => x.NewValue == null).Select(x => x.Identity).ToList();
+                this.RemoveAnswersImpl(interviewId, removeAnswersFrom, EntityType.Variable);
+            }
+        }
 
         private void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer, EntityType entityType)
         {
@@ -308,8 +310,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         }
 
-        public void RemoveAnswers(Guid interviewId, IEnumerable<Identity> questionIds)
-            => this.sessionProvider.GetSession().Connection.Execute(
+        public void RemoveAnswers(Guid interviewId, IEnumerable<Identity> entityIds)
+            => RemoveAnswersImpl(interviewId, entityIds, EntityType.Question);
+
+        private int RemoveAnswersImpl(Guid interviewId, IEnumerable<Identity> entityIds, EntityType entityType)
+        {
+            return this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
                 $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
@@ -327,13 +333,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"{AsLongColumn} = null, " +
                 $"{AsStringColumn} = null, " +
                 $"{AsYesNoColumn} = null;",
-                questionIds.Select(x => new
+                entityIds.Select(x => new
                 {
                     InterviewId = interviewId,
                     EntityId = x.Id,
                     RosterVector = x.RosterVector.Array,
-                    EntityType = EntityType.Question
+                    EntityType = entityType
                 }));
+        }
 
         public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity, Guid[] multimediaQuestionIds)
         {
