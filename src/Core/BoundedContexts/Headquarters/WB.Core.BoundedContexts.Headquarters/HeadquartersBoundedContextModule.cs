@@ -305,7 +305,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
 
             this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
-            this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>().InSingletonScope();
+            this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>();
             this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 
             this.Bind<SampleImportSettings>().ToConstant(sampleImportSettings);
@@ -336,6 +336,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
             this.Bind<ICsvWriterService>().To<CsvWriterService>();
             this.Bind<ICsvWriter>().To<CsvWriter>();
+            this.Bind<ICsvReader>().To<CsvReader>();
             this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
 
             this.Bind<IExportQuestionService>().To<ExportQuestionService>();

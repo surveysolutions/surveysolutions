@@ -17,19 +17,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             });
 
             Property(x => x.FileName);
-            Property(x => x.State);
-            Property(x => x.FileSize);
-            Property(x => x.UploadDate);
-            Property(x => x.LastUpdateDate);
             Property(x => x.RecordsCount);
-            Property(x => x.CreatedUsersCount);
-            Property(x => x.ErrorMessage);
 
-            Property(x => x.ValidationStartDate);
-            Property(x => x.VerificationProgressInPercents);
-            Property(x => x.CreationStartDate);
-
-            List<UserPreloadingDataRecord>(x => x.UserPrelodingData, listMap =>
+            List(x => x.UserPrelodingData, listMap =>
             {
                 listMap.Index(index => index.Column("Position"));
                 listMap.Key(keyMap =>
@@ -56,18 +46,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
                         cmp.Property(x => x.Supervisor);
                     });
                 });
-
-            Set(x => x.VerificationErrors, set =>
-            {
-                set.Key(key =>
-                {
-                    key.Column("UserPreloadingProcessId");
-                    key.ForeignKey("FK_UserPreloadingProcesses_UserPreloadingProcessId");
-                });
-                set.Lazy(CollectionLazy.NoLazy);
-                set.Cascade(Cascade.All | Cascade.DeleteOrphans);
-            },
-                relation => relation.OneToMany());
         }
     }
 }

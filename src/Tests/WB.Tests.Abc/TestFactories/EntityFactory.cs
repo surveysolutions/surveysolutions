@@ -1238,9 +1238,7 @@ namespace WB.Tests.Abc.TestFactories
             var result = new UserPreloadingProcess
             {
                 UserPreloadingProcessId = userPreloadingProcessId ?? Guid.NewGuid().FormatGuid(),
-                State = state,
                 RecordsCount = recordsCount,
-                LastUpdateDate = DateTime.Now
             };
             foreach (var userPreloadingDataRecord in dataRecords)
             {

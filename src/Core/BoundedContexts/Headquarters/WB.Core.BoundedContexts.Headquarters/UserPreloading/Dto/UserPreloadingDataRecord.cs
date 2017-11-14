@@ -5,7 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
     public class UserPreloadingDataRecord
     {
         public virtual int Id { get; set; }
-        public virtual UserPreloadingProcess UserPreloadingProcess { get; set; }
         public virtual string Login { get; set; } = String.Empty;
         public virtual string Password { get; set; }
         public virtual string Email { get; set; }

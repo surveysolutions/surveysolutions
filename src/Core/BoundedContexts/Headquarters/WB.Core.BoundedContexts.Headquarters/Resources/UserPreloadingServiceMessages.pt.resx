@@ -124,7 +124,7 @@
     <value>máximo número de erros de validação {0}foram atingidos</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>O dataset contém {0} registros, mas o máximo permitido é de número recorde {1}</value>
+    <value/>
   </data>
   <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
     <value>pré-carregamento do processo com o id de usuário '{0}' não pode ser concluída porque só {1} criado de {2}</value>

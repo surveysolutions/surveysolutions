@@ -26,22 +26,22 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public void CleanUpInactiveUserPreloadingProcesses()
         {
-            var processeIdsToClean =
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingProcessStorage.Query(_ => _.OrderBy(p => p.LastUpdateDate)
-                        .Where(
-                            p =>
-                                p.LastUpdateDate <
-                                DateTime.Now.AddDays(
-                                    -userPreloadingSettings.HowOldInDaysProcessShouldBeInOrderToBeCleaned))
-                        .Select(p => p.UserPreloadingProcessId)
-                        .ToArray()));
+            //var processeIdsToClean =
+            //    this.plainTransactionManager.ExecuteInPlainTransaction(
+            //        () => userPreloadingProcessStorage.Query(_ => _.OrderBy(p => p.LastUpdateDate)
+            //            .Where(
+            //                p =>
+            //                    p.LastUpdateDate <
+            //                    DateTime.Now.AddDays(
+            //                        -userPreloadingSettings.HowOldInDaysProcessShouldBeInOrderToBeCleaned))
+            //            .Select(p => p.UserPreloadingProcessId)
+            //            .ToArray()));
 
-            foreach (var processeIdToClean in processeIdsToClean)
-            {
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingProcessStorage.Remove(processeIdToClean));
-            }
+            //foreach (var processeIdToClean in processeIdsToClean)
+            //{
+            //    this.plainTransactionManager.ExecuteInPlainTransaction(
+            //        () => userPreloadingProcessStorage.Remove(processeIdToClean));
+            //}
         }
     }
 }

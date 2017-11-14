@@ -2,379 +2,151 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Linq.Expressions;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     public class UserPreloadingService : IUserPreloadingService
     {
-        private readonly IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage;
-        private readonly IRecordsAccessorFactory recordsAccessorFactory;
         private readonly UserPreloadingSettings userPreloadingSettings;
+        private readonly ICsvReader csvReader;
+        private readonly IPlainStorageAccessor<UserPreloadingProcess> importUsersProcessRepository;
+        private readonly IUserRepository userStorage;
+        private readonly IUserPreloadingVerifier userImportVerifier;
 
-        readonly Dictionary<string, Action<UserPreloadingDataRecord, string>> dataColumnNamesMappedOnRecordSetter;
+        private readonly string importUsersProcessId = Guid.Empty.ToString();
+        private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
+        private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
-        public UserPreloadingService(IPlainStorageAccessor<UserPreloadingProcess> userPreloadingProcessStorage,
-            IRecordsAccessorFactory recordsAccessorFactory, UserPreloadingSettings userPreloadingSettings)
+        public UserPreloadingService(
+            UserPreloadingSettings userPreloadingSettings, 
+            ICsvReader csvReader,
+            IPlainStorageAccessor<UserPreloadingProcess> importUsersProcessRepository,
+            IUserRepository userStorage,
+            IUserPreloadingVerifier userImportVerifier)
         {
-            this.userPreloadingProcessStorage = userPreloadingProcessStorage;
-            this.recordsAccessorFactory = recordsAccessorFactory;
             this.userPreloadingSettings = userPreloadingSettings;
-
-            this.dataColumnNamesMappedOnRecordSetter = new Dictionary<string, Action<UserPreloadingDataRecord, string>>
-            {
-                {"login", (r, v) => r.Login = v},
-                {"password", (r, v) => r.Password = v},
-                {"email", (r, v) => r.Email = v},
-                {"fullname", (r, v) => r.FullName = v},
-                {"phonenumber", (r, v) => r.PhoneNumber = v},
-                {"role", (r, v) => r.Role = v},
-                {"supervisor", (r, v) => r.Supervisor = v}
-            };
+            this.csvReader = csvReader;
+            this.importUsersProcessRepository = importUsersProcessRepository;
+            this.userStorage = userStorage;
+            this.userImportVerifier = userImportVerifier;
         }
 
-        public string CreateUserPreloadingProcess(Stream data, string fileName)
+        public IEnumerable<UserPreloadingVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
         {
-            var preloadingProcessId = Guid.NewGuid().FormatGuid();
-            var preloadingProcess = new UserPreloadingProcess
+            var csvDelimiter = ExportFileSettings.DataFileSeparator.ToString();
+
+            var requiredColumns = this.GetRequiredUserProperties();
+
+            var columns = this.csvReader.ReadHeader(new MemoryStream(data), csvDelimiter)
+                .Select(x => x.ToLower()).ToArray();
+
+            var missingColumns = requiredColumns.Where(x => !columns.Contains(x));
+
+            if (missingColumns.Any())
+                throw new UserPreloadingException(string.Format(UserPreloadingServiceMessages.FileColumnsMissingFormat,
+                        fileName, string.Join(", ", missingColumns)));
+
+            var usersToImport = new List<UserPreloadingDataRecord>();
+
+            var allInterviewersAndSupervisors = this.userStorage.Users.Select(x => new UserToValidate
             {
-                UserPreloadingProcessId = preloadingProcessId,
+                UserId = x.Id,
+                UserName = x.UserName,
+                IsArchived = x.IsArchived,
+                SupervisorId = x.Profile.SupervisorId,
+                IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId),
+                IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+            }).ToArray();
+
+            var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors);
+
+            foreach (var userToImport in this.csvReader.ReadAll<UserPreloadingDataRecord>(new MemoryStream(data), csvDelimiter))
+            {
+                usersToImport.Add(userToImport);
+
+                foreach (var validator in validations)
+                {
+                    if (validator.ValidationFunction(userToImport))
+                        yield return ToVerificationError(validator, userToImport, usersToImport.Count);
+                }
+
+                if (usersToImport.Count > userPreloadingSettings.MaxAllowedRecordNumber)
+                    throw new UserPreloadingException(string.Format(UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat,
+                            this.userPreloadingSettings.MaxAllowedRecordNumber));
+            }
+
+            validations = this.userImportVerifier.GetAllUsersValidations(allInterviewersAndSupervisors, usersToImport);
+
+            for (int userIndex = 0; userIndex < usersToImport.Count; userIndex++)
+            {
+                var userToImport = usersToImport[userIndex];
+
+                foreach (var validator in validations)
+                {
+                    if (validator.ValidationFunction(userToImport))
+                        yield return ToVerificationError(validator, userToImport, userIndex + 1);
+                }
+            }
+
+            this.Save(fileName, usersToImport);
+        }
+
+        private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();
+
+        public string[] GetUserProperties() => new[]
+        {
+            nameof(UserPreloadingDataRecord.Login), nameof(UserPreloadingDataRecord.Password),
+            nameof(UserPreloadingDataRecord.Role), nameof(UserPreloadingDataRecord.Supervisor),
+            nameof(UserPreloadingDataRecord.FullName), nameof(UserPreloadingDataRecord.Email),
+            nameof(UserPreloadingDataRecord.PhoneNumber)
+        }.Select(x => x.ToLower()).ToArray();
+
+        private void Save(string fileName, IList<UserPreloadingDataRecord> usersToImport)
+            => this.importUsersProcessRepository.Store(new UserPreloadingProcess
+            {
+                UserPreloadingProcessId = importUsersProcessId,
                 FileName = fileName,
-                FileSize = data.Length,
-                State = UserPrelodingState.Uploaded,
-                UploadDate = DateTime.UtcNow,
-                LastUpdateDate = DateTime.UtcNow
+                RecordsCount = usersToImport.Count,
+                InterviewersCount = usersToImport.Count(x => x.Role == "interviewer"),
+                SupervisorsCount = usersToImport.Count(x => x.Role == "supervisor"),
+                UserPrelodingData = usersToImport.OrderByDescending(x => x.Role).ToList()
+            }, null);
+
+        public void Import()
+        {
+            throw new NotImplementedException();
+        }
+
+        public UsersImportStatus GetImportStatus()
+        {
+            var process = this.importUsersProcessRepository.GetById(importUsersProcessId);
+
+            return new UsersImportStatus
+            {
+                IsInProgress = process != null,
+                TotalUsersToImport = process?.RecordsCount ?? 0,
+                UsersInQueue = process?.UserPrelodingData?.Count ?? 0,
+                FileName = process?.FileName
             };
+        }
 
-            var records = new List<string[]>();
-            try
+        private static UserPreloadingVerificationError ToVerificationError(PreloadedDataValidator validator,
+            UserPreloadingDataRecord userToImport, int userIndex)
+            => new UserPreloadingVerificationError
             {
-                var recordsAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(data, ExportFileSettings.DataFileSeparator.ToString());
-                records = recordsAccessor.Records.ToList();
-            }
-            catch (Exception e)
-            {
-                throw new UserPreloadingException(e.Message, e);
-            }
-
-            if (records.Count - 1 > userPreloadingSettings.MaxAllowedRecordNumber)
-            {
-                var exceptionMessage = UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat
-                                                                    .FormatString(records.Count - 1, this.userPreloadingSettings.MaxAllowedRecordNumber);
-                throw new UserPreloadingException(exceptionMessage);
-            }
-
-            string[] headerRow = null;
-            foreach (string[] record in records)
-            {
-                if (headerRow == null)
-                {
-                    headerRow = record.Select(r => r.ToLower()).ToArray();
-                    ThrowIfFileStructureIsInvalid(headerRow, fileName);
-                    continue;
-                }
-
-                var dataRecord = new UserPreloadingDataRecord();
-
-                for (int i = 0; i < headerRow.Length; i++)
-                {
-                    var columnName = headerRow[i];
-
-                    if(!dataColumnNamesMappedOnRecordSetter.ContainsKey(columnName))
-                        continue;
-
-                    var recordSetter = dataColumnNamesMappedOnRecordSetter[columnName];
-
-                    var cellValue = (record[i] ?? "").Trim();
-
-                    var propertySetter = recordSetter;
-
-                    propertySetter(dataRecord, cellValue);
-                }
-
-                preloadingProcess.UserPrelodingData.Add(dataRecord);
-            }
-
-            preloadingProcess.RecordsCount = preloadingProcess.UserPrelodingData.Count;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-
-            return preloadingProcessId;
-        }
-
-        public void FinishValidationProcess(string preloadingProcessId)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
-
-            preloadingProcess.State = UserPrelodingState.Validated;
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void FinishValidationProcessWithError(string preloadingProcessId, string errorMessage)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
-
-            preloadingProcess.State = UserPrelodingState.ValidationFinishedWithError;
-            preloadingProcess.ErrorMessage = errorMessage;
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void FinishPreloadingProcess(string preloadingProcessId)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.CreatingUsers);
-
-            if (preloadingProcess.CreatedUsersCount != preloadingProcess.RecordsCount)
-            {
-                var message = String.Format(UserPreloadingServiceMessages.userPreloadingProcessCantBeFinishedFormat,
-                    preloadingProcess.UserPreloadingProcessId, 
-                    preloadingProcess.CreatedUsersCount, 
-                    preloadingProcess.RecordsCount);
-                throw new UserPreloadingException(message);
-            }
-
-            preloadingProcess.State = UserPrelodingState.Finished;
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void FinishPreloadingProcessWithError(string preloadingProcessId, string errorMessage)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.CreatingUsers);
-
-            preloadingProcess.State = UserPrelodingState.FinishedWithError;
-            preloadingProcess.ErrorMessage = errorMessage;
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void EnqueueForValidation(string preloadingProcessId)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Uploaded);
-
-            preloadingProcess.State = UserPrelodingState.ReadyForValidation;
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void EnqueueForUserCreation(string preloadingProcessId)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validated);
-
-            if (preloadingProcess.VerificationErrors.Any())
-            {
-                var message = String.Format(UserPreloadingServiceMessages.UserPreloadingProcessWithIdHasErrorsFormat,
-                    preloadingProcess.UserPreloadingProcessId, 
-                    preloadingProcess.VerificationErrors.Count);
-                throw new UserPreloadingException(message);
-            }
-
-            preloadingProcess.State = UserPrelodingState.ReadyForUserCreation;
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void DeletePreloadingProcess(string preloadingProcessId)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-            var statesWhichNotAllowingDelete = new[] {UserPrelodingState.Validating, UserPrelodingState.CreatingUsers};
-            if (statesWhichNotAllowingDelete.Contains(preloadingProcess.State))
-            {
-                throw new InvalidOperationException(
-                    String.Format(
-                        UserPreloadingServiceMessages.UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat,
-                        preloadingProcess.FileName, preloadingProcess.State, string.Join(", ", statesWhichNotAllowingDelete.Select(s=>s.ToString()))));
-            }
-
-            userPreloadingProcessStorage.Remove(preloadingProcessId);
-        }
-
-        public string DeQueuePreloadingProcessIdReadyToBeValidated()
-        {
-            var process = GetOldestPreloadingProcessInState(UserPrelodingState.ReadyForValidation);
-            if (process == null)
-                return null;
-
-            process.State = UserPrelodingState.Validating;
-            process.LastUpdateDate = DateTime.UtcNow;
-            process.ValidationStartDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(process, process.UserPreloadingProcessId);
-            return process.UserPreloadingProcessId;
-        }
-
-        public string DeQueuePreloadingProcessIdReadyToCreateUsers()
-        {
-            var process = GetOldestPreloadingProcessInState(UserPrelodingState.ReadyForUserCreation);
-            if (process == null)
-                return null;
-
-            process.State = UserPrelodingState.CreatingUsers;
-            process.LastUpdateDate = DateTime.UtcNow;
-            process.CreationStartDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(process, process.UserPreloadingProcessId);
-            return process.UserPreloadingProcessId;
-        }
-
-        public UserPreloadingProcess[] GetPreloadingProcesses()
-        {
-            return userPreloadingProcessStorage.Query(_ => _.OrderBy(p => p.LastUpdateDate).ToArray());
-        }
-
-        public UserPreloadingProcess GetPreloadingProcesseDetails(string preloadingProcessId)
-        {
-            return userPreloadingProcessStorage.GetById(preloadingProcessId);
-        }
-
-        public void PushVerificationError(string preloadingProcessId, 
-            string code, 
-            int rowNumber, 
-            string columnName,
-            string cellValue)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
-
-            if (preloadingProcess.VerificationErrors.Count >= userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation)
-            {
-                var message = string.Format(UserPreloadingServiceMessages.MaxNumberOfValidationErrorsHaveBeenReachedFormat,
-                    this.userPreloadingSettings.NumberOfValidationErrorsBeforeStopValidation);
-                throw new UserPreloadingException(message);
-            }
-
-            preloadingProcess.VerificationErrors.Add(new UserPreloadingVerificationError()
-            {
-                CellValue = cellValue,
-                Code = code,
-                ColumnName = columnName,
-                RowNumber = rowNumber
-            });
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-            
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void UpdateVerificationProgressInPercents(string preloadingProcessId, int percents)
-        {
-            if (percents < 0 || percents > 100)
-            {
-                var message = String.Format(UserPreloadingServiceMessages.validationProgressInPercentsCantBeNegativeOrGreaterThen100Format, percents);
-                throw new ArgumentOutOfRangeException(message);
-            }
-
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.Validating);
-
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-            preloadingProcess.VerificationProgressInPercents = percents;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public void IncrementCreatedUsersCount(string preloadingProcessId)
-        {
-            var preloadingProcess = this.GetUserPreloadingProcessAndThrowIfMissing(preloadingProcessId);
-
-            ThrowIfStateDoesntMatch(preloadingProcess, UserPrelodingState.CreatingUsers);
-
-            if (preloadingProcess.RecordsCount == preloadingProcess.CreatedUsersCount)
-            {
-                var message = String.Format(UserPreloadingServiceMessages.UserPreloadingProcessWithIdCantCreateMoreUsersFormat,
-                    preloadingProcessId, 
-                    preloadingProcess.RecordsCount);
-                throw new UserPreloadingException(message);
-            }
-
-            preloadingProcess.CreatedUsersCount++;
-            preloadingProcess.LastUpdateDate = DateTime.UtcNow;
-
-            userPreloadingProcessStorage.Store(preloadingProcess, preloadingProcessId);
-        }
-
-        public string[] GetAvaliableDataColumnNames()
-        {
-            return this.dataColumnNamesMappedOnRecordSetter.Keys.ToArray();
-        }
-
-        public UserRoles GetUserRoleFromDataRecord(UserPreloadingDataRecord dataRecord)
-        {
-            if ("supervisor".Equals(dataRecord.Role,StringComparison.InvariantCultureIgnoreCase))
-                return UserRoles.Supervisor;
-            if ("interviewer".Equals(dataRecord.Role,StringComparison.InvariantCultureIgnoreCase))
-                return UserRoles.Interviewer;
-
-            return 0;
-        }
-
-        private UserPreloadingProcess GetUserPreloadingProcessAndThrowIfMissing(string preloadingProcessId)
-        {
-            var preloadingProcess = this.userPreloadingProcessStorage.GetById(preloadingProcessId);
-            if (preloadingProcess == null)
-            {
-                var message = String.Format(UserPreloadingServiceMessages.UserPreloadingProcessWithIdIisMissingFormat, preloadingProcessId);
-                throw new KeyNotFoundException(message);
-            }
-            return preloadingProcess;
-        }
-
-        private void ThrowIfStateDoesntMatch(UserPreloadingProcess preloadingProcess, UserPrelodingState state)
-        {
-            if (preloadingProcess.State != state)
-                throw new InvalidOperationException(
-                    String.Format(
-                        UserPreloadingServiceMessages.UserPreloadingProcessWithIdInInvalidStateFormat,
-                        preloadingProcess.UserPreloadingProcessId, preloadingProcess.State, state));
-        }
-
-        private UserPreloadingProcess GetOldestPreloadingProcessInState(UserPrelodingState state)
-        {
-            return userPreloadingProcessStorage.Query(_ => _.Where(p => p.State == state)
-                                                            .OrderBy(p => p.LastUpdateDate)
-                                                            .FirstOrDefault());
-        }
-
-        private void ThrowIfFileStructureIsInvalid(string[] header, string fileName)
-        {
-            var dataColumnNamesLowerCase = this.dataColumnNamesMappedOnRecordSetter.Keys.Select(r => r.ToLower()).ToArray();
-            var invalidColumnNames = new List<string>();
-            foreach (var columnName in header)
-            {
-                if (!dataColumnNamesLowerCase.Contains(columnName))
-                    invalidColumnNames.Add(columnName);
-            }
-            if (invalidColumnNames.Any())
-                throw new UserPreloadingException(String.Format(UserPreloadingServiceMessages.FileColumnsCantBeMappedFormat,
-                    fileName, string.Join(",", invalidColumnNames)));
-        }
+                CellValue = validator.ValueSelector.Compile()(userToImport),
+                Code = validator.Code,
+                ColumnName = ((MemberExpression)validator.ValueSelector.Body).Member.Name,
+                RowNumber = userIndex + 1 /*header item*/
+            };
     }
 }

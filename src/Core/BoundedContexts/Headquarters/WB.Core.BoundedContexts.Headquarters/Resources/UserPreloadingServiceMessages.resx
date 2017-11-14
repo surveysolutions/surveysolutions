@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FileColumnsMissingFormat" xml:space="preserve">
+    <value>The file '{0}' does not contains required columns: {1}</value>
+  </data>
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>The file '{0}' contains the following columns that can't be mapped to any user property (e.g., full name, phone number, etc.) : {1}</value>
   </data>
@@ -127,7 +130,7 @@
     <value>User preloading process with id '{0}'has {1} error(s).</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>The dataset contains {0} records, but the max allowed number of records is {1}</value>
+    <value>Max allowed number of records is {0}</value>
   </data>
   <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
     <value>Validation progress in percents can't be negative or greater than 100, but the value is {0}</value>

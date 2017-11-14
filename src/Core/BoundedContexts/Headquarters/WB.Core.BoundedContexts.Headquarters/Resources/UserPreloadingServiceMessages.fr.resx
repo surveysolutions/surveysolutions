@@ -124,7 +124,7 @@
     <value>Nombre maximum de d'erreurs de validation erreurs atteint: {0}</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>Base de données contient {0} entrée(s), mais le maximum autorisé est {1}</value>
+    <value/>
   </data>
   <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
     <value>Chargement des utilisateurs interrompu.  Le processus avec l'identifiant « {0} » n'a pas abouti parce que uniquement {1} comptes d'utilisateur sur {2} ont pu été crées</value>

@@ -97,6 +97,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to column.
+        /// </summary>
+        internal static string Column {
+            get {
+                return ResourceManager.GetString("Column", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alernatively, you can .
         /// </summary>
         internal static string Description {
@@ -138,6 +147,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string ImportingUserInfo {
             get {
                 return ResourceManager.GetString("ImportingUserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to line.
+        /// </summary>
+        internal static string Line {
+            get {
+                return ResourceManager.GetString("Line", resourceCulture);
             }
         }
         
