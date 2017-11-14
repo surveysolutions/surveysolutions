@@ -154,28 +154,28 @@
     <value>العمل جار</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} جواب/أجوبة</value>
+    <value>{{value}} جواب/أجوبة</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
     <value>جواب واحد</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} خطأ / أخطاء</value>
+    <value>{{value}} خطأ / أخطاء</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>خطأ واحد</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>اكتمل القسم: {0}</value>
+    <value>اكتمل القسم: {{value}}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
     <value>لم يبدأ القسم</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>تم البدء بالقسم: {0}</value>
+    <value>تم البدء بالقسم: {{value}}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} أقسام فرعية</value>
+    <value>{{value}} أقسام فرعية</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
     <value>قسم فرعي واحد</value>
