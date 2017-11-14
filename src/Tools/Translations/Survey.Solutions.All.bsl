@@ -699,7 +699,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="Stat_QuestionsWithValidation" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questions with validation conditions:{0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопсросов с проверяющим условием: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопросов с проверяющим условием: {0}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="Stat_Rosters" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1785,7 +1785,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0223_SectionWithLessThan5Questions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Section contains less than five questions. Consider joining with other sections." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Секция содержит меньше пяти вопросов. Рассмотрите возможность объединения с другими секциями." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Секция содержит менее пяти вопросов. Рассмотрите возможность объединения с другими секциями." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0224_TooManySubsectionsAtOneLevel" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1821,7 +1821,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0229_SupervisorQuestionInValidation" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="В проверочном выражении используется супервизоровский вопрос. Убедитесь, что условие включения учитывает отвеченность супервизоровского вопроса или проинструктируйте супервизоров всегда отвечать на него. " ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="В проверочном выражении используется супервизоровский вопрос. Убедитесь, что условие включения учитывает отвеченность супервизоровского вопроса или проинструктируйте супервизоров всегда отвечать на него. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0230_NonconsecutiveCascadings" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1959,7 +1959,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0264_GpsQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You have a GPS question. Tablets must support geolocation to be used with this questionnaire." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. " ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0265_MoreThan30PercentQuestionsAreText" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2415,7 +2415,7 @@
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.resx" nm="Questionnaire_verification_failed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Your questionnaire has errors. Please verify the questionnaire on Designer." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="В вашей опроснике есть ошибки. Пожалуйста, проверьте опросник в дизайнере опросников." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="В вашем опроснике есть ошибки. Пожалуйста, проверьте опросник в дизайнере опросников." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.resx" nm="QuestionnaireTitle_required" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2499,7 +2499,7 @@
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.resx" nm="User_Not_authorized" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="User is not authorized. Please check your login and password." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пользователь не авторизирован. Проверьте своё имя пользователя и пароль." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Пользователь не авторизован. Проверьте своё имя пользователя и пароль." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.resx" nm="UserLockedOut" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2553,7 +2553,7 @@
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\ErrorMessages.resx" nm="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Your questionnaire &quot;{0}&quot; contains new functionality: {1}. New feature(s) is not supported by your installation. Please update." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ваша опросник «{0}» содержит новую функциональность: {1}. Новая функция(и) не поддерживается вашей текущей версией приложения. Пожалуйста обновитесь." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ваш опросник «{0}» содержит новую функциональность: {1}. Новая функция(и) не поддерживается вашей текущей версией приложения. Пожалуйста обновитесь." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\FindReplaceResources.resx" nm="SearchForRegexNotValid" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2605,13 +2605,13 @@
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Hello {0}, &lt;br&gt;  {1} has invited {2} to {3} your questionnaire: " ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; пользователь {1}  разрешил пользователю {2} {3} ваш опросник:" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; пользователь {1}  дал доступ пользователю {2} {3} к Вашему опроснику:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Hello {0}, &lt;br&gt;  {1} has revoked access for {2} to your questionnaire: {3}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; {1} закрыл доступ для {2} к вашему опроснику: {3}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; {1} закрыл доступ для {2} к Вашему опроснику: {3}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="ResetPassword" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2848,6 +2848,12 @@
             <li lc="ru" tx="Вы действительно хотите удалить опросник &quot;{0}&quot;?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="DeleteFolderConfirmation" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Are you sure to want to delete folder {0} ?" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вы точно хотите удалить папку {0} ?" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Deleting" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Deleting" ts="Translated" qs="ToReview" />
@@ -2950,6 +2956,12 @@
             <li lc="ru" tx="Дата изменения" ts="Changed" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Location" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Location:  " ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Расположение:  " ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="ManageUsers" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Manage users" ts="Translated" qs="ToReview" />
@@ -2960,6 +2972,12 @@
           <lis>
             <li lc="nn-nn" tx="My Questionnaires" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Мои опросники" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="NewFolder" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="New Folder" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Новая папка" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Open" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6868,6 +6886,36 @@
             <li lc="zh-CN" tx="Survey Solutions督导员网站正在维护中。Survey Solutions Designer网站正处于维护模式。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Maps_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Maps" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Карты" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Checking maps on server" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Проверка карт на сервере" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Map sync error" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ошибка синхронизации карт" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Map synchronization succesfuly finished" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Синхронизация карт успешно завершена" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Handling map {0}, {1} out of {2}. &#xD;&#xA; Downloaded {3} out of {4} ({5}%)" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обработка карты {0}, {1} из {2}. &#xD;&#xA; Скачано {3} из {4} ({5}%)" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Dashboard" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="Tablero de instrumentos" ts="Translated" qs="ToReview" />
@@ -6922,6 +6970,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Maps" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Maps" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Карты" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Settings" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -8966,7 +9015,7 @@
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="Questionnaire_verification_failed" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="В вашей опроснике есть ошибки. Пожалуйста, проверьте опросник в дизайнере опросников." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="В вашем опроснике есть ошибки. Пожалуйста, проверьте опросник в дизайнере опросников." ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Your questionnaire has errors. Please verify the questionnaire on Designer." ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -9050,7 +9099,7 @@
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="User_Not_authorized" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="Пользователь не авторизирован. Проверьте своё имя пользователя и пароль." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Пользователь не авторизован. Проверьте своё имя пользователя и пароль." ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="User is not authorized. Please check your login and password." ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -9104,7 +9153,7 @@
         </it>
         <it rn="Resources\ErrorMessages.resx" nm="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="ErrorMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="Ваша опросник «{0}» содержит новую функциональность: {1}. Новая функция(и) не поддерживается вашей текущей версией приложения. Пожалуйста обновитесь." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ваш опросник «{0}» содержит новую функциональность: {1}. Новая функция(и) не поддерживается вашей текущей версией приложения. Пожалуйста обновитесь." ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Your questionnaire &quot;{0}&quot; contains new functionality: {1}. New feature(s) is not supported by your installation. Please update." ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -9158,13 +9207,13 @@
         </it>
         <it rn="Resources\NotificationResources.resx" nm="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="NotificationResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; пользователь {1}  разрешил пользователю {2} {3} ваш опросник:" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; пользователь {1}  дал доступ пользователю {2} {3} к Вашему опроснику:" ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Hello {0}, &lt;br&gt;  {1} has invited {2} to {3} your questionnaire: " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\NotificationResources.resx" nm="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="NotificationResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; {1} закрыл доступ для {2} к вашему опроснику: {3}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; {1} закрыл доступ для {2} к Вашему опроснику: {3}" ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Hello {0}, &lt;br&gt;  {1} has revoked access for {2} to your questionnaire: {3}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -9426,6 +9475,12 @@
             <li lc="nn-nn" tx="Do you really want to delete &quot;{0}&quot; questionnaire?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\QuestionnaireController.resx" nm="DeleteFolderConfirmation" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="ru" tx="Вы точно хотите удалить папку {0} ?" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Are you sure to want to delete folder {0} ?" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\QuestionnaireController.resx" nm="Deleting" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Удаление" ts="Translated" qs="ToReview" />
@@ -9528,6 +9583,12 @@
             <li lc="nn-nn" tx="Modified on" ts="Changed" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\QuestionnaireController.resx" nm="Location" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="ru" tx="Расположение:  " ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Location:  " ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\QuestionnaireController.resx" nm="ManageUsers" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Управление пользователями" ts="Translated" qs="ToReview" />
@@ -9538,6 +9599,12 @@
           <lis>
             <li lc="ru" tx="Мои опросники" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="My Questionnaires" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\QuestionnaireController.resx" nm="NewFolder" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="ru" tx="Новая папка" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="New Folder" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireController.resx" nm="Open" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10077,8 +10144,8 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="HelpVariableLabel" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="A text up to 80 characters that will be attached to the exported variable." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Текст до {{maxLength}} символов, который будет использован для экспорта переменной." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="A text up to {{maxLength}} characters that will be attached to the exported variable." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Текст до {{maxLength}} символов, который будет использован для экспорта переменной." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="HelpVariableName" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -13287,6 +13354,12 @@
             <li lc="ka" tx="საიდენტიფიკაციო კითხვები" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Common.resx" nm="Processing" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Processing..." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обработка..." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Common.resx" nm="Questionnaire" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="fr" tx="Questionnaire" ts="Translated" qs="ToReview" />
@@ -14901,6 +14974,12 @@
             <li lc="ka" tx="ინტერვიუერი დავალებულია" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Reports.resx" nm="Interviewers" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Интервьюеры" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Reports.resx" nm="Questionnaire" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="fr" tx="Questionnaire" ts="Translated" qs="ToReview" />
@@ -16333,6 +16412,12 @@
             <li lc="ka" tx="ვერ მოიძებნა შესაბამისი ჩანაწერები" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\Details.resx" nm="Area_ShowCoordinates" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Show coordinates" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Показать координаты" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\Details.resx" nm="ChooseResponsibleInterviewer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interview has no responsible. Please, choose responsible interviewer" ts="Translated" qs="ToReview" />
@@ -16359,10 +16444,27 @@
             <li lc="ru" tx="Обновлено {{ date }}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\Details.resx" nm="NoSearchResults" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="No items found" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ничего не найдено" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\Details.resx" nm="Responsible" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Responsible " ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ответственный" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Details.resx" nm="SearchResult_Count" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="{{ count }} item found:" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="{{ count }} объект найден:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Details.resx" nm="SearchResult_Count_plural" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="{{ count }} items found:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="Status" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16926,6 +17028,12 @@
             <li lc="ru" tx="Пожалуйста, выберите файл" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="请选择文件" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="გთხოვთ, აირჩიოთ ფაილი" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\FieldsAndValidations.resx" nm="UserIsLockedByHq" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="User is locked by Headquarter" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заблокирован Администратором или Хедквотером" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="UserName_Taken" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -19308,10 +19416,46 @@
             <li lc="ru" tx="Отвязать пользователя от карты" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\Pages.resx" nm="MapDetails_ImportedOn" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Imported on" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Импортирован" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\Pages.resx" nm="MapDetails_InterviewerName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Interviewer name" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя интервьюера" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="MapDetails_MapDisclaimer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="This preview shows the loaded map supperimposed on the world map" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="This preview shows the loaded map supperimposed on the world map" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="MapDetails_MapTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Map" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Карта" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="MapDetails_MaxScale" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Max Scale" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Максимальный масштаб" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="MapDetails_MinScale" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Min Scale" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Минимальный масштаб" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="MapDetails_Size" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Size" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Размер" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="NoResults" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -20312,6 +20456,7 @@
             <li lc="nn-nn" tx="in the {0} team" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="在{0}的团队中" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="{0} გუნდში" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="командой {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PeriodicStatusReport.resx" nm="LastDateToShowLabel" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -20679,6 +20824,16 @@
             <li lc="ka" tx="ჩამოტვირთეთ გასაუბრების სია. &lt;/ br&gt; &lt;ul&gt; {0} &lt;/ ul&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\SyncLogMessages.resx" nm="GetMap" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Download map: {0}" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\SyncLogMessages.resx" nm="GetMaps" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Download list of Maps. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\SyncLogMessages.resx" nm="GetQuestionnaire" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="fr" tx="Télécharger le questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]" ts="Translated" qs="ToReview" />
@@ -20769,6 +20924,11 @@
             <li lc="ru" tx="Привязать интервьюера к планшету" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="将调查员与设备链接" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="დალინკეთ ინტერვიუერი მოწყობილობაზე" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\SyncLogMessages.resx" nm="NoMapsForUser" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="No maps to download" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="NoNewInterviewPackagesToDownload" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21476,7 +21636,7 @@
         <it rn="Resources\WebInterview.resx" nm="Filters_OldDetailsLink" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Old interview details" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Старые интервью детали" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Деталика интервью (старый дизайн)" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Filters_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21807,12 +21967,6 @@
             <li lc="ru" tx="Здравствуйте и Добро пожаловать в Survey Solutions Веб Опрос" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您好，欢迎使用Survey Solutions网络访谈" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="გამარჯობა და კეთილი იყოს თქვენი მობრძანება Survey Solutions ვებ კვლევაში" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="Resources\WebInterview.resx" nm="SearchResult_Count" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="{{ count }} questions found" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{{ count }} вопросов найдено" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="ServerUnderLoad" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
