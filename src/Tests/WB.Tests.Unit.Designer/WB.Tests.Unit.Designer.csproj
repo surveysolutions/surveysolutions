@@ -54,7 +54,7 @@
     <PackageReference Include="CsvHelper" Version="2.16.3" />
     <PackageReference Include="EPPlus" Version="4.1.0" />
     <PackageReference Include="FluentAssertions" Version="4.19.3" />
-    <PackageReference Include="Iesi.Collections" Version="4.0.1.4000" />
+    <PackageReference Include="Iesi.Collections" Version="4.0.2" />
     <PackageReference Include="Machine.Specifications" Version="0.11.0" />
     <PackageReference Include="Machine.Specifications.Should" Version="0.11.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
@@ -73,7 +73,7 @@
     <PackageReference Include="MultipartDataMediaFormatter" Version="1.1.0.0" />
     <PackageReference Include="MvcMailer" Version="4.5" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="NHibernate" Version="5.0.0" />
+    <PackageReference Include="NHibernate" Version="5.0.1" />
     <PackageReference Include="NSubstitute" Version="2.0.3" />
     <PackageReference Include="NUnit" Version="3.8.1" />
     <PackageReference Include="Quartz" Version="2.5.0" />
