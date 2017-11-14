@@ -20,7 +20,6 @@
     <PackageReference Include="FluentMigrator.Tools" Version="1.6.2" />
     <PackageReference Include="HtmlSanitizer" Version="3.4.156" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
-    <PackageReference Include="Iesi.Collections" Version="4.0.1.4000" />
     <PackageReference Include="Microsoft.CSharp" Version="4.3.0" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
