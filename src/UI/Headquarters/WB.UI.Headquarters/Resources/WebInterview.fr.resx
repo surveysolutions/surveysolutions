@@ -148,28 +148,28 @@
     <value>En cours</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} réponses</value>
+    <value>{{value}} réponses</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
     <value>une réponse</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} erreurs</value>
+    <value>{{value}} erreurs</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>une erreur</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Section commencée: {0}</value>
+    <value>Section commencée: {{value}}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
     <value>Section pas encore entamée</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Section entamée: {0}</value>
+    <value>Section entamée: {{value}}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} sous-sections</value>
+    <value>{{value}} sous-sections</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
     <value>une sous-section</value>
