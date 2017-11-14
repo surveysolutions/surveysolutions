@@ -499,6 +499,8 @@ namespace WB.UI.Headquarters.API.WebInterview
                     return InterviewEntityType.QRBarcode;
                 case QuestionType.Audio:
                     return InterviewEntityType.Audio;
+                case QuestionType.Area:
+                    return IsReviewMode ? InterviewEntityType.Area : InterviewEntityType.Unsupported;
                 default:
                     return InterviewEntityType.Unsupported;
             }

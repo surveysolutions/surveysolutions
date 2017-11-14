@@ -87,7 +87,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public long? Answer { get; set; }
         public string Filename { get; set; }
     }
-    
+
+    public class InterviewAreaQuestion : GenericQuestion
+    {
+        public string DisplayUrl { get; set; }
+        public double Answer { get; set; }
+        public string Coordinates { get; set; }
+    }
+
     public class InterviewDateQuestion : GenericQuestion
     {
         public bool IsTimestamp { get; set; }

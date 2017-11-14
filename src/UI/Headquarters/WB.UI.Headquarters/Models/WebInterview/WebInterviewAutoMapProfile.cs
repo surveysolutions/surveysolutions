@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -30,6 +32,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
             this.CreateMap<InterviewTreeQuestion, InterviewBarcodeQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer()));
+
+            this.CreateMap<InterviewTreeQuestion, InterviewAreaQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(_ => _.Answer, opts => opts.MapFrom(x =>
+                    Math.Round(x.GetAsInterviewTreeAreaQuestion().GetAnswer() != null ? x.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.AreaSize ?? 0 : 0, 2) ))
+                .ForMember(_ => _.Coordinates, opts => opts.MapFrom(x =>
+                        x.GetAsInterviewTreeAreaQuestion().GetAnswer() != null ? x.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.Coordinates : null))
+                    ;
 
             this.CreateMap<InterviewTreeQuestion, InterviewAudioQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()

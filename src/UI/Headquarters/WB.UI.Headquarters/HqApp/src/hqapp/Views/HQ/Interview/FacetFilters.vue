@@ -53,11 +53,7 @@ export default {
         },
 
         oldPageUrl() {
-            return (
-                window.input.settings.config.basePath +
-                "Interview/Details/" +
-                this.$route.params.interviewId
-            );
+            return  `${this.$store.getters.basePath}Interview/Details/${this.$route.params.interviewId}`;
         }
     },
     methods: {

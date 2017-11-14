@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
+using Microsoft.Ajax.Utilities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -223,6 +224,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                         break;
                     default:
                         result = this.Map<StubEntity>(question);
+                        break;
+                    case InterviewQuestionType.Area:
+                        InterviewTreeQuestion areaQuestion = callerInterview.GetQuestion(identity);
+                        result = this.Map<InterviewAreaQuestion>(areaQuestion);
                         break;
                 }
 
