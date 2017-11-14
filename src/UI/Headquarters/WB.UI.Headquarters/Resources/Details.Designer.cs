@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{ count }} items found:.
+        ///   Looks up a localized string similar to {{ count }} item found:.
         /// </summary>
         public static string SearchResult_Count {
             get {
