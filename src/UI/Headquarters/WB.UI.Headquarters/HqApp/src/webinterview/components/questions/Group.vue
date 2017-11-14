@@ -67,12 +67,12 @@
                     case GroupStatus.NotStarted: 
                         return this.$t("WebInterview.Interview_Group_Status_NotStarted")
                     case GroupStatus.Started: {
-                        return this.$t("WebInterview.Interview_Group_Status_StartedIncompleteFormat", 
-                            [this.getInformationByQuestionsAndAnswers])
+                        const value = this.getInformationByQuestionsAndAnswers
+                        return this.$t("WebInterview.Interview_Group_Status_StartedIncompleteFormat", {value})
                     }
                     case GroupStatus.Completed: 
-                        return this.$t("WebInterview.Interview_Group_Status_CompletedFormat", 
-                            [this.getInformationByQuestionsAndAnswers])
+                        const value = this.getInformationByQuestionsAndAnswers
+                        return this.$t("WebInterview.Interview_Group_Status_CompletedFormat", {value})
                 }
             },
             
@@ -91,9 +91,9 @@
 
                 if(answeredCount === 1) {
                     return this.$t("WebInterview.Interview_Group_AnsweredQuestions_One")
-                } else
-
-                return this.$t("WebInterview.Interview_Group_AnsweredQuestions_Many", [answeredCount])
+                } else {
+                    return this.$t("WebInterview.Interview_Group_AnsweredQuestions_Many", { value: answeredCount})
+                }
             },
 
             getInformationByInvalidAnswers() {
@@ -101,14 +101,14 @@
                     return this.$t("WebInterview.Interview_Group_InvalidAnswers_One")
                 }
 
-                return this.$t("WebInterview.Interview_Group_InvalidAnswers_ManyFormat", [ this.$me.stats.invalidCount ])
+                return this.$t("WebInterview.Interview_Group_InvalidAnswers_ManyFormat", { value: this.$me.stats.invalidCount })
             },
 
             informationBySubgroups() {
                 switch(this.$me.stats.subSectionsCount) {
                     case 0: return this.$t("WebInterview.Interview_Group_Subgroups_Zero")
                     case 1: return this.$t("WebInterview.Interview_Group_Subgroups_One")
-                    default: return this.$t("WebInterview.Interview_Group_Subgroups_ManyFormat", [ this.$me.stats.subSectionsCount ])
+                    default: return this.$t("WebInterview.Interview_Group_Subgroups_ManyFormat", { value:  this.$me.stats.subSectionsCount })
                 }
             }
         }

@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} answers.
+        ///   Looks up a localized string similar to {{value}} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
             get {
@@ -295,7 +295,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} errors.
+        ///   Looks up a localized string similar to {{value}} errors.
         /// </summary>
         public static string Interview_Group_InvalidAnswers_ManyFormat {
             get {
@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section completed: {0}.
+        ///   Looks up a localized string similar to Section completed: {{value}}.
         /// </summary>
         public static string Interview_Group_Status_CompletedFormat {
             get {
@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section started: {0}.
+        ///   Looks up a localized string similar to Section started: {{value}}.
         /// </summary>
         public static string Interview_Group_Status_StartedIncompleteFormat {
             get {
@@ -340,7 +340,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} sub-sections.
+        ///   Looks up a localized string similar to {{value}} sub-sections.
         /// </summary>
         public static string Interview_Group_Subgroups_ManyFormat {
             get {
