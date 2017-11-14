@@ -688,7 +688,6 @@
     <Content Include="questionnaire\content\designer-editor\wb-question-list.css.css">
       <DependentUpon>wb-question-list.css.less</DependentUpon>
     </Content>
-    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="Content\body.css" />
     <Content Include="Content\bootstrap-mvc-validation.css" />
     <Content Include="Content\images\loader.gif" />
