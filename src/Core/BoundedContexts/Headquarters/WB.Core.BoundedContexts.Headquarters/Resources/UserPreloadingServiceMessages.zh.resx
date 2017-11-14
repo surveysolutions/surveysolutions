@@ -124,7 +124,7 @@
     <value>已经达到了验证错误数量的最大值{0}</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>数据集中包含{0}条记录，但允许的最大记录数为{1}</value>
+    <value/>
   </data>
   <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
     <value>编号为'{0}'的用户预加载过程不能完成，因为只创建了{2}个中的{1}个</value>

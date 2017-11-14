@@ -192,4 +192,10 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Column" xml:space="preserve">
+    <value>column</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>line</value>
+  </data>
 </root>

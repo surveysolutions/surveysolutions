@@ -70,6 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; does not contains required columns: {1}.
+        /// </summary>
+        public static string FileColumnsMissingFormat {
+            get {
+                return ResourceManager.GetString("FileColumnsMissingFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max number of validation errors {0} has been reached.
         /// </summary>
         public static string MaxNumberOfValidationErrorsHaveBeenReachedFormat {
@@ -79,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The dataset contains {0} records, but the max allowed number of records is {1}.
+        ///   Looks up a localized string similar to Max allowed number of records is {0}.
         /// </summary>
         public static string TheDatasetMaxRecordNumberReachedFormat {
             get {

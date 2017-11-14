@@ -1,5 +1,4 @@
 <template>
-    <main>
         <div class="container">
             <div class="row">
                 <div class="page-header">
@@ -10,7 +9,7 @@
                     </ol>
                     <h1>{{$t('UploadUsers.Title')}}</h1>
                     <p>
-                        <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>some-file.tsv</h3>
+                        <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>{{$store.getters.upload.fileName}}</h3>
                     </p>
                 </div>
             </div>
@@ -37,7 +36,6 @@
                 </div>
             </div>
         </div>
-    </main>
 </template>
 
 

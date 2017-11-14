@@ -30,72 +30,74 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.logger = logger;
         }
 
-        public async Task CreateUsersFromReadyToBeCreatedQueueAsync()
+        public Task CreateUsersFromReadyToBeCreatedQueueAsync()
         {
-            if (IsWorking)
-                return;
+            return Task.CompletedTask;
+            //if (IsWorking)
+            //    return;
 
-            IsWorking = true;
+            //IsWorking = true;
 
-            try
-            {
-                while (IsWorking)
-                {
-                    string preloadingProcessIdToCreate = this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
+            //try
+            //{
+            //    while (IsWorking)
+            //    {
+            //        string preloadingProcessIdToCreate = this.plainTransactionManager.ExecuteInPlainTransaction(
+            //            () => userPreloadingService.DeQueuePreloadingProcessIdReadyToCreateUsers());
 
-                    if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
-                        break;
+            //        if (string.IsNullOrEmpty(preloadingProcessIdToCreate))
+            //            break;
 
-                    var preloadingProcessDataToCreate =
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate).UserPrelodingData.ToList());
-                    try
-                    {
+            //        var preloadingProcessDataToCreate =
+            //            this.plainTransactionManager.ExecuteInPlainTransaction(
+            //                () => userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToCreate).UserPrelodingData.ToList());
+            //        try
+            //        {
 
-                        using (userManager = ServiceLocator.Current.GetInstance<HqUserManager>())
-                        {
-                            await this.CreateUsersFromPreloadedDataAsync(preloadingProcessDataToCreate, preloadingProcessIdToCreate);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error($"preloading process with id {preloadingProcessIdToCreate} finished with error", e);
+            //            using (userManager = ServiceLocator.Current.GetInstance<HqUserManager>())
+            //            {
+            //                await this.CreateUsersFromPreloadedDataAsync(preloadingProcessDataToCreate, preloadingProcessIdToCreate);
+            //            }
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            logger.Error($"preloading process with id {preloadingProcessIdToCreate} finished with error", e);
 
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,e.Message));
-                        return;
-                    }
+            //            this.plainTransactionManager.ExecuteInPlainTransaction(
+            //                () => userPreloadingService.FinishPreloadingProcessWithError(preloadingProcessIdToCreate,e.Message));
+            //            return;
+            //        }
 
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
-                }
-            }
-            finally
-            {
-                IsWorking = false;
-            }
+            //        this.plainTransactionManager.ExecuteInPlainTransaction(
+            //            () => userPreloadingService.FinishPreloadingProcess(preloadingProcessIdToCreate));
+            //    }
+            //}
+            //finally
+            //{
+            //    IsWorking = false;
+            //}
         }
 
-        private async Task CreateUsersFromPreloadedDataAsync(List<UserPreloadingDataRecord> data, string id)
+        private Task CreateUsersFromPreloadedDataAsync(List<UserPreloadingDataRecord> data, string id)
         {
-            var usersToCreate = data.ToLookup(row => userPreloadingService.GetUserRoleFromDataRecord(row));
+            return Task.CompletedTask;
+            //var usersToCreate = data.ToLookup(row => userPreloadingService.GetUserRoleFromDataRecord(row));
 
-            foreach (var supervisorToCreate in usersToCreate[UserRoles.Supervisor])
-            {
-                await this.CreateUserOrUnarchiveAndUpdateAsync(supervisorToCreate, UserRoles.Supervisor);
+            //foreach (var supervisorToCreate in usersToCreate[UserRoles.Supervisor])
+            //{
+            //    await this.CreateUserOrUnarchiveAndUpdateAsync(supervisorToCreate, UserRoles.Supervisor);
 
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingService.IncrementCreatedUsersCount(id));
-            }
+            //    this.plainTransactionManager.ExecuteInPlainTransaction(
+            //        () => userPreloadingService.IncrementCreatedUsersCount(id));
+            //}
 
-            foreach (var interviewerToCreate in usersToCreate[UserRoles.Interviewer])
-            {
-                await CreateInterviewerOrUnarchiveAndUpdateAsync(interviewerToCreate);
+            //foreach (var interviewerToCreate in usersToCreate[UserRoles.Interviewer])
+            //{
+            //    await CreateInterviewerOrUnarchiveAndUpdateAsync(interviewerToCreate);
 
-                this.plainTransactionManager.ExecuteInPlainTransaction(
-                    () => userPreloadingService.IncrementCreatedUsersCount(id));
-            }
+            //    this.plainTransactionManager.ExecuteInPlainTransaction(
+            //        () => userPreloadingService.IncrementCreatedUsersCount(id));
+            //}
         }
 
         private async Task CreateUserOrUnarchiveAndUpdateAsync(UserPreloadingDataRecord supervisorToCreate, UserRoles role, Guid? supervisorId = null)
