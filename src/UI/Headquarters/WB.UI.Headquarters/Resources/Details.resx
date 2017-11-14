@@ -136,7 +136,7 @@
     <value>Responsible </value>
   </data>
   <data name="SearchResult_Count" xml:space="preserve">
-    <value>{{ count }} items found:</value>
+    <value>{{ count }} item found:</value>
   </data>
   <data name="SearchResult_Count_plural" xml:space="preserve">
     <value>{{ count }} items found:</value>
