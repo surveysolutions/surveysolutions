@@ -46,6 +46,9 @@ const store = safeStore({
         },
         addCommentsAllowed(state) {
             return !state.interviewCannotBeChanged;
+        },
+        basePath() {
+            return window.input ? window.input.settings.config.basePath : window.CONFIG.basePath;
         }
     }
 })
