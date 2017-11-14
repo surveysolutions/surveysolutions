@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show coordinates.
+        /// </summary>
+        public static string Area_ShowCoordinates {
+            get {
+                return ResourceManager.GetString("Area_ShowCoordinates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview has no responsible. Please, choose responsible interviewer.
         /// </summary>
         public static string ChooseResponsibleInterviewer {

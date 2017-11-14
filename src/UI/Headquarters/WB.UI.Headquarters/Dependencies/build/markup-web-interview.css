@@ -2,7 +2,8 @@
 /* Changed default value */
 /* Indent for filters */
 .content, .filters-results {
-  height: 100%;
+  height: auto;
+  overflow: auto;
   top: 0;
   left: 0;
   bottom: 0;
@@ -30,15 +31,15 @@
   filter: alpha(opacity=0);
   visibility: hidden; }
 
-.gps-question.answered .question-unit .options-group .action-btn-holder .btn-default, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default {
+.gps-question.answered .question-unit .options-group .action-btn-holder .btn-default, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default, .area-question.answered .question-unit .options-group .action-btn-holder .btn-default, .area-question.has-error .question-unit .options-group .action-btn-holder .btn-default {
   border-color: #dbdfe2; }
-  .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active {
+  .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .area-question.answered .question-unit .options-group .action-btn-holder .btn-default:hover, .area-question.has-error .question-unit .options-group .action-btn-holder .btn-default:hover, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .area-question.answered .question-unit .options-group .action-btn-holder .btn-default:focus, .area-question.has-error .question-unit .options-group .action-btn-holder .btn-default:focus, .gps-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .gps-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .qr-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .current-time-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .multimedia-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active, .area-question.answered .question-unit .options-group .action-btn-holder .btn-default:active, .area-question.has-error .question-unit .options-group .action-btn-holder .btn-default:active {
     border-color: #8c8f90; }
 
-.gps-question.answered .question-unit .options-group .field .btn-clear, .gps-question.has-error .question-unit .options-group .field .btn-clear, .qr-question.answered .question-unit .options-group .field .btn-clear, .qr-question.has-error .question-unit .options-group .field .btn-clear, .current-time-question.answered .question-unit .options-group .field .btn-clear, .current-time-question.has-error .question-unit .options-group .field .btn-clear, .multimedia-question.answered .question-unit .options-group .field .btn-clear, .multimedia-question.has-error .question-unit .options-group .field .btn-clear {
+.gps-question.answered .question-unit .options-group .field .btn-clear, .gps-question.has-error .question-unit .options-group .field .btn-clear, .qr-question.answered .question-unit .options-group .field .btn-clear, .qr-question.has-error .question-unit .options-group .field .btn-clear, .current-time-question.answered .question-unit .options-group .field .btn-clear, .current-time-question.has-error .question-unit .options-group .field .btn-clear, .multimedia-question.answered .question-unit .options-group .field .btn-clear, .multimedia-question.has-error .question-unit .options-group .field .btn-clear, .area-question.answered .question-unit .options-group .field .btn-clear, .area-question.has-error .question-unit .options-group .field .btn-clear {
   top: -11px; }
 
-.gps-question.answered .block-with-data, .gps-question.has-error .block-with-data, .qr-question.answered .block-with-data, .qr-question.has-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.has-error .block-with-data, .multimedia-question.answered .block-with-data, .multimedia-question.has-error .block-with-data {
+.gps-question.answered .block-with-data, .gps-question.has-error .block-with-data, .qr-question.answered .block-with-data, .qr-question.has-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.has-error .block-with-data, .multimedia-question.answered .block-with-data, .multimedia-question.has-error .block-with-data, .area-question.answered .block-with-data, .area-question.has-error .block-with-data {
   font-size: 14px;
   line-height: 16px;
   font-weight: bold;
@@ -366,9 +367,9 @@ span.image-zoom-box, span.image-option {
   background-position: 10px 100%;
   padding: 0 0 15px 0; }
 
-.bootstrap-select .dropdown-menu > li > a.flagged, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.button-flag, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.button-flag {
+.bootstrap-select .dropdown-menu > li > a.flagged {
   padding-left: 35px; }
-  .bootstrap-select .dropdown-menu > li > a.flagged:before, .bootstrap-select .question.with-flag .question-editor .dropdown-menu > li > a.button-flag:before, .question.with-flag .question-editor .bootstrap-select .dropdown-menu > li > a.button-flag:before {
+  .bootstrap-select .dropdown-menu > li > a.flagged:before {
     top: 5px;
     left: 7px; }
 
@@ -392,8 +393,8 @@ span.image-zoom-box, span.image-option {
 .content {
   z-index: 4;
   left: 12px;
-  -webkit-box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 20px 0px 40px 0px rgba(0, 0, 0, 0.2); }
+  -webkit-box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2); }
 
 .filters-results {
   -webkit-transition: all 0.3s linear 0s;
@@ -499,14 +500,6 @@ span.image-zoom-box, span.image-option {
     position: absolute;
     top: 0;
     left: -30px; }
-  .question.with-flag {
-    display: block;
-    background-image: -webkit-gradient(linear, left top, right top, from(#ececec), to(#ececec));
-    background-image: linear-gradient(to right, #ececec 0%, #ececec 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFECECEC', endColorstr='#FFECECEC', GradientType=1);
-    background-repeat: repeat-y;
-    background-size: 12px 100%; }
   .question .progress.question-progress {
     bottom: -2px; }
 
@@ -592,7 +585,8 @@ span.image-zoom-box, span.image-option {
 
 .disabled-question .question-editor.roster-section-block .disabled {
   background-color: #6b6b6b;
-  background-image: none; }
+  background-image: none;
+  color: #fff !important; }
 
 .roster-section-btn-wrapper {
   padding: 0 10px; }
@@ -646,10 +640,19 @@ span.image-zoom-box, span.image-option {
   .question-editor.has-error .form-control:focus {
     -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
             box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6); }
+  .question-editor.has-error .field-to-fill {
+    -webkit-box-shadow: none;
+            box-shadow: none; }
+    .question-editor.has-error .field-to-fill:hover, .question-editor.has-error .field-to-fill:focus, .question-editor.has-error .field-to-fill:active, .question-editor.has-error .field-to-fill:active:focus {
+      border-color: transparent;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580;
+              box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580; }
   .question-editor .question-unit .radio, .question-editor .question-unit .form-group {
-    border-color: transparent; }
+    border-color: #eeeff0; }
   .question-editor.answered .question-unit .radio, .question-editor.answered .question-unit .form-group {
     border-color: #dbdfe2; }
+  .question-editor.answered.has-error .question-unit .radio, .question-editor.answered.has-error .question-unit .form-group {
+    border-color: #f6d6d0; }
 
 .question-editor .options-group {
   position: relative;
@@ -781,7 +784,7 @@ span.image-zoom-box, span.image-option {
   max-width: 90%;
   max-height: 200px; }
 
-.qr-question.answered .block-with-data, .qr-question.has-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.has-error .block-with-data {
+.qr-question.answered .block-with-data, .qr-question.has-error .block-with-data, .current-time-question.answered .block-with-data, .current-time-question.has-error .block-with-data, .area-question.answered .block-with-data, .area-question.has-error .block-with-data {
   font-size: 12px;
   line-height: 14px;
   margin-bottom: 10px;
@@ -884,17 +887,25 @@ span.image-zoom-box, span.image-option {
   display: block; }
 
 .readonly input[type="text"]:disabled,
-.readonly label,
-.readonly .field {
+.readonly .field label,
+.readonly .radio .field,
+.readonly .options-group input,
+.readonly .options-group label {
   background: rgba(248, 248, 248, 0.8);
   border-radius: 5px; }
   .readonly input[type="text"]:disabled:hover, .readonly input[type="text"]:disabled:focus, .readonly input[type="text"]:disabled:active,
-  .readonly label:hover,
-  .readonly label:focus,
-  .readonly label:active,
-  .readonly .field:hover,
-  .readonly .field:focus,
-  .readonly .field:active {
+  .readonly .field label:hover,
+  .readonly .field label:focus,
+  .readonly .field label:active,
+  .readonly .radio .field:hover,
+  .readonly .radio .field:focus,
+  .readonly .radio .field:active,
+  .readonly .options-group input:hover,
+  .readonly .options-group input:focus,
+  .readonly .options-group input:active,
+  .readonly .options-group label:hover,
+  .readonly .options-group label:focus,
+  .readonly .options-group label:active {
     -webkit-box-shadow: none;
             box-shadow: none; }
 
@@ -972,6 +983,13 @@ span.image-zoom-box, span.image-option {
 .readonly .dropdown-toggle:disabled {
   background: rgba(248, 248, 248, 0.8); }
 
+.readonly .btn:disabled,
+.readonly .btn.disabled {
+  background: #f8f8f8; }
+
+.readonly .btn.btn-clear {
+  display: none; }
+
 @media only screen and (max-width: 1525px) {
   .content {
     width: 330px;
@@ -987,8 +1005,6 @@ span.image-zoom-box, span.image-option {
     width: auto; } }
 
 @media (max-width: 1210px) {
-  .filters-results {
-    margin-top: 60px; }
   .wide-navbar .content {
     margin-top: 60px; }
   .wide-navbar .questionnaire .unit-title.is_stuck {
@@ -1008,16 +1024,6 @@ span.image-zoom-box, span.image-option {
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle; }
-  .web-interview.filters-results-are-shown .filters-results.active {
-    width: 100%;
-    left: 0; }
-    .web-interview.filters-results-are-shown .filters-results.active .close-btn {
-      right: 10px; }
-  .web-interview.filters-results-are-shown .content, .web-interview.filters-results-are-shown .filters {
-    display: none; }
-  .web-interview.filters-results-are-shown .questionnaire.details-interview {
-    margin-left: 0px;
-    width: calc(100% - 0px); }
   .web-interview .content {
     margin-top: 60px;
     -webkit-box-shadow: none;
@@ -1040,21 +1046,6 @@ span.image-zoom-box, span.image-option {
         display: inline-block; }
   .web-interview .complete-link {
     padding-left: 60px; }
-  .web-interview.fullscreen-hidden-filters .content, .web-interview.fullscreen-hidden-filters .questionnaire, .web-interview.show-filters .content, .web-interview.show-filters .questionnaire {
-    display: none; }
-  .web-interview.fullscreen-hidden-filters .filters, .web-interview.show-filters .filters {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%; }
-  .web-interview.show-filters .filters {
-    margin-left: 0;
-    height: auto; }
-    .web-interview.show-filters .filters .filters-container, .web-interview.show-filters .filters .preset-filters-container {
-      width: 330px;
-      margin: 0 auto; }
   .web-interview.fullscreen-hidden-content .filters, .web-interview.fullscreen-hidden-content .questionnaire, .web-interview.show-content .filters, .web-interview.show-content .questionnaire {
     display: none; }
   .web-interview.fullscreen-hidden-content .content, .web-interview.show-content .content {
@@ -1063,8 +1054,8 @@ span.image-zoom-box, span.image-option {
     top: 0;
     right: 0;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 12px;
+    width: calc(100% - 12px);
     height: auto;
     border: none; }
     .web-interview.fullscreen-hidden-content .content .foldback-button, .web-interview.show-content .content .foldback-button {

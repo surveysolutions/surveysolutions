@@ -526,7 +526,7 @@
 		}
 	}
 }
-.gps-question, .qr-question, .current-time-question, .multimedia-question{
+.gps-question, .qr-question, .current-time-question, .multimedia-question, .area-question{
 	&.answered, &.has-error{
 		@extend %action-btn;
 	}
@@ -546,7 +546,7 @@
 		max-height: 200px;
 	}
 }
-.qr-question, .current-time-question{
+.qr-question, .current-time-question, .area-question {
 		&.answered, &.has-error{
 		.block-with-data{
 			font-size: 12px;
@@ -556,6 +556,7 @@
 		}
 	}
 }
+
 .img-single-select-question{
 	label{
 		overflow: hidden;
