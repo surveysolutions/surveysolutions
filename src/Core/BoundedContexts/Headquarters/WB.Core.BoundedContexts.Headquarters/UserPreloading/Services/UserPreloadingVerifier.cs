@@ -1,51 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
-    internal class UserPreloadingVerifier : IUserPreloadingVerifier
+    public class UserPreloadingVerifier : IUserPreloadingVerifier
     {
-        private bool IsWorking = false; //please use singleton injection
-
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-
-        private readonly IUserPreloadingService userPreloadingService;
-
-        private  readonly IUserRepository userStorage;
-
         private readonly UserPreloadingSettings userPreloadingSettings;
+        private readonly Regex passwordValidationRegex;
+        private readonly Regex loginValidatioRegex;
+        private readonly Regex emailValidationRegex;
+        private readonly Regex phoneNumberValidationRegex;
+        private readonly Regex fullNameRegex;
 
-        private readonly ILogger logger;
-
-        readonly Regex passwordValidationRegex;
-        readonly Regex loginValidatioRegex;
-        readonly Regex emailValidationRegex;
-        readonly Regex phoneNumberValidationRegex;
-        readonly Regex fullNameRegex;
-
-        public UserPreloadingVerifier(
-            IUserPreloadingService userPreloadingService,
-            IUserRepository userStorage, 
-            UserPreloadingSettings userPreloadingSettings, 
-            ILogger logger)
+        public UserPreloadingVerifier(UserPreloadingSettings userPreloadingSettings)
         {
-            this.userPreloadingService = userPreloadingService;
-            this.userStorage = userStorage;
             this.userPreloadingSettings = userPreloadingSettings;
-            this.logger = logger;
             this.passwordValidationRegex = new Regex(this.userPreloadingSettings.PasswordFormatRegex);
             this.loginValidatioRegex = new Regex(this.userPreloadingSettings.LoginFormatRegex);
             this.emailValidationRegex = new Regex(this.userPreloadingSettings.EmailFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
@@ -53,73 +27,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.fullNameRegex = new Regex(this.userPreloadingSettings.PersonNameFormatRegex, RegexOptions.Compiled | RegexOptions.IgnoreCase);
         }
 
-        public void VerifyProcessFromReadyToBeVerifiedQueue()
+        public PreloadedDataValidator[] GetEachUserValidations(UserToValidate[] allInterviewersAndSupervisors)
         {
-            if (IsWorking)
-                return;
-
-            IsWorking = true;
-            try
-            {
-                while (IsWorking)
-                {
-                    string preloadingProcessIdToValidate = this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.DeQueuePreloadingProcessIdReadyToBeValidated());
-
-                    if (string.IsNullOrEmpty(preloadingProcessIdToValidate))
-                        return;
-
-                    var preloadingProcessDataToValidate = this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => userPreloadingService.GetPreloadingProcesseDetails(preloadingProcessIdToValidate).UserPrelodingData.ToList());
-                    try
-                    {
-                        this.ValidatePreloadedData(preloadingProcessDataToValidate, preloadingProcessIdToValidate);
-                    }
-                    catch (Exception e)
-                    {
-                        logger.Error(e.Message, e);
-                        this.plainTransactionManager.ExecuteInPlainTransaction(
-                            () => userPreloadingService.FinishValidationProcessWithError(preloadingProcessIdToValidate, e.Message));
-                        return;
-
-                    }
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.FinishValidationProcess(preloadingProcessIdToValidate));
-                }
-            }
-            finally
-            {
-                IsWorking = false;
-            }
-
-
-        }
-
-        private void ValidatePreloadedData(IList<UserPreloadingDataRecord> data, string processId)
-        {
-            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
-            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
-
-            var allInterviewersAndSupervisors =
-                this.userStorage.Users.Select(x => new
-                {
-                    UserId = x.Id,
-                    UserName = x.UserName,
-                    IsArchived = x.IsArchived,
-                    SupervisorId = x.Profile.SupervisorId,
-                    IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId),
-                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
-                }).ToArray();
-
             var activeUserNames = allInterviewersAndSupervisors
                 .Where(u => !u.IsArchived)
                 .Select(u => u.UserName.ToLower())
-                .ToHashSet();
-            
-            var activeSupervisorNames = allInterviewersAndSupervisors
-                .Where(u => !u.IsArchived && u.IsSupervisor)
-                .Select(u => u.UserName.ToLower())
-                .Distinct()
                 .ToHashSet();
 
             var archivedSupervisorNames = allInterviewersAndSupervisors
@@ -134,35 +46,48 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     {
                         u.UserName,
                         SupervisorName = allInterviewersAndSupervisors
-                            .FirstOrDefault(user => user.UserId == u.SupervisorId)?.UserName ?? ""
+                                             .FirstOrDefault(user => user.UserId == u.SupervisorId)?.UserName ?? ""
                     })
                 .ToDictionary(u => u.UserName.ToLower(), u => u.SupervisorName.ToLower());
 
-            var preloadedUsersGroupedByUserName =
-                data.GroupBy(x => x.Login.ToLower()).ToDictionary(x=>x.Key, x=>x.Count());
-
-            var validationFunctions = new[]
+            return new[]
             {
-                new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row),"PLU0001", u => u.Login),
-                new PreloadedDataValidator(row => LoginDublicationInDataset(preloadedUsersGroupedByUserName, row), "PLU0002",u => u.Login),
-                new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003",u => u.Login),
-                new PreloadedDataValidator(row =>LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames,row), "PLU0004", u => u.Login),
+                new PreloadedDataValidator(row => LoginNameUsedByExistingUser(activeUserNames, row), "PLU0001", u => u.Login),
+                new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(archivedInterviewerNamesMappedOnSupervisorName, row), "PLU0003", u => u.Login),
+                new PreloadedDataValidator(row => LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(archivedInterviewerNamesMappedOnSupervisorName, archivedSupervisorNames, row), "PLU0004", u => u.Login),
                 new PreloadedDataValidator(LoginFormatVerification, "PLU0005", u => u.Login),
                 new PreloadedDataValidator(PasswordFormatVerification, "PLU0006", u => u.Password),
                 new PreloadedDataValidator(EmailFormatVerification, "PLU0007", u => u.Email),
                 new PreloadedDataValidator(PhoneNumberFormatVerification, "PLU0008", u => u.PhoneNumber),
                 new PreloadedDataValidator(RoleVerification, "PLU0009", u => u.Role),
-                new PreloadedDataValidator(row =>SupervisorVerification(data, activeSupervisorNames, row), "PLU0010",u => u.Supervisor),
-                new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011",u => u.Supervisor),
+                new PreloadedDataValidator(SupervisorColumnMustBeEmptyForUserInSupervisorRole, "PLU0011", u => u.Supervisor),
                 new PreloadedDataValidator(FullNameLengthVerification, "PLU0012", u => u.FullName),
                 new PreloadedDataValidator(PhoneLengthVerification, "PLU0013", u => u.PhoneNumber),
                 new PreloadedDataValidator(FullNameAllowedSymbolsValidation, "PLU0014", u => u.FullName),
             };
+        }
 
-            for (int i = 0; i < validationFunctions.Length; i++)
+        public PreloadedDataValidator[] GetAllUsersValidations(
+            UserToValidate[] allInterviewersAndSupervisors, IList<UserPreloadingDataRecord> usersToImport)
+        {
+            var activeSupervisorNames = allInterviewersAndSupervisors
+                .Where(u => !u.IsArchived && u.IsSupervisor)
+                .Select(u => u.UserName.ToLower())
+                .Distinct()
+                .ToHashSet();
+
+            var preloadedUsersGroupedByUserName =
+                usersToImport.GroupBy(x => x.Login.ToLower()).ToDictionary(x => x.Key, x => x.Count());
+
+            return new[]
             {
-                this.ValidateEachRowInDataSet(data, processId, validationFunctions[i], i, validationFunctions.Length);
-            }
+                new PreloadedDataValidator(
+                    row => LoginDublicationInDataset(preloadedUsersGroupedByUserName, row),
+                    "PLU0002", u => u.Login),
+
+                new PreloadedDataValidator(row => SupervisorVerification(usersToImport, activeSupervisorNames, row),
+                    "PLU0010", u => u.Supervisor)
+            };
         }
 
         private bool FullNameAllowedSymbolsValidation(UserPreloadingDataRecord arg)
@@ -185,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
+            var role = this.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             if (role != UserRoles.Supervisor)
                 return false;
 
@@ -239,7 +164,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
             UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
+            var desiredRole = this.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             if (desiredRole != UserRoles.Interviewer)
                 return false;
 
@@ -258,7 +183,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
             HashSet<string> archivedSupervisorNames, UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var desiredRole = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
+            var desiredRole = this.GetUserRoleFromDataRecord(userPreloadingDataRecord);
 
             var loginName = userPreloadingDataRecord.Login.ToLower();
             switch (desiredRole)
@@ -276,14 +201,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private bool RoleVerification(UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
+            var role = this.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             return role == 0;
         }
 
         private bool SupervisorVerification(IList<UserPreloadingDataRecord> data,
             HashSet<string> activeSupervisors, UserPreloadingDataRecord userPreloadingDataRecord)
         {
-            var role = userPreloadingService.GetUserRoleFromDataRecord(userPreloadingDataRecord);
+            var role = this.GetUserRoleFromDataRecord(userPreloadingDataRecord);
             if (role != UserRoles.Interviewer)
                 return false;
 
@@ -304,7 +229,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             foreach (var supervisorToPreload in supervisorsToPreload)
             {
-                var possibleSupervisorRole = userPreloadingService.GetUserRoleFromDataRecord(supervisorToPreload);
+                var possibleSupervisorRole = this.GetUserRoleFromDataRecord(supervisorToPreload);
                 if (possibleSupervisorRole == UserRoles.Supervisor)
                     return false;
             }
@@ -312,54 +237,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return true;
         }
 
-        void ValidateEachRowInDataSet(
-            IList<UserPreloadingDataRecord> data,
-            string processId,
-            PreloadedDataValidator validator,
-            int indexOfCurrentVerification,
-            int countOfVerifications)
+        public UserRoles GetUserRoleFromDataRecord(UserPreloadingDataRecord dataRecord)
         {
-            int rowNumber = 1;
-            var columnName = ((MemberExpression) validator.ValueSelector.Body).Member.Name;
-            foreach (var userPreloadingDataRecord in data)
-            {
-                if (validator.ValidationFunction(userPreloadingDataRecord))
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => userPreloadingService.PushVerificationError(processId, validator.Code,
-                            rowNumber, columnName, validator.ValueSelector.Compile()(userPreloadingDataRecord)));
+            if ("supervisor".Equals(dataRecord.Role, StringComparison.InvariantCultureIgnoreCase))
+                return UserRoles.Supervisor;
+            if ("interviewer".Equals(dataRecord.Role, StringComparison.InvariantCultureIgnoreCase))
+                return UserRoles.Interviewer;
 
-                if (rowNumber%userPreloadingSettings.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress == 0)
-                {
-                    var part = (double) indexOfCurrentVerification + (double) rowNumber/data.Count;
-                    int intermediatePercents = (int) ((part/countOfVerifications)*100);
-
-                    this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () =>
-                            userPreloadingService.UpdateVerificationProgressInPercents(processId, intermediatePercents));
-                }
-                rowNumber++;
-            }
-
-            int percents = (int) ((((double) (indexOfCurrentVerification + 1))/countOfVerifications)*100);
-            this.plainTransactionManager.ExecuteInPlainTransaction(
-                () => userPreloadingService.UpdateVerificationProgressInPercents(processId, percents));
-        }
-
-        class PreloadedDataValidator
-        {
-            public PreloadedDataValidator(
-                Func<UserPreloadingDataRecord, bool> validationFunction, 
-                string code, 
-                Expression<Func<UserPreloadingDataRecord, string>> valueSelector)
-            {
-                this.ValidationFunction = validationFunction;
-                this.Code = code;
-                this.ValueSelector = valueSelector;
-            }
-
-            public Func<UserPreloadingDataRecord, bool> ValidationFunction { get; private set; }
-            public string Code { get; private set; }
-            public Expression<Func<UserPreloadingDataRecord, string>> ValueSelector { get; private set; }
+            return 0;
         }
     }
 }

@@ -124,7 +124,7 @@
     <value>Достигнуто максимальное количество {0} ошибок проверки</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>Файл содержит {0} записей, но допустимое число {1}</value>
+    <value>Максимально возможное число пользователей для загрузки: {0}</value>
   </data>
   <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
     <value>процесс загрузки пользователей с идентификатором «{0}» был закончен не полностью, потому что только {1} создано из {2}</value>

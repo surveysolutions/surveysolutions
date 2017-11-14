@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -322,7 +321,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingVerifierTests
                 new UserPreloadingVerifier(
                     userPreloadingService ?? Mock.Of<IUserPreloadingService>(),
                     userStorage ?? Mock.Of<IUserRepository>(),
-                    Create.Entity.UserPreloadingSettings(), Mock.Of<ILogger>());
+                    Create.Entity.UserPreloadingSettings());
         }
 
         private Mock<IUserPreloadingService> CreateUserPreloadingServiceMock(UserPreloadingProcess userPreloadingProcess, UserRoles role = UserRoles.Interviewer)

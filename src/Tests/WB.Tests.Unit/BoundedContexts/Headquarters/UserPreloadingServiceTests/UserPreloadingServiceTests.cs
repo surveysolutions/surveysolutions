@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
                 this.CreateUserPreloadingService(recordsAccessorFactory: recordsAccessorFactoryMock.Object);
 
             Assert.Catch<UserPreloadingException>(
-                () => userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(), "aaa"));
+                () => userPreloadingService.Verify(new MemoryStream(), "aaa"));
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
                 this.CreateUserPreloadingService(recordsAccessorFactory: recordsAccessorFactoryMock.Object);
 
             Assert.Catch<UserPreloadingException>(
-                () => userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(), "aaa"));
+                () => userPreloadingService.Verify(new MemoryStream(), "aaa"));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
                 this.CreateUserPreloadingService(recordsAccessorFactory: recordsAccessorFactoryMock.Object);
 
             Assert.Catch<UserPreloadingException>(
-                () => userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(), "aaa"));
+                () => userPreloadingService.Verify(new MemoryStream(), "aaa"));
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
                 this.CreateUserPreloadingService(userPreloadingProcessStorage: userPreloadingProcessStorage, recordsAccessorFactory: recordsAccessorFactoryMock.Object);
             var fileName = "aaa";
 
-            var processId = userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(), fileName);
+            var processId = userPreloadingService.Verify(new MemoryStream(), fileName);
 
             Assert.That(userPreloadingProcessStorage.GetById(processId).FileName, Is.EqualTo(fileName));
         }
@@ -336,8 +336,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.UserPreloadingServiceTests
             return
                 new UserPreloadingService(
                     userPreloadingProcessStorage ?? new InMemoryPlainStorageAccessor<UserPreloadingProcess>(),
-                    recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>(),
-                    Create.Entity.UserPreloadingSettings());
+                    Create.Entity.UserPreloadingSettings(), TODO, TODO, TODO);
         }
     }
 }

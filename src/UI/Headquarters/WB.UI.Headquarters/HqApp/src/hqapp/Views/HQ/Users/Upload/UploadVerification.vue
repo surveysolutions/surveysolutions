@@ -1,5 +1,4 @@
 <template>
-    <main>
         <div class="container">
             <div class="row">
                 <div class="page-header">
@@ -10,7 +9,7 @@
                     </ol>
                     <h1>{{$t('UploadUsers.Title')}}</h1>
                     <p>
-                        <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>some-file.tsv</h3>
+                        <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>{{$store.getters.upload.fileName}}</h3>
                     </p>
                 </div>
             </div>
@@ -21,23 +20,26 @@
                             <span class="text-danger">{{$t('UploadUsers.VerificationFailed')}}</span> <br> {{$t('UploadUsers.NoCreatedUsers')}}
                         </h1>
                     </p>
-                    <p>
-                        <strong class="text-danger">[01]: Error</strong><br>
-                        <span class="info-block">({{$t('UploadUsers.UserNameDescription')}})</span>
+
+                    <p v-for="error in $store.getters.upload.verificationErrors">
+                        <strong class="text-danger">[{{$t('UploadUsers.Line')}}: {{error.line}}, {{$t('UploadUsers.Column')}}: {{error.column}}]: {{error.message}}</strong><br>
+                        <span class="info-block">{{error.description}}</span><br>
+                        <span v-if="error.recomendation" class="info-block">{{error.recomendation}}</span>
                     </p>
                     <p class="list-inline">
-                        <input name="file" ref="uploader" v-show="false" accept=".tsv" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
+                        <input name="file" ref="uploader" v-show="false" accept=".tsv, .txt" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
                         <button type="button" class="btn btn-success" @click="$refs.uploader.click()">{{$t('UploadUsers.ReUploadTabFile')}}</button>
                         <router-link class="btn btn-link" :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
                     </p>
                 </div>
             </div>
         </div>
-    </main>
 </template>
 
 
 <script>
+import * as toastr from "toastr";
+
 export default {
   computed: {
     config() {
@@ -52,13 +54,26 @@ export default {
         return;
       }
 
+      var file = files[0];
       var formData = new FormData();
       formData.append("file", files[0]);
 
+      var self = this;
+
       this.$http
         .post(this.config.api.importUsersUrl, formData)
-        .then(response => {})
-        .catch(() => this.$router.push("upload"));
+        .then(response => {
+          self.$store.dispatch("setUploadFileName", file.name);
+
+          const errors = response.data;
+
+          if (errors.length > 0)
+            self.$store.dispatch("setUploadVerificationErrors", errors);
+          else self.$router.push({ name: "uploadprogress" });
+        })
+        .catch(e => {
+          toastr.error(e.response.data.ExceptionMessage);
+        });
     }
   }
 };

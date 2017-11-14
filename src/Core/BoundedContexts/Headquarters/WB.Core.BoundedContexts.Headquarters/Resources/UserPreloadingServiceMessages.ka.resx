@@ -124,7 +124,7 @@
     <value>ვალიდაციის შეცდომების მაქიმალური მნიშვნელობა {0} მიღწეულია</value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>მონაცემთა მწკრივი შეიცავს {0} რაოდენობის ჩანაწერებს, მაგრამ მაქსიმალური დასაშვები რაოდენობა არის {1}</value>
+    <value/>
   </data>
   <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
     <value>მომხმარებლის მიერ ხელახლა ჩატვირთვის პროცესი id-ით '{0}' არ სრულდება, რადგან {2}-დან მხოლოდ {1} არის შექმნილი </value>

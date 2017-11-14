@@ -1481,11 +1481,6 @@
     <Content Include="Views\Observer\Edit.cshtml" />
     <Content Include="Views\Observer\Index.cshtml" />
     <Content Include="Views\Shared\ObserverMainMenu.cshtml" />
-    <Content Include="Views\BatchUserUpload\NewUserBatchUpload.cshtml" />
-    <Content Include="Views\BatchUserUpload\ImportUserDetails.cshtml" />
-    <Content Include="Views\BatchUserUpload\UserPreloadigVerificationDetails.cshtml" />
-    <Content Include="Views\BatchUserUpload\UserCreationProcessDetails.cshtml" />
-    <Content Include="Views\BatchUserUpload\UserBatchUploads.cshtml" />
     <Content Include="Views\Shared\Profile\_EditorLayout.cshtml" />
     <Content Include="Views\ApiUser\Create.cshtml" />
     <Content Include="Views\ApiUser\Edit.cshtml" />
@@ -1680,7 +1675,6 @@
     <Compile Include="API\Resources\CompanyLogoController.cs" />
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
-    <Compile Include="API\UserPreloadingController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\WebInterview\Services\ConnectionLimiter.cs" />
@@ -1807,7 +1801,6 @@
     <Compile Include="Controllers\AttachmentsController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\BatchUserUploadController.cs" />
     <Compile Include="Controllers\CommandApiController.cs" />
     <Compile Include="Controllers\ControlPanelController.cs" />
     <Compile Include="Controllers\DataExportController.cs" />

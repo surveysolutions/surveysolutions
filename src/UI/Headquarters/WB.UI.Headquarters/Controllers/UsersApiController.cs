@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
@@ -27,6 +28,7 @@ using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -40,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IExportFactory exportFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewerProfileFactory interviewerProfileFactory;
-        private readonly IUserPreloadingService userPreloadingService;
+        private readonly IUserPreloadingService userImportService;
 
         public UsersApiController(
             ICommandService commandService,
@@ -52,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers
             IExportFactory exportFactory, 
             IInterviewerProfileFactory interviewerProfileFactory,
             IFileSystemAccessor fileSystemAccessor,
-            IUserPreloadingService userPreloadingService)
+            IUserPreloadingService userImportService)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -62,7 +64,7 @@ namespace WB.UI.Headquarters.Controllers
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewerProfileFactory = interviewerProfileFactory;
-            this.userPreloadingService = userPreloadingService;
+            this.userImportService = userImportService;
         }
 
         [HttpPost]
@@ -281,16 +283,62 @@ namespace WB.UI.Headquarters.Controllers
         [Localizable(false)]
         public HttpResponseMessage ImportUsersTemplate() => this.CreateReportResponse(ExportFileType.Tab, new ReportView
         {
-            Headers = new[] {"login", "password", "role", "supervisor", "fullname", "email", "phonenumber"},
+            Headers = this.userImportService.GetUserProperties(),
             Data = new object[][] { }
         }, Reports.ImportUsersTemplate);
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public string ImportUsers(ImportUsersRequest request)
+        [CamelCase]
+        public ImportUserError[] ImportUsers(ImportUsersRequest request)
         {
-            return this.userPreloadingService.CreateUserPreloadingProcess(new MemoryStream(request.File.FileBytes),
-                request.File.FileName);
+            if(this.userImportService.GetImportStatus().IsInProgress)
+                throw new UserPreloadingException(BatchUpload.Prerequisite_FileOpen);
+
+            if (request?.File?.FileBytes == null)
+                throw new UserPreloadingException(BatchUpload.Prerequisite_FileOpen);
+
+            var txtExtension = @".txt";
+            var tsvExtension = @".tsv";
+
+            var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
+
+            if (!new []{txtExtension, tsvExtension}.Contains(fileExtension))
+                throw new UserPreloadingException(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, tsvExtension, txtExtension));
+
+            return this.userImportService
+                .VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
+                .Take(5)
+                .Select(ToImportError)
+                .ToArray();
+        }
+
+        private ImportUserError ToImportError(UserPreloadingVerificationError error) => new ImportUserError
+        {
+            Line = error.RowNumber.ToString(@"D2"),
+            Column = error.ColumnName.ToLower(),
+            Message = ToImportErrorMessage(error.Code),
+            Description = ToImportErrorDescription(error.Code, error.CellValue),
+            Recomendation = ToImportErrorRecomendation(error.Code)
+        };
+
+        private string ToImportErrorRecomendation(string errorCode)
+            => UserPreloadingVerificationMessages.ResourceManager.GetString($"{errorCode}Recomendation");
+
+        private string ToImportErrorDescription(string errorCode, string errorCellValue)
+            => string.Format(UserPreloadingVerificationMessages.ResourceManager.GetString($"{errorCode}Description"), errorCellValue);
+
+        private string ToImportErrorMessage(string errorCode)
+            => UserPreloadingVerificationMessages.ResourceManager.GetString(errorCode);
+
+
+        public class ImportUserError
+        {
+            public string Line { get; set; }
+            public string Column { get; set; }
+            public string Message { get; set; }
+            public string Description { get; set; }
+            public string Recomendation { get; set; }
         }
 
         private HttpResponseMessage CreateReportResponse(ExportFileType type, ReportView report, string reportName)
