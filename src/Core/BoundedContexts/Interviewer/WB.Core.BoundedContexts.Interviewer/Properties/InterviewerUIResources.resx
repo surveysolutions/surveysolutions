@@ -311,6 +311,9 @@ for further instructions</value>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>All assignments were updated</value>
   </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>All maps were synchronized</value>
+  </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
     <value>{0} new interviews downloaded</value>
   </data>
@@ -701,7 +704,7 @@ your next synchronization</value>
   </data>
     <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
     <value>Handling map {0}, {1} out of {2}. 
- Downloaded {3} out of {4} ({5}%)</value>
+ Downloaded {3}%</value>
   </data>
     <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
     <value>Map synchronization succesfuly finished</value>

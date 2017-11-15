@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         }
 
         public virtual async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
-            CancellationToken cancellationToken, SychronizationStatistics statistics)
+            CancellationToken cancellationToken, SynchronizationStatistics statistics)
         {
             if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
