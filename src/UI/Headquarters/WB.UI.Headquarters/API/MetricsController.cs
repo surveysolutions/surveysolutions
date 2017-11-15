@@ -8,18 +8,24 @@ using Prometheus.Advanced;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
+    
     public class MetricsController : ApiController
     {
         public HttpResponseMessage Get()
         {
-            using (var ms = new MemoryStream())
+            if (Request.IsLocal())
             {
-                ScrapeHandler.ProcessScrapeRequest(DefaultCollectorRegistry.Instance.CollectAll(), @"text/plain", ms);
+                using (var ms = new MemoryStream())
+                {
+                    ScrapeHandler.ProcessScrapeRequest(DefaultCollectorRegistry.Instance.CollectAll(), @"text/plain", ms);
 
-                var resp = new HttpResponseMessage(HttpStatusCode.OK);
-                resp.Content = new StringContent(Encoding.UTF8.GetString(ms.ToArray()), Encoding.UTF8, @"text/plain");
-                return resp;
+                    var resp = new HttpResponseMessage(HttpStatusCode.OK);
+                    resp.Content = new StringContent(Encoding.UTF8.GetString(ms.ToArray()), Encoding.UTF8, @"text/plain");
+                    return resp;
+                }
             }
+
+            return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Not available");
         }
     }
 }
