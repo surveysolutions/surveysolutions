@@ -712,4 +712,7 @@
     <value>Обработка карты {0}, {1} из {2}. 
  Скачано {3} из {4} ({5}%)</value>
   </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Карты успешно обновлены</value>
+  </data>
 </root>

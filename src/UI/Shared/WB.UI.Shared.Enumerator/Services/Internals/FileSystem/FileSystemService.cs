@@ -222,5 +222,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
         {
             return Path.ChangeExtension(path1, newExtension);
         }
+
+        public void MoveFile(string pathToFile, string newPathToFile)
+        {
+            if (File.Exists(newPathToFile))
+                File.Delete(newPathToFile);
+            File.Move(pathToFile, newPathToFile);
+        }
     }
 }

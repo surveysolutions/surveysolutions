@@ -28,6 +28,13 @@ namespace WB.Core.GenericSubdomains.Portable.Services
             CancellationToken? token = null, 
             Dictionary<string, string> customHeaders = null);
 
+        Task DownloadFileAndSaveAsync(string url,
+            Stream streamToSave,
+            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
+            RestCredentials credentials = null,
+            CancellationToken? token = null,
+            Dictionary<string, string> customHeaders = null);
+
         Task SendStreamAsync(Stream stream, string url, 
             RestCredentials credentials, 
             Dictionary<string, string> customHeaders = null, 

@@ -17,12 +17,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private bool isSynchronizationInProgress;
         private string processOperation;
         private string processOperationDescription;
-        private SychronizationStatistics statistics;
+        private SynchronizationStatistics statistics;
         private SynchronizationStatus status;
         private CancellationTokenSource synchronizationCancellationTokenSource;
         private bool synchronizationErrorOccured;
 
-        public SychronizationStatistics Statistics
+        public SynchronizationStatistics Statistics
         {
             get { return statistics; }
             set
