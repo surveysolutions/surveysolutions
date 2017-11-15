@@ -193,7 +193,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
 
-                var fieldHeaders = csvReader.FieldHeaders.Select(x => x.Trim()).ToArray();
+                var fieldHeaders = csvReader.Context.HeaderRecord.Select(x => x.Trim()).ToArray();
 
                 var amountOfHeaders = fieldHeaders.Length;
 
@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 {
                     var variables = new List<decimal?>();
                     var row = new LookupTableRow();
-                    var record = csvReader.CurrentRecord;
+                    var record = csvReader.Context.Record;
 
                     for (int i = 0; i < amountOfHeaders; i++)
                     {
@@ -297,9 +297,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return !VariableNameRegex.IsMatch(variableName);
         }
 
-        private CsvConfiguration CreateCsvConfiguration()
+        private Configuration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
+            return new Configuration { HasHeaderRecord = true, TrimOptions = TrimOptions.Trim, IgnoreQuotes = false, Delimiter = DELIMETER, MissingFieldFound = null };
         }
     }
 }
