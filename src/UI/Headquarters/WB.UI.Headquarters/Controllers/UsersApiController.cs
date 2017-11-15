@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IExportFactory exportFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewerProfileFactory interviewerProfileFactory;
-        private readonly IUserPreloadingService userImportService;
+        private readonly IUserImportService userImportService;
 
         public UsersApiController(
             ICommandService commandService,
@@ -54,7 +54,7 @@ namespace WB.UI.Headquarters.Controllers
             IExportFactory exportFactory, 
             IInterviewerProfileFactory interviewerProfileFactory,
             IFileSystemAccessor fileSystemAccessor,
-            IUserPreloadingService userImportService)
+            IUserImportService userImportService)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -328,7 +328,7 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         public UsersImportCompleteStatus ImportCompleteStatus() => this.userImportService.GetImportCompleteStatus();
 
-        private ImportUserError ToImportError(UserPreloadingVerificationError error) => new ImportUserError
+        private ImportUserError ToImportError(UserImportVerificationError error) => new ImportUserError
         {
             Line = error.RowNumber.ToString(@"D2"),
             Column = error.ColumnName.ToLower(),

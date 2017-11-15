@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -15,36 +15,38 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
-    public class UserPreloadingService : IUserPreloadingService
+    public class UserImportService : IUserImportService
     {
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ICsvReader csvReader;
-        private readonly IPlainStorageAccessor<UserPreloadingProcess> importUsersProcessRepository;
+        private readonly IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository;
+        private readonly IPlainStorageAccessor<UserToImport> importUsersRepository;
         private readonly IUserRepository userStorage;
-        private readonly IUserPreloadingVerifier userImportVerifier;
-        private readonly HqUserManager userManager;
-
-        private readonly string importUsersProcessId = Guid.Empty.ToString();
+        private readonly IUserImportVerifier userImportVerifier;
+        private readonly IAuthorizedUser authorizedUser;
+        
         private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
         private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
-        public UserPreloadingService(
+        public UserImportService(
             UserPreloadingSettings userPreloadingSettings, 
             ICsvReader csvReader,
-            IPlainStorageAccessor<UserPreloadingProcess> importUsersProcessRepository,
+            IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository,
+            IPlainStorageAccessor<UserToImport> importUsersRepository,
             IUserRepository userStorage,
-            IUserPreloadingVerifier userImportVerifier,
-            HqUserManager userManager)
+            IUserImportVerifier userImportVerifier,
+            IAuthorizedUser authorizedUser)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.csvReader = csvReader;
             this.importUsersProcessRepository = importUsersProcessRepository;
+            this.importUsersRepository = importUsersRepository;
             this.userStorage = userStorage;
             this.userImportVerifier = userImportVerifier;
-            this.userManager = userManager;
+            this.authorizedUser = authorizedUser;
         }
 
-        public IEnumerable<UserPreloadingVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
+        public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
         {
             var csvDelimiter = ExportFileSettings.DataFileSeparator.ToString();
 
@@ -59,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                 throw new UserPreloadingException(string.Format(UserPreloadingServiceMessages.FileColumnsMissingFormat,
                         fileName, string.Join(", ", missingColumns)));
 
-            var usersToImport = new List<UserPreloadingDataRecord>();
+            var usersToImport = new List<UserToImport>();
 
             var allInterviewersAndSupervisors = this.userStorage.Users.Select(x => new UserToValidate
             {
@@ -73,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors);
 
-            foreach (var userToImport in this.csvReader.ReadAll<UserPreloadingDataRecord>(new MemoryStream(data), csvDelimiter))
+            foreach (var userToImport in this.csvReader.ReadAll<UserToImport>(new MemoryStream(data), csvDelimiter))
             {
                 usersToImport.Add(userToImport);
 
@@ -108,102 +110,71 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public string[] GetUserProperties() => new[]
         {
-            nameof(UserPreloadingDataRecord.Login), nameof(UserPreloadingDataRecord.Password),
-            nameof(UserPreloadingDataRecord.Role), nameof(UserPreloadingDataRecord.Supervisor),
-            nameof(UserPreloadingDataRecord.FullName), nameof(UserPreloadingDataRecord.Email),
-            nameof(UserPreloadingDataRecord.PhoneNumber)
+            nameof(UserToImport.Login), nameof(UserToImport.Password),
+            nameof(UserToImport.Role), nameof(UserToImport.Supervisor),
+            nameof(UserToImport.FullName), nameof(UserToImport.Email),
+            nameof(UserToImport.PhoneNumber)
         }.Select(x => x.ToLower()).ToArray();
 
-        private void Save(string fileName, IList<UserPreloadingDataRecord> usersToImport)
-            => this.importUsersProcessRepository.Store(new UserPreloadingProcess
-            {
-                UserPreloadingProcessId = importUsersProcessId,
-                FileName = fileName,
-                RecordsCount = usersToImport.Count,
-                InterviewersCount = usersToImport.Count(x => x.Role == "interviewer"),
-                SupervisorsCount = usersToImport.Count(x => x.Role == "supervisor"),
-                UserPrelodingData = usersToImport.OrderByDescending(x => x.Role).ToList()
-            }, importUsersProcessId);
+        private void Save(string fileName, IList<UserToImport> usersToImport)
+        {
+            var process = this.importUsersProcessRepository.Query(x => x.FirstOrDefault()) ?? new UsersImportProcess();
+            process.FileName = fileName;
+            process.InterviewersCount = usersToImport.Count(x => x.Role == "interviewer");
+            process.SupervisorsCount = usersToImport.Count(x => x.Role == "supervisor");
+            process.Responsible = this.authorizedUser.Id;
+            process.StartedDate = DateTime.UtcNow;
+
+            this.importUsersProcessRepository.Store(process, process.Id);
+
+            this.importUsersRepository.Store(usersToImport.OrderByDescending(x => x.Role)
+                .Select(x => new Tuple<UserToImport, object>(x, null)));
+        }
 
         public UsersImportStatus GetImportStatus()
         {
-            var process = this.importUsersProcessRepository.GetById(importUsersProcessId);
+            var process = this.importUsersProcessRepository.Query(x => x.FirstOrDefault());
+            var usersInQueue = this.importUsersRepository.Query(x => x.Count());
 
             return new UsersImportStatus
             {
-                IsInProgress = process?.UserPrelodingData?.Any() ?? false,
-                TotalUsersToImport = process?.RecordsCount ?? 0,
-                UsersInQueue = process?.UserPrelodingData?.Count ?? 0,
+                IsInProgress = usersInQueue > 0,
+                TotalUsersToImport = process?.InterviewersCount + process?.SupervisorsCount ?? 0,
+                UsersInQueue = usersInQueue,
                 FileName = process?.FileName
             };
         }
 
         public UsersImportCompleteStatus GetImportCompleteStatus()
         {
-            var process = this.importUsersProcessRepository.GetById(importUsersProcessId);
+            var process = this.importUsersProcessRepository.Query(x => x.FirstOrDefault());
 
             return new UsersImportCompleteStatus
             {
-                TotalCount = process?.RecordsCount ?? 0,
                 SupervisorsCount = process?.SupervisorsCount ?? 0,
                 InterviewersCount = process?.InterviewersCount ?? 0
             };
         }
 
-        public void RemoveAllUsersToImport() => this.importUsersProcessRepository.Remove(this.importUsersProcessId);
-
-        public async Task<bool> ImportFirstUserAndReturnIfHasMoreUsersToImportAsync()
+        public void RemoveAllUsersToImport()
         {
-            var process = this.importUsersProcessRepository.GetById(importUsersProcessId);
+            var allUsersToImport = this.importUsersRepository.Query(x => x.ToList());
 
-            var userToImport = process?.UserPrelodingData?.FirstOrDefault();
-            if (userToImport == null) return false;
+            this.importUsersRepository.Remove(allUsersToImport);
 
-            Guid? supervisorId = null;
-
-            if (!string.IsNullOrEmpty(userToImport.Supervisor))
-                supervisorId = (await this.userManager.FindByNameAsync(userToImport.Supervisor))?.Id;
-
-            await this.CreateUserOrUnarchiveAndUpdateAsync(userToImport, supervisorId);
-
-            process.UserPrelodingData.Remove(userToImport);
-
-            this.importUsersProcessRepository.Store(process, null);
-            return true;
+            var usersImportProcess = this.importUsersProcessRepository.Query(x => x.FirstOrDefault());
+            if (usersImportProcess != null)
+                this.importUsersProcessRepository.Remove(usersImportProcess.Id);
         }
 
-        private async Task CreateUserOrUnarchiveAndUpdateAsync(UserPreloadingDataRecord userToCreate, Guid? supervisorId = null)
-        {
-            var user = await this.userManager.FindByNameAsync(userToCreate.Login);
-            if (user == null)
-            {
-                await this.userManager.CreateUserAsync(new HqUser
-                {
-                    Id = Guid.NewGuid(),
-                    UserName = userToCreate.Login,
-                    FullName = userToCreate.FullName,
-                    Email = userToCreate.Email,
-                    PhoneNumber = userToCreate.PhoneNumber,
-                    Profile = supervisorId.HasValue ? new HqUserProfile
-                    {
-                        SupervisorId = supervisorId
-                    } : null,
-                }, userToCreate.Password, userToCreate.GetUserRole());
-            }
-            else
-            {
-                user.FullName = userToCreate.FullName;
-                user.Email = userToCreate.Email;
-                user.PhoneNumber = userToCreate.PhoneNumber;
-                user.IsArchived = false;
+        public UserToImport GetUserToImport() => this.importUsersRepository.Query(x => x.FirstOrDefault());
 
-                await this.userManager.UpdateUserAsync(user, userToCreate.Password);
-            }
-        }
+        public void RemoveImportedUser(UserToImport importedUser)
+            => this.importUsersRepository.Remove(new[] {importedUser});
 
-        private static UserPreloadingVerificationError ToVerificationError(PreloadedDataValidator validator,
-            UserPreloadingDataRecord userToImport, int userIndex)
-            => new UserPreloadingVerificationError
+        private static UserImportVerificationError ToVerificationError(PreloadedDataValidator validator,
+            UserToImport userToImport, int userIndex)
+            => new UserImportVerificationError
             {
                 CellValue = validator.ValueSelector.Compile()(userToImport),
                 Code = validator.Code,

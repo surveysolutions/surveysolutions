@@ -10,22 +10,26 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
         public override void Up()
         {
             Delete.Table("userpreloadingverificationerrors");
+            Delete.Table("userprelodingdata");
+            Delete.Table("userpreloadingprocesses");
 
-            Execute.Sql("DELETE FROM plainstore.userprelodingdata;" +
-                        "DELETE FROM plainstore.userpreloadingprocesses");
-            
-            Delete.Column("filesize").FromTable("userpreloadingprocesses");
-            Delete.Column("state").FromTable("userpreloadingprocesses");
-            Delete.Column("uploaddate").FromTable("userpreloadingprocesses");
-            Delete.Column("validationstartdate").FromTable("userpreloadingprocesses");
-            Delete.Column("verificationprogressinpercents").FromTable("userpreloadingprocesses");
-            Delete.Column("creationstartdate").FromTable("userpreloadingprocesses");
-            Delete.Column("lastupdatedate").FromTable("userpreloadingprocesses");
-            Delete.Column("createduserscount").FromTable("userpreloadingprocesses");
-            Delete.Column("errormessage").FromTable("userpreloadingprocesses");
+            Create.Table("usertoimport")
+                .WithColumn("id").AsInt32().PrimaryKey().Identity()
+                .WithColumn("login").AsString().NotNullable()
+                .WithColumn("email").AsString().NotNullable()
+                .WithColumn("fullname").AsString().NotNullable()
+                .WithColumn("password").AsString().NotNullable()
+                .WithColumn("phonenumber").AsString().NotNullable()
+                .WithColumn("role").AsString().NotNullable()
+                .WithColumn("supervisor").AsString().NotNullable();
 
-            Create.Column("supervisorscount").OnTable("userpreloadingprocesses").AsInt32();
-            Create.Column("interviewerscount").OnTable("userpreloadingprocesses").AsInt32();
+            Create.Table("usersimportprocess")
+                .WithColumn("id").AsInt32().PrimaryKey().Identity()
+                .WithColumn("filename").AsString().NotNullable()
+                .WithColumn("supervisorscount").AsInt32().NotNullable()
+                .WithColumn("interviewerscount").AsInt32().NotNullable()
+                .WithColumn("responsible").AsGuid().NotNullable()
+                .WithColumn("starteddate").AsDateTime().NotNullable();
         }
 
         public override void Down()

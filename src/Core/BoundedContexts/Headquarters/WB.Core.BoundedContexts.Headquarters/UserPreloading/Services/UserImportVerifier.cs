@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
-    public class UserPreloadingVerifier : IUserPreloadingVerifier
+    public class UserImportVerifier : IUserImportVerifier
     {
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly Regex passwordValidationRegex;
@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private readonly Regex phoneNumberValidationRegex;
         private readonly Regex fullNameRegex;
 
-        public UserPreloadingVerifier(UserPreloadingSettings userPreloadingSettings)
+        public UserImportVerifier(UserPreloadingSettings userPreloadingSettings)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.passwordValidationRegex = new Regex(this.userPreloadingSettings.PasswordFormatRegex);
@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         }
 
         public PreloadedDataValidator[] GetAllUsersValidations(
-            UserToValidate[] allInterviewersAndSupervisors, IList<UserPreloadingDataRecord> usersToImport)
+            UserToValidate[] allInterviewersAndSupervisors, IList<UserToImport> usersToImport)
         {
             var activeSupervisorNames = allInterviewersAndSupervisors
                 .Where(u => !u.IsArchived && u.IsSupervisor)
@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             };
         }
 
-        private bool FullNameAllowedSymbolsValidation(UserPreloadingDataRecord arg)
+        private bool FullNameAllowedSymbolsValidation(UserToImport arg)
         {
             if (string.IsNullOrEmpty(arg.FullName))
                 return false;
@@ -97,22 +97,22 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return !this.fullNameRegex.IsMatch(arg.FullName);
         }
 
-        private bool PhoneLengthVerification(UserPreloadingDataRecord arg)
+        private bool PhoneLengthVerification(UserToImport arg)
             => arg.PhoneNumber?.Length > this.userPreloadingSettings.PhoneNumberMaxLength;
 
-        private bool FullNameLengthVerification(UserPreloadingDataRecord record)
+        private bool FullNameLengthVerification(UserToImport record)
             => record.FullName?.Length > this.userPreloadingSettings.FullNameMaxLength;
 
-        private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool SupervisorColumnMustBeEmptyForUserInSupervisorRole(UserToImport userPreloadingDataRecord)
         {
-            var role = userPreloadingDataRecord.GetUserRole();
+            var role = userPreloadingDataRecord.UserRole;
             if (role != UserRoles.Supervisor)
                 return false;
 
             return !string.IsNullOrEmpty(userPreloadingDataRecord.Supervisor);
         }
 
-        private bool PasswordFormatVerification(UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool PasswordFormatVerification(UserToImport userPreloadingDataRecord)
         {
             if (string.IsNullOrEmpty(userPreloadingDataRecord.Password))
                 return true;
@@ -126,10 +126,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return !this.passwordValidationRegex.IsMatch(userPreloadingDataRecord.Password);
         }
 
-        private bool LoginFormatVerification(UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool LoginFormatVerification(UserToImport userPreloadingDataRecord)
             => !this.loginValidatioRegex.IsMatch(userPreloadingDataRecord.Login);
 
-        private bool EmailFormatVerification(UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool EmailFormatVerification(UserToImport userPreloadingDataRecord)
         {
             if (string.IsNullOrEmpty(userPreloadingDataRecord.Email))
                 return false;
@@ -137,7 +137,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return !this.emailValidationRegex.IsMatch(userPreloadingDataRecord.Email);
         }
 
-        private bool PhoneNumberFormatVerification(UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool PhoneNumberFormatVerification(UserToImport userPreloadingDataRecord)
         {
             if (string.IsNullOrEmpty(userPreloadingDataRecord.PhoneNumber))
                 return false;
@@ -145,17 +145,17 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             return !this.phoneNumberValidationRegex.IsMatch(userPreloadingDataRecord.PhoneNumber);
         }
 
-        private bool LoginNameUsedByExistingUser(HashSet<string> activeUserNames, UserPreloadingDataRecord userPreloadingDataRecord) 
+        private bool LoginNameUsedByExistingUser(HashSet<string> activeUserNames, UserToImport userPreloadingDataRecord) 
             => activeUserNames.Contains(userPreloadingDataRecord.Login.ToLower());
 
         private bool LoginDublicationInDataset(Dictionary<string, int> data,
-            UserPreloadingDataRecord userPreloadingDataRecord) => data[userPreloadingDataRecord.Login.ToLower()] > 1;
+            UserToImport userPreloadingDataRecord) => data[userPreloadingDataRecord.Login.ToLower()] > 1;
 
         bool LoginOfArchiveUserCantBeReusedBecauseItBelongsToOtherTeam(
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
-            UserPreloadingDataRecord userPreloadingDataRecord)
+            UserToImport userPreloadingDataRecord)
         {
-            var desiredRole = userPreloadingDataRecord.GetUserRole();
+            var desiredRole = userPreloadingDataRecord.UserRole;
             if (desiredRole != UserRoles.Interviewer)
                 return false;
 
@@ -172,9 +172,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         bool LoginOfArchiveUserCantBeReusedBecauseItExistsInOtherRole(
             Dictionary<string, string> archivedInterviewerNamesMappedOnSupervisorName,
-            HashSet<string> archivedSupervisorNames, UserPreloadingDataRecord userPreloadingDataRecord)
+            HashSet<string> archivedSupervisorNames, UserToImport userPreloadingDataRecord)
         {
-            var desiredRole = userPreloadingDataRecord.GetUserRole();
+            var desiredRole = userPreloadingDataRecord.UserRole;
 
             var loginName = userPreloadingDataRecord.Login.ToLower();
             switch (desiredRole)
@@ -190,13 +190,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
         }
 
-        private bool RoleVerification(UserPreloadingDataRecord userPreloadingDataRecord)
-            => userPreloadingDataRecord.GetUserRole() == 0;
+        private bool RoleVerification(UserToImport userPreloadingDataRecord)
+            => userPreloadingDataRecord.UserRole == 0;
 
-        private bool SupervisorVerification(IList<UserPreloadingDataRecord> data,
-            HashSet<string> activeSupervisors, UserPreloadingDataRecord userPreloadingDataRecord)
+        private bool SupervisorVerification(IList<UserToImport> data,
+            HashSet<string> activeSupervisors, UserToImport userPreloadingDataRecord)
         {
-            var role = userPreloadingDataRecord.GetUserRole();
+            var role = userPreloadingDataRecord.UserRole;
             if (role != UserRoles.Interviewer)
                 return false;
 
@@ -217,7 +217,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             foreach (var supervisorToPreload in supervisorsToPreload)
             {
-                var possibleSupervisorRole = supervisorToPreload.GetUserRole();
+                var possibleSupervisorRole = supervisorToPreload.UserRole;
                 if (possibleSupervisorRole == UserRoles.Supervisor)
                     return false;
             }

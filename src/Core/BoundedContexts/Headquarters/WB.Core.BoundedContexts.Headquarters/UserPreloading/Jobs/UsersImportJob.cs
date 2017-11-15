@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 
@@ -17,24 +22,68 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private IPlainTransactionManager transactionManager => ServiceLocator.Current
             .GetInstance<IPlainTransactionManager>();
 
-        private IUserPreloadingService importUsersService => ServiceLocator.Current
-            .GetInstance<IUserPreloadingService>();
+        private IUserImportService importUsersService => ServiceLocator.Current
+            .GetInstance<IUserImportService>();
 
         public void Execute(IJobExecutionContext context)
         {
             try
             {
-                bool hasUsersToImport;
+                UserToImport userToImport = null;
                 do
                 {
-                    hasUsersToImport = this.transactionManager.ExecuteInPlainTransaction(() => this
-                        .importUsersService.ImportFirstUserAndReturnIfHasMoreUsersToImportAsync().Result);
+                    userToImport = this.transactionManager.ExecuteInPlainTransaction(
+                        () => this.importUsersService.GetUserToImport());
 
-                } while (hasUsersToImport);
+                    this.CreateUserOrUnarchiveAndUpdateAsync(userToImport).WaitAndUnwrapException();
+
+                    this.transactionManager.ExecuteInPlainTransaction(
+                        () => this.importUsersService.RemoveImportedUser(userToImport));
+
+                } while (userToImport != null);
             }
             catch (Exception ex)
             {
                 this.logger.Error($"User import job: FAILED. Reason: {ex.Message} ", ex);
+            }
+        }
+
+        private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)
+        {
+            using (var userManager = ServiceLocator.Current.GetInstance<HqUserManager>())
+            {
+                var user = await userManager.FindByNameAsync(userToCreate.Login);
+                if (user == null)
+                {
+                    Guid? supervisorId = null;
+
+                    if (!string.IsNullOrEmpty(userToCreate.Supervisor))
+                        supervisorId = (await userManager.FindByNameAsync(userToCreate.Supervisor))?.Id;
+
+                    await userManager.CreateUserAsync(new HqUser
+                    {
+                        Id = Guid.NewGuid(),
+                        UserName = userToCreate.Login,
+                        FullName = userToCreate.FullName,
+                        Email = userToCreate.Email,
+                        PhoneNumber = userToCreate.PhoneNumber,
+                        Profile = supervisorId.HasValue
+                            ? new HqUserProfile
+                            {
+                                SupervisorId = supervisorId
+                            }
+                            : null,
+                    }, userToCreate.Password, userToCreate.UserRole);
+                }
+                else
+                {
+                    user.FullName = userToCreate.FullName;
+                    user.Email = userToCreate.Email;
+                    user.PhoneNumber = userToCreate.PhoneNumber;
+                    user.IsArchived = false;
+
+                    await userManager.UpdateUserAsync(user, userToCreate.Password);
+                }
             }
         }
     }

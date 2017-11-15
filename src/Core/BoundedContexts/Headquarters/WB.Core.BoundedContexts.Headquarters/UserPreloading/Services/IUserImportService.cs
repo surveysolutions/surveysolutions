@@ -4,11 +4,12 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
-    public interface IUserPreloadingService
+    public interface IUserImportService
     {
-        IEnumerable<UserPreloadingVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName);
+        IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName);
         string[] GetUserProperties();
-        Task<bool> ImportFirstUserAndReturnIfHasMoreUsersToImportAsync();
+        UserToImport GetUserToImport();
+        void RemoveImportedUser(UserToImport importedUser);
         UsersImportStatus GetImportStatus();
         UsersImportCompleteStatus GetImportCompleteStatus();
         void RemoveAllUsersToImport();
