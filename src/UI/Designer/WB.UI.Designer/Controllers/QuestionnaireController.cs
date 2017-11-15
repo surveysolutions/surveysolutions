@@ -451,6 +451,9 @@ namespace WB.UI.Designer.Controllers
             var csvReader = new CsvReader(new StreamReader(inputStream), this.CreateCsvConfiguration());
             using (csvReader)
             {
+                csvReader.Read();
+                csvReader.ReadHeader();
+
                 while (csvReader.Read())
                 {
                     if (isCascade)
