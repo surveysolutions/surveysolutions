@@ -175,6 +175,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
         }
 
+        private void Apply(InterviewOpenedBySupervisor @event)
+        {
+        }
+
+        private void Apply(InterviewClosedBySupervisor @event)
+        {
+        }
+
         public new void Apply(InterviewRejected @event)
         {
             base.Apply(@event);
@@ -874,6 +882,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
 
             ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime));
+        }
+
+        public void CloseBySupevisor(CloseInterviewBySupervisorCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+
+            ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.LocalTime));
+        }
+
+        public void OpenBySupevisor(OpenInterviewBySupervisorCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+
+            ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.LocalTime));
         }
     }
 }

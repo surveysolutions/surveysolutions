@@ -30,6 +30,8 @@
         Paused,
         Resumed,
         KeyAssigned,
-        TranslationSwitched
+        TranslationSwitched,
+        OpenedBySupervisor,
+        ClosedBySupervisor
     }
 }
