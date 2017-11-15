@@ -24,7 +24,12 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewsUrl = Url.Action("Interviews", "HQ"),
                 SupervisorsUrl = Url.Action("Index", "Supervisor"),
                 ImportUsersTemplateUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportUsersTemplate" }),
-                ImportUsersUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportUsers" })
+                ImportUsersUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportUsers" }),
+                ImportUsersStatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportStatus" }),
+                ImportUsersCompleteStatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportCompleteStatus" }),
+                ImportUsersCancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "CancelToImportUsers" }),
+                SupervisorCreateUrl = Url.Action("Create", "Supervisor"),
+                InterviewerCreateUrl = Url.Action("Create", "Interviewer"),
             }
         });
     }

@@ -18,6 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
 
             Property(x => x.FileName);
             Property(x => x.RecordsCount);
+            Property(x => x.SupervisorsCount);
+            Property(x => x.InterviewersCount);
 
             List(x => x.UserPrelodingData, listMap =>
             {

@@ -303,10 +303,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
             
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
-
-            this.Bind<IUserBatchCreator>().To<UserBatchCreator>();
+            
             this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>();
-            this.Bind<IUserPreloadingCleaner>().To<UserPreloadingCleaner>().InSingletonScope();
 
             this.Bind<SampleImportSettings>().ToConstant(sampleImportSettings);
 
