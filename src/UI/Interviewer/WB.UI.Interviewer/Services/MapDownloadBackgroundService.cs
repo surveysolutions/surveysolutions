@@ -20,17 +20,18 @@ namespace WB.UI.Interviewer.Services
         public void SyncMaps()
         {
             if (!this.isSyncRunning)
-            {
+             {
                 var synchronizationProcess = Mvx.Resolve<IMapSyncProvider>();
-                this.CurrentProgress = new MapSyncProgressStatus(new Progress<MapSyncProgress>(), new CancellationTokenSource());
+                this.CurrentProgress = new MapSyncProgressStatus(new Progress<SyncProgressInfo>(), new CancellationTokenSource());
 
                 this.thread = new Thread(() =>
                 {
                     if (!this.isSyncRunning)
                     {
+                        this.isSyncRunning = true;
                         try
                         {
-                            synchronizationProcess.SyncronizeMapsAsync(this.CurrentProgress.Progress,
+                            synchronizationProcess.SyncronizeAsync(this.CurrentProgress.Progress,
                                     this.CurrentProgress.CancellationTokenSource.Token)
                                 .WaitAndUnwrapException();
                             // do not pass cancellationToken, since it will always throw operation cancelled here
@@ -47,8 +48,7 @@ namespace WB.UI.Interviewer.Services
                         }
                     }
                 });
-
-                this.isSyncRunning = true;
+                
                 this.thread.Start();
             }
         }

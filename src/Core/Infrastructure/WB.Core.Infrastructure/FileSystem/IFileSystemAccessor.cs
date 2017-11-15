@@ -42,5 +42,8 @@ namespace WB.Core.Infrastructure.FileSystem
         bool IsWritePermissionExists(string path);
 
         string ChangeExtension(string path1, string newExtension);
+
+        void MoveFile(string pathToFile, string newPathToFile);
+
     }
 }
