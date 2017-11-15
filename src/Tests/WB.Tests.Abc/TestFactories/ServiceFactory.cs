@@ -400,7 +400,7 @@ namespace WB.Tests.Abc.TestFactories
             return new SynchronizationProcess(
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
-                interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),

@@ -1,7 +1,8 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -9,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
     internal class when_handling_YesNoQuestionAnswered_event
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             interviewId = Guid.Parse("22222222222222222222222222222222");
 
@@ -39,13 +39,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                     })));
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, questionnaireStorage: plainQuestionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             denormalizer.Handle(@event);
-
-        It should_interview_be_strated = () =>
-            interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.ShouldNotBeNull();
+        
+        [Test]
+        public void should_interview_be_strated() =>
+            interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.Should().NotBeNull();
 
         private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<YesNoQuestionAnswered> @event;
