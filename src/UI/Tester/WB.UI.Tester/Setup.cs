@@ -25,7 +25,6 @@ namespace WB.UI.Tester
     {
         public Setup(Context applicationContext) : base(applicationContext)
         {
-            this.InitializeLogger(applicationContext);
         }
 
         protected override IMvxApplication CreateApp()
@@ -77,23 +76,6 @@ namespace WB.UI.Tester
 #endif
 
             });
-        }
-
-        private void InitializeLogger(Context applicationContext)
-        {
-            Insights.HasPendingCrashReport += (sender, isStartupCrash) =>
-            {
-                if (isStartupCrash)
-                {
-                    Insights.PurgePendingCrashReports().Wait();
-                }
-            };
-
-#if DEBUG
-            Insights.Initialize(Insights.DebugModeKey, applicationContext);
-#else
-            Insights.Initialize("42692ba29c8395f41cf92fc810d365a4ec0c98d7", applicationContext);
-#endif
         }
     }
 }

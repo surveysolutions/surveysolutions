@@ -98,6 +98,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             var trimmedSearchText = (searchTerm ?? "").Trim();
 
+            if (searchTerm == "crash")
+            {
+                throw new InvalidOperationException("KABOOOOOOM");
+            }
             bool EmptyFilter(QuestionnaireListItem x) => true;
 
             bool TitleSearchFilter(QuestionnaireListItem x) => CultureInfo.CurrentCulture.CompareInfo.IndexOf(x.Title, trimmedSearchText, CompareOptions.IgnoreCase) >= 0 || (x.OwnerName != null && x.OwnerName.Contains(trimmedSearchText));

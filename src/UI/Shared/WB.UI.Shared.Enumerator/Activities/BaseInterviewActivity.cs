@@ -43,6 +43,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
             base.OnStart();
+            throw new Exception("Test 3");
         }
 
         public override void OnBackPressed()
@@ -105,6 +106,9 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnStop();
 
+            var messenger = Mvx.Resolve<IMvxMessenger>();
+            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
+            messenger.Unsubscribe<InterviewCompletedMessage>(interviewCompleteActivityToken);
             Mvx.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
         }
     }
