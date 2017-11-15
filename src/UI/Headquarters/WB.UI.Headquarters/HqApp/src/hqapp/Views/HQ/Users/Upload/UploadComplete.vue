@@ -36,7 +36,7 @@ export default {
     },
     totalCount() {
       if (!this.$store.getters.upload.complete) return 0;
-      return this.$store.getters.upload.complete.totalCount;
+      return this.supervisorsCount + this.interviewersCount;
     },
     supervisorsCount() {
       if (!this.$store.getters.upload.complete) return 0;

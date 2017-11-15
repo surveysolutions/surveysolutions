@@ -304,7 +304,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             
             this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
             
-            this.Bind<IUserPreloadingVerifier>().To<UserPreloadingVerifier>();
+            this.Bind<IUserImportVerifier>().To<UserImportVerifier>();
 
             this.Bind<SampleImportSettings>().ToConstant(sampleImportSettings);
 

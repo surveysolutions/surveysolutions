@@ -78,6 +78,7 @@ export default {
         this.$store.dispatch("setUploadStatus", response.data);
 
         if (response.data.usersInQueue == 0) {
+          window.clearInterval(self.timerId);
           self.$http
             .get(this.config.api.importUsersCompleteStatusUrl)
             .then(response => {
