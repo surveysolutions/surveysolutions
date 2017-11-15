@@ -173,13 +173,8 @@ namespace WB.UI.Headquarters
 
             var userPreloadingSettings =
                 new UserPreloadingSettings(
-                    userPreloadingConfigurationSection.VerificationIntervalInSeconds,
-                    userPreloadingConfigurationSection.CreationIntervalInSeconds,
-                    userPreloadingConfigurationSection.CleaningIntervalInHours,
-                    userPreloadingConfigurationSection.HowOldInDaysProcessShouldBeInOrderToBeCleaned,
+                    userPreloadingConfigurationSection.ExecutionIntervalInSeconds,
                     userPreloadingConfigurationSection.MaxAllowedRecordNumber,
-                    userPreloadingConfigurationSection.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress,
-                    userPreloadingConfigurationSection.NumberOfValidationErrorsBeforeStopValidation,
                     loginFormatRegex: UserModel.UserNameRegularExpression,
                     emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
                     passwordFormatRegex: applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
@@ -245,7 +240,7 @@ namespace WB.UI.Headquarters
             kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
 
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
+            ServiceLocator.Current.GetInstance<UsersImportTask>().Configure();
             ServiceLocator.Current.GetInstance<ExportJobScheduler>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();

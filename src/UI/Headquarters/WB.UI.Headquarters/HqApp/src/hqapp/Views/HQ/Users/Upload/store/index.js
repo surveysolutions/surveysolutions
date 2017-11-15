@@ -1,7 +1,10 @@
 export default {
     state: {
         fileName: "",
-        verificationErrors: []
+        verificationErrors: [],
+        importedUsersInPercents: 0,
+        complete: {},
+        progress: {}
     },
 
     actions: {
@@ -10,6 +13,13 @@ export default {
         },
         setUploadVerificationErrors({ commit }, errors) {
             commit("SET_VERIFICATION_ERRORS", errors)
+        },
+        setUploadStatus({ commit, dispatch }, status) {
+            dispatch("setUploadFileName", status.fileName)
+            commit("SET_STATUS", status)
+        },
+        setUploadCompleteStatus({ commit }, status) {
+            commit("SET_COMPLETE_STATUS", status)
         }
     },
 
@@ -19,6 +29,12 @@ export default {
         },
         SET_VERIFICATION_ERRORS(state, errors) {
             state.verificationErrors = errors
+        },
+        SET_STATUS(state, status) {
+            state.progress = status
+        },
+        SET_COMPLETE_STATUS(state, status) {
+            state.complete = status
         }
     },
 

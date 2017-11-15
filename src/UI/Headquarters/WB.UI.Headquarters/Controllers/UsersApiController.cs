@@ -293,7 +293,7 @@ namespace WB.UI.Headquarters.Controllers
         public ImportUserError[] ImportUsers(ImportUsersRequest request)
         {
             if(this.userImportService.GetImportStatus().IsInProgress)
-                throw new UserPreloadingException(BatchUpload.Prerequisite_FileOpen);
+                throw new UserPreloadingException(BatchUpload.HasUsersToImport);
 
             if (request?.File?.FileBytes == null)
                 throw new UserPreloadingException(BatchUpload.Prerequisite_FileOpen);
@@ -308,10 +308,25 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.userImportService
                 .VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
-                .Take(5)
+                .Take(8)
                 .Select(ToImportError)
                 .ToArray();
         }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public void CancelToImportUsers() => this.userImportService.RemoveAllUsersToImport();
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public UsersImportStatus ImportStatus() => this.userImportService.GetImportStatus();
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public UsersImportCompleteStatus ImportCompleteStatus() => this.userImportService.GetImportCompleteStatus();
 
         private ImportUserError ToImportError(UserPreloadingVerificationError error) => new ImportUserError
         {

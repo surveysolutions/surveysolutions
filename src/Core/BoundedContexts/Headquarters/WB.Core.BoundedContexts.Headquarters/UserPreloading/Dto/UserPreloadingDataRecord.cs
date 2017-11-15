@@ -1,4 +1,5 @@
 using System;
+using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
 {
@@ -12,5 +13,15 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         public virtual string PhoneNumber { get; set; }
         public virtual string Role { get; set; }
         public virtual string Supervisor { get; set; }
+
+        public UserRoles GetUserRole()
+        {
+            if ("supervisor".Equals(this.Role, StringComparison.InvariantCultureIgnoreCase))
+                return UserRoles.Supervisor;
+            if ("interviewer".Equals(this.Role, StringComparison.InvariantCultureIgnoreCase))
+                return UserRoles.Interviewer;
+
+            return 0;
+        }
     }
 }

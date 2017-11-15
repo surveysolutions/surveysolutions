@@ -1140,6 +1140,7 @@
     <EmbeddedResource Include="Resources\UploadUsers.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>UploadUsers.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UploadUsers.ru.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
@@ -1824,6 +1825,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201710021139_ChangeJsonToJsonB.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709291647_RemoveQuestionnaireQuestionsInfos.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201711141615_ImportUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201710161320_UserMaps.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
