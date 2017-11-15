@@ -18,6 +18,8 @@
         InterviewReceivedByTablet = 13,
         Resumed = 14,
         Paused = 15,
-        TranslationSwitched = 16
+        TranslationSwitched = 16,
+        OpenedBySupervisor = 17,
+        ClosedBySupervisor = 18
     }
 }
