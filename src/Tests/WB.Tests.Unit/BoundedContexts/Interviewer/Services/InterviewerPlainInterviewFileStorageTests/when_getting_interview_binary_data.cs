@@ -1,18 +1,17 @@
 ﻿using System;
 using FluentAssertions;
-using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc.Storage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInterviewFileStorageTests
 {
     internal class when_getting_interview_binary_data : InterviewerPlainInterviewFileStorageTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             var imageViewStorage = new SqliteInmemoryStorage<InterviewMultimediaView>();
             imageViewStorage.Store(
@@ -35,12 +34,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
             interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
                 imageViewStorage: imageViewStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             bytesResult = interviewerImageFileStorage.GetInterviewBinaryData(interviewId, imageFileName);
 
-        It should_remove_questionnaire_document_view_from_plain_storage = () =>
+        [Test]
+        public void should_remove_questionnaire_document_view_from_plain_storage() =>
             bytesResult.ShouldAllBeEquivalentTo(imageFileBytes);
         
         static byte[] bytesResult;
