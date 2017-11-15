@@ -124,10 +124,13 @@
     <value>required for interviewers, contains username of supervisor to whom this person wil be assigned</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alernatively, you can </value>
+    <value>Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alernatively, you can create</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>profile manually</value>
   </data>
   <data name="DownloadTemplateLink" xml:space="preserve">
-    <value>Download .tsv template for user upload</value>
+    <value>Download .tab template for user upload</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -135,8 +138,11 @@
   <data name="FullName" xml:space="preserve">
     <value>Full name</value>
   </data>
-  <data name="ManualUserCreateLink" xml:space="preserve">
-    <value>create user profiles manually</value>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve">
+    <value>supervisor</value>
+  </data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve">
+    <value>interviewer</value>
   </data>
   <data name="OptionalInformation" xml:space="preserve">
     <value>Optional personal information</value>
@@ -163,7 +169,7 @@
     <value>Creating multiple users by batch upload</value>
   </data>
   <data name="UploadBtn" xml:space="preserve">
-    <value>Upload .tsv file</value>
+    <value>Upload .tab file</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>User name</value>
@@ -181,13 +187,13 @@
     <value>Importing user information from</value>
   </data>
   <data name="ReUploadTabFile" xml:space="preserve">
-    <value>Reupload .tsv file</value>
+    <value>Reupload .tab file</value>
   </data>
   <data name="BackToImport" xml:space="preserve">
-    <value>Back to import</value>
+    <value>Back to user import</value>
   </data>
-  <data name="UploadingAndVerifying" xml:space="preserve">
-    <value>Uploading and verifying</value>
+  <data name="Uploading" xml:space="preserve">
+    <value>Uploading {{importedUsersCount}} of {{totalUsersToImportCount}}</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
@@ -197,5 +203,20 @@
   </data>
   <data name="Line" xml:space="preserve">
     <value>line</value>
+  </data>
+  <data name="AllAccountsCreated" xml:space="preserve">
+    <value>All {{total}} accounts was successfully created:</value>
+  </data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
+    <value>{{supervisorsCount}} supervisors and {{interviewersCount}} interviewers</value>
+  </data>
+  <data name="CompleteDescription" xml:space="preserve">
+    <value>You can assign interviews for these teams from 'interviews' section, interviews can also be created and assigned in batch mode</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Interviews</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>Supervisors</value>
   </data>
 </root>

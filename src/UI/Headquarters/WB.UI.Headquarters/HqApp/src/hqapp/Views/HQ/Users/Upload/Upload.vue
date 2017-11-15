@@ -1,20 +1,10 @@
 <template>
-    <div class="container">
-        <div class="row">
-            <div class="page-header">
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="#">{{$t('MainMenu.TeamsAndRoles')}}</a>
-                    </li>
-                </ol>
-                <h1>{{$t('UploadUsers.Title')}}</h1>
-            </div>
-        </div>
-
+    <div>
         <div class="row">
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
                 <p>{{$t('UploadUsers.Description')}}
-                    <a v-bind:href="config.api.supervisorsUrl">{{$t('UploadUsers.ManualUserCreateLink')}}</a>
+                    <a v-bind:href="config.api.supervisorCreateUrl">{{$t('UploadUsers.ManualSupervisorCreateLink')}}</a> {{$t('UploadUsers.Or')}}
+                    <a v-bind:href="config.api.interviewerCreateUrl">{{$t('UploadUsers.ManualInterviewerCreateLink')}}</a> {{$t('UploadUsers.Profile')}}
                 </p>
             </div>
         </div>

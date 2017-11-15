@@ -3,13 +3,8 @@
     public class UserPreloadingSettings
     {
         public UserPreloadingSettings(
-            int verificationIntervalInSeconds, 
-            int creationIntervalInSeconds, 
-            int cleaningIntervalInHours, 
-            int howOldInDaysProcessShouldBeInOrderToBeCleaned, 
+            int executionIntervalInSeconds, 
             int maxAllowedRecordNumber, 
-            int numberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress, 
-            int numberOfValidationErrorsBeforeStopValidation, 
             string loginFormatRegex, 
             string emailFormatRegex, 
             string passwordFormatRegex, 
@@ -18,13 +13,8 @@
             int phoneNumberMaxLength, 
             string personNameFormatRegex)
         {
-            this.VerificationIntervalInSeconds = verificationIntervalInSeconds;
-            this.CreationIntervalInSeconds = creationIntervalInSeconds;
-            this.CleaningIntervalInHours = cleaningIntervalInHours;
-            this.HowOldInDaysProcessShouldBeInOrderToBeCleaned = howOldInDaysProcessShouldBeInOrderToBeCleaned;
+            this.ExecutionIntervalInSeconds = executionIntervalInSeconds;
             this.MaxAllowedRecordNumber = maxAllowedRecordNumber;
-            this.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress = numberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress;
-            this.NumberOfValidationErrorsBeforeStopValidation = numberOfValidationErrorsBeforeStopValidation;
             this.LoginFormatRegex = loginFormatRegex;
             this.EmailFormatRegex = emailFormatRegex;
             this.PasswordFormatRegex = passwordFormatRegex;
@@ -33,14 +23,9 @@
             this.PhoneNumberMaxLength = phoneNumberMaxLength;
             this.PersonNameFormatRegex = personNameFormatRegex;
         }
-
-        public int VerificationIntervalInSeconds { get; private set; }
-        public int CreationIntervalInSeconds { get; private set; }
-        public int CleaningIntervalInHours { get; private set; }
-        public int HowOldInDaysProcessShouldBeInOrderToBeCleaned { get; private set; }
+        
+        public int ExecutionIntervalInSeconds { get; private set; }
         public int MaxAllowedRecordNumber { get; private set; }
-        public int NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress { get; private set; }
-        public int NumberOfValidationErrorsBeforeStopValidation { get; private set; }
 
         public string LoginFormatRegex { get; private set; }
         public string EmailFormatRegex { get; private set; }

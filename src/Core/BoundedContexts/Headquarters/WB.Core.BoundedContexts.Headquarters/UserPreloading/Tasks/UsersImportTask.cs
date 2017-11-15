@@ -4,31 +4,30 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
 {
-    public class UserPreloadingCleanerTask
+    public class UsersImportTask
     {
         readonly IScheduler scheduler;
 
         private readonly UserPreloadingSettings userPreloadingSettings;
 
-        public UserPreloadingCleanerTask(IScheduler scheduler, UserPreloadingSettings userPreloadingSettings)
+        public UsersImportTask(IScheduler scheduler, UserPreloadingSettings userPreloadingSettings)
         {
-            if (scheduler == null) throw new ArgumentNullException("scheduler");
-            this.scheduler = scheduler;
+            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
             this.userPreloadingSettings = userPreloadingSettings;
         }
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<UserPreloadingCleanerJob>()
-                .WithIdentity("user preloading cleaner", "Batch user creation")
+            IJobDetail job = JobBuilder.Create<UsersImportJob>()
+                .WithIdentity("import users job", "Import users")
                 .StoreDurably(true)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("user preloading cleaner trigger", "Batch user creation")
+                .WithIdentity("import users trigger", "Import users")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(userPreloadingSettings.CleaningIntervalInHours)
+                    .WithIntervalInSeconds(userPreloadingSettings.ExecutionIntervalInSeconds)
                     .RepeatForever())
                 .Build();
 
