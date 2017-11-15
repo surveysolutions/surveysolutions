@@ -2,7 +2,7 @@
 using Autofac;
 using Autofac.Core;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Interviewer.Infrastructure.Logging;
+using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Interviewer.ServiceLocation
 {

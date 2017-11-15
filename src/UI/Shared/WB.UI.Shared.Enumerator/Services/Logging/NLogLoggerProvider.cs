@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.UI.Interviewer.Infrastructure.Logging
+namespace WB.UI.Shared.Enumerator.Services.Logging
 {
     public class NLogLoggerProvider : ILoggerProvider
     {
