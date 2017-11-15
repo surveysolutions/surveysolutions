@@ -3,10 +3,10 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
-    public interface IUserPreloadingVerifier
+    public interface IUserImportVerifier
     {
         PreloadedDataValidator[] GetAllUsersValidations(UserToValidate[] allInterviewersAndSupervisors,
-            IList<UserPreloadingDataRecord> usersToImport);
+            IList<UserToImport> usersToImport);
 
         PreloadedDataValidator[] GetEachUserValidations(UserToValidate[] allInterviewersAndSupervisors);
     }

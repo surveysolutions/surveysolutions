@@ -1218,10 +1218,10 @@ namespace WB.Tests.Abc.TestFactories
         public UserLight UserLight(Guid? userId = null)
             => new UserLight(userId ?? Guid.NewGuid(), "test");
 
-        public UserPreloadingDataRecord UserPreloadingDataRecord(
+        public UserToImport UserPreloadingDataRecord(
             string login = "test", string supervisor = "", string password = "test", string email = "", string phoneNumber = "",
             string role = null, string fullName = null)
-            => new UserPreloadingDataRecord
+            => new UserToImport
             {
                 Login = login,
                 Supervisor = supervisor,
@@ -1232,21 +1232,6 @@ namespace WB.Tests.Abc.TestFactories
                 FullName = fullName 
             };
 
-        public UserPreloadingProcess UserPreloadingProcess(string userPreloadingProcessId = null,
-            UserPrelodingState state = UserPrelodingState.Uploaded, int recordsCount = 0, params UserPreloadingDataRecord[] dataRecords)
-        {
-            var result = new UserPreloadingProcess
-            {
-                UserPreloadingProcessId = userPreloadingProcessId ?? Guid.NewGuid().FormatGuid(),
-                RecordsCount = recordsCount,
-            };
-            foreach (var userPreloadingDataRecord in dataRecords)
-            {
-                result.UserPrelodingData.Add(userPreloadingDataRecord);
-            }
-            return result;
-        }
-
         public UserPreloadingSettings UserPreloadingSettings()
             => new UserPreloadingSettings(
                 5, 10000, "^[a-zA-Z0-9_]{3,15}$",
@@ -1255,8 +1240,8 @@ namespace WB.Tests.Abc.TestFactories
                 @"^(\+\s?)?((?<!\+.*)\(\+?\d+([\s\-\.]?\d+)?\)|\d+)([\s\-\.]?(\(\d+([\s\-\.]?\d+)?\)|\d+))*(\s?(x|ext\.?)\s?\d+)?$", 100, 15,
                 UserModel.PersonNameRegex);
 
-        public UserPreloadingVerificationError UserPreloadingVerificationError()
-            => new UserPreloadingVerificationError();
+        public UserImportVerificationError UserPreloadingVerificationError()
+            => new UserImportVerificationError();
 
         public ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
             => new ValidationCondition(expression, message);
