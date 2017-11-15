@@ -31,13 +31,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var reader = GetCsvReader(ouptutBytes);
 
             reader.Read();
+            reader.ReadHeader();
 
             Assert.That(reader.Context.HeaderRecord.Length, Is.EqualTo(2));
             Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("interview__link"));
             Assert.That(reader.Context.HeaderRecord[1], Is.EqualTo("id"));
 
-            var csvReaderException = Assert.Throws<ReaderException>(() => reader.Read(), "Only header row should be written to the output file");
-            Assert.That(csvReaderException.Message, Does.Contain("exhausted all records"));
+            var isReaded = reader.Read();
+            Assert.IsFalse(isReaded);
         }
 
         [Test]
@@ -56,6 +57,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             // Assert
             var reader = GetCsvReader(ouptutBytes);
 
+            reader.Read();
+            reader.ReadHeader();
             reader.Read();
             Assert.That(reader.Context.HeaderRecord.Length, Is.EqualTo(2));
             Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("interview__link"));
@@ -94,6 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var reader = GetCsvReader(ouptutBytes);
 
             reader.Read();
+            reader.ReadHeader();
             Assert.That(reader.Context.HeaderRecord[2], Is.EqualTo(expectedHeader));
             Assert.That(reader.Context.HeaderRecord[2], Is.EqualTo(expectedHeader));
         }

@@ -188,7 +188,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read())
+                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need excute all Reads
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
@@ -249,7 +249,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         }
                         else
                         {
-                            if (string.IsNullOrWhiteSpace(record[i]))
+                            if (i >= record.Length || string.IsNullOrWhiteSpace(record[i]))
                             {
                                 variables.Add(null);
                             }
@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     {
                         throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows, MAX_ROWS_COUNT));
                     }
-                }while (csvReader.Read());
+                } while (csvReader.Read());
 
                 var countOfDistinctRowcodeValues = rows.Select(x => x.RowCode).Distinct().Count();
 
