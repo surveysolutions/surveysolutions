@@ -11,18 +11,16 @@
                     <h2>{{$config.model.key}}</h2>
                     <ul class="list-unstyled about-questionnaire">
                         <li>
-                            <strong>{{this.$t('Details.Status', {name: this.$config.model.statusName})}}</strong>
+                            {{this.$t('Details.Status', {name: this.$config.model.statusName})}}
                         </li>
                         <li>
-                            <strong>{{lastUpdateDate}}</strong>
+                            {{ this.$t('Details.Responsible') }}:
+                            <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">
+                                {{this.$config.model.responsible}}
+                            </a>
                         </li>
                         <li>
-                            <b>
-                                {{ this.$t('Details.Responsible') }}
-                                <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">
-                                    {{this.$config.model.responsible}}
-                                </a>
-                            </b>
+                            {{lastUpdateDate}}
                         </li>
                     </ul>
                     <div class="filter-actions-block" v-if="!this.$store.state.webinterview.interviewCannotBeChanged">
@@ -32,7 +30,6 @@
                         <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject">
                             {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
                         </button>
-
                         <button type="button" class="btn btn-link" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                     </div>
                 </div>
