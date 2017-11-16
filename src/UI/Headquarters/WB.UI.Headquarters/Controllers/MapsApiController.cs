@@ -21,7 +21,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    
+    [CamelCase]
     [Authorize(Roles = "Administrator, Headquarter")]
     public class MapsApiController : ApiController
     {
@@ -44,9 +44,38 @@ namespace WB.UI.Headquarters.Controllers
 
         [ApiValidationAntiForgeryToken]
         [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter")]
         public IHttpActionResult Maps([FromBody] DataTableRequest request)
+        {
+            var input = new MapsInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                SearchBy = request.Search.Value,
+            };
+
+            var items = this.mapBrowseViewFactory.Load(input);
+
+            var table = new DataTableResponse<MapViewItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = items.TotalCount,
+                RecordsFiltered = items.TotalCount,
+                Data = items.Items.ToList().Select(x => new MapViewItem
+                {
+                    FileName = x.FileName,
+                    ImportDate = x.ImportDate?.FormatDateWithTime(),
+                    Size = FileSizeUtils.SizeInMegabytes(x.Size)
+                })
+            };
+
+            return Ok(table);
+        }
+        
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public IHttpActionResult MapList([FromUri] DataTableRequest request)
         {
             var input = new MapsInputModel
             {
@@ -79,9 +108,8 @@ namespace WB.UI.Headquarters.Controllers
             public string MapName { get; set; }
         }
 
-        [ApiValidationAntiForgeryToken]
+        
         [HttpPost]
-        [CamelCase]
         [Authorize(Roles = "Administrator, Headquarter")]
         public IHttpActionResult MapUsers([FromBody] MapUsersTableRequest request)
         {
@@ -112,6 +140,42 @@ namespace WB.UI.Headquarters.Controllers
 
             return Ok(table);
         }
+
+
+        
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
+        public IHttpActionResult MapUserList([FromUri]MapUsersTableRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.MapName))
+                return null;
+
+            var input = new MapUsersInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                SearchBy = request.Search.Value,
+                MapName = request.MapName
+            };
+
+            var items = this.mapBrowseViewFactory.Load(input);
+
+            var table = new DataTableResponse<MapUserViewItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = items.TotalCount,
+                RecordsFiltered = items.TotalCount,
+                Data = items.Items.ToList().Select(x => new MapUserViewItem
+                {
+                    UserName = x
+                })
+            };
+
+            return Ok(table);
+        }
+
+
 
         public class MapUserViewItem
         {
