@@ -136,7 +136,7 @@
     <value>{0} დავალებები შერჩეულია</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
-    <value>დავალების ზომა რედაქტირებისთვის {0}</value>
+    <value>დავალების ზომა რედაქტირებისთვის {{assignmentId}}</value>
   </data>
   <data name="Count" xml:space="preserve">
     <value>ანგარიში</value>
