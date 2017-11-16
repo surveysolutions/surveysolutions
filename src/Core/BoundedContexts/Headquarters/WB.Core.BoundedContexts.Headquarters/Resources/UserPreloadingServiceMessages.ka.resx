@@ -120,7 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>{0}' ფაილი შეიცავს ისეთ სვეტებს, რომლების დაკავშრიება მომხმარებლის მნიშვნელობებთან არ შეიძლება (მაგალითად, სახელი და გვარი, ტელეფონის ნომერი და ა.შ) : {1}</value>
   </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value/>
-  </data>
 </root>

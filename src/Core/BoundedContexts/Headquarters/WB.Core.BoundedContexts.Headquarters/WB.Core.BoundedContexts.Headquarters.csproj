@@ -253,6 +253,9 @@
     <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.fr.resx">
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.ka.resx">
+      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.pt.resx">
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
     </EmbeddedResource>

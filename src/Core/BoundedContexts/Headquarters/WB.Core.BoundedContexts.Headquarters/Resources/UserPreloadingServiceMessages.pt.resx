@@ -120,7 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>arquivo '{0}' contém colunas que não podem ser mapeadas na Propriedade do usuário qualquer existente na sequência: {1}</value>
   </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value/>
-  </data>
 </root>

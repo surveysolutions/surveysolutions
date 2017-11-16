@@ -120,7 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>Fichier « {0} » contient les colonnes suivantes qui ne peuvent pas être reliées aux propriétés d'utilisateur existant : {1}</value>
   </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value/>
-  </data>
 </root>

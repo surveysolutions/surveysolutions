@@ -120,7 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>文件'{0}'中包含的以下列不能与现有任何用户的属性相匹配：{1}</value>
   </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value/>
-  </data>
 </root>
