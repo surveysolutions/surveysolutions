@@ -922,6 +922,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All maps were synchronized.
+        /// </summary>
+        public static string Maps_Synchronization_Success_Description {
+            get {
+                return ResourceManager.GetString("Maps_Synchronization_Success_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maps.
         /// </summary>
         public static string Maps_Title {
@@ -959,7 +968,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Handling map {0}, {1} out of {2}. 
-        /// Downloaded {3} out of {4} ({5}%).
+        /// Downloaded {3}%.
         /// </summary>
         public static string MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format {
             get {

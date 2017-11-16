@@ -19,7 +19,9 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly ILogger logger;
 
         string filesToSearch = "*.tpk";
-        
+
+        string tempSuffix = ".part";
+
         public MapService(IPermissions permissions, 
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger)
@@ -98,6 +100,39 @@ namespace WB.UI.Shared.Enumerator.Services
 
                 this.fileSystemAccessor.WriteAllBytes(filename, content);
             }
+        }
+
+        public Stream GetTempMapSaveStream(string mapName)
+        {
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
+                this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
+            
+            var tempFileName = GetTempFileName(mapName);
+
+            if (this.fileSystemAccessor.IsFileExists(tempFileName))
+                this.fileSystemAccessor.DeleteFile(tempFileName);
+
+            return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, false);
+            
+        }
+
+        public void MoveTempMapToPermanent(string mapName)
+        {
+            var tempFileName = GetTempFileName(mapName);
+
+            if (!this.fileSystemAccessor.IsFileExists(tempFileName))
+                return;
+
+            var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
+
+            this.fileSystemAccessor.MoveFile(tempFileName, newName);
+        }
+
+        private string GetTempFileName(string mapName)
+        {
+            var fileName = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
+            var tempFileName = fileName + tempSuffix;
+            return tempFileName;
         }
     }
 }

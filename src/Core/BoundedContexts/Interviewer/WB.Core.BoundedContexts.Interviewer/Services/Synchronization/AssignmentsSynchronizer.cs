@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             this.answerSerializer = answerSerializer;
         }
 
-        public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress, SychronizationStatistics statistics, CancellationToken cancellationToken)
+        public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
             var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
 
