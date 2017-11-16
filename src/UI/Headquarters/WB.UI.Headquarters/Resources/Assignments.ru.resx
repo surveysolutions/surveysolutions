@@ -136,7 +136,7 @@
     <value>Изменение количества интервью, которые будут созданы согласно этому заданию. Разрешенные значения: -1 для не ограниченного задания, 0 для пустого, число для конкретного количества</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
-    <value>Редактировать количество интервью для задания {0}</value>
+    <value>Редактировать количество интервью для задания {{assignmentId}}</value>
     <comment>{0} - id of the assignment</comment>
   </data>
   <data name="CreatedAt" xml:space="preserve">
