@@ -277,10 +277,6 @@
       <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
       <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
-      <Project>{3464f3ae-094c-4dec-8725-59506328e597}</Project>
-      <Name>WB.UI.Designer</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
       <Project>{d3efcc0c-4a50-484d-a9ff-252dc7916ecd}</Project>
       <Name>WB.UI.Headquarters</Name>
