@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -22,7 +24,10 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.Maps;
+using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
@@ -58,6 +63,23 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
+        public ActionResult MapList()
+        {
+            this.ViewBag.ActivePage = MenuItem.Maps;
+
+            var model = new MapsModel()
+            {
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new
+                    {
+                        httproute = "",
+                        controller = "MapsApi",
+                        action = "MapList"
+                    }),
+            };
+            return View(model);
+        }
+
         public ActionResult UserMapsLink()
         {
             this.ViewBag.ActivePage = MenuItem.Maps;
@@ -78,6 +100,60 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(map);
         }
+
+        [HttpDelete]
+        public ActionResult DeleteMapUserLink(string mapName, string userName)
+        {
+            this.mapRepository.DeleteMapUser(mapName, userName);
+            return this.Content("ok");
+        }
+
+        public ActionResult UserMapsLinking()
+        {
+            this.ViewBag.ActivePage = MenuItem.Maps;
+            var model = new UserMapLinkModel()
+            {
+                DownloadAllUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "MapsApi", action = "MappingDownload"}),
+                UploadUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMappings" }),
+            };
+            return View(model);
+        }
+
+        [ActivePage(MenuItem.Maps)]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+        public ActionResult MapDetails(string mapName)
+        {
+            this.ViewBag.ActivePage = MenuItem.Maps;
+
+            if (mapName == null)
+                return HttpNotFound();
+
+            MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
+            if (map == null)
+                return HttpNotFound();
+
+            return this.View("MapDetails",
+                new MapDetailsModel
+            {
+                    
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new
+                    {
+                        httproute = "",
+                        controller = "MapsApi",
+                        action = "MapUserList"
+                    }),
+                MapPreviewUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "MapPreview", mapName = map.Id }),
+                MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
+                FileName = mapName,
+                Size = FileSizeUtils.SizeInMegabytes(map.Size),
+                Wkid = map.Wkid,
+                ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
+                MaxScale = map.MaxScale,
+                MinScale = map.MinScale
+            });
+        }
+
 
         [HttpGet]
         public ActionResult MapPreview(string mapName)
