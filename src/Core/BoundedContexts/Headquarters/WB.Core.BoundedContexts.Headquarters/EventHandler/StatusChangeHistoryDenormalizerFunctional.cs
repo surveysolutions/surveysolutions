@@ -44,7 +44,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, AreaQuestionAnswered>,
         IUpdateHandler<InterviewSummary, AudioQuestionAnswered>,
         IUpdateHandler<InterviewSummary, InterviewResumed>,
-        IUpdateHandler<InterviewSummary, InterviewPaused>
+        IUpdateHandler<InterviewSummary, InterviewPaused>,
+        IUpdateHandler<InterviewSummary, InterviewOpenedBySupervisor>,
+        IUpdateHandler<InterviewSummary, InterviewClosedBySupervisor>,
+        IUpdateHandler<InterviewSummary, TranslationSwitched>
     {
         private readonly IUserViewFactory users;
         private readonly string unknown = "Unknown";
@@ -397,6 +400,42 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.TeamLeadId,
                 @event.Payload.UserId,
                 InterviewExportedAction.Paused,
+                @event.EventTimeStamp,
+                null);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TranslationSwitched> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.TranslationSwitched,
+                @event.EventTimeStamp,
+                @event.Payload.Language);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOpenedBySupervisor> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.OpenedBySupervisor,
+                @event.EventTimeStamp,
+                null);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewClosedBySupervisor> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.ClosedBySupervisor,
                 @event.EventTimeStamp,
                 null);
         }

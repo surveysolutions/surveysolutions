@@ -91,14 +91,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void Refresh(object sender, EventArgs e)
         {
-            this.RefreshMaps();
-        }
-
-        private void RefreshMaps()
-        {
             UpdateUiItems();
         }
 
+        
         protected void UpdateUiItems() => Task.Run(() =>
         {
             this.IsInProgress = true;
@@ -127,32 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public override void Load()
         {
             this.Synchronization.Init();
-            RefreshMaps();
-        }
-    }
-
-
-    public class MapItem : MvxNotifyPropertyChanged
-    {
-        private string mapName;
-
-        public string MapName
-        {
-            get => mapName;
-            set => SetProperty(ref mapName, value);
-        }
-
-        private long size;
-        public long Size {
-            get => size;
-            set => SetProperty(ref size, value);
-        }
-
-        private DateTime creationDate;
-        public DateTime CreationDate
-        {
-            get => creationDate;
-            set => SetProperty(ref creationDate, value);
+            UpdateUiItems();
         }
     }
 }

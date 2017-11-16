@@ -67,6 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewKeyAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewPaused>,
         IUpdateHandler<InterviewHistoryView, InterviewResumed>,
+        IUpdateHandler<InterviewHistoryView, InterviewOpenedBySupervisor>,
+        IUpdateHandler<InterviewHistoryView, InterviewClosedBySupervisor>,
         IUpdateHandler<InterviewHistoryView, TranslationSwitched>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
@@ -745,7 +747,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewResumed> @event)
         {
-            this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, null,
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, @event.Payload.UserId,
+                @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewOpenedBySupervisor> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.OpenedBySupervisor, @event.Payload.UserId,
+                @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewClosedBySupervisor> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.ClosedBySupervisor, @event.Payload.UserId,
                 @event.EventTimeStamp);
 
             return state;
@@ -753,12 +771,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<TranslationSwitched> @event)
         {
-            this.AddHistoricalRecord(state, InterviewHistoricalAction.TranslationSwitched, null,
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.TranslationSwitched, @event.Payload.UserId,
                 @event.EventTimeStamp, new Dictionary<string, string>
                 {
-                    {
-                        "translation", @event.Payload.Language
-                    }
+                    { "translation", @event.Payload.Language ?? "ORIGINAL" }
                 });
 
             return state;
