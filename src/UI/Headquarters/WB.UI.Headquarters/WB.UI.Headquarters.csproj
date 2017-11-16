@@ -1145,25 +1145,11 @@
     <EmbeddedResource Include="Resources\UploadUsers.ru.resx">
       <DependentUpon>UploadUsers.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.fr.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ka.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.pt.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UserPreloadingVerificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx">
-      <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx" />
     <EmbeddedResource Include="Resources\WebInterview.ar.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
