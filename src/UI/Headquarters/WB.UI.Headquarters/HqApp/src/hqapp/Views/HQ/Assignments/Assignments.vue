@@ -98,7 +98,7 @@
         </ModalFrame>
 
         <ModalFrame ref="editQuantityModal"
-                    :title="$t('Assignments.ChangeSizeModalTitle', [ editedRowId ])">
+                    :title="$t('Assignments.ChangeSizeModalTitle', {assignmentId: editedRowId} )">
             <p>{{ $t("Assignments.SizeExplanation")}}</p>
             <form onsubmit="return false;">
                 <div class="form-group"
