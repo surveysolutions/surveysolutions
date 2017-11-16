@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         Owner = x.Owner,
                         PublicId = x.PublicId,
                         QuestionnaireId = x.QuestionnaireId,
-                        Title = x.Title,
+                        Title = x.Title
                     })
                     .OrderUsingSortExpression(sortOrder)
                     .Skip((input.Page - 1) * input.PageSize)
