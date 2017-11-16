@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit size for assignment {0}.
+        ///   Looks up a localized string similar to Edit size for assignment {{assignmentId}}.
         /// </summary>
         public static string ChangeSizeModalTitle {
             get {
