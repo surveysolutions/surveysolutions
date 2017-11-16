@@ -2,6 +2,7 @@
 @using WB.Core.GenericSubdomains.Portable
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
 @using WB.UI.Designer.Resources
+@using WB.UI.Designer.Utils
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory.QuestionnaireChangeHistory
 
 @{
@@ -50,7 +51,7 @@
                             </td>
                             <td>@(listViewModel.UserName ?? QuestionnaireHistoryResources.UnknownUserName)</td>
                             <td>
-                                <time time="@listViewModel.Timestamp.ToString("s")Z"></time>
+                                <time time="@listViewModel.Timestamp.ToString("s")Z">@listViewModel.Timestamp.FormatDate()</time>
                             </td>
                             @if (!Model.ReadonlyMode)
                             {
