@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
     public interface IQuestionnaireDownloader
     {
         Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
-            CancellationToken cancellationToken, SychronizationStatistics statistics);
+            CancellationToken cancellationToken, SynchronizationStatistics statistics);
     }
 }

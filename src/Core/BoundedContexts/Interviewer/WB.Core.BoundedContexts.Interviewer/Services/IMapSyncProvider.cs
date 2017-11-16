@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface IMapSyncProvider
     {
-        Task SyncronizeMapsAsync(IProgress<MapSyncProgress> progress, CancellationToken cancellationToken);
+        Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken);
     }
 }

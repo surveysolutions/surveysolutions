@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -238,17 +239,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 url: this.mapsController, token: cancellationToken, credentials: this.restCredentials));
         }
         
-        public Task<byte[]> GetMapContent(string mapName, CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged)
+        public Task GetMapContentAndSave(string mapName, Stream streamToSave, CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var restFile = await this.restService.DownloadFileAsync(
+                await this.restService.DownloadFileAndSaveAsync(
                     url: $"{this.mapsController}/{mapName}",
+                    streamToSave:streamToSave,
                     token: cancellationToken,
                     credentials: this.restCredentials,
                     onDownloadProgressChanged: onDownloadProgressChanged).ConfigureAwait(false);
-
-                return restFile.Content;
             });
         }
 

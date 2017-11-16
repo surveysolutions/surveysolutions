@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
@@ -88,16 +89,28 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         private void RecordInterviewPause(IHub hub)
         {
             var isInterviewer = hub.Context.User.IsInRole(UserRoles.Interviewer.ToString());
+            var isSupervisor = hub.Context.User.IsInRole(UserRoles.Supervisor.ToString());
+
             var interviewId = hub.Context.QueryString[@"interviewId"];
             var interview = this.statefulInterviewRepository.Get(interviewId);
+            Guid userId = Guid.Parse(hub.Context.User.Identity.GetUserId());
 
+            ICommand pauseInterviewCommand = null;
             if (isInterviewer && !interview.IsCompleted)
             {
-                Guid userId = Guid.Parse(hub.Context.User.Identity.GetUserId());
-                var pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now);
+                pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now);
+            }
+            else if (isSupervisor && interview.Status != InterviewStatus.ApprovedBySupervisor)
+            {
+                pauseInterviewCommand =
+                    new CloseInterviewBySupervisorCommand(Guid.Parse(interviewId), userId, DateTime.Now);
+            }
 
+            if (pauseInterviewCommand != null)
+            {
                 // There is no request scope so no other way to get scoped transaction
-                var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
+                var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>()
+                    .GetTransactionManager();
                 try
                 {
                     transactionManager.BeginCommandTransaction();

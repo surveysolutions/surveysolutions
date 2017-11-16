@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        private void ProgressOnProgressChanged(object sender, MapSyncProgress syncProgressInfo)
+        private void ProgressOnProgressChanged(object sender, SyncProgressInfo syncProgressInfo)
         {
             this.InvokeOnMainThread(() =>
             {
