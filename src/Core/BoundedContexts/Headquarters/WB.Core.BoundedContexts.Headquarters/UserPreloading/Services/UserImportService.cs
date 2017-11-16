@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using Dapper;
 using Main.Core.Entities.SubEntities;
+using Npgsql;
+using NpgsqlTypes;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -12,11 +15,15 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     public class UserImportService : IUserImportService
     {
+        private const string UserToImportTableName = "\"plainstore\".\"usertoimport\"";
+        private const string UsersImportProcessTableName = "\"plainstore\".\"usersimportprocess\"";
+
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ICsvReader csvReader;
         private readonly IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository;
@@ -24,7 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private readonly IUserRepository userStorage;
         private readonly IUserImportVerifier userImportVerifier;
         private readonly IAuthorizedUser authorizedUser;
-        
+        private readonly ISessionProvider sessionProvider;
+
         private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
         private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
@@ -35,7 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             IPlainStorageAccessor<UserToImport> importUsersRepository,
             IUserRepository userStorage,
             IUserImportVerifier userImportVerifier,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            ISessionProvider sessionProvider)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.csvReader = csvReader;
@@ -44,6 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.userStorage = userStorage;
             this.userImportVerifier = userImportVerifier;
             this.authorizedUser = authorizedUser;
+            this.sessionProvider = sessionProvider;
         }
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
@@ -118,17 +128,41 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         private void Save(string fileName, IList<UserToImport> usersToImport)
         {
+            this.SaveProcess(fileName, usersToImport);
+            this.SaveUsers(usersToImport);
+        }
+
+        private void SaveProcess(string fileName, IList<UserToImport> usersToImport)
+        {
             var process = this.importUsersProcessRepository.Query(x => x.FirstOrDefault()) ?? new UsersImportProcess();
             process.FileName = fileName;
-            process.InterviewersCount = usersToImport.Count(x => x.Role == "interviewer");
-            process.SupervisorsCount = usersToImport.Count(x => x.Role == "supervisor");
+            process.InterviewersCount = usersToImport.Count(x => x.UserRole == UserRoles.Interviewer);
+            process.SupervisorsCount = usersToImport.Count(x => x.UserRole == UserRoles.Supervisor);
             process.Responsible = this.authorizedUser.Id;
             process.StartedDate = DateTime.UtcNow;
 
             this.importUsersProcessRepository.Store(process, process.Id);
+        }
 
-            this.importUsersRepository.Store(usersToImport.OrderByDescending(x => x.Role)
-                .Select(x => new Tuple<UserToImport, object>(x, null)));
+        private void SaveUsers(IList<UserToImport> usersToImport)
+        {
+            var npgsqlConnection = this.sessionProvider.GetSession().Connection as NpgsqlConnection;
+
+            using (var writer = npgsqlConnection.BeginBinaryImport("COPY  \"plainstore\".\"usertoimport\" (login, email, fullname, password, phonenumber, role, supervisor) " +
+                                                                   "FROM STDIN BINARY;"))
+            {
+                foreach (var userToImport in usersToImport.OrderBy(x => x.UserRole))
+                {
+                    writer.StartRow();
+                    writer.Write(userToImport.Login, NpgsqlDbType.Text);
+                    writer.Write(userToImport.Email, NpgsqlDbType.Text);
+                    writer.Write(userToImport.FullName, NpgsqlDbType.Text);
+                    writer.Write(userToImport.Password, NpgsqlDbType.Text);
+                    writer.Write(userToImport.PhoneNumber, NpgsqlDbType.Text);
+                    writer.Write(userToImport.Role, NpgsqlDbType.Text);
+                    writer.Write(userToImport.Supervisor, NpgsqlDbType.Text);
+                }
+            }
         }
 
         public UsersImportStatus GetImportStatus()
@@ -156,16 +190,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             };
         }
 
-        public void RemoveAllUsersToImport()
-        {
-            var allUsersToImport = this.importUsersRepository.Query(x => x.ToList());
-
-            this.importUsersRepository.Remove(allUsersToImport);
-
-            var usersImportProcess = this.importUsersProcessRepository.Query(x => x.FirstOrDefault());
-            if (usersImportProcess != null)
-                this.importUsersProcessRepository.Remove(usersImportProcess.Id);
-        }
+        public void RemoveAllUsersToImport() => this.sessionProvider.GetSession().Connection.Execute(
+            $"DELETE FROM {UserToImportTableName};" +
+            $"DELETE FROM {UsersImportProcessTableName};");
 
         public UserToImport GetUserToImport() => this.importUsersRepository.Query(x => x.FirstOrDefault());
 

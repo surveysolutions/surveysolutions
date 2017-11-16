@@ -120,31 +120,7 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>Fichier « {0} » contient les colonnes suivantes qui ne peuvent pas être reliées aux propriétés d'utilisateur existant : {1}</value>
   </data>
-  <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>Nombre maximum de d'erreurs de validation erreurs atteint: {0}</value>
-  </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value/>
-  </data>
-  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>Chargement des utilisateurs interrompu.  Le processus avec l'identifiant « {0} » n'a pas abouti parce que uniquement {1} comptes d'utilisateur sur {2} ont pu été crées</value>
-  </data>
-  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>Processus de chargement des utilisateurs « {0} » a le statut « {1} ». Impossible de supprimer un processus ayant le statut : {2}.</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>Processus de chargement des utiliateurs avec l’id '{0}" ne peut créer plus d'utilisateurs que {1}</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>Processus de chargement des utilisateurs avec l'identifiant « {0} » a {1} erreur(s).</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>Processus de chargemen des utilisateurs avec l'identifiant « {0} » est manquant</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>Processus de chargement des utilisateurs « {0} » a le statut « {1} », mais devrait avoir le statut : {2}.</value>
-  </data>
-  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>Progrès de validation, en pourcentage, ne peut être ni négatif ni supérieur à 100, mais sa valeur est de {0}</value>
   </data>
 </root>

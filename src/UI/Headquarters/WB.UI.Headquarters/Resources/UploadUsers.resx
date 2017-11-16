@@ -124,7 +124,7 @@
     <value>required for interviewers, contains username of supervisor to whom this person wil be assigned</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alernatively, you can create</value>
+    <value>Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alternatively, you can create</value>
   </data>
   <data name="Profile" xml:space="preserve">
     <value>profile manually</value>
@@ -193,7 +193,7 @@
     <value>Back to user import</value>
   </data>
   <data name="Uploading" xml:space="preserve">
-    <value>Uploading {{importedUsersCount}} of {{totalUsersToImportCount}}</value>
+    <value>Importing {{importedUsersCount}} of {{totalUsersToImportCount}}</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>

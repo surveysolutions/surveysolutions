@@ -123,31 +123,7 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>The file '{0}' contains the following columns that can't be mapped to any user property (e.g., full name, phone number, etc.) : {1}</value>
   </data>
-  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>User preloading process with id '{0}' can't be finished because only {1} created out of {2}</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>User preloading process with id '{0}'has {1} error(s).</value>
-  </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>Max allowed number of records is {0}</value>
-  </data>
-  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>Validation progress in percents can't be negative or greater than 100, but the value is {0}</value>
-  </data>
-  <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>Max number of validation errors {0} has been reached</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>User preloading process with id '{0}' can't create more users than {1}</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>User preloading process with id '{0}' is in state '{1}', but must be in state '{2}'</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>User preloading process with id '{0}' is missing</value>
-  </data>
-  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>User preloading process '{0}' is in state '{1}',it is not allowed to delete processes in states: {2}.</value>
   </data>
 </root>
