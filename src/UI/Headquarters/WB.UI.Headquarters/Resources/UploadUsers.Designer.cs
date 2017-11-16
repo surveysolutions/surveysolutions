@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alernatively, you can create.
+        ///   Looks up a localized string similar to Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alternatively, you can create.
         /// </summary>
         internal static string Description {
             get {
@@ -331,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uploading {{importedUsersCount}} of {{totalUsersToImportCount}}.
+        ///   Looks up a localized string similar to Importing {{importedUsersCount}} of {{totalUsersToImportCount}}.
         /// </summary>
         internal static string Uploading {
             get {

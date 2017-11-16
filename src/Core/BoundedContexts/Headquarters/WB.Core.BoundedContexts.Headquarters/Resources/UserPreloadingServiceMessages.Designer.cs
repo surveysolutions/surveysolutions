@@ -79,83 +79,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Max number of validation errors {0} has been reached.
-        /// </summary>
-        public static string MaxNumberOfValidationErrorsHaveBeenReachedFormat {
-            get {
-                return ResourceManager.GetString("MaxNumberOfValidationErrorsHaveBeenReachedFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Max allowed number of records is {0}.
         /// </summary>
         public static string TheDatasetMaxRecordNumberReachedFormat {
             get {
                 return ResourceManager.GetString("TheDatasetMaxRecordNumberReachedFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; can&apos;t be finished because only {1} created out of {2}.
-        /// </summary>
-        public static string userPreloadingProcessCantBeFinishedFormat {
-            get {
-                return ResourceManager.GetString("userPreloadingProcessCantBeFinishedFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User preloading process &apos;{0}&apos; is in state &apos;{1}&apos;,it is not allowed to delete processes in states: {2}..
-        /// </summary>
-        public static string UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat {
-            get {
-                return ResourceManager.GetString("UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; can&apos;t create more users than {1}.
-        /// </summary>
-        public static string UserPreloadingProcessWithIdCantCreateMoreUsersFormat {
-            get {
-                return ResourceManager.GetString("UserPreloadingProcessWithIdCantCreateMoreUsersFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos;has {1} error(s)..
-        /// </summary>
-        public static string UserPreloadingProcessWithIdHasErrorsFormat {
-            get {
-                return ResourceManager.GetString("UserPreloadingProcessWithIdHasErrorsFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; is missing.
-        /// </summary>
-        public static string UserPreloadingProcessWithIdIisMissingFormat {
-            get {
-                return ResourceManager.GetString("UserPreloadingProcessWithIdIisMissingFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to User preloading process with id &apos;{0}&apos; is in state &apos;{1}&apos;, but must be in state &apos;{2}&apos;.
-        /// </summary>
-        public static string UserPreloadingProcessWithIdInInvalidStateFormat {
-            get {
-                return ResourceManager.GetString("UserPreloadingProcessWithIdInInvalidStateFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Validation progress in percents can&apos;t be negative or greater than 100, but the value is {0}.
-        /// </summary>
-        public static string validationProgressInPercentsCantBeNegativeOrGreaterThen100Format {
-            get {
-                return ResourceManager.GetString("validationProgressInPercentsCantBeNegativeOrGreaterThen100Format", resourceCulture);
             }
         }
     }

@@ -120,31 +120,7 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>文件'{0}'中包含的以下列不能与现有任何用户的属性相匹配：{1}</value>
   </data>
-  <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>已经达到了验证错误数量的最大值{0}</value>
-  </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value/>
-  </data>
-  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>编号为'{0}'的用户预加载过程不能完成，因为只创建了{2}个中的{1}个</value>
-  </data>
-  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>用户预加载过程'{0}'正处于状态'{1}'，不允许删除正处于状态{2}的过程。</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>编号为'{0}'的用户预加载过程不能创建超过{1}的用户</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>编号为'{0}'的用户预加载过程有{1}个错误。</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>编号为'{0}'的用户预加载过程缺失</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>编号为'{0}'的用户预加载过程正处于状态'{1}'，但应该处于状态'{2}'</value>
-  </data>
-  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>以百分比计算的验证过程不能为负值或者超过100，但是数值为{0}</value>
   </data>
 </root>

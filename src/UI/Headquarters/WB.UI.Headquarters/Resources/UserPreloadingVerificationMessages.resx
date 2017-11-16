@@ -157,10 +157,10 @@
     <value>Phone number '{0}' is in wrong format</value>
   </data>
   <data name="PLU0014Description" xml:space="preserve">
-    <value>User name '{0}' has invalid characters</value>
+    <value>Full name '{0}' has invalid characters</value>
   </data>
   <data name="PLU0001" xml:space="preserve">
-    <value>Unique login</value>
+    <value>Login is not unique</value>
   </data>
   <data name="PLU0002" xml:space="preserve">
     <value>Duplicate</value>
@@ -199,13 +199,13 @@
     <value>Wrong length of phone number</value>
   </data>
   <data name="PLU0014" xml:space="preserve">
-    <value>Wrong user name format</value>
+    <value>Wrong full name format</value>
   </data>
   <data name="PLU0001Recomendation" xml:space="preserve">
-    <value>Login should be unique. Remove or rename user in file</value>
+    <value></value>
   </data>
   <data name="PLU0002Recomendation" xml:space="preserve">
-    <value>Remove duplicated users from file</value>
+    <value></value>
   </data>
   <data name="PLU0003Recomendation" xml:space="preserve">
     <value>Archived user cannot be re-used because it belongs to another team</value>

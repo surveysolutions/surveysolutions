@@ -120,31 +120,7 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>{0}' ფაილი შეიცავს ისეთ სვეტებს, რომლების დაკავშრიება მომხმარებლის მნიშვნელობებთან არ შეიძლება (მაგალითად, სახელი და გვარი, ტელეფონის ნომერი და ა.შ) : {1}</value>
   </data>
-  <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>ვალიდაციის შეცდომების მაქიმალური მნიშვნელობა {0} მიღწეულია</value>
-  </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value/>
-  </data>
-  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>მომხმარებლის მიერ ხელახლა ჩატვირთვის პროცესი id-ით '{0}' არ სრულდება, რადგან {2}-დან მხოლოდ {1} არის შექმნილი </value>
-  </data>
-  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>მომხმარებლის მიერ ხელახლა ჩატვირთვის პროცესი '{0}' არის '{1}' მდგომარეობაში, დაუშვებელია {2} მდგომარეობაში მყოფი პროცესების წაშლა</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>მომხმარებლის მიერ ხელახლა ჩატვირთვის პროცესს id-ით '{0}' არ შეუძლია შექმნას {1} რაოდენობაზე მეტი მომხმარებელი</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>მომხმარებლის მიერ ხელახლა ჩატვირთვის პროცესს id-ით '{0}' გააჩნია {1} შეცდომა(ები)</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>მომხმარებლის მიერ ხელახლა ჩატვირთვის პროცესს  id-ით '{0}' არ არსებობს</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>მომხმარებლის მიერ ხელახლა ჩატვირთვის პროცესს  id-ით '{0}' არის '{1}' მდგომარეობაში, მაგრამ უნდა იყოს '{2}' მდგომარეობაში</value>
-  </data>
-  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>ვალიდაციის მიმდინარეობის პროგრესი პროცენტებში არ შეიძლება, იყოს უარყოფითი ან 100-ზე მეტი, მაგრამ მნიშვნელობა არის {0}</value>
   </data>
 </root>

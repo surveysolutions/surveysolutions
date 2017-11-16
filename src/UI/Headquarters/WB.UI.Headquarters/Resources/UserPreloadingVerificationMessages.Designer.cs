@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unique login.
+        ///   Looks up a localized string similar to Login is not unique.
         /// </summary>
         public static string PLU0001 {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login should be unique. Remove or rename user in file.
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string PLU0001Recomendation {
             get {
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove duplicated users from file.
+        ///   Looks up a localized string similar to .
         /// </summary>
         public static string PLU0002Recomendation {
             get {
@@ -412,7 +412,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wrong user name format.
+        ///   Looks up a localized string similar to Wrong full name format.
         /// </summary>
         public static string PLU0014 {
             get {
@@ -421,7 +421,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User name &apos;{0}&apos; has invalid characters.
+        ///   Looks up a localized string similar to Full name &apos;{0}&apos; has invalid characters.
         /// </summary>
         public static string PLU0014Description {
             get {

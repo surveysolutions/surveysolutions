@@ -511,7 +511,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Some users already in queue to import. Please, wait until previous operation is completed.
+        ///   Looks up a localized string similar to Please, wait until previous import of users is completed.
         /// </summary>
         internal static string HasUsersToImport {
             get {
