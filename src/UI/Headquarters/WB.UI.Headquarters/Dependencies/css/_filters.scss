@@ -7,7 +7,8 @@
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
 	padding: 30px 5px 50px 5px;
-	margin-left: 12px;
+	//margin-left: 12px;
+	border-left: 12px solid $gray_form;
 	.input-group.date{
 		margin-left: 0 !important;
 	}
@@ -136,7 +137,7 @@
 	}
 	.fullscreen-hidden-filters{
 		.filters{
-			left: - $filter-width - 12px;
+			left: - $filter-width;
 			overflow: visible;
 			@include hidden-foldback-button();
 			.foldback-button{
@@ -150,16 +151,16 @@
 }
 @media (max-width: $screen-sm-min){
 	.filters{
-		left: ((-$filter-width)-12px);
+		left: ((-$filter-width));
 		@include hidden-foldback-button();
 		overflow: visible;
 	}
 	.fullscreen-hidden-filters{
 		.filters{
-			border: none;
+			//border: none;
 			margin-left: 0;
-			@include absolute(0px, 0, 0, 12px);
-			width: calc(100% - 12px);
+			@include absolute(0px, 0, 0, 0);
+			width: 100%;
 			overflow: auto;
 			height: auto;
 		   	@include visible-foldback-button();

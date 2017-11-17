@@ -55,48 +55,6 @@
 	left: 12px;
 	@include box-shadow(20px 10px 40px 0px rgba(0, 0, 0, 0.2));
 }
-.filters-results{
-	@include transition(all, 0.3s);
-	&.active{
-		left: $filter-width-details +12px;
-	}
-	left: -$content-width;
-	z-index: 5;
-	background-color: $gray-super-light;
-	border-right-color: darken($gray-super-light, 5%);
-	h2{
-		margin: 0;
-		padding: 30px 40px 25px 30px;
-		color: #000;
-	}
-	.breadcrumb{
-		a{
-			color: $blue;
-		}
-		padding: 10px 30px;
-		margin-bottom: 0;
-		
-	}
-	.close-btn{
-		@include absolute(5px, 0px);
-	}
-	.unit-section{
-		border-top: 2px solid $blue;
-		.question{
-			font: 14px/16px "RobotoRegular";
-			display: block;
-			color: $gray_text;
-			border: none;
-			padding: 12px 30px;
-			border-top: 1px solid #fff;
-			&:hover, &:focus, &.active, &:active{
-				background-color: $gray-highlighting;
-				text-decoration: none;
-			}
-		}
-	}
-}
-
 .complete-link{
 	display: block;
 	font: 16px/18px "RobotoMedium";
@@ -331,8 +289,11 @@
 		position: relative;
 		&:before{left: -25px;}
 	}
-	.instructions-wrapper .btn-link{
+	.btn-link{
 		font: 10px/12px "TrebuchetMSBold";
+	}
+	.block-with-data .btn-link{
+		padding-left: 0;
 	}
 	&.answered .question-unit{
 		.options-group{
@@ -546,7 +507,7 @@
 		max-height: 200px;
 	}
 }
-.qr-question, .current-time-question, .area-question {
+.qr-question, .current-time-question, .area-question{
 		&.answered, &.has-error{
 		.block-with-data{
 			font-size: 12px;
@@ -556,7 +517,6 @@
 		}
 	}
 }
-
 .img-single-select-question{
 	label{
 		overflow: hidden;

@@ -21,7 +21,7 @@
 		}
 		&.fullscreen-hidden-filters{
 			.filters{
-				left: - $filter-width-details - 12px;
+				left: - $filter-width-details;
 				overflow: visible;
 				box-shadow: none;
 				@include hidden-foldback-button();
@@ -47,21 +47,17 @@
 }
 .about-questionnaire{
 	font: 14px/16px "RobotoBold";
-	a{
-		font-weight: bold;
-	}
-	
 }
 .web-interview-for-supervisor,
 .web-interview-for-supervisor.fullscreen-hidden-content,
 .web-interview-for-supervisor.fullscreen-hidden-filters,
 .web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
 	.content{
-		left: $filter-width-details + 12px;
+		left: $filter-width-details;
 	}
 	.details-interview{
 		&.questionnaire{
-			@include width-questionnaire(($filter-width-details + $content-width));
+			@include width-questionnaire(($filter-width-details + $content-width - 12px));
 		}
 	}
 }
@@ -106,6 +102,47 @@
 		float: right;
 	}
 }
+.filters-results{
+	@include transition(all, 0.3s);
+	&.active{
+		left: $filter-width-details;
+	}
+	left: -$content-width;
+	z-index: 5;
+	background-color: $gray-super-light;
+	border-right-color: darken($gray-super-light, 5%);
+	h2{
+		margin: 0;
+		padding: 30px 40px 25px 30px;
+		color: #000;
+	}
+	.breadcrumb{
+		a{
+			color: $blue;
+		}
+		padding: 10px 30px;
+		margin-bottom: 0;
+		
+	}
+	.close-btn{
+		@include absolute(5px, 0px);
+	}
+	.unit-section{
+		border-top: 2px solid $blue;
+		.question{
+			font: 14px/16px "RobotoRegular";
+			display: block;
+			color: $gray_text;
+			border: none;
+			padding: 12px 30px;
+			border-top: 1px solid #fff;
+			&:hover, &:focus, &.active, &:active{
+				background-color: $gray-highlighting;
+				text-decoration: none;
+			}
+		}
+	}
+}
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
 		.filters{
@@ -121,7 +158,7 @@
 		.filters-results{
 			width: $content-width-small;
 			&.active{
-				left: $filter-width +12px;
+				left: $filter-width ;
 			}
 		}
 		.content{
@@ -133,7 +170,7 @@
 					width: $filter-width;
 				}
 				.filters{
-					left: - $filter-width - 12px;
+					left: - $filter-width;
 				}
 			}
 			
@@ -144,12 +181,12 @@
 	.web-interview-for-supervisor.fullscreen-hidden-filters,
 	.web-interview-for-supervisor.fullscreen-hidden-content.fullscreen-hidden-filters {
 		.content{
-			left: $filter-width + 12px;
+			left: $filter-width;
 			box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
 		}
 		.details-interview{
 			&.questionnaire{
-				@include width-questionnaire(($filter-width + $content-width-small));
+				@include width-questionnaire(($filter-width + $content-width-small - 12px));
 			}
 		}
 	}
@@ -158,7 +195,7 @@
 	.web-interview-for-supervisor{
 		.details-interview{
 			&.questionnaire{
-				@include width-questionnaire(($filter-width + $content-width-small));
+				@include width-questionnaire(($filter-width + $content-width-small - 12px));
 			}
 		}
 		.filters-results.active{
@@ -176,7 +213,7 @@
 	            }
 			}
 			.questionnaire.details-interview{
-				@include width-questionnaire($filter-width);
+				@include width-questionnaire($filter-width - 12px);
 			}
 			.filters{
 				overflow: auto;
@@ -185,27 +222,32 @@
 			&.filters-results-are-shown{
 				.details-interview{
 					&.questionnaire{
-						@include width-questionnaire($content-width-small + $filter-width);
+						@include width-questionnaire($content-width-small + $filter-width - 12px);
 					}
 				}
 			}
 		}
 		&.fullscreen-hidden-filters{
 			.filters{
-				left: - $filter-width - 12px;
+				left: - $filter-width;
 				overflow: visible;
+				box-shadow: none;
 				@include hidden-foldback-button();
 				 .foldback-button{
 	                right: - $width-foldback-button;
 	            }
 			}
 			&.filters-results-are-shown{
+				.filters-results.active{
+					left: 0;
+					border-left: 12px solid $gray_form;
+				}
 				.content{
-					left: $filter-width +12px;
+					left: $filter-width;
 				}
 				.details-interview{
 					&.questionnaire{
-						@include width-questionnaire($content-width-small + $filter-width);
+						@include width-questionnaire($content-width-small + $filter-width - 12px);
 					}
 				}
 			}
@@ -220,7 +262,7 @@
 		}
 		&.fullscreen-hidden-filters.fullscreen-hidden-content{
 			.filters{
-				left: - $filter-width - 12px;
+				left: - $filter-width;
 				box-shadow: none;
 			}
 			.content{
@@ -238,7 +280,7 @@
 			&.filters-results-are-shown{
 				.details-interview{
 					&.questionnaire{
-						@include width-questionnaire($filter-width);
+						@include width-questionnaire($filter-width - 12px);
 					}
 				}
 			}
@@ -256,7 +298,7 @@
 			overflow: visible;
 		}
 		.filters{
-			left: - $filter-width - 12px;
+			left: - $filter-width;
 			box-shadow: none;
 		}
 		.content{
@@ -298,7 +340,7 @@
 	            }
 			}
 			.questionnaire.details-interview{
-				@include width-questionnaire($filter-width);
+				@include width-questionnaire($filter-width - 12px);
 			}
 			.filters{
 				@include visible-foldback-button();
@@ -357,8 +399,8 @@
 				display: none;
 			}
 			.filters{
-				@include absolute(0, 0, 0, 12px);
-				width: calc(100% - 12px);
+				@include absolute(0, 0, 0, 0);
+				width: 100%;
 			}
 		}
 		&.show-filters{
