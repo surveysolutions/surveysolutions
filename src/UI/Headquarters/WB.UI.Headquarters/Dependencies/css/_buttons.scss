@@ -206,12 +206,12 @@ a.disabled{
 	&:hover, &:focus{
 		background-position: -57px 0;
 	}
-	&.flagged, &:active{
-    	background-position: 0 0;
-    	&:hover, &:focus{
-    		background-position: -19px 0;
-    	}
-	}
+	// &.flagged, &:active{
+    // 	background-position: 0 0;
+    // 	&:hover, &:focus{
+    // 		background-position: -19px 0;
+    // 	}
+	// }
 }
 .reject{
 	border-width: 3px;
@@ -269,8 +269,7 @@ a.disabled{
 }
 .btn-roster-section{
 	letter-spacing: normal;
-	font: 14px/16px Arial, sans-serif;
-	font-weight: bold;
+	font: 14px/16px "RobotoBold";
 	width: 100%;
 	text-transform: none;
 	padding: 11px 15px;
@@ -305,6 +304,13 @@ a.disabled{
 	}
 	&.btn-primary{
 		@include btn-back-questionnaire ($blue, "back-to-parrent-1-no-animation-1.png");
+	}
+	&.btn-success,
+	&.btn-primary,
+	&.btn-danger{
+		&.disabled{
+			@include btn-back-questionnaire (transparent, "back-to-parrent-1-no-animation-4.png");
+		}
 	}
 }
 .section-blocker{

@@ -45,9 +45,10 @@ namespace WB.UI.Designer
                     "~/Content/plugins/jquery.fancytree-all-deps.min.js",
                     "~/Content/plugins/jquery.fancytree.contextMenu.js",
                     "~/Content/plugins/jquery.contextMenu.min.js",
+                    "~/Content/plugins/bootbox.min.js",
                     "~/Scripts/custom/public-folders.js" }));
             bundles.Add(
-                new StyleBundle("~/Content/plugins/skin").Include( new [] {
+                new StyleBundle("~/Content/plugins/folders-skin").Include( new [] {
                     "~/Content/plugins/ui.fancytree.min.css",
                     "~/Content/plugins/jquery.contextMenu.min.css"
                 }));

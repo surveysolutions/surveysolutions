@@ -24,7 +24,7 @@
     @Scripts.Render("~/js/common")
 
     <script type="text/javascript">
-        var $interviewsPageUrl = '@Html.Raw(@Url.Action("Interviews", "HQ", new {area = ""}, Request.Url.Scheme))';
+        var $interviewsPageUrl = '@Url.Action("Interviews", "HQ")';
         var $detailsUrl = '@Url.Action("Review", "Interview")';
         var $surveysUrl = '@Url.Action("SurveysAndStatuses", "Reports")';
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
@@ -280,7 +280,8 @@
                                                 <span data-bind="text: ResponsibleName"></span>
                                                 <!-- /ko -->
                                             </td>
-                                            <td class="date last-update" data-bind="text: LastEntryDate"></td>
+                                            <td class="date last-update" data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)">
+                                            </td>
                                             <td class="errors">
                                                 <!-- ko if:HasErrors -->
                                                 @Common.Yes
@@ -320,7 +321,7 @@
                             </div>
                             <ul class="list-unstyled">
                                 <li>@Common.НasErrors:  <span data-bind="text: HasErrors() ? '@Common.Yes' : '@Common.No'"></span></li>
-                                <li>@Common.LastUpdate: <span data-bind="text: LastEntryDate"></span></li>
+                                <li>@Common.LastUpdate: <span data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)"></span></li>
                                 <li>@Common.ReceivedByInterviewer: <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Common.Responsible: <a class="interviewer" data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a></li>
                             </ul>

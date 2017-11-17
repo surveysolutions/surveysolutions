@@ -301,4 +301,16 @@
     <value>Создать подпапку</value>
     <comment>Создать подпапку</comment>
   </data>
+  <data name="Location" xml:space="preserve">
+    <value>Расположение:  </value>
+    <comment>Расположение:</comment>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>Новая папка</value>
+    <comment>Новая папка</comment>
+  </data>
+  <data name="DeleteFolderConfirmation" xml:space="preserve">
+    <value>Вы точно хотите удалить папку {0} ?</value>
+    <comment>Вы точно хотите удалить папку {0} ?</comment>
+  </data>
 </root>

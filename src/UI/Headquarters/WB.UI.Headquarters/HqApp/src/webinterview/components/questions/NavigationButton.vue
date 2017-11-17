@@ -19,8 +19,8 @@
             css() {
                 return [{
                     'btn-success': this.$me.status == GroupStatus.Completed,
-                    'btn-danger': this.$me.status == GroupStatus.Invalid,
-                    'btn-primary': this.$me.status == GroupStatus.Other,
+                    'btn-danger': this.$me.validity.isValid == false,
+                    'btn-primary': this.$me.status == GroupStatus.NotStarted || this.$me.status == GroupStatus.Started, 
                     'btn-back': this.isParentButton
                 }]
             },
@@ -48,11 +48,13 @@
                 return title;
             }
         },
+
         watch: {
             ["$route.params.sectionId"]() {
                 this.fetch();
             }
         },
+
         methods: {
             navigate() {
                 if (this.$me.type == ButtonType.Complete) {

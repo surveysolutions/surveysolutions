@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public UserRoles ResponsibleRole { get; set; }
         public bool HasErrors { get; set; }
         public string Status { get; set; }
-        public string LastEntryDate { get; set; }
+        public DateTime LastEntryDateUtc { get; set; }
         public int? AssignmentId { get; set; }
 
     }

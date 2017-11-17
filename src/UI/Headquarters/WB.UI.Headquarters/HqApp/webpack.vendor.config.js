@@ -25,7 +25,7 @@ module.exports = merge(shared(packageName, devMode), {
             "signalr",
             "smoothscroll-polyfill",
             "toastr",
-            "vue-i18n",
+            "i18next",
             "vue-router",
             "vue",
             "vuex-router-sync",

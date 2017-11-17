@@ -123,15 +123,15 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
         int CountActiveAnsweredQuestionsInInterview();
-
         int CountActiveQuestionsInInterview();
-
         int CountInvalidEntitiesInInterview();
 
+        int CountActiveAnsweredQuestionsInInterviewForSupervisor();
+        int CountActiveQuestionsInInterviewForSupervisor();
+        int CountInvalidEntitiesInInterviewForSupervisor();
+
         int CountAllEnabledQuestions();
-
         int CountAllEnabledAnsweredQuestions();
-
         int CountAllInvalidEntities();
 
 
@@ -192,5 +192,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewKey GetInterviewKey();
 
         int? GetAssignmentId();
+        bool IsParentOf(Identity parentIdentity, Identity childIdentity);
     }
 }

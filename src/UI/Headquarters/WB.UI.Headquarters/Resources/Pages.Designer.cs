@@ -2068,11 +2068,65 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Imported on.
+        /// </summary>
+        public static string MapDetails_ImportedOn {
+            get {
+                return ResourceManager.GetString("MapDetails_ImportedOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewer name.
         /// </summary>
         public static string MapDetails_InterviewerName {
             get {
                 return ResourceManager.GetString("MapDetails_InterviewerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This preview shows the loaded map supperimposed on the world map.
+        /// </summary>
+        public static string MapDetails_MapDisclaimer {
+            get {
+                return ResourceManager.GetString("MapDetails_MapDisclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map.
+        /// </summary>
+        public static string MapDetails_MapTitle {
+            get {
+                return ResourceManager.GetString("MapDetails_MapTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Scale.
+        /// </summary>
+        public static string MapDetails_MaxScale {
+            get {
+                return ResourceManager.GetString("MapDetails_MaxScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min Scale.
+        /// </summary>
+        public static string MapDetails_MinScale {
+            get {
+                return ResourceManager.GetString("MapDetails_MinScale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size.
+        /// </summary>
+        public static string MapDetails_Size {
+            get {
+                return ResourceManager.GetString("MapDetails_Size", resourceCulture);
             }
         }
         

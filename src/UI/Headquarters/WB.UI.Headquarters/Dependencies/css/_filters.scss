@@ -46,22 +46,9 @@
 	h2{
 		margin-bottom: 10px;
 	}
-	.about-questionnaire{
-		font-size: 14px;
-		line-height: 16px;
-		li{
-			padding-bottom: 3px;
-			b a{
-				font-weight: bold;
-			}
-		}
-	}
 	color: $gray_text;
 	padding: 0 15px 20px 15px; 
 	@extend %filter-indent;
-}
-.filter-actions-block{
-	margin-bottom: 10px;
 }
 .block-filter{
 	h5{
@@ -171,8 +158,8 @@
 		.filters{
 			border: none;
 			margin-left: 0;
-			@include absolute(0px, 0, 0, 0);
-			width: 100%;
+			@include absolute(0px, 0, 0, 12px);
+			width: calc(100% - 12px);
 			overflow: auto;
 			height: auto;
 		   	@include visible-foldback-button();

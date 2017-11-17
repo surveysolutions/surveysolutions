@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Area_ShowCoordinates" xml:space="preserve">
+    <value>Показать координаты</value>
+  </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>Ответственный не назначен. Выберите интервьюера</value>
   </data>
@@ -129,8 +132,20 @@
   <data name="LastUpdated" xml:space="preserve">
     <value>Обновлено {{ date }}</value>
   </data>
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>Ничего не найдено</value>
+  </data>
   <data name="Responsible" xml:space="preserve">
     <value>Ответственный</value>
+  </data>
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>{{ count }} объект найден:</value>
+  </data>
+  <data name="SearchResult_Count_1" xml:space="preserve">
+    <value>{{ count }} объекта найдено:</value>
+  </data>
+  <data name="SearchResult_Count_2" xml:space="preserve">
+    <value>{{ count }} объектов найдено:</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Статус: {{ name }}</value>

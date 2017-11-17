@@ -213,12 +213,12 @@ export default {
                     responsivePriority: 4
                 },
                 {
-                    data: "lastEntryDate",
+                    data: "lastEntryDateUtc",
                     name: "UpdateDate",
                     title: this.$t("Assignments.UpdatedAt"),
                     searchable: false,
                     render(data){
-                        return moment(data).format(DateFormats.dateTimeInList);
+                        return moment.utc(data).local().format(DateFormats.dateTimeInList);
                     }
                 }
             ]

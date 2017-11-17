@@ -699,4 +699,20 @@
   <data name="MenuItem_Title_Maps" xml:space="preserve">
     <value>Карты</value>
   </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Проверка карт на сервере</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Синхронизация карт успешно завершена</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Ошибка синхронизации карт</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Обработка карты {0}, {1} из {2}. 
+ Скачано {3}%</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Карты успешно обновлены</value>
+  </data>
 </root>

@@ -10,6 +10,7 @@
                 </section>
             </div>
         </div>
+        <IdleTimeoutService />
     </main>
 </template>
 

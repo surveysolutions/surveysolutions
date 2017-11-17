@@ -21,6 +21,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         Unsupported,
         NavigationButton,
         LinkedMulti,
-        Audio
+        Audio,
+        Area
     }
 }

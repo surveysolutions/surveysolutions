@@ -26,7 +26,6 @@ const i18n = Vuei18n.initialize(browserLanguage)
 
 Vue.use(config);
 Vue.use(http);
-Vue.use(Vuei18n);
 
 const viewsProvider = require("./views").default;
 const Router = require('./router').default;
@@ -44,6 +43,5 @@ export default new Vue({
     el: "#vueApp",
     render: h => h('router-view'),
     store,
-    router,
-    i18n
+    router
 });

@@ -237,6 +237,7 @@ namespace WB.UI.Designer.Controllers
 
             var model = new QuestionnaireListModel()
             {
+                IsSupportAssignFolders = UserHelper.WebUser.IsAdmin,
                 CurrentFolderId = id,
                 Breadcrumbs = breadcrumbs,
                 Questionnaires = questionnaires
@@ -359,9 +360,15 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        private CsvConfiguration CreateCsvConfiguration()
+        private Configuration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = false, TrimFields = true, IgnoreQuotes = false, Delimiter = "\t" };
+            return new Configuration
+            {
+                HasHeaderRecord = false,
+                TrimOptions = TrimOptions.Trim,
+                IgnoreQuotes = false,
+                Delimiter = "\t",
+            };
         }
 
         public JsonResult ApplyOptions()

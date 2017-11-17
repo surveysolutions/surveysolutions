@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -34,20 +35,45 @@ namespace WB.UI.Designer.Code
                 FolderId = folderId
             });
 
+            var locations = showPublic ? GetLocations(model.Items) : new Dictionary<Guid, string>();
+
             return model.Items.Select(x =>
                 {
                     if (x is QuestionnaireListViewItem item)
-                        return this.GetQuestionnaire(item, viewerId, isAdmin, showPublic);
+                    {
+                        var questLocation = item.Folder != null && locations.ContainsKey(item.Folder.PublicId) 
+                                            ? locations[item.Folder.PublicId] 
+                                            : null;
+                        return this.GetQuestionnaire(item, viewerId, isAdmin, showPublic, questLocation);
+                    }
 
-                    return this.GetFolder((QuestionnaireListViewFolder)x, showPublic);
+                    var folderLocation = locations.ContainsKey(x.PublicId) ? locations[x.PublicId] : null;
+                    return this.GetFolder((QuestionnaireListViewFolder)x, showPublic, folderLocation);
                 })
                 .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
+        }
+
+        private Dictionary<Guid, string> GetLocations(IEnumerable<IQuestionnaireListItem> modelItems)
+        {
+            HashSet<QuestionnaireListViewFolder> folders = new HashSet<QuestionnaireListViewFolder>();
+
+            foreach (var modelItem in modelItems)
+            {
+                if (modelItem is QuestionnaireListViewItem item && item.Folder != null)
+                    folders.Add(item.Folder);
+                if (modelItem is QuestionnaireListViewFolder folder)
+                    folders.Add(folder);
+            }
+
+            var locations = viewFactory.LoadFoldersLocation(folders);
+
+            return locations.ToDictionary(k => k.PublicId, v => v.Location);
         }
 
         public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByViewerId(Guid viewerId, bool isAdmin, Guid? folderId = null) 
             => this.GetQuestionnaires(viewerId: viewerId, isAdmin: isAdmin, showPublic: false, folderId: folderId);
 
-        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin, bool showPublic)
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x, Guid viewerId, bool isAdmin, bool showPublic, string location)
             => new QuestionnaireListViewModel
             {
                 Id = x.PublicId.FormatGuid(),
@@ -63,12 +89,15 @@ namespace WB.UI.Designer.Code
                 CanOpen = (showPublic || x.CreatedBy == viewerId || x.SharedPersons.Any(s => s.UserId == viewerId)) && !x.IsDeleted,
                 CanSynchronize = isAdmin,
                 CanExportToPdf = true,
+                Location = location != null
+                           ? x.Title + "\r\n" + @QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location
+                           : null,
                 Owner = x.CreatedBy == null
                     ? GlobalHelper.EmptyString
                     : (x.CreatedBy == viewerId ? QuestionnaireController.You : x.CreatorName)
             };
 
-        private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic)
+        private QuestionnaireListViewModel GetFolder(QuestionnaireListViewFolder x, bool showPublic, string location)
             => new QuestionnaireListViewModel
             {
                 Id = x.PublicId.FormatGuid(),
@@ -84,6 +113,7 @@ namespace WB.UI.Designer.Code
                 CanEdit = false,
                 CanSynchronize = false,
                 CanExportToPdf = false,
+                Location = location != null ? QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location : null,
                 Owner = GlobalHelper.EmptyString
             };
     }

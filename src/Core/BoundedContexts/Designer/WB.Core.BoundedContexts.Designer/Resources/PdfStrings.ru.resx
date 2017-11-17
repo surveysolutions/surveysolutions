@@ -268,7 +268,7 @@
     <value>Вопросов со включающим условием: {0}</value>
   </data>
   <data name="Stat_QuestionsWithValidation" xml:space="preserve">
-    <value>Вопсросов с проверяющим условием: {0}</value>
+    <value>Вопросов с проверяющим условием: {0}</value>
   </data>
   <data name="Stat_Rosters" xml:space="preserve">
     <value>Ростеров: {0}</value>

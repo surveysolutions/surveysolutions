@@ -12,11 +12,13 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
@@ -31,6 +33,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ICaptchaService captchaService;
         private readonly HqSignInManager signInManager;
         private readonly IAuthenticationManager authenticationManager;
+        private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
 
         public AccountController(
             ICommandService commandService,
@@ -40,13 +43,14 @@ namespace WB.UI.Headquarters.Controllers
             ICaptchaService captchaService,
             HqUserManager userManager,
             HqSignInManager signInManager,
-            IAuthenticationManager authenticationManager)
+            IAuthenticationManager authenticationManager, IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
             : base(commandService, logger, authorizedUser, userManager)
         {
             this.captchaProvider = captchaProvider;
             this.captchaService = captchaService;
             this.signInManager = signInManager;
             this.authenticationManager = authenticationManager;
+            this.appSettingsStorage = appSettingsStorage;
         }
 
         [HttpGet]
@@ -82,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             return this.View(new LogOnModel
             {
@@ -94,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
 
             if (model.RequireCaptcha && !this.captchaProvider.IsCaptchaValid(this))

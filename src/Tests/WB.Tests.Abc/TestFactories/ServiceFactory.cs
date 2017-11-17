@@ -403,7 +403,7 @@ namespace WB.Tests.Abc.TestFactories
             return new SynchronizationProcess(
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
-                interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
@@ -525,14 +525,6 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewStatusTimeSpanDenormalizer();
         }
 
-        public InterviewsErrorsReader InterviewsErrorsReader(IEnumerable<ExportedError> errors)
-        {
-            var resultList = new List<ExportedError>(errors);
-            var errorsReader = Mock.Of<InterviewsErrorsReader>(x =>
-                x.GetErrors(It.IsAny<List<Guid>>()) == resultList);
-            return errorsReader;
-        }
-
         public ICsvWriter CsvWriter(List<CsvData> writeTo)
         {
             var csvWriterMock = new Mock<ICsvWriter>();
@@ -575,6 +567,17 @@ namespace WB.Tests.Abc.TestFactories
             return Mock.Of<ICsvReader>(
                 x => x.ReadAll<T>(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<bool>()) == rows &&
                      x.ReadHeader(It.IsAny<Stream>(), It.IsAny<string>()) == headers);
+        }
+        public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
+            IDeviceSyncInfoRepository deviceSyncInfoRepository = null, 
+            IInterviewerVersionReader interviewerVersionReader = null)
+        {
+            return new InterviewerProfileFactory(
+                userManager ?? Mock.Of<HqUserManager>(),
+                interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(), 
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>());
         }
     }
 }

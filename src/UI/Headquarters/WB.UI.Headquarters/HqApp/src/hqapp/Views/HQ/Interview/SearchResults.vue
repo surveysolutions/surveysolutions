@@ -5,8 +5,14 @@
                 <span class="cancel"></span>
             </button>
             
-            <h2>{{ $t("WebInterview.SearchResult_Count", { count: searchResult.count })}}:</h2>
+            <h2 v-if="searchResult.count > 0">
+                {{ $t("Details.SearchResult_Count", { count: searchResult.count })}}
+            </h2>
+            <h2 v-else>
+                {{ $t("Details.NoSearchResults")}}
+            </h2>
             
+
             <search-section-result 
                 v-for="search in searchResult.results"
                 :key="search.sectionId"

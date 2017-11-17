@@ -20,6 +20,7 @@ Vue.component("QRBarcode",          () => import(/* webpackChunkName: "questions
 Vue.component("StaticText",         () => import(/* webpackChunkName: "questions" */"./StaticText"))
 Vue.component("TextList",           () => import(/* webpackChunkName: "questions" */"./TextList"))
 Vue.component("TextQuestion",       () => import(/* webpackChunkName: "questions" */"./TextQuestion"))
+Vue.component("Area",               () => import(/* webpackChunkName: "questions" */"./Area"))
 Vue.component("Unsupported",        () => import(/* webpackChunkName: "questions" */"./Unsupported"))
 
 Vue.component("wb-question",        () => import( /* webpackChunkName: "questions" */ "./Question"))
@@ -27,10 +28,10 @@ Vue.component("wb-humburger",       () => import( /* webpackChunkName: "question
 Vue.component("wb-typeahead",       () => import( /* webpackChunkName: "questions" */ "./ui/typeahead"))
 
 export const GroupStatus = {
-
-    Completed: 1,
-    Invalid: -1,
-    Other: 0
+    NotStarted: 1,
+    Started: 2,
+    Completed: 3,
+    Invalid: 4
 }
 
 export const ButtonType = {

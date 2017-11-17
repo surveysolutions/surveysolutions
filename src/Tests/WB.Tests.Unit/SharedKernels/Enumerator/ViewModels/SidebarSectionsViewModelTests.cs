@@ -1,19 +1,180 @@
-﻿using System;
-using System.Linq;
-using Main.Core.Entities.Composite;
+﻿using Main.Core.Entities.Composite;
+using Moq;
 using MvvmCross.Core.Views;
 using MvvmCross.Platform.Core;
 using MvvmCross.Test.Core;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 {
     [TestOf(typeof(SideBarSectionsViewModel))]
-    public class SidebarSectionsViewModelTests: MvxIoCSupportingTest
+    public class SidebarSectionsViewModelTests : MvxIoCSupportingTest
     {
+        private static readonly QuestionnaireDocument QuestionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+        {
+            Create.Entity.Group(Id.g1, children: new IComposite[]
+            {
+                Create.Entity.FixedRoster(Id.g4, variable: "r1", fixedTitles: Create.Entity.FixedTitles(1, 2), children: new IComposite[]
+                {
+                    Create.Entity.FixedRoster(Id.g5, variable: "r2", fixedTitles: Create.Entity.FixedTitles(3, 4), children: new IComposite[]
+                    {
+                        Create.Entity.FixedRoster(Id.g6, variable: "r3", fixedTitles: Create.Entity.FixedTitles(5, 6), children: new IComposite[]
+                        {
+
+                        })
+                    })
+                })
+            }),
+            Create.Entity.Group(Id.g2),
+            Create.Entity.Group(Id.g3)
+        });
+
+
+        [Test]
+        public void When_getting_sections_after_closing_section_for_interview_with_nested_rosters_and_nested_roster_open()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+
+            //arrange
+            var questionnaire = QuestionnaireDocument;
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.Setup.StatefulInterview(questionnaire);
+
+            var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
+            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g5, Create.RosterVector(1, 3))));
+            //-Id.Identity1,
+            // +-- Create.Identity(Id.g4, 1),
+            // |   +-- Create.Identity(Id.g5, 3),
+            // |   |   +-- Create.Identity(Id.g5, 5),
+            // |   |   +-- Create.Identity(Id.g5, 6),
+            // |   +--  Create.Identity(Id.g5, 4),
+            // +-- Create.Identity(Id.g4, 2),
+            //-Id.Identity2,
+            //-Id.Identity3
+            SideBarSectionsViewModel viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
+
+            //act
+            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections(new ToggleSectionEventArgs
+            {
+                ToggledSection = Id.Identity1, 
+                IsExpandedNow = false
+            }).ToArray();
+
+            //assert
+
+            //-Id.Identity1,
+            //-Id.Identity2,
+            //-Id.Identity3
+            Assert.That(resust, Is.EquivalentTo(new[]
+            {
+                Id.Identity1,
+                Id.Identity2,
+                Id.Identity3
+            }));
+        }
+
+        [Test]
+        public void When_getting_sections_for_interview_with_fisrt_section_open()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+
+            //arrange
+            var questionnaire = QuestionnaireDocument;
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.Setup.StatefulInterview(questionnaire);
+
+            var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
+            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Id.Identity1));
+
+            var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
+
+            //act
+            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections().ToArray();
+
+            //assert
+            //-Id.Identity1,
+            // +-- Create.Identity(Id.g4, 1),
+            // +-- Create.Identity(Id.g4, 2),
+            //-Id.Identity2,
+            //-Id.Identity3
+            Assert.That(resust, Is.EquivalentTo(new[]
+            {
+                Id.Identity1,
+                Create.Identity(Id.g4, 1),
+                Create.Identity(Id.g4, 2),
+                Id.Identity2,
+                Id.Identity3
+            }));
+        }
+
+        [Test]
+        public void When_getting_sections_for_interview_with_nested_rosters_and_deepest_roster_is_open()
+        {
+            base.Setup();
+
+            var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
+            Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+
+            //arrange
+            var questionnaire = QuestionnaireDocument;
+
+            var eventRegistry = Create.Service.LiteEventRegistry();
+
+            var interview = Abc.Setup.StatefulInterview(questionnaire);
+
+            var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
+            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g6, Create.RosterVector(1, 3, 5))));
+
+            var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
+
+            //act
+            IEnumerable<Identity> resust = viewModel.GetSectionsAndExpandedSubSections().ToArray();
+
+            //assert
+            //-Id.Identity1,
+            // +-- Create.Identity(Id.g4, 1),
+            // |   +-- Create.Identity(Id.g5, 1, 3),
+            // |   |   +-- Create.Identity(Id.g5, 1, 3, 5),
+            // |   |   +-- Create.Identity(Id.g5, 1, 3, 6),
+            // |   +--  Create.Identity(Id.g5, 1, 4),
+            // +-- Create.Identity(Id.g4, 2),
+            //-Id.Identity2,
+            //-Id.Identity3
+            Assert.That(resust, Is.EquivalentTo(new[]
+            {
+                Id.Identity1,
+                Create.Identity(Id.g4, 1),
+                Create.Identity(Id.g5, 1, 3),
+                Create.Identity(Id.g6, 1, 3, 5),
+                Create.Identity(Id.g6, 1, 3, 6),
+                Create.Identity(Id.g5, 1, 4),
+                Create.Identity(Id.g4, 2),
+                Id.Identity2,
+                Id.Identity3
+            }));
+        }
+
         [Test]
         public void When_section_enabled_Then_new_view_model_should_be_added_with_specified_index()
         {

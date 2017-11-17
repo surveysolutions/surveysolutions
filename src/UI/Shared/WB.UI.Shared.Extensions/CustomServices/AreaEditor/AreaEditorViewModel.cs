@@ -48,36 +48,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public override void Load()
         {
-            var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
-                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
-                : AndroidPathUtils.GetPathToExternalDirectory();
-
-            string mapFolderPath = this.fileSystemAccessor.CombinePath(basePath, "maps");
-            string mapPath = this.fileSystemAccessor.CombinePath(mapFolderPath, "worldmap(default).tpk");
-
-            if (!this.fileSystemAccessor.IsFileExists(mapPath))
-            {
-                if(!this.fileSystemAccessor.IsDirectoryExists(mapFolderPath))
-                    this.fileSystemAccessor.CreateDirectory(mapFolderPath);
-
-                using (var br = new BinaryReader(Application.Context.Assets.Open("worldmap(default).tpk")))
-                {
-                    using (var bw = new BinaryWriter(new FileStream(mapPath, FileMode.Create)))
-                    {
-                        byte[] buffer = new byte[2048];
-                        int length = 0;
-                        while ((length = br.Read(buffer, 0, buffer.Length)) > 0)
-                        {
-                            bw.Write(buffer, 0, length);
-                        }
-                    }
-                }
-            }
-
-            var defaultMap = new MapDescription() { MapName = "Worldmap[default]", MapFullPath = mapPath };
-
             var localmaps = this.mapService.GetAvailableMaps();
-            localmaps.Add(defaultMap);
+            localmaps.Add(this.mapService.PrepareAndGetDefaultMap());
             
 
             this.AvailableMaps = new MvxObservableCollection<MapDescription>(localmaps);

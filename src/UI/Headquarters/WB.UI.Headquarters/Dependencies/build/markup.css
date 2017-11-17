@@ -5840,7 +5840,8 @@ button.close {
   text-transform: uppercase; }
 
 .filters {
-  height: 100%;
+  height: auto;
+  overflow: auto;
   top: 0;
   left: 0;
   bottom: 0;
@@ -6193,10 +6194,6 @@ a.disabled {
       background-size: 75px 22px; } }
   .button-flag:hover, .flag:hover:before, .button-flag:focus, .flag:focus:before {
     background-position: -57px 0; }
-  .button-flag.flagged, .flagged.flag:before, .button-flag:active, .flag:active:before {
-    background-position: 0 0; }
-    .button-flag.flagged:hover, .flagged.flag:hover:before, .button-flag.flagged:focus, .flagged.flag:focus:before, .button-flag:active:hover, .flag:active:hover:before, .button-flag:active:focus, .flag:active:focus:before {
-      background-position: -19px 0; }
 
 .reject {
   border-width: 3px;
@@ -6306,8 +6303,7 @@ a.disabled {
 
 .btn-roster-section {
   letter-spacing: normal;
-  font: 14px/16px Arial, sans-serif;
-  font-weight: bold;
+  font: 14px/16px "RobotoBold";
   width: 100%;
   text-transform: none;
   padding: 11px 15px;
@@ -6375,6 +6371,20 @@ a.disabled {
       background-color: #cce2f5;
       color: #2a81cb;
       border-color: #2166a1; }
+  .btn-back.btn-success.disabled, .btn-back.btn-primary.disabled, .btn-back.btn-danger.disabled {
+    color: transparent;
+    border-color: transparent; }
+    .btn-back.btn-success.disabled:before, .btn-back.btn-primary.disabled:before, .btn-back.btn-danger.disabled:before {
+      background: url("../img/back-to-parrent-1-no-animation-4.png") no-repeat;
+      background-size: 22.5px 33.75px; }
+    .btn-back.btn-success.disabled:active:focus, .btn-back.btn-primary.disabled:active:focus, .btn-back.btn-danger.disabled:active:focus {
+      background-color: rgba(102, 102, 102, 0);
+      color: transparent;
+      border-color: transparent; }
+    .btn-back.btn-success.disabled:hover, .btn-back.btn-success.disabled:focus, .btn-back.btn-primary.disabled:hover, .btn-back.btn-primary.disabled:focus, .btn-back.btn-danger.disabled:hover, .btn-back.btn-danger.disabled:focus {
+      background-color: rgba(102, 102, 102, 0);
+      color: transparent;
+      border-color: transparent; }
 
 .section-blocker {
   border: none;
@@ -7587,7 +7597,7 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
   right: 10px;
   z-index: 1; }
   .aside-menu button {
-    display: block;
+    display: inline-block;
     position: relative;
     text-align: center;
     width: 40px;
@@ -7597,6 +7607,7 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
       .aside-menu button:focus span:before, .aside-menu button:focus span:after, .aside-menu button:hover span:before, .aside-menu button:hover span:after, .aside-menu button:active span:before, .aside-menu button:active span:after, .aside-menu button:active:focus span:before, .aside-menu button:active:focus span:after {
         background-color: #bfc6cb; }
     .aside-menu button span {
+      vertical-align: middle;
       display: inline-block;
       width: 5px;
       height: 5px;
@@ -7713,16 +7724,6 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
   padding: 0 15px 20px 15px; }
   .filters-container h2 {
     margin-bottom: 10px; }
-  .filters-container .about-questionnaire {
-    font-size: 14px;
-    line-height: 16px; }
-    .filters-container .about-questionnaire li {
-      padding-bottom: 3px; }
-      .filters-container .about-questionnaire li b a {
-        font-weight: bold; }
-
-.filter-actions-block {
-  margin-bottom: 10px; }
 
 .block-filter {
   margin-bottom: 15px; }
@@ -7847,8 +7848,8 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
     top: 0px;
     right: 0;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 12px;
+    width: calc(100% - 12px);
     overflow: auto;
     height: auto; }
     .fullscreen-hidden-filters .filters .foldback-button {
@@ -8806,11 +8807,8 @@ h4 {
   margin-bottom: 20px; }
 
 h5, .preset-filters-container a, .preset-filters-container .export-queue {
-  font-size: 14px;
-  line-height: 16px;
-  font-family: inherit;
   margin-bottom: 10px;
-  font-weight: bold; }
+  font: 14px/16px "RobotoBold"; }
 
 .hold-transition * {
   -webkit-transition: none !important;

@@ -188,12 +188,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             {
                 var rows = new List<LookupTableRow>();
 
-                if (!csvReader.Read())
+                if (!csvReader.Read() | !csvReader.ReadHeader() | !csvReader.Read()) // | - because we need excute all Reads
                 {
                     throw new ArgumentException(ExceptionMessages.LookupTables_cant_has_empty_content);
                 }
 
-                var fieldHeaders = csvReader.FieldHeaders.Select(x => x.Trim()).ToArray();
+                var fieldHeaders = csvReader.Context.HeaderRecord.Select(x => x.Trim()).ToArray();
 
                 var amountOfHeaders = fieldHeaders.Length;
 
@@ -224,7 +224,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                 {
                     var variables = new List<decimal?>();
                     var row = new LookupTableRow();
-                    var record = csvReader.CurrentRecord;
+                    var record = csvReader.Context.Record;
 
                     for (int i = 0; i < amountOfHeaders; i++)
                     {
@@ -249,7 +249,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                         }
                         else
                         {
-                            if (string.IsNullOrWhiteSpace(record[i]))
+                            if (i >= record.Length || string.IsNullOrWhiteSpace(record[i]))
                             {
                                 variables.Add(null);
                             }
@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
                     {
                         throw new ArgumentException(string.Format(ExceptionMessages.LookupTables_too_many_rows, MAX_ROWS_COUNT));
                     }
-                }while (csvReader.Read());
+                } while (csvReader.Read());
 
                 var countOfDistinctRowcodeValues = rows.Select(x => x.RowCode).Distinct().Count();
 
@@ -297,9 +297,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             return !VariableNameRegex.IsMatch(variableName);
         }
 
-        private CsvConfiguration CreateCsvConfiguration()
+        private Configuration CreateCsvConfiguration()
         {
-            return new CsvConfiguration { HasHeaderRecord = true, TrimFields = true, IgnoreQuotes = false, Delimiter = DELIMETER, WillThrowOnMissingField = false};
+            return new Configuration { HasHeaderRecord = true, TrimOptions = TrimOptions.Trim, IgnoreQuotes = false, Delimiter = DELIMETER, MissingFieldFound = null };
         }
     }
 }

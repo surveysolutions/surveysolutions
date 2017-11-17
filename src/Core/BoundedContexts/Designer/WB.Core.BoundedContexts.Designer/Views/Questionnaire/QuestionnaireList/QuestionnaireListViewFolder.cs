@@ -13,14 +13,30 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public virtual DateTime CreateDate { get; set; }
 
+        public virtual string CreatorName { get; set; }
+
         public virtual Guid CreatedBy { get; set; }
 
         public virtual int Depth { get; set; }
 
         public virtual string Path { get; set; }
 
-        public virtual ISet<QuestionnaireListViewFolder> SubFolders { get; set; }
+        protected bool Equals(QuestionnaireListViewFolder other)
+        {
+            return PublicId.Equals(other.PublicId);
+        }
 
-        public virtual ISet<QuestionnaireListViewFolder> Questionnaires { get; set; }
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((QuestionnaireListViewFolder) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return PublicId.GetHashCode();
+        }
     }
 }
