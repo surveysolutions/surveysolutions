@@ -478,6 +478,7 @@
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_have_mixed_answeres_across_groups_questions.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\FilterTestCase.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\StatefullInterviewSearchTests.cs" />
+    <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\when_interview_has_prefilled_readonly_question.cs" />
     <Compile Include="Applications\Shared\Web\Captcha\WebCachedCaptchaServiceTests.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
     <Compile Include="BoundedContexts\Headquarters\Assignments\AssignmentsApiControllerTests.cs" />
