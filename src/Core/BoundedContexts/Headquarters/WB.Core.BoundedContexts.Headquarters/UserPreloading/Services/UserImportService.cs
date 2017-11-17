@@ -7,6 +7,7 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
+using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -32,6 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private readonly IUserImportVerifier userImportVerifier;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ISessionProvider sessionProvider;
+        private readonly IScheduler scheduler;
 
         private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
         private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
@@ -44,7 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             IUserRepository userStorage,
             IUserImportVerifier userImportVerifier,
             IAuthorizedUser authorizedUser,
-            ISessionProvider sessionProvider)
+            ISessionProvider sessionProvider,
+            IScheduler scheduler)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.csvReader = csvReader;
@@ -54,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.userImportVerifier = userImportVerifier;
             this.authorizedUser = authorizedUser;
             this.sessionProvider = sessionProvider;
+            this.scheduler = scheduler;
         }
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
@@ -122,6 +126,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             if (!hasErrors) this.Save(fileName, usersToImport);
+
+            this.scheduler.ResumeJob(new JobKey("import users job", "Import users"));
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();
