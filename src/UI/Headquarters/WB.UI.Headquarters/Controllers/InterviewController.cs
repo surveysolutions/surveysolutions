@@ -97,6 +97,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId)
             {
                 var hasSupervisorAccessToInterview = interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                                                    || interviewSummary.Status == InterviewStatus.SupervisorAssigned
                                                     || interviewSummary.Status == InterviewStatus.Completed
                                                     || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
                                                     || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters;
