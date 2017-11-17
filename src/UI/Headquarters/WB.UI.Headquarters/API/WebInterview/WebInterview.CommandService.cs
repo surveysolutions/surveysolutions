@@ -193,7 +193,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         }
 
-        public SearchResults Search(FilterOption[] flags, long skip = 0, long limit = 50)
+        public SearchResults Search(FilterOption[] flags, int skip = 0, int limit = 50)
         {
             var interview = GetCallerInterview();
 
