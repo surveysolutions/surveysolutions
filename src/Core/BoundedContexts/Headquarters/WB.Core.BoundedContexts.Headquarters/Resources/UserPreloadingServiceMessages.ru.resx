@@ -126,4 +126,10 @@
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>Максимально возможное число пользователей для загрузки: {0}</value>
   </data>
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>Пожалуйста, подождите пока завершится предыдущая операция загрузки пользователей
+</value>
+    <comment>Пожалуйста, подождите пока завершится предыдущая операция загрузки пользователей
+</comment>
+  </data>
 </root>
