@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     case FilterOption.Answered: return question.IsAnswered();
                     case FilterOption.NotAnswered: return !question.IsAnswered();
                     case FilterOption.ForSupervisor: return question.IsSupervisors;
-                    case FilterOption.ForInterviewer: return !question.IsSupervisors;
+                    case FilterOption.ForInterviewer: return question.IsInterviewer && !question.IsReadonly;
                     default:
                         return @default;
                 }
