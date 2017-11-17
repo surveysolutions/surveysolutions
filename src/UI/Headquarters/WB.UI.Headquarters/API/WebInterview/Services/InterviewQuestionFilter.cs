@@ -21,9 +21,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             
         }
 
-        public bool Evaluate(IInterviewTreeNode questionToEvaluate, HashSet<FilterOption> filters)
+        public void SetNode(IInterviewTreeNode questionToEvaluate)
         {
             this.node = questionToEvaluate;
+        }
+
+        public bool Evaluate(HashSet<FilterOption> filters)
+        {
             this.filters = filters;
 
             return rule(this);
@@ -45,42 +49,46 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             return options.Any(o => Is(o, false));
         }
 
+        public bool Evaluate(FilterOption option, bool @default)
+        {
+            if (node.IsDisabled()) return false;
+
+            switch (node)
+            {
+                case InterviewTreeStaticText staticText:
+                    switch (option)
+                    {
+                        case FilterOption.WithComments: return false;
+                        case FilterOption.Invalid: return !staticText.IsValid;
+                        case FilterOption.Valid: return staticText.IsValid;
+                        default:
+                            return @default;
+                    }
+                case InterviewTreeQuestion question:
+                    switch (option)
+                    {
+                        case FilterOption.Flagged: return flaggedQuestionsSet.Contains(question.Identity);
+                        case FilterOption.NotFlagged: return !flaggedQuestionsSet.Contains(question.Identity);
+                        case FilterOption.WithComments: return question.AnswerComments.Any();
+                        case FilterOption.Invalid: return !question.IsValid;
+                        case FilterOption.Valid: return question.IsValid;
+                        case FilterOption.Answered: return question.IsAnswered();
+                        case FilterOption.NotAnswered: return !question.IsAnswered();
+                        case FilterOption.ForSupervisor: return question.IsSupervisors;
+                        case FilterOption.ForInterviewer: return question.IsInterviewer && !question.IsReadonly;
+                        default:
+                            return @default;
+                    }
+            }
+
+            return @default;
+        }
+
         public bool Is(FilterOption option, bool @default = true)
         {
             if (!filters.Contains(option)) return @default;
 
-            if (node is InterviewTreeStaticText staticText)
-            {
-                
-                switch (option)
-                {
-                    case FilterOption.WithComments: return false;
-                    case FilterOption.Invalid: return !staticText.IsValid;
-                    case FilterOption.Valid: return staticText.IsValid;
-                    default:
-                        return @default;
-                }
-            }
-
-            if(node is InterviewTreeQuestion question)
-            {
-                switch (option)
-                {
-                    case FilterOption.Flagged: return flaggedQuestionsSet.Contains(question.Identity);
-                    case FilterOption.NotFlagged: return !flaggedQuestionsSet.Contains(question.Identity);
-                    case FilterOption.WithComments: return question.AnswerComments.Any();
-                    case FilterOption.Invalid: return !question.IsValid;
-                    case FilterOption.Valid: return question.IsValid;
-                    case FilterOption.Answered: return question.IsAnswered();
-                    case FilterOption.NotAnswered: return !question.IsAnswered();
-                    case FilterOption.ForSupervisor: return question.IsSupervisors;
-                    case FilterOption.ForInterviewer: return question.IsInterviewer && !question.IsReadonly;
-                    default:
-                        return @default;
-                }
-            }
-
-            return @default;
+            return Evaluate(option, @default);
         }
     }
 }

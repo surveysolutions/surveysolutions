@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var stats = new Dictionary<FilterOption, int>();
             var nodes = GetFilteredNodes(flags, interview, stats);
 
-            long taken = 0, skipped = 0, total = 0;
+            int taken = 0, skipped = 0, total = 0;
             int searchResultId = 0;
 
             Identity lastSection = null;
@@ -180,21 +180,22 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             foreach (var node in nodes)
             {
-                var found = rule.Evaluate(node, flagsSet);
+                rule.SetNode(node);
+                var found = rule.Evaluate(flagsSet);
 
-                if (found) yield return node;
-
-                UpdateStats(node);
+                if (found)
+                {
+                    yield return node;
+                    UpdateStats();
+                }
             }
 
-            void UpdateStats(IInterviewTreeNode node)
+            void UpdateStats()
             {
                 foreach (var option in AllFilterOptions)
                 {
-                    var statsFlag = new HashSet<FilterOption>(flagsSet) { option };
-
-                    var ruleValue = rule.Evaluate(node, statsFlag);
-
+                    var ruleValue = rule.Evaluate(option, false);
+                    
                     if (ruleValue) stats[option] += 1;
                 }
             }
