@@ -18,7 +18,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         }
 
-        public SearchResults Search(IStatefulInterview interview, FilterOption[] flags, long skip, long take)
+        public SearchResults Search(IStatefulInterview interview, FilterOption[] flags, int skip, int take)
         {
             var stats = new Dictionary<FilterOption, int>();
             var nodes = GetFilteredNodes(flags, interview, stats);
