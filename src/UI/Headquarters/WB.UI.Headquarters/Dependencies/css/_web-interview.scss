@@ -45,7 +45,7 @@
 		}
 	}
 }
-.content, .filters-results{
+.content{
 	@extend %aside;
 	border-right: 3px solid $gray-super-light;
 	width: $content-width;
