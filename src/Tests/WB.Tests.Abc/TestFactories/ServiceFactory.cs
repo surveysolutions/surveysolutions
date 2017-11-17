@@ -10,6 +10,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -548,7 +549,8 @@ namespace WB.Tests.Abc.TestFactories
             IUserRepository userStorage = null,
             IUserImportVerifier userImportVerifier = null,
             IAuthorizedUser authorizedUser = null,
-            ISessionProvider sessionProvider = null)
+            ISessionProvider sessionProvider = null,
+            IScheduler scheduler = null)
         {
             userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
             return new UserImportService(
@@ -559,7 +561,8 @@ namespace WB.Tests.Abc.TestFactories
                 userStorage ?? Stub<IUserRepository>.WithNotEmptyValues,
                 userImportVerifier ?? new UserImportVerifier(userPreloadingSettings),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
-                sessionProvider ?? Stub<ISessionProvider>.WithNotEmptyValues);
+                sessionProvider ?? Stub<ISessionProvider>.WithNotEmptyValues, 
+                scheduler ?? Stub<IScheduler>.WithNotEmptyValues);
         }
 
         public ICsvReader CsvReader<T>(string[] headers, params T[] rows)

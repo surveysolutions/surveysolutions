@@ -25,6 +25,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private IUserImportService importUsersService => ServiceLocator.Current
             .GetInstance<IUserImportService>();
 
+        private IScheduler scheduler => ServiceLocator.Current
+            .GetInstance<IScheduler>();
+
         public void Execute(IJobExecutionContext context)
         {
             try
@@ -35,12 +38,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     userToImport = this.transactionManager.ExecuteInPlainTransaction(
                         () => this.importUsersService.GetUserToImport());
 
+                    if (userToImport == null) break;
+
                     this.CreateUserOrUnarchiveAndUpdateAsync(userToImport).WaitAndUnwrapException();
 
                     this.transactionManager.ExecuteInPlainTransaction(
                         () => this.importUsersService.RemoveImportedUser(userToImport));
 
                 } while (userToImport != null);
+
+                this.scheduler.PauseJob(new JobKey("import users job", "Import users"));
             }
             catch (Exception ex)
             {
