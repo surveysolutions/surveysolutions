@@ -103,12 +103,13 @@
 	}
 }
 .filters-results{
-	@include transition(all, 0.3s);
+	@extend %aside;
+	border-right: 3px solid $gray-super-light;
+	width: $content-width;
 	&.active{
 		left: $filter-width-details;
 	}
 	left: -$content-width;
-	z-index: 5;
 	background-color: $gray-super-light;
 	border-right-color: darken($gray-super-light, 5%);
 	h2{
