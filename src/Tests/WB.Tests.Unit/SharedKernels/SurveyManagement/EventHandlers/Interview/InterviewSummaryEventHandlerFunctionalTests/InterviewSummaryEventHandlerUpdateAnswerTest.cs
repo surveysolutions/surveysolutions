@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -13,16 +12,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.Views;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Tests.Abc;
 using QuestionAnswer = WB.Core.BoundedContexts.Headquarters.Views.Interview.QuestionAnswer;
 
@@ -85,7 +78,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         [TestCase(QuestionType.Numeric, 1)]
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]
-        [TestCase(QuestionType.DateTime, "2012-02-01T22:00:00Z")]
+        [TestCase(QuestionType.DateTime, "2012-02-01T22:00:00")]
         [TestCase(QuestionType.QRBarcode, "some answer")]
         public void Update_When_event_with_answer_on_featured_question_published_Then_answer_value_be_equal_passed_answer(QuestionType type,
             object answer)
@@ -144,7 +137,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 case QuestionType.DateTime:
                     return new DateTimeQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
-                        DateTime.ParseExact(answer.ToString(), ExportFormatSettings.ExportDateTimeFormat, CultureInfo.InvariantCulture).ToUniversalTime());
+                        DateTime.ParseExact(answer.ToString(), ExportFormatSettings.ExportDateTimeFormat, CultureInfo.InvariantCulture));
                 case QuestionType.Numeric:
                     if (answer is int)
                         return new NumericIntegerQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (int)answer);

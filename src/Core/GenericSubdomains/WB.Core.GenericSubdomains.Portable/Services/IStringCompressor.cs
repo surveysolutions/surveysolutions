@@ -13,5 +13,8 @@ namespace WB.Core.GenericSubdomains.Portable.Services
         byte[] DecompressGZip(byte[] payload);
         byte[] DecompressDeflate(byte[] payload);
         T DecompressString<T>(string s) where T : class;
+
+        Stream GetDecompressingGZipStream(Stream outputStream);
+        Stream GetDecompressingDeflateStream(Stream outputStream);
     }
 }

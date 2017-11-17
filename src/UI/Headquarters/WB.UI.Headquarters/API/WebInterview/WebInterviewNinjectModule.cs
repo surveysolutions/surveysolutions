@@ -32,6 +32,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewLazyNotificationService>().InSingletonScope();
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
             this.Bind<IStatefullInterviewSearcher>().To<StatefullInterviewSearcher>();
+            this.Bind<IWebInterviewInterviewEntityFactory>().To<WebInterviewInterviewEntityFactory>();
 
             DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new IOnDemandCollector[]
             {

@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             Type = a.Type
                         }).ToList(),
                     InterviewId = x.InterviewId,
-                    LastEntryDate = x.UpdateDate.FormatDateWithTime(),
+                    LastEntryDateUtc = x.UpdateDate,
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     ResponsibleRole = x.ResponsibleRole,

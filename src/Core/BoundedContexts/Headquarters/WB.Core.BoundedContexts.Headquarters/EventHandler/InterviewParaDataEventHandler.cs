@@ -67,6 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewKeyAssigned>,
         IUpdateHandler<InterviewHistoryView, InterviewPaused>,
         IUpdateHandler<InterviewHistoryView, InterviewResumed>,
+        IUpdateHandler<InterviewHistoryView, InterviewOpenedBySupervisor>,
+        IUpdateHandler<InterviewHistoryView, InterviewClosedBySupervisor>,
         IUpdateHandler<InterviewHistoryView, TranslationSwitched>
     {
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
@@ -598,7 +600,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var question in @event.Payload.FailedValidationConditions.Keys)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null, @event.EventTimeStamp,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
             return view;
@@ -608,7 +610,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var question in @event.Payload.Questions)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredValid, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredValid, null, @event.EventTimeStamp,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
             return view;
@@ -618,7 +620,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var question in @event.Payload.Questions)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDisabled, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDisabled, null, @event.EventTimeStamp,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
             return view;
@@ -628,7 +630,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var question in @event.Payload.Questions)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionEnabled, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionEnabled, null, @event.EventTimeStamp,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
             return view;
@@ -638,7 +640,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var group in @event.Payload.Groups)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupDisabled, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupDisabled, null, @event.EventTimeStamp,
                 this.CreateGroupParameters(group.Id, group.RosterVector));
             }
             return view;
@@ -648,7 +650,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var group in @event.Payload.Groups)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null, @event.EventTimeStamp,
                 this.CreateGroupParameters(group.Id, group.RosterVector));
             }
             return view;
@@ -698,7 +700,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var variable in @event.Payload.ChangedVariables)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableSet, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableSet, null, @event.EventTimeStamp,
                     this.CreateNewVariableValueParameters(variable.Identity.Id, variable.NewValue, variable.Identity.RosterVector));
             }
             return view;
@@ -708,7 +710,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var variable in @event.Payload.Variables)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableEnabled, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableEnabled, null, @event.EventTimeStamp,
                     this.CreateVariableParameters(variable.Id, variable.RosterVector));
             }
             return view;
@@ -718,7 +720,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             foreach (var variable in @event.Payload.Variables)
             {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableDisabled, null, null,
+                this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableDisabled, null, @event.EventTimeStamp,
                     this.CreateVariableParameters(variable.Id, variable.RosterVector));
             }
             return view;
@@ -745,7 +747,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewResumed> @event)
         {
-            this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, null,
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, @event.Payload.UserId,
+                @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewOpenedBySupervisor> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.OpenedBySupervisor, @event.Payload.UserId,
+                @event.EventTimeStamp);
+
+            return state;
+        }
+
+        public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewClosedBySupervisor> @event)
+        {
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.ClosedBySupervisor, @event.Payload.UserId,
                 @event.EventTimeStamp);
 
             return state;
@@ -753,12 +771,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<TranslationSwitched> @event)
         {
-            this.AddHistoricalRecord(state, InterviewHistoricalAction.TranslationSwitched, null,
+            this.AddHistoricalRecord(state, InterviewHistoricalAction.TranslationSwitched, @event.Payload.UserId,
                 @event.EventTimeStamp, new Dictionary<string, string>
                 {
-                    {
-                        "translation", @event.Payload.Language
-                    }
+                    { "translation", @event.Payload.Language ?? "ORIGINAL" }
                 });
 
             return state;

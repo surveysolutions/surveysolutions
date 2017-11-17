@@ -12,7 +12,7 @@
                             :disabled="!$me.acceptAnswer"
                             value="true"                            
                             @click="answerYes(option.value)" 
-                            v-disabledWhenUnchecked="allAnswersGiven || !$me.acceptAnswer" />
+                            v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}" />
                         <label :for="$me.id + '_' + option.value + '_yes'">
                             <span class="tick"></span>
                         </label>

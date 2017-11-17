@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
                     Create.Entity.FixedRoster(Id.IdentityD.Id, title: "roster", children: new IComposite[]
                     {
                         Create.Entity.TextQuestion(TextInRosterFlagged.Id, text: "Text Roster Flagged", variable: "textInRoster"),
-                    }, fixedTitles: new [] { Create.Entity.FixedTitle(1.0m, "Test") }),
+                    }, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Test") }),
                     Create.Entity.StaticText(StaticTextInvalid.Id, "StaticText 4 Invalid"),
                     Create.Entity.TextQuestion(TextCommentFlaggedAnswered.Id, text: "Text 5 With Comment Flagged Answered", variable: "text5")
                 }),

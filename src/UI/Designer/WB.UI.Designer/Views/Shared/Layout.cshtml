@@ -32,10 +32,11 @@
             if (window.moment) {
                 moment.locale('@UICulture');
 
-                $('time').each(function() {
-                    var date = $(this).attr('datetime');
-                    var momentDate = moment.utc(date).local().format('D MMM YYYY, HH:mm');
-                    $(this).text(momentDate);
+                $('time').each(function () {
+                    var me = $(this);
+                    var date = me.attr('datetime') || me.attr('time');
+                    var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
+                    me.text(momentDate);
                 });
             }
         });

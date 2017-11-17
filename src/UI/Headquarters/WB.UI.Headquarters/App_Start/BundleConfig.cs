@@ -226,7 +226,8 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/interviews.base.js",
                 "~/Scripts/viewmodels/pages/interview/hq.interviews.js",
-                "~/Scripts/knockout/ko.numericformatter.js"
+                "~/Scripts/knockout/ko.numericformatter.js",
+                "~/Scripts/moment-with-locales.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interviews-sv").Include(

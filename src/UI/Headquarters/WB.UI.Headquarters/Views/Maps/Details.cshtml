@@ -92,7 +92,7 @@
                         @Html.ActionLink(MainMenu.Maps, "Index", "Maps")
                     </li>
                 </ol>
-                    <h1>Map: @Model.FileName</h1>
+                    <h1>@Pages.MapDetails_MapTitle: @Model.FileName</h1>
             </div>
         </div>
         <div class="row">
@@ -100,24 +100,24 @@
                 <div class="row">
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>Max Scale:</b> <span>@Model.MaxScale</span></li>
-                            <li><b>Min Scale:</b> <span>@Model.MinScale</span></li>
+                            <li><b>@Pages.MapDetails_MaxScale:</b> <span>@Model.MaxScale</span></li>
+                            <li><b>@Pages.MapDetails_MinScale:</b> <span>@Model.MinScale</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>Size:</b> <span>@FileSizeUtils.SizeInMegabytes(Model.Size) MB</span></li>
+                            <li><b>@Pages.MapDetails_Size:</b> <span>@FileSizeUtils.SizeInMegabytes(Model.Size) MB</span></li>
                             <li><b>Wkid:</b> <span>@Model.Wkid</span></li>
                         </ul>
                     </div>
                     <div class="col-md-4 col-sm-3 questionnaire-statistics">
                         <ul class="list-unstyled">
-                            <li><b>Imported on:</b> <span>@(Model.ImportDate.HasValue ? Model.ImportDate.Value.FormatDateWithTime():"")</span></li>
+                            <li><b>@Pages.MapDetails_ImportedOn:</b> <span>@(Model.ImportDate.HasValue ? Model.ImportDate.Value.FormatDateWithTime():"")</span></li>
                         </ul>
                     </div>
                 </div>
                 <iframe width="100%" height="550px" src='@Url.RouteUrl("Default", new {httproute = "", controller = "Maps", action = "MapPreview", mapName = Model.Id})'></iframe>
-                <p>This preview shows the loaded map supperimposed on the world map</p>
+                <p>@Pages.MapDetails_MapDisclaimer</p>
             </div>
             <div id="list" class="col-md-5 col-sm-6">
                 <table id="data_holder" class="table table-striped table-bordered table-hover table-ordered"

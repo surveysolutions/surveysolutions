@@ -270,7 +270,11 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public SideBarSectionsViewModel SidebarSectionsViewModel(QuestionnaireDocument questionnaireDocument, IStatefulInterview interview, LiteEventRegistry liteEventRegistry)
+        public SideBarSectionsViewModel SidebarSectionsViewModel(
+            QuestionnaireDocument questionnaireDocument, 
+            IStatefulInterview interview, 
+            LiteEventRegistry liteEventRegistry,
+            NavigationState navigationState = null)
         {
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1);
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(
@@ -281,27 +285,23 @@ namespace WB.Tests.Abc.TestFactories
             var sideBarSectionViewModelsFactory = new SideBarSectionViewModelFactory(ServiceLocator.Current);
             
             var mvxMessenger = Mock.Of<IMvxMessenger>();
-            var navigationState = Create.Other.NavigationState();
+            navigationState = navigationState ?? Create.Other.NavigationState();
 
-            Func<SideBarSectionViewModel> sideBarSectionViewModel = ()
-                => new SideBarSectionViewModel(
-                    interviewsRepository,
-                    questionnaireRepository,
-                    mvxMessenger,
-                    liteEventRegistry,
-                    Create.ViewModel.DynamicTextViewModel(
-                        liteEventRegistry,
-                        interviewRepository: interviewsRepository),
+            SideBarSectionViewModel SideBarSectionViewModel()
+            {
+                return new SideBarSectionViewModel(interviewsRepository, questionnaireRepository, mvxMessenger, liteEventRegistry,
+                    Create.ViewModel.DynamicTextViewModel(liteEventRegistry, interviewsRepository),
                     Create.Entity.AnswerNotifier(liteEventRegistry))
                 {
                     NavigationState = navigationState,
                 };
+            }
 
             Setup.InstanceToMockedServiceLocator(Mock.Of<CoverStateViewModel>());
             Setup.InstanceToMockedServiceLocator(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
-                .Returns(sideBarSectionViewModel);
+                .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCoverSectionViewModel>())
@@ -318,7 +318,7 @@ namespace WB.Tests.Abc.TestFactories
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
-                .Returns(sideBarSectionViewModel);
+                .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
             Setup.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
 
             var sidebarViewModel = new SideBarSectionsViewModel(

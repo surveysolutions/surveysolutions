@@ -43,6 +43,7 @@ export default {
         state.firstSectionId = interviewInfo.firstSectionId
         state.interviewKey = interviewInfo.interviewKey
         state.receivedByInterviewer = interviewInfo.receivedByInterviewer
+        state.interviewCannotBeChanged = interviewInfo.interviewCannotBeChanged
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo

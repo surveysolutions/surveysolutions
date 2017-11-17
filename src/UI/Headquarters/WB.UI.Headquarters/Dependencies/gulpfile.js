@@ -75,6 +75,10 @@ const config = {
         {
             file: "Index.cshtml",
             folder: '../Views/Download/'
+        },
+        {
+            file: "_WebInterviewLayout.cshtml",
+            folder: '../Views/WebInterview/'
         }
     ],
     cssFilesToWatch: './css/*.scss"',

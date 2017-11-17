@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class SingleInterviewActivity<TViewModel> : AuthorizedUserActivity<TViewModel> where TViewModel : SingleInterviewViewModel
+    public abstract class SingleInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : SingleInterviewViewModel
     {
         #region Subclasses
 

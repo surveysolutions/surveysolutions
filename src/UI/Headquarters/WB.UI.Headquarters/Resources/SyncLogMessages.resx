@@ -168,6 +168,9 @@
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
     <value>No new interview packages to download</value>
   </data>
+  <data name="NoMapsForUser" xml:space="preserve">
+    <value>No maps to download</value>
+  </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Update interview: &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Package: {1}, Sort index: {2}&lt;/li&gt;</value>
   </data>
@@ -182,7 +185,10 @@
   </data>
   <data name="GetInterviews" xml:space="preserve">
     <value>Download list of interviews. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
-  </data>  
+  </data>
+  <data name="GetMaps" xml:space="preserve">
+    <value>Download list of Maps. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+  </data>
   <data name="GetAssignmentsFormat" xml:space="preserve">
     <value>Download list of assignments ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;</value>
   </data>
@@ -194,6 +200,9 @@
   </data>
   <data name="GetAttachmentContent" xml:space="preserve">
     <value>Download attachment content: {0}</value>
+  </data>
+  <data name="GetMap" xml:space="preserve">
+    <value>Download map: {0}</value>
   </data>
   <data name="GetQuestionnaireAttachments" xml:space="preserve">
     <value>Download questionnaire attachments: &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>

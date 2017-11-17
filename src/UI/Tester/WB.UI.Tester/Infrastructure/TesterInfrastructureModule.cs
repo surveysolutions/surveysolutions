@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Infrastructure.Internals;
-using WB.UI.Tester.Infrastructure.Internals.Log;
 using WB.UI.Tester.Infrastructure.Internals.Rest;
 using WB.UI.Tester.Infrastructure.Internals.Security;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
@@ -25,6 +24,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Enumerator.Services.Logging;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Tester.Infrastructure
@@ -52,11 +52,10 @@ namespace WB.UI.Tester.Infrastructure
 
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>)); // TODO Move to generic module between IN, T
 
-            // this.Unbind<IPlainStorage<OptionView>>(); // TODO check wtf?
             registry.BindAsSingleton<IPlainStorage<OptionView>, InMemoryPlainStorage<OptionView>>();
 
-            registry.Bind<ILoggerProvider, XamarinInsightsLoggerProvider>();
-            registry.BindAsSingleton<ILogger, XamarinInsightsLogger>();
+            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
+            registry.BindAsSingleton<ILogger, NLogLogger>();
             registry.Bind<IRestServiceSettings, TesterSettings>();
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.Bind<IEnumeratorSettings, TesterSettings>();

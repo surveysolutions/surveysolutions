@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -21,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         void MarkQuestionsAsReadOnly(Guid interviewId, Identity[] questionIds);
         void AddRosters(Guid interviewId, Identity[] rosterIds);
         void RemoveRosters(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity[] rosterIds);
-        void RemoveAnswers(Guid interviewId, Identity[] questionIds);
+        void RemoveAnswers(Guid interviewId, IEnumerable<Identity> entityIds);
         
         InterviewData GetInterviewData(Guid interviewId);
 
@@ -36,5 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude);
 
         string[] GetQuestionnairesWithAnsweredGpsQuestions();
+
+        List<ExportedError> GetErrors(IEnumerable<Guid> interveiws);
     }
 }

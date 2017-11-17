@@ -14,13 +14,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         public SyncProgressInfo()
         {
-            this.Statistics = new SychronizationStatistics();
+            this.Statistics = new SynchronizationStatistics();
         }
 
         public string Title { get; set; }
         public string Description { get; set; }
         public SynchronizationStatus Status { get; set; }
-        public SychronizationStatistics Statistics { get; set; }
+        public SynchronizationStatistics Statistics { get; set; }
         public bool UserIsLinkedToAnotherDevice { get; set; }
 
         public bool HasErrors => this.Statistics.FailedToUploadInterviwesCount != 0 || 

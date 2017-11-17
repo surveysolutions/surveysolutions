@@ -16,8 +16,8 @@
     @Styles.Render("~/css/list")
     @Scripts.Render("~/js/list", "~/js/synclog")
     <script type="text/javascript">
-        var $interviewerPageUrl = '@Html.Raw(@Url.Action("Edit", "Interviewer", new {area = ""}, Request.Url.Scheme))';
-        var controlPanelSynclogUrl = '@Html.Raw(@Url.Action("SynchronizationLog", "ControlPanel", new { }, Request.Url.Scheme))';
+        var $interviewerPageUrl = '@Url.Action("Edit", "Interviewer")';
+        var controlPanelSynclogUrl = '@Url.Action("SynchronizationLog", "ControlPanel")';
         var synchronizationLogUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetSynchronizationLog" })';
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "SyncLogInterviewers" })';
         var devicesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "SyncLogDevices" })';
