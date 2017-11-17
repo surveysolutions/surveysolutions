@@ -10,8 +10,8 @@
                     @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
                 <button type="button" class="btn btn-default btn-lg btn-action-questionnaire" :disabled="!$me.acceptAnswer"
                     v-if="!$me.isAnswered && !inFetchState" @click="$refs.uploader.click()">{{ $t("WebInterviewUI.PhotoUpload") }}</button>
-            </div>
             <wb-lock />
+            </div>            
         </div>
     </wb-question>
 </template>
