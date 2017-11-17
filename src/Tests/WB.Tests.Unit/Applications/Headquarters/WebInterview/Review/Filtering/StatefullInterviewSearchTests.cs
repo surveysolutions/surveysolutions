@@ -154,7 +154,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         [TestCase(4, 5)]
         [TestCase(5, 5)]
         [TestCase(7, 5)]
-        public void ShouldReturnConsistentSearchResultIds(long skip, long take)
+        public void ShouldReturnConsistentSearchResultIds(int skip, int take)
         {
             var search = Subject.Search(interview, Array.Empty<FilterOption>(), skip, take);
 
