@@ -16,8 +16,8 @@
                         <div class="badge" v-if="$me.ordered">{{getAnswerOrder(option.value)}}</div>
                 </div>
                 <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
-            </div>
             <wb-lock />
+            </div>            
         </div>
     </wb-question>
 </template>
