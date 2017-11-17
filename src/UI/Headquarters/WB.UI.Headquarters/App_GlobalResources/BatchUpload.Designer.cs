@@ -511,15 +511,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please, wait until previous import of users is completed.
-        /// </summary>
-        internal static string HasUsersToImport {
-            get {
-                return ResourceManager.GetString("HasUsersToImport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Hide list of required identifying data.
         /// </summary>
         internal static string HideListPrefilledData {

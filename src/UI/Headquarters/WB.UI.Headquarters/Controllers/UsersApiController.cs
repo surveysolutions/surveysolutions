@@ -292,9 +292,6 @@ namespace WB.UI.Headquarters.Controllers
         [CamelCase]
         public ImportUserError[] ImportUsers(ImportUsersRequest request)
         {
-            if(this.userImportService.GetImportStatus().IsInProgress)
-                throw new UserPreloadingException(BatchUpload.HasUsersToImport);
-
             if (request?.File?.FileBytes == null)
                 throw new UserPreloadingException(BatchUpload.Prerequisite_FileOpen);
 

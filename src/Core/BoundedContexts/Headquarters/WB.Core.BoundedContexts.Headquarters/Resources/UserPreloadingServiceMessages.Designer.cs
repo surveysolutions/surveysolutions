@@ -79,6 +79,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, wait until previous import of users is completed.
+        /// </summary>
+        public static string HasUsersToImport {
+            get {
+                return ResourceManager.GetString("HasUsersToImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max allowed number of records is {0}.
         /// </summary>
         public static string TheDatasetMaxRecordNumberReachedFormat {

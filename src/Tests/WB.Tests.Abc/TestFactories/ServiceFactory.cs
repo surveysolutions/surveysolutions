@@ -29,6 +29,9 @@ using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -544,6 +547,34 @@ namespace WB.Tests.Abc.TestFactories
                     });
                 });
             return csvWriterMock.Object;
+        }
+
+        public UserImportService UserImportService(UserPreloadingSettings userPreloadingSettings = null,
+            ICsvReader csvReader = null,
+            IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository = null,
+            IPlainStorageAccessor<UserToImport> importUsersRepository = null,
+            IUserRepository userStorage = null,
+            IUserImportVerifier userImportVerifier = null,
+            IAuthorizedUser authorizedUser = null,
+            ISessionProvider sessionProvider = null)
+        {
+            userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
+            return new UserImportService(
+                userPreloadingSettings,
+                csvReader ?? Stub<ICsvReader>.WithNotEmptyValues,
+                importUsersProcessRepository ?? Stub<IPlainStorageAccessor<UsersImportProcess>>.WithNotEmptyValues,
+                importUsersRepository ?? Stub<IPlainStorageAccessor<UserToImport>>.WithNotEmptyValues,
+                userStorage ?? Stub<IUserRepository>.WithNotEmptyValues,
+                userImportVerifier ?? new UserImportVerifier(userPreloadingSettings),
+                authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
+                sessionProvider ?? Stub<ISessionProvider>.WithNotEmptyValues);
+        }
+
+        public ICsvReader CsvReader<T>(string[] headers, params T[] rows)
+        {
+            return Mock.Of<ICsvReader>(
+                x => x.ReadAll<T>(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<bool>()) == rows &&
+                     x.ReadHeader(It.IsAny<Stream>(), It.IsAny<string>()) == headers);
         }
     }
 }

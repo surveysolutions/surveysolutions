@@ -524,9 +524,6 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
   <data name="Prerequisite_FileOpen" xml:space="preserve">
     <value>Uploaded file cannot be opened. Please check that it is in correct format.</value>
   </data>
-  <data name="HasUsersToImport" xml:space="preserve">
-    <value>Please, wait until previous import of users is completed</value>
-  </data>
   <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
     <value>Only .tab and .txt files are allowed for upload.</value>
   </data>

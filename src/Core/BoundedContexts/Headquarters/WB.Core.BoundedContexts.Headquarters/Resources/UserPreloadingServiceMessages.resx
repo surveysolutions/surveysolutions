@@ -126,4 +126,7 @@
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>Max allowed number of records is {0}</value>
   </data>
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>Please, wait until previous import of users is completed</value>
+  </data>
 </root>
