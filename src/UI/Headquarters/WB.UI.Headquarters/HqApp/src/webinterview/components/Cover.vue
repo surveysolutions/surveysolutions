@@ -110,10 +110,10 @@ export default {
                 params: {
                     sectionId: commentedQuestion.parentId,
                     interviewId: this.$route.params.interviewId
-                }
+                },
+                hash: '#' + commentedQuestion.id 
             }
 
-            this.$store.dispatch("sectionRequireScroll", { id: commentedQuestion.id })
             this.$router.push(navigateToEntity)
         }
     }
