@@ -496,6 +496,7 @@
     <Compile Include="BoundedContexts\Headquarters\Repositories\DeviceSyncInfoRepositoryTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HashCompatibilityProviderTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Security\HqUserManagerTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\UserImportServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Views\Interview\TeamInterviewsFactoryTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\MappingTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\ReviewAllowedServiceTests.cs" />
@@ -1630,8 +1631,6 @@
   <ItemGroup>
     <Folder Include="Applications\Headquarters\PublicApiTests\ApiTests\" />
     <Folder Include="BoundedContexts\Headquarters\UserBatchCreatorTests\" />
-    <Folder Include="BoundedContexts\Headquarters\UserPreloadingServiceTests\" />
-    <Folder Include="BoundedContexts\Headquarters\UserPreloadingVerifierTests\" />
     <Folder Include="Properties\" />
     <Folder Include="Resources\" />
     <Folder Include="SharedKernels\Enumerator\Services\QuestionnaireModelBuilderTests\" />

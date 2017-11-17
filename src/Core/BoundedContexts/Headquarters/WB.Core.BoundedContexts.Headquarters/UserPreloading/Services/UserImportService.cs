@@ -58,6 +58,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
         {
+            if (this.GetImportStatus().IsInProgress)
+                throw new UserPreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
+
             var csvDelimiter = ExportFileSettings.DataFileSeparator.ToString();
 
             var requiredColumns = this.GetRequiredUserProperties();
@@ -84,6 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }).ToArray();
 
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors);
+            var hasErrors = false;
 
             foreach (var userToImport in this.csvReader.ReadAll<UserToImport>(new MemoryStream(data), csvDelimiter))
             {
@@ -91,8 +95,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
                 foreach (var validator in validations)
                 {
-                    if (validator.ValidationFunction(userToImport))
-                        yield return ToVerificationError(validator, userToImport, usersToImport.Count);
+                    if (!validator.ValidationFunction(userToImport)) continue;
+
+                    hasErrors = true;
+                    yield return ToVerificationError(validator, userToImport, usersToImport.Count);
                 }
 
                 if (usersToImport.Count > userPreloadingSettings.MaxAllowedRecordNumber)
@@ -108,12 +114,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
                 foreach (var validator in validations)
                 {
-                    if (validator.ValidationFunction(userToImport))
-                        yield return ToVerificationError(validator, userToImport, userIndex + 1);
+                    if (!validator.ValidationFunction(userToImport)) continue;
+
+                    hasErrors = true;
+                    yield return ToVerificationError(validator, userToImport, userIndex + 1);
                 }
             }
 
-            this.Save(fileName, usersToImport);
+            if (!hasErrors) this.Save(fileName, usersToImport);
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();
@@ -141,14 +149,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             process.Responsible = this.authorizedUser.Id;
             process.StartedDate = DateTime.UtcNow;
 
-            this.importUsersProcessRepository.Store(process, process.Id);
+            this.importUsersProcessRepository.Store(process, process?.Id);
         }
 
         private void SaveUsers(IList<UserToImport> usersToImport)
         {
             var npgsqlConnection = this.sessionProvider.GetSession().Connection as NpgsqlConnection;
 
-            using (var writer = npgsqlConnection.BeginBinaryImport("COPY  \"plainstore\".\"usertoimport\" (login, email, fullname, password, phonenumber, role, supervisor) " +
+            using (var writer = npgsqlConnection.BeginBinaryImport($"COPY  {UserToImportTableName} (login, email, fullname, password, phonenumber, role, supervisor) " +
                                                                    "FROM STDIN BINARY;"))
             {
                 foreach (var userToImport in usersToImport.OrderBy(x => x.UserRole))
