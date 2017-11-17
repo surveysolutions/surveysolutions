@@ -1,6 +1,6 @@
 @import "variables";
-$icon-font-path: '../fonts/';
-@import "../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
+$icon-font-path: '../vendor/bootstrap-sass/assets/fonts/bootstrap/';
+@import "../vendor/bootstrap-sass/assets/stylesheets/_bootstrap.scss";
 
 @import "mixins";
 @import "buttons";
@@ -15,4 +15,4 @@ $icon-font-path: '../fonts/';
 @import "common";
 @import "login";
 @import "two-column-form";
-@import "bootstrap-mvc-validation";
+@import "bootstrap-mvc-validation";
