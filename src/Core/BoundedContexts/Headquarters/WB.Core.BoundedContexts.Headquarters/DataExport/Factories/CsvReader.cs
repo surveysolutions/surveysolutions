@@ -9,14 +9,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         public IEnumerable<T> ReadAll<T>(Stream csvFileStream, string delimiter, bool hasHeaderRow = true)
         {
             using (var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
-                new CsvConfiguration
+                new Configuration
                 {
-                    IsHeaderCaseSensitive = false,
-                    WillThrowOnMissingField = false,
+                    MissingFieldFound = null,
                     Delimiter = delimiter,
                     HasHeaderRecord = hasHeaderRow
                 }))
             {
+                reader.Read();
+                reader.ReadHeader();
                 foreach (var record in reader.GetRecords<T>())
                     yield return record;
             }
@@ -25,16 +26,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         public string[] ReadHeader(Stream csvFileStream, string delimiter)
         {
             using (var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
-                new CsvConfiguration
+                new Configuration
                 {
-                    IsHeaderCaseSensitive = false,
-                    WillThrowOnMissingField = false,
-                    Delimiter = delimiter,
-                    HasHeaderRecord = true
+                    MissingFieldFound = null,
+                    Delimiter = delimiter
                 }))
             {
+                reader.Read();
                 reader.ReadHeader();
-                return reader.FieldHeaders;
+                return reader.Context.HeaderRecord;
             }
         }
     }
