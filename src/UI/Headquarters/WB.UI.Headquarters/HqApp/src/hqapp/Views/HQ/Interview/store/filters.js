@@ -44,7 +44,7 @@ export default {
                 const skip = state.search.needToClear ? 0 : state.search.skip;
                 return api.search(flags, skip, state.search.pageSize)
             })
-
+            commit("LOG_LAST_ACTIVITY")
             commit("SET_SEARCH_RESULT", res)
         },
 
