@@ -17,8 +17,8 @@
                     </div>
                 </div>
                 <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
-            </div>
-            <wb-lock />
+                <wb-lock />
+            </div>            
         </div>
     </wb-question>
 </template>

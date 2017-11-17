@@ -31,8 +31,8 @@
                         </button>
                     </div>
                 </div>
-            </div>
             <wb-lock />
+            </div>            
         </div>
     </wb-question>
 </template>
