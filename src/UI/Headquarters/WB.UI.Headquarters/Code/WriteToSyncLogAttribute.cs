@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http.Filters;
+using Prometheus;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
@@ -66,8 +67,8 @@ namespace WB.UI.Headquarters.Code
                     Type = this.logAction
                 };
 
-                Guid parsedId;
-                Guid? idAsGuid = Guid.TryParse(context.GetActionArgumentOrDefault<string>("id", string.Empty), out parsedId) ? parsedId : context.GetActionArgumentOrDefault<Guid?>("id", null);
+                Guid? idAsGuid = Guid.TryParse(context.GetActionArgumentOrDefault<string>("id", string.Empty), 
+                    out var parsedId) ? parsedId : context.GetActionArgumentOrDefault<Guid?>("id", null);
 
                 switch (this.logAction)
                 {
@@ -175,13 +176,19 @@ namespace WB.UI.Headquarters.Code
                     default:
                         throw new ArgumentException("logAction");
                 }
+
+                messagesTotal.Labels(this.logAction.ToString()).Inc();
                 this.synchronizationLogItemPlainStorageAccessor.Store(logItem, Guid.NewGuid());
+
             }
             catch (Exception exception)
             {
                 this.logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
             }
         }
+
+        private readonly Counter messagesTotal = Metrics.CreateCounter(@"wb_hq_sync_log_total_count", @"Count of sync log actions", "action");
+
 
         private string GetInterviewsLogMessage(HttpActionExecutedContext context)
         {
