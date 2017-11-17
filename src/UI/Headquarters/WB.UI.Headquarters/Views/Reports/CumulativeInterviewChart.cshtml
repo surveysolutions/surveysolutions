@@ -14,7 +14,7 @@
     @Scripts.Render("~/js/chart")
 
     <script type="text/javascript">
-    var interviewChartUrl = '@Html.Raw(@Url.Action("InterviewsChart", "Reports", new { }, Request.Url.Scheme))';;
+    var interviewChartUrl = '@Url.Action("InterviewsChart", "Reports")';
         var chartApiUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "ChartStatistics" })';
         var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         $(function () {
@@ -57,17 +57,20 @@
                             </span>
                         </div>
                     </div>
+                    <div class="block-filter">
+                        <button type="button" class="btn btn-default input-group" data-bind="click: $root.initChart">@Common.Refresh</button>
+                    </div>
                 </div>
             </aside>
             <div class="main-information">
                 <div class="page-header">
                     <h1>@Reports.CumulativeInterviewChart</h1>
-                    <button type="button" class="btn btn-default" data-bind="click: $root.initChart">@Common.Refresh</button>
                 </div>
                 <div class="clearfix">
                     <div class="col-sm-8">
                         <h2 data-bind="text: TemplateName"></h2>
-                        <h2 id="NoResultsFound">@Common.NoResultsFound</h2>
+                        <h2 style="display: none;" id="NoResultsFound">@Common.NoResultsFound</h2>
+                        <h2 id="ProcessingMessage">@Common.Processing</h2>
                     </div>
                 </div>
                 <div id="interviewChart"></div>

@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -31,6 +33,14 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer()));
 
+            this.CreateMap<InterviewTreeQuestion, InterviewAreaQuestion>()
+                .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(_ => _.Answer, opts => opts.MapFrom(x =>
+                    Math.Round(x.GetAsInterviewTreeAreaQuestion().GetAnswer() != null ? x.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.AreaSize ?? 0 : 0, 2) ))
+                .ForMember(_ => _.Coordinates, opts => opts.MapFrom(x =>
+                        x.GetAsInterviewTreeAreaQuestion().GetAnswer() != null ? x.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.Coordinates : null))
+                    ;
+
             this.CreateMap<InterviewTreeQuestion, InterviewAudioQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Filename, opts => opts.MapFrom(x => x.GetAsInterviewTreeAudioQuestion().GetAnswer() != null
@@ -39,7 +49,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsInterviewTreeAudioQuestion().GetAnswer()!=null
                     ? (long)x.GetAsInterviewTreeAudioQuestion().GetAnswer().Length.TotalMilliseconds
                     : (long?)null));
-
 
             this.CreateMap<InterviewTreeQuestion, InterviewSingleOptionQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
@@ -131,27 +140,15 @@ namespace WB.UI.Headquarters.Models.WebInterview
 
             this.CreateMap<InterviewTreeGroup, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeGroup, InterviewEntity>()
-                .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
-                .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
-                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
-                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
                 .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => x is InterviewTreeRoster));
-
-            this.CreateMap<InterviewTreeGroup, Validity>()
-                .ForMember(x => x.IsValid, opts => opts.MapFrom(x => !HasQuestionsWithInvalidAnswers(x)));
-
+            
             this.CreateMap<InterviewTreeRoster, InterviewGroupOrRosterInstance>()
                 .IncludeBase<InterviewTreeRoster, InterviewEntity>()
-                .ForMember(x => x.StatisticsByAnswersAndSubsections, opts => opts.MapFrom(x => GetGroupStatisticsByAnswersAndSubsections(x)))
-                .ForMember(x => x.StatisticsByInvalidAnswers, opts => opts.MapFrom(x => GetGroupStatisticsByInvalidAnswers(x)))
-                .ForMember(x => x.Status, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
-                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
                 .ForMember(x => x.RosterTitle, opts => opts.MapFrom(x => x.RosterTitle))
                 .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => true));
 
             this.CreateMap<InterviewTreeGroup, SidebarPanel>()
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                .ForMember(x => x.State, opts => opts.MapFrom(x => GetGroupStatus(x).ToString()))
                 .ForMember(x => x.ParentId, opts => opts.MapFrom(x => x.Parent == null ? null : x.Parent.Identity)) // automapper do not allow null propagation in expressions
                 .ForMember(x => x.HasChildren, opts => opts.MapFrom(x => x.Children.OfType<InterviewTreeGroup>().Any(c => !c.IsDisabled())))
                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
@@ -160,7 +157,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
                     opts.Condition(x => x is InterviewTreeRoster);
                     opts.MapFrom(x => (x as InterviewTreeRoster).RosterTitle);
                 })
-                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
                 .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => x is InterviewTreeRoster)); 
 
             this.CreateMap<InterviewTreeQuestion, InterviewMultimediaQuestion>()
@@ -171,78 +167,6 @@ namespace WB.UI.Headquarters.Models.WebInterview
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)
         {
             return new DropdownItem(question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue, question.GetAnswerAsString());
-        }
-
-        private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group)
-            => group.CountEnabledInvalidQuestionsAndStaticTexts() > 0;
-
-        private static GroupStatus GetGroupStatus(InterviewTreeGroup group)
-        {
-            if (group.HasUnansweredQuestions() || HasSubgroupsWithUnansweredQuestions(@group))
-                return group.CountEnabledAnsweredQuestions() > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
-
-            return GroupStatus.Completed;
-        }
-
-        private static bool HasSubgroupsWithUnansweredQuestions(InterviewTreeGroup @group)
-            => @group.Children
-                .OfType<InterviewTreeGroup>()
-                .Where(subGroup => !subGroup.IsDisabled())
-                .Any(subGroup => GetGroupStatus(subGroup) != GroupStatus.Completed || HasQuestionsWithInvalidAnswers(subGroup));
-
-        private string GetGroupStatisticsByInvalidAnswers(InterviewTreeGroup group)
-            => HasQuestionsWithInvalidAnswers(@group) ? GetInformationByInvalidAnswers(@group) : null;
-
-        private static string GetGroupStatisticsByAnswersAndSubsections(InterviewTreeGroup group)
-        {
-            switch (GetGroupStatus(group))
-            {
-                case GroupStatus.NotStarted:
-                    return Resources.WebInterview.Interview_Group_Status_NotStarted;
-
-                case GroupStatus.Started:
-                    return string.Format(Resources.WebInterview.Interview_Group_Status_StartedIncompleteFormat, GetInformationByQuestionsAndAnswers(group));
-
-                case GroupStatus.Completed:
-                    return string.Format(Resources.WebInterview.Interview_Group_Status_CompletedFormat, GetInformationByQuestionsAndAnswers(group));
-            }
-
-            return null;
-        }
-
-        private static string GetInformationByQuestionsAndAnswers(InterviewTreeGroup group)
-        {
-            var subGroupsText = GetInformationBySubgroups(group);
-            var enabledAnsweredQuestionsCount = @group.CountEnabledAnsweredQuestions();
-
-            return $@"{(enabledAnsweredQuestionsCount == 1 ?
-                Resources.WebInterview.Interview_Group_AnsweredQuestions_One :
-                string.Format(Resources.WebInterview.Interview_Group_AnsweredQuestions_Many, enabledAnsweredQuestionsCount))}, {subGroupsText}";
-        }
-
-        private static string GetInformationByInvalidAnswers(InterviewTreeGroup group)
-        {
-            var countEnabledInvalidQuestionsAndStaticTexts = @group.CountEnabledInvalidQuestionsAndStaticTexts();
-
-            return countEnabledInvalidQuestionsAndStaticTexts == 1
-                ? Resources.WebInterview.Interview_Group_InvalidAnswers_One
-                : string.Format(Resources.WebInterview.Interview_Group_InvalidAnswers_ManyFormat, countEnabledInvalidQuestionsAndStaticTexts);
-        }
-
-        private static string GetInformationBySubgroups(InterviewTreeGroup group)
-        {
-            var subGroupsCount = @group.Children.OfType<InterviewTreeGroup>().Count();
-            switch (subGroupsCount)
-            {
-                case 0:
-                    return Resources.WebInterview.Interview_Group_Subgroups_Zero;
-
-                case 1:
-                    return Resources.WebInterview.Interview_Group_Subgroups_One;
-
-                default:
-                    return string.Format(Resources.WebInterview.Interview_Group_Subgroups_ManyFormat, subGroupsCount);
-            }
         }
     }
 }

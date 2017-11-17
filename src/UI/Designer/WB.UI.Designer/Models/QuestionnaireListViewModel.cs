@@ -32,5 +32,7 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Public?", Order = 6)]
         [OnlyForAdmin]
         public bool IsPublic { get; set; }
+
+        public string Location { get; set; }
     }
 }

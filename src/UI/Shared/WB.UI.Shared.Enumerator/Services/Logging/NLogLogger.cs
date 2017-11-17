@@ -1,7 +1,4 @@
 using System;
-using System.IO;
-using System.Threading;
-using Java.Lang;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Exceptions;
 using MvvmCross.Platform.Platform;
@@ -9,7 +6,7 @@ using NLog;
 using Exception = System.Exception;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
-namespace WB.UI.Interviewer.Infrastructure.Logging
+namespace WB.UI.Shared.Enumerator.Services.Logging
 {
     public class NLogLogger : ILogger
     {

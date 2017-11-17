@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterview {
@@ -214,6 +214,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old interview details.
+        /// </summary>
+        public static string Filters_OldDetailsLink {
+            get {
+                return ResourceManager.GetString("Filters_OldDetailsLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter Questions.
         /// </summary>
         public static string Filters_Title {
@@ -268,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} answers.
+        ///   Looks up a localized string similar to {{value}} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
             get {
@@ -286,7 +295,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} errors.
+        ///   Looks up a localized string similar to {{value}} errors.
         /// </summary>
         public static string Interview_Group_InvalidAnswers_ManyFormat {
             get {
@@ -304,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section completed: {0}.
+        ///   Looks up a localized string similar to Section completed: {{value}}.
         /// </summary>
         public static string Interview_Group_Status_CompletedFormat {
             get {
@@ -322,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section started: {0}.
+        ///   Looks up a localized string similar to Section started: {{value}}.
         /// </summary>
         public static string Interview_Group_Status_StartedIncompleteFormat {
             get {
@@ -331,7 +340,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} sub-sections.
+        ///   Looks up a localized string similar to {{value}} sub-sections.
         /// </summary>
         public static string Interview_Group_Subgroups_ManyFormat {
             get {
@@ -498,15 +507,6 @@ namespace WB.UI.Headquarters.Resources {
         public static string Resume_WelcomeText {
             get {
                 return ResourceManager.GetString("Resume_WelcomeText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to {{ count }} questions found.
-        /// </summary>
-        public static string SearchResult_Count {
-            get {
-                return ResourceManager.GetString("SearchResult_Count", resourceCulture);
             }
         }
         

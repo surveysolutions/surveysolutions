@@ -5,6 +5,7 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -59,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             AnswerType.YesNoList
         };
 
-        private readonly Dictionary<AnswerType, string> AnswerColumnNameByAnswerType = new Dictionary<AnswerType, string>
+        private readonly Dictionary<AnswerType, string> answerColumnNameByAnswerType = new Dictionary<AnswerType, string>
         {
             {AnswerType.Area, AsAreaColumn},
             {AnswerType.Audio, AsAudioColumn},
@@ -147,13 +148,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             => UpdateAnswer(interviewId, questionIdentity, answer, EntityType.Question);
 
         public void UpdateVariables(Guid interviewId, ChangedVariable[] variables)
-            => variables.ForEach(variable => this.UpdateAnswer(interviewId, variable.Identity, variable.NewValue,
-                EntityType.Variable));
+        {
+            var notNullVariables = variables.Where(x => x.NewValue != null).ToList();
+            notNullVariables.ForEach(variable =>
+            {
+                this.UpdateAnswer(interviewId, variable.Identity, variable.NewValue, EntityType.Variable);
+            });
+
+            if (notNullVariables.Count != variables.Length)
+            {
+                var removeAnswersFrom = variables.Where(x => x.NewValue == null).Select(x => x.Identity).ToList();
+                this.RemoveAnswersImpl(interviewId, removeAnswersFrom, EntityType.Variable);
+            }
+        }
 
         private void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer, EntityType entityType)
         {
-            var answerType = InterviewEntity.GetAnswerType(answer);
-            var columnNameByAnswer = AnswerColumnNameByAnswerType[answerType.Value];
+            AnswerType? answerType = InterviewEntity.GetAnswerType(answer);
+            var columnNameByAnswer = answerColumnNameByAnswerType[answerType.Value];
             var isJsonAnswer = JsonAnswerTypes.Contains(answerType.Value);
             
             using (var command = this.sessionProvider.GetSession().Connection.CreateCommand())
@@ -298,8 +310,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         }
 
-        public void RemoveAnswers(Guid interviewId, Identity[] questionIds)
-            => this.sessionProvider.GetSession().Connection.Execute(
+        public void RemoveAnswers(Guid interviewId, IEnumerable<Identity> entityIds)
+            => RemoveAnswersImpl(interviewId, entityIds, EntityType.Question);
+
+        private int RemoveAnswersImpl(Guid interviewId, IEnumerable<Identity> entityIds, EntityType entityType)
+        {
+            return this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
                 "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
                 $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
@@ -317,13 +333,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"{AsLongColumn} = null, " +
                 $"{AsStringColumn} = null, " +
                 $"{AsYesNoColumn} = null;",
-                questionIds.Select(x => new
+                entityIds.Select(x => new
                 {
                     InterviewId = interviewId,
                     EntityId = x.Id,
                     RosterVector = x.RosterVector.Array,
-                    EntityType = EntityType.Question
+                    EntityType = entityType
                 }));
+        }
 
         public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity, Guid[] multimediaQuestionIds)
         {
@@ -361,6 +378,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
                 $"WHERE {AsGpsColumn} is not null " +
                 $"GROUP BY questionnaireidentity").ToArray();
+
+        public List<ExportedError> GetErrors(IEnumerable<Guid> interveiws)
+        {
+            var connection = this.sessionProvider.GetSession().Connection;
+            var array = interveiws.ToArray();
+            var errors = connection.Query<ExportedError>(
+                $@"SELECT {InterviewIdColumn} as {nameof(ExportedError.InterviewId)}, {EntityIdColumn} as {nameof(ExportedError.EntityId)}, 
+                          {RosterVectorColumn} as {nameof(ExportedError.RosterVector)}, {EntityTypeColumn} as {nameof(ExportedError.EntityType)}, 
+                          {InvalidValidationsColumn} as {nameof(ExportedError.FailedValidationConditions)}
+                          FROM {InterviewsTableName}
+                          WHERE {InterviewIdColumn} = ANY(@interviews) AND {EntityTypeColumn} IN(2, 3) AND array_length({InvalidValidationsColumn}, 1) > 0
+                          ORDER BY interviewid",
+                new
+                {
+                    interviews = array
+                }).ToList();
+
+            return errors;
+        }
 
         public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude, double southWestCornerLatitude,

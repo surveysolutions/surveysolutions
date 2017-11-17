@@ -206,6 +206,25 @@ namespace WB.Tests.Integration
             Assert.That(readOnlyQuestions, Is.EquivalentTo(interviewEntities.Select(x=>x.Identity)));
         }
 
+        [Test]
+        public void when_udpading_variable_with_null_value()
+        {
+            Guid interviewId = Id.g1;
+            var interviewSummaryRepository = GetInMemoryInterviewSummaryRepository(interviewId);
+            var factory = CreateInterviewFactory(interviewSummaryRepository);
+
+            // Act
+            this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.UpdateVariables(interviewId, new[]
+            {
+                new ChangedVariable(Create.Identity(), null)
+            }));
+
+            // Assert
+            var interviewEntities = this.GetInterviewEntities(factory, interviewId);
+            
+            Assert.That(GetAnswer(interviewEntities[0]), Is.Null);
+        }
+
         [TestCase(EntityType.StaticText)]
         [TestCase(EntityType.Question)]
         [TestCase(EntityType.Variable)]

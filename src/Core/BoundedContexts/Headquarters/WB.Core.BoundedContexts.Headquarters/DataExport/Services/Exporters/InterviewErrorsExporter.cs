@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -18,25 +19,28 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
     public class InterviewErrorsExporter
     {
-        private readonly InterviewsErrorsReader errorsReader;
+        private readonly IInterviewFactory interviewFactory;
         private readonly ILogger logger;
         private readonly ICsvWriter csvWriter;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ITransactionManagerProvider transactionManager;
         private const string FileName = "interview__errors.tab";
 
         protected InterviewErrorsExporter()
         {
         }
 
-        public InterviewErrorsExporter(InterviewsErrorsReader errorsReader,
+        public InterviewErrorsExporter(IInterviewFactory interviewFactory,
             ILogger logger,
             ICsvWriter csvWriter,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            ITransactionManagerProvider transactionManager)
         {
-            this.errorsReader = errorsReader;
+            this.interviewFactory = interviewFactory;
             this.logger = logger;
             this.csvWriter = csvWriter;
             this.questionnaireStorage = questionnaireStorage;
+            this.transactionManager = transactionManager;
         }
 
         public void Export(QuestionnaireExportStructure exportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -55,14 +59,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             foreach (var interviewsBatch in interviewIdsToExport.Batch(40))
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var exportedErrors = this.errorsReader.GetErrors(interviewsBatch.ToList());
+               
+                var exportedErrors =
+                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                        this.interviewFactory.GetErrors(interviewsBatch.ToList()));
+                List<string[]> exportRecords = new List<string[]>();
                 foreach (var error in exportedErrors)
                 {
                     foreach (var failedValidationConditionIndex in error.FailedValidationConditions)
                     {
-                        var exportRow = ConvertExportRowToCsv(questionnaire, error, maxRosterDepthInQuestionnaire, failedValidationConditionIndex);
-                        this.csvWriter.WriteData(filePath, new[] { exportRow.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
+                        string[] exportRow = CreateExportRow(questionnaire, error, maxRosterDepthInQuestionnaire, failedValidationConditionIndex);
+                        exportRecords.Add(exportRow);
                     }
+                }
+
+                if (exportRecords.Count > 0)
+                {
+                    this.csvWriter.WriteData(filePath, exportRecords, ExportFileSettings.DataFileSeparator.ToString());
                 }
 
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
@@ -72,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             progress.Report(100);
         }
 
-        private static List<string> ConvertExportRowToCsv(IQuestionnaire questionnaire, ExportedError error,
+        private static string[] CreateExportRow(IQuestionnaire questionnaire, ExportedError error,
             int maxRosterDepthInQuestionnaire, int failedValidationConditionIndex)
         {
             List<string> exportRow = new List<string>();
@@ -114,23 +127,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
             exportRow.Add((failedValidationConditionIndex + 1).ToString());
             exportRow.Add(questionnaire.GetValidationMessage(error.EntityId, failedValidationConditionIndex).RemoveHtmlTags());
-            return exportRow;
+            return exportRow.ToArray();
         }
 
         private void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath)
         {
-            var header = new List<string> { "Variable", "Type" };
+            var header = new List<string> { "variable", "type" };
             if (hasAtLeastOneRoster)
-                header.Add("Roster");
+                header.Add("roster");
 
-            header.Add("InterviewId");
+            header.Add("interviewid");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
-                header.Add($"Id{i}");
+                header.Add($"id{i}");
             }
-            header.Add("Message Number");
-            header.Add("Message");
+            header.Add("message_number");
+            header.Add("message");
 
             this.csvWriter.WriteData(filePath, new[] { header.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
         }

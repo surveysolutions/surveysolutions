@@ -60,6 +60,7 @@
     "angular-ui-router": "0.4.2",
     "angular-ui-tree": "^2.22.6",
     "angular-ui-utils": "^0.1.1",
+    "bootbox": "^4.4.0",
     "bootstrap": "3.3.7",
     "console-shim": "^1.0.3",
     "es5-shim": "^4.5.9",

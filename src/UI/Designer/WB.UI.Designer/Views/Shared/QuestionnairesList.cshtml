@@ -31,7 +31,7 @@
             {
                 <table id="questionnaire-table-content" class="table table-content ">
                     <tbody>
-                        @foreach (var listViewModel in Model)
+                @foreach (var listViewModel in Model)
                 {
                     var routevalues = listViewModel.GetIdValue();
                     var itemId = listViewModel.GetId();
@@ -46,7 +46,7 @@
 
                             <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
                                 <td class="search-value">
-                                    <a href="@Url.Action(openActionName, "Questionnaire", routevalues)">
+                                    <a href="@Url.Action(openActionName, "Questionnaire", routevalues)" title="@listViewModel.Location">
                                         <span class="@iconCssClass"></span>
                                         @listViewModel.Title
                                     </a>

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Machine.Specifications;
 using NUnit.Framework;
 
@@ -8,10 +9,9 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 {
     internal class when_checking_that_translated_resources_have_same_string_format_elements_as_original : ResourcesTranslationTestsContext
     {
-        private static readonly List<string> fileNamesToExculde = new List<string>()
-        {
-            "QuestionnaireEditor"
-        };
+        private static readonly Regex PluralizationRegex = new Regex(@"(_plural|_\d+)$", RegexOptions.Compiled);
+
+        private static readonly List<string> fileNamesToExculde = new List<string>();
 
         [OneTimeSetUp]
         public void Context()
@@ -49,7 +49,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 if (!originalResources.ContainsKey(translatedResource.Key))
                 {
-                    yield return $"<{translatedResourceFile}> {translatedResource.Key}: no original resource string found";
+                    var cleanKey = PluralizationRegex.Replace(translatedResource.Key, "");
+                    if (!originalResources.ContainsKey(cleanKey))
+                    {
+                        yield return $"<{translatedResourceFile}> {translatedResource.Key}: no original resource string found";
+                    }
+
                     continue;
                 }
 

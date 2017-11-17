@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
@@ -8,9 +9,10 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     [TestFixture]
     internal class ResourcesTranslationTests : ResourcesTranslationTestsContext
     {
+        private static readonly Regex PluralizationRegex = new Regex(@"(_plural|_\d+)$", RegexOptions.Compiled);
+
         private static List<string> fileNamesToExculde = new List<string>()
         {
-            "QuestionnaireEditor"
         };
 
         [Test]
@@ -42,7 +44,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 if (!originalResources.ContainsKey(translatedResource.Key))
                 {
-                    yield return $"<{translatedResourceFile}> {translatedResource.Key}: no original resource string found";
+                    var cleanKey = PluralizationRegex.Replace(translatedResource.Key, "");
+                    if (!originalResources.ContainsKey(cleanKey))
+                    {
+                        yield return $"<{translatedResourceFile}> {translatedResource.Key}: no original resource string found";
+                    }
+
                     continue;
                 }
 

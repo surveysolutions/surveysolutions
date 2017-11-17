@@ -47,6 +47,14 @@
                 if (node.key == "root")
                     return { "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" } };
 
+                if (removeNodeUrl == null)
+                {
+                    return {
+                        "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" },
+                        "edit": { "name": localization.Edit, "icon": "edit" }
+                    };
+                }
+
                 return {
                     "createSubFolder": { "name": localization.CreateSubFolder, "icon": "add" },
                     "edit": { "name": localization.Edit, "icon": "edit" },
@@ -55,7 +63,7 @@
             },
             actions: function (node, action, options) {
                 if (action === "createSubFolder") {
-                    var defaultFolderName = "New folder";
+                    var defaultFolderName = localization.NewFolderName;
                     self.postRequest(addNodeUrl, { 'parentId': node.key, 'title': defaultFolderName }, function (data) {
                         node.editCreateNode("child",
                             {
@@ -67,8 +75,14 @@
                 } else if (action === "edit") {
                     node.editStart();
                 } else if (action === "delete") {
-                    self.postRequest(removeNodeUrl, { 'id': node.key }, function() {
-                        node.remove();
+                    var message = localization.DeleteConfirmation.replace("{0}", "<b>" + node.title + "</b>");
+                    bootbox.confirm(message, function (result) {
+                        if (result)
+                        {
+                            self.postRequest(removeNodeUrl, { 'id': node.key }, function () {
+                                node.remove();
+                            });
+                        }
                     });
                 } 
             }
@@ -81,20 +95,10 @@
                     return false;
             },
             edit: function (event, data) {
-                // Editor was opened (available as data.input)
+                data.input.select();
             },
             beforeClose: function (event, data) {
                 // Return false to prevent cancel/save (data.input is available)
-                console.log(event.type, event, data);
-                if (data.originalEvent.type === "mousedown") {
-                    // We could prevent the mouse click from generating a blur event
-                    // (which would then again close the editor) and return `false` to keep
-                    // the editor open:
-                    //                  data.originalEvent.preventDefault();
-                    //                  return false;
-                    // Or go on with closing the editor, but discard any changes:
-                    //                  data.save = false;
-                }
             },
             save: function (event, data) {
                 var newTitle = data.input.val();

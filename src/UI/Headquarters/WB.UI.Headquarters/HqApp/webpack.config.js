@@ -7,7 +7,7 @@ const config = {
     },
     webinterview: {
         entry: "./src/webinterview/main.js",
-        locales: ["WebInterviewUI", "Common"]
+        locales: ["WebInterviewUI", "WebInterview", "Common"]
     }
 };
 

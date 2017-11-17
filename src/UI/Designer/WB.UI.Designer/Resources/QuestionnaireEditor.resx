@@ -785,7 +785,7 @@
     <value>Text that will be shown next to a variable for testing purposes</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>A text up to 80 characters that will be attached to the exported variable.</value>
+    <value>A text up to {{maxLength}} characters that will be attached to the exported variable.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
     <value>Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>

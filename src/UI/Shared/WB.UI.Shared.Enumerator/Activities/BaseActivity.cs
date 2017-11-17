@@ -1,11 +1,12 @@
 using Android.OS;
+using HockeyApp.Android;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Platform;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platform;
 using Plugin.CurrentActivity;
 using Plugin.Permissions;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -24,6 +25,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         protected override void OnResume()
         {
+            CrashManager.Register(this, new AutoSendingCrashListener());
             base.OnResume();
             CrossCurrentActivity.Current.Activity = this;
         }

@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Section completed: {0}</value>
+    <value>Section completed: {{value}}</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} answers</value>
+    <value>{{value}} answers</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} sub-sections</value>
+    <value>{{value}} sub-sections</value>
   </data>
   <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
     <value>no sub-sections</value>
@@ -139,10 +139,10 @@
     <value>one sub-section</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Section started: {0}</value>
+    <value>Section started: {{value}}</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} errors</value>
+    <value>{{value}} errors</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>one error</value>
@@ -292,10 +292,7 @@
   <data name="PoweredBy" xml:space="preserve">
     <value>Powered by</value>
   </data>
-  <data name="SearchResult_Count">
-    <value>{{ count }} questions found</value>
-  </data>
-  <data name="Filters_ClearSelection">
+  <data name="Filters_ClearSelection" xml:space="preserve">
     <value>View all (reset all filters)</value>
   </data>
   <data name="Filters_OldDetailsLink" xml:space="preserve">

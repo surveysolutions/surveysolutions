@@ -13,12 +13,13 @@ export default {
   },
 
   beforeMount() {
+    var self = this;
     setInterval(() => {
-      if (!this.shown) {
-        const minutesAfterLastAction = moment().diff(this.lastActivity, 'minutes');
+      if (!self.shown) {
+        const minutesAfterLastAction = moment().diff(self.lastActivity, 'minutes');
 
-        if (Math.abs(minutesAfterLastAction) > this.minutes) {
-          this.show();
+        if (Math.abs(minutesAfterLastAction) >= self.minutes) {
+          self.show();
         }
       }
     }, 15 * 1000);

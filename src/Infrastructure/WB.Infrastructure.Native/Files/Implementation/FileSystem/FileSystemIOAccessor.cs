@@ -14,6 +14,12 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public string CombinePath(string path1, string path2) => Path.Combine(path1, path2);
 
         public string ChangeExtension(string path1, string newExtension) => Path.ChangeExtension(path1, newExtension);
+        public void MoveFile(string pathToFile, string newPathToFile)
+        {
+            if(File.Exists(newPathToFile))
+                File.Delete(newPathToFile);
+            File.Move(pathToFile, newPathToFile);
+        }
 
         public string GetFileName(string filePath) => Path.GetFileName(filePath);
 

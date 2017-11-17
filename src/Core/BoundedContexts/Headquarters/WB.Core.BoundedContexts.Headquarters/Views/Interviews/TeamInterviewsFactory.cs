@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     InterviewId = x.InterviewId,
                     Key = x.Key,
                     ClientKey = x.ClientKey,
-                    LastEntryDate = x.UpdateDate.ToShortDateString(),
+                    LastEntryDateUtc = x.UpdateDate,
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     ResponsibleRole = x.ResponsibleRole,

@@ -53,7 +53,7 @@
 .content{
 	z-index: 4;
 	left: 12px;
-	@include box-shadow(20px 0px 40px 0px rgba(0, 0, 0, 0.2));
+	@include box-shadow(20px 10px 40px 0px rgba(0, 0, 0, 0.2));
 }
 .filters-results{
 	@include transition(all, 0.3s);
@@ -178,15 +178,6 @@
 	.question-editor .button-flag{
 		@include absolute(0, null, null, -30px);
 	}
-	&.with-flag{
-		display: block;
-		@include gradient-horizontal($gray-super-light, $gray-super-light);
-		background-repeat: repeat-y;
-		background-size: 12px 100%;
-		.question-editor .button-flag{
-			@extend .flagged;
-		}
-	}
 	.progress.question-progress{
 		bottom: -2px;
 	}
@@ -296,6 +287,7 @@
  .disabled-question .question-editor.roster-section-block .disabled{
 	background-color: $gray-highlight-font;
 	background-image: none;
+	color: #fff !important;
 }
 .roster-section-btn-wrapper{
 	padding: 0 10px;
@@ -347,24 +339,38 @@
 			background-color: transparent;
 		}
 	}
-	&.has-error .question-unit .options-group{
-		background-color: $red-super-light;
-		.form-group{
-			border-color: $red-super-light;
+	&.has-error {
+		.question-unit .options-group{
+			background-color: $red-super-light;
+			.form-group{
+				border-color: $red-super-light;
+			}
 		}
-	}
-	&.has-error .form-control:focus{
-		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		.form-control:focus{
+			box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		}
+		.field-to-fill{
+			box-shadow: none;
+			&:hover, &:focus, &:active, &:active:focus {
+				border-color: transparent;
+				box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580; 
+			}
+		}
 	}
 	.question-unit{
 		.radio, .form-group{
-			border-color: transparent;
+			border-color: #eeeff0;
 		}
 	}
 	&.answered{
 		.question-unit{
 			.radio, .form-group{
 				border-color: $gray-form;
+			}
+		}
+		&.has-error .question-unit{
+			.radio, .form-group{
+				border-color: #f6d6d0;
 			}
 		}
 	}
@@ -520,7 +526,7 @@
 		}
 	}
 }
-.gps-question, .qr-question, .current-time-question, .multimedia-question{
+.gps-question, .qr-question, .current-time-question, .multimedia-question, .area-question{
 	&.answered, &.has-error{
 		@extend %action-btn;
 	}
@@ -540,7 +546,7 @@
 		max-height: 200px;
 	}
 }
-.qr-question, .current-time-question{
+.qr-question, .current-time-question, .area-question {
 		&.answered, &.has-error{
 		.block-with-data{
 			font-size: 12px;
@@ -550,6 +556,7 @@
 		}
 	}
 }
+
 .img-single-select-question{
 	label{
 		overflow: hidden;
@@ -664,8 +671,10 @@
 		display: block;
 	}
 	input[type="text"]:disabled,
-	label,
-	.field{
+	.field label,
+	.radio .field,
+	.options-group input,
+	.options-group label{
 		background: rgba(248, 248, 248, 0.8);
 		border-radius: 5px;
 		&:hover, &:focus, &:active{
@@ -763,6 +772,15 @@
 .readonly .dropdown-toggle:disabled{
 	background: rgba(248, 248, 248, 0.8);
 }
+.readonly {
+	.btn:disabled,
+	.btn.disabled{
+		background: rgba(248, 248, 248, 1);
+	}
+	.btn.btn-clear{
+		display: none;
+	}
+}
 @media only screen and (max-width: 1525px){
 	.content{
 		width: $content-width-small;
@@ -785,9 +803,6 @@
 	}
 }
 @media (max-width: $screen-md-min){
-	.filters-results{
-		margin-top: 60px;
-	}
 	.wide-navbar{
 		.content{
 			margin-top: 60px;
@@ -822,23 +837,6 @@
 				vertical-align: middle;
 			}
 		}
-		&.filters-results-are-shown{
-			.filters-results.active{
-				width: 100%;
-				left: 0;
-				.close-btn{
-					right: 10px;
-				}
-			}
-			.content, .filters{
-				display: none;
-			}
-			.questionnaire {
-				&.details-interview{
-					@include width-questionnaire(0px);
-				}
-			}
-		}
 		.content{
 			margin-top: 60px;
 			box-shadow: none;
@@ -849,33 +847,14 @@
 		.complete-link{
 			padding-left: 60px;
 		}
-		&.fullscreen-hidden-filters, &.show-filters{
-			.content, .questionnaire{
-				display: none;
-			}
-			.filters{
-				@include absolute(0, 0, 0, 0);
-				width: 100%;
-			}
-		}
-		&.show-filters{
-			.filters{
-				margin-left: 0;
-				height: auto;
-				.filters-container, .preset-filters-container{
-					width: $filter-width-details;
-					margin: 0 auto;
-				}
-			}
-		}
 		&.fullscreen-hidden-content, &.show-content{
 			.filters, .questionnaire{
 				display: none;
 			}
 			.content{
 				overflow: auto;
-				@include absolute(0, 0, 0, 0);
-				width: 100%;
+				@include absolute(0, 0, 0, 12px);
+				width: calc(100% - 12px);
 				height: auto;
 				border: none;
 				@include visible-foldback-button();
@@ -905,9 +884,7 @@
 		}
 	}
 	.web-interview{
-
 		.questionnaire {
-
 			.comment .form-inline {
 				.form-group{
 					margin-bottom: 0;

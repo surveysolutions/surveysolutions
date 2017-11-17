@@ -124,10 +124,10 @@
     <value>Здравствуйте {0}, &lt;br&gt; пользователь {1} пригласил вас {2} следующий вопросник:</value>
   </data>
   <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
-    <value>Здравствуйте {0}, &lt;br&gt; {1} закрыл доступ для {2} к вашему опроснику: {3}</value>
+    <value>Здравствуйте {0}, &lt;br&gt; {1} закрыл доступ для {2} к Вашему опроснику: {3}</value>
   </data>
   <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
-    <value>Здравствуйте {0}, &lt;br&gt; пользователь {1}  разрешил пользователю {2} {3} ваш опросник:</value>
+    <value>Здравствуйте {0}, &lt;br&gt; пользователь {1}  дал доступ пользователю {2} {3} к Вашему опроснику:</value>
   </data>
   <data name="ConfirmationEmail" xml:space="preserve">
     <value>Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс регистрации, нажмите на эту ссылку:</value>

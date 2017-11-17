@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
     {
         private readonly IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage;
+        private readonly IPlainStorageAccessor<User> accountStorage;
 
         QuestionnaireListViewFolder publicQuestionnairesFolder = new QuestionnaireListViewFolder()
         {
@@ -21,10 +23,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
 
 
         public PublicFoldersStorage(IPlainStorageAccessor<QuestionnaireListViewFolder> folderStorage,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage)
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireStorage,
+            IPlainStorageAccessor<User> accountStorage)
         {
             this.folderStorage = folderStorage;
             this.questionnaireStorage = questionnaireStorage;
+            this.accountStorage = accountStorage;
         }
 
         public IEnumerable<QuestionnaireListViewFolder> GetSubFolders(Guid? folderId)
@@ -55,6 +59,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Repositories
                 Parent = parentId,
                 CreateDate = DateTime.UtcNow,
                 CreatedBy = userId,
+                CreatorName = this.accountStorage.GetById(userId.FormatGuid())?.UserName,
                 Depth = depth,
                 Path = path
             };

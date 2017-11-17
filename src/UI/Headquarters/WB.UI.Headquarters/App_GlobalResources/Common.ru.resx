@@ -291,4 +291,8 @@
   <data name="AuditLog" xml:space="preserve">
     <value> Аудит</value>
   </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Обработка...</value>
+    <comment>Обработка...</comment>
+  </data>
 </root>

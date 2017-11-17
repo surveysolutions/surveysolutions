@@ -45,7 +45,10 @@ const store = safeStore({
             return result;
         },
         addCommentsAllowed(state) {
-            return !state.receivedByInterviewer;
+            return !state.interviewCannotBeChanged;
+        },
+        basePath() {
+            return window.input ? window.input.settings.config.basePath : window.CONFIG.basePath;
         }
     }
 })

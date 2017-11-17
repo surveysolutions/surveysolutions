@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         Owner = x.Owner,
                         PublicId = x.PublicId,
                         QuestionnaireId = x.QuestionnaireId,
-                        Title = x.Title,
+                        Title = x.Title
                     })
                     .OrderUsingSortExpression(sortOrder)
                     .Skip((input.Page - 1) * input.PageSize)
@@ -76,8 +76,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public QuestionnaireListView LoadFoldersAndQuestionnaires(QuestionnaireListInputModel input)
         {
-            List<QuestionnaireListViewFolder> folders = Enumerable.Empty<QuestionnaireListViewFolder>().ToList();
-            List<QuestionnaireListViewItem> questionnaires = Enumerable.Empty<QuestionnaireListViewItem>().ToList();
+            List<QuestionnaireListViewFolder> folders = new List<QuestionnaireListViewFolder>();
+            List<QuestionnaireListViewItem> questionnaires = new List<QuestionnaireListViewItem>(); 
             int foldersCount = 0, questionnairesCount = 0;
             var isSupportFolders = input.IsPublic;
 
@@ -117,6 +117,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                             PublicId = x.PublicId,
                             QuestionnaireId = x.QuestionnaireId,
                             Title = x.Title,
+                            FolderId = x.FolderId,
+                            Folder = isSupportFolders ? x.Folder : null
                         })
                         .OrderUsingSortExpression(sortOrder)
                         .Skip(questionnairesSkipCount)
@@ -124,9 +126,36 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         .ToList());
             }
 
+            var items = folders.Concat(questionnaires.Cast<IQuestionnaireListItem>()).ToList();
             return new QuestionnaireListView(page: input.Page, pageSize: input.PageSize, totalCount: count,
-                items: folders.Concat(questionnaires.Cast<IQuestionnaireListItem>()).ToList(), 
-                order: input.Order);
+                items: items, order: input.Order);
+        }
+
+        public IEnumerable<QuestionnaireListFolderLocation> LoadFoldersLocation(IEnumerable<QuestionnaireListViewFolder> folders)
+        {
+            HashSet<Guid> foldersIds = new HashSet<Guid>();
+            folders.ForEach(f =>
+            {
+                var foldersFromPath = f.Path.Split('/');
+                foreach (var pathFolder in foldersFromPath)
+                {
+                    if (!string.IsNullOrEmpty(pathFolder))
+                    {
+                        foldersIds.Add(Guid.Parse(pathFolder));
+                    }
+                }
+            });
+
+            var titles = publicFoldersStorage.Query(_ => 
+                _.Where(f => foldersIds.Contains(f.PublicId))
+                    .Select(f => new{ PublicId = f.PublicId, Title = f.Title })
+            ).ToDictionary(k => k.PublicId, v => v.Title);
+
+            return folders.Select(f => new QuestionnaireListFolderLocation()
+            {
+                PublicId = f.PublicId,
+                Location = string.Join(" / ", f.Path.Split('/').Where(fp => !string.IsNullOrEmpty(fp)).Select(fp => titles[Guid.Parse(fp)]))
+            }).ToList();
         }
 
         private static string ConvertToFolderSortOrder(QuestionnaireListInputModel input)
