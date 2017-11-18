@@ -1596,7 +1596,6 @@
     <Content Include="Views\Maps\Details.cshtml" />
     <Content Include="Views\Maps\MapPreview.cshtml" />
     <Content Include="Views\Maps\UserMapsLink.cshtml" />
-    <Content Include="Views\Maps\MapDetails.cshtml" />    
     <Content Include="Views\Maps\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
