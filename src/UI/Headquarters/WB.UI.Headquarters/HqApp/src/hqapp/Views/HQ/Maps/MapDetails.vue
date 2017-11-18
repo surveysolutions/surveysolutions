@@ -1,6 +1,13 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$config.model.fileName">
-        
+    <HqLayout :hasFilter="false" >
+        <div slot="headers">
+                <ol class="breadcrumb">
+                    <li>
+                        <a :href="$config.model.mapsUrl">{{$t("Dashboard.Maps")}}</a>
+                    </li>
+                </ol>
+                    <h1>{{$config.model.fileName}}</h1>
+        </div>
         <div class="row">
           <div class="col-md-7 col-sm-12">
                 <div class="row">
@@ -32,6 +39,12 @@
             :addParamsToRequest="addParamsToRequest"
             :contextMenuItems="contextMenuItems">
         </DataTables>
+
+        <Confirm ref="confirmDiscard"
+                 id="discardConfirm"
+                 slot="modals">
+            {{ $t("Pages.MapUserLink_DiscardConfirm") }}
+        </Confirm>
       </div>
       </div>
     </HqLayout>
@@ -42,30 +55,36 @@ export default {
     mounted() {
         this.$refs.table.reload();
     },
-    methods: {        
+    methods: {     
+        reload() {
+            this.$refs.table.reload();
+        },   
         addParamsToRequest(requestData) {
             requestData.mapName = this.$config.model.fileName;
         },
         contextMenuItems({ rowData }) {
             return [{
                 name: this.$t("Pages.MapDetails_DelinkUser"),
-                callback: () => self.delinkUserFromMap(rowData)
-                    
+                callback: () => { this.delinkUserFromMap(rowData.userName, this.$config.model.fileName)}                    
             }];
         },
-        delinkUserFromMap(userName) {
+
+        delinkUserFromMap(userName, fileName) 
+        {
             const self = this;
-            this.$refs.confirmDiscard.promt(ok => {
-                if (ok) {
-                    
-                    self.$store.dispatch("delinkUser", {
-                        userName : userName,
-                        mapName: this.$config.model.fileName,
-                        callback: self.reload
-                    });
+            this.$refs.confirmDiscard.promt(ok => 
+            {
+                if (ok) 
+                {                  
+                    this.$http({
+                        method: 'delete',
+                        url: this.config.deleteMapUserLinkUrl,
+                        data: {user:userName, map: fileName}})
+
+                    this.$refs.table.reload();
                 }
-            });
-        }
+            })
+        },        
     },
     computed: {        
         config() {

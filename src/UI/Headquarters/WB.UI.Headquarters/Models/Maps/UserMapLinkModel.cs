@@ -4,7 +4,6 @@
     {
         public string DownloadAllUrl { get; set; }
         public string UploadUrl { get; set; }
-
         public string MapsUrl { get; set; }
     }
 }
