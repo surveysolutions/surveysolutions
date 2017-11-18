@@ -1590,16 +1590,14 @@
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
     <Content Include="Views\WebInterview\Index.cshtml" />
     <Content Include="Views\AuditLog\Index.cshtml" />
-    <Content Include="Views\Maps\Index.cshtml" />
     <Content Include="Views\Interview\Review.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <Content Include="Views\Maps\Details.cshtml" />
     <Content Include="Views\Maps\MapPreview.cshtml" />
     <Content Include="Views\Maps\UserMapsLink.cshtml" />
-    <Content Include="Views\Maps\MapDetails.cshtml" />
-    <Content Include="Views\Maps\UserMapsLinking.cshtml" />
-    <Content Include="Views\Maps\MapList.cshtml" />
+    <Content Include="Views\Maps\MapDetails.cshtml" />    
+    <Content Include="Views\Maps\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>

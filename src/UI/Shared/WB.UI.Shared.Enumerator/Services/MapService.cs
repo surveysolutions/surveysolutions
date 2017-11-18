@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly string mapsLocation;
         private readonly ILogger logger;
 
-        string filesToSearch = "*.tpk";
+        string[] filesToSearch = {"*.tpk", "*.mmpk"};
 
         string tempSuffix = ".part";
 
@@ -71,7 +71,10 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 return new List<MapDescription>();
 
-            return this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, this.filesToSearch).OrderBy(x => x)
+            return
+                this.filesToSearch
+                .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
+                .OrderBy(x => x)
                 .Select(x => new MapDescription()
                 {
                     MapFullPath = x,
