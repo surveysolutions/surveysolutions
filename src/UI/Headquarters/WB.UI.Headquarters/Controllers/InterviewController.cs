@@ -126,6 +126,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 CommandService.Execute(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id, DateTime.Now));
             }
 
+            ViewBag.SpecificPageCaption = interviewSummary.Key;
+
             return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
                 Id = id.FormatGuid(),
