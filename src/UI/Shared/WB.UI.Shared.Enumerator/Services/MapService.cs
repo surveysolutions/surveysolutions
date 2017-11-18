@@ -14,22 +14,22 @@ namespace WB.UI.Shared.Enumerator.Services
     {
         private readonly IPermissions permissions;
         private readonly IFileSystemAccessor fileSystemAccessor;
-       
+
         private readonly string mapsLocation;
         private readonly ILogger logger;
 
-        string[] filesToSearch = {"*.tpk", "*.mmpk"};
+        string filesToSearch = "*.tpk";
 
         string tempSuffix = ".part";
 
-        public MapService(IPermissions permissions, 
+        public MapService(IPermissions permissions,
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger)
         {
             this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
-            
+
             this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
         }
 
@@ -71,10 +71,7 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 return new List<MapDescription>();
 
-            return
-                this.filesToSearch
-                .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
-                .OrderBy(x => x)
+            return this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, this.filesToSearch).OrderBy(x => x)
                 .Select(x => new MapDescription()
                 {
                     MapFullPath = x,
@@ -109,14 +106,14 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
-            
+
             var tempFileName = GetTempFileName(mapName);
 
             if (this.fileSystemAccessor.IsFileExists(tempFileName))
                 this.fileSystemAccessor.DeleteFile(tempFileName);
 
             return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, false);
-            
+
         }
 
         public void MoveTempMapToPermanent(string mapName)
