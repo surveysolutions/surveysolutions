@@ -206,9 +206,8 @@ namespace WB.UI.Headquarters.Controllers
             return result;
         }
 
-        [ApiValidationAntiForgeryToken]
         [ObserverNotAllowedApi]
-        [HttpPost]
+        [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
         public JsonCommandResponse DeleteMap(DeleteMapRequestModel request)
         {
@@ -221,9 +220,8 @@ namespace WB.UI.Headquarters.Controllers
             public string Map { get; set; }
         }
 
-        [ApiValidationAntiForgeryToken]
         [ObserverNotAllowedApi]
-        [HttpPost]
+        [HttpDelete]
         [Authorize(Roles = "Administrator, Headquarter")]
         public JsonCommandResponse DeleteMapUser(DeleteMapUserRequestModel request)
         {

@@ -53,13 +53,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             {
                 IQueryable<UserMap> query = queryable;
 
+                query = query.Where(x => x.Map == input.MapName);
 
                 if (!string.IsNullOrEmpty(input.SearchBy))
                 {
-                    var filterLowerCase = input.SearchBy.ToLower();
-                    query = query.Where(x => x.Map.ToLower() == input.MapName.ToLower() && x.UserName.ToLower().Contains(filterLowerCase));
+                    query = query.Where(x=> x.UserName.Contains(input.SearchBy));
                 }
-
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
 

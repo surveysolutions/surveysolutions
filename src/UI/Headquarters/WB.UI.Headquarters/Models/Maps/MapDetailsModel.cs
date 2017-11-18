@@ -19,5 +19,6 @@
         public string DataUrl { get; set; }
         public string MapPreviewUrl { get; set; }
         public string MapsUrl { get; set; }
+        public string DeleteMapUserLinkUrl { get; set; }
     }
 }

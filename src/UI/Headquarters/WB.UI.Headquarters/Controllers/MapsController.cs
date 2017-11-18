@@ -59,13 +59,6 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Maps;
-            return View();
-        }
-
-
-        public ActionResult MapList()
-        {
-            this.ViewBag.ActivePage = MenuItem.Maps;
 
             var model = new MapsModel()
             {
@@ -76,14 +69,30 @@ namespace WB.UI.Headquarters.Controllers
                         controller = "MapsApi",
                         action = "MapList"
                     }),
+                UploadMapUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMaps" }),
+                UserMapLinkingUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMapsLink" }),
+                DeleteMapLinkUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "MapsApi", action = "DeleteMap" })
             };
             return View(model);
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteMap(string mapName)
+        {
+            this.mapRepository.DeleteMap(mapName);
+            return this.Content("ok");
         }
 
         public ActionResult UserMapsLink()
         {
             this.ViewBag.ActivePage = MenuItem.Maps;
-            return View();
+            var model = new UserMapLinkModel()
+            {
+                DownloadAllUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "MapsApi", action = "MappingDownload"}),
+                UploadUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMappings" }),
+                MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
+            };
+            return View(model);
         }
 
         [HttpGet]
@@ -95,10 +104,30 @@ namespace WB.UI.Headquarters.Controllers
                 return HttpNotFound();
 
             MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
-            if(map == null)
+            if (map == null)
                 return HttpNotFound();
 
-            return View(map);
+            return this.View("Details",
+                new MapDetailsModel
+                {
+
+                    DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                        new
+                        {
+                            httproute = "",
+                            controller = "MapsApi",
+                            action = "MapUserList"
+                        }),
+                    MapPreviewUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "MapPreview", mapName = map.Id }),
+                    MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
+                    FileName = mapName,
+                    Size = FileSizeUtils.SizeInMegabytes(map.Size),
+                    Wkid = map.Wkid,
+                    ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
+                    MaxScale = map.MaxScale,
+                    MinScale = map.MinScale,
+                    DeleteMapUserLinkUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "MapsApi", action = "DeleteMapUser" })
+                });
         }
 
         [HttpDelete]
@@ -108,53 +137,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.Content("ok");
         }
 
-        public ActionResult UserMapsLinking()
-        {
-            this.ViewBag.ActivePage = MenuItem.Maps;
-            var model = new UserMapLinkModel()
-            {
-                DownloadAllUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "MapsApi", action = "MappingDownload"}),
-                UploadUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMappings" }),
-            };
-            return View(model);
-        }
-
-        [ActivePage(MenuItem.Maps)]
-        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-        public ActionResult MapDetails(string mapName)
-        {
-            this.ViewBag.ActivePage = MenuItem.Maps;
-
-            if (mapName == null)
-                return HttpNotFound();
-
-            MapBrowseItem map = mapPlainStorageAccessor.GetById(mapName);
-            if (map == null)
-                return HttpNotFound();
-
-            return this.View("MapDetails",
-                new MapDetailsModel
-            {
-                    
-                DataUrl = Url.RouteUrl("DefaultApiWithAction",
-                    new
-                    {
-                        httproute = "",
-                        controller = "MapsApi",
-                        action = "MapUserList"
-                    }),
-                MapPreviewUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "MapPreview", mapName = map.Id }),
-                MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
-                FileName = mapName,
-                Size = FileSizeUtils.SizeInMegabytes(map.Size),
-                Wkid = map.Wkid,
-                ImportDate = map.ImportDate.HasValue ? map.ImportDate.Value.FormatDateWithTime() : "",
-                MaxScale = map.MaxScale,
-                MinScale = map.MinScale
-            });
-        }
-
-
+                
         [HttpGet]
         public ActionResult MapPreview(string mapName)
         {
@@ -168,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public async Task<ActionResult> UploadMaps(MapFileUploadModel model)
         {
@@ -228,7 +210,6 @@ namespace WB.UI.Headquarters.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         public ActionResult UploadMappings(MapFileUploadModel model)
         {
@@ -251,7 +232,7 @@ namespace WB.UI.Headquarters.Controllers
                 var mappings = ProcessDataFile(model);
                 foreach (var mapUserMapping in mappings)
                 {
-                    noErrors = noErrors && mapRepository.UpdateUserMaps(mapUserMapping.Map, mapUserMapping.Users.ToArray());
+                    noErrors = mapRepository.UpdateUserMaps(mapUserMapping.Map, mapUserMapping.Users.ToArray()) && noErrors;
                 }
 
                 this.Success("User map imported");
@@ -292,7 +273,11 @@ namespace WB.UI.Headquarters.Controllers
             var dataColumnNamesMappedOnRecordSetter = new Dictionary<string, Action<MapUserMapping, string>>
             {
                 {"map", (r, v) => r.Map = v},
-                {"users", (r, v) => r.Users = new List<string>(v.Split(','))}
+                {"users", (r, v) => 
+                    r.Users = new List<string>(
+                        string.IsNullOrWhiteSpace(v) ? 
+                        new string[0] :
+                        v.Split(',').Select(x=> x.Trim()).ToArray())}
             };
             
             var mappings = new List<MapUserMapping>();

@@ -1,5 +1,5 @@
 <template>
-    <aside class="content wrapper-view-mode" v-if="sections" style="transform: translateZ(0);">
+    <aside class="content" v-if="sections" style="transform: translateZ(0);">
         <wb-humburger id="sidebarHamburger" :show-foldback-button-as-hamburger="showFoldbackButtonAsHamburger" />
         <div class="panel-group structured-content">
             <SidebarPanel :panel="coverSection" v-if="showCover" />

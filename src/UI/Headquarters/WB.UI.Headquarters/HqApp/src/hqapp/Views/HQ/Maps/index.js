@@ -7,11 +7,13 @@ const store = {
     state: {
         pendingHandle: null
     },
-    actions: {       
-
-        delinkUser(context, { callback, userMame, mapName }) {
+    actions: {        
+        openMap(context, fileName) {            
+            window.location = window.input.settings.config.basePath + "Maps/MapDetails?mapname=" + fileName
+        },
+        deleteMap(context, { callback, mapName }) {
             $.ajax({
-                url: Vue.$config.model.hqHqEndpoint + "/DeleteMapUserLink/" + userMame,
+                url: window.input.settings.config.basePath + "Maps/DeleteMap/" + mapName,
                 type: 'DELETE',
                 success: callback
             })
@@ -22,11 +24,11 @@ const store = {
 export default class MapComponent {
     get routes() {
         return [{
-            path: '/Maps/MapDetails/', component: MapDetails
+            path: '/Maps/Details/', component: MapDetails
         },{
-            path: '/Maps/UserMapLinking/', component: UserMapLinking
+            path: '/Maps/UserMapsLink/', component: UserMapLinking
         },{
-            path: '/Maps/MapList/', component: MapList
+            path: '/Maps/', component: MapList
         }]
     }
     

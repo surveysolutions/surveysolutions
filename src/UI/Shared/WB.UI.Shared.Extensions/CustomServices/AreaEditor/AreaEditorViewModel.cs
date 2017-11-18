@@ -105,16 +105,31 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
 
-        public void UpdateBaseMap(string pathToMap)
+        public async Task UpdateBaseMap(string pathToMapFile)
         {
-            if (pathToMap != null)
+            if (pathToMapFile != null)
             {
                 //woraround to fix size of map
                 //on map reload
                 if (MapView?.LocationDisplay != null)
                     this.MapView.LocationDisplay.IsEnabled = false;
 
-                TileCache titleCache = new TileCache(pathToMap);
+                
+                this.Map = await GetMap(pathToMapFile);
+            }
+            else
+            {
+                this.Map = null;
+            }
+        }
+
+        private async Task<Map> GetMap(string pathToMapFile)
+        {
+            var type = this.fileSystemAccessor.GetFileExtension(pathToMapFile);
+
+            if (type == ".tpk")
+            {
+                TileCache titleCache = new TileCache(pathToMapFile);
                 var layer = new ArcGISTiledLayer(titleCache)
                 {
                     //zoom to any level
@@ -123,19 +138,23 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     MinScale = 100000000,
                     MaxScale = 1
                 };
-
-                this.Map = new Map
+                return new Map
                 {
                     Basemap = new Basemap(layer),
                     MinScale = 100000000,
                     MaxScale = 1
                 };
             }
-            else
+            if (type == ".mmpk")
             {
-                this.Map = null;
+                MobileMapPackage package = await MobileMapPackage.OpenAsync(pathToMapFile);
+                if (package.Maps.Count > 0)
+                    return package.Maps.First();
             }
+
+            return null;
         }
+
 
         public void Init(string geometry, string mapName)
         {
@@ -179,14 +198,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
        
-        public IMvxCommand SwitchMapCommand => 
-            new MvxCommand<MapDescription>(mapDescription =>
-            {
-                this.SelectedMap = mapDescription.MapName;
-                IsPanelVisible = false;
-            });
+        
+        private async Task ChangeSelectedMap(string selectedMap)
+        {
+            this.SelectedMap = selectedMap;
+        }
 
-       
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
             await this.MapView?.SetViewpointRotationAsync(0));
 

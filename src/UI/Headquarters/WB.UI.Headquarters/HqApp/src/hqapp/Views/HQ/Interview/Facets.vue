@@ -1,7 +1,7 @@
 <template>
     <div>
         <aside class="filters">
-            <div class="wrapper-view-mode">
+            <div>
                 <div class="foldback-button" id="hide-filters" @click="hideFacets">
                     <span class="arrow"></span>
                     <span class="arrow"></span>
