@@ -814,7 +814,7 @@
     <value>Macros</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{cont.}} Sección</value>
+    <value>{{count}} Sección</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
     <value>{{count}} Secciones:</value>
