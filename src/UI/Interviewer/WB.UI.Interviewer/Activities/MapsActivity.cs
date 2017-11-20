@@ -44,10 +44,6 @@ namespace WB.UI.Interviewer.Activities
             this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new MapDownloadServiceConnection(this), Bind.AutoCreate);
         }
 
-        public override void OnBackPressed()
-        {
-        }
-
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.maps, menu);
