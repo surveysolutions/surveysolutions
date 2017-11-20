@@ -627,9 +627,6 @@
 	height: 27px;
 }
 .readonly {
-	.lock{
-		display: block;
-	}
 	input[type="text"]:disabled,
 	.field label,
 	.radio .field,
