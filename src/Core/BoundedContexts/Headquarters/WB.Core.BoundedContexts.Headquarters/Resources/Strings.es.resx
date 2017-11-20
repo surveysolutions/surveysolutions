@@ -117,100 +117,112 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Todos los entrevistadores</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>Todos los períodos</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Todos los cuestionarios</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Todos los equipos</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>cualquier usuario de sede</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="Assignments" xml:space="preserve">
+    <value>Asignaciones</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="Average" xml:space="preserve">
+    <value>Promedio</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>Error al procesar la respuesta de la pregunta</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>Estado asignado por el equipo de soporte de Survey Solutions</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="Days" xml:space="preserve">
+    <value>Días</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>La clave de la cuenta ha sido actualizada satisfactoriamente</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>La clave de la cuenta &lt;bar&gt;{0}&lt;/br&gt;  actualizada satisfactoriamente</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+    <value>Información de la cuenta actualizada satisfactoriamente</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Información sobre &lt;br&gt;{0}&lt;/br&gt; actualizada satisfactoriamente</value>
   </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
+  <data name="HQ_Views_Manage_Title" xml:space="preserve">
+    <value>Administrar cuenta</value>
   </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
+  <data name="Interviews" xml:space="preserve">
+    <value>Entrevistas</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>Aprobado por sede</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprobado por supervisor</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>Completada</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>Creada</value>
   </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>Eliminada</value>
   </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>Entrevista asignada</value>
   </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
+  <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+    <value>Listo para entrevista</value>
   </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>Rechazado por sede</value>
   </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>Rechazado por supervisor</value>
   </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>Reiniciada</value>
   </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>Restablecida</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+  <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+    <value>Enviada a Capi</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>Asignada a supervisor</value>
   </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>Observador no es permitido para esta acción</value>
+  </data>
+  <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+    <value>Administrar cuenta</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>Un error inesperado ha ocurrido</value>
+  </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>Propiedad inválida</value>
   </data>
 </root>

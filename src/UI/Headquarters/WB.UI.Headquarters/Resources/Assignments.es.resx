@@ -117,100 +117,106 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="Active" xml:space="preserve">
+    <value>Activo</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Todas las asignaciones</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="Archive" xml:space="preserve">
+    <value>Archivar</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="Archived" xml:space="preserve">
+    <value>Archivado</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Asignaciones</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}} Asignación (es) seleccionada (s)</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Editar tamaño de la asignación {{assignmentId}}</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="Count" xml:space="preserve">
+    <value>Contar</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Complete todos o algunos de los campos de identificación</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Seleccionar responsable (Supervisor o Entrevistador) para esta tarea</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Creado en</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Iniciar nueva entrevista</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Preguntas de identificación</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Entrevistas necesarias</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>El campo Tamaño debe ser -1 o más.</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}} Asignación (es) van a ser cambiadas</value>
   </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Cuestionario</value>
   </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Seleccione responsable</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Estado archivado</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
+  <data name="Size" xml:space="preserve">
+    <value>Tamaño</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Especifique la cantidad máxima de entrevistas que se generarán para esa asignación. Valores permitidos: -1 es para asignación ilimitada, 0 es para asignación vacía, números para tamaño de asignación</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Indicador que muestra si la asignación está activa o ha sido archivada.</value>
   </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione "Todos los cuestionarios" para ver las entrevistas asociadas con cualquier cuestionario.</value>
   </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Usuario responsable. Haga clic en el campo para elegir un nombre de usuario ya sea seleccionándolo directamente o escribiendo en filtro de la lista de nombres de usuario.</value>
   </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Número de entrevistas actualmente enviadas para la asignación. Se pueden haber creado más entrevistas pero aun no están sincronizadas. Haga clic en cualquier celda para ver las entrevistas asociadas. Haga clic en el icono de ordenar para ordenar por conteo.</value>
   </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Cuando la asignación se creó inicialmente. Haga clic en el icono de ordenar para ordenar por tiempo.</value>
   </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Información que identifica cada tarea. Estas son las respuestas a las preguntas marcadas como identificadas en Designar.</value>
   </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Número de entrevistas necesarias para completar esta tarea.</value>
   </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Usuario actualmente responsable de la tarea. Haga clic en el icono de ordenar para ordenar el nombre de usuario.</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Número máximo de entrevistas que pueden realizarse para esta tarea. Haga clic en cualquier celda para cambiar este número. Haga clic en el icono de ordenar para ordenar por tamaño.</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Cuando la tarea fue actualizada por última vez. Haga clic en el icono de ordenar para ordenar por tiempo</value>
   </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Sin archivar</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Sin límite</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Actualizado en</value>
   </data>
 </root>

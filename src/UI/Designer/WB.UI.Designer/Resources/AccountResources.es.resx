@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllRights" xml:space="preserve">
+    <value>Todos los derechos reservados</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Esta es una herramienta para creación de encuestas para la plataforma CAPI del Banco Mundial con capacidades de exportación a PDF</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Diseñador de Cuestionario</value>
+  </data>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Regresar a inicio de sesión</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Cambiar</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Cambiar clave</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>The World Bank Group</value>
+  </data>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>Para completar el proceso de registro busque un correo electrónico con  instrucciones adicionales</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmar clave</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Clave actual</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Correo electrónico</value>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>El login externo fue removido</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Olvidó su clave ?</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ayuda</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>La dirección de correo electrónico provista es inválida. Por favor revise e intente nuevamente.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>La clave provista es inválida. Por favor revise e intente nuevamente.</value>
+  </data>
+  <data name="InvalidResetPasswordLink" xml:space="preserve">
+    <value>El enlace para reiniciar su clave no es valido o ha caducado. Por favor intente nuevamente.</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>La respuesta a la pregunta de recuperación de clave es inválida. Por favor revise e intente nuevamente.</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>La pregunta para recuperación de clave es inválida. Por favor revise e intente nuevamente.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>El nombre de usuario provisto es inválido.  Por favor revise e intente nuevamente.</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Legal</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Inicio de sesión</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Favor ingresar </value>
+  </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>Login o correo</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>El proveedor de autenticación retornó un error. Por favor verifique su entrada y vuelva a intentarlo. Si el problema persiste, contacte al administrador del sistema</value>
+  </data>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>Usted está usando un navegador que necesita ser actualizado</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Clave</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Su clave ha sido cambiada</value>
+  </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>restablecer clave</value>
+  </data>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Introduzca su login o correo electrónico y le mandaremos un enlace para restablecer su clave</value>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>Su clave ha sido establecida</value>
+  </data>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>Nueva clave (mínimo 10 caracteres, símbolos, número, y letras)</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrar</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Error en el registro</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>Se obtuvo un error al momento de confirmar su correo electrónico. Favor intentar nuevamente</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Repetir clave</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restaurar</value>
+  </data>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>Permanezca en sesión por un día</value>
+  </data>
+  <data name="TesterApp" xml:space="preserve">
+    <value>Instale el Tester de cuestionario de Survey Solutions en una tableta Android para probar los cuestionarios que  usted ha diseñado en Designer</value>
+  </data>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>Obténgala en Google Play</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Gracias</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Un error desconocido ha ocurrido. Por favor, verifique su entrada y vuelva a intentarlo. Si el problema persiste, contacte al administrador del sistema.</value>
+  </data>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>Favor &lt;a href="http://browsehappy.com/"&gt;actualice su navegador&lt;/a&gt; paa usar la aplicación de diseño</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>La solicitud de creación del usuario fue cancelada. Por favor, verifique su entrada e inténtelo nuevamente. Si el problema persiste, contacte al administrador del sistema.</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>El nombre de usuario ya existe. Favor ingresar uno diferente</value>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>El usuario para esa dirección de correo ya existe. Favor ingrese una dirección de correo diferente.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bienvenido a Survey Solutions</value>
+  </data>
+</root>

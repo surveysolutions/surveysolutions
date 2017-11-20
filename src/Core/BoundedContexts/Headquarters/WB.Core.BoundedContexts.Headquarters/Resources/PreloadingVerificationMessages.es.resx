@@ -117,100 +117,121 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="PL0001_NoQuestionnaire" xml:space="preserve">
+    <value>[PL0001] El cuestionario no se encuentra en HA</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>La columna no puede asignarse a ninguna pregunta del cuestionario</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>Archivo no puede ser asignado a ninguna lista del cuestionario</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
+    <value>[PL0005] N/A</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>Se encontraron identificadores duplicados</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>Una o mas columnas de identificación padre hacen falta</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>Registro de la lista no tiene padre</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>El identificador de lista es inconsistente con el tamaño de la lista</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
+    <value>No es posible que una pregunta enlazada sea precargada</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="PL0011_GeneralError" xml:space="preserve">
+    <value>Ocurrió un error general</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
+    <value>Se ha encontrado una pregunta en el archivo cargado que no existe en el cuestionario</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
+    <value>Valor provisto es nulo o vacío</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>Valor de pregunta provisto no es permitido</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
+    <value>El tipo de pregunta es incorrecto</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>Se han ingresado valores de fecha u hora no validos en la pregunta </value>
   </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>Valor de GPS no es válido</value>
   </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>Solamente se permiten valores enteros</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>Solamente se permiten valores decimales</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>La pregunta que define el tamaño de la lista no puede contener un número negativo</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
+  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
+    <value>No es posible que una pregunta de tipo imagen sea precargada</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>Datos precargados no se encontraron</value>
   </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
+  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
+    <value>Campo responsable inexistente en una o mas observaciones</value>
   </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>No existe responsable para una o mas observaciones</value>
   </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>El responsable de una o mas observaciones se encuentra bloqueado</value>
   </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
+  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
+    <value>El usuario no es el Supervisor o Entrevistador en una o mas observaciones</value>
   </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>La respuesta a una pregunta que define el tamaño de la lista no puede ser mayor a {0}</value>
   </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>La pregunta GPS requiere columnas separadas para Latitud y Longitud</value>
   </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>Una pregunta identificadora de tipo GPS requiere que se establezcan los valores de Latitud y Longitud</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>Dos o mas columnas posee el mismo nombre</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>Latitud debe ser mayor a -90° y menor a 90°</value>
   </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>Longitud debe ser mayor a -180° y menor a 180°</value>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>Separador decimal es inválido. El símbolo "," no es permitido en respuestas numéricas, favor use "."</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>Solamente se permiten valores enteros</value>
+  </data>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>La cantidad debe ser mayor o igual a -1</value>
+  </data>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>La columna no pude ser enlazada con una pregunta no identificadora</value>
+  </data>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>Pregunta que captura área no puede ser precargada</value>
+  </data>
+  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
+    <value>Pregunta que captura un audio no puede ser precargada</value>
+  </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>No se ha encontrado el archivo con los datos de nivel del cuestionario</value>
   </data>
 </root>

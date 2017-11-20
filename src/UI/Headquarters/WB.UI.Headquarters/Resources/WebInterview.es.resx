@@ -249,4 +249,49 @@
   <data name="WelcomeText" xml:space="preserve">
     <value>Hola y bienvenido a la Encuesta Web de Survey Solutions </value>
   </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Entrevista completada</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Contestadas</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Ver todos (eliminar todos los filtros)</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>Marcada</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>Para el entrevistador</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>Para el supervisor</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>Inválido</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Sin respuesta</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>Sin marca</value>
+  </data>
+  <data name="Filters_OldDetailsLink" xml:space="preserve">
+    <value>Detalles de entrevista anterior</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Preguntas filtradas</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Valido</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>Con comentarios</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>No se puede modificar una entrevista que ha sido recibida en el dispositivo del entrevistador</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
+  </data>
 </root>
