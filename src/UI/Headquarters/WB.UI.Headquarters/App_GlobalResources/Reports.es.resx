@@ -117,100 +117,133 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="ApprovedByHQ" xml:space="preserve">
+    <value>Aprobado por sede</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprobado por supervisor</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="Completed" xml:space="preserve">
+    <value>Completado</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Fecha de completado</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="CumulativeInterviewChart" xml:space="preserve">
+    <value>Cuadro acumulado de entrevistas</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="DatesRange" xml:space="preserve">
+    <value>Rango de fechas</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="InterviewChart" xml:space="preserve">
+    <value>Cuadro de entrevistas</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Entrevistador asignado</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Cuestionario</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="RejectedByHQ" xml:space="preserve">
+    <value>Rechazado por sede</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Rechazado por supervisor</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>Duración promedio en la asignación de casos</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>Tiempo promedio de procesamiento por sede</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>Duración promedio de la entrevista</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>Tiempo promedio total de procesamiento de casos</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>Tiempo promedio de procesamiento por supervisor</value>
   </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>Días por estado de la entrevista</value>
   </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>Dispositivos y Entrevistadores</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
+  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+    <value>Número de entrevistas completadas</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>Número de transacciones de entrevista hechos por sede</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>Número de transacciones de entrevista hechos por supervisor</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>Número de entrevistas aprobadas por sede</value>
   </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>Cantidad por entrevistadores</value>
   </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>Cantidad por supervisores</value>
   </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>Velocidad entre estados por entrevistadores</value>
   </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>Velocidad entre estados por supervisores</value>
   </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>Velocidad de los entrevistadores</value>
   </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>Velocidad de los supervisores</value>
   </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>Duración del estado</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>Supervisores y estados</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>Encuestas y estados</value>
   </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>Miembros de equipo y estados</value>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>Equipos y estados</value>
+  </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>Reiniciado</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Conteo de dias de la entrevista en esl estado</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Supervisor asignado</value>
+  </data>
+  <data name="SupervisorsAndSurveys" xml:space="preserve">
+    <value>Supervisores y Encuestas</value>
+  </data>
+  <data name="SurveyName" xml:space="preserve">
+    <value>Titulo de cuestionario</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Encuestas y estados</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Equipos y estados</value>
+  </data>
+  <data name="TemplateVersion" xml:space="preserve">
+    <value>Versión de cuestionario</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Variables</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versión</value>
   </data>
 </root>

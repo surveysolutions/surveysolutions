@@ -1,0 +1,681 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WB0001_NoQuestions" xml:space="preserve">
+    <value>El cuestionario debe contener al menos una pregunta.</value>
+  </data>
+  <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>La condición de validación contiene un error de sintaxis</value>
+  </data>
+  <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+    <value>La condición de habilitación contiene un error de sintaxis</value>
+  </data>
+  <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+    <value>La variable no puede contener una expresión vacía</value>
+  </data>
+  <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>La expresión que define la variable tiene mas de {0} caracteres</value>
+  </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>Solamente es permitido marcar como identificador a una pregunta de tipo GPS</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>No es posible enlazar a una pregunta de tipo si/no a una selección-múltiple</value>
+  </data>
+  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+    <value>No se permite usar sustitución en la etiqueta de la variable</value>
+  </data>
+  <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+    <value>La pregunta que define el tamaño de la lista no ha sido encontrada</value>
+  </data>
+  <data name="WB0010_MacroHasInvalidName" xml:space="preserve">
+    <value>La macro tiene un nombre inválido</value>
+  </data>
+  <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>La pregunta vinculada hace referencia a una pregunta inexistente.</value>
+  </data>
+  <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+    <value>La pregunta relacionada hace referencia a un tipo de pregunta que no es compatible.</value>
+  </data>
+  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+    <value>El enlace de la pregunta apunta a un tupo de pregunta no soportado</value>
+  </data>
+  <data name="WB0014_MacroHasEmptyName" xml:space="preserve">
+    <value>El nombre de la macro no puede estar vacío</value>
+  </data>
+  <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+    <value>La pregunta con el reemplazo del titulo no puede ser marcada como identificador</value>
+  </data>
+  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
+    <value>La pregunta con el título de sustitución no hacer referencia a si misma</value>
+  </data>
+  <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+    <value>Reemplazo hace referencia a una pregunta o variable inexistente</value>
+  </data>
+  <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+    <value>La sustitución hace referencia a un elemento que no se admite en sustituciones.</value>
+  </data>
+  <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+    <value>La sustitución no puede hacer referencia a elementos de un nivel de lista más profundo.</value>
+  </data>
+  <data name="WB0020_NameForMacrosIsNotUnique" xml:space="preserve">
+    <value>Otra macro ya cuenta con ese nombre</value>
+  </data>
+  <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+    <value>La cantidad máxima de respuestas es mayor que la cantidad de opciones de la pregunta.</value>
+  </data>
+  <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+    <value>Preguntas de este tipo no pueden ser identificadoras</value>
+  </data>
+  <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+    <value>La pregunta que define el tamaño de las lista es incorrecta. Solo se pueden usar preguntas numéricas, categóricas con selección múltiple o listas de texto.</value>
+  </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>La tabla de búsqueda tiene un nombre inválido</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>La tabla de búsqueda no puede tener un nombre vacío</value>
+  </data>
+  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+    <value>Se han encontrado ítems con el mismo nombre</value>
+  </data>
+  <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>La expresión contiene un error de sintaxis</value>
+  </data>
+  <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>La expresión de la opción de filtro tiene una longitud superior a {0} caracteres</value>
+  </data>
+  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+    <value>Preguntas con filtro de opciones no puede ser identificadoras</value>
+  </data>
+  <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+    <value>Las preguntas de identificación no puede estar dentro de una lista</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>La tabla de búsqueda tiene encabezados de columna no válidos</value>
+  </data>
+  <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+    <value>La lista donde se pregunta su tamaño no puede contener un numero fijo de ítems</value>
+  </data>
+  <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+    <value>Una lista de numero fijo de ítems no puede tener una pregunta sobre el tamaño de la lista </value>
+  </data>
+  <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Una lista de numero fijo de ítems no puede tener una pregunta de tipo título</value>
+  </data>
+  <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+    <value>La lista donde se pregunta la fuente de la misma, tiene un una pregunta de tipo título inválida</value>
+  </data>
+  <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+    <value>Una lista que contiene un tamaño de lista categórico, de respuestas múltiples o lista , no puede tener una pregunta de tipo título </value>
+  </data>
+  <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+    <value>Una lista de número fijo de ítems no puede tener títulos vacíos ni menos de dos ítems</value>
+  </data>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+    <value>Una lista de número fijo de ítems no puede tener mas de {0} filas</value>
+  </data>
+  <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+    <value>La pregunta de la lista no puede ser de identificación</value>
+  </data>
+  <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+    <value>La pregunta de la lista no puede ser completada por el supervisor</value>
+  </data>
+  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+    <value>Los valores de la lista de tipo fijo de ítems deber únicos</value>
+  </data>
+  <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+    <value>El número máximo de elementos de lista debe estar en el rango de [{1},{0}]</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>La tabla de búsqueda tiene demasiadas columnas</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+    <value>La tabla de búsqueda tiene demasiadas filas</value>
+  </data>
+  <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+    <value>La pregunta tiene opción(es) con valor vacío</value>
+  </data>
+  <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>La condición de habilitación no puede estar asociada a una pregunta de un nivel inferior de la lista</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>La tabla de búsqueda no tiene valores únicos de códigos de fila</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>La tabla de búsqueda no puede estar vacía</value>
+  </data>
+  <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+    <value>Una pregunta de tipo código de barra no puede ser completada por el supervisor</value>
+  </data>
+  <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+    <value>Una pregunta de tipo código de barra no puede ser identificadora</value>
+  </data>
+  <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+    <value>Una sub-sección no pueden contener condiciones de habilitación asociadas a una pregunta hija</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>El nombre de una tabla de búsqueda no puede ser una palabra reservada</value>
+  </data>
+  <data name="WB0053_LinkedQuestionReferencesNotExistingRoster" xml:space="preserve">
+    <value>La lista que sea la fuente de un enlace debe existir</value>
+  </data>
+  <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+    <value>La lista debe tener el mismo o mas profundo nivel que el la pregunta que define el tamaño de la lista</value>
+  </data>
+  <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+    <value>La lista no puede tener mas de {0} listas padre</value>
+  </data>
+  <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+    <value>Las referencias circulares no están permitidas</value>
+  </data>
+  <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+    <value>Los nombres de variables o identificadores de lista no pueden ser palabras reservadas</value>
+  </data>
+  <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+    <value>Si el ítem utiliza sustitución de titulo (%reistertible%) , ésta debe incluirse dentro de la lista</value>
+  </data>
+  <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+    <value>La pregunta tiene menos de {0} opciones</value>
+  </data>
+  <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+    <value>El máximo numero de respuestas de la pregunta es menor que {0}</value>
+  </data>
+  <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>La expresión del filtro de opción contiene error de sintaxis</value>
+  </data>
+  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+    <value>Una pregunta categórica enlazada no puede ser usada en la validación de una condición #{0}</value>
+  </data>
+  <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+    <value>Una pregunta categórica enlazada no puede ser usada como condición de habilitación</value>
+  </data>
+  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+    <value>Ya existe otro archivo adjunto con el mismo nombre</value>
+  </data>
+  <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+    <value>Una pregunta de este tipo no está soportada</value>
+  </data>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>Variable válida o identificador de lista no debe estar vacío</value>
+  </data>
+  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
+    <value>La lista no puede tener mas de {0} elementos hijos</value>
+  </data>
+  <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+    <value>La lista tiene un identificador igual al título del cuestionario</value>
+  </data>
+  <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+    <value>Los texto estáticos no puede estar vacíos</value>
+  </data>
+  <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Los títulos de las opciones deben ser únicos</value>
+  </data>
+  <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>Los valores de las opciones deben ser únicos</value>
+  </data>
+  <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+    <value>Una pregunta categórica no pueden contener opciones y estar enlazada a otra pregunta</value>
+  </data>
+  <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+    <value>Contiene mas de {0} opciones</value>
+  </data>
+  <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+    <value>Contiene mas de {0} opciones</value>
+  </data>
+  <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+    <value>La pregunta contiene un nombre de variable inválido</value>
+  </data>
+  <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Las preguntas de tipo imagen están reservadas al entrevistador solamente</value>
+  </data>
+  <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+    <value>Las preguntas de tipo imagen no soportan condiciones de habilitación</value>
+  </data>
+  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
+    <value>Listas con mas de {0} filas no pueden contener listas anidadas</value>
+  </data>
+  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
+    <value>Listas con mas de {0} filas no pueden anidarse otras</value>
+  </data>
+  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+    <value>El tamaño de las listas debe limitarse para listas de selección múltiple</value>
+  </data>
+  <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+    <value>Preguntas de este tipo no pueden usarse como título de la lista</value>
+  </data>
+  <data name="WB0084_CascadingOptionsShouldHaveParent" xml:space="preserve">
+    <value>Las opciones de una caja combo en cascada solamente puede hacer referencia a opciones de la pegunta padre</value>
+  </data>
+  <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+    <value>La pregunta debe tener un nivel igual o mayor al de su pregunta padre</value>
+  </data>
+  <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+    <value>La pregunta de tipo caja de combo en cascada referencia a una pregunta inexistente o de tipo no soportado</value>
+  </data>
+  <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+    <value>No son permitidas las referencias circulares en preguntas de tipo combo en cascada </value>
+  </data>
+  <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+    <value>Las preguntas en cascada de tipo combo deben tener menos de {0} opciones </value>
+  </data>
+  <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+    <value>Las preguntas en cascada de tipo combo deben tener valores únicos y padres únicos </value>
+  </data>
+  <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>Las preguntas enlazadas están disponibles solo para los entrevistadores</value>
+  </data>
+  <data name="WB0091_CascadingChildQuestionShouldNotContainCondition" xml:space="preserve">
+    <value>Las preguntas hijas de las preguntas en cascada de tipo combo no pueden contener opciones de habilitación</value>
+  </data>
+  <data name="WB0092_CascadingChildQuesionShouldNotContainValidation" xml:space="preserve">
+    <value>Las preguntas hijas de las preguntas en cascada de tipo combo no pueden contener condiciones de validación</value>
+  </data>
+  <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+    <value>El tamaño de las listas de tipo texto deben tener un límite</value>
+  </data>
+  <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>La condición de habilitación tiene mas de {0} caracteres</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>El texto estático se asociado a un archivo adjunto inexistente</value>
+  </data>
+  <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+    <value>Un error ha ocurrido durante la compilación del cuestionario</value>
+  </data>
+  <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+    <value>El título del cuestionario contiene caracteres que no son permitidos. Solamente se permiten letras, números, espacios y _ de tipo no Unicode </value>
+  </data>
+  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+    <value>El tamaño del cuestionario es aproximadamente {0:0.##}MB. Es demasiado grande para ser trabajado adecuadamente con Survey Solutions, trate de reducir su tamaño hasta un máximo de {1} MB</value>
+  </data>
+  <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+    <value>El máximo número de respuestas de una lista no pueden ser mayor a {0}</value>
+  </data>
+  <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+    <value>La subsección no puede tener mas de {0} padres</value>
+  </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>Los siguientes ítems del cuestionario (pregunta/grupo/texto estático/etc.) usan el mismo identificador interno. Por favor borre uno de ellos.</value>
+  </data>
+  <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+    <value>La lista fuente del enlace es una lista no una subsección</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>La condición de validación #{0} es demasiado larga. No debe ser mas larga que {1} caracteres</value>
+  </data>
+  <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>El mensaje de validación #{0} es demasiado largo. Este no debe contener mas de {1} caracteres</value>
+  </data>
+  <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+    <value>La condición de validación #{0} está vacía.</value>
+  </data>
+  <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+    <value>El mensaje de error de la validación #{0} está vacío.</value>
+  </data>
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>La expresión del filtro de la pregunta enlazada tiene mas de {0} caracteres</value>
+  </data>
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>La pregunta no puede usarse en su propia expresión de filtro</value>
+  </data>
+  <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>La expresión de filtro contiene error de sintaxis</value>
+  </data>
+  <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>El archivo adjunto no puede estar vacío</value>
+  </data>
+  <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+    <value>La variable tiene un nombre inválido</value>
+  </data>
+  <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+    <value>La variable no puede tener un nombre vacío</value>
+  </data>
+  <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>Las preguntas categóricas soportan solamente valores enteros en el rango de {0} a {1}</value>
+  </data>
+  <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+    <value>La lista fija soporta solo valores enteros en el título</value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>Pregunta enlazada hace referencia a una lista de nivel erróneo</value>
+  </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>Enlace a lista no soporta opciones de filtro</value>
+  </data>
+  <data name="WB0118_ExpressionReferencingForbiddenDateTimeProperies" xml:space="preserve">
+    <value>La expresión hace referencia a propiedades no permitidas de tipo Date Time: {0}, {1}, {2}. Considere usar en su lugar una pregunta de tipo hora actual</value>
+  </data>
+  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+    <value>El título del cuestionario no puede tener mas de {0} símbolos</value>
+  </data>
+  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+    <value>Los títulos de secciones y subsecciones no pueden estar vacíos o con espacios en blanco</value>
+  </data>
+  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+    <value>El nombre del elemento o identificador no debe tener mas de {0} caracteres</value>
+  </data>
+  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+    <value>Los nombres de variables o listas deben contener solo letras, dígitos y guiones bajo ( _  )</value>
+  </data>
+  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+    <value>Los nombres de las variables o listas no pueden iniciar con números o símbolos de subrayado</value>
+  </data>
+  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+    <value>Los nombres de variable o listas no pueden finalizar con símbolos de subrayado</value>
+  </data>
+  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+    <value>Los nombres de variable o listas no pueden contener dos símbolos de subrayado  consecutivos</value>
+  </data>
+  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+    <value>Los nombres de variables o listas deben ser únicos dentro del cuestionario</value>
+  </data>
+  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Existen duplicados en Título + Valor de pares. La lista de opciones no debe contener ningún duplicado de ese tipo.</value>
+  </data>
+  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+    <value>El numero de decimales no esta en el rango de {0} y {1}</value>
+  </data>
+  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+    <value>El título de la opción está vacía o es demasiado larga. El largo del título debe estar entre {0} y {1} caracteres</value>
+  </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>No puede usar entidades hijas en las condiciones de habilitación de secciones, subsecciones y listas</value>
+  </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>Un numero muy grande de listas ha sido creado. Exportar esta estructura a archivos de datos puede ser problemático. Considere reducir el numero de listas.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>la sección o Lista contiene mas de {0} preguntas, considere dividirla en subsecciones</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>La sección no contiene preguntas. Considere remover las secciones vacías</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>El grupo de lista contiene solamente una pregunta. Considere agruparla con otras listas. Para lista fija de opciones, mejor establezca preguntas independientes </value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>La lista está vacía. Elimínela si no es necesaria.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>El cuestionario tiene mas de {0} preguntas. Podría ser difícil de administrar.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>El cuestionario tiene mas de {0} preguntas pero solamente una o dos secciones. Ajupe las preguntas en secciones para simplificar la navegación y mejorar su desempeño.</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>Listas fijas contienen {0} ítems o menos. Considere usar subsecciones y serie de preguntas. Las listas complican la estructura de la data exportada.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>Mas del {0}% de las preguntas no tienen condiciones de validación.  Incorpore condiciones de validación para mejorar la calidad de los datos</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>La condición de habilitación es muy larga. Podría ser que el uso de funciones predeterminadas (como InList() acorte y haga mas legible la condición.</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>La pregunta de selección tiene muchas opciones, considere utilizar una caja combo en su lugar</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>El cuestionario no contiene una pregunta de tipo GPS. Considere adicionar una.</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>La condición de validación #{0} es larga. Podría ser que el uso de funciones predeterminadas (como InList() acorte y haga mas legible la condición.</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>El archivo adjunto mide mas que {0}MB</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>La longitud total del archivo adjunto es mas de {0}MB</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>El cuestionario posee archivos adjuntos sin uso.</value>
+  </data>
+  <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+    <value>No se han definido preguntas de identificación. Defina al menos una pregunta de este tipo.</value>
+  </data>
+  <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+    <value>La etiqueta de la variable es demasiado larga (mas de {0} caracteres) y será truncada en el archivo de exportación SPSS</value>
+  </data>
+  <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+    <value>Preguntas consecutivas contienen la misma condición de habilitación. Considere mejor incluirlas en una subsección con esa condición de habilitación.</value>
+  </data>
+  <data name="WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options" xml:space="preserve">
+    <value>Existen múltiples preguntas de selección sin condición con {0} opciones. Considere mejor una pregunta de selección múltiple.</value>
+  </data>
+  <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+    <value>Usar @{0} con una pregunta de selección múltiple puede ser inestable. Considere usar @{1} en su lugar.</value>
+  </data>
+  <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+    <value>No se ha encontrado una pregunta de hora actual.  Considere registrar la fecha y hora de la entrevista en su cuestionario.</value>
+  </data>
+  <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+    <value>Una pregunta de selección ha sido definida como de identificación. Considere usar una pregunta de tipo texto.</value>
+  </data>
+  <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+    <value>La sección contiene menos de cinco preguntas. Concederé incorporar estas preguntas en otra sección.</value>
+  </data>
+  <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+    <value>Demasiadas subsecciones en el mismo nivel. Considere usar un diseño jerárquico.</value>
+  </data>
+  <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+    <value>El menú desplegable (caja combo) contiene menos de 10 elementos. Considere sustituirlo por una representación de selección única.</value>
+  </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>La pregunta de caja combo en cascada tiene la misma pregunta padre.</value>
+  </data>
+  <data name="WB0227_NotShared" xml:space="preserve">
+    <value>El cuestionario no ha sido revisado. Considere compartirlo con otro usuario para obtener retroalimentación.</value>
+  </data>
+  <data name="WB0228_OmittedOptions" xml:space="preserve">
+    <value>Pregunta categórica tiene códigos no consecutivos. Revise si no ha omitido opciones.</value>
+  </data>
+  <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+    <value>Una pregunta para el supervisor esta siendo usada en la validación. Revise las condiciones de "sin respuesta" de la cuenta de supervisor o instrúyalo para que siempre responda</value>
+  </data>
+  <data name="WB0230_NonconsecutiveCascadings" xml:space="preserve">
+    <value>Preguntas en cascada no consecutivas. Considere plantear las preguntas en cascada una tras otra.</value>
+  </data>
+  <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+    <value>La pregunta se selección múltiple tiene muchas opciones (&gt;{0}), podría ser difícil de navegar en tabletas. Si es posible sepárelas en dos preguntas de selección múltiple</value>
+  </data>
+  <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+    <value>Cinco o mas preguntas tienen la misma condición de habilitación. Coloque las preguntas en un grupo con la condición habilitante para mejorar la eficiencia del cuestionario.</value>
+  </data>
+  <data name="WB0233_NestedRosterDegree3OrMore" xml:space="preserve">
+    <value>Lista anidada con tres o más grados de anidación. Intente evitar estructuras tan complejas que puedan generar problemas en la recopilación de datos.</value>
+  </data>
+  <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+    <value>Niveles subordinados en una lista anidada se basan en el mismo padre. Intente revisar, esas listas podrían ocasionar problemas en la colección de datos</value>
+  </data>
+  <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+    <value>La misma condición habilitante está siendo usada en varias preguntas. Se sugiere que cree una variable booleana para simplificar la administración del código</value>
+  </data>
+  <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+    <value>La misma condición habilitante está siendo usada en varias preguntas. Se sugiere que cree una variable booleana para simplificar la administración del código</value>
+  </data>
+  <data name="WB0237_BitwiseAnd" xml:space="preserve">
+    <value>Ha usado &amp; en la expresión. Asegúrese que usted comprende la diferencia entre los operadores &amp; y &amp;&amp;. Para la mayor parte de los casos use &amp;&amp;</value>
+  </data>
+  <data name="WB0238_BitwiseOr" xml:space="preserve">
+    <value>Ha usado | en la expresión. Asegúrese de que comprende la diferencia entre los operadores | y ||. En la mayoría de los casos use ||.</value>
+  </data>
+  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>Condición de validación #{0} está referida para una pregunta futura. Considere revisar el orden de las preguntas.</value>
+  </data>
+  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>La condición habilitan está referida a una pregunta futura. Considere revisar el orden de las preguntas.</value>
+  </data>
+  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+    <value>Muy pocas etiquetas de variable han sido definidas. Agregue etiquetas de variables para mejorar la usabilidad de la exportación de los datos y proveer metadato para el formato DDI (Data Documentación Iniciativa )</value>
+  </data>
+  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+    <value>Utilice la función IsValidEmail() para validar la dirección de correo electrónico</value>
+  </data>
+  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+    <value>La pregunta es demasiado corta. Podría tratarse de una pregunta incompleta.</value>
+  </data>
+  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+    <value>El nombre de la traducción no es válido</value>
+  </data>
+  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+    <value>La traducción está vacía</value>
+  </data>
+  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+    <value>La traducción tiene nombres duplicados</value>
+  </data>
+  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+    <value>El titulo de la pregunta es demasiado largo. Este no debe ser mas largo que {0} caracteres</value>
+  </data>
+  <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+    <value>El titulo es demasiado largo. Este no debe ser mas lago que {0} caracteres</value>
+  </data>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>El cuestionario contiene listas con un número de instancias de listas mayores al límite del sistema</value>
+  </data>
+  <data name="WB0262_RosterHasTooBigPropagation" xml:space="preserve">
+    <value>La lista ha alcanzado el tamaño límite. Reduzca el tamaño de la lista o decremento la anidación</value>
+  </data>
+  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
+    <value>La primera sección no puede contener condición habilitante.</value>
+  </data>
+  <data name="WB0264_GpsQuestion" xml:space="preserve">
+    <value>Usted tiene una pregunta de tipo GPS. La tableta a usar para este cuestionario debe soportar geo localización</value>
+  </data>
+  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+    <value>Mas del {0}% de las preguntas son de tipo texto. Las preguntas de tipo texto son difíciles de responder en las tabletas. En su lugar considere usar pregunta de selección simple o múltiple. </value>
+  </data>
+  <data name="WB0266_SameTitle" xml:space="preserve">
+    <value>Preguntas duplicadas. (Las preguntas tienen el mismo titulo)</value>
+  </data>
+  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+    <value>Usted tiene una pregunta de tipo código de barra. La tableta deberá soportar la función de auto enfoque para poder se usada con este cuestionario.</value>
+  </data>
+  <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+    <value>Usted ha tratado de usar sustitución en una entidad que no lo soporta</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>La pregunta no puede contener un titulo en blanco</value>
+  </data>
+  <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+    <value>La sección no puede contener mas de {0} preguntas</value>
+  </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>La macro no puede estar en blanco</value>
+  </data>
+</root>

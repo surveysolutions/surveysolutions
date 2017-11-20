@@ -369,4 +369,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Si</value>
   </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Posting...</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>La entrevista ha sido recibida por un entrevistador y no puede modificarse</value>
+  </data>
 </root>

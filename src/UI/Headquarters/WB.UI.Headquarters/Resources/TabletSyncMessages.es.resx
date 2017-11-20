@@ -117,100 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>La sincronización ha fallado. El identificador del dispositivo Android no ha sido proporcionado. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="FileWasNotFound" xml:space="preserve">
+    <value>La sincronización ha fallado. El archivo con la última versión no fue encontrado. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="IncorrectFilesCount" xml:space="preserve">
+    <value>La sincronización ha fallado. Cuenta incorrecta de archivos. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="IncorrectMediaType" xml:space="preserve">
+    <value>La sincronización ha fallado. Tipo de media incorrecto. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+    <value>La sincronización ha fallado. Su aplicación no es compatible con el servidor. Actualice la aplicación Interviene</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+    <value>La sincronización ha fallado. Su aplicación no es compatible con el servidor. Desinstale su aplicación y descargue la nueva versión de la aplicación Interviewer</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="InvalidDeviceIdentifier" xml:space="preserve">
+    <value>Identificador de dispositivo no es válido. Algo ha sucedido con la instalación de la aplicación cliente. Por favor envíe la información de la tableta</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="InvalidSequenceIdentifier" xml:space="preserve">
+    <value>La sincronización ha fallado. Secuencia de identificador no es válida. Algo ha sucedido con la aplicación con la instalación de la aplicación cliente. Por favor presión el botón "enviar información" de su tableta.</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="InvalidUserFormat" xml:space="preserve">
+    <value>La sincronización ha fallado. El usuario no está autorizado. Por favor revise el login y clave para {0}</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>Su cuenta pertenece a un rol sin el privilegio de ejecutar esta operación.</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="Maintenance" xml:space="preserve">
+    <value>El servidor se encuentra en mantenimiento en este momento. Sentimos la inconveniencia. Por favor intente nuevamente mas tarde.</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="NoClientIdentifier" xml:space="preserve">
+    <value>La sincronización ha fallado. Por favor reinstale la aplicación. El identificador de la aplicación no se ha encontrado. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+    <value>La sincronización ha fallado parcialmente. Las entrevistas completadas han sido enviadas al servidor, sin embargo usted no recibirá nuevas asignaciones. Por favor vaya al menú de Configuración del dispositivo Android -&gt; Apps -&gt; Interviewer y presione el botón Clear Data. Después sincronice nuevamente.</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="ServerError" xml:space="preserve">
+    <value>La sincronización ha fallado. Ha ocurrido un error interno del servidor. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+    <value>La sincronización ha fallado. El paquete de sincronización con identificador {0} no ha sido encontrado en el servidor. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
-  </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
-  </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
-  </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
-  </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
-  </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
-  </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
-  </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
-  </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
-  </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
-  </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
-  </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
-  </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
-  </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
-  </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
-  </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
-  </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>La sincronización ha fallado. Se ha proporcionado un identificador de dispositivo Android erróneo. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
 </root>
