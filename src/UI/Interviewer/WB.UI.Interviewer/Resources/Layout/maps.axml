@@ -35,9 +35,9 @@
                         <LinearLayout style="@style/VerticalContentHeightWrappingLayout" 
                                       local:MvxBind="Visible Not(Synchronization.SynchronizationErrorOccured)">
                             <TextView style="@style/Dashboard_Synchronization_Operation_Title"
-                                      local:MvxBind="Text Synchronization.ProcessOperation; " />
+                                      local:MvxBind="Text Synchronization.ProcessOperation; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
                             <TextView style="@style/Dashboard_Synchronization_Operation_Title"
-                                      local:MvxBind="Text Synchronization.ProcessOperationDescription; " />
+                                      local:MvxBind="Text Synchronization.ProcessOperationDescription; TextColor SynchronizationStatusToTextColor(Synchronization.Status)" />
                         </LinearLayout>
 
                         <LinearLayout style="@style/VerticalContentHeightWrappingLayout" 
