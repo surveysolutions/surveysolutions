@@ -60,7 +60,7 @@ export default class ReviewComponent {
 
     async beforeEnter(to, from, next) {
         await Vue.$api.hub({
-            interviewId: to.params["interviewId"],
+            interviewId: this.$config.model.id,
             review: true
         })
         
