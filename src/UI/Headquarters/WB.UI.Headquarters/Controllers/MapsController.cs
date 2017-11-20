@@ -317,7 +317,9 @@ namespace WB.UI.Headquarters.Controllers
                 mappings.Add(dataRecord);
             }
 
-            return mappings;
+            return mappings.GroupBy(p => p.Map)
+                .Select(g => g.First())
+                .ToList();
         }
 
 

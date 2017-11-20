@@ -35,6 +35,11 @@ namespace WB.UI.Interviewer.Activities
                 this.ViewModel.NavigateToDiagnosticsPageCommand
             },
             {
+                Resource.Id.menu_maps,
+                InterviewerUIResources.MenuItem_Title_Maps,
+                this.ViewModel.NavigateToMapsCommand
+            },
+            {
                 Resource.Id.interview_language,
                 InterviewerUIResources.MenuItem_Title_Language
             },
