@@ -1,7 +1,7 @@
 /* Colors */
 /* Changed default value */
 /* Indent for filters */
-.content, .filters-results {
+.content {
   height: auto;
   overflow: auto;
   top: 0;
@@ -386,7 +386,7 @@ span.image-zoom-box, span.image-option {
   .preset-filters-container .block-filter .dropdown-menu li a {
     margin: 0; }
 
-.content, .filters-results {
+.content {
   border-right: 3px solid #ececec;
   width: 510px; }
 
@@ -395,41 +395,6 @@ span.image-zoom-box, span.image-option {
   left: 12px;
   -webkit-box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2); }
-
-.filters-results {
-  -webkit-transition: all 0.3s linear 0s;
-  transition: all 0.3s linear 0s;
-  left: -510px;
-  z-index: 5;
-  background-color: #ececec;
-  border-right-color: #dfdfdf; }
-  .filters-results.active {
-    left: 342px; }
-  .filters-results h2 {
-    margin: 0;
-    padding: 30px 40px 25px 30px;
-    color: #000; }
-  .filters-results .breadcrumb {
-    padding: 10px 30px;
-    margin-bottom: 0; }
-    .filters-results .breadcrumb a {
-      color: #2a81cb; }
-  .filters-results .close-btn {
-    position: absolute;
-    top: 5px;
-    right: 0px; }
-  .filters-results .unit-section {
-    border-top: 2px solid #2a81cb; }
-    .filters-results .unit-section .question {
-      font: 14px/16px "RobotoRegular";
-      display: block;
-      color: #3f3f3f;
-      border: none;
-      padding: 12px 30px;
-      border-top: 1px solid #fff; }
-      .filters-results .unit-section .question:hover, .filters-results .unit-section .question:focus, .filters-results .unit-section .question.active, .filters-results .unit-section .question:active {
-        background-color: #f3f3f3;
-        text-decoration: none; }
 
 .complete-link {
   display: block;
@@ -629,8 +594,10 @@ span.image-zoom-box, span.image-option {
     position: relative; }
     .question-editor h5:before {
       left: -25px; }
-  .question-editor .instructions-wrapper .btn-link {
+  .question-editor .btn-link {
     font: 10px/12px "TrebuchetMSBold"; }
+  .question-editor .block-with-data .btn-link {
+    padding-left: 0; }
   .question-editor.answered .question-unit .options-group {
     background-color: transparent; }
   .question-editor.has-error .question-unit .options-group {

@@ -7691,10 +7691,10 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
   transition: left 0.3s linear 0s; }
 
 .filters {
-  width: 270px;
+  width: 282px;
   border-right: 3px solid #ececec;
   padding: 30px 5px 50px 5px;
-  margin-left: 12px; }
+  border-left: 12px solid #dbdfe2; }
   .filters .input-group.date {
     margin-left: 0 !important; }
   .filters .bootstrap-select.btn-group {
@@ -7842,14 +7842,13 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
       .filters .foldback-button .glyphicon {
         display: inline-block; }
   .fullscreen-hidden-filters .filters {
-    border: none;
     margin-left: 0;
     position: absolute;
     top: 0px;
     right: 0;
     bottom: 0;
-    left: 12px;
-    width: calc(100% - 12px);
+    left: 0;
+    width: 100%;
     overflow: auto;
     height: auto; }
     .fullscreen-hidden-filters .filters .foldback-button {
@@ -9322,6 +9321,20 @@ main.hidden.display-block {
 
 .reset-margin {
   margin: 0; }
+
+dl dt {
+  font-weight: normal;
+  font-family: "RobotoBold";
+  float: left;
+  margin-right: 5px; }
+
+dl dd:after {
+  display: block;
+  clear: both;
+  content: ""; }
+
+.warning-message {
+  font-family: "RobotoBold"; }
 
 .left-column #log-in {
   text-align: left; }

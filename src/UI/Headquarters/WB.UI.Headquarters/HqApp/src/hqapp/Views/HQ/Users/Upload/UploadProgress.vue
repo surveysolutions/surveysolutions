@@ -4,25 +4,18 @@
             <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>{{fileName}}</h3>
         </slot>
         <div class="row">
-            <div class="col-sm-7 col-xs-11 prefilled-data-info info-block">
-                <p>
-                    <h1>{{$t('UploadUsers.Uploading', {importedUsersCount: importedUsersCount, totalUsersToImportCount: totalUsersToImportCount})}}</h1>
-                </p>
-                <p>
-                    <div class="cancelable-progress">
-                        <div class="wrapper-progress">
-                            <div class="progress" style="width:95%">
-                                <div class="progress-bar progress-bar-primary" role="progressbar" v-bind:style="{ width: importedUsersInPercents + '%' }">
-                                    <span class="sr-only">{{$t('UploadUsers.Uploading')}}</span>
-                                </div>
-                            </div>
+            <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
+                <div class="import-progress">
+                    <p>{{$t('UploadUsers.Uploading', {importedUsersCount: importedUsersCount, totalUsersToImportCount: totalUsersToImportCount})}}</p>
+                </div>
+                <div class="cancelable-progress">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" v-bind:style="{ width: importedUsersInPercents + '%' }">
+                            <span class="sr-only">{{importedUsersInPercents}}%</span>
                         </div>
-                        <button type="button" class="btn btn-link" style="position:initial" @click="cancelUpload">
-                            {{$t('UploadUsers.Cancel')}}
-                        </button>
                     </div>
-                </p>
-
+                    <button class="btn  btn-link" type="button" @click="cancelUpload">{{$t('UploadUsers.Cancel')}}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -33,7 +26,6 @@
 export default {
   data: function() {
     return {
-      cancelled: false,
       timerId: 0
     };
   },
@@ -41,20 +33,20 @@ export default {
     config() {
       return this.$config.model;
     },
-    progress() {
-      return this.$store.getters.upload.progress;
-    },
     fileName() {
       return this.$store.getters.upload.fileName;
     },
-    importedUsersInPercents() {
-      return this.importedUsersCount / this.progress.totalUsersToImport * 100;
+    progress() {
+      return this.$store.getters.upload.progress;
     },
     importedUsersCount() {
       return this.totalUsersToImportCount - this.progress.usersInQueue;
     },
     totalUsersToImportCount() {
       return this.progress.totalUsersToImport;
+    },
+    importedUsersInPercents() {
+      return this.importedUsersCount / this.progress.totalUsersToImport * 100;
     }
   },
   mounted() {

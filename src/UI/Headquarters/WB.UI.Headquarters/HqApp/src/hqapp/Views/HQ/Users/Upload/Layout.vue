@@ -9,9 +9,11 @@
                         </li>
                     </ol>
                     <h1>{{$t('UploadUsers.Title')}}</h1>
-                    <p>
-                        <slot name="title" />
-                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-7">
+                    <slot name="title" />
                 </div>
             </div>
             <router-view />
