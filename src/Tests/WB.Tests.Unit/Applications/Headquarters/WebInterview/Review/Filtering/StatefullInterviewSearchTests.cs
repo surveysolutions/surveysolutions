@@ -124,28 +124,28 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
             new FilterTestCase(FilterOption.WithComments).ExpectedQuestions(TextComment, TextCommentFlaggedAnswered),
             new FilterTestCase(FilterOption.Flagged, FilterOption.WithComments)
                 .ExpectedQuestions(TextCommentFlaggedAnswered)
-                .ExpectedStats(1, 2, 1, 0, 1, 1, 0, 0, 1),
+                .ExpectedStats(1, 0, 1, 0, 1, 1, 0, 0, 1),
             new FilterTestCase(FilterOption.Flagged, FilterOption.NotAnswered)
                 .ExpectedQuestions(TextFlagged, TextInRosterFlagged)
-                .ExpectedStats(2, 6, 0, 0, 2, 3, 2, 0, 2),
+                .ExpectedStats(2, 0, 0, 0, 2, 0, 2, 0, 2),
             new FilterTestCase(FilterOption.Flagged, FilterOption.Valid)
                 .ExpectedQuestions(TextFlagged, TextInRosterFlagged, TextCommentFlaggedAnswered)
-                .ExpectedStats(3, 7, 1, 3, 3, 1, 2, 0, 3),
+                .ExpectedStats(3, 0, 1, 0, 3, 1, 2, 0, 3),
             new FilterTestCase(FilterOption.NotFlagged, FilterOption.Invalid)
                 .ExpectedQuestions(TextAnsweredInvalid)
-                .ExpectedStats(1, 1, 0, 1, 5, 1, 0, 0, 1),
+                .ExpectedStats(0, 1, 0, 1, 0, 1, 0, 0, 1),
             new FilterTestCase(FilterOption.Valid, FilterOption.Invalid)
                 .ExpectedQuestions(AllQuestions)
-                .ExpectedStats(3, 5, 2, 10, 10, 2, 6, 2, 6),
+                .ExpectedStats(3, 5, 2, 2, 8, 2, 6, 2, 6),
             new FilterTestCase(FilterOption.Flagged, FilterOption.NotFlagged)
                 .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
-                .ExpectedStats(8, 8, 2, 1, 7, 2, 6, 2, 6),
+                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6),
             new FilterTestCase(FilterOption.Answered, FilterOption.NotAnswered)
                 .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
-                .ExpectedStats(3, 5, 2, 1, 7, 8, 8, 2, 6),
+                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6),
             new FilterTestCase(FilterOption.ForSupervisor, FilterOption.ForInterviewer)
                 .ExpectedQuestions(AllQuestionsBut(StaticTextInvalid, StaticText))
-                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 8, 8)
+                .ExpectedStats(3, 5, 2, 1, 7, 2, 6, 2, 6)
         };
 
         [TestCase(1, 2)]
@@ -154,7 +154,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
         [TestCase(4, 5)]
         [TestCase(5, 5)]
         [TestCase(7, 5)]
-        public void ShouldReturnConsistentSearchResultIds(long skip, long take)
+        public void ShouldReturnConsistentSearchResultIds(int skip, int take)
         {
             var search = Subject.Search(interview, Array.Empty<FilterOption>(), skip, take);
 

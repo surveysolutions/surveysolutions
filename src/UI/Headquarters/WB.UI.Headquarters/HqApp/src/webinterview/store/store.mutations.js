@@ -67,7 +67,9 @@ export default {
         question.comments = comments
         Vue.set(question, "postingComment", false)
     },
-
+    LOG_LAST_ACTIVITY(state){
+        state.lastActivityTimestamp = new Date()
+    },
     COMPLETE_INTERVIEW(state) {
         state.interviewCompleted = true;
     }

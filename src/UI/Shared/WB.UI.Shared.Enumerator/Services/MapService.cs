@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Enumerator.Services
     {
         private readonly IPermissions permissions;
         private readonly IFileSystemAccessor fileSystemAccessor;
-       
+
         private readonly string mapsLocation;
         private readonly ILogger logger;
 
@@ -22,14 +22,14 @@ namespace WB.UI.Shared.Enumerator.Services
 
         string tempSuffix = ".part";
 
-        public MapService(IPermissions permissions, 
+        public MapService(IPermissions permissions,
             IFileSystemAccessor fileSystemAccessor,
             ILogger logger)
         {
             this.permissions = permissions;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
-            
+
             this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
         }
 
@@ -106,14 +106,14 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(this.mapsLocation))
                 this.fileSystemAccessor.CreateDirectory(this.mapsLocation);
-            
+
             var tempFileName = GetTempFileName(mapName);
 
             if (this.fileSystemAccessor.IsFileExists(tempFileName))
                 this.fileSystemAccessor.DeleteFile(tempFileName);
 
             return this.fileSystemAccessor.OpenOrCreateFile(tempFileName, false);
-            
+
         }
 
         public void MoveTempMapToPermanent(string mapName)

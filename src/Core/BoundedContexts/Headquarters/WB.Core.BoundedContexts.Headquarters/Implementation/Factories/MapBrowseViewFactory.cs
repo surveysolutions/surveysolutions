@@ -9,19 +9,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
     public class MapBrowseViewFactory : IMapBrowseViewFactory
     {
-        private readonly IPlainStorageAccessor<MapBrowseItem> mapBrowseItemeRader;
+        private readonly IPlainStorageAccessor<MapBrowseItem> mapBrowseItemReader;
         private readonly IPlainStorageAccessor<UserMap> userMapReader;
 
         public MapBrowseViewFactory(IPlainStorageAccessor<MapBrowseItem> mapBrowseItemeRader, 
             IPlainStorageAccessor<UserMap> userMapReader)
         {
-            this.mapBrowseItemeRader = mapBrowseItemeRader;
+            this.mapBrowseItemReader = mapBrowseItemeRader;
             this.userMapReader = userMapReader;
         }
 
         public MapsView Load(MapsInputModel input)
         {
-            return this.mapBrowseItemeRader.Query(queryable =>
+            return this.mapBrowseItemReader.Query(queryable =>
             {
                 IQueryable<MapBrowseItem> query = queryable;
 
@@ -53,13 +53,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             {
                 IQueryable<UserMap> query = queryable;
 
+                query = query.Where(x => x.Map == input.MapName);
 
                 if (!string.IsNullOrEmpty(input.SearchBy))
                 {
-                    var filterLowerCase = input.SearchBy.ToLower();
-                    query = query.Where(x => x.Map.ToLower() == input.MapName.ToLower() && x.UserName.ToLower().Contains(filterLowerCase));
+                    query = query.Where(x=> x.UserName.Contains(input.SearchBy));
                 }
-
 
                 var queryResult = query.OrderUsingSortExpression(input.Order);
 

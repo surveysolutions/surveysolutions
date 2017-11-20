@@ -3,12 +3,14 @@
         <div class="container-fluid">
             <div class="row">
                 <slot name="filters" />
-                 <div :class="information">
+                <div :class="information">
                     <div class="page-header clearfix">
+                      <slot name="headers">
                         <h1>
                             {{title}}
                         </h1>
                         <h3 v-if="subtitle">{{ subtitle }}</h3>
+                      </slot>
                     </div>
                     <slot />
                 </div>

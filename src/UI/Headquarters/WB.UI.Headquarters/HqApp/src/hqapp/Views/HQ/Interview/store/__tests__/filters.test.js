@@ -59,8 +59,8 @@ describe("filters store search", () => {
 
             await actions.fetchSearchResults({ commit, state })
 
-            expect(commit.mock.calls.length).toBe(1)
-            const call = commit.mock.calls[0];
+            expect(commit.mock.calls.length).toBe(2)
+            const call = commit.mock.calls[1];
 
             expect(call[0] /*  type  */).toBe("SET_SEARCH_RESULT")
             expect(call[1] /* payload */).toBe(searchResult)

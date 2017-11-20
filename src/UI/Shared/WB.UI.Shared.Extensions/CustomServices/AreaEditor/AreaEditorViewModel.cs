@@ -50,13 +50,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             var localmaps = this.mapService.GetAvailableMaps();
             localmaps.Add(this.mapService.PrepareAndGetDefaultMap());
-            
+
 
             this.AvailableMaps = new MvxObservableCollection<MapDescription>(localmaps);
             this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
             if (this.AvailableMaps.Count == 0)
-                    return;
+                return;
 
             this.ReloadMap();
         }
@@ -79,7 +79,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             get => this.availableMaps;
             protected set => this.RaiseAndSetIfChanged(ref this.availableMaps, value);
         }
-        
+
 
         private List<string> mapsList = new List<string>();
         public List<string> MapsList
@@ -178,15 +178,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 }
             }
         }
-       
-        public IMvxCommand SwitchMapCommand => 
+
+        public IMvxCommand SwitchMapCommand =>
             new MvxCommand<MapDescription>(mapDescription =>
             {
                 this.SelectedMap = mapDescription.MapName;
                 IsPanelVisible = false;
             });
 
-       
+
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
             await this.MapView?.SetViewpointRotationAsync(0));
 
@@ -233,7 +233,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 if (!this.MapView.LocationDisplay.IsEnabled && !this.MapView.LocationDisplay.Started
                     && (this.MapView.LocationDisplay.DataSource != null && !this.MapView.LocationDisplay.DataSource.IsStarted))
-                        this.MapView.LocationDisplay.IsEnabled = true;
+                    this.MapView.LocationDisplay.IsEnabled = true;
                 else
                     this.MapView.LocationDisplay.IsEnabled = false;
             }
@@ -271,7 +271,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.IsEditing = true;
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
+                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
                     bool isCanCalculateAreaDimensions = IsCanCalculateAreaDimensions(geometry);
@@ -318,7 +318,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 //project to geocoordinates
                 SpatialReference reference = new SpatialReference(4326);
                 var projectedPolygon = GeometryEngine.Project(result, reference) as Polygon;
-                
+
                 string coordinates = string.Empty;
                 if (projectedPolygon != null)
                 {
@@ -367,8 +367,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 return false;
 
             var groupedPoints = from point in readOnlyPart.Points
-                group point by new { X = point.X, Y = point.Y } into xyPoint
-                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
+                                group point by new { X = point.X, Y = point.Y } into xyPoint
+                                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
 
             if (groupedPoints.Count() < 3)
                 return false;
@@ -444,7 +444,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
         }
 
-        private bool isLocationServiceSwitchEnabled = true; 
+        private bool isLocationServiceSwitchEnabled = true;
         public bool IsLocationServiceSwitchEnabled
         {
             get => this.isLocationServiceSwitchEnabled;

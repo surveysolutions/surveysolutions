@@ -1,6 +1,6 @@
 <template>
     <aside class="filters-results" :class="{'active' : searchResultsAreVisible}">
-        <div class="wrapper-view-mode" >
+        <div>
             <button class="btn btn-link close-btn" type="button" @click="hideSearchResults">
                 <span class="cancel"></span>
             </button>

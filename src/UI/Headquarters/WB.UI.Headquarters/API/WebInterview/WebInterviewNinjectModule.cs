@@ -4,7 +4,6 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Ninject;
 using Ninject.Modules;
-using Prometheus.Advanced;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -33,11 +32,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
             this.Bind<IStatefullInterviewSearcher>().To<StatefullInterviewSearcher>();
             this.Bind<IWebInterviewInterviewEntityFactory>().To<WebInterviewInterviewEntityFactory>();
-
-            DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new IOnDemandCollector[]
-            {
-                new DotNetStatsCollector ()
-            });
 
             this.Bind<IJavaScriptMinifier>().ToConstant(new SignalRHubMinifier());
 
