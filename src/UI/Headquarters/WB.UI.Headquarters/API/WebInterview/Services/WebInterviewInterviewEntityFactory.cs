@@ -357,7 +357,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     => new Comment
                     {
                         Text = ac.Comment,
-                        IsOwnComment = ac.UserId == statefulInterview.CurrentResponsibleId,
+                        IsOwnComment = ac.UserId == this.authorizedUser.Id,
                         UserRole = ac.UserRole,
                         CommentTimeUtc = ac.CommentTime
                     })

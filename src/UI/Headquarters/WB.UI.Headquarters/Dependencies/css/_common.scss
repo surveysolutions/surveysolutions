@@ -679,3 +679,21 @@ main.hidden.display-block{
 .reset-margin{
 	margin: 0;
 }
+dl{
+	dt{
+		font-weight: normal;
+		font-family: "RobotoBold";
+		float: left;
+		margin-right: 5px;
+	}
+	dd{
+		&:after{
+			display: block;
+			clear: both;
+			content: "";
+		}
+	}
+}
+.warning-message{
+	font-family: "RobotoBold";
+}

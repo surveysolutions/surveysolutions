@@ -30,10 +30,10 @@
 
 var ajustNoticeHeight = function () {
     var height = $(".view-mode").outerHeight();
-    $('.view-mode + main').css("margin-top", height + "px");
-    $('.wrapper-view-mode').css("padding-top", height);
-    $('.wrapper-view-mode .foldback-button').css("margin-top", height);
-    $('.wrapper-view-mode .humburger-foldback-button').css("margin-top", height);
+    $('.content').css("top", height + "px");
+    $('.filters').css("top", height + "px");
+    $('.filters-results').css("top", height + "px");
+    $('main').css("margin-top", height + "px");
 };
 
 
@@ -98,8 +98,6 @@ $(function() {
         setInterval(updateQueueLength, 3000);
     }
 
-    $(".view-mode + main .container-fluid .filters").wrapInner("<div class='wrapper-view-mode'></div>");
-    $(".view-mode + main .container-fluid .content").wrapInner("<div class='wrapper-view-mode'></div>");
     ajustNoticeHeight();
 
     $('.view-mode .alerts .alert').on('closed.bs.alert', function() {

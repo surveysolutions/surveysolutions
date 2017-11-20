@@ -251,6 +251,9 @@
   <data name="GPSRecord" xml:space="preserve">
     <value>Record GPS</value>
   </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Mark area</value>
+  </data>
   <data name="GPSNotAvailable" xml:space="preserve">
     <value>Your browser does not support receiving Geolocation</value>
   </data>

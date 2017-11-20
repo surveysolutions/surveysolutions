@@ -15,8 +15,8 @@
                 <div class="action-btn-holder gps-question">
                     <button type="button" :disabled="!$me.acceptAnswer" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">{{ $t('WebInterviewUI.GPSRecord') }}</button>
                 </div>
-            </div>
-            <wb-lock />
+                <wb-lock />
+            </div>            
         </div>
     </wb-question>
 </template>

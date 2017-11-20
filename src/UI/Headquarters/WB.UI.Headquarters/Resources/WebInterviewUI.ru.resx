@@ -324,6 +324,9 @@
   <data name="GPSRecord" xml:space="preserve">
     <value>Записать GPS</value>
   </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Отметить область</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>

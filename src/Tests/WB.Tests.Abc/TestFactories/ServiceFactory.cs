@@ -85,6 +85,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
+using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using AssignmentDocument = WB.Core.BoundedContexts.Interviewer.Views.AssignmentDocument;
@@ -581,6 +582,11 @@ namespace WB.Tests.Abc.TestFactories
                 interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(), 
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>());
+        }
+
+        public StatefullInterviewSearcher StatefullInterviewSearcher()
+        {
+            return new StatefullInterviewSearcher(Mock.Of<IInterviewFactory>(x=> x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[]{}));
         }
     }
 }

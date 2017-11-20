@@ -1574,13 +1574,13 @@
     <Content Include="Views\Shared\ClientTimezoneOffset.cshtml" />
     <Content Include="Views\WebInterview\Index.cshtml" />
     <Content Include="Views\AuditLog\Index.cshtml" />
-    <Content Include="Views\Maps\Index.cshtml" />
     <Content Include="Views\Interview\Review.cshtml" />
     <Content Include="Views\Shared\_AdminLayout.cshtml" />
     <Content Include="Views\Shared\_MainLayoutHq.cshtml" />
     <Content Include="Views\Maps\Details.cshtml" />
     <Content Include="Views\Maps\MapPreview.cshtml" />
     <Content Include="Views\Maps\UserMapsLink.cshtml" />
+    <Content Include="Views\Maps\Index.cshtml" />
     <Content Include="Views\Users\index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
@@ -1834,6 +1834,9 @@
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
+    <Compile Include="Models\Maps\MapsModel.cs" />
+    <Compile Include="Models\Maps\UserMapLinkModel.cs" />
+    <Compile Include="Models\Maps\MapDetailsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
