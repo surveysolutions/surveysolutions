@@ -703,8 +703,8 @@ your next synchronization</value>
     <value>Checking maps on server</value>
   </data>
     <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
-    <value>Handling map {0}, {1} out of {2}. 
- Downloaded {3}%</value>
+    <value>Handling map {0}, {1} out of {2}.
+Downloaded {3}%</value>
   </data>
     <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
     <value>Map synchronization succesfuly finished</value>

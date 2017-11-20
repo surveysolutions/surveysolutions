@@ -108,7 +108,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     Size = x.Size
                 }  
                 ).ToList();
-                this.Maps.ReplaceWith(newItems);
+                this.Maps = new MvxObservableCollection<MapItem>(newItems);
             }
             finally
             {
