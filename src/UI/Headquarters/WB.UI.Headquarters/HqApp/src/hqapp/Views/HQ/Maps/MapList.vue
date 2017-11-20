@@ -3,7 +3,7 @@
         <div slot="headers">
             <div class="topic-with-button" >
                 <h1>{{$t('Pages.MapList_Title')}}</h1>
-                <form :action="$config.model.uploadMapUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post">
+                <form :action="$config.model.uploadMapUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post" v-if="actionsAlowed">
                     <label class="btn btn-success btn-file">
                         {{$t('Pages.MapList_Upload')}}
                         <input accept=".zip" id="File" name="File" onchange="this.form.submit()" type="file" value="" />
@@ -71,6 +71,9 @@ export default {
     config() {
       return this.$config.model;
     },
+    actionsAlowed() {
+            return !this.config.isObserver && !this.config.isObserving;
+        },
     tableOptions() {
       var self = this;
       return {
