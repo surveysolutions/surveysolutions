@@ -151,10 +151,10 @@
     <value>Count</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{{ count }} Assignment is going to be changed</value>
+    <value>{{count}} Assignment is going to be changed</value>
   </data>
   <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
-    <value>{{ count }} Assignments are going to be changed</value>
+    <value>{{count}} Assignments are going to be changed</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>

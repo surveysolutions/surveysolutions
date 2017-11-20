@@ -160,7 +160,7 @@
     <value>საჭირო ინტერვიუები</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{0} დავალებები შეიცვლება</value>
+    <value>{{count}} დავალებები შეიცვლება</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>კითხვარი</value>
