@@ -4,21 +4,17 @@
             <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>{{fileName}}</h3>
         </slot>
         <div class="row">
-            <div class="col-sm-7 col-xs-11 prefilled-data-info info-block">
-                <br/><br/><br/>
-                <h1>{{$t("UploadUsers.AllAccountsCreated", { total: totalCount })}}
-                    <br/> {{$t('UploadUsers.InterviewersAndSupervisorsCount', {supervisorsCount: supervisorsCount, interviewersCount: interviewersCount})}}</h1>
-                {{$t('UploadUsers.CompleteDescription')}}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-7 col-xs-11 prefilled-data-info info-block">
-                <br/><br/>
-                <p class="list-inline">
+            <div class="col-sm-7 col-xs-12 action-block preloading-done active-preloading">
+                <div class="import-progress">
+                    <h1>{{$t("UploadUsers.AllAccountsCreated", { total: totalCount })}}
+                        <br/> {{$t('UploadUsers.InterviewersAndSupervisorsCount', {supervisorsCount: supervisorsCount, interviewersCount: interviewersCount})}}</h1>
+                    {{$t('UploadUsers.CompleteDescription')}}
+                </div>
+                <div class="action-buttons">
                     <a class="btn btn-primary" v-bind:href="config.api.interviewsUrl">{{$t('UploadUsers.Interviews')}}</a>
                     <a class="btn btn-primary" v-bind:href="config.api.supervisorsUrl">{{$t('UploadUsers.Supervisors')}}</a>
                     <router-link class="btn btn-link" :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
-                </p>
+                </div>
             </div>
         </div>
     </div>

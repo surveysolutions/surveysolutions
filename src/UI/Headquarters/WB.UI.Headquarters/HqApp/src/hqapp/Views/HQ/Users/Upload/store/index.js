@@ -2,7 +2,6 @@ export default {
     state: {
         fileName: "",
         verificationErrors: [],
-        importedUsersInPercents: 0,
         complete: {},
         progress: {}
     },

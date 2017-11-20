@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             process.FileName = fileName;
             process.InterviewersCount = usersToImport.Count(x => x.UserRole == UserRoles.Interviewer);
             process.SupervisorsCount = usersToImport.Count(x => x.UserRole == UserRoles.Supervisor);
-            process.Responsible = this.authorizedUser.Id;
+            process.Responsible = this.authorizedUser.UserName;
             process.StartedDate = DateTime.UtcNow;
 
             this.importUsersProcessRepository.Store(process, process?.Id);
@@ -186,10 +186,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             return new UsersImportStatus
             {
+                IsOwnerOfRunningProcess = process?.Responsible == this.authorizedUser.UserName,
                 IsInProgress = usersInQueue > 0,
                 TotalUsersToImport = process?.InterviewersCount + process?.SupervisorsCount ?? 0,
                 UsersInQueue = usersInQueue,
-                FileName = process?.FileName
+                FileName = process?.FileName,
+                StartedDate = process?.StartedDate,
+                Responsible = process?.Responsible
             };
         }
 
