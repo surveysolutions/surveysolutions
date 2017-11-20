@@ -117,100 +117,130 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="BatchUploadModel_FileName" xml:space="preserve">
+    <value>Archivo C.V.</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="BatchUploadModel_Required" xml:space="preserve">
+    <value>Debe seleccionar un archivo para cargar</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
+    <value>Favor seleccione un archivo</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+    <value>No se pudo actualizar la información del usuario porque el usuario actual no existe</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+    <value>No se pudo actualizar la información del usuario porque el usuario actual está archivado</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+    <value>El titulo de cuestionario es requerido</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+    <value>Titulo</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>Confirmar la clave</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
+    <value>La contraseña y la contraseña de confirmación no coinciden</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="ConfirmPasswordFieldName" xml:space="preserve">
+    <value>Confirme la clave</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>Es requerido confirmar la clave</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="EmailErrorMessage" xml:space="preserve">
+    <value>No es una cuenta de correo válida</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="EmailFieldName" xml:space="preserve">
+    <value>Cuenta de correo electrónico</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="InvalidUser" xml:space="preserve">
+    <value>Usuario inválido</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+    <value>Esta bloqueado por el supervisor</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
+  <data name="IsLockedFieldName" xml:space="preserve">
+    <value>Está bloqueado por la sede</value>
   </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
+  <data name="LogOnModel_Password" xml:space="preserve">
+    <value>Clave</value>
   </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
+  <data name="LogOnModel_UserName" xml:space="preserve">
+    <value>Nombre de usuario</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
+  <data name="NewPasswordFieldName" xml:space="preserve">
+    <value>Nueva clave</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>Para cambiar la contraseña, proporcione la contraseña existente válida</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>Clave anterior</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
+  <data name="PasswordErrorMessage" xml:space="preserve">
+    <value>La contraseña debe contener al menos un número, un carácter en mayúscula y un carácter en minúscula</value>
   </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
+  <data name="PasswordFieldName" xml:space="preserve">
+    <value>Clave</value>
   </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
+  <data name="PasswordLengthMessage" xml:space="preserve">
+    <value>La clave debe tener como mínimo {2} caracteres</value>
   </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
+  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+    <value>El nombre de la persona tiene caracteres no válidos. Solo letras, puntos, espacios y apóstrofos están permitidos</value>
   </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
+  <data name="PersonNameErrorMessage" xml:space="preserve">
+    <value>El nombre de la persona no puede contener más de {1} caracteres</value>
   </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+  <data name="PersonNameFieldName" xml:space="preserve">
+    <value>Nombre completo</value>
   </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
+  <data name="PhoneErrorLength" xml:space="preserve">
+    <value>El número de teléfono no puede contener más de {1} caracteres</value>
   </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
+  <data name="PhoneErrorMessage" xml:space="preserve">
+    <value>Numero de teléfono invalido</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+  <data name="PhoneNumberFieldName" xml:space="preserve">
+    <value>Numero de teléfono</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
+  <data name="RequiredEmailErrorMessage" xml:space="preserve">
+    <value>Correo electrónico es requerido</value>
   </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="RequiredPasswordErrorMessage" xml:space="preserve">
+    <value>Clave es requerida</value>
+  </data>
+  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+    <value>Supervisor es requerido</value>
+  </data>
+  <data name="RequiredUserNameErrorMessage" xml:space="preserve">
+    <value>Nombre de usuario es requerido</value>
+  </data>
+  <data name="SupervisorFieldName" xml:space="preserve">
+    <value>Supervisor</value>
+  </data>
+  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+    <value>Ingrese un GUIDE válido en el siguiente formato xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
+  </data>
+  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+    <value>Archivo CSV</value>
+  </data>
+  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+    <value>Debe escoger un archivo para cargar</value>
+  </data>
+  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
+    <value>Favor seleccione el archivo</value>
+  </data>
+  <data name="UserName_Taken" xml:space="preserve">
+    <value>Por favor elija otro nombre de usuario</value>
+  </data>
+  <data name="UserNameErrorMessage" xml:space="preserve">
+    <value>El nombre debe tener entre 3 y 15 caracteres, y puede contener solo letras, dígitos y el símbolo de subrayado</value>
+  </data>
+  <data name="UserNameFieldName" xml:space="preserve">
+    <value>Nombre de usuario</value>
   </data>
 </root>

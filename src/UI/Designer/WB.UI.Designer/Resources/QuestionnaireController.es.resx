@@ -117,100 +117,171 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="Action" xml:space="preserve">
+    <value>Acción</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="Assign" xml:space="preserve">
+    <value>Asignar</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="AssignFolder" xml:space="preserve">
+    <value>Asignar carpeta</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="AssignFolderText" xml:space="preserve">
+    <value>Favor asignar carpeta para cuestionario {0}</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="Assigning" xml:space="preserve">
+    <value>Asignando</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="BackToList" xml:space="preserve">
+    <value>Regresar a la lista</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="Backup" xml:space="preserve">
+    <value>Respaldar</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="CancelSearch" xml:space="preserve">
+    <value>Cancelar búsqueda</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Escoger idioma</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Favor elija el idioma para presentar el cuestionario enPDF</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="Confirmation" xml:space="preserve">
+    <value>confirmación</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="CopyQuestionnaire" xml:space="preserve">
+    <value>Copiar Cuestionario</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
+  <data name="Create" xml:space="preserve">
+    <value>Crear</value>
   </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Creado por</value>
   </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Creado en</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Crear nuevo</value>
   </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
+  <data name="CreateNewQuestionnaire" xml:space="preserve">
+    <value>Crear nuevo cuestionario</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Crear subcarpeta</value>
   </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Eliminar</value>
   </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
+  <data name="DeleteConfirmationText" xml:space="preserve">
+    <value>Realmente desea eliminar el cuestionario {0}?</value>
   </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
+  <data name="Deleting" xml:space="preserve">
+    <value>Eliminando</value>
   </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
+  <data name="Designer" xml:space="preserve">
+    <value>Diseñador de cuestionario</value>
   </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Descargar PDF</value>
   </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
+  <data name="EmptyList" xml:space="preserve">
+    <value>La lista no contiene ningún registro</value>
   </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
   </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Ha ocurrido un error mientras se precisaba su petición</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+  <data name="ExportAsPDF" xml:space="preserve">
+    <value>Exportar como PDF</value>
   </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;br/&gt; - "Crear carpeta" para crear una subcarpeta
+&lt;br/&gt; - "Editar" para cambiar el nombre de la carpeta
+&lt;br/&gt; - "Eliminar" para eliminar la carpeta con subcarpetas</value>
   </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="FoldersManagement" xml:space="preserve">
+    <value>Administración de carpetas</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>No tiene privilegios para editar este cuestionario</value>
+  </data>
+  <data name="ForbiddenDelete" xml:space="preserve">
+    <value>No tiene privilegios para eliminar este cuestionario</value>
+  </data>
+  <data name="ForbiddenRevert" xml:space="preserve">
+    <value>No tiene privilegios para restaurar la operación para este cuestionario</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generar PDF</value>
+  </data>
+  <data name="GeneratingPdf" xml:space="preserve">
+    <value>Generando pdf para {0}</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hola. {0}</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Inicializando</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Modificado en</value>
+  </data>
+  <data name="ManageUsers" xml:space="preserve">
+    <value>Administrar usuarios</value>
+  </data>
+  <data name="MyQuestionnaires" xml:space="preserve">
+    <value>Mis cuestionarios</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="PublicQuestionnaires" xml:space="preserve">
+    <value>Cuestionarios públicos</value>
+  </data>
+  <data name="QuestionnaireTitle" xml:space="preserve">
+    <value>Titulo del cuestionario</value>
+  </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Carpetas</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renombrar</value>
+  </data>
+  <data name="RestoreQuestionnaire" xml:space="preserve">
+    <value>Restaurar cuestionarios</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Intentar de nuevo exportar PDF</value>
+  </data>
+  <data name="SelectTabFile" xml:space="preserve">
+    <value>Favor escoja el archivo a cargar que contiene valores separados por tabí </value>
+  </data>
+  <data name="SuccessDeleteMessage" xml:space="preserve">
+    <value>Cuestionario "{0}"eliminado satisfactoriamente</value>
+  </data>
+  <data name="TabFilesOnly" xml:space="preserve">
+    <value>Solamente se aceptan archivos conteniendo valores separados por tab</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titulo</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Sin titulo</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>Usted</value>
   </data>
 </root>

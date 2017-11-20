@@ -117,100 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
-    <value>La lista no ha sido actualizada</value>
+  <data name="CompleteRegistration" xml:space="preserve">
+    <value>complete el registro</value>
   </data>
-  <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>La lista ha sido actualizada {0}</value>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>Hola {0}, Para completar su registro de clic en el siguiente enlace:</value>
   </data>
-  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>Conectando al servidor</value>
+  <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
+    <value>vista</value>
   </data>
-  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>Creando entrevista</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_edit" xml:space="preserve">
+    <value>editar</value>
   </data>
-  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Descargando cuestionario - {0} %</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
+    <value>enlace</value>
   </data>
-  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». Su cuenta de usuario de Designer no está autorizada. Por favor, compruebe su nombre de usuario y contraseña.</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
+    <value>usuario</value>
   </data>
-  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario no se encuentra. Por favor, actualice la lista de cuestionarios.</value>
+  <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+    <value>Hola {0}, &lt;br&gt; {1} ha invitado a {2} para {3} su cuestionario:</value>
   </data>
-  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
-    <value>No se puede abrir el cuestionario «{0}». El cuestionario tiene errores. Por favor, arregle esto en Designer.</value>
+  <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+    <value>Hola {0}, &lt;br&gt; {1} ha revocado el acceso a {2} para su cuestionario: {3}</value>
   </data>
-  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>Guardando cuestionario en almacenamiento local</value>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>restablecer clave</value>
   </data>
-  <data name="Login_Error_NotFound" xml:space="preserve">
-    <value>La aplicación web Designer no es accesible en este momento. Compruebe la configuración de la conexión o inténtelo más tarde</value>
+  <data name="ResetPasswordEmail" xml:space="preserve">
+    <value>Hola {0}, para completar el restablecimiento de su clave de clic en:</value>
   </data>
-  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Cuestionarios</value>
+  <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+    <value>Complete el proceso de registro</value>
   </data>
-  <data name="MenuItem_Title_Settings" xml:space="preserve">
-    <value>Configuración</value>
+  <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+    <value>Su notificación al compartir cuestionario</value>
   </data>
-  <data name="MenuItem_Title_SignOut" xml:space="preserve">
-    <value>Cerrar sesión</value>
+  <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Su notificación al dejar de compartir cuestionario</value>
   </data>
-  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
-    <value>Desactivar validación de certificado SSL</value>
+  <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+    <value>Notificación al compartir cuestionario</value>
   </data>
-  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
-    <value>Aceptar todos los certificados SSL</value>
+  <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>Notificación al dejar de compartir cuestionario</value>
   </data>
-  <data name="Prefs_ConnectionSettings" xml:space="preserve">
-    <value>Configuración de la conexión</value>
+  <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+    <value>Completar restablecimiento de clave</value>
   </data>
-  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
-    <value>Dirección URL que se utiliza para comunicarse con aplicación Designer</value>
+  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>Hola {0} , &lt;bar&gt; {1} le invita a {2} el siguiente cuestionario:</value>
   </data>
-  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
-    <value>URL de Designer</value>
-  </data>
-  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Número de segundos a esperar para coordenadas</value>
-  </data>
-  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Tiempo de espera para la recepción de GPS</value>
-  </data>
-  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Número de segundos de espera para respuesta del servidor</value>
-  </data>
-  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Tiempo de respuesta del servidor</value>
-  </data>
-  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
-    <value>Versión: {0}</value>
-  </data>
-  <data name="Prefs_VersionTitle" xml:space="preserve">
-    <value>Versión de la aplicación</value>
-  </data>
-  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
-    <value>Descargando adjuntos del cuestionario - {0}%</value>
-  </data>
-  <data name="MenuItem_Title_Language" xml:space="preserve">
-    <value>Idioma</value>
-  </data>
-  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
-    <value>Original</value>
-  </data>
-  <data name="MenuItem_Title_Reload" xml:space="preserve">
-    <value>Recargar cuestionario</value>
-  </data>
-  <data name="Prefs_ShowVariables" xml:space="preserve">
-    <value>Mostrar variables</value>
-  </data>
-  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
-    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
-  </data>
-  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
-    <value>Las variables están ocultas</value>
-  </data>
-  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>Hola {0} , &lt;br&gt; {1} ha dejado de compartir con usted el cuestionario {2}</value>
   </data>
 </root>

@@ -379,4 +379,193 @@ Puede crear o editar sus cuestionarios en Survey Solutions Designer
   <data name="Yes" xml:space="preserve">
     <value>Sí</value>
   </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>MAPA ACTIVO:</value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Área:</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>MAPAS DISPONIBLES EN EL DISPOSITIVO</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Perímetro:</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Ubicación</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Mapa</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>No hay cambios a guardar</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>No se encontró ningún mapa. Por favor actualice los mapas</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Deshacer</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Actualizar mapas</value>
+  </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Actualización fallida</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Actualizar mapas</value>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Asignaciones #{0}</value>
+  </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>No fue posible escribir el archivo de audio. Asegúrese duque el dispositivo tenga espacio disponible </value>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Excepción inesperada durante el inicio de la grabación de audio</value>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} grabaciones de audio</value>
+  </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Su dispositivo no soporta esta funcionalidad</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para determinar su ubicación para poder proceder con la acción.  Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso la la detección de ubicación.</value>
+  </data>
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>Entidades con errores:</value>
+  </data>
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>Primeras {0} entidades con errores:</value>
+  </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>Está a punto de completar la entrevista {0}</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>Primeras {0} preguntas con comentarios:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Pregunta con comentarios del supervisor:</value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Cubrir</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Nota del supervisor:</value>
+  </data>
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>Comentarios de la sede</value>
+  </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>Mostrar instrucción</value>
+  </data>
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>Comentario del entrevistador</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>Comentario de usuario</value>
+  </data>
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>La respuesta no puede quedar en blanco</value>
+  </data>
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Presione para editar el área</value>
+  </data>
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Registrar nuevo</value>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Presione para grabar audio</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Presione para registrar la fecha y hora</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Comentario del supervisor</value>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>Grabación de audio</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Diagnostico</value>
+  </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>Hecho</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Llave de entrevista: {0}</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Salir del editor de mapa</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Limpiar todo</value>
+  </data>
+  <data name="Messages_WaitPendingOperation" xml:space="preserve">
+    <value>Por favor espere a que la operación actual sea completada</value>
+  </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>La aplicación no cuenta con suficientes privilegios para ejecutar la acción solicitada</value>
+  </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para usar la cámara para poder proceder con la acción. Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso de la cámara</value>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para usar el micrófono para poder proceder con la acción.  Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso del micrófono</value>
+  </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>La aplicación necesita tener autorización para usar el almacenamiento interno para poder proceder con la acción.  Intente nuevamente contestar la pregunta y permita el acceso. Si no le aparece la ventana emergente,  entonces vaya a la opción de configuración y autorice el uso de el almacenamiento interno.</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Selección de la galería</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Seleccione una opción</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Tome la foto</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>Número de metros para fijar la precisión</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>Precisión de pregunta GPS deseada </value>
+  </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Mostrar localización en el mapa</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Cargar el mapa para mostrar locación en la pregunta GPS</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>La tableta vibrará cuando una pregunta no satisfaga su validación</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Vibración cuando se introduzca una respuesta inválida</value>
+  </data>
+  <data name="VariableEmptyValue" xml:space="preserve">
+    <value>&lt;vacío&gt;</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>La versión de su aplicación no soporta esta funcionalidad</value>
+  </data>
 </root>

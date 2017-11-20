@@ -222,6 +222,7 @@
     <EmbeddedResource Include="Resources\Captcha.zh.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.es.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.ka.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
