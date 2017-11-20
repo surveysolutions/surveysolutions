@@ -19,7 +19,7 @@
                     </div>
                     <div>
                         <a :href="$config.model.downloadAllUrl">{{$t("Pages.MapLinking_DownloadExisting")}}</a>
-                    <div class="info-block">
+                    <div class="info-block" v-if="actionsAlowed">
                         <form :action="$config.model.uploadUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post">
                             <label class="btn btn-success btn-file">
                                 {{$t("Pages.MapLinking_UploadFile")}}
@@ -39,6 +39,14 @@
 </template>
 <script>
 export default {   
-    mounted() {}
+    mounted() {},
+    computed: {
+        config(){
+            return this.$config.model;
+        },
+        actionsAlowed() {
+            return !this.config.isObserver && !this.config.isObserving;
+        }
+    }
 }
 </script>

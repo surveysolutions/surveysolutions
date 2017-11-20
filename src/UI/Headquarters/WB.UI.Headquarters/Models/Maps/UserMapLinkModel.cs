@@ -5,5 +5,9 @@
         public string DownloadAllUrl { get; set; }
         public string UploadUrl { get; set; }
         public string MapsUrl { get; set; }
+
+        public bool IsObserver { get; set; }
+        public bool IsObserving { get; set; }
+
     }
 }
