@@ -130,7 +130,10 @@
     <value>Assignments</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{0} Assignment(s) selected</value>
+    <value>{{count}} Assignment selected</value>
+  </data>
+  <data name="AssignmentsSelected_plural" xml:space="preserve">
+    <value>{{count}} Assignments selected</value>
   </data>
   <data name="SizeExplanation" xml:space="preserve">
     <value>Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size</value>
@@ -148,7 +151,10 @@
     <value>Count</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{0} Assignment(s) are going to be changed</value>
+    <value>{{ count }} Assignment is going to be changed</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+    <value>{{ count }} Assignments are going to be changed</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>
