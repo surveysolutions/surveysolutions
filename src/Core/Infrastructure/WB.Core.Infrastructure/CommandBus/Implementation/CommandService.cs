@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
@@ -207,6 +208,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             {
                 // evict AR only if exception occured on event apply
                 aggregateRootCacheCleaner.Evict(aggregateId);
+                (this.eventSourcedRepository as IEventSourcedAggregateRootRepositoryCacheCleaner)?.CleanCache();
                 throw;
             }
 
@@ -228,6 +230,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             catch (Exception)
             {
                 aggregateRootCacheCleaner.Evict(aggregateId);
+                (this.eventSourcedRepository as IEventSourcedAggregateRootRepositoryCacheCleaner)?.CleanCache();
                 throw;
             }
             finally
