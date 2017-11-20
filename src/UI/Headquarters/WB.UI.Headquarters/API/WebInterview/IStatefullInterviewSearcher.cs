@@ -4,7 +4,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public interface IStatefullInterviewSearcher
     {
-        SearchResults Search(IStatefulInterview interview, FilterOption[] flags, long skip, long take);
+        SearchResults Search(IStatefulInterview interview, FilterOption[] flags, int skip, int take);
     }
 
     public enum FilterOption

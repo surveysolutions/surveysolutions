@@ -91,8 +91,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
         {
-            return this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
-                   (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
+            if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
+                return true;
+
+            if (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId)
+            {
+                var hasSupervisorAccessToInterview = interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                                                    || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                                                    || interviewSummary.Status == InterviewStatus.Completed
+                                                    || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                                                    || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters;
+
+                if (hasSupervisorAccessToInterview)
+                    return true;
+
+            }
+
+            return false;
         }
 
         [ActivePage(MenuItem.Docs)]
@@ -110,6 +125,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 CommandService.Execute(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id, DateTime.Now));
             }
+
+            ViewBag.SpecificPageCaption = interviewSummary.Key;
 
             return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {

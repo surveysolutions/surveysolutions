@@ -268,10 +268,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
             var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map == mapName).ToList());
             
-            userMapsStorage.Remove(userMaps);
-            var availableUsers = this.userStorage.Users.Where(x => users.Contains(x.UserName.ToLower()) && x.IsArchivedOrLocked == false).ToList();
+            var availableUsers = this.userStorage.Users.Where(x => users.Contains(x.UserName)).ToList();
             var userMappings = availableUsers.Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
 
+            userMapsStorage.Remove(userMaps);
             userMapsStorage.Store(userMappings.Select(x => Tuple.Create(x, (object)x)));
 
             if(availableUsers.Count < users.Length)

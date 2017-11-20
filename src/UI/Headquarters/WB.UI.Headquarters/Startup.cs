@@ -22,7 +22,9 @@ using Ninject.Web.Common.OwinHost;
 using Ninject.Web.Common.WebHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
+using Npgsql;
 using Owin;
+using Prometheus.Advanced;
 using Quartz;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -55,6 +57,8 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
+            DefaultCollectorRegistry.Instance.Clear();
+
             app.Use(RemoveServerNameFromHeaders);
 
             ConfigureNinject(app);
@@ -103,8 +107,20 @@ namespace WB.UI.Headquarters
                     }
                 }
 
-               AddAllSqlData(exception);
+                AddAllSqlData(exception);
             });
+
+            try { StartMetricsPush(); } catch { /* don't care if it crashes */}
+        }
+
+        private void StartMetricsPush()
+        {
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[@"Postgres"];
+            var npgsConnectionString = new NpgsqlConnectionStringBuilder(connectionString.ConnectionString);
+            var instanceName = npgsConnectionString.ApplicationName;
+            var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
+            var pusher = new Prometheus.MetricPusher(metricsGateway, "hq", instanceName, standardCollectors: Array.Empty<IOnDemandCollector>());
+            pusher.Start();
         }
 
         private void ConfigureNinject(IAppBuilder app)
@@ -140,9 +156,9 @@ namespace WB.UI.Headquarters
             WebApiConfig.Register(config);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            
-            
-            app.MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
+
+
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);

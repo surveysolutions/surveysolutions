@@ -20,8 +20,8 @@
                                :title="$t('WebInterviewUI.TextEnter')">
                         <wb-remove-answer />
                     </div>
-                </div>
-                <wb-lock />
+                    <wb-lock />
+                </div>                
             </div>
         </div>
     </wb-question>

@@ -4,15 +4,13 @@
             <div class="options-group">
                 <div class="form-group">
                     <div class="field" :class="{ answered: $me.isAnswered}">
-                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
-                            :placeholder="$t('WebInterviewUI.NumberEnter')"
-                            :title="$t('WebInterviewUI.NumberEnter')"
-                            :value="$me.answer" 
-                            v-blurOnEnterKey 
-                            :disabled="!$me.acceptAnswer"
-                            @blur="answerIntegerQuestion" 
-                            v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">                            
-                            <wb-remove-answer />
+                        <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" 
+                        :placeholder="$t('WebInterviewUI.NumberEnter')" 
+                        :title="$t('WebInterviewUI.NumberEnter')" 
+                        :value="$me.answer" v-blurOnEnterKey 
+                        :disabled="!$me.acceptAnswer" @blur="answerIntegerQuestion" 
+                        v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
+                        <wb-remove-answer />
                         </button>
                     </div>
                 </div>

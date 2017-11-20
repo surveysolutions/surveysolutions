@@ -48,10 +48,11 @@ export default {
             }
             commit("SET_FACET_HIDDEN", facetPanelNewState)
         },
-        hideSearchResults({ commit, state }, newState = null) {
+        hideSearchResults({ commit, dispatch, state }, newState = null) {
             if (state.screenWidth >= state.mediumScreenThreshold){
                 commit("SET_FACET_HIDDEN", false)
             }
+            dispatch("resetAllFilters")
             commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? !state.searchResultsHidden : newState)
         },
         showSearchResults({ commit, state }) {
