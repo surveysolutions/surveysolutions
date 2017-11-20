@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{ count }} Assignment is going to be changed.
+        ///   Looks up a localized string similar to {{count}} Assignment is going to be changed.
         /// </summary>
         public static string NumberOfAssignmentsAffected {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {{ count }} Assignments are going to be changed.
+        ///   Looks up a localized string similar to {{count}} Assignments are going to be changed.
         /// </summary>
         public static string NumberOfAssignmentsAffected_plural {
             get {
