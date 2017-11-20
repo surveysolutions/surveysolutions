@@ -1,37 +1,34 @@
 <template>
     <HqLayout :hasFilter="false" >
-
         <div slot="headers">
                 <ol class="breadcrumb">
                     <li>
-                        <a :href="$config.model.mapsUrl">{{$t("Dashboard.Maps")}}</a>
+                        <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
                     </li>
                 </ol>
-                    <h1>Manage user map links</h1>
+                    <h1>{{$t("Pages.MapLinking_DescriptionTitle")}}</h1>
 
-                    <p>Upload file containing correspondence between maps and users</p>  
-        </div>
-                
+                    <p>{{$t("Pages.MapLinking_Description")}}</p>  
+        </div>                
         <div class="row flex-row">
             <div class="flex-block" style="margin-left:0px;">
                 <div class="selection-box">
                     <div class="block">
-                        <h3>Upload users mappings</h3>
-                        <p>This will allow you to create map to user correspondence.</p>
+                        <h3>{{$t("Pages.MapLinking_UploadDescriptionTitle")}}</h3>
+                        <p>{{$t("Pages.MapLinking_UploadDescription")}}</p>
                     </div>
                     <div>
-                        <a :href="$config.model.downloadAllUrl">Download existing links</a>
+                        <a :href="$config.model.downloadAllUrl">{{$t("Pages.MapLinking_DownloadExisting")}}</a>
                     <form :action="$config.model.uploadUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post">
                         <label class="btn btn-success btn-file">
-                            Upload .tsv file
+                            {{$t("Pages.MapLinking_UploadFile")}}
                             <input accept=".tsv" id="File" name="File" onchange="this.form.submit()" type="file" value="" />
                         </label>
                     </form>
                     <div>                    
-                        <p>Upload .tsv file with file mappings.</p>
-                                <p>Invalid names and user names will be ignored.</p>
-                            </div>
-                        
+                        <p>{{$t("Pages.MapLinking_UploadFileDescription")}}</p>
+                        <p>{{$t("Pages.MapLinking_UploadFileDescription1")}}</p>
+                    </div>                        
                     </div>
                 </div>
             </div>
