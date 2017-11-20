@@ -52,7 +52,7 @@
                            disabled>
                     <label>
                         <span class="tick"></span>
-                        {{ $t("Assignments.AssignmentsSelected", [ selectedRows.length ]) }}
+                        {{ $t("Assignments.AssignmentsSelected", {count: selectedRows.length}) }}
                     </label>
 
                     <button class="btn btn-lg btn-primary"
@@ -72,7 +72,7 @@
 
         <ModalFrame ref="assignModal"
                     :title="$t('Pages.ConfirmationNeededTitle')">
-            <p>{{ $t("Assignments.NumberOfAssignmentsAffected", [selectedRows.length] ) }}</p>
+            <p>{{ $t("Assignments.NumberOfAssignmentsAffected", {count: selectedRows.length} )}}</p>
             <form onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label"
