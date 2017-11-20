@@ -56,6 +56,13 @@ namespace WB.UI.Interviewer.ViewModel
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 
+        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
+
+        private void NavigateToMaps()
+        {
+            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
+        }
+
         public override void NavigateBack()
         {
             if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
