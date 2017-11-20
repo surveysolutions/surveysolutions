@@ -1103,4 +1103,55 @@
   <data name="MapDetails_MaxScale" xml:space="preserve">
     <value>Max Scale</value>
   </data>
+  <data name="MapList_Title" xml:space="preserve">
+    <value>Maps</value>
+  </data>
+  <data name="MapList_Upload" xml:space="preserve">
+    <value>Upload .zip file</value>
+  </data>
+  <data name="MapList_UploadDescription" xml:space="preserve">
+    <value>Upload zip archive containing maps.</value>
+  </data>
+  <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
+    <value>Files with same name will be overridden.</value>
+  </data>
+  <data name="MapList_UserLinking" xml:space="preserve">
+    <value>Update user-to-map linking</value>
+  </data>
+  <data name="MapList_DeleteMap" xml:space="preserve">
+    <value>Delete Map</value>
+  </data>
+  <data name="MapList_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="MapList_Size" xml:space="preserve">
+    <value>Size (MB)</value>
+  </data>
+  <data name="MapList_Updated" xml:space="preserve">
+    <value>Updated on</value>
+  </data>
+  <data name="MapLinking_DescriptionTitle" xml:space="preserve">
+    <value>Manage user map links</value>
+  </data>
+  <data name="MapLinking_Description" xml:space="preserve">
+    <value>Upload file containing correspondence between maps and users</value>
+  </data>
+  <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
+    <value>Upload users mappings</value>
+  </data>
+  <data name="MapLinking_UploadDescription" xml:space="preserve">
+    <value>This will allow you to create map to user correspondence.</value>
+  </data>
+  <data name="MapLinking_DownloadExisting" xml:space="preserve">
+    <value>Download existing links</value>
+  </data>
+  <data name="MapLinking_UploadFile" xml:space="preserve">
+    <value>Upload .tsv file</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription" xml:space="preserve">
+    <value>Upload .tsv file with file mappings</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
+    <value> Invalid names and user names will be ignored.</value>
+  </data> 
 </root>
