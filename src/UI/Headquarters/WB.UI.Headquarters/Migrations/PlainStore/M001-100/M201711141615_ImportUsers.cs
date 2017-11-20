@@ -28,7 +28,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("filename").AsString().NotNullable()
                 .WithColumn("supervisorscount").AsInt32().NotNullable()
                 .WithColumn("interviewerscount").AsInt32().NotNullable()
-                .WithColumn("responsible").AsGuid().NotNullable()
+                .WithColumn("responsible").AsString().NotNullable()
                 .WithColumn("starteddate").AsDateTime().NotNullable();
         }
 

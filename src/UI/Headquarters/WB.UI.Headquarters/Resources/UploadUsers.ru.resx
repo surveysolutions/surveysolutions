@@ -219,4 +219,20 @@
   <data name="VerificationFailed" xml:space="preserve">
     <value>Проверка провалена</value>
   </data>
+  <data name="UploadInProgress" xml:space="preserve">
+    <value>Предупреждение: Пользователь "{{userName}}" уже запустил процесс импорта.</value>
+    <comment>Предупреждение: Пользователь "{{userName}}" уже запустил процесс импорта.</comment>
+  </data>
+  <data name="UploadInProgressDescription" xml:space="preserve">
+    <value>Вы сможете начать импорт пользователей когда текущая операция завершится.</value>
+    <comment>Вы сможете начать импорт своих пользователей когда текущая операция завершится.</comment>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Предположительное время ожидания: {{estimatedTime}}</value>
+    <comment>Предположительное время ожидания: {{estimatedTime}}</comment>
+  </data>
+  <data name="TimeDetermination" xml:space="preserve">
+    <value>определение времени</value>
+    <comment>определение времени</comment>
+  </data>
 </root>

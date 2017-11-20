@@ -29,6 +29,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -290,6 +291,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
+        [ApiNoCache]
         public ImportUserError[] ImportUsers(ImportUsersRequest request)
         {
             if (request?.File?.FileBytes == null)
@@ -318,11 +320,13 @@ namespace WB.UI.Headquarters.Controllers
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
+        [ApiNoCache]
         public UsersImportStatus ImportStatus() => this.userImportService.GetImportStatus();
 
         [HttpGet]
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
+        [ApiNoCache]
         public UsersImportCompleteStatus ImportCompleteStatus() => this.userImportService.GetImportCompleteStatus();
 
         private ImportUserError ToImportError(UserImportVerificationError error) => new ImportUserError

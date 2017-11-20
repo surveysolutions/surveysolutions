@@ -151,6 +151,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approx {{estimatedTime}} left.
+        /// </summary>
+        internal static string EstimatedTime {
+            get {
+                return ResourceManager.GetString("EstimatedTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Full name.
         /// </summary>
         internal static string FullName {
@@ -313,6 +322,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to time determination.
+        /// </summary>
+        internal static string TimeDetermination {
+            get {
+                return ResourceManager.GetString("TimeDetermination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Creating multiple users by batch upload.
         /// </summary>
         internal static string Title {
@@ -336,6 +354,24 @@ namespace WB.UI.Headquarters.Resources {
         internal static string Uploading {
             get {
                 return ResourceManager.GetString("Uploading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning: Another Batch Upload by &quot;{{userName}}&quot; is in progress..
+        /// </summary>
+        internal static string UploadInProgress {
+            get {
+                return ResourceManager.GetString("UploadInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will be available to start yours when current one is completed..
+        /// </summary>
+        internal static string UploadInProgressDescription {
+            get {
+                return ResourceManager.GetString("UploadInProgressDescription", resourceCulture);
             }
         }
         

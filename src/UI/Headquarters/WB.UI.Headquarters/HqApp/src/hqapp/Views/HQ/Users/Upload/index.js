@@ -25,7 +25,8 @@ export default class UploadComponent {
                             Vue.$http
                                 .get(config.model.api.importUsersStatusUrl)
                                 .then(response => {
-                                    if (response.data.isInProgress)
+                                    self.rootStore.dispatch("setUploadStatus", response.data);
+                                    if (response.data.isInProgress && response.data.isOwnerOfRunningProcess)
                                         next({ name: "uploadprogress" });
                                     else next()
                                 });
@@ -46,7 +47,7 @@ export default class UploadComponent {
                             Vue.$http
                                 .get(config.model.api.importUsersStatusUrl)
                                 .then(response => {
-                                    if (!response.data.isInProgress)
+                                    if(!response.data.isInProgress || !response.data.isOwnerOfRunningProcess)
                                         next({ name: "upload" });
                                     else next()
                                 });

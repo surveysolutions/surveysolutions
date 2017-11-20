@@ -1,26 +1,24 @@
 <template>
     <div>
         <slot name="title">
-            <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>{{fileName}}</h3>
+              <h3>{{$t('UploadUsers.ImportingUserInfo')}} <br>{{fileName}}</h3>
         </slot>
         <div class="row">
-            <div class="col-sm-7 col-xs-11 prefilled-data-info info-block">
-                <p>
-                    <h1>
-                        <span class="text-danger">{{$t('UploadUsers.VerificationFailed')}}</span> <br> {{$t('UploadUsers.NoCreatedUsers')}}
-                    </h1>
-                </p>
-                <p v-for="error in verificationErrors">
-                    <strong class="text-danger">[{{$t('UploadUsers.Line')}}: {{error.line}}, {{$t('UploadUsers.Column')}}: {{error.column}}]: {{error.message}}</strong><br>
-                    <span class="info-block">{{error.description}}</span><br>
-                    <span v-if="error.recomendation" class="info-block">{{error.recomendation}}</span>
-                </p>
-                <br>
-                <p class="list-inline">
-                    <input name="file" ref="uploader" v-show="false" accept=".tsv, .txt" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
+            <div class="col-sm-7 col-xs-12 action-block verification-failed active-preloading">
+                <div class="import-progress">
+                    <p class="error-text">{{$t('UploadUsers.VerificationFailed')}}</p> 
+                    <p>{{$t('UploadUsers.NoCreatedUsers')}}</p>
+                </div>
+                <div class="error-block" v-for="error in verificationErrors">
+                    <h5 class="error-text"><span>[{{$t('UploadUsers.Line')}}: {{error.line}}, {{$t('UploadUsers.Column')}}: {{error.column}}]</span>: {{error.message}}</h5>
+                    <p>{{error.description}}</p>
+                    <p>{{error.recomendation}}</p>
+                </div>
+                <div class="action-buttons">
+					<input name="file" ref="uploader" v-show="false" accept=".tsv, .txt" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
                     <button type="button" class="btn btn-success" @click="$refs.uploader.click()">{{$t('UploadUsers.ReUploadTabFile')}}</button>
                     <router-link class="btn btn-link" :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
-                </p>
+				</div>
             </div>
         </div>
     </div>
