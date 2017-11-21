@@ -50,9 +50,7 @@ namespace WB.Infrastructure.Native.Storage
             return cachedAggregate;
         }
 
-        private static Cache Cache => System.Web.HttpContext.Current == null
-            ? System.Web.HttpRuntime.Cache
-            : System.Web.HttpContext.Current.Cache;
+        private static Cache Cache => System.Web.HttpRuntime.Cache;
 
         private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
         {
