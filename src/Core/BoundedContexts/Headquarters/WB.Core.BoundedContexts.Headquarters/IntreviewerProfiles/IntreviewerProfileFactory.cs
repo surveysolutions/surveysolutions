@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
             profile.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
             profile.DeviceId = lastSuccessDeviceInfo.DeviceId;
-            profile.DeviceSerialNumber = lastSuccessDeviceInfo.DeviceType;
+            profile.DeviceSerialNumber = lastSuccessDeviceInfo.DeviceSerialNumber;
             profile.DeviceType = lastSuccessDeviceInfo.DeviceType;
             profile.DeviceManufacturer = lastSuccessDeviceInfo.DeviceManufacturer;
             profile.DeviceModel = lastSuccessDeviceInfo.DeviceModel;

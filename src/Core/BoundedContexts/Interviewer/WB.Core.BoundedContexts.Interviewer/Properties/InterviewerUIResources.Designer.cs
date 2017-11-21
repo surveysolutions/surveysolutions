@@ -967,8 +967,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Handling map {0}, {1} out of {2}. 
-        /// Downloaded {3}%.
+        ///   Looks up a localized string similar to Handling map {0}, {1} out of {2}.
+        ///Downloaded {3}%.
         /// </summary>
         public static string MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format {
             get {

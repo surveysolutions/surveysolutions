@@ -19,9 +19,9 @@
                                :data-mask-completed="$me.isAnswered"
                                :title="$t('WebInterviewUI.TextEnter')">
                         <wb-remove-answer />
-                    </div>
-                    <wb-lock />
-                </div>                
+                    </div>                    
+                </div>    
+                <wb-lock />            
             </div>
         </div>
     </wb-question>
