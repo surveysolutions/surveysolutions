@@ -160,7 +160,7 @@
     <value>proceso de exportación</value>
   </data>
   <data name="ExportExplanation" xml:space="preserve">
-    <value>Al presionar el botón Generar se crea un archivo de datos de las entrevistas disponibles en el servidor en ese momento. El tiempo de creación del archivo y el tamaño del archivo se muestran en la tabla. El último archivo de datos generado se puede descargar presionando el botón Descargar. Presione el botón Generar nuevamente para crear un nuevo archivo.</value>
+    <value>Al presionar el botón "Generar" se crea un archivo de datos de las entrevistas disponibles en el servidor en ese momento. El tiempo de creación del archivo y el tamaño del archivo se muestran en la tabla. El último archivo de datos generado se puede descargar presionando el botón Descargar. Presione el botón "Generar" nuevamente para crear un nuevo archivo.</value>
   </data>
   <data name="ExportRange" xml:space="preserve">
     <value>Rango de exportación:</value>
@@ -184,7 +184,7 @@
     <value>Ítems en cola de exportación:</value>
   </data>
   <data name="LastGeneratedTitle" xml:space="preserve">
-    <value>Generado en</value>
+    <value>Generado</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Ultima fecha de actualización</value>
@@ -220,7 +220,7 @@
     <value>Estado de entrevistas exportadas</value>
   </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
-    <value>(versión) Cuestionario de encuesta</value>
+    <value>(versión) Cuestionario</value>
   </data>
   <data name="TabularFormat" xml:space="preserve">
     <value>Formato tabular</value>

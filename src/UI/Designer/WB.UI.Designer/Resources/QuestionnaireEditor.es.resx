@@ -160,7 +160,7 @@
     <value>{{count}} errores encontrado</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>{{count}} errores encontrados</value>
+    <value>{{cont.}} errores encontrados</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Compilación:</value>
@@ -253,7 +253,7 @@
     <value>Todos</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>Entidad encontrada en {{count}} ?</value>
+    <value>Entidad encontrada en {{cont.}} ?</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
     <value>Entidades encontradas en {{count}} ?</value>
@@ -262,7 +262,7 @@
     <value>Que coincida con caso</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Que coincida con líneas:  {{count}}</value>
+    <value>Que coincida con líneas:  {{cont.}}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Que coincida con palabra</value>
@@ -274,7 +274,7 @@
     <value>Anterior</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>Reemplazar todos ({{count}})</value>
+    <value>Reemplazar todos ({{cont.}})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Reemplazar todos</value>
@@ -349,7 +349,7 @@
     <value>Texto que se mostrará junto a una variable para fines de prueba</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Texto de hasta {{maxLength}} caracteres que será adjunto a la variable exportada</value>
+    <value>Texto de hasta 80 caracteres que será adjunto a la variable exportada</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
     <value>Los nombres de las variables y los identificadores de lista pueden ser de {{minLength}} a {{maxLength}} caracteres de largo y solo deben contener los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
@@ -601,7 +601,7 @@
     <value>Conjunto fijo de ítems</value>
   </data>
   <data name="RosterSourceNumericQuestion" xml:space="preserve">
-    <value>Pregunta que define numero de filas</value>
+    <value>Pregunta que define número de filas</value>
   </data>
   <data name="RosterSourceNumericTitles" xml:space="preserve">
     <value>Pregunta que define el nombre de filas</value>
@@ -763,10 +763,10 @@
     <value>tabla de búsqueda carece de nombre</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{{count}} Tabla de búsqueda:</value>
+    <value>{{cont.}} Tabla de búsqueda:</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>{{count}} Tablas de búsqueda:</value>
+    <value>{{cont.}} Tablas de búsqueda:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>Seleccionar archivo</value>
@@ -814,7 +814,7 @@
     <value>Macros</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{count}} Sección</value>
+    <value>{{cont.}} Sección</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
     <value>{{count}} Secciones:</value>

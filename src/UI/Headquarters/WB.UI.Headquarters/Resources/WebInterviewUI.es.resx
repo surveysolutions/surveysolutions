@@ -175,7 +175,7 @@
     <value>Enviar</value>
   </data>
   <data name="CommentSupervisor" xml:space="preserve">
-    <value>Supervisor comment</value>
+    <value>Comentario del supervisor</value>
   </data>
   <data name="CommentYours" xml:space="preserve">
     <value>Tu comentario</value>
@@ -253,7 +253,7 @@
     <value>No se pudo determinar la posición debido a un error desconocido (Código: {{strErrorCode}}).</value>
   </data>
   <data name="GPSNotAvailable" xml:space="preserve">
-    <value>Su navegador no admite la recepción de Geolocalización</value>
+    <value>Su navegador no admite la recepción de Geo localización</value>
   </data>
   <data name="GPSPermissionDenied" xml:space="preserve">
     <value>Este sitio web no tiene permiso para utilizar la Geolocation API</value>
