@@ -6,7 +6,7 @@
                 data-toggle="dropdown">
             <span data-bind="label"
                   v-if="value === null"
-                  class="gray-text">{{ $t("WebInterviewUI.ClickToAnswer") }}</span>
+                  class="gray-text">{{ watermarkText }}</span>
             <span data-bind="label"
                   v-else>{{value.title}}</span>
         </button>
@@ -59,9 +59,17 @@
             disabled: {
                 required: false,
                 type: Boolean
+            },
+            watermark: {
+                required: false,
+                type: String,
+                default: null
             }
         },
         computed: {
+            watermarkText() {
+                return this.watermark || this.$t("WebInterviewUI.ClickToAnswer")
+            },
             searchBoxId() {
                 return `sb_${this.questionId}`
             }
