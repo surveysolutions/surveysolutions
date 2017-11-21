@@ -11,8 +11,8 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
         private readonly IInterviewerEventStorage eventStore;
-        private readonly IEventSourcedAggregateRootRepository aggregateRootRepository;
+        private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
@@ -48,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ICommandService commandService,
             IInterviewerPrincipal principal,
             IInterviewerEventStorage eventStore,
-            IEventSourcedAggregateRootRepository aggregateRootRepository,
+            IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.commandService = commandService;
             this.principal = principal;
             this.eventStore = eventStore;
-            this.aggregateRootRepository = aggregateRootRepository;
+            this.aggregateRootRepositoryWithCache = aggregateRootRepositoryWithCache;
             this.snapshotStoreWithCache = snapshotStoreWithCache;
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
@@ -71,6 +71,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public void RemoveInterview(Guid interviewId)
         {
+            this.aggregateRootRepositoryWithCache.CleanCache();
             this.snapshotStoreWithCache.CleanCache();
 
             this.interviewViewRepository.Remove(interviewId.FormatGuid());
