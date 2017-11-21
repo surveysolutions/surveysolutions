@@ -176,17 +176,17 @@ gulp.task('styles:markup', ['move-bootstrap-fonts'], wrapPipe(function (success,
 }));
 
 gulp.task('styles:webinterview', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
-    return compileCss(config.css["markup-web-interview"], error)
+    return compileCss(config.css["markup-web-interview"], error);
 }));
 
 gulp.task('styles:specific', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
-    return compileCss(config.css["markup-specific"], error)
+    return compileCss(config.css["markup-specific"], error);
 }));
 
 gulp.task('styles', [
     'styles:markup',
-    'styles:specific',
     'styles:webinterview',
+    'styles:specific',
     'libsCss']);
 
 gulp.task('libsJs', ["checkSources"], wrapPipe((success, error) => {
