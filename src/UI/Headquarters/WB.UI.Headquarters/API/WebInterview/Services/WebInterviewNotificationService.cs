@@ -47,19 +47,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 {
                     entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid()), identity));
                 }
-                else
+                
+                var curreentEntity = identity;
+
+                while (curreentEntity != null)
                 {
-                    var curreentEntity = identity;
-                    while (curreentEntity != null)
+                    var parent = this.GetParentIdentity(curreentEntity, interview);
+                    if (parent != null)
                     {
-                        var parent = this.GetParentIdentity(curreentEntity, interview);
-                        if (parent != null)
-                        {
-                            entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientSectionKey(parent.ToString(), interview.Id.FormatGuid()), curreentEntity));
-                        }
-                        curreentEntity = parent;
+                        entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientSectionKey(parent.ToString(), interview.Id.FormatGuid()), curreentEntity));
                     }
+                    curreentEntity = parent;
                 }
+                
             }
 
             foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))

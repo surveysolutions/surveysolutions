@@ -850,9 +850,6 @@ span.image-zoom-box, span.image-option {
       background-image: url("../img/padlock-3dp.png");
       background-size: 27px 27px; } }
 
-.readonly .lock {
-  display: block; }
-
 .readonly input[type="text"]:disabled,
 .readonly .field label,
 .readonly .radio .field,

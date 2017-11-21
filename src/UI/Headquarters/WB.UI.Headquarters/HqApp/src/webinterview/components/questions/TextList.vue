@@ -17,8 +17,7 @@
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
                         <input autocomplete="off" type="text" class="field-to-fill"
-                            :disabled="!$me.acceptAnswer"
-                            :placeholder="$t('WebInterviewUI.TextEnterNewItem')" :title="$t('WebInterviewUI.TextEnterNewItem')" v-blurOnEnterKey @blur="addRow"/>
+                            :placeholder="noAnswerWatermark" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>
                 <wb-lock />
@@ -42,11 +41,17 @@
         mixins: [entityDetails],
         computed:{
             canAddNewItem() {
+                if(this.$store.getters.isReviewMode) {
+                    return !this.$me.isAnswered;
+                }
+
                 return this.$me.rows == undefined || this.$me.maxAnswersCount == null || this.$me.maxAnswersCount > this.$me.rows.length
             },
-
             canAnswer() {
                 return this.$me.acceptAnswer;
+            },
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnterNewItem')
             }
         },
         methods: {

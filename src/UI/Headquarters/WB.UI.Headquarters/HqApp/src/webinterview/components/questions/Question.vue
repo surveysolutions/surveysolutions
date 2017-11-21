@@ -111,7 +111,8 @@
                 return [{
                     answered: this.question.isAnswered && !this.noAnswer,
                     readonly: !this.question.acceptAnswer,
-                    'has-error': !this.question.validity.isValid
+                    'has-error': !this.question.validity.isValid,
+                    'for-supervisor': this.question.isForSupervisor
                 }, this.questionCssClassName]
             },
             isShowingAddCommentDialog() {

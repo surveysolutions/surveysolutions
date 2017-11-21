@@ -33,10 +33,10 @@
     <!-- css_markup:css -->
     <link rel="stylesheet" async href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
+    @RenderSection("styles", false)
     <!-- css_markupSpecific:css -->
     <link rel='stylesheet' async href='@Url.Content("~/Dependencies/build/markup-specific.css")' >
     <!-- endinject -->
-    @RenderSection("styles", false)
     
     @RenderSection(@"JsLibsHeader", false)
     
