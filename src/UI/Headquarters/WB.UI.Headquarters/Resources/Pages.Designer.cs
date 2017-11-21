@@ -2131,7 +2131,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size.
+        ///   Looks up a localized string similar to Size(MB).
         /// </summary>
         public static string MapDetails_Size {
             get {

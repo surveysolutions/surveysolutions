@@ -1103,16 +1103,16 @@
     <value>Имя интервьюера</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
-    <value>This preview shows the loaded map supperimposed on the world map</value>
+    <value>Этот предварительный просмотр показывает загруженную карту, наложенную на карту мира</value>
   </data>
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Карта</value>
   </data>
   <data name="MapDetails_ImportedOn" xml:space="preserve">
-    <value>Импортирован</value>
+    <value>Карта загружена</value>
   </data>
   <data name="MapDetails_Size" xml:space="preserve">
-    <value>Размер</value>
+    <value>Размер(МБ)</value>
   </data>
   <data name="MapDetails_MinScale" xml:space="preserve">
     <value>Минимальный масштаб</value>
@@ -1127,13 +1127,13 @@
     <value>Загрузить .zip файл</value>
   </data>
   <data name="MapList_UploadDescription" xml:space="preserve">
-    <value>Загрузить zip архив содержащий карты.</value>
+    <value>Загрузить .zip архив, содержащий карты.</value>
   </data>
   <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
-    <value>Файлы с существующими именами будут перезаписаны</value>
+    <value>Файлы с одинаковыми названиями будут перезаписаны.</value>
   </data>
   <data name="MapList_UserLinking" xml:space="preserve">
-    <value>Обновить связи между пользователями и картами</value>
+    <value>Загрузить файл с назначением карт на пользователей</value>
   </data>
   <data name="MapList_DeleteMap" xml:space="preserve">
     <value>Удалить карту</value>
@@ -1148,27 +1148,27 @@
     <value>Обновлено</value>
   </data>
   <data name="MapLinking_DescriptionTitle" xml:space="preserve">
-    <value>Управление связями между пользователями и картами</value>
+    <value>Назначение карт на пользователей</value>
   </data>
   <data name="MapLinking_Description" xml:space="preserve">
-    <value>Загрузить файл содержащий связи между пользователями и картами</value>
+    <value>Позволяет загрузить файл с назначением карт на пользователей</value>
   </data>
   <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
-    <value>Загрузить связи</value>
+    <value>Назначить карты на пользователей</value>
   </data>
   <data name="MapLinking_UploadDescription" xml:space="preserve">
-    <value>Позволяет создать связи между пользователями и картами.</value>
+    <value>Позволяет назначить пользователями конкретные карты.</value>
   </data>
   <data name="MapLinking_DownloadExisting" xml:space="preserve">
-    <value>Скачать существующие связи</value>
+    <value>Скачать существующие назначения</value>
   </data>
   <data name="MapLinking_UploadFile" xml:space="preserve">
     <value>Загрузить .tsv файл</value>
   </data>
   <data name="MapLinking_UploadFileDescription" xml:space="preserve">
-    <value>Загрузить .tsv файл со связями</value>
+    <value>Загрузить .tsv файл с назначениями</value>
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
-    <value>Неправильные имена пользователей будут игнорированы</value>
+    <value>Неправильные или несуществующие имена пользователей не будут загружены</value>
   </data> 
 </root>
