@@ -189,4 +189,28 @@
   <data name="Prefs_VersionTitle" xml:space="preserve">
     <value>Versión de la aplicación</value>
   </data>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>Descargando adjuntos del cuestionario - {0}%</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Recargar cuestionario</value>
+  </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Mostrar variables</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>Las variables son mostradas en la entrevista con valores y descripciones</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>Las variables están ocultas</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Los datos de la entrevista no pueden aplicarse a la nueva versión del cuestionario. Abriremos una entrevista vacía</value>
+  </data>
 </root>

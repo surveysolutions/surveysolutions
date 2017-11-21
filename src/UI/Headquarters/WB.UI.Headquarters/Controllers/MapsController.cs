@@ -24,10 +24,8 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Maps;
-using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
@@ -39,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapRepository mapRepository;
         private readonly IExportFactory exportFactory;
+        private readonly IAuthorizedUser authorizedUser;
 
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
@@ -47,13 +46,14 @@ namespace WB.UI.Headquarters.Controllers
         public MapsController(ICommandService commandService, ILogger logger, 
             IFileSystemAccessor fileSystemAccessor, IMapRepository mapRepository,
             IExportFactory exportFactory, IRecordsAccessorFactory recordsAccessorFactory,
-            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor) : base(commandService, logger)
+            IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor, IAuthorizedUser authorizedUser) : base(commandService, logger)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.mapRepository = mapRepository;
             this.exportFactory = exportFactory;
             this.recordsAccessorFactory = recordsAccessorFactory;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
+            this.authorizedUser = authorizedUser;
         }
 
         public ActionResult Index()
@@ -71,7 +71,9 @@ namespace WB.UI.Headquarters.Controllers
                     }),
                 UploadMapUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMaps" }),
                 UserMapLinkingUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMapsLink" }),
-                DeleteMapLinkUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "MapsApi", action = "DeleteMap" })
+                DeleteMapLinkUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "MapsApi", action = "DeleteMap" }),
+                IsObserver = authorizedUser.IsObserver,
+                IsObserving = authorizedUser.IsObserving,
             };
             return View(model);
         }
@@ -91,6 +93,8 @@ namespace WB.UI.Headquarters.Controllers
                 DownloadAllUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "MapsApi", action = "MappingDownload"}),
                 UploadUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMappings" }),
                 MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
+                IsObserver = authorizedUser.IsObserver,
+                IsObserving = authorizedUser.IsObserving,
             };
             return View(model);
         }
@@ -313,11 +317,12 @@ namespace WB.UI.Headquarters.Controllers
                 mappings.Add(dataRecord);
             }
 
-            return mappings;
+            return mappings.GroupBy(p => p.Map)
+                .Select(g => g.First())
+                .ToList();
         }
 
 
-        [ObserverNotAllowed]
         public HttpResponseMessage MappingDownload()
         {
             return CreateReportResponse("usermaps");

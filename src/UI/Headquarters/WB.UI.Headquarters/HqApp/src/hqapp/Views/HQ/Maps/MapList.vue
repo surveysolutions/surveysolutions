@@ -1,21 +1,21 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('MainMenu.Maps')">        
+    <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">        
         <div slot="headers">
             <div class="topic-with-button" >
-                <h1>{{$t('MainMenu.Maps')}}</h1>
-                <form :action="$config.model.uploadMapUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post">
+                <h1>{{$t('Pages.MapList_Title')}}</h1>
+                <form :action="$config.model.uploadMapUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post" v-if="actionsAlowed">
                     <label class="btn btn-success btn-file">
-                        Upload .zip file
+                        {{$t('Pages.MapList_Upload')}}
                         <input accept=".zip" id="File" name="File" onchange="this.form.submit()" type="file" value="" />
                     </label>
                 </form>
             </div>
             <ol class="list-unstyled">
-                <li>Upload zip archive containing maps. </li>
-                <li>Files with same name will be overridden.</li>
+                <li>{{$t('Pages.MapList_UploadDescription')}} </li>
+                <li>{{$t('Pages.MapList_UploadDescriptionExtra')}}</li>
             </ol>
             <p>
-                <a :href="$config.model.userMapLinkingUrl">Update user to maps linking</a>
+                <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
             </p>
         </div>
         <DataTables ref="table" 
@@ -48,7 +48,7 @@ export default {
           callback: () => this.$store.dispatch("openMap", rowData.fileName)
         },
         {
-          name: this.$t("Dashboard.DeleteMap"),
+          name: this.$t("Pages.MapList_DeleteMap"),
           callback: () => this.deleteMap(rowData.fileName)
         }
       ];
@@ -71,6 +71,9 @@ export default {
     config() {
       return this.$config.model;
     },
+    actionsAlowed() {
+            return !this.config.isObserver && !this.config.isObserving;
+        },
     tableOptions() {
       var self = this;
       return {
@@ -80,19 +83,19 @@ export default {
             data: "fileName",
             name: "FileName",
             class: "title",
-            title: this.$t("Maps.Name")
+            title: this.$t("Pages.MapList_Name")
           },
           {
             data: "size",
             name: "Size",
             class: "parameters",
-            title: this.$t("Maps.Size")
+            title: this.$t("Pages.MapList_Size")
           },
           {
             data: "importDate",
             name: "ImportDate",
             class: "date",
-            title: this.$t("Maps.UpdateDate")
+            title: this.$t("Pages.MapList_Updated")
           }
         ],
         ajax: {

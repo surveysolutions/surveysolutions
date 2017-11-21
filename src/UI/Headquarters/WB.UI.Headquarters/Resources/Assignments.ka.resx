@@ -133,7 +133,7 @@
     <value>დავალებები</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{0} დავალებები შერჩეულია</value>
+    <value>{{count}} დავალებები შერჩეულია</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
     <value>დავალების ზომა რედაქტირებისთვის {{assignmentId}}</value>
@@ -160,7 +160,7 @@
     <value>საჭირო ინტერვიუები</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{0} დავალებები შეიცვლება</value>
+    <value>{{count}} დავალებები შეიცვლება</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>კითხვარი</value>
