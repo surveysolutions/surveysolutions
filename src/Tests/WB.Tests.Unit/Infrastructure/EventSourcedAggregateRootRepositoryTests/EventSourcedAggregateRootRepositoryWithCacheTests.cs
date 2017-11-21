@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
             var domainRepository = Mock.Of<IDomainRepository>();
             Mock.Get(domainRepository).SetReturnsDefault(dirtyAggregate);
 
-            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithCache(repository: domainRepository);
+            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepository(repository: domainRepository);
 
             // act - get twice
             eventSourcedRepository.GetLatest(dirtyAggregate.GetType(), Guid.Empty);
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Infrastructure.EventSourcedAggregateRootRepositoryTests
             var domainRepository = Mock.Of<IDomainRepository>();
             Mock.Get(domainRepository).SetReturnsDefault(cleanAggregate);
 
-            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepositoryWithCache(repository: domainRepository);
+            var eventSourcedRepository = Create.Service.EventSourcedAggregateRootRepository(repository: domainRepository);
 
             // act - get twice
             eventSourcedRepository.GetLatest(cleanAggregate.GetType(), Guid.Empty);
