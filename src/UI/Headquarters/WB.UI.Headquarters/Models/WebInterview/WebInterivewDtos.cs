@@ -177,6 +177,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public bool HideInstructions { get; set; }
         public bool IsAnswered { get; set; }
         public bool AcceptAnswer { get; set; }
+        public bool IsForSupervisor { get; set; }
         public Validity Validity { get; set; } = new Validity();
         public Comment[] Comments { get; set; }
     }

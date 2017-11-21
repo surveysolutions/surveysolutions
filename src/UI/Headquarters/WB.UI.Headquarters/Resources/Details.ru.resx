@@ -132,6 +132,9 @@
   <data name="LastUpdated" xml:space="preserve">
     <value>Обновлено {{ date }}</value>
   </data>
+  <data name="NoAnswer" xml:space="preserve">
+    <value>Не отвечен</value>
+  </data>
   <data name="NoSearchResults" xml:space="preserve">
     <value>Ничего не найдено</value>
   </data>
