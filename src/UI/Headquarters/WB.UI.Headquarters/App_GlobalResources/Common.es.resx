@@ -181,7 +181,7 @@
     <value>Bitácora de errores</value>
   </data>
   <data name="GetInterviewerApp" xml:space="preserve">
-    <value>Obtener aplicación Interviewer</value>
+    <value>Descarge aplicación Interviewer</value>
   </data>
   <data name="HideIdentifying" xml:space="preserve">
     <value>Ocultar</value>
@@ -193,7 +193,7 @@
     <value>Entrevistas</value>
   </data>
   <data name="LastUpdate" xml:space="preserve">
-    <value>Actualizado en</value>
+    <value>Actualizado</value>
   </data>
   <data name="Legal" xml:space="preserve">
     <value>Legal</value>

@@ -160,7 +160,7 @@
     <value>Título de lista es inválido </value>
   </data>
   <data name="InvalidValueOfFixedTitle" xml:space="preserve">
-    <value>Es necesario indicar el numero de ítems de la lista </value>
+    <value>Es necesario indicar el número de ítems de la lista </value>
   </data>
   <data name="ItemWithIdExistsAlready" xml:space="preserve">
     <value>Uno o mas ítems del cuestionario con el mismo id ya existe {0}</value>
@@ -235,7 +235,7 @@
     <value>La pregunta {0} no es un caja combo</value>
   </data>
   <data name="QuestionnaireCantBeFound" xml:space="preserve">
-    <value>No fue posible encontrar la pregunta con id {0}</value>
+    <value>El elemento del cuestionario con ID {0} no se puede encontrar.</value>
   </data>
   <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
     <value>No fue posible encontrar la pregunta {0} de la versión {1} </value>
@@ -292,7 +292,7 @@
     <value>Usuario {0} es un propietario del cuestionario. Por favor ingrese otro email</value>
   </data>
   <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
-    <value>El valor que indica el numero de ítems de la lista solo puede contener caracteres numéricos</value>
+    <value>El valor que indica el número de ítems de la lista solo puede contener caracteres numéricos</value>
   </data>
   <data name="VariableCantBePaste" xml:space="preserve">
     <value>No es posible incrustar variables</value>

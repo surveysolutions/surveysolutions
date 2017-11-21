@@ -202,7 +202,7 @@
     <value>Velocidad de los supervisores</value>
   </data>
   <data name="Report_Status_Duration" xml:space="preserve">
-    <value>Duración del estado</value>
+    <value>Duración de estado</value>
   </data>
   <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
     <value>Supervisores y estados</value>
