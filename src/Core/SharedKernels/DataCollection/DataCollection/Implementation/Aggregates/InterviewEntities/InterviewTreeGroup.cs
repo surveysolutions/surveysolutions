@@ -292,7 +292,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private IEnumerable<InterviewTreeQuestion> GetEnabledQuestionsForSupervisor()
             => this.Children.OfType<InterviewTreeQuestion>()
-                .Where(x => !x.IsPrefilled && (x.IsSupervisors || x.IsInterviewer)&& !x.IsDisabled());
+                .Where(x => !x.IsDisabled());
         
         public int CountEnabledAnsweredQuestionsForSupervisor() 
             => this.GetEnabledQuestionsForSupervisor().Count(question => question.IsAnswered());
