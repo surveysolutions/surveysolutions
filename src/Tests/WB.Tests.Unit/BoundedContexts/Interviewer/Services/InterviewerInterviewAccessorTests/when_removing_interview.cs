@@ -10,8 +10,8 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             interviewerInterviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
                 interviewViewRepository: interviewViewRepositoryMock.Object,
-                aggregateRootRepositoryWithCache: mockOfAggregateRootRepositoryWithCache.Object,
+                aggregateRootRepository: mockOfAggregateRootRepositoryWithCache.Object,
                 snapshotStoreWithCache: mockOfSnapshotStoreWithCache.Object,
                 principal: principal,
                 eventStore: eventStore.Object,
@@ -53,9 +53,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         public void should_remove_interview_view_from_plain_storage() =>
             interviewViewRepositoryMock.Verify(x => x.Remove(interviewStringId), Times.Once);
 
-        [Test]
-        public void should_clean_cache_of_aggregate_root_repository() =>
-            mockOfAggregateRootRepositoryWithCache.Verify(x => x.CleanCache(), Times.Once);
 
         [Test]
         public void should_clean_cache_of_snapshot_repository() =>
@@ -105,7 +102,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
         private static readonly Mock<IPlainStorage<InterviewView>> interviewViewRepositoryMock = new Mock<IPlainStorage<InterviewView>>();
-        private static readonly Mock<IEventSourcedAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IEventSourcedAggregateRootRepositoryWithCache>();
+        private static readonly Mock<IEventSourcedAggregateRootRepository> mockOfAggregateRootRepositoryWithCache = new Mock<IEventSourcedAggregateRootRepository>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
         private static Mock<IInterviewerEventStorage> eventStore;
