@@ -40,10 +40,17 @@ function addDefaultLocaleValues(locales, def) {
     Object.keys(locales).forEach((locale) => {
         if (locale == def) return;
 
-        Object.keys(defaultMessages).forEach((key) => {
-            if (!locales[locale][key]) {
-                locales[locale][key] = defaultMessages[key];
+        Object.keys(defaultMessages).forEach((namespace) => {
+            if (!locales[locale][namespace]) {
+                locales[locale][namespace] = defaultMessages[namespace];
             }
+
+            Object.keys(defaultMessages[namespace]).forEach(key => {
+                
+                if (!locales[locale][namespace][key]) {
+                    locales[locale][namespace][key] = defaultMessages[namespace][key];
+                }
+            })
         });
     });
 
