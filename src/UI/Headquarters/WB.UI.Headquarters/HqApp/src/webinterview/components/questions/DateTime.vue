@@ -10,8 +10,8 @@
                                     :value="answer"
                                     :disabled="!$me.acceptAnswer"
                                     class="field-to-fill"
-                                    :placeholder="$t('WebInterviewUI.EnterDate')"
-                                    :title="$t('WebInterviewUI.EnterDate')" />
+                                    :placeholder="noAnswerWatermark"
+                                    :title="noAnswerWatermark" />
                         <wb-remove-answer/>
                     </div>
                 </div>
@@ -25,9 +25,8 @@
                          @click="answerDate">
                         <button type="button"
                                 :disabled="!$me.acceptAnswer"
-                    
                                 class="btn btn-default btn-lg btn-action-questionnaire">
-                            {{ $t("WebInterviewUI.RecordCurrentTime") }}
+                            {{ noAnswerWatermark }}
                         </button>
                     </div>
                 </div>
@@ -58,6 +57,10 @@
             }
         },
         computed: {
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
+                    (this.$me.isTimestamp ? this.$t("WebInterviewUI.RecordCurrentTime") : this.$t('WebInterviewUI.EnterDate'))
+            },
             answer() {
                 if (this.$me && this.$me.answer) {
                     if (this.$me.isTimestamp){

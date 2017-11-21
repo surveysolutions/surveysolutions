@@ -5,7 +5,8 @@
                 <div class="form-group">
                     <div class="field" :class="{ answered: $me.isAnswered}"> 
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
-                            :placeholder="$t('WebInterviewUI.DecimalEnter')" :title="$t('WebInterviewUI.DecimalEnter')"
+                            :placeholder="noAnswerWatermark" 
+                            :title="noAnswerWatermark"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="!$me.acceptAnswer"
                             v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
@@ -25,6 +26,9 @@
         name: 'Double',
         mixins: [entityDetails],
         computed: {
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
+            },
             groupSeparator() {
                 if (this.$me.useFormatting) {
                     var etalon = 1111

@@ -10,14 +10,13 @@
                                autocomplete="off"
                                type="text"
                                class="field-to-fill"
-                               :placeholder="$t('WebInterviewUI.TextEnterMasked', { userFriendlyMask })"
+                               :placeholder="noAnswerWatermark"
                                :value="$me.answer"
                                :disabled="!$me.acceptAnswer"
                                v-blurOnEnterKey
                                @blur="answerTextQuestion"
                                v-mask="$me.mask"
-                               :data-mask-completed="$me.isAnswered"
-                               :title="$t('WebInterviewUI.TextEnter')">
+                               :data-mask-completed="$me.isAnswered">
                         <wb-remove-answer />
                     </div>                    
                 </div>    
@@ -34,6 +33,10 @@
         name: 'TextQuestion',
         mixins: [entityDetails],
         computed: {
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
+                    this.$t('WebInterviewUI.TextEnterMasked', {userFriendlyMask: this.userFriendlyMask})
+            },
             userFriendlyMask() {
                 if (this.$me.mask) {
                     const resultMask = this.$me.mask.replace(/\*/g, "_").replace(/\#/g, "_").replace(/\~/g, "_")

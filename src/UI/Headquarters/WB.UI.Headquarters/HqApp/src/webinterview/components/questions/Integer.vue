@@ -5,8 +5,8 @@
                 <div class="form-group">
                     <div class="field" :class="{ answered: $me.isAnswered}">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" 
-                        :placeholder="$t('WebInterviewUI.NumberEnter')" 
-                        :title="$t('WebInterviewUI.NumberEnter')" 
+                        :placeholder="noAnswerWatermark" 
+                        :title="noAnswerWatermark" 
                         :value="$me.answer" v-blurOnEnterKey 
                         :disabled="!$me.acceptAnswer" @blur="answerIntegerQuestion" 
                         v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
@@ -28,7 +28,10 @@
     export default {
         name: 'Integer',
         mixins: [entityDetails],
-        computed: {
+        computed: { 
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.NumberEnter')
+            },
             groupSeparator() {
                 if (this.$me.useFormatting) {
                     var etalon = 1111
