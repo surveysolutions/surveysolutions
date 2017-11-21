@@ -2059,6 +2059,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are You sure You want to delete the map?.
+        /// </summary>
+        public static string Map_DiscardConfirm {
+            get {
+                return ResourceManager.GetString("Map_DiscardConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delink User from map.
         /// </summary>
         public static string MapDetails_DelinkUser {
@@ -2086,7 +2095,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This preview shows the loaded map supperimposed on the world map.
+        ///   Looks up a localized string similar to This preview shows the loaded map superimposed on the world map.
         /// </summary>
         public static string MapDetails_MapDisclaimer {
             get {
@@ -2127,6 +2136,168 @@ namespace WB.UI.Headquarters.Resources {
         public static string MapDetails_Size {
             get {
                 return ResourceManager.GetString("MapDetails_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload file containing correspondence between maps and users.
+        /// </summary>
+        public static string MapLinking_Description {
+            get {
+                return ResourceManager.GetString("MapLinking_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage user map links.
+        /// </summary>
+        public static string MapLinking_DescriptionTitle {
+            get {
+                return ResourceManager.GetString("MapLinking_DescriptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download existing links.
+        /// </summary>
+        public static string MapLinking_DownloadExisting {
+            get {
+                return ResourceManager.GetString("MapLinking_DownloadExisting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will allow you to create map to user correspondence..
+        /// </summary>
+        public static string MapLinking_UploadDescription {
+            get {
+                return ResourceManager.GetString("MapLinking_UploadDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload users mappings.
+        /// </summary>
+        public static string MapLinking_UploadDescriptionTitle {
+            get {
+                return ResourceManager.GetString("MapLinking_UploadDescriptionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload .tsv file.
+        /// </summary>
+        public static string MapLinking_UploadFile {
+            get {
+                return ResourceManager.GetString("MapLinking_UploadFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload .tsv file with file mappings.
+        /// </summary>
+        public static string MapLinking_UploadFileDescription {
+            get {
+                return ResourceManager.GetString("MapLinking_UploadFileDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Invalid names and user names will be ignored..
+        /// </summary>
+        public static string MapLinking_UploadFileDescription1 {
+            get {
+                return ResourceManager.GetString("MapLinking_UploadFileDescription1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Map.
+        /// </summary>
+        public static string MapList_DeleteMap {
+            get {
+                return ResourceManager.GetString("MapList_DeleteMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string MapList_Name {
+            get {
+                return ResourceManager.GetString("MapList_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size (MB).
+        /// </summary>
+        public static string MapList_Size {
+            get {
+                return ResourceManager.GetString("MapList_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string MapList_Title {
+            get {
+                return ResourceManager.GetString("MapList_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated on.
+        /// </summary>
+        public static string MapList_Updated {
+            get {
+                return ResourceManager.GetString("MapList_Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload .zip file.
+        /// </summary>
+        public static string MapList_Upload {
+            get {
+                return ResourceManager.GetString("MapList_Upload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload zip archive containing maps..
+        /// </summary>
+        public static string MapList_UploadDescription {
+            get {
+                return ResourceManager.GetString("MapList_UploadDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files with same name will be overridden..
+        /// </summary>
+        public static string MapList_UploadDescriptionExtra {
+            get {
+                return ResourceManager.GetString("MapList_UploadDescriptionExtra", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update user-to-map linking.
+        /// </summary>
+        public static string MapList_UserLinking {
+            get {
+                return ResourceManager.GetString("MapList_UserLinking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are You sure You want delink user from the map?.
+        /// </summary>
+        public static string MapUserLink_DiscardConfirm {
+            get {
+                return ResourceManager.GetString("MapUserLink_DiscardConfirm", resourceCulture);
             }
         }
         
