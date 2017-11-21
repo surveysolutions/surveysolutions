@@ -152,14 +152,6 @@ namespace WB.Tests.Abc.TestFactories
             IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
 
-
-        public EventSourcedAggregateRootRepositoryWithExtendedCache EventSourcedAggregateRootRepositoryWithExtendedCache(
-            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
-            => new EventSourcedAggregateRootRepositoryWithExtendedCache(
-                eventStore ?? Mock.Of<IEventStore>(),
-                snapshotStore ?? Mock.Of<ISnapshotStore>(),
-                repository ?? Mock.Of<IDomainRepository>());
-
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
 
