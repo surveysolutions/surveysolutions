@@ -67,6 +67,9 @@ export default {
     beforeMount() {
         this.fetch()
     },
+    mounted() {
+        window.scroll({ top: 0, behavior: "smooth" })
+    },
     computed: {
         title() {
             return this.$store.state.webinterview.questionnaireTitle

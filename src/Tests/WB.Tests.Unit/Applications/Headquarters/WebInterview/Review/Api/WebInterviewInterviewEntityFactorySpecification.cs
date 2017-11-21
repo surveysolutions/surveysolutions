@@ -46,8 +46,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
                     Create.Entity.FixedRoster(SecB_Group.Id,variable: "roster_b", title: "roster", children: new IComposite[]
                     {
-                        Create.Entity.TextQuestion(SecB_Group_In.Id, text: "interviewer q in group", variable: "text_in_g_B"),
-                        Create.Entity.TextQuestion(SecB_Group_Sup.Id, text: "supervisor q in group", variable: "text_s_g_B", scope: QuestionScope.Supervisor),
+                        Create.Entity.TextQuestion(SecB_Group_In.Id, text: "interviewer q in group", variable: "text_in_g_B", scope: QuestionScope.Interviewer),
+                        Create.Entity.TextQuestion(SecB_Group_Sup.Id, text: "supervisor q in group", variable: "text_s_g_B", scope: QuestionScope.Hidden),
                     }, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Test") })
                 }));
 

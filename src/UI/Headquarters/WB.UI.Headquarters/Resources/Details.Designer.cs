@@ -106,6 +106,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string NoAnswer {
+            get {
+                return ResourceManager.GetString("NoAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No items found.
         /// </summary>
         public static string NoSearchResults {

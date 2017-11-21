@@ -316,9 +316,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 return;
             }
 
-            result.AcceptAnswer = question.IsSupervisors &&
+            result.IsForSupervisor = question.IsSupervisors &&
                                   callerInterview.Status < InterviewStatus.ApprovedByHeadquarters &&
                                   (this.authorizedUser.IsSupervisor && !this.authorizedUser.IsObserving);
+            result.AcceptAnswer = result.IsForSupervisor;
         }
 
         private void PutInstructions(GenericQuestion result, Identity id, IQuestionnaire questionnaire)
