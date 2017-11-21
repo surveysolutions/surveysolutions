@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
             Assert.That(report.Data.Length, Is.EqualTo(2));
 
             Assert.That(report.Data[0], Is.EquivalentTo(new object[]{ "u1", Id.g1, "super", "AppVersion", false, null, 0, 0, null, null, "device1",
-                "DeviceType", "DeviceType", "DeviceManufacturer", "DeviceModel", "DeviceBuildNumber", "DeviceLanguage", "Android AndroidSdkVersionName(25)",
+                "DeviceSerialNumber", "DeviceType", "DeviceManufacturer", "DeviceModel", "DeviceBuildNumber", "DeviceLanguage", "Android AndroidSdkVersionName(25)",
                 "AppVersion", deviceSyncInfos[0].LastAppUpdatedDate, 14.15, 16.17, "AppOrientation", 88, "BatteryPowerSource", false,
                 5242880, 2097152000, 52428800, 1073741824, 76546048,
                 deviceSyncInfos[0].SyncDate, deviceSyncInfos[0].DeviceDate, "NetworkType", "NetworkSubType", 0, 0, 0, 10, 0, 0 }));
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
             Assert.That(profile.AndroidVersion, Is.EqualTo("Android AndroidSdkVersionName(25)"));
             Assert.That(profile.DeviceLanguage, Is.EqualTo("DeviceLanguage"));
             Assert.That(profile.DeviceBuildNumber, Is.EqualTo("DeviceBuildNumber"));
-            Assert.That(profile.DeviceSerialNumber, Is.EqualTo("DeviceType"));
+            Assert.That(profile.DeviceSerialNumber, Is.EqualTo("DeviceSerialNumber"));
             Assert.That(profile.DeviceManufacturer, Is.EqualTo("DeviceManufacturer"));
             Assert.That(profile.DatabaseSizeInBytes, Is.EqualTo(73 * 1024 * 1024));
             Assert.That(profile.AndroidVersion, Is.EqualTo("Android AndroidSdkVersionName(25)"));

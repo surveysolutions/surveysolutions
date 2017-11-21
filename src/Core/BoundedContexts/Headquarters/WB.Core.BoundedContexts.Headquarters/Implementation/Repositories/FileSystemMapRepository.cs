@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         {
             return userMapsStorage.Query(q =>
             {
-                return q.Where(x => x.UserName == userName).Select(y => y.Map).ToList();
+                return q.Where(x => x.UserName == userName).Select(y => y.Map).Distinct().ToList();
             }).ToArray();
         }
 

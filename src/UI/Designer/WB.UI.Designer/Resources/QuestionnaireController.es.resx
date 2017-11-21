@@ -1,0 +1,287 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Action" xml:space="preserve">
+    <value>Acción</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Asignar</value>
+  </data>
+  <data name="AssignFolder" xml:space="preserve">
+    <value>Asignar carpeta</value>
+  </data>
+  <data name="AssignFolderText" xml:space="preserve">
+    <value>Favor asignar carpeta para cuestionario {0}</value>
+  </data>
+  <data name="Assigning" xml:space="preserve">
+    <value>Asignando</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Regresar a la lista</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Respaldar</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="CancelSearch" xml:space="preserve">
+    <value>Cancelar búsqueda</value>
+  </data>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Escoger idioma</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>Favor elija el idioma para presentar el cuestionario enPDF</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>confirmación</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="CopyQuestionnaire" xml:space="preserve">
+    <value>Copiar Cuestionario</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crear</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Creado por</value>
+  </data>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>Creado en</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Crear nuevo</value>
+  </data>
+  <data name="CreateNewQuestionnaire" xml:space="preserve">
+    <value>Crear nuevo cuestionario</value>
+  </data>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Crear subcarpeta</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="DeleteConfirmationText" xml:space="preserve">
+    <value>Realmente desea eliminar el cuestionario {0}?</value>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Eliminando</value>
+  </data>
+  <data name="Designer" xml:space="preserve">
+    <value>Diseñador de cuestionario</value>
+  </data>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>Descargar PDF</value>
+  </data>
+  <data name="EmptyList" xml:space="preserve">
+    <value>La lista no contiene ningún registro</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>Ha ocurrido un error mientras se precisaba su petición</value>
+  </data>
+  <data name="ExportAsPDF" xml:space="preserve">
+    <value>Exportar como PDF</value>
+  </data>
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;br/&gt; - "Crear carpeta" para crear una subcarpeta
+&lt;br/&gt; - "Editar" para cambiar el nombre de la carpeta
+&lt;br/&gt; - "Eliminar" para eliminar la carpeta con subcarpetas</value>
+  </data>
+  <data name="FoldersManagement" xml:space="preserve">
+    <value>Administración de carpetas</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>No tiene privilegios para editar este cuestionario</value>
+  </data>
+  <data name="ForbiddenDelete" xml:space="preserve">
+    <value>No tiene privilegios para eliminar este cuestionario</value>
+  </data>
+  <data name="ForbiddenRevert" xml:space="preserve">
+    <value>No tiene privilegios para restaurar la operación para este cuestionario</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generar PDF</value>
+  </data>
+  <data name="GeneratingPdf" xml:space="preserve">
+    <value>Generando pdf para {0}</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>Hola. {0}</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>Inicializando</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>Modificado en</value>
+  </data>
+  <data name="ManageUsers" xml:space="preserve">
+    <value>Administrar usuarios</value>
+  </data>
+  <data name="MyQuestionnaires" xml:space="preserve">
+    <value>Mis cuestionarios</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Abrir</value>
+  </data>
+  <data name="PublicQuestionnaires" xml:space="preserve">
+    <value>Cuestionarios públicos</value>
+  </data>
+  <data name="QuestionnaireTitle" xml:space="preserve">
+    <value>Titulo del cuestionario</value>
+  </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Carpetas</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renombrar</value>
+  </data>
+  <data name="RestoreQuestionnaire" xml:space="preserve">
+    <value>Restaurar cuestionarios</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>Intentar de nuevo exportar PDF</value>
+  </data>
+  <data name="SelectTabFile" xml:space="preserve">
+    <value>Favor escoja el archivo a cargar que contiene valores separados por tabí </value>
+  </data>
+  <data name="SuccessDeleteMessage" xml:space="preserve">
+    <value>Cuestionario "{0}"eliminado satisfactoriamente</value>
+  </data>
+  <data name="TabFilesOnly" xml:space="preserve">
+    <value>Solamente se aceptan archivos conteniendo valores separados por tab</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Titulo</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Sin titulo</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>Usted</value>
+  </data>
+</root>

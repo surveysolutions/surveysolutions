@@ -3,7 +3,7 @@
         <div slot="headers">
                 <ol class="breadcrumb">
                     <li>
-                        <a :href="$config.model.mapsUrl">{{$t("Dashboard.Maps")}}</a>
+                        <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
                     </li>
                 </ol>
                     <h1>{{$config.model.fileName}}</h1>
