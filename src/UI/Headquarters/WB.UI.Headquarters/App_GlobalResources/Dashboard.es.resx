@@ -145,7 +145,7 @@
     <value>Clonar cuestionario</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Creado en</value>
+    <value>Creado</value>
   </data>
   <data name="DeleteMap" xml:space="preserve">
     <value>Eliminar mapa</value>
@@ -181,7 +181,7 @@
     <value>Cuestionarios</value>
   </data>
   <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>Haga clic en el botón Importar cuestionario para cargar un cuestionario del diseñador</value>
+    <value>Haga clic en el botón "Importar cuestionario" para cargar un cuestionario del diseñador</value>
   </data>
   <data name="SurveySetupIntroMessage2" xml:space="preserve">
     <value>Haga clic en un cuestionario de la lista para crear asignaciones de entrevistas</value>

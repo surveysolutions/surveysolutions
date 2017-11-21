@@ -211,13 +211,13 @@
     <value>La tabla de búsqueda tiene encabezados de columna no válidos</value>
   </data>
   <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
-    <value>La lista donde se pregunta su tamaño no puede contener un numero fijo de ítems</value>
+    <value>La lista donde se pregunta su tamaño no puede contener un número fijo de ítems</value>
   </data>
   <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
-    <value>Una lista de numero fijo de ítems no puede tener una pregunta sobre el tamaño de la lista </value>
+    <value>Una lista de número fijo de ítems no puede tener una pregunta sobre el tamaño de la lista </value>
   </data>
   <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
-    <value>Una lista de numero fijo de ítems no puede tener una pregunta de tipo título</value>
+    <value>Una lista de número fijo de ítems no puede tener una pregunta de tipo título</value>
   </data>
   <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
     <value>La lista donde se pregunta la fuente de la misma, tiene un una pregunta de tipo título inválida</value>
@@ -295,7 +295,7 @@
     <value>La pregunta tiene menos de {0} opciones</value>
   </data>
   <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
-    <value>El máximo numero de respuestas de la pregunta es menor que {0}</value>
+    <value>El máximo número de respuestas de la pregunta es menor que {0}</value>
   </data>
   <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>La expresión del filtro de opción contiene error de sintaxis</value>
@@ -490,7 +490,7 @@
     <value>Existen duplicados en Título + Valor de pares. La lista de opciones no debe contener ningún duplicado de ese tipo.</value>
   </data>
   <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
-    <value>El numero de decimales no esta en el rango de {0} y {1}</value>
+    <value>El número de decimales no esta en el rango de {0} y {1}</value>
   </data>
   <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
     <value>El título de la opción está vacía o es demasiado larga. El largo del título debe estar entre {0} y {1} caracteres</value>
@@ -499,7 +499,7 @@
     <value>No puede usar entidades hijas en las condiciones de habilitación de secciones, subsecciones y listas</value>
   </data>
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
-    <value>Un numero muy grande de listas ha sido creado. Exportar esta estructura a archivos de datos puede ser problemático. Considere reducir el numero de listas.</value>
+    <value>Un número muy grande de listas ha sido creado. Exportar esta estructura a archivos de datos puede ser problemático. Considere reducir el número de listas.</value>
   </data>
   <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
     <value>la sección o Lista contiene mas de {0} preguntas, considere dividirla en subsecciones</value>
