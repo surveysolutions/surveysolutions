@@ -6,7 +6,7 @@
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <input autocomplete="off" type="text" class="field-to-fill"
                             :disabled="!$me.acceptAnswer"
-                            :placeholder="$t('WebInterviewUI.TextEnter')" :title="$t('WebInterviewUI.TextEnter')" :value="$me.answer"
+                            :placeholder="noAnswerWatermark" :title="noAnswerWatermark" :value="$me.answer"
                             v-blurOnEnterKey @blur="answerQRBarcodeQuestion">
                             <wb-remove-answer />
                     </div>
@@ -22,6 +22,11 @@
     export default {
         name: 'QRBarcode',
         mixins: [entityDetails],
+        computed: {
+            noAnswerWatermark() {
+                return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.TextEnter')
+            }
+        },
         methods: {
             answerQRBarcodeQuestion(evnt) {
                 this.sendAnswer(() => {
