@@ -1023,7 +1023,7 @@
     <value>Are You sure that You want to discard interview data?</value>
   </data>
   <data name="Map_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want to discard map?</value>
+    <value>Are You sure You want to delete the map?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
     <value>Are You sure You want delink user from the map?</value>
@@ -1086,7 +1086,7 @@
     <value>Delink User from map</value>
   </data>
   <data name="MapDetails_MapDisclaimer" xml:space="preserve">
-    <value>This preview shows the loaded map supperimposed on the world map</value>
+    <value>This preview shows the loaded map superimposed on the world map</value>
   </data>
   <data name="MapDetails_MapTitle" xml:space="preserve">
     <value>Map</value>
