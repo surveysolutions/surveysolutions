@@ -1,6 +1,6 @@
 <template>
     <wb-question :question="$me"
-                 questionCssClassName="single-select-question">
+                 questionCssClassName="text-question">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
