@@ -1026,7 +1026,7 @@
     <value>Are You sure You want to delete the map?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
-    <value>Are You sure You want delink user from the map?</value>
+    <value>Are You sure You want to delink user from the map?</value>
   </data>
   <data name="CautionTitle" xml:space="preserve">
     <value>Caution:</value>
