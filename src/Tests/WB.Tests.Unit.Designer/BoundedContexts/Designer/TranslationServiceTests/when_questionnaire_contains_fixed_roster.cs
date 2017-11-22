@@ -57,12 +57,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         {
             excelFile = service.GetAsExcelFile(questionnaireId, translationId);
             workbook = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook;
-            cells = workbook.Worksheets[0].Cells;
+            cells = workbook.Worksheets[1].Cells;
         }
 
         [NUnit.Framework.Test] public void should_output_roster_title_translation () 
         {
-            var questionTitleRow = 2;
+            var questionTitleRow = 3;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Title);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
             cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.FormatGuid());
@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         [NUnit.Framework.Test] public void should_output_roster_fixed_option_title_translation () 
         {
-            var questionTitleRow = 3;
+            var questionTitleRow = 4;
             ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.FixedRosterTitle);
             cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("42");
             cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.FormatGuid());
