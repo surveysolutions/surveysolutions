@@ -47,7 +47,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         public void Export(QuestionnaireExportStructure exportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             long totalProcessed = 0;
-            
+            long totalRowsWritten = 0;
+
             bool hasAtLeastOneRoster = exportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
             int maxRosterDepthInQuestionnaire = exportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
 
@@ -71,6 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     foreach (var failedValidationConditionIndex in error.FailedValidationConditions)
                     {
                         string[] exportRow = CreateExportRow(questionnaire, error, maxRosterDepthInQuestionnaire, failedValidationConditionIndex);
+                        totalRowsWritten++;
                         exportRecords.Add(exportRow);
                     }
                 }
@@ -81,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 }
                 totalProcessed += interveiws.Count;
                 if (totalProcessed % 10_000 == 0)
-                    this.logger.Info($"Exported errors for batch. Processed {totalProcessed} of {interviewIdsToExport.Count}. Reported batch took {batchWatch.Elapsed:g} Elapsed {watch.Elapsed:g}");
+                    this.logger.Info($"Exported errors for batch. Processed {totalProcessed:N} of {interviewIdsToExport.Count:N}. Reported batch took {batchWatch.Elapsed:g}. Total rows written {totalRowsWritten:N} .Elapsed {watch.Elapsed:g}");
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
