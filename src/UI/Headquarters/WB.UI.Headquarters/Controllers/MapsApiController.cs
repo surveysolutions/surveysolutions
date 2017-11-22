@@ -28,16 +28,16 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapBrowseViewFactory mapBrowseViewFactory;
         private readonly ILogger logger;
-        private readonly IMapRepository mapRepository;
+        private readonly IMapStorageService mapStorageService;
         private readonly IExportFactory exportFactory;
 
         public MapsApiController(IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
-            IMapRepository mapRepository, IExportFactory exportFactory,
+            IMapStorageService mapStorageService, IExportFactory exportFactory,
             IFileSystemAccessor fileSystemAccessor) 
         {
             this.mapBrowseViewFactory = mapBrowseViewFactory;
             this.logger = logger;
-            this.mapRepository = mapRepository;
+            this.mapStorageService = mapStorageService;
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
         }
@@ -193,9 +193,9 @@ namespace WB.UI.Headquarters.Controllers
         {
             var exportFile = this.exportFactory.CreateExportFile(ExportFileType.Tab);
 
-            var mapping = mapRepository.GetAllMapUsers();
+            var reportView = mapStorageService.GetAllMapUsersReportView();
             
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(new string[] { "map", "users" }, mapping));
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(reportView.Headers, reportView.Data));
 
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
@@ -211,7 +211,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public JsonCommandResponse DeleteMap(DeleteMapRequestModel request)
         {
-            this.mapRepository.DeleteMap(request.Map);
+            this.mapStorageService.DeleteMap(request.Map);
             return new JsonCommandResponse() { IsSuccess = true };
         }
 
@@ -225,7 +225,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public JsonCommandResponse DeleteMapUser(DeleteMapUserRequestModel request)
         {
-            this.mapRepository.DeleteMapUser(request.Map, request.User);
+            this.mapStorageService.DeleteMapUserLink(request.Map, request.User);
             return new JsonCommandResponse() { IsSuccess = true };
         }
 
