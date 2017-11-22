@@ -160,7 +160,7 @@
     <value>{{count}} errores encontrado</value>
   </data>
   <data name="CompilationErrorsCounter_plural" xml:space="preserve">
-    <value>{{cont.}} errores encontrados</value>
+    <value>{{count}} errores encontrados</value>
   </data>
   <data name="CompilationLabel" xml:space="preserve">
     <value>Compilación:</value>
@@ -253,7 +253,7 @@
     <value>Todos</value>
   </data>
   <data name="FindReplaceInAllFound" xml:space="preserve">
-    <value>Entidad encontrada en {{cont.}} ?</value>
+    <value>Entidad encontrada en {{count}} ?</value>
   </data>
   <data name="FindReplaceInAllFound_plural" xml:space="preserve">
     <value>Entidades encontradas en {{count}} ?</value>
@@ -262,7 +262,7 @@
     <value>Que coincida con caso</value>
   </data>
   <data name="FindReplaceMatchingLines" xml:space="preserve">
-    <value>Que coincida con líneas:  {{cont.}}</value>
+    <value>Que coincida con líneas:  {{count}}</value>
   </data>
   <data name="FindReplaceMatchWord" xml:space="preserve">
     <value>Que coincida con palabra</value>
@@ -274,7 +274,7 @@
     <value>Anterior</value>
   </data>
   <data name="FindReplaceReplaceAll" xml:space="preserve">
-    <value>Reemplazar todos ({{cont.}})</value>
+    <value>Reemplazar todos ({{count}})</value>
   </data>
   <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
     <value>Reemplazar todos</value>
@@ -763,10 +763,10 @@
     <value>tabla de búsqueda carece de nombre</value>
   </data>
   <data name="SideBarLookupTablesCounter" xml:space="preserve">
-    <value>{{cont.}} Tabla de búsqueda:</value>
+    <value>{{count}} Tabla de búsqueda:</value>
   </data>
   <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
-    <value>{{cont.}} Tablas de búsqueda:</value>
+    <value>{{count}} Tablas de búsqueda:</value>
   </data>
   <data name="SideBarLookupTableSelectFile" xml:space="preserve">
     <value>Seleccionar archivo</value>
@@ -814,7 +814,7 @@
     <value>Macros</value>
   </data>
   <data name="SideBarSectionsCounter" xml:space="preserve">
-    <value>{{cont.}} Sección</value>
+    <value>{{count}} Sección</value>
   </data>
   <data name="SideBarSectionsCounter_plural" xml:space="preserve">
     <value>{{count}} Secciones:</value>

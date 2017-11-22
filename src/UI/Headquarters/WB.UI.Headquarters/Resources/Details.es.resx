@@ -133,6 +133,6 @@
     <value>Responsable</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Estado : {{name}}</value>
+    <value>Estado : {{ name }}</value>
   </data>
 </root>
