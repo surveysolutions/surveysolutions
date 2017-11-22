@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -55,9 +56,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             var questionnaire = questionnaireStorage.GetQuestionnaire(
                 new QuestionnaireIdentity(exportStructure.QuestionnaireId, exportStructure.Version), null);
-
-            foreach (var interviewsBatch in interviewIdsToExport.Batch(40))
+            Stopwatch watch = Stopwatch.StartNew();
+            foreach (var interviewsBatch in interviewIdsToExport.Batch(200))
             {
+                Stopwatch batchWatch = Stopwatch.StartNew();
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var interveiws = interviewsBatch.ToList();
@@ -79,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 }
                 totalProcessed += interveiws.Count;
                 if (totalProcessed % 10_000 == 0)
-                    this.logger.Info($"Exported errors for batch. Processed {totalProcessed} of {interviewIdsToExport.Count}");
+                    this.logger.Info($"Exported errors for batch. Processed {totalProcessed} of {interviewIdsToExport.Count}. Reported batch took {batchWatch.Elapsed:g} Elapsed {watch.Elapsed:g}");
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
