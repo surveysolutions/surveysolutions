@@ -133,7 +133,7 @@
     <value>Asignaciones</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>0} Asignación (es) seleccionada (s)</value>
+    <value>{{count}} Asignación (es) seleccionada (s)</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
     <value>Editar tamaño de la asignación {{assignmentId}}</value>
