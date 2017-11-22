@@ -7,6 +7,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -160,7 +161,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 Mock.Of<ILogger>(), 
                 csvWriter ??  Create.Service.CsvWriter(dataInCsvFile), 
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                Create.Service.TransactionManagerProvider());
+                Create.Service.TransactionManagerProvider(),
+                new InterviewDataExportSettings());
         }
     }
 }
