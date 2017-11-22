@@ -78,8 +78,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     this.csvWriter.WriteData(filePath, exportRecords, ExportFileSettings.DataFileSeparator.ToString());
                 }
                 totalProcessed += interveiws.Count;
+                if (totalProcessed % 10_000 == 0)
+                    this.logger.Info($"Exported errors for batch. Processed {totalProcessed} of {interviewIdsToExport.Count}");
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
-                this.logger.Info($"Exported errors for batch. Processed {totalProcessed} of {interviewIdsToExport.Count}");
             }
 
             progress.Report(100);
