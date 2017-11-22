@@ -18,6 +18,7 @@ using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using NConfig;
+using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.Common.WebHost;
 using Ninject.Web.WebApi.OwinHost;
@@ -61,7 +62,7 @@ namespace WB.UI.Headquarters
 
             app.Use(RemoveServerNameFromHeaders);
 
-            ConfigureNinject(app);
+            var kernel = ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
             UpdateAppVersion();
@@ -110,20 +111,31 @@ namespace WB.UI.Headquarters
                 AddAllSqlData(exception);
             });
 
-            try { StartMetricsPush(); } catch { /* don't care if it crashes */}
+            StartMetricsPush(kernel, logger);
         }
-
-        private void StartMetricsPush()
+                
+        private void StartMetricsPush(IKernel kernel, Core.GenericSubdomains.Portable.Services.ILogger logger)
         {
-            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[@"Postgres"];
-            var npgsConnectionString = new NpgsqlConnectionStringBuilder(connectionString.ConnectionString);
-            var instanceName = npgsConnectionString.ApplicationName;
-            var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
-            var pusher = new Prometheus.MetricPusher(metricsGateway, "hq", instanceName, standardCollectors: Array.Empty<IOnDemandCollector>());
-            pusher.Start();
+            try
+            {
+                // getting instance name from connection string information
+                var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[@"Postgres"];
+                var npgsConnectionString = new NpgsqlConnectionStringBuilder(connectionString.ConnectionString);
+                var instanceName = npgsConnectionString.ApplicationName;
+
+                // configuring address for metrics pushgateway
+                var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
+
+                // initialize push mechanizm
+                new Prometheus.MetricPusher(metricsGateway, "hq", instanceName, intervalMilliseconds: 1000).Start();
+            }
+        catch (Exception e)
+            {
+                logger.Error("Unable to start metrics push", e);
+            }
         }
 
-        private void ConfigureNinject(IAppBuilder app)
+        private IKernel ConfigureNinject(IAppBuilder app)
         {
             var perRequestModule = new OnePerRequestHttpModule();
 
@@ -145,6 +157,7 @@ namespace WB.UI.Headquarters
             var kernel = NinjectConfig.CreateKernel();
             kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
             app.UseNinjectMiddleware(() => kernel);
+            return kernel;
         }
 
         private void ConfigureWebApi(IAppBuilder app)
