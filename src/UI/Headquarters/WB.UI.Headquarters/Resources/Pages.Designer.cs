@@ -2293,7 +2293,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are You sure You want delink user from the map?.
+        ///   Looks up a localized string similar to Are You sure You want to delink user from the map?.
         /// </summary>
         public static string MapUserLink_DiscardConfirm {
             get {

@@ -1097,7 +1097,7 @@
     <value>Вы хотите удалить карту?</value>
   </data>
   <data name="MapDetails_DelinkUser" xml:space="preserve">
-    <value>Отвязать пользователя от карты</value>
+    <value>Отменить назначение на пользователя</value>
   </data>
   <data name="MapDetails_InterviewerName" xml:space="preserve">
     <value>Имя интервьюера</value>
