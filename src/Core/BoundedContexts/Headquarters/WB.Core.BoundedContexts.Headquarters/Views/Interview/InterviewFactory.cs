@@ -379,19 +379,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"WHERE {AsGpsColumn} is not null " +
                 $"GROUP BY questionnaireidentity").ToArray();
 
-        public List<ExportedError> GetErrors(Guid interveiwId)
+        public List<ExportedError> GetErrors(IEnumerable<Guid> interveiws)
         {
             var connection = this.sessionProvider.GetSession().Connection;
+            var array = interveiws.ToArray();
             var errors = connection.Query<ExportedError>(
                 $@"SELECT {InterviewIdColumn} as {nameof(ExportedError.InterviewId)}, {EntityIdColumn} as {nameof(ExportedError.EntityId)}, 
                           {RosterVectorColumn} as {nameof(ExportedError.RosterVector)}, {EntityTypeColumn} as {nameof(ExportedError.EntityType)}, 
                           {InvalidValidationsColumn} as {nameof(ExportedError.FailedValidationConditions)}
                           FROM {InterviewsTableName}
-                          WHERE {InterviewIdColumn} = @interviewId AND {EntityTypeColumn} IN(2, 3) AND array_length({InvalidValidationsColumn}, 1) > 0
-                          ORDER BY {InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}",
+                          WHERE {InterviewIdColumn} = ANY(@interviews) AND {EntityTypeColumn} IN(2, 3) AND array_length({InvalidValidationsColumn}, 1) > 0
+                          ORDER BY interviewid",
                 new
                 {
-                    interviewId = interveiwId
+                    interviews = array
                 }).ToList();
 
             return errors;

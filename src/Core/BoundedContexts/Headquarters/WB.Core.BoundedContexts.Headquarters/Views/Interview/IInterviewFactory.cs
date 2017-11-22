@@ -38,6 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         string[] GetQuestionnairesWithAnsweredGpsQuestions();
 
-        List<ExportedError> GetErrors(Guid interveiwId);
+        List<ExportedError> GetErrors(IEnumerable<Guid> interveiws);
     }
 }
