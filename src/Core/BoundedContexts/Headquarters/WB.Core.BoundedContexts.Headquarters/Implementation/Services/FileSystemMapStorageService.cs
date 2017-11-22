@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
+namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    public class FileSystemMapRepository : IMapRepository
+    public class FileSystemMapStorageService : IMapStorageService
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
@@ -33,11 +36,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
         private readonly string mapsFolderPath;
 
-        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<FileSystemMapRepository>();
+        private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<FileSystemMapStorageService>();
 
         private static readonly HashSet<string> createdFolders = new HashSet<string>();
 
-        public FileSystemMapRepository(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
+        public FileSystemMapStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
             IMapPropertiesProvider mapPropertiesProvider,
@@ -80,38 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
             return folderName;
         }
-
-
-        public MapFileDescription[] GetMapsMetaInformation(string id)
-        {
-            var filesInDirectory = this.GetFiles(id);
-            var zipFilesInDirectory = filesInDirectory.Where(this.archiveUtils.IsZipFile).ToArray();
-            if (zipFilesInDirectory.Length > 0)
-            {
-                try
-                {
-                    return this.archiveUtils.GetArchivedFileNamesAndSize(zipFilesInDirectory[0])
-                                .Select(file => new MapFileDescription(file.Key, file.Value))
-                                .ToArray();
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e.Message, e);
-                    return null;
-                }
-            }
-            return null;
-        }
-
-        private IEnumerable<string> GetFiles(string id)
-        {
-            var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
-            if (!this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                return new string[0];
-
-            return this.fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
-        }
-
+        
         public string[] UnzipAndGetFileList(string id)
         {
             var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
@@ -177,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
         }
 
-        public void DeleteData(string id)
+        public void DeleteTemporaryData(string id)
         {
             var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
 
@@ -206,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                 fileSystemAccessor.DeleteFile(filePath);
         }
 
-        public void DeleteMapUser(string map, string user)
+        public void DeleteMapUserLink(string map, string user)
         {
             if(string.IsNullOrWhiteSpace(map)||string.IsNullOrWhiteSpace(user))
                 return;
@@ -216,7 +188,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                 this.userMapsStorage.Remove(mapUsers);
         }
 
-        public string[][] GetAllMapUsers()
+        public ReportView GetAllMapUsersReportView()
         {
             var pageSize = 1024;
             var page = 1;
@@ -255,29 +227,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
             } while (true);
 
-
-
-            return rows.ToArray();
+            
+            return new ReportView()
+            {
+                Headers = new string[] {"map", "users"},
+                Data = rows.ToArray()
+            };
         }
 
-        public bool UpdateUserMaps(string mapName, string[] users)
+        public void UpdateUserMaps(string mapName, string[] users)
         {
             var map = this.mapPlainStorageAccessor.GetById(mapName);
             if (map == null)
-                return false;
+                throw new ArgumentException($"Map was not found {mapName}", nameof(mapName));
 
             var userMaps = userMapsStorage.Query(q => q.Where(x=>x.Map == mapName).ToList());
-            
-            var availableUsers = this.userStorage.Users.Where(x => users.Contains(x.UserName)).ToList();
-            var userMappings = availableUsers.Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
+
+            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+
+            var availableUsers = this.userStorage.Users
+                .Where(x => users.Contains(x.UserName))
+                .Select(x => new
+                {
+                    UserName = x.UserName,
+                    IsArchived = x.IsArchived,
+                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId)
+                }).ToArray();
+                
+            var userMappings = availableUsers.Where(y => y.IsArchived == false && y.IsInterviewer == true)
+                .Select(x => new UserMap() {Map = mapName, UserName = x.UserName}).ToList();
 
             userMapsStorage.Remove(userMaps);
             userMapsStorage.Store(userMappings.Select(x => Tuple.Create(x, (object)x)));
-
-            if(availableUsers.Count < users.Length)
-                return false;
-
-            return true;
         }
 
         public string[] GetAllMapsForUser(string userName)
