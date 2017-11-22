@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -53,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         public void Export(QuestionnaireExportStructure exportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
         {
             long totalProcessed = 0;
+            long totalRowsWritten = 0;
 
             bool hasAtLeastOneRoster = exportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
             int maxRosterDepthInQuestionnaire = exportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
@@ -63,49 +62,41 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var questionnaire = questionnaireStorage.GetQuestionnaire(
                 new QuestionnaireIdentity(exportStructure.QuestionnaireId, exportStructure.Version), null);
             Stopwatch watch = Stopwatch.StartNew();
-
-
-            foreach (var batchIds in interviewIdsToExport.Batch(this.exportSettings.ErrorsExporterBatchSize))
+            foreach (var interviewsBatch in interviewIdsToExport.Batch(exportSettings.ErrorsExporterBatchSize))
             {
                 Stopwatch batchWatch = Stopwatch.StartNew();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                ConcurrentBag<string[]> exportBulk = new ConcurrentBag<string[]>();
-                Parallel.ForEach(batchIds,
-                    new ParallelOptions
-                    {
-                        CancellationToken = cancellationToken,
-                        MaxDegreeOfParallelism = this.exportSettings.InterviewsExportParallelTasksLimit
-                    },
-                    interviewId => {
-                        cancellationToken.ThrowIfCancellationRequested();
+                Stopwatch readWatch = Stopwatch.StartNew();
+                var interveiws = interviewsBatch.ToList();
+                var exportedErrors =
+                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewFactory.GetErrors(interveiws));
+                this.logger.Debug($"Read from db took {readWatch.Elapsed:g}");
+                readWatch.Stop();
 
-                        var exportedErrors = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewFactory.GetErrors(interviewId));
-
-                        foreach (var error in exportedErrors)
-                        {
-                            foreach (var failedValidationConditionIndex in error.FailedValidationConditions)
-                            {
-                                string[] exportRow = CreateExportRow(questionnaire, error, maxRosterDepthInQuestionnaire, failedValidationConditionIndex);
-                                exportBulk.Add(exportRow);
-                            }
-                        }
-
-                        Interlocked.Increment(ref totalProcessed);
-                        progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
-                    });
-
-                batchWatch.Stop();
-
-                if (exportBulk.Count > 0)
+                List<string[]> exportRecords = new List<string[]>();
+                foreach (var error in exportedErrors)
                 {
-                    this.csvWriter.WriteData(filePath, exportBulk, ExportFileSettings.DataFileSeparator.ToString());
+                    foreach (var failedValidationConditionIndex in error.FailedValidationConditions)
+                    {
+                        string[] exportRow = CreateExportRow(questionnaire, error, maxRosterDepthInQuestionnaire, failedValidationConditionIndex);
+                        totalRowsWritten++;
+                        exportRecords.Add(exportRow);
+                    }
                 }
 
+                if (exportRecords.Count > 0)
+                {
+                    this.csvWriter.WriteData(filePath, exportRecords, ExportFileSettings.DataFileSeparator.ToString());
+                }
+
+                totalProcessed += interveiws.Count;
                 if (totalProcessed % 10_000 == 0)
-                    this.logger.Debug($"Exported errors for batch. Processed {totalProcessed:N} of {interviewIdsToExport.Count:N}. Reported batch took {batchWatch.Elapsed:g} .Elapsed {watch.Elapsed:g}");
+                    this.logger.Debug($"Exported errors for batch. Processed {totalProcessed:N} of {interviewIdsToExport.Count:N}. Reported batch took {batchWatch.Elapsed:g}. Total rows written {totalRowsWritten:N} .Elapsed {watch.Elapsed:g}");
+                progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
-            this.logger.Info($"Exported errors for {questionnaire.Title} ver {questionnaire.Version}. Exported {interviewIdsToExport.Count:N} interviews. Elapsed {watch.Elapsed:g}");
+            this.logger.Info($"Exported errors for batch. Processed {interviewIdsToExport.Count:N}. Elapsed {watch.Elapsed:g}");
 
             progress.Report(100);
         }
