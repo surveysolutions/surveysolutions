@@ -119,7 +119,7 @@ namespace WB.UI.Interviewer.ViewModel
             var interview = interviewRepository.Get(this.interviewId);
             if (!interview.IsCompleted)
             {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity?.UserId, DateTime.Now));
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), interview.CurrentResponsibleId, DateTime.Now));
             }
 
             base.ViewDisappeared();
