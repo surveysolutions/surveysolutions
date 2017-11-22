@@ -286,19 +286,13 @@ namespace WB.UI.Headquarters.Controllers
             };
             
             var mappings = new List<MapUserMapping>();
+            string[] headerRow = records.First().Select(r => r.ToLower()).ToArray();
 
-            string[] headerRow = null;
-            foreach (string[] record in records)
+            for (int j = 1; j < records.Count; j++)
             {
-                if (headerRow == null)
-                {
-                    headerRow = record.Select(r => r.ToLower()).ToArray();
-                    //ThrowIfFileStructureIsInvalid(headerRow, fileName);
-                    continue;
-                }
-
+                var record = records[j];
+                
                 var dataRecord = new MapUserMapping();
-
                 for (int i = 0; i < headerRow.Length; i++)
                 {
                     var columnName = headerRow[i].ToLower();
@@ -318,7 +312,7 @@ namespace WB.UI.Headquarters.Controllers
                 mappings.Add(dataRecord);
             }
 
-            return mappings.GroupBy(p => p.Map)
+            return mappings.GroupBy(p => p.Map, StringComparer.OrdinalIgnoreCase)
                 .Select(g => g.First())
                 .ToList();
         }
