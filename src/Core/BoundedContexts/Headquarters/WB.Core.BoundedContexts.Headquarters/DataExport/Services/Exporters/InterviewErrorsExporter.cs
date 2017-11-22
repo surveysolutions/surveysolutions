@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var questionnaire = questionnaireStorage.GetQuestionnaire(
                 new QuestionnaireIdentity(exportStructure.QuestionnaireId, exportStructure.Version), null);
             Stopwatch watch = Stopwatch.StartNew();
-            foreach (var interviewsBatch in interviewIdsToExport.Batch(200))
+            foreach (var interviewsBatch in interviewIdsToExport.Batch(500))
             {
                 Stopwatch batchWatch = Stopwatch.StartNew();
                 cancellationToken.ThrowIfCancellationRequested();
@@ -66,6 +66,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var interveiws = interviewsBatch.ToList();
                 var exportedErrors =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewFactory.GetErrors(interveiws));
+                this.logger.Debug($"Read from db took {batchWatch.Elapsed:g}");
+
+                batchWatch.Restart();
                 List<string[]> exportRecords = new List<string[]>();
                 foreach (var error in exportedErrors)
                 {
@@ -76,11 +79,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         exportRecords.Add(exportRow);
                     }
                 }
-
+                this.logger.Debug($"Processing took {batchWatch.Elapsed:g}");
+                batchWatch.Restart();
                 if (exportRecords.Count > 0)
                 {
                     this.csvWriter.WriteData(filePath, exportRecords, ExportFileSettings.DataFileSeparator.ToString());
                 }
+                this.logger.Debug($"Write took {batchWatch.Elapsed:g}");
+
                 totalProcessed += interveiws.Count;
                 if (totalProcessed % 10_000 == 0)
                     this.logger.Info($"Exported errors for batch. Processed {totalProcessed:N} of {interviewIdsToExport.Count:N}. Reported batch took {batchWatch.Elapsed:g}. Total rows written {totalRowsWritten:N} .Elapsed {watch.Elapsed:g}");
