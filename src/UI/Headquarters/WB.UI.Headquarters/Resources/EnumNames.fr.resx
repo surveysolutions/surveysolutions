@@ -118,15 +118,48 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approuvé par quartier général</value>
+    <value>Approuvé par le QG</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approuvé par superviseur</value>
+    <value>Approuvé par le Chef d'équipe</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Terminé</value>
+    <value>Achevé</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Affecté à l'enquêteur</value>
+    <value>Affecté à l'Enquêteur</value>
+  </data>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="MenuItem_Completed" xml:space="preserve">
+    <value>Achevé</value>
+  </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="MenuItem_Rejected" xml:space="preserve">
+    <value>Rejeté</value>
+  </data>
+  <data name="MenuItem_Started" xml:space="preserve">
+    <value>Commencé</value>
+  </data>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>Administrateur</value>
+  </data>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>Utilisateur API</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Quartier Général</value>
+  </data>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>Enquêteur</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>Observateur</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>Chef d'équipe</value>
   </data>
 </root>

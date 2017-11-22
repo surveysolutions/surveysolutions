@@ -927,6 +927,7 @@
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.es.resx" />
+    <EmbeddedResource Include="Resources\AuditLog.fr.resx" />
     <EmbeddedResource Include="Resources\AuditLog.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
@@ -935,6 +936,7 @@
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.es.resx" />
+    <EmbeddedResource Include="Resources\DataTables.fr.resx" />
     <EmbeddedResource Include="Resources\DataTables.ka.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
@@ -950,6 +952,7 @@
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.es.resx" />
+    <EmbeddedResource Include="Resources\Details.fr.resx" />
     <EmbeddedResource Include="Resources\Details.ka.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
@@ -965,6 +968,7 @@
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DevicesInterviewers.es.resx" />
+    <EmbeddedResource Include="Resources\DevicesInterviewers.fr.resx" />
     <EmbeddedResource Include="Resources\DevicesInterviewers.ka.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
@@ -1022,6 +1026,7 @@
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.es.resx" />
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.ka.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
@@ -1099,6 +1104,7 @@
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\OutdatedBrowser.es.resx" />
+    <EmbeddedResource Include="Resources\OutdatedBrowser.fr.resx" />
     <EmbeddedResource Include="Resources\OutdatedBrowser.ka.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
@@ -1208,6 +1214,7 @@
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Troubleshooting.es.resx" />
+    <EmbeddedResource Include="Resources\Troubleshooting.fr.resx" />
     <EmbeddedResource Include="Resources\Troubleshooting.ka.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>

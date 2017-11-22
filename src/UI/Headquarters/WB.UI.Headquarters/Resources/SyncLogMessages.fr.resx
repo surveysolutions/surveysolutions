@@ -121,7 +121,7 @@
     <value>Démarrer la synchronisation</value>
   </data>
   <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+    <value>&lt;li&gt; &lt;b&gt; {0} &lt;/ b&gt; [{1}] &lt;/ li&gt;</value>
   </data>
   <data name="DeleteInterviewPackage" xml:space="preserve">
     <value>&lt;li&gt;Supprimer l’entretien : &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paquet : {1}, Indice de tri : {2}&lt;/li&gt;</value>
@@ -148,7 +148,7 @@
     <value>Télécharger entretien(s) : &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewer" xml:space="preserve">
-    <value>Télécharger de l’information sur l’enquêteur.&lt;br&gt;Superviseur : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+    <value>Télécharger de l’information sur l’enquêteur.&lt;br&gt;chef d'équipe : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="GetInterviewPackage" xml:space="preserve">
     <value>Télécharger le paquet de l'entretien : &lt;b&gt;{0}&lt;/b&gt;</value>
@@ -169,7 +169,7 @@
     <value>Télécharger les pièces jointes du questionnaire : &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
   <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>L’enquêteur a un appareil déjà </value>
+    <value>L’enquêteur a un appareil déjà</value>
   </data>
   <data name="InterviewPackageProcessed" xml:space="preserve">
     <value>&lt;font color="green" '=""&gt;Paquet de l'entretien&lt;b&gt;{0}&lt;/b&gt; traité avec succès&lt;/font&gt;</value>
@@ -194,5 +194,20 @@
   </data>
   <data name="PostPackage" xml:space="preserve">
     <value>Importer l'entretien: {0}</value>
+  </data>
+  <data name="GetAssignmentFormat" xml:space="preserve">
+    <value>Télécharger l'affectation ({0}) &lt;/ br&gt;</value>
+  </data>
+  <data name="GetAssignmentsFormat" xml:space="preserve">
+    <value>Télécharger la liste des affectations ({0}). &lt;/ br&gt; &lt;ul&gt; {1} &lt;/ ul&gt;</value>
+  </data>
+  <data name="GetTranslations" xml:space="preserve">
+    <value>Télécharger les traductions du questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}]</value>
+  </data>
+  <data name="InterviewerFailedToLogin" xml:space="preserve">
+    <value>L'enquêteur n'a pas réussi à se connecter</value>
+  </data>
+  <data name="InterviewerLoggedIn" xml:space="preserve">
+    <value>Enquêteur connecté et a besoin d'un AuthToken</value>
   </data>
 </root>
