@@ -346,7 +346,7 @@
     <value>Texte qui sera affiché à côté d'une variable à des fins de test</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Texte pourvant aller jusqu'à 80 caractères qui seront attachés à la variable exportée.</value>
+    <value>Texte pourvant aller jusqu'à {{maxLength}} caractères qui seront attachés à la variable exportée.</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
     <value>Les noms de variables et les ID de roster peuvent être d'une longeur de {{minLength}} à {{maxLength}} et ne doivent contenir que les caractères suivants: a-z, A-Z, _ ou 0-9. Le premier caractère ne peut pas être 0-9 ou _ et le dernier ne peut pas être _.</value>
