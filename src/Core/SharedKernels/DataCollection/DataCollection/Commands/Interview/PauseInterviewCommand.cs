@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class PauseInterviewCommand : InterviewCommand
     {
-        public PauseInterviewCommand(Guid interviewId, Guid? userId, DateTime localTime) : base(interviewId, userId)
+        public PauseInterviewCommand(Guid interviewId, Guid userId, DateTime localTime) : base(interviewId, userId)
         {
             LocalTime = localTime;
         }
