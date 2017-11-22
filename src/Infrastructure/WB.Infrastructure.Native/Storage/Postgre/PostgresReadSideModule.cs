@@ -134,12 +134,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 db.Dialect<PostgreSQL91Dialect>();
                 db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
             });
+            
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(this.GetMappings(), "Main");
 
             cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, this.schemaName);
+            cfg.SessionFactory().GenerateStatistics();
 
-            return cfg.BuildSessionFactory();
+            var sessionFactory = cfg.BuildSessionFactory();
+
+            Prometheus.Advanced.DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new[] {
+                new NHibernateStatsCollector("readside", sessionFactory)
+            });
+
+            return sessionFactory;
         }
 
         /// <summary>
