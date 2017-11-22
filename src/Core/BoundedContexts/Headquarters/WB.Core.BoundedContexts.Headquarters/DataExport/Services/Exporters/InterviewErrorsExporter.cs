@@ -59,10 +59,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             foreach (var interviewsBatch in interviewIdsToExport.Batch(40))
             {
                 cancellationToken.ThrowIfCancellationRequested();
-               
+
+                var interveiws = interviewsBatch.ToList();
                 var exportedErrors =
-                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.interviewFactory.GetErrors(interviewsBatch.ToList()));
+                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewFactory.GetErrors(interveiws));
                 List<string[]> exportRecords = new List<string[]>();
                 foreach (var error in exportedErrors)
                 {
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 {
                     this.csvWriter.WriteData(filePath, exportRecords, ExportFileSettings.DataFileSeparator.ToString());
                 }
-
+                totalProcessed += interveiws.Count;
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
                 this.logger.Info($"Exported errors for batch. Processed {totalProcessed} of {interviewIdsToExport.Count}");
             }
