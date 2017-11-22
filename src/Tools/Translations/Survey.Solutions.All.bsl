@@ -120,7 +120,7 @@
           <lis>
             <li lc="nn-nn" tx="Fixed set of items roster value is required" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Все значения для фиксированного ростера обязательны." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="Es necesario indicar el numero de ítems de la lista " ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Es necesario indicar el número de ítems de la lista " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="ItemWithIdExistsAlready" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -295,7 +295,7 @@
           <lis>
             <li lc="nn-nn" tx="Questionnaire item with id {0} can't be found." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник с ключом {0} не найден." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="No fue posible encontrar la pregunta con id {0}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="El elemento del cuestionario con ID {0} no se puede encontrar." er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionnaireRevisionCantBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -428,7 +428,7 @@
           <lis>
             <li lc="nn-nn" tx="Fixed set of items roster value should have only number characters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Все значения для фиксированного ростера должны быть числами." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="El valor que indica el numero de ítems de la lista solo puede contener caracteres numéricos" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El valor que indica el número de ítems de la lista solo puede contener caracteres numéricos" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="VariableCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1247,21 +1247,21 @@
           <lis>
             <li lc="nn-nn" tx="Roster where roster size source is question could not have fixed set of items." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ростер, в котором источником ростера является управляющий вопрос, не может быть фиксированным ростером." ts="Changed" qs="ToReview" />
-            <li lc="es" tx="La lista donde se pregunta su tamaño no puede contener un numero fijo de ítems" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="La lista donde se pregunta su tamaño no puede contener un número fijo de ítems" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Fixed set of items roster cannot have roster size question." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Фиксированный ростер не может иметь вопрос о размере ростера." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Una lista de numero fijo de ítems no puede tener una pregunta sobre el tamaño de la lista " er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Una lista de número fijo de ítems no puede tener una pregunta sobre el tamaño de la lista " er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Fixed set of items roster cannot have roster title question." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Фиксированный ростер не может содержать вопрос о заголовке ростера." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Una lista de numero fijo de ítems no puede tener una pregunta de tipo título" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Una lista de número fijo de ítems no puede tener una pregunta de tipo título" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1443,7 +1443,7 @@
           <lis>
             <li lc="nn-nn" tx="Question has max allowed answers less than {0}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вопрос имеет максимально допустимые ответы менее {0}." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="El máximo numero de respuestas de la pregunta es menor que {0}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="El máximo número de respuestas de la pregunta es menor que {0}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0062_OptionFilterExpresssionHasIncorrectSyntax" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1898,7 +1898,7 @@
           <lis>
             <li lc="nn-nn" tx="Number of decimal places is not in range from {0} to {1}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Количество десятичных знаков после запятой не находится в диапазоне от {0} до {1}." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="El numero de decimales no esta en el rango de {0} y {1}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="El número de decimales no esta en el rango de {0} y {1}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0129_AnswerTitleIsTooLong" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1919,7 +1919,7 @@
           <lis>
             <li lc="nn-nn" tx="Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Un numero muy grande de listas ha sido creado. Exportar esta estructura a archivos de datos puede ser problemático. Considere reducir el numero de listas." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Un número muy grande de listas ha sido creado. Exportar esta estructura a archivos de datos puede ser problemático. Considere reducir el número de listas." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0201_LargeNumberOfQuestionsInGroup" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2177,8 +2177,8 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0237_BitwiseAnd" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="&amp; is used in expression. Make sure you understand the difference between &amp; and &amp;&amp; operators. In most cases, use &amp;&amp;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&amp; используется в выражении. Убедитесь, что вы понимаете разницу между операторами &amp; и &amp;&amp;. В большинстве случаев используйте &amp;&amp;." er="The invariant text and the locale text contain a different number of menu shortcuts (&quot;&amp;&amp;&quot;)." ts="Translated" qs="ErrorVerifier" />
-            <li lc="es" tx="Ha usado &amp; en la expresión. Asegúrese que usted comprende la diferencia entre los operadores &amp; y &amp;&amp;. Para la mayor parte de los casos use &amp;&amp;" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&amp; используется в выражении. Убедитесь, что вы понимаете разницу между операторами &amp; и &amp;&amp; . В большинстве случаев используйте &amp;&amp;." er="" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Ha usado &amp; en la expresión. Asegúrese que usted comprende la diferencia entre los operadores &amp; y &amp;&amp;. Para la mayor parte de los casos use &amp;&amp;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0238_BitwiseOr" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -3128,7 +3128,7 @@
           <lis>
             <li lc="nn-nn" tx="PDF document generated {0} minute(s) ago.&#xD;&#xA;Size: {1}Kb" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="PDF документ сгенерирован {0} минут(ы) назад.&#xD;&#xA;Размер: {1}Kb" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="El archivo PDF ha sido generado hace {0} minutos. Tamaño:{1} Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="El archivo PDF ha sido generado hace {0} minutos. Tamaño: {1} Kb " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx" nm="GenerateLessMinute" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -3282,7 +3282,7 @@
           <lis>
             <li lc="nn-nn" tx="Created on" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Дата создания" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="es" tx="Creado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Creado" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="CreateNew" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4108,7 +4108,7 @@
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Button" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="Completar" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Completar" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Terminer" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Selesai" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="km" tx="បញ្ចប់" ts="Translated" qs="ToReview" />
@@ -4234,7 +4234,7 @@
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Screen_Title" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="Completar" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Completar" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Résumé" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="id-ID" tx="Lengkap" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="km" tx="បញ្ចប់" ts="Translated" qs="ToReview" />
@@ -4307,13 +4307,13 @@
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_Many" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="{0} respuestas" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="{0} réponses" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="{0} respuestas" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{0} réponses" er="" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="{0} jawaban" ts="Translated" qs="ToReview" />
             <li lc="km" tx="{0} ចំលើយ" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="{0} respostas" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="{0} answers" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="ответов: {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="ответов: {0}" er="" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} คำตอบ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
             <li lc="uk-UA" tx="{0} відповіді" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="{0} câu trả lời" ts="Translated" qs="ToReview" />
@@ -4338,12 +4338,12 @@
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_ManyFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="{0} errores" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="{0} erreurs" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="fr" tx="{0} erreurs" er="" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="{0} kesalahan" ts="Translated" qs="ToReview" />
             <li lc="km" tx="{0} ខុស" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="{0} erros" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="{0} errors" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="ошибок: {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="ошибок: {0}" er="" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ข้อผิดพลาด" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="{0} помилки" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="{0} lỗi" ts="Translated" qs="ToReview" />
@@ -4368,12 +4368,12 @@
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Status_CompletedFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="Sección completada: {0}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Section terminée : {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="fr" tx="Section terminée : {0}" er="" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian selesai: {0}" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បំពេញផ្នែក {0}" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Seção concluída: {0}" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Section completed: {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Секция заполнена ({0})" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Секция заполнена ({0})" er="" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ตอนที่สมบูรณ์แล้ว" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Розділ завершено: {0}" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Số mục đã hoàn thành: {0}" ts="Translated" qs="ToReview" />
@@ -4398,12 +4398,12 @@
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Status_StartedIncompleteFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="Sección iniciada: {0}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Section entamée : {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="fr" tx="Section entamée : {0}" er="" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian mulai: {0}" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ផ្នែកនេះចាប់ផ្តើម  {0}" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
             <li lc="pt" tx="Seção começada: {0}" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Section started: {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Секция частично заполнена ({0})" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Секция частично заполнена ({0})" er="" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ตอนที่เริ่มไปแล้ว" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Розділ частково заповнен: {0}" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Số mục đã bắt đầu phỏng vấn: {0}" ts="Translated" qs="ToReview" />
@@ -4412,13 +4412,13 @@
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Subgroups_ManyFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="{0} subsecciones" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="{0} sous-sections" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="{0} subsecciones" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{0} sous-sections" er="" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="{0} Sub-Bagian" ts="Translated" qs="ToReview" />
             <li lc="km" tx=" {0} ផ្នែកតូចបន្ទាប់" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
             <li lc="pt" tx="{0} sub-seções" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="{0} sub-sections" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="вложенных секций: {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="вложенных секций: {0}" er="" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="{0} ตอนย่อย" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="{0} підрозділів" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="{0} mục con" ts="Translated" qs="ToReview" />
@@ -4795,7 +4795,7 @@
           <lis>
             <li lc="nn-nn" tx="Supervisor comment" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Комментарий супервизора" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Comentario del supervisor" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Comentario del supervisor" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_ApplicationName" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5567,7 +5567,7 @@
             <li lc="nn-nn" tx="You can't unarchive interviewer {0} until supervisor is unarchived" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюер {0} не может быть разархивирован, до тех пор, пока супервизор заархивирован" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="在取消归档督导员之前，您不能将调查员{0}取消归档" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="No puede sacar del archivo a un entrevistador {0} hasta que su supervisor sea sacado de archivo" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No puede sacar del archivo a un entrevistador {0} hasta que su supervisor sea sacado de archivo" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.resx" nm="ImportInterviews_FailedToImportInterview_NoSupervisor" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6512,7 +6512,7 @@
             <li lc="nn-nn" tx="Max number of validation errors {0} has been reached" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Достигнуто максимальное количество {0} ошибок проверки" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已经达到了验证错误数量的最大值{0}" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Se alcanzó el numero máximo de validaciones de error " er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ErrorVerifier" />
+            <li lc="es" tx="Se alcanzó el número {0} máximo de validaciones de error " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\UserPreloadingServiceMessages.resx" nm="TheDatasetMaxRecordNumberReachedFormat" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6808,7 +6808,7 @@
             <li lc="km" tx="គ្រប់គ្រងរួម ដើម្បីធ្វើកិច្ចការថ្មី ឬទាក់ទង ប្រធានរបស់អ្នកសំរាប់ការណែនាំបន្ត។ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
             <li lc="pt" tx="Sincronizar para obter novo tarefas ou entrar em contato seu supervisor para mais instruções" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Synchronize to get new tasks&#xD;&#xA;or contact your supervisor&#xD;&#xA;for further instructions" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Синхронизируйтесь для получения новых заданий&#xD;&#xA;или свяжитесь с Вашим супервизором&#xD;&#xA;для дальнейших инструкций" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Синхронизируйтесь для получения новых карт&#xD;&#xA;или свяжитесь с Вашим супервизором&#xD;&#xA;для дальнейших инструкций" ts="Changed" qs="ToReview" />
             <li lc="th-TH" tx="ซิงโครไนส์เพื่อรับงานใหม่ หรือติดต่อ Supervisor เพื่อรับคำแนะนำเพิ่มเติม" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Синхронізуйтесь, щоб отримати нові призначення або зв'яжіться з вашим керівникомі, щоб отримати подальші інструкції" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Đồng bộ hóa để có nhiệm vụ mới hoặc liên hệ với giám sát của bạn để được hướng dẫn thêm" ts="Translated" qs="ToReview" />
@@ -7667,6 +7667,11 @@
             <li lc="zh-CN" tx="Survey Solutions督导员网站正在维护中。Survey Solutions Designer网站正处于维护模式。" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Maps_NoMapsText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Synchronize to get maps&#xD;&#xA;or contact your supervisor&#xD;&#xA;for further instructions" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Maps_Synchronization_Success_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="All maps were synchronized" ts="Translated" qs="ToReview" />
@@ -7699,7 +7704,7 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Handling map {0}, {1} out of {2}. &#xD;&#xA; Downloaded {3}%" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Handling map {0}, {1} out of {2}.&#xD;&#xA;Downloaded {3}%" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Обработка карты {0}, {1} из {2}. &#xD;&#xA; Скачано {3}%" ts="Changed" qs="ToReview" />
           </lis>
         </it>
@@ -10395,7 +10400,7 @@
           <lis>
             <li lc="ru" tx="Дата создания" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
             <li lc="nn-nn" tx="Created on" ts="Changed" qs="ToReview" />
-            <li lc="es" tx="Creado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Creado" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireController.resx" nm="CreateNew" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11024,7 +11029,7 @@
           <lis>
             <li lc="nn-nn" tx="Next" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Следующее" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Siguiente" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="Siguiente" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="FindReplacePrevious" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11211,9 +11216,9 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="HelpVariableLabel" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="A text up to 80 characters that will be attached to the exported variable." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="A text up to {{maxLength}} characters that will be attached to the exported variable." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Текст до {{maxLength}} символов, который будет использован для экспорта переменной." ts="Changed" qs="ToReview" />
-            <li lc="es" tx="Texto de hasta 80 caracteres que será adjunto a la variable exportada" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Texto de hasta 80 caracteres que será adjunto a la variable exportada" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="HelpVariableName" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11799,7 +11804,7 @@
           <lis>
             <li lc="nn-nn" tx="Source question for number of rows:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ответ, определяющий количетво строк:" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Pregunta que define numero de filas" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Pregunta que define número de filas" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="RosterSourceNumericTitles" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -13649,7 +13654,7 @@
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Import_Verification_Errors" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} errors" ts="Translated" qs="ToReview" />
-            <li lc="ka" tx="{0} შეცდომები" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ka" tx="{0} შეცდომები" er="" ts="Translated" qs="ToReview" />
             <li lc="es" tx="{0} errores" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -14360,7 +14365,7 @@
             <li lc="ru" tx="Загрузка пользователей" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="批量用户上传" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="Batch მომხმარებელი ატვირთვა" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Carga de usuario por lotes" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Carga de usuarios por lotes" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UploadUsers_NotAllowedExtension" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -14411,7 +14416,7 @@
             <li lc="ru" tx="Загрузка пользователей" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="批量用户上传" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="Batch მომხმარებელი ატვირთვა" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Carga de usuario por lotes" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Carga de usuario por lotes" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UserPreloadingProcessIsMissing" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -14725,7 +14730,7 @@
             <li lc="ru" tx="Скачать Interviewer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="获得调查员程序" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="მიიღეთ ინტერვიუერის აპლიკაცია" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Obtener aplicación Interviewer" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Descarge aplicación Interviewer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="HideIdentifying" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -14765,7 +14770,7 @@
             <li lc="ru" tx="Обновлено" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="最近一次更新" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ბოლო განახლება" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Actualizado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Actualizado" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="Legal" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -15213,7 +15218,7 @@
             <li lc="ru" tx="Создан" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="创建日期" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ka" tx="შექმნის დრო" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Creado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Creado" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Dashboard.resx" nm="DeleteMap" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
@@ -15322,7 +15327,7 @@
             <li lc="ru" tx="Кликните по кнопке Иморт Опросника для загрузки шаблона с Дизайнера" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="1. 点击导入模板按钮从问卷设计网站导入一个问卷" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="დააჭირეთ კითხვარის შემოტანა-ის ღილაკს დამპროექტებლისგან კითხვარის ჩასატვირთად  " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Haga clic en el botón Importar cuestionario para cargar un cuestionario del diseñador" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Haga clic en el botón &quot;Importar cuestionario&quot; para cargar un cuestionario del diseñador" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Dashboard.resx" nm="SurveySetupIntroMessage2" rc="" dnt="false" nms="Resources" cln="Dashboard" bac="Content" hgt="0" wdt="0">
@@ -15515,7 +15520,7 @@
             <li lc="ru" tx="По нажатию кнопки «Создать» генерируется архив данных интервью доступных на сервере в текущий момент. Время создания и размер архива показаны в таблице. Последний созданный архив можно загрузить нажав  кнопку «Скачать». Нажмите кнопку «Создать» для того чтобы получить обновленный архив" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="点击生成按钮创建一个数据归档。表格中将显示归档创建的时间和大小。最近一次生成的数据归档可以通过点击下载按钮下载。要创建新的归档，请再次点击生成按钮。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ka" tx="დაგენერირების ღილაკზე დაჭერა ქმნის ინტერვიუების მონაცემთა ბაზის არქივს, რომელის სერვეზეა იმ დროს . არქივის შექმნის დრო და ზომა ნაჩვენებია ცხრილში. ბოლო დაგენერირებული მონაცემთა არქივი შესაძლებელია გადმოიწეროს გადმოწერის ღილაკზე დაჭერით. დააჭირეთ დაგენერირების ღილაკს ისევ რადგან შექმნათა ახალი არქივი" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="Al presionar el botón Generar se crea un archivo de datos de las entrevistas disponibles en el servidor en ese momento. El tiempo de creación del archivo y el tamaño del archivo se muestran en la tabla. El último archivo de datos generado se puede descargar presionando el botón Descargar. Presione el botón Generar nuevamente para crear un nuevo archivo." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Al presionar el botón &quot;Generar&quot; se crea un archivo de datos de las entrevistas disponibles en el servidor en ese momento. El tiempo de creación del archivo y el tamaño del archivo se muestran en la tabla. El último archivo de datos generado se puede descargar presionando el botón Descargar. Presione el botón &quot;Generar&quot; nuevamente para crear un nuevo archivo." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="ExportRange" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -15589,7 +15594,7 @@
             <li lc="ru" tx="Дата генерации" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="最近一次生成" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ბოლო დაგენერირებული" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Generado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Generado" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="LastUpdateDate" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -15709,7 +15714,7 @@
             <li lc="ru" tx="(версия) Шаблон обследования" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="（版本）调查模板" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="(ვერსია) კვლევის კითხვარი" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="(versión) Cuestionario de encuesta" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="(versión) Cuestionario" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\DataExport.resx" nm="TabularFormat" rc="" dnt="false" nms="Resources" cln="DataExport" bac="Content" hgt="0" wdt="0">
@@ -16034,7 +16039,7 @@
             <li lc="ru" tx="Карта" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="地图报告" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="რუკის ანგარიში" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Reporte del mapa" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Reporte del mapa" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="Maps" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
@@ -16127,7 +16132,7 @@
           <lis>
             <li lc="nn-nn" tx="Status Duration" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Длительность статусов" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Duración del estado" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Duración del estado" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="Supervisors" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
@@ -16149,7 +16154,7 @@
             <li lc="ru" tx="Обследования и статусы" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="调查和状态" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="კვლევები და სტატუსები" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Encestas y estados" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="Encuestas y estados" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="SurveySetup" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
@@ -16225,7 +16230,7 @@
             <li lc="ru" tx="Загрузка пользователей" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="批量用户上传" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="Batch მომხმარებელის ატვირთვა" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Carga de usuario por lotes" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Carga de usuario por lotes" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="Users" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
@@ -16258,7 +16263,7 @@
             <li lc="ru" tx="Карта" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="地图报告" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="რუკის ანგარიში" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Reporte del mapa" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Mapa" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\MapReport.resx" nm="NotAllMarkers" rc="" dnt="false" nms="Resources" cln="MapReport" bac="Content" hgt="0" wdt="0">
@@ -16427,7 +16432,7 @@
             <li lc="ru" tx="Создано" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="创建于" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ka" tx="შექმნილია" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Creado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Creado" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\QuestionnaireImport.resx" nm="DesignerQuestionnaires" rc="" dnt="false" nms="Resources" cln="QuestionnaireImport" bac="Content" hgt="0" wdt="0">
@@ -16857,7 +16862,7 @@
             <li lc="nn-nn" tx="Status Duration" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Длительность статусов" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="სტატუსის ხანგრძლივობა" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Duración del estado" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Duración de estado" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Reports.resx" nm="Report_Supervisors_And_Statuses" rc="" dnt="false" nms="Resources" cln="Reports" bac="Content" hgt="0" wdt="0">
@@ -17390,7 +17395,7 @@
             <li lc="ru" tx="Создан" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="创建日期" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ანგარიშის შექმნის თარიღი" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Cuenta creada en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Cuenta creada" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Edit" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -17560,7 +17565,7 @@
             <li lc="nn-nn" tx="Number of interviewers in the team" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="团队中的调查员数量" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ინტერვიუერების რაოდენობა გუნდში " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Numero de entrevistadores en el equipo" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="número de entrevistadores en el equipo" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Observer" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
@@ -17894,10 +17899,10 @@
         </it>
         <it rn="Resources\Assignments.resx" nm="AssignmentsSelected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="{0} Assignment(s) selected" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{{count}} Задание выбрано " er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="{{count}} დავალებები შერჩეულია" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="0} Asignación (es) seleccionada (s)" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ErrorVerifier" />
+            <li lc="nn-nn" tx="{{count}} Assignment selected" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="{{count}} Задание выбрано " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="ka" tx="{{count}} დავალებები შერჩეულია" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="0} Asignación (es) seleccionada (s)" er="" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Assignments.resx" nm="AssignmentsSelected_plural" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -17907,10 +17912,10 @@
         </it>
         <it rn="Resources\Assignments.resx" nm="ChangeSizeModalTitle" ns="{0} - id of the assignment" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Edit size for assignment {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Редактировать количество интервью для задания {{assignmentId}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="დავალების ზომა რედაქტირებისთვის {{assignmentId}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="Editar tamaño de la asignación {0}" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Edit size for assignment {{assignmentId}}" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Редактировать количество интервью для задания {{assignmentId}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="დავალების ზომა რედაქტირებისთვის {{assignmentId}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Editar tamaño de la asignación {{assignmentId}}" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Assignments.resx" nm="Count" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -17942,7 +17947,7 @@
             <li lc="nn-nn" tx="Created on" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Создан" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ka" tx="შექმნილია" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Creado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Creado" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Assignments.resx" nm="CreateInterview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -17978,10 +17983,10 @@
         </it>
         <it rn="Resources\Assignments.resx" nm="NumberOfAssignmentsAffected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="{0} Assignment(s) are going to be changed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{{count}} Задание будет изменено" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="{{count}} დავალებები შეიცვლება" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="{0} Asignación (es) van a ser cambiadas" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="{{count}} Assignment is going to be changed" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="{{count}} Задание будет изменено" er="" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="{{count}} დავალებები შეიცვლება" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="{{count}} Asignación (es) van a ser cambiadas" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Assignments.resx" nm="NumberOfAssignmentsAffected_plural" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18123,7 +18128,7 @@
             <li lc="nn-nn" tx="Updated on" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обновлено" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="განახლდა" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Actualizado en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Actualizado" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\AuditLog.resx" nm="Empty" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="AuditLog" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18180,7 +18185,7 @@
             <li lc="ru" tx="Записи с _START_ до _END_ из _TOTAL_ записей" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="显示_TOTAL_个条目中的_START_-_END_个" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ნაჩვენებია _START_ to _END_ of _TOTAL_ ჩანაწერი" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Swing _START_ to _END_ of _TOTAL_ entries" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Mostrando de _START_ a _END_ deun total de _TOTAL_ registros" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="InfoEmpty" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18189,7 +18194,7 @@
             <li lc="ru" tx="Записи с 0 до 0 из 0 записей" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="显示0个条目中的0-0个" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ნაჩვენებია 0-დან 0-მდე 0 ჩანაწერის" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Mostrando 0 a 0 de 0 entradas" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Mostrando de 0 a 0 de un total de 0 entradas" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="InfoFiltered" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18252,7 +18257,7 @@
             <li lc="ru" tx="Следующая" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="下一个" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="შემდეგი" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Próximo" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="Siguiente" er="" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DataTables.resx" nm="Paginate_Previous" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DataTables" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18333,6 +18338,12 @@
             <li lc="nn-nn" tx="Updated {{ date }}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обновлено {{ date }}" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Actualizado" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Details.resx" nm="NoAnswer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Not answered" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Не отвечен" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="NoSearchResults" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18873,7 +18884,7 @@
             <li lc="ru" tx="Неправильный номер телефона" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="无效的电话号码" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="არასწორი მობილურის ნომერი" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero de teléfono invalido" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Número de teléfono invalido" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="PhoneNumberFieldName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18884,7 +18895,7 @@
             <li lc="ru" tx="Номер телефона" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="电话号码" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ტელეფონის ნომერი" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero de teléfono" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Número de teléfono" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\FieldsAndValidations.resx" nm="RequiredEmailErrorMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="FieldsAndValidations" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -19044,9 +19055,9 @@
           <lis>
             <li lc="nn-nn" tx="You are signed in on Designer as {0}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы вошли на Designer как {0}." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="您在问卷设计网站以{0}登录。" ts="Translated" qs="ToReview" />
-            <li lc="ka" tx="თქვენ შესული ხართ დიზაინერიში {0} -ით" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Ha ingresado en sesión en Designer" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ErrorVerifier" />
+            <li lc="zh" tx="您在问卷设计网站以{0}登录。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ka" tx="თქვენ შესული ხართ დიზაინერიში {0} -ით" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Ha ingresado en sesión en Designer {0}" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\ImportQuestionnaire.resx" nm="SignOut" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="ImportQuestionnaire" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -19799,7 +19810,7 @@
             <li lc="nn-nn" tx="The Computer-assisted Personal Interview technology developed by the World Bank." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Технология опросов с помощью компьютерных систем, разработанная Мировым Банком." ts="Translated" qs="ToReview" />
             <li lc="ka" tx="მსოფლიო ბანკის მიერ შემუშავებული კომპიუტერული დახმარების პერსონალური ინტერვიუს ტექნოლოგია." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="La tecnología de entrevista personal asistida por computadora ha sido desarrollada por el Banco Mundial" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Tecnología de entrevista personal asistida por computadora desarrollada por el Banco Mundial" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="DownloadPage_Version" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -20883,7 +20894,7 @@
             <li lc="ru" tx="Серийный номер устройства" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="设备序列号" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="მოწყობილობის სერიული ნომერი" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero de serie del dispositivo" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Número de serie del dispositivo" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_DownloadedInterviewsCount" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21043,7 +21054,7 @@
             <li lc="ru" tx="Общее количество оборванных синхронизаций" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="失败的同步数量" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="წარუმატებელი სინქრონიზაციების საერთო რაოდენობა" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero total de sincronizaciones fallidas" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Número total de sincronizaciones fallidas" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_NumberOfSuccessSynchronizations" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21052,7 +21063,7 @@
             <li lc="ru" tx="Общее количество успешных синхронизаций" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="成功同步的数量" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="წარმატებული სინქრონიზაციების საერთო რაოდენობა" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero total de sincronizaciones satisfactorias" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Número total de sincronizaciones satisfactorias" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_PhoneFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21061,7 +21072,7 @@
             <li lc="ru" tx="Телефон: {0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="电话号码：{0}" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ტელეფონის ნომერი: {0}" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero de teléfono: {0}" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Número de teléfono: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_Rejected" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21113,7 +21124,7 @@
             <li lc="nn-nn" tx="Number of unfinished or unsynchronized assignments on device every given moment" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Количество незаконченных или не синхронизированных интервью на устройстве в каждый момент синхронизации" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="დაუმთავრებელი ან არასინქრონიზებული დავალებების რაოდენობა ყოველ მომენტში" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero de asignaciones sin finalizar o pendientes de sincronizar " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="es" tx="Número de asignaciones sin finalizar o pendientes de sincronizar " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21299,7 +21310,7 @@
             <li lc="ru" tx="Создан" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="创建日期" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ანგარიშის შექმნილია" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Cuenta creada en" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Cuenta creada" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_CreationDateTooltip" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21644,8 +21655,8 @@
         </it>
         <it rn="Resources\Pages.resx" nm="Map_DiscardConfirm" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Are You sure You want to discard map?" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вы уверены, что хотите удалить карту?" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Are You sure You want to delete the map?" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Вы уверены, что хотите удалить карту?" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapDetails_DelinkUser" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21658,7 +21669,7 @@
         <it rn="Resources\Pages.resx" nm="MapDetails_ImportedOn" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Imported on" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Импортирован" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Карта загружена" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapDetails_InterviewerName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21670,8 +21681,8 @@
         </it>
         <it rn="Resources\Pages.resx" nm="MapDetails_MapDisclaimer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="This preview shows the loaded map supperimposed on the world map" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="This preview shows the loaded map supperimposed on the world map" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="This preview shows the loaded map superimposed on the world map" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Этот предварительный просмотр показывает загруженную карту, наложенную на карту мира" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapDetails_MapTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21694,38 +21705,38 @@
         </it>
         <it rn="Resources\Pages.resx" nm="MapDetails_Size" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Size" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Размер" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Size(MB)" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Размер(МБ)" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapLinking_Description" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Upload file containing correspondence between maps and users" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Загрузить файл содержащий связи между пользователями и картами" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Позволяет загрузить файл с назначением карт на пользователей" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapLinking_DescriptionTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Manage user map links" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Управление связями между пользователями и картами" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Назначение карт на пользователей" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapLinking_DownloadExisting" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Download existing links" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Скачать существующие связи" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Скачать существующие назначения" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapLinking_UploadDescription" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="This will allow you to create map to user correspondence." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Позволяет создать связи между пользователями и картами." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Позволяет назначить пользователями конкретные карты." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapLinking_UploadDescriptionTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Upload users mappings" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Загрузить связи" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Назначить карты на пользователей" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapLinking_UploadFile" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21737,13 +21748,13 @@
         <it rn="Resources\Pages.resx" nm="MapLinking_UploadFileDescription" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Upload .tsv file with file mappings" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Загрузить .tsv файл со связями" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Загрузить .tsv файл с назначениями" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapLinking_UploadFileDescription1" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx=" Invalid names and user names will be ignored." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Неправильные имена пользователей будут игнорированы" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Неправильные или несуществующие имена пользователей не будут загружены" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapList_DeleteMap" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -21785,19 +21796,19 @@
         <it rn="Resources\Pages.resx" nm="MapList_UploadDescription" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Upload zip archive containing maps." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Загрузить zip архив содержащий карты." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Загрузить .zip архив, содержащий карты." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapList_UploadDescriptionExtra" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Files with same name will be overridden." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Файлы с существующими именами будут перезаписаны" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Файлы с одинаковыми названиями будут перезаписаны." er="" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapList_UserLinking" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Update user-to-map linking" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Обновить связи между пользователями и картами" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Загрузить файл с назначением карт на пользователей" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="MapUserLink_DiscardConfirm" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -22177,14 +22188,14 @@
           <lis>
             <li lc="nn-nn" tx="Status Duration" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Длительность статусов" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Duración del estado" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Duración del estado" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="StatusDurationDescription" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Number of days that assignments and interviews have stayed in their current status" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Количество дней когда интервью находятся в их текущем статусе" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Numero de días que la asignación a los entrevistadores ha estado en el estado actual" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Número de días que la asignación de los entrevistadores ha estado en el estado actual" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisor_CreateText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -22635,7 +22646,7 @@
             <li lc="nn-nn" tx="Press Add Headquarters button to create a new HQ user." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нажмите на кнопку Добавить Хэдквотера, чтобы создать нового хэдквотера." ts="Translated" qs="ToReview" />
             <li lc="ka" tx="დააჭირეთ სათაო ოფისის ღილაკს, რათა შეიქმნას ახალი სათაო ოფისის მომხმარებელი." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Presione el botón &quot;Adicionar usuario HA&quot; para adiciona un usuario de tipo HQ (sede)" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Presione el botón &quot;Adicionar usuario HQ&quot; para adiciona un usuario de tipo HQ (sede)" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Users_Headquarters_Instruction2" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -22667,7 +22678,7 @@
             <li lc="nn-nn" tx="Press Add Observer button to create a new Observer." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нажмите на кнопку Добавить Наблюдателя, чтобы создать нового наблюдателя." ts="Translated" qs="ToReview" />
             <li lc="ka" tx="დააჭირეთ დამკვირვებლის ღილაკს, რათა შეიქმნას ახალი დამკვირვებელი." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Presione el botón &quot;Adicionar Observador&quot; para crear un nuevo observador" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Presione el botón &quot;Adicionar observador&quot; para crear un nuevo observador" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Users_Observers_Instruction2" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -22683,7 +22694,7 @@
             <li lc="nn-nn" tx="Press Add Supervisor button to create a new supervisor." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нажмите на кнопку Добавить Супервизора, чтобы создать нового Супервизора." ts="Translated" qs="ToReview" />
             <li lc="ka" tx="დააჭირეთ  ზედამხეველის ღილაკს, რათა შეიქმნას ახალი ხელმძღვანელი." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="es" tx="Presione el botón de &quot;Adicionar Supervisor&quot; para crear un nuevo supervisor." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Presione el botón de &quot;Adicionar supervisor&quot; para crear un nuevo supervisor." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Users_Supervisors_Instruction2" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -22801,7 +22812,7 @@
             <li lc="ru" tx="Временной промежуток между первым отвеченным вопросом и завершением интервью на планшете." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="从平板电脑上记录第一个答案到点击完成之间的时间。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ka" tx="საშუალო დრო, ინტერვიუერის ინტერვიუს პირველი პასუხის ჩაწერიდან - დასრულების ღილაკის დაჭერამდე." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Tiempo promedio transcurrido entre la acción de la primera respuesta del cuestionario y la acción de completar la entrevista." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Tiempo promedio transcurrido entre la toma de la primera respuesta del cuestionario y la acción de completar la entrevista." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PeriodicStatusReport.resx" nm="AverageOverallCaseProcessingTime" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="PeriodicStatusReport" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -23636,7 +23647,7 @@
             <li lc="ru" tx="Частичный сбой синхронизации. Завершенные интервью были отправлены на сервер, но вы не будете получать новые назначения. Пожалуйста, перейдите к android настройкам-&gt; Приложения-&gt; Интервьюер и нажмите кнопку Очистить данные. Затем синхронизируйтесь заново." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="同步部分失败。已经将完成的访谈发送给了服务器，但您将不会收到新的任务。请依次点击平板电脑的“设置”—“应用程序”—“Interviewer”—“清除数据”，然后重新同步。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ka" tx="სინქრონიზაცია ნაწილობრივ ვერ მოხერხდა. დასრულებული ინტერვიუები გაიგზავნა სერვერზე, მაგრამ ვერ მიიღებთ ახალ დავალებებს. გთხოვთ, შედით Android- ის პარამეტრებში -&gt; პროგრამები -&gt; ინტერვიუერი და დააჭირეთ ღილაკს &quot;Clear Data&quot;. შემდეგ სინქრონიზაცია ნულიდან." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="La sincronización ha fallado parcialmente. Las entrevistas completadas han sido enviadas al servidor, sin embargo usted no recibirá nuevas asignaciones. Por favor vaya al menú de Configuración del dispositivo Android -&gt; Apps -&gt; Interviewer y presione el botón Clear Data. Después sincronice nuevamente." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="La sincronización ha fallado parcialmente. Las entrevistas completadas han sido enviadas al servidor, sin embargo usted no recibirá nuevas asignaciones. Por favor vaya al menú de Configuración del dispositivo Android -&gt; Apps -&gt; Interviewer y presione el botón &quot;Clear Data&quot;. Después sincronice nuevamente." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\TabletSyncMessages.resx" nm="ServerError" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="TabletSyncMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -24203,7 +24214,7 @@
         <it rn="Resources\WebInterview.resx" nm="Filters_NotAnswered" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Not answered" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Без ответа" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Без ответа" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="es" tx="Sin respuesta" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -24277,13 +24288,13 @@
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_AnsweredQuestions_Many" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ar" tx="{{value}} جواب/أجوبة" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="{0} respuesta" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="{{value}} réponses" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="nn-nn" tx="{0} answers" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{{value}} ответов" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="zh" tx="{{value}}个答案" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="{{value}} პასუხები" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
+            <li lc="ar" tx="{{value}} جواب/أجوبة" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="{{value}} respuesta" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{{value}} réponses" er="" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="{{value}} answers" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="{{value}} ответов" er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="{{value}}个答案" er="" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="{{value}} პასუხები" er="" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_AnsweredQuestions_One" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -24299,13 +24310,13 @@
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_InvalidAnswers_ManyFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ar" tx="{{value}} خطأ / أخطاء" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="{0} errores" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="{{value}} erreurs" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="nn-nn" tx="{0} errors" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{{value}} ошибок" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="zh" tx="{{value}}个错误" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="{{value}} შეცდომები" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
+            <li lc="ar" tx="{{value}} خطأ / أخطاء" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="{{value}} errores" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{{value}} erreurs" er="" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="{{value}} errors" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="{{value}} ошибок" er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="{{value}}个错误" er="" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="{{value}} შეცდომები" er="" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_InvalidAnswers_One" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -24321,13 +24332,13 @@
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Status_CompletedFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ar" tx="اكتمل القسم: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="Sección completada: {0}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Section commencée: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="nn-nn" tx="Section completed: {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Секция завершена: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="zh" tx="已完成的部分：{{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="სექცია დასრულებულია: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
+            <li lc="ar" tx="اكتمل القسم: {{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Sección completada: {{value}}" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Section commencée: {{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Section completed: {{value}}" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Секция завершена: {{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="已完成的部分：{{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="სექცია დასრულებულია: {{value}}" er="" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Status_NotStarted" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -24343,24 +24354,24 @@
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Status_StartedIncompleteFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ar" tx="تم البدء بالقسم: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="Sección iniciada: {0}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Section entamée: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="nn-nn" tx="Section started: {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Секция начата: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="zh" tx="已经开始的部分：{{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="სექცია დაიწყო: {{value}}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
+            <li lc="ar" tx="تم البدء بالقسم: {{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Sección iniciada: {{value}}" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Section entamée: {{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Section started: {{value}}" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Секция начата: {{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="已经开始的部分：{{value}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="სექცია დაიწყო: {{value}}" er="" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Subgroups_ManyFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ar" tx="{{value}} أقسام فرعية" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="es" tx="{0} sub-secciones" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="{{value}} sous-sections" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="nn-nn" tx="{0} sub-sections" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="{{value}} подсекций" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="zh" tx="{{value}}个子部分" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="ka" tx="{{value}} ქვე-სექციები" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
+            <li lc="ar" tx="{{value}} أقسام فرعية" er="" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="{{value}} sub-secciones" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{{value}} sous-sections" er="" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="{{value}} sub-sections" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="{{value}} подсекций" er="" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="{{value}}个子部分" er="" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="{{value}} ქვე-სექციები" er="" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterview.resx" nm="Interview_Group_Subgroups_One" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterview" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -25002,7 +25013,7 @@
         <it rn="Resources\WebInterviewUI.resx" nm="CommentSupervisor" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewUI" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ar" tx="تعليق المشرف" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Comentario del supervisor" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Comentario del supervisor" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Commentaire du superviseur" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Supervisor comment" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Комментарий супервизора" ts="Translated" qs="ToReview" />
@@ -25022,7 +25033,7 @@
         <it rn="Resources\WebInterviewUI.resx" nm="Complete" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewUI" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ar" tx="مكتمل" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Completar" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Completar" er="" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Résumé" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="nn-nn" tx="Complete" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Закончить" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />

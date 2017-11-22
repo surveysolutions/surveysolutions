@@ -16,10 +16,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class MapsApiV2Controller : ApiController
     {
-        private readonly IMapRepository mapRepository;
+        private readonly IMapStorageService mapRepository;
         private readonly IAuthorizedUser authorizedUser;
 
-        public MapsApiV2Controller(IMapRepository mapRepository, IAuthorizedUser authorizedUser)
+        public MapsApiV2Controller(IMapStorageService mapRepository, IAuthorizedUser authorizedUser)
         {
             this.mapRepository = mapRepository;
             this.authorizedUser = authorizedUser;
