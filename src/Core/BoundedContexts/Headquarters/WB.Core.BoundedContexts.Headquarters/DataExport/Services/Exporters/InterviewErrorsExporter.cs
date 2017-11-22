@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Transactions;
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ITransactionManagerProvider transactionManager;
+        private readonly InterviewDataExportSettings exportSettings;
         private const string FileName = "interview__errors.tab";
 
         protected InterviewErrorsExporter()
@@ -35,13 +37,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             ILogger logger,
             ICsvWriter csvWriter,
             IQuestionnaireStorage questionnaireStorage,
-            ITransactionManagerProvider transactionManager)
+            ITransactionManagerProvider transactionManager,
+            InterviewDataExportSettings exportSettings)
         {
             this.interviewFactory = interviewFactory;
             this.logger = logger;
             this.csvWriter = csvWriter;
             this.questionnaireStorage = questionnaireStorage;
             this.transactionManager = transactionManager;
+            this.exportSettings = exportSettings;
         }
 
         public void Export(QuestionnaireExportStructure exportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -58,17 +62,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var questionnaire = questionnaireStorage.GetQuestionnaire(
                 new QuestionnaireIdentity(exportStructure.QuestionnaireId, exportStructure.Version), null);
             Stopwatch watch = Stopwatch.StartNew();
-            foreach (var interviewsBatch in interviewIdsToExport.Batch(500))
+            foreach (var interviewsBatch in interviewIdsToExport.Batch(exportSettings.ErrorsExporterBatchSize))
             {
                 Stopwatch batchWatch = Stopwatch.StartNew();
                 cancellationToken.ThrowIfCancellationRequested();
 
+                Stopwatch readWatch = Stopwatch.StartNew();
                 var interveiws = interviewsBatch.ToList();
                 var exportedErrors =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewFactory.GetErrors(interveiws));
-                this.logger.Debug($"Read from db took {batchWatch.Elapsed:g}");
+                this.logger.Debug($"Read from db took {readWatch.Elapsed:g}");
+                readWatch.Stop();
 
-                batchWatch.Restart();
+                Stopwatch processingWatch = Stopwatch.StartNew();
                 List<string[]> exportRecords = new List<string[]>();
                 foreach (var error in exportedErrors)
                 {
@@ -79,13 +85,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         exportRecords.Add(exportRow);
                     }
                 }
-                this.logger.Debug($"Processing took {batchWatch.Elapsed:g}");
-                batchWatch.Restart();
+                this.logger.Debug($"Processing took {processingWatch.Elapsed:g}");
+
                 if (exportRecords.Count > 0)
                 {
                     this.csvWriter.WriteData(filePath, exportRecords, ExportFileSettings.DataFileSeparator.ToString());
                 }
-                this.logger.Debug($"Write took {batchWatch.Elapsed:g}");
 
                 totalProcessed += interveiws.Count;
                 if (totalProcessed % 10_000 == 0)

@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }, cancellationToken);
             exportWatch.Stop();
 
-            this.logger.Info($"Export with all steps (Interviews, Comments, Actions) finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
+            this.logger.Info($"Export with all steps finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
         }
 
         public List<Guid> GetInterviewIdsToExport(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, CancellationToken cancellationToken)
