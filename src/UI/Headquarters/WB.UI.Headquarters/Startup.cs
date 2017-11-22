@@ -127,7 +127,10 @@ namespace WB.UI.Headquarters
                 var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
 
                 // initialize push mechanizm
-                new Prometheus.MetricPusher(metricsGateway, "hq", instanceName, intervalMilliseconds: 1000).Start();
+                new Prometheus.MetricPusher(metricsGateway, 
+                    job: "hq", 
+                    additionalLabels: new[] { Tuple.Create("site", instanceName) },
+                    intervalMilliseconds: 1000).Start();
             }
         catch (Exception e)
             {
