@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -119,5 +119,104 @@
   </resheader>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>actif</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Toutes les affectations</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Archiver</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Archivé</value>
+  </data>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Affectations</value>
+  </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}} Affectation (s) sélectionnée</value>
+  </data>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Modifier la taille pour l'affectation {{assignmentId}}</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Compter</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Remplissez tout ou en partie des champs d'identification</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Sélectionnez le responsable (Chef d'équipe ou Enquêteur) pour cette tâche</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Créé sur</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Démarrer un nouvel entretien</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Identifier des questions</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Entretiens nécessaires</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>Le champ Taille doit être égal à -1 ou plus.</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}} Affectation (s) vont être modifiées</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Sélectionnez le responsable</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Statut archivé</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Taille</value>
+  </data>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Indiquez le nombre maximum d'entretiens à générer pour cette affectation. Valeurs autorisées: -1 pour l'affectation illimitée, 0 pour l'affectation vide, les nombres pour la taille d'affectation</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Indique si l'affectation est active ou archivée.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Version du questionnaire. Sélectionnez une version du questionnaire pour voir les entretiens associées dans le rapport à droite. Sélectionnez "Tous les questionnaires" pour voir les entretiens associées à un questionnaire.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Utilisateur responsable. Cliquez dans le champ pour choisir un nom d'utilisateur en le sélectionnant directement ou en tapant pour filtrer la liste des noms d'utilisateur plus loin.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Nombre d'entretiens actuellement soumis pour cette affectation. D'autres entretiens peuvent avoir été créés mais pas synchronisés. Cliquez sur n'importe quelle cellule pour voir les entretiens associées. Cliquez sur l'icône de tri pour trier par nombre.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Lorsque l'affectation a été créée initialement. Cliquez sur l'icône de tri pour trier par heure.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informations qui identifient chaque affectation. Ce sont les réponses aux questions marquées comme identifiant dans le Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Nombre d'entretiens nécessaires pour achever cette affectation.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Utilisateur actuellement responsable de l'affectation. Cliquez sur l'icône de tri pour trier le nom d'utilisateur.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Nombre maximum d'entretiens pouvant être menés pour cette affectation. Cliquez sur n'importe quelle cellule pour changer ce nombre. Cliquez sur l'icône de tri pour trier par taille.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Lorsque l'affectation a été mise à jour pour la dernière fois Cliquez sur l'icône de tri pour trier par heure.</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Désarchiver</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Illimité</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Mis à jour le</value>
   </data>
 </root>

@@ -121,37 +121,37 @@
     <value>Moyenne</value>
   </data>
   <data name="AverageCaseAssignmentDuration" xml:space="preserve">
-    <value>Durée moyenne d'affectation</value>
+    <value>Durée moyenne de l'affectation</value>
   </data>
   <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
-    <value>s</value>
+    <value>Temps moyen entre l'affectation d'un entretien à un enquêteur et le moment où le bouton Terminer est appuyé sur une tablette.</value>
   </data>
   <data name="AverageHQProcessingTime" xml:space="preserve">
-    <value>Délai moyen de traitement par quartier général</value>
+    <value>Temps moyen de traitement du QG</value>
   </data>
   <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
-    <value>La durée entre le moment où un superviseur approuve un questionnaire et où ce même questionnaire est approuvé ou rejeté par quartier général.</value>
+    <value>La durée moyenne entre le moment où un chef d'équipe approuve un questionnaire et où ce même questionnaire est approuvé ou rejeté par quartier général.</value>
   </data>
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Durée moyenne de l'entretien</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>La durée entre le moment où la première réponse est enregistrée sur une tablette et le moment où l'enquêteur marque le questionnaire comme complet.</value>
+    <value>La durée moyenne entre le moment où la première réponse est enregistrée sur une tablette et le moment où l'enquêteur marque le questionnaire comme terminé.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Délai moyen de traitement global</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
-    <value>Le temps écoulé entre l'affectation du questionnaire tâche et  l'appprobation par le quartier général.</value>
+    <value>Temps moyen entre le moment où l'entretien est assigné et le moment où le QG approuve cet entretien.</value>
   </data>
   <data name="AverageSupervisorProcessingTime" xml:space="preserve">
-    <value>Temps de traitement moyen de superviseur</value>
+    <value>Temps moyen de traitement du chef d'équipe</value>
   </data>
   <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
-    <value>Durée entre le moment où l'enquêteur termine un entretien et le moment où le superviseur approuve ou rejette ce même entretien.</value>
+    <value>Temps moyen entre le moment où un enquêteur appuie sur le bouton Terminer et celui où le chef d'équipe accepte ou rejette l'entretien.</value>
   </data>
   <data name="BackToSupervisors" xml:space="preserve">
-    <value> Retourer aux superviseurs</value>
+    <value>Retour aux chefs d'équipe</value>
   </data>
   <data name="By" xml:space="preserve">
     <value>Par</value>
@@ -169,25 +169,25 @@
     <value>Mois</value>
   </data>
   <data name="NumberOfCompletedInterviews" xml:space="preserve">
-    <value>Nombre d’entretiens achevés</value>
+    <value>Nombre d'entretiens achevés</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
     <value>Nombre d’entetiens approuvés par le quartier général</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
-    <value>Nombre d’entretiens achevés par un {0} qui ont été approuvés par le quartier général.</value>
+    <value>Nombre de entretiens recueillis par {0} approuvé par le QG.</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
-    <value>Nombre d'actions sur des entretiens par le quartier général</value>
+    <value>Nombre d'actions sur des entretiens par le QG</value>
   </data>
   <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
-    <value>Nombre de rejets ou d'approbations rendus par le QG sur les entretiens réalisés par un {0}.</value>
+    <value>Nombre d'approbations et de rejets faits par le QG sur les entretiens réalisés par {0}.</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
-    <value>Nombre d'actions par le superviseur</value>
+    <value>Nombre d'actions sur l'entretien par le chef d'équipe</value>
   </data>
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
-    <value>Nombre de rejets ou d'approbations rendus par un superviseur sur les entretiens réalisés par un {0}.</value>
+    <value>Nombre d'approbations et de rejets faits par un chef d'équipe sur les entretiens réalisés par un {0}.</value>
   </data>
   <data name="Period" xml:space="preserve">
     <value>Unité de temps</value>
@@ -202,10 +202,10 @@
     <value>Équipe</value>
   </data>
   <data name="TeamMember" xml:space="preserve">
-    <value>Membre de l’équipe</value>
+    <value>Membre de l'équipe</value>
   </data>
   <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
-    <value>Temps moyen de l'achèvement d'entretien</value>
+    <value>Temps moyen d'achèvement de l'entretien</value>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>
@@ -217,6 +217,24 @@
     <value>ver.</value>
   </data>
   <data name="Week" xml:space="preserve">
-    <value>Semaine</value>
+    <value>Semaines</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>actions d'entretien</value>
+  </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>dans l'équipe {0}</value>
+  </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>A partir de</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+    <value>Nombre d'entretiens achevés par une équipe. Les entretiens rejetés puis achevés sont comptés comme des événements d'achèvement distincts.</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>Pendant le dernier</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Durée</value>
   </data>
 </root>
