@@ -5,11 +5,10 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
-using SpreadsheetGear;
+using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 using TranslationInstance = WB.Core.BoundedContexts.Designer.Translations.TranslationInstance;
@@ -57,7 +56,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         private void BecauseOf() 
         {
             excelFile = service.GetAsExcelFile(questionnaireId, translationId);
-            workbook = SpreadsheetGear.Factory.GetWorkbookSet().Workbooks.OpenFromMemory(excelFile.ContentAsExcelFile);
+            workbook = new ExcelPackage(new MemoryStream(excelFile.ContentAsExcelFile)).Workbook;
             cells = workbook.Worksheets[0].Cells;
         }
 
@@ -87,7 +86,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         static Guid questionnaireId;
         static Guid translationId = Guid.Parse("ABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
         static TranslationFile excelFile;
-        static IWorkbook workbook;
-        static IRange cells;
+        static ExcelWorkbook workbook;
+        static ExcelRange cells;
     }
 }
