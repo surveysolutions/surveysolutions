@@ -3,6 +3,7 @@
     <HiddenComponentWarnings>
       <Value>NUnitTestsWithSameName</Value>
       <Value>AssemblyReferenceToBuildOutputDirectory</Value>
+      <Value>CopyReferencedAssembliesToWorkspaceIsOn</Value>
     </HiddenComponentWarnings>
     <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
   </Settings>
