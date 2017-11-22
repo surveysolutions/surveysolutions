@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IUserViewFactory>(),
-                new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
+                new InterviewDataExportSettings("", false, 10000, 100, 1, 1, 10),
                 Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ =>
                         _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
