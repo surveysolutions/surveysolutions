@@ -124,9 +124,9 @@
     <value>Captcha invalide</value>
   </data>
   <data name="Required" xml:space="preserve">
-    <value>Le champ obligatoire</value>
+    <value>Est un champs obligatoire</value>
   </data>
   <data name="TryAnother" xml:space="preserve">
-    <value>Essaie un autre</value>
+    <value>Essayez un autre</value>
   </data>
 </root>

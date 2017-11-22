@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>Retourner vers Paramètres d'enquête</value>
+    <value>Retour à la Configuration de l'enquête</value>
   </data>
   <data name="Done" xml:space="preserve">
     <value>Achevé</value>
@@ -130,30 +130,30 @@
     <value>Vous pouvez télécharger la liste d'affectations qui ont été affectés aux enquêteurs afin d'envoyer des liens web aux répondants</value>
   </data>
   <data name="SelectInterviwer" xml:space="preserve">
-    <value>Sélectionner un entretien</value>
+    <value>Sélectionner L'Enquêteur</value>
   </data>
   <data name="Start" xml:space="preserve">
     <value>Commencer</value>
   </data>
   <data name="Started_Title" xml:space="preserve">
-    <value>Entretien web commencé</value>
+    <value>L'entretien Web a commencé</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Démarrage d'un entretien web pour {0}</value>
+    <value>Début de l'entretien sur le Web pour {0}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
-    <value>Arrêter l'entretien web</value>
+    <value>Arrêtez l'entrevue Web</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
     <value>Activer la protection anti-spam</value>
   </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>Paramètrage de la collecte web</value>
+    <value>Configuration de l'entretien Web</value>
   </data>
   <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>Paramètrage de la collecte web</value>
+    <value>Configuration de l'entretien Web</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>Entretien web commencé pour {0}</value>
+    <value>Entretien Web pour {0} a commencé</value>
   </data>
 </root>

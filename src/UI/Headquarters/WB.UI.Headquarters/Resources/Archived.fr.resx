@@ -121,13 +121,13 @@
     <value>Enquêteurs actifs</value>
   </data>
   <data name="ActiveSupervisors" xml:space="preserve">
-    <value>Superviseurs actifs</value>
+    <value>Chefs d'équipe actifs</value>
   </data>
   <data name="ArchivedInterviewers" xml:space="preserve">
     <value>Enquêteurs archivés</value>
   </data>
   <data name="ArchivedSupervisors" xml:space="preserve">
-    <value>Superviseurs archivés</value>
+    <value>Chefs d'équipe archivés</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
     <value>Date de création</value>
@@ -136,7 +136,7 @@
     <value>Voulez-vous continuer?</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Courriel</value>
+    <value>Email</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
     <value>Enquêteurs</value>
@@ -148,9 +148,9 @@
     <value>Désarchiver</value>
   </data>
   <data name="UnarchiveInterviewerWarning" xml:space="preserve">
-    <value>Enquêteurs seront désarchivé.</value>
+    <value>Les enquêteurs seront désarchivés.</value>
   </data>
   <data name="UnarchiveSupervisorWarning" xml:space="preserve">
-    <value>Superviseur sera déarchivée.</value>
+    <value>Les Chefs d'équipe seront désarchivés.</value>
   </data>
 </root>

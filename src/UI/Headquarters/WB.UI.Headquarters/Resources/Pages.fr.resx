@@ -130,13 +130,13 @@
     <value>Approuvé par le quartier général</value>
   </data>
   <data name="ApprovedByupervisor" xml:space="preserve">
-    <value>Approuvés par le superviseur</value>
+    <value>Approuvé par le chef d'équipe</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
     <value>Approuver</value>
   </data>
   <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
-    <value>Approuver l'entretien</value>
+    <value>Approuver L'entretien</value>
   </data>
   <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
     <value>Commentaire</value>
@@ -145,7 +145,7 @@
     <value>Rejeter</value>
   </data>
   <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
-    <value>Rejeter l'entretien</value>
+    <value>Rejeter L'entretien</value>
   </data>
   <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
     <value>Annuler l'approbation</value>
@@ -166,19 +166,19 @@
     <value>Fermer</value>
   </data>
   <data name="Completed" xml:space="preserve">
-    <value>Terminé</value>
+    <value>Achevé</value>
   </data>
   <data name="Create" xml:space="preserve">
     <value>Créer</value>
   </data>
   <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
-    <value>Ecrire un commentaire...</value>
+    <value>Écrire un commentaire...</value>
   </data>
   <data name="EditQuestion_Save" xml:space="preserve">
-    <value>Sauvegarder</value>
+    <value>sauvegarder</value>
   </data>
   <data name="Error_Description" xml:space="preserve">
-    <value>Une erreur s’est produite lors du traitement de votre demande.</value>
+    <value>Une erreur s'est produite lors du traitement de votre demande.</value>
   </data>
   <data name="Error_Title" xml:space="preserve">
     <value>Erreur</value>
@@ -190,10 +190,10 @@
     <value>Interdit</value>
   </data>
   <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
-    <value>Êtes-vous sûr de que vouloir supprimer le questionnaire ? Les données collectées avec cet instrument seront supprimées.</value>
+    <value>Êtes-vous sûr de vouloir supprimer le questionnaire? Tous les entretiens effectués par l'actuel questionnaire seront perdus.</value>
   </data>
   <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
-    <value>Vous n’êtes pas autorisé à prendre cette action.</value>
+    <value>Vous n'êtes pas autorisé pour cette action.</value>
   </data>
   <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
     <value>Votre demande antérieure n’est pas encore accomplie. Veuillez patienter la fin de cette opération.</value>
@@ -211,7 +211,7 @@
     <value>Aucune coordonnées GPS à charger</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
-    <value>Aucun marqueurs n'ont été ajoutés</value>
+    <value>Aucun marqueur n'a été ajouté</value>
   </data>
   <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
     <value>Une erreur inattendue s’est produite. Nous sommes désolés pour la gêne occasionnée.</value>
@@ -223,10 +223,10 @@
     <value>altitude</value>
   </data>
   <data name="GPS_latitude" xml:space="preserve">
-    <value>Latitude</value>
+    <value>latitude</value>
   </data>
   <data name="GPS_longitude" xml:space="preserve">
-    <value>Longitude</value>
+    <value>longitude</value>
   </data>
   <data name="HealthCheck_Header" xml:space="preserve">
     <value>Surveillance du bilan de santé</value>
@@ -235,19 +235,19 @@
     <value>Page du bilan de santé</value>
   </data>
   <data name="HideFilter" xml:space="preserve">
-    <value>Cacher le filtre</value>
+    <value>Masquer le filtre</value>
   </data>
   <data name="HistoryOfStatuses_By" xml:space="preserve">
-    <value>par</value>
+    <value>Par</value>
   </data>
   <data name="HistoryOfStatuses_Comment" xml:space="preserve">
-    <value>avec commentaire</value>
+    <value>Commentaire</value>
   </data>
   <data name="HistoryOfStatuses_On" xml:space="preserve">
-    <value>le</value>
+    <value>Changé sur</value>
   </data>
   <data name="HistoryOfStatuses_State" xml:space="preserve">
-    <value>Statut</value>
+    <value>Etat</value>
   </data>
   <data name="HistoryOfStatuses_Title" xml:space="preserve">
     <value>Historique de l'entretien</value>
@@ -256,13 +256,13 @@
     <value>Voulez-vous continuer?</value>
   </data>
   <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
-    <value>Statut défini par l’équipe de soutien de Solutions d’enquête</value>
+    <value>Etat défini par l'équipe de support de Survey Solutions</value>
   </data>
   <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
-    <value>Répétition du dernier statut a échoué.</value>
+    <value>La répétition du dernier état a échoué.</value>
   </data>
   <data name="InterviewController_RevalidationFailed" xml:space="preserve">
-    <value>Revalidation a échoué.</value>
+    <value>La revalidation a échoué.</value>
   </data>
   <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
     <value>tout</value>
@@ -274,10 +274,10 @@
     <value>avec commentaire</value>
   </data>
   <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
-    <value>activés</value>
+    <value>activée</value>
   </data>
   <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
-    <value>marqué(s)</value>
+    <value>marqué</value>
   </data>
   <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
     <value>Groupes</value>
@@ -286,13 +286,13 @@
     <value>caché</value>
   </data>
   <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
-    <value>Cacher les groupes</value>
+    <value>Masquer les groupes</value>
   </data>
   <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
     <value>invalide(s)</value>
   </data>
   <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
-    <value>Entretien a des paquets de synchronisation dans la la file d’attente</value>
+    <value>entretien a des paquets de synchronisation en attente dans la file d'attente</value>
   </data>
   <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
     <value>Responsable</value>
@@ -304,7 +304,7 @@
     <value>Statut</value>
   </data>
   <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
-    <value>pour le superviseur</value>
+    <value>pour le chef d'équipe</value>
   </data>
   <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
     <value>sans réponse</value>
@@ -313,7 +313,7 @@
     <value>Affecté à l'enquêteur</value>
   </data>
   <data name="InterviewerController_EditSuccess" xml:space="preserve">
-    <value>Informations sur {0}  mises à jour</value>
+    <value>Informations sur {0} mises à jour avec succès</value>
   </data>
   <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
     <value>Compte d'enquêteur a été créé avec succès</value>
@@ -322,7 +322,7 @@
     <value>Impossible d'acutaliser les informations parce que l’utilisateur n’existe pas</value>
   </data>
   <data name="InterviewerCreate_CreateIn" xml:space="preserve">
-    <value>Créer l’intervieweur dans</value>
+    <value>Créer l'enquêteur dans</value>
   </data>
   <data name="InterviewerCreate_Team" xml:space="preserve">
     <value>équipe</value>
@@ -343,7 +343,7 @@
     <value>Enquêteur : {0}</value>
   </data>
   <data name="Interviewers_ActiveUsers" xml:space="preserve">
-    <value>Utilisateurs actifs</value>
+    <value>Enquêteurs actifs</value>
   </data>
   <data name="Interviewers_Archive" xml:space="preserve">
     <value>Archives</value>
@@ -361,16 +361,16 @@
     <value>Si l’enquêteur a effectué des entretiens en "mode recensement", les données seront supprimées.</value>
   </data>
   <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
-    <value>Statut de l’archive</value>
+    <value>Statut de l'archive</value>
   </data>
   <data name="Interviewers_Connected" xml:space="preserve">
     <value>Connecté</value>
   </data>
   <data name="Interviewers_CreationDateTitle" xml:space="preserve">
-    <value>Date de création</value>
+    <value>Compte créé sur</value>
   </data>
   <data name="Interviewers_EmailTitle" xml:space="preserve">
-    <value>Courriel</value>
+    <value>Email de l'enquêteur</value>
   </data>
   <data name="Interviewers_Header" xml:space="preserve">
     <value>Enquêteurs</value>
@@ -379,16 +379,16 @@
     <value>Pas connecté</value>
   </data>
   <data name="Interviewers_SupervisorTitle" xml:space="preserve">
-    <value>Superviseur</value>
+    <value>Chef d'équipe</value>
   </data>
   <data name="Interviewers_Title" xml:space="preserve">
-    <value>Intervieweurs</value>
+    <value>Enquêteurs</value>
   </data>
   <data name="Interviewers_Unarchive" xml:space="preserve">
     <value>Désarchiver</value>
   </data>
   <data name="Interviewers_UserNameTitle" xml:space="preserve">
-    <value>Nom</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="InterviewHistory_Header" xml:space="preserve">
     <value>Historique de l’entretien</value>
@@ -403,13 +403,13 @@
     <value>Tous droits réservés.</value>
   </data>
   <data name="Layout_WorldBank" xml:space="preserve">
-    <value>Le groupe de la Banque mondiale</value>
+    <value>Le Groupe de la Banque Mondiale</value>
   </data>
   <data name="LogOn_Legend" xml:space="preserve">
     <value>Veuillez vous connecter</value>
   </data>
   <data name="LogOn_LogIn" xml:space="preserve">
-    <value>Se connecter</value>
+    <value>S'identifier</value>
   </data>
   <data name="LogOn_Title" xml:space="preserve">
     <value>Se connecter</value>
@@ -418,10 +418,10 @@
     <value>Ouverture de session a échoué. Veuillez corriger les erreurs et essayez à nouveau.</value>
   </data>
   <data name="Maintenance_Description" xml:space="preserve">
-    <value>Mise à jour de l'application actuellement en cours. Cette une opération manuelle et peut nécessiter une quantité notable de temps. Désolé pour la gêne occasionnée. Une fois ce processus terminé, vous serez automatiquement redirigé vers la page demandée.</value>
+    <value>Mise à jour de l'application actuellement en cours. C'est une opération manuelle qui peut nécessiter une duréee importante. Désolé pour les désagréments causés. Une fois ce processus terminé, vous serez automatiquement redirigé vers la page demandée.</value>
   </data>
   <data name="Maintenance_RebuildDescription" xml:space="preserve">
-    <value>Redémarrage de l’application en cours. Ceci peut prendre jusqu'à 10 minutes ou plus. Désolé pour la gêne occasionnée. Une fois ce processus terminé, vous serez automatiquement redirigé à la page demandée.</value>
+    <value>Redémarrage de l’application en cours. Ceci peut prendre jusqu'à 10 minutes ou plus. Désolé pour le désagrément occasionné. Une fois ce processus terminé, vous serez automatiquement redirigé à la page demandée.</value>
   </data>
   <data name="Maintenance_Title" xml:space="preserve">
     <value>Maintenance</value>
@@ -433,7 +433,7 @@
     <value>Redémarrage en cours...</value>
   </data>
   <data name="NoResults" xml:space="preserve">
-    <value>Aucun résultat retrouvé</value>
+    <value>Aucun résultat trouvé</value>
   </data>
   <data name="NotFound_Title" xml:space="preserve">
     <value>Pas retrouvé</value>
@@ -445,7 +445,7 @@
     <value>Pacquets d'informations de la tablette</value>
   </data>
   <data name="PackagesInfo_Size" xml:space="preserve">
-    <value>Taille (bytes)</value>
+    <value>Taille (octets)</value>
   </data>
   <data name="PackagesInfo_Title" xml:space="preserve">
     <value>Indice</value>
@@ -457,13 +457,13 @@
     <value>Identifiant d'utilisateur</value>
   </data>
   <data name="PackagesInfo_UserName" xml:space="preserve">
-    <value>Nom d’utilisateur</value>
+    <value>Nom d'utilisateur</value>
   </data>
   <data name="RejectedByHeadquarters" xml:space="preserve">
     <value>Rejeté par le quartier général</value>
   </data>
   <data name="RejectedBySupervisor" xml:space="preserve">
-    <value>Rejeté par le superviseur</value>
+    <value>Rejeté par le chef d'équipe</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Recherche</value>
@@ -475,7 +475,7 @@
     <value>Statut</value>
   </data>
   <data name="SupervisorAssigned" xml:space="preserve">
-    <value>Affecté au superviseur</value>
+    <value>Affecté au chef d'équipe</value>
   </data>
   <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
     <value>Créé sur la tablette</value>
@@ -508,7 +508,7 @@
     <value>Approuvé par quartier général</value>
   </data>
   <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approuvé par superviseur</value>
+    <value>Approuvé par chef d'équipe</value>
   </data>
   <data name="SurveysStatuses_Completed" xml:space="preserve">
     <value>Terminé</value>
@@ -520,10 +520,10 @@
     <value>Rejeté par quartier général</value>
   </data>
   <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
-    <value>Rejeté par superviseur</value>
+    <value>Rejeté par chef d'équipe</value>
   </data>
   <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
-    <value>Affecté au superviseur</value>
+    <value>Affecté au chef d'équipe</value>
   </data>
   <data name="SurveysStatuses_SurveyName" xml:space="preserve">
     <value>Nom de l’enquête</value>
@@ -544,7 +544,7 @@
     <value>Membres de l’équipe et statuts</value>
   </data>
   <data name="Template" xml:space="preserve">
-    <value>Masque</value>
+    <value>Modèle</value>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>
@@ -562,6 +562,510 @@
     <value>Oui</value>
   </data>
   <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
-    <value>Connecté à l'appareil</value>
+    <value>Connecté au serveur</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Changer le mot de passe</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>Utilisez le formulaire ci-dessous pour changer le mot de passe du compte</value>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>Modifier les détails des informations publiques du profil</value>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>S'identifier</value>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>Rôle</value>
+  </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>Modifier le profil {0}</value>
+  </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Superficie</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>mètres carrés</value>
+  </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>Affectations</value>
+  </data>
+  <data name="CautionTitle" xml:space="preserve">
+    <value>Mise en garde:</value>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Confirmation nécessaire</value>
+  </data>
+  <data name="DownloadPage_Instructions" xml:space="preserve">
+    <value>Instructions d'installation</value>
+  </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>Télécharger l'application Interviewer</value>
+  </data>
+  <data name="DownloadPage_Title" xml:space="preserve">
+    <value>La technologie CAPI développée par la Banque mondiale.</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="DownloadPage_Welcome" xml:space="preserve">
+    <value>Bienvenue sur la page de téléchargement de l'application Interviewer de Survey Solutions.</value>
+  </data>
+  <data name="DownloadReport" xml:space="preserve">
+    <value>Télécharger le rapport sous</value>
+  </data>
+  <data name="ExcludeEsriTitle" xml:space="preserve">
+    <value>Exclure le support de la carte ESRI</value>
+  </data>
+  <data name="ExportButton" xml:space="preserve">
+    <value>Exportation</value>
+  </data>
+  <data name="ExportToCsv" xml:space="preserve">
+    <value>Valeurs séparées par des virgules (.csv)</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Excel (.xlsx)</value>
+  </data>
+  <data name="ExportToTab" xml:space="preserve">
+    <value>Valeurs séparées par des tabulations (.tsv)</value>
+  </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>Affectation</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filtres</value>
+  </data>
+  <data name="GetEsriExtraDescription" xml:space="preserve">
+    <value>Le support de la carte ESRI est une fonctionnalité expérimentale. Utilisez-le uniquement si vous avez besoin de la fonctionnalité ESRI GIS avancée. L'ajout de cette fonctionnalité augmentera considérablement la taille de l'application et le temps de téléchargement.</value>
+  </data>
+  <data name="GetLatestApp" xml:space="preserve">
+    <value>Téléchargez la dernière version de l'application Interviewer</value>
+  </data>
+  <data name="GetLatestAppDescription" xml:space="preserve">
+    <value>Téléchargez et installez cette version de l'application Interviewer pour les enquêtes n'utilisant aucune fonctionnalité GIS ESRI. Cette apk n'inclut pas un SDK ESRI et est donc beaucoup plus petite en taille et plus rapide à télécharger par rapport à la version avec SDK.</value>
+  </data>
+  <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+    <value>Téléchargez et installez cette version de l'application Interviewer uniquement si vous utilisez la fonctionnalité ESRI GIS avancée. Cette application contient un grand SDK ESRI, est de grande taille et peut prendre beaucoup de temps à télécharger.</value>
+  </data>
+  <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+    <value>Affecté à</value>
+  </data>
+  <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+    <value>l'entretien</value>
+  </data>
+  <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+    <value>Voir l'entretien</value>
+  </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>Le quartier général est verrouillé (case cochée) ne peut pas se connecter et effectuer des actions sur le serveur.</value>
+  </data>
+  <data name="InstallationInstruction" xml:space="preserve">
+    <value>Instruction d'installation</value>
+  </data>
+  <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+    <value>original</value>
+  </data>
+  <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>Aucun élément ne satisfait le filtre sélectionné</value>
+  </data>
+  <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+    <value>La langue</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>Les enquêteurs verrouillés (case cochée) ne peuvent pas connecter leurs tablettes au serveur et envoyer des entretiens au serveur.</value>
+  </data>
+  <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer les données de l'entretien?</value>
+  </data>
+  <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+    <value>Veuillez fournir un commentaire si nécessaire pour redémarrer un entretien</value>
+  </data>
+  <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+    <value>Redémarrer</value>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>L'enquêteur est archivé</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>Version Android</value>
+  </data>
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
+    <value>Entretiens finis (terminés et approuvés par le QG)</value>
+  </data>
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0} (chef d'équipe: {1})</value>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>Vitesse moyenne de synchronisation</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>État de la batterie (%)</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>sur</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}%, source d'alimentation: {1}, l'économiseur de batterie est {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+    <value>Type: {0} {1}, Opérateur: {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>Vitesse de connexion</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>Type de connexion</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+    <value>Type: {0}</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>Base de données</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} importé, {1} téléchargé</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>Statistiques de l'appareil et de la connexion</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>Date d'affectation de l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>Heure de la tablette au début de la synchronisation</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>Identifiant  de l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>Informations détaillées sur l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>Langue de l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>Emplacement de l'appareil ou dernier emplacement connu</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>Modèle de l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+    <value>Orientation de l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>Numéro de série de l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>entretiens reçus par l'enquêteur</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+    <value>Questionnaires reçus par l'enquêteur</value>
+  </data>
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+    <value>E-mail: {0}</value>
+  </data>
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+    <value>Nom complet: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Info" xml:space="preserve">
+    <value>Modifier les informations personnelles</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>version de l'application Interviewer</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+    <value>Peut être mis à jour</value>
+  </data>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>Enquêteurs</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>Dernière date de mise à jour de Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+    <value>À jour</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>Version de Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>Dernières statistiques de connexion</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>Dernière synchronisation échouée</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>Dernière synchronisation réussie</value>
+  </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>Date de la dernière communication</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>Mémoire (disponible / total)</value>
+  </data>
+  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+    <value>nouveau sur l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+    <value>Nombre total de synchronisations échouées</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+    <value>Nombre total de synchronisations réussies</value>
+  </data>
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+    <value>Numéro de téléphone: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Rejected" xml:space="preserve">
+    <value>rejeté à nouveau sur l'appareil</value>
+  </data>
+  <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+    <value>Heure du serveur au début de la synchronisation</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>Force du signal</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>Affectations commencées mais non achevées</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>Stockage (disponible / total)</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+    <value>Nombre d'affectations non terminées ou non synchronisées sur l'appareil à chaque instant</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>Affectations téléchargées</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>Échec de la tentative de synchronisation</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>Connexion réussie, rien à synchroniser</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>Activité de synchronisation récente</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>Téléchargé sur le serveur pour approbation</value>
+  </data>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>Enquêteur: {0}</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>Durée de synchronisation</value>
+  </data>
+  <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+    <value>Les entretiens achevés reçus de l'enquêteur</value>
+  </data>
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+    <value>en attente d'approbation</value>
+  </data>
+  <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+    <value>Date de création du compte de l'enquêteur</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>Jamais connecté</value>
+  </data>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>Version de l'application</value>
+  </data>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>La version de l'application Interviewer signalée lors de la dernière synchronisation de sa tablette au serveur</value>
+  </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>Jamais connecté</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>Dépassé</value>
+  </data>
+  <data name="Interviewers_Selected" xml:space="preserve">
+    <value>enquêteur (s) sélectionné (s)</value>
+  </data>
+  <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+    <value>Nom d'utilisateur du chef d'équipe de l'enquêteur</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>À jour</value>
+  </data>
+  <data name="InterviewersAndDevicesTitle" xml:space="preserve">
+    <value>Appareils / enquêteurs</value>
+  </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>entretien (s) sélectionné (s)</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Nom d'utilisateur</value>
+  </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>Une erreur est survenue, veuillez réessayer plus tard.</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>L'opération a échoué</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>ou</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>Créer un utilisateur d'API</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>Modifier le profil utilisateur de l'API: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>Utilisateurs de l'API</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>L'utilisateur de l'API &lt;b&gt; {0} &lt;/ b&gt; a été créé avec succès</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>Créer un membre du QG</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>Modifier le profil du quartier Général: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>Quartier général</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>Créer un profil d'enquêteur</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>Modifier le profil d'enquêteur: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>profile d'enquêteur</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>Enquêteurs</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>Créer un observateur</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>Modifier le profil de l'observateur: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>Observateurs</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>Créer un chef d'équipe</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>Modifier le profil du chef d'équipe: &lt;strong&gt; {0} &lt;/ strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>Chefs d'équipe</value>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>Les informations personnelles (facultatives) &lt;br&gt; ne seront visibles que par les utilisateurs du QG</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>(ver. {1}) {0}</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Durée du statut</value>
+  </data>
+  <data name="StatusDurationDescription" xml:space="preserve">
+    <value>Nombre de jours pendant lesquels les affectations et les entretiens sont restés dans leur état actuel "Cette action va créer un utilisateur individuel avec des droits de chef d'équipe,
+
+
+</value>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>Cette action va créer un utilisateur individuel avec des droits de chef d'équipe, pour créer plusieurs utilisateurs, vous pouvez utiliser la &lt;a href=""{0}"" target=""_blank""&gt; création par lots utilisateur &lt;/a&gt;.</value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>Le chef d'équipe verrouillé (case cochée) ne peut pas se connecter et effectuer des actions sur le serveur.</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>Chefs d'équipe actifs</value>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>Archiver</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>Superviseurs archivés</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+    <value>Statut de l'archive</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>Si l'enquêteur a effectué des entretiens sur sa tablette, les données seront perdues.</value>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>chef d'équipe (s) sélectionné (s)</value>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>Désarchiver</value>
+  </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>Voulez-vous continuer?</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0} entretiens</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>enquêteur (équipe)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>Enquêtes et états</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>Chefs d'équipe (équipes)</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Désarchiver</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="Users_API_Instruction1" xml:space="preserve">
+    <value>Appuyez sur le bouton Ajouter une API pour créer un nouvel utilisateur d'API.</value>
+  </data>
+  <data name="Users_API_Instruction2" xml:space="preserve">
+    <value>Cliquez sur un nom d'utilisateur pour modifier le profil d'un utilisateur d'API existant.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+    <value>Appuyez sur le bouton Ajouter un quartier général pour créer un nouvel utilisateur HQ.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+    <value>Cliquez sur un nom d'utilisateur pour modifier le profil d'un utilisateur HQ existant.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+    <value>Appuyez sur le bouton Ajouter un enquêteur pour créer un nouvel enquêteur.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+    <value>Cliquez sur un nom d'utilisateur pour voir des informations sur un enquêteur et modifier un profil d'enquêteur.</value>
+  </data>
+  <data name="Users_Observers_Instruction1" xml:space="preserve">
+    <value>Appuyez sur le bouton Ajouter un observateur pour créer un nouvel observateur.</value>
+  </data>
+  <data name="Users_Observers_Instruction2" xml:space="preserve">
+    <value>Cliquez sur un nom d'utilisateur pour modifier le profil d'un utilisateur observateur existant.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+    <value>Appuyez sur le bouton Ajouter un chef d'équipe pour créer un nouveau chef d'équipe.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+    <value>Cliquez sur un nom d'utilisateur pour modifier le profil d'un chef d'équipe existant.</value>
   </data>
 </root>

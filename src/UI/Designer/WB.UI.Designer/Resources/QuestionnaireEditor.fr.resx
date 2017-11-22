@@ -1,0 +1,927 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddNewSection" xml:space="preserve">
+    <value>Ajouter une nouvelle section</value>
+  </data>
+  <data name="AddQuestion" xml:space="preserve">
+    <value>Ajouter une question</value>
+  </data>
+  <data name="AddRoster" xml:space="preserve">
+    <value>Ajouter un roster</value>
+  </data>
+  <data name="AddStaticText" xml:space="preserve">
+    <value>Ajouter un texte statique</value>
+  </data>
+  <data name="AddSubsection" xml:space="preserve">
+    <value>Ajouter une sous-section</value>
+  </data>
+  <data name="AddValidationRule" xml:space="preserve">
+    <value>Ajouter une nouvelle règle de validation</value>
+  </data>
+  <data name="AddVariable" xml:space="preserve">
+    <value>Ajouter une variable</value>
+  </data>
+  <data name="AttachmentPreview" xml:space="preserve">
+    <value>Aperçu de la pièce jointe</value>
+  </data>
+  <data name="Backup" xml:space="preserve">
+    <value>Sauvegarde</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Changer le mot de passe</value>
+  </data>
+  <data name="ClickHere" xml:space="preserve">
+    <value>cliquez ici</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="CompilationErrorsCounter" xml:space="preserve">
+    <value>{{count}} erreur trouvée</value>
+  </data>
+  <data name="CompilationErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} erreurs trouvées</value>
+  </data>
+  <data name="CompilationLabel" xml:space="preserve">
+    <value>Compilation:</value>
+  </data>
+  <data name="CompilationWarningsCounter" xml:space="preserve">
+    <value>{{count}} avertissement trouvé</value>
+  </data>
+  <data name="CompilationWarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} avertissements trouvés</value>
+  </data>
+  <data name="Compile" xml:space="preserve">
+    <value>Compiler</value>
+  </data>
+  <data name="ConditionMightBeBroken" xml:space="preserve">
+    <value>La condition ou les éléments dépendants en cascade peuvent être rompus</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copie</value>
+  </data>
+  <data name="DefaultNewRoster" xml:space="preserve">
+    <value>Nouveau roster</value>
+  </data>
+  <data name="DefaultNewSection" xml:space="preserve">
+    <value>Nouvelle section</value>
+  </data>
+  <data name="DefaultNewStaticText" xml:space="preserve">
+    <value>Nouveau texte statique</value>
+  </data>
+  <data name="DefaultNewSubsection" xml:space="preserve">
+    <value>Nouvelle sous-section</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="DeleteConfirmQuestion" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer "{{trimmedTitle}}"?</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Télécharger</value>
+  </data>
+  <data name="EmptySectionLine1" xml:space="preserve">
+    <value>Cette section est vide</value>
+  </data>
+  <data name="EmptySectionLine2" xml:space="preserve">
+    <value>Vous pouvez commencer en utilisant les boutons {{-addQuestionBtn}} et {{-addSubsectionBtn}}</value>
+  </data>
+  <data name="EmptySectionLine3" xml:space="preserve">
+    <value>en haut de ce bloc ou gérer les sections avec {{-panel}} panneau de gauche</value>
+  </data>
+  <data name="EmptySectionLine4" xml:space="preserve">
+    <value>Langue de l'enquête, types d'appareils, collaboration et autres options</value>
+  </data>
+  <data name="EmptySectionLine5" xml:space="preserve">
+    <value>peut être trouvé sur le panneau {{-settingsBtn}} (en haut à droite)</value>
+  </data>
+  <data name="EnablingCondition" xml:space="preserve">
+    <value>Condition d'activation</value>
+  </data>
+  <data name="EnteredMoreThanAllowed" xml:space="preserve">
+    <value>Vous avez saisi plus que le maximum autorisé {{max}}</value>
+  </data>
+  <data name="ErrorMessage" xml:space="preserve">
+    <value>Message d'erreur</value>
+  </data>
+  <data name="ErrorsCounter" xml:space="preserve">
+    <value>Erreur {{count}}</value>
+  </data>
+  <data name="ErrorsCounter_plural" xml:space="preserve">
+    <value>{{count}} erreurs</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Exportation</value>
+  </data>
+  <data name="FindReplaceBackToSearch" xml:space="preserve">
+    <value>Retour à la recherche</value>
+  </data>
+  <data name="FindReplaceDone" xml:space="preserve">
+    <value>Terminé</value>
+  </data>
+  <data name="FindReplaceFindAll" xml:space="preserve">
+    <value>Trouver tout</value>
+  </data>
+  <data name="FindReplaceFindWhat" xml:space="preserve">
+    <value>Trouver quoi:</value>
+  </data>
+  <data name="FindReplaceInAll" xml:space="preserve">
+    <value>Tout</value>
+  </data>
+  <data name="FindReplaceInAllFound" xml:space="preserve">
+    <value>dans {{count}} entité trouvée?</value>
+  </data>
+  <data name="FindReplaceInAllFound_plural" xml:space="preserve">
+    <value>dans {{count}} entités trouvées?</value>
+  </data>
+  <data name="FindReplaceMatchCase" xml:space="preserve">
+    <value>Cas correspondant</value>
+  </data>
+  <data name="FindReplaceMatchingLines" xml:space="preserve">
+    <value>Lignes correspondantes: {{count}}</value>
+  </data>
+  <data name="FindReplaceMatchWord" xml:space="preserve">
+    <value>Apparier le mot entier</value>
+  </data>
+  <data name="FindReplaceNext" xml:space="preserve">
+    <value>Prochain</value>
+  </data>
+  <data name="FindReplacePrevious" xml:space="preserve">
+    <value>Précédent</value>
+  </data>
+  <data name="FindReplaceReplaceAll" xml:space="preserve">
+    <value>Remplacer tout ({{count}})</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirm" xml:space="preserve">
+    <value>Remplacer tout</value>
+  </data>
+  <data name="FindReplaceReplaceAllConfirmWith" xml:space="preserve">
+    <value>avec</value>
+  </data>
+  <data name="FindReplaceReplaceWith" xml:space="preserve">
+    <value>Remplacer par:</value>
+  </data>
+  <data name="FindReplaceTitle" xml:space="preserve">
+    <value>Rechercher et remplacer</value>
+  </data>
+  <data name="FindReplaceUseRegex" xml:space="preserve">
+    <value>Utiliser une expression régulière</value>
+  </data>
+  <data name="FindReplaceWereReplaced" xml:space="preserve">
+    <value>ont été remplacés par</value>
+  </data>
+  <data name="FindReplaceСonfirm" xml:space="preserve">
+    <value>Veuillez confirmer l'action.</value>
+  </data>
+  <data name="GroupTitle" xml:space="preserve">
+    <value>Titre</value>
+  </data>
+  <data name="HellowMessageBtn" xml:space="preserve">
+    <value>Hello, {{currentUserName}}</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Aide</value>
+  </data>
+  <data name="HelpConditionExpression" xml:space="preserve">
+    <value>Une expression logique qui active (désactive) l'élément actuel en fonction des réponses aux autres questions.</value>
+  </data>
+  <data name="HelpExpression" xml:space="preserve">
+    <value>Une expression logique qui est calculée en fonction des réponses aux autres questions.</value>
+  </data>
+  <data name="HelpFixedTitles" xml:space="preserve">
+    <value>Le nombre d'éléments détermine la taille de la liste. Chaque élément de la liste correspond à un titre de la ligne de liste. Chaque élément de la liste doit être placé sur une ligne distincte.</value>
+  </data>
+  <data name="HelpHideIfDisabled" xml:space="preserve">
+    <value>Par défaut, un élément désactivé est grisé. Cochez cette option pour masquer une question ou une section désactivée sur une tablette.</value>
+  </data>
+  <data name="HelpHideInstructions" xml:space="preserve">
+    <value>Par défaut, un texte d'instruction est affiché sur une tablette. Cocher cette option montrera seulement la première ligne d'instructions. Tapoter sur cette ligne affichera le texte complet.</value>
+  </data>
+  <data name="HelpInstruction" xml:space="preserve">
+    <value>Texte d'instruction qui sera joint à la question.</value>
+  </data>
+  <data name="HelpIsTimestamp" xml:space="preserve">
+    <value>Cette option permet à l'utilisateur de marquer l'heure actuelle sur la tablette</value>
+  </data>
+  <data name="HelpMask" xml:space="preserve">
+    <value>Entrée formatée pour les valeurs alphanumériques: numéros de téléphone, codes d'identification, etc. Exemples: "~" - Représente un caractère alpha (AZ, az), "#" - Représente un caractère numérique (0-9), "*" - Représente un caractère alphanumérique (AZ, az, 0-9). "## / ## / ####" - date, "(###) ### - ####" - numéro de téléphone, "AA ####" - numéro de vol opéré par American AirLines ou " ~ * - ### - ~ ### "</value>
+  </data>
+  <data name="HelpSourceQuestion" xml:space="preserve">
+    <value>Question source (la réponse génère le nombre de lignes)</value>
+  </data>
+  <data name="HelpTitles" xml:space="preserve">
+    <value>Titres de lignes</value>
+  </data>
+  <data name="HelpUseFormatting" xml:space="preserve">
+    <value>Lorsque cette case est cochée, le champ numérique de la tablette est au format: d, ddd, ddd.dd, "d" représente des chiffres (0-9), "." (point) est un séparateur de milliers et ,." (virgule) est un symbole de point décimal. Le séparateur de milliers et le symbole de la virgule décimale peuvent varier pour les tablettes avec différentes cultures.</value>
+  </data>
+  <data name="HelpValidationExpression" xml:space="preserve">
+    <value>Une expression logique qui valide une réponse à la question en cours. Pourrait inclure des valeurs de d'autres questions.</value>
+  </data>
+  <data name="HelpValidationMessage" xml:space="preserve">
+    <value>Un message d'erreur s'affiche lorsque la condition de validation est évaluée à "False" ou qu'une erreur se produit pendant l'évaluation de l'expression.</value>
+  </data>
+  <data name="HelpVariableDescription" xml:space="preserve">
+    <value>Texte qui sera affiché à côté d'une variable à des fins de test</value>
+  </data>
+  <data name="HelpVariableLabel" xml:space="preserve">
+    <value>Texte pourvant aller jusqu'à 80 caractères qui seront attachés à la variable exportée.</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>Les noms de variables et les ID de roster peuvent être d'une longeur de {{minLength}} à {{maxLength}} et ne doivent contenir que les caractères suivants: a-z, A-Z, _ ou 0-9. Le premier caractère ne peut pas être 0-9 ou _ et le dernier ne peut pas être _.</value>
+  </data>
+  <data name="HideIfDisabled" xml:space="preserve">
+    <value>Masquer si invalide</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Historique</value>
+  </data>
+  <data name="HotkeysCloseLookup" xml:space="preserve">
+    <value>Fermer le panneau des tableaux de référence</value>
+  </data>
+  <data name="HotkeysCloseMacros" xml:space="preserve">
+    <value>Fermer le panneau des macros</value>
+  </data>
+  <data name="HotkeysCloseTranslations" xml:space="preserve">
+    <value>Fermer les panneau de traductions</value>
+  </data>
+  <data name="HotkeysFocusTitle" xml:space="preserve">
+    <value>Activer le champ de titre dans l'éditeur</value>
+  </data>
+  <data name="HotkeysFocusTree" xml:space="preserve">
+    <value>Activer l'arbre du questionnaire</value>
+  </data>
+  <data name="HotkeysHideAttachments" xml:space="preserve">
+    <value>Fermer le panneau des pièces jointes</value>
+  </data>
+  <data name="HotkeysHideSections" xml:space="preserve">
+    <value>Fermer les sections</value>
+  </data>
+  <data name="HotkeysNavigateToPrevSibling" xml:space="preserve">
+    <value>Naviguer vers le frère précédent</value>
+  </data>
+  <data name="HotkeysNavigateToSibling" xml:space="preserve">
+    <value>Naviguer vers le prochain frère</value>
+  </data>
+  <data name="HotkeysOpenItem" xml:space="preserve">
+    <value>Ouvrir un élément dans l'éditeur</value>
+  </data>
+  <data name="HotkeysOpenSection" xml:space="preserve">
+    <value>Ouvrir la section</value>
+  </data>
+  <data name="HotkeysPrint" xml:space="preserve">
+    <value>Imprimer</value>
+  </data>
+  <data name="HotkeysSearch" xml:space="preserve">
+    <value>Rechercher des sous-sections et des questions dans la section</value>
+  </data>
+  <data name="HotkeysShortcuts" xml:space="preserve">
+    <value>Raccourcis clavier</value>
+  </data>
+  <data name="HotkeysShowHideHelp" xml:space="preserve">
+    <value>Afficher / masquer ce menu d'aide</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Se connecter</value>
+  </data>
+  <data name="ModalConfirm" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="MoveTo" xml:space="preserve">
+    <value>Passer à</value>
+  </data>
+  <data name="MoveToAnotherSubSection" xml:space="preserve">
+    <value>Passer à une autre sous-section:</value>
+  </data>
+  <data name="MultipleDependencies" xml:space="preserve">
+    <value>Une ou plusieurs questions / sous-sections dépendent de</value>
+  </data>
+  <data name="NoPermissions" xml:space="preserve">
+    <value>Vous n'êtes pas autorisé à modifier ce questionnaire</value>
+  </data>
+  <data name="NotAnImage" xml:space="preserve">
+    <value>Le fichier choisi n'est pas une image</value>
+  </data>
+  <data name="NothingFound" xml:space="preserve">
+    <value>Rien n'a été trouvé</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>D'accord</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="OptionsCloseWindow" xml:space="preserve">
+    <value>Fermer la fenêtre?</value>
+  </data>
+  <data name="OptionsListError" xml:space="preserve">
+    <value>Vous avez saisi une valeur non valide. Chaque ligne doit suivre le format: "Titre ... Valeur". 'Value' doit être un nombre entier. Le titre doit être une chaîne alphanumérique. Aucune ligne vide n'est autorisée.</value>
+  </data>
+  <data name="OptionsUploadApply" xml:space="preserve">
+    <value>Appliquer</value>
+  </data>
+  <data name="OptionsUploadLimit" xml:space="preserve">
+    <value>Pas d'options. Choisissez un fichier de format tab séparateur tabulation. Le fichier peut contenir jusqu'à {0} options.</value>
+  </data>
+  <data name="OptionsUploadParent" xml:space="preserve">
+    <value>Valeur parente</value>
+  </data>
+  <data name="OptionsUploadTitle" xml:space="preserve">
+    <value>Titre</value>
+  </data>
+  <data name="OptionsUploadValue" xml:space="preserve">
+    <value>Valeur</value>
+  </data>
+  <data name="Paste" xml:space="preserve">
+    <value>Coller</value>
+  </data>
+  <data name="PasteAfter" xml:space="preserve">
+    <value>Coller après</value>
+  </data>
+  <data name="QuestionAddInstruction" xml:space="preserve">
+    <value>Ajouter une instruction pour l'enquêteur</value>
+  </data>
+  <data name="QuestionAddOption" xml:space="preserve">
+    <value>Ajouter une option</value>
+  </data>
+  <data name="QuestionCascading" xml:space="preserve">
+    <value>Cascading combo box</value>
+  </data>
+  <data name="QuestionClickReload" xml:space="preserve">
+    <value>cliquez sur recharger</value>
+  </data>
+  <data name="QuestionComboBox" xml:space="preserve">
+    <value>Combo box</value>
+  </data>
+  <data name="QuestionCurrentTime" xml:space="preserve">
+    <value>Heure courante</value>
+  </data>
+  <data name="QuestionDecimalPlaces" xml:space="preserve">
+    <value>Nombre de décimales</value>
+  </data>
+  <data name="QuestionFilter" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="QuestionGpsNavigation" xml:space="preserve">
+    <value>Cette question sera traitée comme une question de navigation GPS pour Interviewer</value>
+  </data>
+  <data name="QuestionHideInstruction" xml:space="preserve">
+    <value>Masquer l'instruction</value>
+  </data>
+  <data name="QuestionInstruction" xml:space="preserve">
+    <value>Instruction</value>
+  </data>
+  <data name="QuestionInteger" xml:space="preserve">
+    <value>Nombre entier</value>
+  </data>
+  <data name="QuestionIsLinked" xml:space="preserve">
+    <value>Est lié</value>
+  </data>
+  <data name="QuestionLinkedDescr" xml:space="preserve">
+    <value>Lier à une question de type liste ou une question du groupe de roster</value>
+  </data>
+  <data name="QuestionMaxListCount" xml:space="preserve">
+    <value>Nombre maximum d'éléments de la liste</value>
+  </data>
+  <data name="QuestionMaxNumberOfAnswers" xml:space="preserve">
+    <value>Nombre maximum de réponses</value>
+  </data>
+  <data name="QuestionMustBeBound" xml:space="preserve">
+    <value>Vous devez lier cette question</value>
+  </data>
+  <data name="QuestionnaireSummary" xml:space="preserve">
+    <value>({{questionsCount}}Q, {{groupsCount}}S, {{rostersCount}}R)</value>
+  </data>
+  <data name="QuestionOnlyInts" xml:space="preserve">
+    <value>Seuls les nombres entiers sont autorisés</value>
+  </data>
+  <data name="QuestionOpenEditorConfirm" xml:space="preserve">
+    <value>Pour ouvrir l'éditeur d'options, toutes les modifications non enregistrées doivent être enregistrées. Devons-nous les sauver maintenant?</value>
+  </data>
+  <data name="QuestionOpenEditorSaved" xml:space="preserve">
+    <value>Il a été enregistré avec succès. La fenêtre pour le chargement de fichier sera ouverte.</value>
+  </data>
+  <data name="QuestionOptionsCut" xml:space="preserve">
+    <value>Comme la question a été marquée comme "Combo box" ou "Cascading combo box" lors du chargement des détails de la question et contenait de nombreuses options, sa valeur a été réduite jusqu'à {{count}}</value>
+  </data>
+  <data name="QuestionOrdered" xml:space="preserve">
+    <value>Enregistrement dans l'ordre de réponse</value>
+  </data>
+  <data name="QuestionPattern" xml:space="preserve">
+    <value>Modèle</value>
+  </data>
+  <data name="QuestionQuestionType" xml:space="preserve">
+    <value>Type de question</value>
+  </data>
+  <data name="QuestionScope" xml:space="preserve">
+    <value>Champ de la question</value>
+  </data>
+  <data name="QuestionShowStrings" xml:space="preserve">
+    <value>Afficher les chaînes</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Question de type texte</value>
+  </data>
+  <data name="QuestionToUpdateOptions" xml:space="preserve">
+    <value>Pour mettre à jour les options</value>
+  </data>
+  <data name="QuestionUploadOptions" xml:space="preserve">
+    <value>Charger de nouvelles options</value>
+  </data>
+  <data name="QuestionUseSeparator" xml:space="preserve">
+    <value>Utilisez le séparateur millier</value>
+  </data>
+  <data name="QuestionVariableLabel" xml:space="preserve">
+    <value>Label de la variable</value>
+  </data>
+  <data name="QuestionVariableName" xml:space="preserve">
+    <value>Nom de la variable</value>
+  </data>
+  <data name="QuestionYesNoMode" xml:space="preserve">
+    <value>Mode Oui / Non</value>
+  </data>
+  <data name="ReadOnly" xml:space="preserve">
+    <value>Lecture seule</value>
+  </data>
+  <data name="Recompile" xml:space="preserve">
+    <value>Recompiler</value>
+  </data>
+  <data name="RosterAddItem" xml:space="preserve">
+    <value>Ajouter un élement</value>
+  </data>
+  <data name="RosterName" xml:space="preserve">
+    <value>Nom du roster</value>
+  </data>
+  <data name="RosterShowStrings" xml:space="preserve">
+    <value>Afficher les chaînes</value>
+  </data>
+  <data name="RosterSource" xml:space="preserve">
+    <value>Source de Roster</value>
+  </data>
+  <data name="RosterSourceFixed" xml:space="preserve">
+    <value>Ensemble d'éléments fixés:</value>
+  </data>
+  <data name="RosterSourceNumericQuestion" xml:space="preserve">
+    <value>Question source pour le nombre de lignes:</value>
+  </data>
+  <data name="RosterSourceNumericTitles" xml:space="preserve">
+    <value>Question source pour les noms de lignes:</value>
+  </data>
+  <data name="RosterSourceQuestion" xml:space="preserve">
+    <value>Question source (la réponse détermine à la fois le numéro et le nom des lignes):</value>
+  </data>
+  <data name="RosterVariableName" xml:space="preserve">
+    <value>Identifiant du roster</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="SavedAtTimestamp" xml:space="preserve">
+    <value>enregistré à {{dateTime, H:mm}}</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="SelectParentQuestion" xml:space="preserve">
+    <value>Sélectionner une question parente</value>
+  </data>
+  <data name="SelectParentQuestionError" xml:space="preserve">
+    <value>Vous devez sélectionner la question parente</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Choisir une question</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="SettingsCan" xml:space="preserve">
+    <value>Peut</value>
+  </data>
+  <data name="SettingsInvite" xml:space="preserve">
+    <value>Inviter</value>
+  </data>
+  <data name="SettingsInviteCollaborators" xml:space="preserve">
+    <value>Inviter des collaborateurs par e-mail:</value>
+  </data>
+  <data name="SettingsOwner" xml:space="preserve">
+    <value>propriétaire</value>
+  </data>
+  <data name="SettingsPrivate" xml:space="preserve">
+    <value>Privé</value>
+  </data>
+  <data name="SettingsProvideExistingEmail" xml:space="preserve">
+    <value>Fournir un e-mail de l'utilisateur existant</value>
+  </data>
+  <data name="SettingsProvideValidEmail" xml:space="preserve">
+    <value>Fournir un e-mail valide</value>
+  </data>
+  <data name="SettingsPublic" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="SettingsQuestionnaireName" xml:space="preserve">
+    <value>Nom du questionnaire</value>
+  </data>
+  <data name="SettingsQuestionnaireSharing" xml:space="preserve">
+    <value>Créer ce questionnaire</value>
+  </data>
+  <data name="SettingsRevokeAccess" xml:space="preserve">
+    <value>Révoquer l'accès</value>
+  </data>
+  <data name="SettingsShareEdit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="SettingsShareView" xml:space="preserve">
+    <value>Lire</value>
+  </data>
+  <data name="SettingsTitle" xml:space="preserve">
+    <value>Paramètres du questionnaire</value>
+  </data>
+  <data name="SettingsVisibleToEveryone" xml:space="preserve">
+    <value>visible à tout le monde en mode lecture seule</value>
+  </data>
+  <data name="SettingsVisibleToOwner" xml:space="preserve">
+    <value>visible uniquement au propriétaire</value>
+  </data>
+  <data name="SettingsWhoHasAccess" xml:space="preserve">
+    <value>Qui a accès:</value>
+  </data>
+  <data name="ShowList" xml:space="preserve">
+    <value>Montrer la liste</value>
+  </data>
+  <data name="SideBarAddMacro" xml:space="preserve">
+    <value>ajouter une nouvelle macro</value>
+  </data>
+  <data name="SideBarAttachmentDetailsFormat" xml:space="preserve">
+    <value>format: {{- type}}</value>
+  </data>
+  <data name="SideBarAttachmentDetailsResolution" xml:space="preserve">
+    <value>{{width}} × {{height}}px</value>
+  </data>
+  <data name="SideBarAttachmentDetailsSize" xml:space="preserve">
+    <value>taille: {{size}}</value>
+  </data>
+  <data name="SideBarAttachmentName" xml:space="preserve">
+    <value>nom de la pièce jointe</value>
+  </data>
+  <data name="SideBarAttachmentNoName" xml:space="preserve">
+    <value>pièce jointe sans nom</value>
+  </data>
+  <data name="SideBarAttachmentsCounter" xml:space="preserve">
+    <value>{{count}} Fichier joint (total {{bytes}})</value>
+  </data>
+  <data name="SideBarAttachmentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Fichiers joints ({{bytes}} total)</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine1" xml:space="preserve">
+    <value>Utilisez cet onglet pour charger des fichiers multimédias pouvant être référencés dans le questionnaire.</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
+    <value>Pour éviter une synchronisation lente, nous recommandons que la taille combinée de tous les fichiers joints ne dépasse pas 2 Mo. Pour les types de fichiers pris en charge, les formats et les dimensions</value>
+  </data>
+  <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
+    <value>peut être utilisé pour utiliser une pièce jointe dans le questionnaire ajouter un élément de texte statique et spécifier le nom dans sa propriété de pièce jointe</value>
+  </data>
+  <data name="SideBarAttachmentsEstimate" xml:space="preserve">
+    <value>Est. temps de chargement: {{timeString}} à {{downloadSpeed}} Kb / s (EDGE)</value>
+  </data>
+  <data name="SideBarAttachmentsTitle" xml:space="preserve">
+    <value>Pièces jointes</value>
+  </data>
+  <data name="SideBarAttachmentsUpload" xml:space="preserve">
+    <value>Importer</value>
+  </data>
+  <data name="SideBarAttachmentUploaded" xml:space="preserve">
+    <value>chargé: {{-lastUpdate, MMMM DD [,] YYYY [à] k: mm}}</value>
+  </data>
+  <data name="SideBarLookupEmptyLine1" xml:space="preserve">
+    <value>Utilisez cet onglet pour définir les tables de référence</value>
+  </data>
+  <data name="SideBarLookupEmptyLine2" xml:space="preserve">
+    <value>Une table de référence fournit des informations de référence qui peuvent être interrogées par une clé et utilisées dans des conditions d'activation et des expressions de validation.</value>
+  </data>
+  <data name="SideBarLookupEmptyLine3" xml:space="preserve">
+    <value>Une table de référence se compose d'un nom et du fichier de recherche, qui peut contenir plusieurs colonnes de valeurs numériques délimitées par des tabulations.</value>
+  </data>
+  <data name="SideBarLookupTableAdd" xml:space="preserve">
+    <value>AJOUTER UNE NOUVELLE une table de référence</value>
+  </data>
+  <data name="SideBarLookupTableDropFile" xml:space="preserve">
+    <value>Déposer le fichier ici</value>
+  </data>
+  <data name="SideBarLookupTableFileName" xml:space="preserve">
+    <value>nom de fichier</value>
+  </data>
+  <data name="SideBarLookupTableName" xml:space="preserve">
+    <value>nom de la table</value>
+  </data>
+  <data name="SideBarLookupTableNoName" xml:space="preserve">
+    <value>table de référence sans nom</value>
+  </data>
+  <data name="SideBarLookupTablesCounter" xml:space="preserve">
+    <value>{{count}} Table de référence:</value>
+  </data>
+  <data name="SideBarLookupTablesCounter_plural" xml:space="preserve">
+    <value>{{count}} Tables de référence:</value>
+  </data>
+  <data name="SideBarLookupTableSelectFile" xml:space="preserve">
+    <value>Choisir le fichier</value>
+  </data>
+  <data name="SideBarLookupTableUpdateFile" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="SideBarLookupTitle" xml:space="preserve">
+    <value>Tables de référence</value>
+  </data>
+  <data name="SideBarMacroContent" xml:space="preserve">
+    <value>contenu</value>
+  </data>
+  <data name="SideBarMacroCounter" xml:space="preserve">
+    <value>{{count}} Macro:</value>
+  </data>
+  <data name="SideBarMacroCounter_plural" xml:space="preserve">
+    <value>{{count}} Macros:</value>
+  </data>
+  <data name="SideBarMacroDescription" xml:space="preserve">
+    <value>description</value>
+  </data>
+  <data name="SideBarMacroEmptyLine1" xml:space="preserve">
+    <value>Utilisez cet onglet pour définir les substitutions de macros.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>Une macro est une expression nommée pouvant être utilisée dans les conditions d'activation et les expressions de validation. Une macro est composée de nom et de contenu.</value>
+  </data>
+  <data name="SideBarMacroEmptyLine3" xml:space="preserve">
+    <value>peut être utilisé dans une expression, pour faire référence à la macro.</value>
+  </data>
+  <data name="SideBarMacroHideDescription" xml:space="preserve">
+    <value>Masquer la description</value>
+  </data>
+  <data name="SideBarMacroName" xml:space="preserve">
+    <value>nom de la macro</value>
+  </data>
+  <data name="SideBarMacroNoName" xml:space="preserve">
+    <value>macro sans nom</value>
+  </data>
+  <data name="SideBarMacroShowDescription" xml:space="preserve">
+    <value>ajouter une description</value>
+  </data>
+  <data name="SideBarMacroTitle" xml:space="preserve">
+    <value>Macros</value>
+  </data>
+  <data name="SideBarSectionsCounter" xml:space="preserve">
+    <value>{{count}} Section:</value>
+  </data>
+  <data name="SideBarSectionsCounter_plural" xml:space="preserve">
+    <value>{{count}} Sections:</value>
+  </data>
+  <data name="SideBarSectionsTitle" xml:space="preserve">
+    <value>Sections</value>
+  </data>
+  <data name="SideBarTranslationDownloadXlsx" xml:space="preserve">
+    <value>Télécharger xlsx</value>
+  </data>
+  <data name="SideBarTranslationGetTemplate" xml:space="preserve">
+    <value>Obtenir un modèle pour</value>
+  </data>
+  <data name="SideBarTranslationGetTemplateLinkTextXlsx" xml:space="preserve">
+    <value>Excel (xlsx)</value>
+  </data>
+  <data name="SideBarTranslationName" xml:space="preserve">
+    <value>nom de la traduction</value>
+  </data>
+  <data name="SideBarTranslationNoName" xml:space="preserve">
+    <value>traduction sans nom</value>
+  </data>
+  <data name="SideBarTranslationsCounter" xml:space="preserve">
+    <value>Traduction de {{count}}</value>
+  </data>
+  <data name="SideBarTranslationsCounter_plural" xml:space="preserve">
+    <value>Traductions de {{count}}</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
+    <value>Utilisez cet onglet pour gérer les traductions du questionnaire.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
+    <value>Vous pouvez télécharger et mettre à jour les traductions dans différentes langues.</value>
+  </data>
+  <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
+    <value>La traduction sera appliquée aux textes originaux et aux valeurs de remplacement. Vous pouvez laisser certains textes vides pour utiliser les traductions originales par défaut.</value>
+  </data>
+  <data name="SideBarTranslationsTitle" xml:space="preserve">
+    <value>Traductions</value>
+  </data>
+  <data name="SideBarTranslationsUploadNew" xml:space="preserve">
+    <value>Charger une nouvelle traduction</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Texte statique</value>
+  </data>
+  <data name="StaticTextAttachmentName" xml:space="preserve">
+    <value>Nom de la pièce jointe</value>
+  </data>
+  <data name="ToggleDropdown" xml:space="preserve">
+    <value>Toggle Liste Déroulante</value>
+  </data>
+  <data name="ToggleSearch" xml:space="preserve">
+    <value>Toggle Recherche</value>
+  </data>
+  <data name="TranslationsObtained" xml:space="preserve">
+    <value>Obtient {0} ligne à partir du fichier de traduction</value>
+  </data>
+  <data name="TranslationsObtained_plural" xml:space="preserve">
+    <value>Obtient {0} lignes à partir du fichier de traduction</value>
+  </data>
+  <data name="TreeAddQuestion" xml:space="preserve">
+    <value>Ajouter une question</value>
+  </data>
+  <data name="TreeAddQuestionAfter" xml:space="preserve">
+    <value>Ajouter une question après</value>
+  </data>
+  <data name="TreeAddRoster" xml:space="preserve">
+    <value>Ajouter un roster</value>
+  </data>
+  <data name="TreeAddRosterAfter" xml:space="preserve">
+    <value>Ajouter un roster après</value>
+  </data>
+  <data name="TreeAddSection" xml:space="preserve">
+    <value>Ajouter une sous-section</value>
+  </data>
+  <data name="TreeAddSectionAfter" xml:space="preserve">
+    <value>Ajouter une sous-section après</value>
+  </data>
+  <data name="TreeAddStaticText" xml:space="preserve">
+    <value>Ajouter un texte statique</value>
+  </data>
+  <data name="TreeAddStaticTextAfter" xml:space="preserve">
+    <value>Ajouter un texte statique après</value>
+  </data>
+  <data name="TreeAddVariable" xml:space="preserve">
+    <value>Ajouter une variable</value>
+  </data>
+  <data name="TreeAddVariableAfter" xml:space="preserve">
+    <value>Ajouter une variable après</value>
+  </data>
+  <data name="TreeRoster" xml:space="preserve">
+    <value>roster:</value>
+  </data>
+  <data name="UnsavedChangesLeave" xml:space="preserve">
+    <value>Vous perdrez des modifications non enregistrées si vous quittez cette page</value>
+  </data>
+  <data name="UnsavedChangesReload" xml:space="preserve">
+    <value>Vous perdrez des modifications non enregistrées si vous rechargez cette page</value>
+  </data>
+  <data name="UntitledQuestion" xml:space="preserve">
+    <value>Question sans titre</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Mettre à jour</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Charger</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Condition de validation</value>
+  </data>
+  <data name="VariableExpression" xml:space="preserve">
+    <value>Expression</value>
+  </data>
+  <data name="VariableLabel" xml:space="preserve">
+    <value>Label de la variable</value>
+  </data>
+  <data name="VariableName" xml:space="preserve">
+    <value>nom</value>
+  </data>
+  <data name="VariableType" xml:space="preserve">
+    <value>Type de variable</value>
+  </data>
+  <data name="WarningsCounter" xml:space="preserve">
+    <value>{{count}} avertissement</value>
+  </data>
+  <data name="WarningsCounter_plural" xml:space="preserve">
+    <value>{{count}} avertissements</value>
+  </data>
+</root>
