@@ -136,7 +136,7 @@
     <value>Duración promedio de la entrevista</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Tiempo promedio transcurrido entre la acción de la primera respuesta del cuestionario y la acción de completar la entrevista.</value>
+    <value>Tiempo promedio transcurrido entre la toma de la primera respuesta del cuestionario y la acción de completar la entrevista.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Promedio general de tiempo de procesamiento de casos</value>

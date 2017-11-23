@@ -127,10 +127,10 @@
     <value>No hay datos disponibles en la tabla</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Swing _START_ to _END_ of _TOTAL_ entries</value>
+    <value>Mostrando de _START_ a _END_ deun total de _TOTAL_ registros</value>
   </data>
   <data name="InfoEmpty" xml:space="preserve">
-    <value>Mostrando 0 a 0 de 0 entradas</value>
+    <value>Mostrando de 0 a 0 de un total de 0 entradas</value>
   </data>
   <data name="InfoFiltered" xml:space="preserve">
     <value>(filtrado de _MAX_ entradas totales)</value>
@@ -151,7 +151,7 @@
     <value>Ultimo</value>
   </data>
   <data name="Paginate_Next" xml:space="preserve">
-    <value>Próximo</value>
+    <value>Siguiente</value>
   </data>
   <data name="Paginate_Previous" xml:space="preserve">
     <value>Anterior</value>

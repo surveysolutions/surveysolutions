@@ -81,7 +81,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             cfg.AddDeserializedMapping(this.GetMappings(schemaName), "Plain");
             cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
-            return cfg.BuildSessionFactory();
+            cfg.SessionFactory().GenerateStatistics();
+
+            var sessionFactory = cfg.BuildSessionFactory();
+
+            Prometheus.Advanced.DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new[] {
+                new NHibernateStatsCollector("plainstore", sessionFactory)
+            });
+
+            return sessionFactory;
         }
 
         private HbmMapping GetMappings(string schemaName)

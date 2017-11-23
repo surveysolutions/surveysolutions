@@ -121,12 +121,12 @@
     <value>Cloner</value>
   </data>
   <data name="CloneQuestionnaireTitle" xml:space="preserve">
-    <value>Cloner questionnaire</value>
+    <value>Cloner le questionnaire</value>
   </data>
   <data name="ToCloneQuestionnaire" xml:space="preserve">
-    <value>Cloner questionnaire</value>
+    <value>Cloner le questionnaire</value>
   </data>
   <data name="UnexpectedError" xml:space="preserve">
-    <value>Une erreur inattendue s’est produite. Désolé pour la gêne occasionnée. Veuillez contacter support@mysurvey.solutions ou réessayez plus tard.</value>
+    <value>Une erreur inattendue s'est produite. Désolé pour le désagrément. Veuillez contacter support@mysurvey.solutions ou réessayer plus tard.</value>
   </data>
 </root>

@@ -131,7 +131,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
         private List<CsvData> dataInCsvFile;
         private Mock<IFileSystemAccessor> fileSystemAccessor;
         private Mock<ILogger> logger;
-        private InterviewDataExportSettings interviewDataExportSettings = new InterviewDataExportSettings("folder", false, 1, 1, 1, 1);
+        private InterviewDataExportSettings interviewDataExportSettings = new InterviewDataExportSettings("folder", false, 1, 1, 1, 1 ,10);
         private ICsvWriter csvWriter;
         private Mock<InterviewExportredDataRowReader> rowReader;
         private Mock<ITransactionManagerProvider> transactionManagerProvider;

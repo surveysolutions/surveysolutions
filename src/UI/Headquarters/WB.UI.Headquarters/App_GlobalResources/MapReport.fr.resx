@@ -118,18 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="details" xml:space="preserve">
-    <value>Détails</value>
+    <value>détails</value>
   </data>
   <data name="MapReportTitle" xml:space="preserve">
-    <value>Rapport cartographique</value>
+    <value>Rapport de carte</value>
   </data>
   <data name="NotAllMarkers" xml:space="preserve">
-    <value>Pas tous les marqueurs ont été chargés pour le niveau de zoom actuel. Veuillez effectuer un zoom et actualiser les marqueurs.</value>
+    <value>Tous les marqueurs n'ont pas été chargés pour le niveau de zoom actuel. Veuillez agrandir et recharger les marqueurs.</value>
   </data>
   <data name="ReloadMarkers" xml:space="preserve">
-    <value>Actualiser les marqueurs</value>
+    <value>Recharger les marqueurs</value>
   </data>
   <data name="ViewInterviewContent" xml:space="preserve">
-    <value>Voir contenu de l'entretien</value>
+    <value>Voir le contenu de L'entretien</value>
   </data>
 </root>

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Web.Caching;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
+using Prometheus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -24,14 +25,14 @@ namespace WB.Infrastructure.Native.Storage
 
         public override IEventSourcedAggregateRoot GetLatest(Type aggregateType, Guid aggregateId, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
         {
-            return aggregateLock.RunWithLock(aggregateId.FormatGuid(),
-            () => {
-                var aggregateRoot = this.GetFromCache(aggregateId) ??
-                    base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
+            return aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
+            {
+                var aggregateRoot = this.GetFromCache(aggregateId);
 
-                if (aggregateRoot != null)
-                {
-                    this.PutToTopOfCache(aggregateRoot);
+                if(aggregateRoot == null) {
+
+                    aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
+                    this.PutToCache(aggregateRoot);
                 }
 
                 return aggregateRoot;
@@ -40,9 +41,7 @@ namespace WB.Infrastructure.Native.Storage
 
         private IEventSourcedAggregateRoot GetFromCache(Guid aggregateId)
         {
-            var cachedAggregate = Cache.Get(aggregateId.FormatGuid()) as IEventSourcedAggregateRoot;
-
-            if (cachedAggregate == null) return null;
+            if (!(Cache.Get(aggregateId.FormatGuid()) is IEventSourcedAggregateRoot cachedAggregate)) return null;
 
             bool isDirty = cachedAggregate.HasUncommittedChanges();
             if (isDirty) return null;
@@ -52,16 +51,36 @@ namespace WB.Infrastructure.Native.Storage
 
         private static Cache Cache => System.Web.HttpRuntime.Cache;
 
-        private void PutToTopOfCache(IEventSourcedAggregateRoot aggregateRoot)
+        private static readonly Gauge StatefullInterviewCacheCounter = Metrics.CreateGauge(
+            "wb_hq_cache_statefull_interview_counter",
+            "Number of statefull interviews stored in HttpRuntime.Cache");
+
+        private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
+            StatefullInterviewCacheCounter.Inc();
+            
             Cache.Insert(aggregateRoot.EventSourceId.FormatGuid(), aggregateRoot, null, Cache.NoAbsoluteExpiration,
-                TimeSpan.FromMinutes(5));
+                TimeSpan.FromMinutes(5), OnUpdateCallback);
+        }
+
+        private void OnUpdateCallback(string key, CacheItemUpdateReason reason, 
+            out object expensiveObject, 
+            out CacheDependency dependency, 
+            out DateTime absoluteExpiration, 
+            out TimeSpan slidingExpiration)
+        {
+            expensiveObject = null; dependency = null;
+            absoluteExpiration = Cache.NoAbsoluteExpiration;
+            slidingExpiration = Cache.NoSlidingExpiration;
+
+            StatefullInterviewCacheCounter.Dec();
         }
 
         public void Evict(Guid aggregateId)
         {
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
+                StatefullInterviewCacheCounter.Dec();
                 Cache.Remove(aggregateId.FormatGuid());
             });
         }

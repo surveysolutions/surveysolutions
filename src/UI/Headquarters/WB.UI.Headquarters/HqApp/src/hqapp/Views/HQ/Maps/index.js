@@ -9,7 +9,7 @@ const store = {
     },
     actions: {        
         openMap(context, fileName) {            
-            window.location = window.input.settings.config.basePath + "Maps/Details?mapname=" + fileName
+            window.location = window.input.settings.config.basePath + "Maps/Details?mapname=" + encodeURIComponent(fileName)
         },
         deleteMap(context, { callback, mapName }) {
             $.ajax({

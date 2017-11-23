@@ -8,7 +8,7 @@
                             <img v-bind:src="googleMapPosition" draggable="false" />
                         </div>
                     </div>
-                    <div class="block-with-data">{{$me.answer.latitude}}, {{$me.answer.longitude}}</div>
+                    <div class="block-with-data"><a v-bind:href="goolgeMapUrl" target="_blank">{{$me.answer.latitude}}, {{$me.answer.longitude}}</a></div>
                      <wb-remove-answer />
                     <button type="submit" v-if="$me.acceptAnswer" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
@@ -51,6 +51,9 @@
                 return `https://maps.googleapis.com/maps/api/staticmap?center=${this.$me.answer.latitude},${this.$me.answer.longitude}`
                     + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${this.$me.answer.latitude},${this.$me.answer.longitude}`
                     + `&key=${this.$config.googleApiKey}`
+            },
+            goolgeMapUrl(){
+                return `https://www.google.com/maps?q=${this.$me.answer.latitude},${this.$me.answer.longitude}`
             }
         },
         methods: {

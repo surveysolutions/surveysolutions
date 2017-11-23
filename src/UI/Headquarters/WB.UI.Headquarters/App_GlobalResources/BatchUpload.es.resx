@@ -505,7 +505,7 @@
     <value>Cargar archivo .tab</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
-    <value>Carga de usuario por lotes</value>
+    <value>Carga de usuarios por lotes</value>
   </data>
   <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
     <value>Solo los archivos con extensiones {0} y {1} pueden cargarse.</value>
