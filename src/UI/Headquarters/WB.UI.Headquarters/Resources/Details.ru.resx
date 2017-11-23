@@ -153,4 +153,8 @@
   <data name="Status" xml:space="preserve">
     <value>Статус: {{ name }}</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Опросник: {{ name }}</value>
+    <comment>Опросник: {{ questionnaireTitle }}</comment>
+  </data>
 </root>
