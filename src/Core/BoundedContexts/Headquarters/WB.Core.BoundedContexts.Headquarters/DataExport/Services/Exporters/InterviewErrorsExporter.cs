@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var interveiws = interviewsBatch.ToList();
                 var exportedErrors =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewFactory.GetErrors(interveiws));
-                this.logger.Debug($"Read from db took {readWatch.Elapsed:g}");
+                this.logger.Debug($"Read from db took {readWatch.Elapsed:g}. Received {exportedErrors.Count:N} rows");
                 readWatch.Stop();
 
                 List<string[]> exportRecords = new List<string[]>();
