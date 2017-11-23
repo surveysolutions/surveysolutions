@@ -32,7 +32,8 @@ namespace WB.Infrastructure.Native.Storage
                 if(aggregateRoot == null) {
 
                     aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
-                    this.PutToCache(aggregateRoot);
+                    if (aggregateRoot != null)
+                        this.PutToCache(aggregateRoot);
                 }
 
                 return aggregateRoot;
