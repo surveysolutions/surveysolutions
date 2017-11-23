@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
-            this.logger.Info($"Exported errors for batch. Processed {interviewIdsToExport.Count:N}. Elapsed {watch.Elapsed:g}");
+            this.logger.Info($"Exported interview errors of {questionnaire.Title} ver {questionnaire.Version}. Processed {interviewIdsToExport.Count:N}. Elapsed {watch.Elapsed:g}");
 
             progress.Report(100);
         }
