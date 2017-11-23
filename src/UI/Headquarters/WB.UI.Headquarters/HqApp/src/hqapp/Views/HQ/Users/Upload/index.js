@@ -29,7 +29,8 @@ export default class UploadComponent {
                                     if (response.data.isInProgress && response.data.isOwnerOfRunningProcess)
                                         next({ name: "uploadprogress" });
                                     else next()
-                                });
+                                })
+                                .catch(() => next());
                         }
                     },
                     {
@@ -38,7 +39,7 @@ export default class UploadComponent {
                         beforeEnter: (to, from, next) => {
                             if (self.rootStore.getters.upload.fileName == "")
                                 next({ name: "upload" })
-                            next()
+                            else next()
                         }
                     },
                     {
@@ -47,10 +48,11 @@ export default class UploadComponent {
                             Vue.$http
                                 .get(config.model.api.importUsersStatusUrl)
                                 .then(response => {
-                                    if(!response.data.isInProgress || !response.data.isOwnerOfRunningProcess)
+                                    if (!response.data.isInProgress || !response.data.isOwnerOfRunningProcess)
                                         next({ name: "upload" });
                                     else next()
-                                });
+                                })
+                                .catch(() => next({ name: "upload" }));
                         }
                     },
                     {
@@ -58,7 +60,7 @@ export default class UploadComponent {
                         beforeEnter: (to, from, next) => {
                             if (self.rootStore.getters.upload.fileName == "")
                                 next({ name: "upload" })
-                            next()
+                            else next()
                         }
                     }
                 ]

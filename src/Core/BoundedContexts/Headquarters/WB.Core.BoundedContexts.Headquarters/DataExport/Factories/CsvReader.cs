@@ -13,13 +13,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 {
                     MissingFieldFound = null,
                     Delimiter = delimiter,
-                    HasHeaderRecord = hasHeaderRow
+                    HasHeaderRecord = hasHeaderRow,
+                    PrepareHeaderForMatch = s => s.ToLower()
                 }))
             {
                 reader.Read();
                 reader.ReadHeader();
-                foreach (var record in reader.GetRecords<T>())
-                    yield return record;
+
+                while (reader.Read())
+                    yield return reader.GetRecord<T>();
             }
         }
 
@@ -33,8 +35,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 }))
             {
                 reader.Read();
-                reader.ReadHeader();
-                return reader.Context.HeaderRecord;
+
+                return reader.ReadHeader() ? reader.Context.HeaderRecord : new string[0];
             }
         }
     }
