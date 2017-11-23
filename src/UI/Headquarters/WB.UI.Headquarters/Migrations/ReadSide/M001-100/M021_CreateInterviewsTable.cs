@@ -53,6 +53,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("asarea").AsCustom("jsonb").Nullable()
                 .WithColumn("hasflag").AsBoolean().WithDefaultValue(false);
 
+            Create.Index("interviews_interviewid_clst").OnTable("interviews").WithOptions().Clustered()
+                .OnColumn("interviewid");
+            Execute.Sql("ALTER TABLE readside.interviews CLUSTER ON interviews_interviewid_clst");
+
             if (!Schema.Table("interviewdatas").Exists())
                 return;
 
@@ -140,10 +144,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
                 logger.Info($"Interview data -> Interviews. " +
                             $"Processed {processedInterviewsCount} interviews out of {allInterviewsCount} in {totalProcessingTime}");
-
-                //logger.Info("Interview data -> Interviews. Removing interview data table.");
-                //connection.Execute("DROP TABLE \"readside\".\"interviewdatas\"", transaction);
-                //logger.Info("Interview data -> Interviews. Removed interview data table.");
             });
         }
 
