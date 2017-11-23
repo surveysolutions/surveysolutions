@@ -11,6 +11,9 @@
                     <h2>{{$config.model.key}}</h2>
                     <ul class="list-unstyled about-questionnaire">
                         <li>
+                            {{$t("Details.Questionnaire", {name: this.$store.state.webinterview.questionnaireTitle})}}
+                        </li>
+                        <li>
                             {{this.$t('Details.Status', {name: this.$config.model.statusName})}}
                         </li>
                         <li>
