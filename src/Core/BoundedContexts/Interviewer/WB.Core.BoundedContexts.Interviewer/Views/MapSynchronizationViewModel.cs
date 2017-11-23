@@ -11,6 +11,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMapSyncBackgroundService MapSyncBackgroundService { get; set; }
         public event EventHandler SyncCompleted;
 
+        private SynchronizationStatus status;
+        public SynchronizationStatus Status
+        {
+            get { return this.status; }
+            set
+            {
+                this.status = value;
+                this.RaisePropertyChanged();
+            }
+        }
 
         private bool synchronizationErrorOccured;
         public bool SynchronizationErrorOccured
@@ -120,7 +130,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.ProcessOperation = syncProgressInfo.Title;
                 this.ProcessOperationDescription = syncProgressInfo.Description;
                 this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
-                
+
+                this.Status = syncProgressInfo.Status;
+
                 if (!syncProgressInfo.IsRunning)
                 {
                     this.OnSyncCompleted();

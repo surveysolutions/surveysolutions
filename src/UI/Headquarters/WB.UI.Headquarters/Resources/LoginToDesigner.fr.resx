@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -119,5 +119,29 @@
   </resheader>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
+  </data>
+  <data name="AccessForbidden" xml:space="preserve">
+    <value>Le serveur n'est pas reconnu valide par le Questionnaire du Designer. Veuillez contacter le support technique pour l'enregistrement.</value>
+  </data>
+  <data name="DesignerAppDescription" xml:space="preserve">
+    <value>Ceci est un outil gratuit pour créer des questionnaires pour la plateforme CAPI de la Banque mondiale. Il peut être trouvé à</value>
+  </data>
+  <data name="InvalidCredentials" xml:space="preserve">
+    <value>Utilisateur non autorisé. Veuillez vérifier votre nom d'utilisateur et votre mot de passe.</value>
+  </data>
+  <data name="LoginWatermark" xml:space="preserve">
+    <value>Nom d'utilisateur ou adresse email</value>
+  </data>
+  <data name="PageHeader" xml:space="preserve">
+    <value>Utilisez vos informations d'identification du Designer de Survey Solutions Designer pour accéder à vos questionnaires.</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>La session a expiré, veuillez vous reconnecter</value>
+  </data>
+  <data name="UnableToImportNewQuestionnaire" xml:space="preserve">
+    <value>Impossible d'importer un nouveau questionnaire:</value>
+  </data>
+  <data name="UserDesignerCredentials" xml:space="preserve">
+    <value>Veuillez vous connecter avec les informations d'identification que vous utilisez normalement pour accéder à vos questionnaires sur le site Designer et dans l'application Tester.</value>
   </data>
 </root>

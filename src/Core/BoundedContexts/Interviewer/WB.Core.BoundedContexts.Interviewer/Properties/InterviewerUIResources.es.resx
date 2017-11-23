@@ -259,7 +259,7 @@
     <value>Solicitud cancelada por el usuario</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Tiempo de espera cuando se conecta a la Página Web de Survey Solutions Supervisor. Compruebe su conexión a internet.</value>
+    <value>Tiempo de espera cuando se conecta a la Página Web de Surrey Solutions Supervisor. Compruebe su conexión a internet.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>No hay conexión con el Survey Solutions Supervisor. Por favor, asegúrese de que el sitio web está disponible.</value>
@@ -343,9 +343,7 @@
     <value>Su cuenta fue vinculada a otro tableta </value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Problema de autenticación. No ha sido posible confirmar su cuenta de entrevistador ('{0}'). Su cuenta puede tener uno de los siguientes problemas: tener una contraseña diferente a la que entró, estar bloqueada por la oficina central o haber sido borrada por la misma. 
-Please introducir contraseña actualizada. Si esto no resuelve el problema, póngase en contacto con su Supervisor u oficina central.
-</value>
+    <value>Problema de autenticación. No ha sido posible confirmar su cuenta de entrevistador ('{0}'). Su cuenta puede tener uno de los siguientes problemas: tener una contraseña diferente a la que entró, estar bloqueada por la oficina central o haber sido borrada por la misma. Favor introducir contraseña actualizada. Si esto no resuelve el problema, póngase en contacto con su Supervisor u oficina central.</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Crear copia de seguridad</value>
@@ -387,7 +385,7 @@ Please introducir contraseña actualizada. Si esto no resuelve el problema, pón
     <value>Paquete de información de tamaño {0} se enviará a través de la red. Está seguro que desea enviarlo?</value>
   </data>
   <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
-    <value>Envando paquete de información</value>
+    <value>Enviando paquete de información</value>
   </data>
   <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
     <value>Se cancela el envío del paquete de información. Razón: {0}</value>

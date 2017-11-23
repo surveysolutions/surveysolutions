@@ -148,7 +148,7 @@
     <value>Seleccionar responsable (Supervisor o Entrevistador) para esta tarea</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
-    <value>Creado en</value>
+    <value>Creado</value>
   </data>
   <data name="CreateInterview" xml:space="preserve">
     <value>Iniciar nueva entrevista</value>
@@ -217,6 +217,6 @@
     <value>Sin límite</value>
   </data>
   <data name="UpdatedAt" xml:space="preserve">
-    <value>Actualizado en</value>
+    <value>Actualizado</value>
   </data>
 </root>

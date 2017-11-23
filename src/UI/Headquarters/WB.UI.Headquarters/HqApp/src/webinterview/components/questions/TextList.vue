@@ -17,6 +17,7 @@
                 <div class="form-group" v-if="canAddNewItem">
                     <div class="field answered">
                         <input autocomplete="off" type="text" class="field-to-fill"
+                            :disabled="!canAnswer"
                             :placeholder="noAnswerWatermark" v-blurOnEnterKey @blur="addRow"/>
                     </div>
                 </div>

@@ -121,25 +121,25 @@
     <value>Annuler</value>
   </data>
   <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
-    <value>Erreur lors de l'analyse de la  réponse à la question</value>
+    <value>Erreur lors de l'analyse de la réponse à la question</value>
   </data>
   <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
-    <value>État défini par l’équipe de soutien de Survey Solutions</value>
+    <value>Statut défini par l'équipe de support de Survey Solutions</value>
   </data>
   <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
-    <value>Mise à jour du compte réalisée avec succès</value>
+    <value>Informations du compte mises à jour avec succès</value>
   </data>
   <data name="HQ_Views_Manage_Title" xml:space="preserve">
-    <value>Gérer le compte</value>
+    <value>Gérer son compte</value>
   </data>
   <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
-    <value>Approuvé par quartier général</value>
+    <value>Approuvé par le Quartier Général</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>Approuvé par superviseur</value>
+    <value>APPROUVÉ PAR LE CHEF D'EQUIPE</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
-    <value>Terminé</value>
+    <value>Achevé</value>
   </data>
   <data name="InterviewStatus_Created" xml:space="preserve">
     <value>Créé</value>
@@ -148,39 +148,81 @@
     <value>Supprimé</value>
   </data>
   <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
-    <value>Affecté à l'enquêteur</value>
+    <value>Affecté à l'Enquêteur</value>
   </data>
   <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
-    <value>Prêt pour l’entretien</value>
+    <value>Prêt pour l'entretien</value>
   </data>
   <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
-    <value>Rejeté par quartier général</value>
+    <value>Rejeté par le Quartier Général</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>Rejeté par superviseur</value>
+    <value>REJETÉ PAR LE CHEF D'ÉQUIPE</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
-    <value>Réinitialisé</value>
+    <value>Redémarré</value>
   </data>
   <data name="InterviewStatus_Restored" xml:space="preserve">
     <value>Restauré</value>
   </data>
   <data name="InterviewStatus_SentToCapi" xml:space="preserve">
-    <value>Envoyé au serveur</value>
+    <value>Envoyé à CAPI</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>Affecté au superviseur</value>
+    <value>AFFECTÉ AU CHEF D'ÉQUIPE</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
-    <value>Observateur n’est pas autorisé à effectuer cette action</value>
+    <value>L'Observateur n'est pas autorisé à effectuer cette action</value>
   </data>
   <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
-    <value>Gérer votre compte</value>
+    <value>Gérer son compte</value>
   </data>
   <data name="UnexpectedErrorOccurred" xml:space="preserve">
-    <value>Une erreur inattendue s’est produite</value>
+    <value>Une erreur inattendue s'est produite</value>
   </data>
   <data name="ViewHelpers_Invalid_property" xml:space="preserve">
     <value>Propriété invalide</value>
+  </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>Tous les Enquêteurs</value>
+  </data>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>Toutes les périodes</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>Tous les questionnaires</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>Toutes les équipes</value>
+  </data>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>n'importe quel membre du Quartier Général</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Affectations</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Moyenne</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>Jours</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>Mot de passe du compte mis à jour avec succès</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>Le mot de passe du compte &lt;b&gt; {0} &lt;/ b&gt; a été bien mis à jour</value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>Informations sur &lt;b&gt; {0} &lt;/ b&gt; mises à jour avec succès</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>Entretiens</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
   </data>
 </root>

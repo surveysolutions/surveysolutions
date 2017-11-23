@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             this.Bind<IExportFileNameService>().To<ExportExportFileNameService>();
 
-            this.Bind<IMapRepository>().To<FileSystemMapRepository>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
+            this.Bind<IMapStorageService>().To<FileSystemMapStorageService>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
 
             //commented because auto registered somewhere 
             //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
