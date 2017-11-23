@@ -8,6 +8,9 @@ namespace WB.UI.Shared.Web.Filters
         public override void OnActionExecuted(HttpActionExecutedContext filterContext)
         {
             base.OnActionExecuted(filterContext);
+
+            if (filterContext.Response?.Headers == null) return;
+
             filterContext.Response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 NoCache = true
