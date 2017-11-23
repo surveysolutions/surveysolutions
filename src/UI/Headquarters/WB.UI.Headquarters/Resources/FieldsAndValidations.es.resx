@@ -202,10 +202,10 @@
     <value>El número de teléfono no puede contener más de {1} caracteres</value>
   </data>
   <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Numero de teléfono invalido</value>
+    <value>Número de teléfono invalido</value>
   </data>
   <data name="PhoneNumberFieldName" xml:space="preserve">
-    <value>Numero de teléfono</value>
+    <value>Número de teléfono</value>
   </data>
   <data name="RequiredEmailErrorMessage" xml:space="preserve">
     <value>Correo electrónico es requerido</value>

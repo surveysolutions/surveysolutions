@@ -154,7 +154,7 @@
     <value>La sincronización ha fallado. Por favor reinstale la aplicación. El identificador de la aplicación no se ha encontrado. Por favor contacte a los desarrolladores de la herramienta.</value>
   </data>
   <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
-    <value>La sincronización ha fallado parcialmente. Las entrevistas completadas han sido enviadas al servidor, sin embargo usted no recibirá nuevas asignaciones. Por favor vaya al menú de Configuración del dispositivo Android -&gt; Apps -&gt; Interviewer y presione el botón Clear Data. Después sincronice nuevamente.</value>
+    <value>La sincronización ha fallado parcialmente. Las entrevistas completadas han sido enviadas al servidor, sin embargo usted no recibirá nuevas asignaciones. Por favor vaya al menú de Configuración del dispositivo Android -&gt; Apps -&gt; Interviewer y presione el botón "Clear Data". Después sincronice nuevamente.</value>
   </data>
   <data name="ServerError" xml:space="preserve">
     <value>La sincronización ha fallado. Ha ocurrido un error interno del servidor. Por favor contacte a los desarrolladores de la herramienta.</value>

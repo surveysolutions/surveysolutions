@@ -121,7 +121,7 @@
     <value>detalles</value>
   </data>
   <data name="MapReportTitle" xml:space="preserve">
-    <value>Reporte del mapa</value>
+    <value>Mapa</value>
   </data>
   <data name="NotAllMarkers" xml:space="preserve">
     <value>No todos los marcadores se cargaron para el nivel de zoom actual. Por favor, amplíe y vuelva a cargar marcadores.</value>

@@ -172,7 +172,7 @@
     <value>Crear supervisor</value>
   </data>
   <data name="CreationDate" xml:space="preserve">
-    <value>Cuenta creada en</value>
+    <value>Cuenta creada</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Editar</value>
@@ -223,7 +223,7 @@
     <value>Número de entrevistadores que aún no sincronizaron correctamente sus tabletas con el servidor</value>
   </data>
   <data name="NumberOfInterviewersInTeam" xml:space="preserve">
-    <value>Numero de entrevistadores en el equipo</value>
+    <value>número de entrevistadores en el equipo</value>
   </data>
   <data name="Observer" xml:space="preserve">
     <value>Observador</value>

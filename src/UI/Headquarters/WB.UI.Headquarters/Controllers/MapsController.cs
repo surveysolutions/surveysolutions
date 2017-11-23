@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
@@ -24,6 +19,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Maps;
 using WB.UI.Headquarters.Resources;
@@ -31,11 +27,11 @@ using WB.UI.Headquarters.Resources;
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
     public class MapsController : BaseController
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IMapRepository mapRepository;
+        private readonly IMapStorageService mapRepository;
         private readonly IExportFactory exportFactory;
         private readonly IAuthorizedUser authorizedUser;
 
@@ -44,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
 
         public MapsController(ICommandService commandService, ILogger logger, 
-            IFileSystemAccessor fileSystemAccessor, IMapRepository mapRepository,
+            IFileSystemAccessor fileSystemAccessor, IMapStorageService mapRepository,
             IExportFactory exportFactory, IRecordsAccessorFactory recordsAccessorFactory,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor, IAuthorizedUser authorizedUser) : base(commandService, logger)
         {
@@ -79,6 +75,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpDelete]
+        [ObserverNotAllowed]
         public ActionResult DeleteMap(string mapName)
         {
             this.mapRepository.DeleteMap(mapName);
@@ -100,10 +97,9 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
+        [ActivePage(MenuItem.Maps)]
         public ActionResult Details(string mapName)
         {
-            this.ViewBag.ActivePage = MenuItem.Maps;
-
             if (mapName == null)
                 return HttpNotFound();
 
@@ -135,9 +131,10 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpDelete]
+        [ObserverNotAllowed]
         public ActionResult DeleteMapUserLink(string mapName, string userName)
         {
-            this.mapRepository.DeleteMapUser(mapName, userName);
+            this.mapRepository.DeleteMapUserLink(mapName, userName);
             return this.Content("ok");
         }
 
@@ -158,8 +155,6 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public async Task<ActionResult> UploadMaps(MapFileUploadModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
             if (!this.ModelState.IsValid)
             {
                 this.Error(Maps.MapsLoadingError);
@@ -205,8 +200,8 @@ namespace WB.UI.Headquarters.Controllers
             }
             finally
             {
-                if(tempStore!=null)
-                    mapRepository.DeleteData(tempStore);
+                if(tempStore != null)
+                    mapRepository.DeleteTemporaryData(tempStore);
             }
 
             return this.RedirectToAction("Index");
@@ -217,8 +212,6 @@ namespace WB.UI.Headquarters.Controllers
         [ObserverNotAllowed]
         public ActionResult UploadMappings(MapFileUploadModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
             if (!this.ModelState.IsValid)
             {
                 return this.RedirectToAction(nameof(Index));
@@ -236,7 +229,15 @@ namespace WB.UI.Headquarters.Controllers
                 var mappings = ProcessDataFile(model);
                 foreach (var mapUserMapping in mappings)
                 {
-                    noErrors = mapRepository.UpdateUserMaps(mapUserMapping.Map, mapUserMapping.Users.ToArray()) && noErrors;
+                    try
+                    {
+                        mapRepository.UpdateUserMaps(mapUserMapping.Map, mapUserMapping.Users.ToArray());
+                    }
+                    catch 
+                    {
+                        noErrors = false;
+                    }
+                    
                 }
 
                 this.Success("User map imported");
@@ -285,19 +286,13 @@ namespace WB.UI.Headquarters.Controllers
             };
             
             var mappings = new List<MapUserMapping>();
+            string[] headerRow = records.First().Select(r => r.ToLower()).ToArray();
 
-            string[] headerRow = null;
-            foreach (string[] record in records)
+            for (int j = 1; j < records.Count; j++)
             {
-                if (headerRow == null)
-                {
-                    headerRow = record.Select(r => r.ToLower()).ToArray();
-                    //ThrowIfFileStructureIsInvalid(headerRow, fileName);
-                    continue;
-                }
-
+                var record = records[j];
+                
                 var dataRecord = new MapUserMapping();
-
                 for (int i = 0; i < headerRow.Length; i++)
                 {
                     var columnName = headerRow[i].ToLower();
@@ -317,39 +312,10 @@ namespace WB.UI.Headquarters.Controllers
                 mappings.Add(dataRecord);
             }
 
-            return mappings.GroupBy(p => p.Map)
+            return mappings.GroupBy(p => p.Map, StringComparer.OrdinalIgnoreCase)
                 .Select(g => g.First())
                 .ToList();
         }
-
-
-        public HttpResponseMessage MappingDownload()
-        {
-            return CreateReportResponse("usermaps");
-        }
-
-        private HttpResponseMessage CreateReportResponse(string reportName)
-        {
-            var exportFile = this.exportFactory.CreateExportFile(ExportFileType.Tab);
-
-            var mapping = mapRepository.GetAllMapUsers();
-
-
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(new string[]{"map", "users"}, mapping));
-
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new StreamContent(exportFileStream)
-            };
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(exportFile.MimeType);
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-            {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
-            };
-
-            return response;
-        }
-
     }
 
     public class MapFileUploadModel

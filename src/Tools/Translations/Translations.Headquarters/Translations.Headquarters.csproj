@@ -40,9 +40,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.Designer.cs">
+      <Link>CommandValidatorsMessages.Designer.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.es.resx">
+      <Link>CommandValidatorsMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.fr.resx">
+      <Link>CommandValidatorsMessages.fr.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.ka.resx">
+      <Link>CommandValidatorsMessages.ka.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\CommandValidatorsMessages.pt.resx">
       <Link>CommandValidatorsMessages.pt.resx</Link>
     </EmbeddedResource>

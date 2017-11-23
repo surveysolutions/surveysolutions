@@ -65,6 +65,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -152,6 +153,13 @@ namespace WB.Tests.Abc.TestFactories
             IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepository(eventStore, snapshotStore, repository);
 
+        public EventSourcedAggregateRootRepositoryWithCache EventSourcedAggregateRootRepositoryWithCache(
+            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+            => new EventSourcedAggregateRootRepositoryWithCache(
+                eventStore ?? Mock.Of<IEventStore>(),
+                snapshotStore ?? Mock.Of<ISnapshotStore>(),
+                repository ?? Mock.Of<IDomainRepository>(),
+                new AggregateLock());
 
         public EventSourcedAggregateRootRepositoryWithExtendedCache EventSourcedAggregateRootRepositoryWithExtendedCache(
             IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
@@ -196,7 +204,7 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<QuestionnaireView> questionnaireRepository = null,
             IInterviewerPrincipal principal = null,
             IJsonAllTypesSerializer synchronizationSerializer = null,
-            IEventSourcedAggregateRootRepository aggregateRootRepository = null,
+            IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
             ISnapshotStoreWithCache snapshotStoreWithCache = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
             IPlainStorage<InterviewFileView> interviewFileViewRepository = null)
@@ -209,7 +217,7 @@ namespace WB.Tests.Abc.TestFactories
                 commandService ?? Mock.Of<ICommandService>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 eventStore ?? Mock.Of<IInterviewerEventStorage>(),
-                aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
+                aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 Mock.Of<IInterviewEventStreamOptimizer>(),

@@ -121,7 +121,7 @@
     <value>El archivo '{0}' contiene las siguientes columnas que no se pueden asignar a ninguna propiedad del usuario (por ejemplo, nombre completo, número de teléfono, etc.): {1}</value>
   </data>
   <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>Se alcanzó el numero máximo de validaciones de error {0}</value>
+    <value>Se alcanzó el número {0} máximo de validaciones de error </value>
   </data>
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>El conjunto de datos contiene {0} registros, pero el número máximo permitido de registros es {1}</value>

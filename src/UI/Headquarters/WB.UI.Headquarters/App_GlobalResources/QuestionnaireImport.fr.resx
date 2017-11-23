@@ -118,18 +118,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BeforeSignInToDesigner" xml:space="preserve">
-    <value>Avant de se connecter, veuillez vous assurer que le site Web « Designer » est disponible et qu'il n’est pas en mode maintenance</value>
+    <value>Avant de vous connecter, assurez-vous que le site Web 'Designer' est disponible</value>
   </data>
   <data name="DesignerQuestionnaires" xml:space="preserve">
-    <value>Questionnaires du site Designer</value>
+    <value>Questionnaires du Designer</value>
   </data>
   <data name="LoginToDesignerError" xml:space="preserve">
-    <value>Imposible de se connecter à Designer. Veuillez vérifier que Designer est disponible et essayez &lt;a href='{0}'&gt;à nouveau&lt;/a&gt;</value>
+    <value>Impossible de se connecter au Designer. Veuillez vérifier si le Designer est disponible et réessayer &lt;a href='{0}'&gt; &lt;/a&gt;</value>
   </data>
   <data name="SignInToDesigner" xml:space="preserve">
-    <value>Veuillez se connecter au site Designer</value>
+    <value>Veuillez vous connecter au Designer</value>
   </data>
   <data name="SignInToDesignerTitle" xml:space="preserve">
-    <value>Se connecter à Designer</value>
+    <value>Connectez-vous au Designer</value>
+  </data>
+  <data name="Chapters" xml:space="preserve">
+    <value>Sections</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Créé sur</value>
+  </data>
+  <data name="Gropus" xml:space="preserve">
+    <value>Sous-sections</value>
+  </data>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>Créer une nouvelle version (# {0})</value>
+  </data>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>Importer un questionnaire:</value>
+  </data>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>Mode d'importation du questionnaire</value>
+  </data>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>Dernière modification le</value>
+  </data>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>liste de mes questionnaires</value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>Designer: Mes questionnaires</value>
+  </data>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>Vous avez déjà importé ce questionnaire</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>Questions</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>{0} entre eux avec des conditions</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>Cela vous permettra de créer des affectations individuelles pouvant contenir des données d'identification. Seules ces affectations apparaîtront sur les appareils de L'Enquêteur.</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>Importer</value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>Rosters</value>
   </data>
 </root>

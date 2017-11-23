@@ -601,7 +601,7 @@
     <value>Conjunto fijo de ítems</value>
   </data>
   <data name="RosterSourceNumericQuestion" xml:space="preserve">
-    <value>Pregunta que define numero de filas</value>
+    <value>Pregunta que define número de filas</value>
   </data>
   <data name="RosterSourceNumericTitles" xml:space="preserve">
     <value>Pregunta que define el nombre de filas</value>

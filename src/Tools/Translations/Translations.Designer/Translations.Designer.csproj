@@ -40,12 +40,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.Designer.cs">
+      <Link>Common.Designer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.Designer.cs">
+      <Link>ExceptionMessages.Designer.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.Designer.cs">
       <Link>AccountResources.Designer.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.resx">
+      <Link>Common.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.ru.resx">
+      <Link>Common.ru.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.es.resx">
+      <Link>ExceptionMessages.es.resx</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.fr.resx">
+      <Link>ExceptionMessages.fr.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx">
       <Link>ExceptionMessages.resx</Link>
     </EmbeddedResource>

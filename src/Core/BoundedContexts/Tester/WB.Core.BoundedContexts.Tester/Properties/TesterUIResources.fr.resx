@@ -121,16 +121,16 @@
     <value>la liste n'a pas été mise à jour</value>
   </data>
   <data name="Dashboard_LastUpdated" xml:space="preserve">
-    <value>la liste a été mise à jour {0}</value>
+    <value>la liste a été mise à jour le {0}</value>
   </data>
   <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
-    <value>En cours de se connecter au serveur</value>
+    <value>Connexion au serveur en cours</value>
   </data>
   <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
-    <value>En train de créer un entretien</value>
+    <value>Création de l'entretien en cours</value>
   </data>
   <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
-    <value>Téléchargement du questionnaire en cours - {0} %</value>
+    <value>Téléchargement du masque en cours - {0} %</value>
   </data>
   <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
     <value>Impossible d'ouvrir le questionnaire « {0} ». Votre compte d'utilisateur de Designer n'est pas autorisé à accéder à ce questionnaire. Veuillez vérifier votre login et mot de passe.</value>
@@ -142,13 +142,13 @@
     <value>Impossible d'ouvrir le questionnaire « {0} ». Le questionnaire comporte des erreurs. Veuillez faire des corrections au questionnaire sur le site Designer.</value>
   </data>
   <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
-    <value>En train de sauvegarder le questionnaire au stockage local</value>
+    <value>Sauvegarde du masque au stockage local en cours</value>
   </data>
   <data name="Login_Error_NotFound" xml:space="preserve">
     <value>Le site Designer n'est pas accessible en ce moment. Veuillez vérifiez votre connexion ou réessayez plus tard</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Questionnaires</value>
+    <value>Masques</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Paramètres</value>
@@ -172,21 +172,45 @@
     <value>URL du site Designer</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
-    <value>Délai de réponse, en secondes, pour les coordonnées GPS</value>
+    <value>Délai d'attende de réponse pour des coordonnées GPS, en secondes</value>
   </data>
   <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
-    <value>Le délai de réponse du GPS a expiré</value>
+    <value>Délai d'attente de réponse du GPS</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
-    <value>Délai de réponse, en secondes, pour le serveur</value>
+    <value>Délai d'attente de réponse, en secondes, pour le serveur</value>
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
-    <value>Le délai de réponse du serveur a expiré</value>
+    <value>Délai d'attente de réponse du serveur dépassé</value>
   </data>
   <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
     <value>Version : {0}</value>
   </data>
   <data name="Prefs_VersionTitle" xml:space="preserve">
     <value>Version de l'application</value>
+  </data>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>Téléchargement de fichiers joints - {0} %</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Version originale</value>
+  </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>Actualiser le masque</value>
+  </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>Montre la valeur des variables</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>Valeur des variables affichées</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>Valeur des variables cachées</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Réponses ne peuvent pas être appliquées à la nouvelle version du masque. Nous allons ouvrir un nouvel entretien vide</value>
   </data>
 </root>

@@ -150,4 +150,7 @@
   <data name="Status" xml:space="preserve">
     <value>Status: {{ name }}</value>
   </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire: {{ name }}</value>
+  </data>
 </root>
