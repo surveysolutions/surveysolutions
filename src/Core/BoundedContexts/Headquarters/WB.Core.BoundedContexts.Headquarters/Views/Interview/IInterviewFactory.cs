@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -39,5 +40,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         string[] GetQuestionnairesWithAnsweredGpsQuestions();
 
         List<ExportedError> GetErrors(IEnumerable<Guid> interveiws);
+        InterviewData GetInterviewDataWithLevelsOnly(Guid interviewId, QuestionnaireIdentity questionnaire);
     }
 }
