@@ -11,6 +11,7 @@ using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService
 {
+    
     public class LazyNotificationServiceTests
     {
         private WebInterviewLazyNotificationService Subj { get; set; }
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
             var interviewId = Guid.NewGuid();
 
             Subj.RefreshEntities(interviewId);
-            
+
             Assert.That(GetStatefullInterviewCallResult(), Is.EqualTo(interviewId.FormatGuid()));
         }
 
