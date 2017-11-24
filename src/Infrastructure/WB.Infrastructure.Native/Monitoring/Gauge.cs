@@ -24,7 +24,7 @@
             gauge.Set(amount);
         }
 
-        public IGauge Label(params string[] labels)
+        public IGauge Labels(params string[] labels)
         {
             return new ChildGauge(gauge, labels);
         }

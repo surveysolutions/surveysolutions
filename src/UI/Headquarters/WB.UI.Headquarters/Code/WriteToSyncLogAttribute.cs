@@ -6,7 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http.Filters;
-using Prometheus;
+
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
@@ -22,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.UI.Headquarters.Code
@@ -187,7 +188,7 @@ namespace WB.UI.Headquarters.Code
             }
         }
 
-        private readonly Counter messagesTotal = Metrics.CreateCounter(@"wb_hq_sync_log_total_count", @"Count of sync log actions", "action");
+        private readonly Counter messagesTotal = new Counter(@"wb_hq_sync_log_total_count", @"Count of sync log actions", "action");
 
 
         private string GetInterviewsLogMessage(HttpActionExecutedContext context)

@@ -2,7 +2,10 @@
 {
     public class CommonMetrics
     {
-        public static Gauge StateFullInterviewsCount = new Gauge(
-            "wb_hq_cache_statefull_interview_counter", "Number of statefull interviews stored in HttpRuntime.Cache");
+        public static readonly Gauge StateFullInterviewsCount 
+            = new Gauge("wb_hq_cache_statefull_interview_counter", "Number of statefull interviews stored in HttpRuntime.Cache");
+
+        public static readonly Counter ExceptionsLogged 
+            = new Counter(@"wb_hq_exceptions_raised", @"Total exceptions raised on Headquarters");
     }
 }
