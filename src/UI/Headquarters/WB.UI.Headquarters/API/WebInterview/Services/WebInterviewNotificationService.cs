@@ -39,37 +39,37 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 return;
             }
 
-            var entitiesToRefresh = new List<Tuple<string, Identity>>();
+            var entitiesToRefresh = new List<(string section, Identity id)>();
 
             foreach (var identity in questions)
             {
                 if (this.IsQuestionPrefield(identity, interview))
                 {
-                    entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid()), identity));
+                    entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid()), identity));
                 }
                 
-                var curreentEntity = identity;
+                var currentEntity = identity;
 
-                while (curreentEntity != null)
+                while (currentEntity != null)
                 {
-                    var parent = this.GetParentIdentity(curreentEntity, interview);
+                    var parent = this.GetParentIdentity(currentEntity, interview);
                     if (parent != null)
                     {
-                        entitiesToRefresh.Add(Tuple.Create(WebInterview.GetConnectedClientSectionKey(parent.ToString(), interview.Id.FormatGuid()), curreentEntity));
+                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent.ToString(), interview.Id.FormatGuid()), currentEntity));
                     }
-                    curreentEntity = parent;
+                    currentEntity = parent;
                 }
                 
             }
 
-            foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))
+            foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.section))
             {
                 if (questionsGroupedByParent.Key == null)
                     continue;
 
                 var group = this.webInterviewHubContext.Clients.Group(questionsGroupedByParent.Key);
 
-                group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).Distinct().ToArray());
+                group.refreshEntities(questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray());
             }
 
             this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
