@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,45 +14,40 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
-    internal class InterviewsExporter
+    internal interface IInterviewsExporter
+    {
+        void Export(QuestionnaireExportStructure questionnaireExportStructure, List<InterviewToExport> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken);
+    }
+
+    internal class InterviewsExporter : IInterviewsExporter
     {
         private readonly string dataFileExtension = "tab";
 
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private ITransactionManager TransactionManager => transactionManagerProvider.GetTransactionManager();
         private readonly ITransactionManagerProvider transactionManagerProvider;
+        private readonly IInterviewErrorsExporter errorsExporter;
 
-        protected InterviewsExporter()
-        {
-        }
-
-        public InterviewsExporter(IFileSystemAccessor fileSystemAccessor,
-            ILogger logger,
+        public InterviewsExporter(ILogger logger,
             InterviewDataExportSettings interviewDataExportSettings, 
-            ICsvWriter csvWriter,
-            InterviewExportredDataRowReader rowReader,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
-            ITransactionManagerProvider plainTransactionManagerProvider)
+            ICsvWriter csvWriter, 
+            ITransactionManagerProvider plainTransactionManagerProvider,
+            IInterviewErrorsExporter errorsExporter)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.logger = logger;
-            this.interviewDataExportSettings = interviewDataExportSettings;
-            this.csvWriter = csvWriter;
-            this.interviewSummaries = interviewSummaries;
-            this.transactionManagerProvider = plainTransactionManagerProvider;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.interviewDataExportSettings = interviewDataExportSettings ?? throw new ArgumentNullException(nameof(interviewDataExportSettings));
+            this.csvWriter = csvWriter ?? throw new ArgumentNullException(nameof(csvWriter));
+            this.transactionManagerProvider = plainTransactionManagerProvider ?? throw new ArgumentNullException(nameof(plainTransactionManagerProvider));
+            this.errorsExporter = errorsExporter ?? throw new ArgumentNullException(nameof(errorsExporter));
         }
 
         public virtual void Export(QuestionnaireExportStructure questionnaireExportStructure, List<InterviewToExport> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
@@ -77,7 +73,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
             {
                 string fileName = this.CreateFormatDataFileName(level.LevelName);
-                string filePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
+                string filePath = Path.Combine(basePath, fileName);
 
                 List<string> interviewLevelHeader = new List<string> { level.LevelIdColumnName };
 
@@ -100,6 +96,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 
                 this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
             }
+
+            bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
+
+            var errorsExportFilePath = Path.Combine(basePath, InterviewErrorsExporter.FileName);
+            errorsExportFilePath = Path.ChangeExtension(errorsExportFilePath, dataFileExtension);
+            this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
         }
 
         private void ExportInterviews(List<InterviewToExport> interviewIdsToExport, 
@@ -123,7 +125,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    },
                     interviewToExport => {
                        cancellationToken.ThrowIfCancellationRequested();
-                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(interviewToExport, questionnaireExportStructure);
+                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(interviewToExport, questionnaireExportStructure, basePath);
                        exportBulk.Add(exportedData);
 
                        Interlocked.Increment(ref totalInterviewsProcessed);
@@ -131,13 +133,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    });
 
                 batchWatch.Stop();
-                this.logger.Debug(string.Format("Exported {0:N0} in {3:g} interviews out of {1:N0}. for questionnaire {2}. GetInterviewDataWatch: {4:g} CreateInterviewExportedDataWatch: {5:g}",
+                this.logger.Debug(string.Format("Exported {0:N0} in {3:g} interviews out of {1:N0}. for questionnaire {2}. GetInterviewDataWatch: {4:g}",
                     totalInterviewsProcessed,
                     interviewIdsToExport.Count,
                     new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version),
                     batchWatch.Elapsed,
-                    GetInterviewDataWatch.Elapsed,
-                    CreateInterviewExportedDataWatch.Elapsed));
+                    getInterviewDataWatch.Elapsed));
 
                 this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
             }
@@ -150,7 +151,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             List<InterviewExportedDataRecord> interviewsToDump)
         {
             var exportBulk = ConvertInterviewsToWriteBulk(interviewsToDump);
-            this.WriteCsv(basePath, questionnaireExportStructure, exportBulk);
+            this.WriteCsv(basePath, exportBulk);
         }
 
         private static Dictionary<string, List<string[]>> ConvertInterviewsToWriteBulk(List<InterviewExportedDataRecord> interviewsToDump)
@@ -168,8 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                             exportBulk.Add(levelName, new List<string[]>());
                         }
 
-                        exportBulk[levelName].Add(dataByLevel.EmptyIfNull()
-                            .Split(ExportFileSettings.DataFileSeparator));
+                        exportBulk[levelName].Add(dataByLevel.EmptyIfNull().Split(ExportFileSettings.DataFileSeparator));
                     }
                 }
             }
@@ -177,38 +177,38 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             return exportBulk;
         }
 
-        private void WriteCsv(string basePath, QuestionnaireExportStructure questionnaireExportStructure, Dictionary<string, List<string[]>> exportBulk)
+        private void WriteCsv(string basePath, Dictionary<string, List<string[]>> exportBulk)
         {
-            foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
+            foreach (var level in exportBulk.Keys)
             {
-                var dataByTheLevelFilePath = this.fileSystemAccessor.CombinePath(basePath,
-                    this.CreateFormatDataFileName(level.LevelName));
+                var dataByTheLevelFilePath = Path.Combine(basePath,
+                    this.CreateFormatDataFileName(level));
 
-                if (exportBulk.ContainsKey(level.LevelName))
-                {
-                    this.csvWriter.WriteData(dataByTheLevelFilePath,
-                        exportBulk[level.LevelName],
-                        ExportFileSettings.DataFileSeparator.ToString());
-                }
+                this.csvWriter.WriteData(dataByTheLevelFilePath,
+                    exportBulk[level],
+                    ExportFileSettings.DataFileSeparator.ToString());
             }
         }
 
-        private Stopwatch GetInterviewDataWatch = new Stopwatch();
-        private Stopwatch CreateInterviewExportedDataWatch = new Stopwatch();
+        private readonly Stopwatch getInterviewDataWatch = new Stopwatch();
 
-        private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport, QuestionnaireExportStructure exportStructure)
+        private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport, QuestionnaireExportStructure exportStructure, string basePath)
         {
-            GetInterviewDataWatch.Start();
-            InterviewData interview =  this.TransactionManager.ExecuteInQueryTransaction(() => 
-                ServiceLocator.Current.GetInstance<IInterviewFactory>().GetInterviewDataWithLevelsOnly(interviewToExport.Id, exportStructure.Identity));
-            GetInterviewDataWatch.Stop();
+            getInterviewDataWatch.Start();
+            var interviewFactory = ServiceLocator.Current.GetInstance<IInterviewFactory>();
+            var interview =  this.TransactionManager.ExecuteInQueryTransaction(() => interviewFactory.GetInterviewEntities(interviewToExport.Id, exportStructure.Identity));
+            getInterviewDataWatch.Stop();
 
-            CreateInterviewExportedDataWatch.Start();
+            List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath);
+
+            var interviewData = new InterviewData();
+            interviewData.Levels = interviewFactory.GetInterviewDataLevels(exportStructure.Identity, interview);
+
             InterviewDataExportView interviewDataExportView =
-                ServiceLocator.Current.GetInstance<IExportViewFactory>().CreateInterviewDataExportView(exportStructure, interview);
+                ServiceLocator.Current.GetInstance<IExportViewFactory>().CreateInterviewDataExportView(exportStructure, interviewData);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
-            CreateInterviewExportedDataWatch.Stop();
-
+            var dataFileSeparator = ExportFileSettings.DataFileSeparator.ToString();
+            exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x =>  string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();
             return exportedData;
         }
 
@@ -265,6 +265,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 InterviewId = interviewId.Id.FormatGuid(),
                 Data = interviewData,
             };
+
+            
 
             return interviewExportedData;
         }
