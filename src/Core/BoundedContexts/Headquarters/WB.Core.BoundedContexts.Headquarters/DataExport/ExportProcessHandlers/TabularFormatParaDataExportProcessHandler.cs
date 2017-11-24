@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
-            var interviewsToExport = this.tabularFormatExportService.GetInterviewIdsToExport(
+            var interviewsToExport = this.tabularFormatExportService.GetInterviewsToExport(
                 questionnaireIdentity, status, cancellationToken);
 
             var paradataReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var eventsByInterview = this.eventStore.Read(interviewId, 0);
+                    var eventsByInterview = this.eventStore.Read(interviewId.Id, 0);
 
                     try
                     {
