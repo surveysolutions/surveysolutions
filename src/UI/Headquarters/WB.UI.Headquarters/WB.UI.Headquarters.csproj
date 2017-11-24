@@ -782,6 +782,10 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>MainMenu.es1.designer.cs</LastGenOutput>
     </Content>
+    <Content Include="App_GlobalResources\Maps.fr.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Maps.fr.designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -1779,6 +1783,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Maps.fr.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.fr.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Maps.ru.designer.cs">
       <AutoGen>True</AutoGen>

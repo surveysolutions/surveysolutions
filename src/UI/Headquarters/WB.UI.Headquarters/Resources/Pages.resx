@@ -1153,5 +1153,14 @@
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
     <value> Invalid names and user names will be ignored.</value>
-  </data> 
+  </data>
+  <data name="Map_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Map_Uploaded" xml:space="preserve">
+    <value>File was uploaded. Processing.</value>
+  </data>
+  <data name="Map_Uploading" xml:space="preserve">
+    <value>Uploading</value>
+  </data>
 </root>
