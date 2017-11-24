@@ -25,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -120,13 +119,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
 
-            List<Guid> interviewIdsToExport = GetInterviewIdsToExport(questionnaireIdentity, status, cancellationToken);
+            var interviewsToExport = GetInterviewsToExport(questionnaireIdentity, status, cancellationToken);
+            var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
             Stopwatch exportWatch = new Stopwatch();
             exportWatch.Start(); 
 
             Task.WaitAll(new[] {
-                Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
+                Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
                 Task.Run(() => this.commentsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportCommentsProgress), cancellationToken),
                 Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress), cancellationToken),
                 Task.Run(() => this.errorsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportErrorsProgress, cancellationToken), cancellationToken),
@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.logger.Info($"Export with all steps finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
         }
 
-        public List<Guid> GetInterviewIdsToExport(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, CancellationToken cancellationToken)
+        public List<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, CancellationToken cancellationToken)
         {
             Expression<Func<InterviewSummary, bool>> expression;
             if (status.HasValue)
@@ -152,32 +152,32 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                                   x.QuestionnaireVersion == questionnaireIdentity.Version;
             }
 
-            List<Guid> interviewIdsToExport = new List<Guid>();
+            List<InterviewToExport> interviewIdsToExport = new List<InterviewToExport>();
 
             var stopwatch = Stopwatch.StartNew();
            
             string lastRecivedId = null;
             while (true)
             {
-                var ids = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                var interviews = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ => _
                         .Where(expression)
                         .OrderBy(x => x.InterviewId)
                         .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
-                        .Select(x => x.InterviewId)
+                        .Select(x => new InterviewToExport(x.InterviewId, x.Key, x.HasErrors, x.Status))
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
                         .ToList()));
 
-                if (ids.Count == 0) break;
+                if (interviews.Count == 0) break;
 
                 cancellationToken.ThrowIfCancellationRequested();
-                interviewIdsToExport.AddRange(ids);
-                lastRecivedId = ids.Last().FormatGuid();
+                interviewIdsToExport.AddRange(interviews);
+                lastRecivedId = interviews.Last().Id.FormatGuid();
                 this.logger.Debug($"Received {interviewIdsToExport.Count:n0} interview interview ids.");
             }
             stopwatch.Stop();
             this.logger.Info($"Received {interviewIdsToExport.Count:N0} interviewIds to start export. Took {stopwatch.Elapsed:g} to complete.");
-            return interviewIdsToExport.ToList();
+            return interviewIdsToExport;
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
