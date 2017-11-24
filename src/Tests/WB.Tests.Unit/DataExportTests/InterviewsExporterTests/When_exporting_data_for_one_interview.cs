@@ -5,6 +5,7 @@ using System.Threading;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -60,7 +61,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                         answers: new [] { "8" })
                 });
             //act
-            exporter.Export(questionnaireExportStructure, new List<Guid>{ interviewId }, "path", new Progress<int>(), CancellationToken.None);
+            exporter.Export(questionnaireExportStructure, new List<InterviewToExport> { interviewId }, "path", new Progress<int>(), CancellationToken.None);
 
             //assert
             Assert.That(dataInCsvFile[0].File, Is.EqualTo("Questionnaire.tab"));

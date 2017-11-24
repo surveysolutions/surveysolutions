@@ -131,11 +131,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    });
 
                 batchWatch.Stop();
-                this.logger.Debug(string.Format("Exported {0:N0} in {3:g} interviews out of {1:N0} for questionnaire {2}",
+                this.logger.Debug(string.Format("Exported {0:N0} in {3:g} interviews out of {1:N0}. for questionnaire {2}. GetInterviewDataWatch: {4:g} CreateInterviewExportedDataWatch: {5:g}",
                     totalInterviewsProcessed,
                     interviewIdsToExport.Count,
                     new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version),
-                    batchWatch.Elapsed));
+                    batchWatch.Elapsed,
+                    GetInterviewDataWatch.Elapsed,
+                    CreateInterviewExportedDataWatch.Elapsed));
 
                 this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
             }
@@ -191,13 +193,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
         }
 
+        private Stopwatch GetInterviewDataWatch = new Stopwatch();
+        private Stopwatch CreateInterviewExportedDataWatch = new Stopwatch();
+
         private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport, QuestionnaireExportStructure exportStructure)
         {
-            var interview =  this.TransactionManager.ExecuteInQueryTransaction(() => 
-                ServiceLocator.Current.GetInstance<IInterviewFactory>().GetInterviewData(interviewToExport.Id));
+            GetInterviewDataWatch.Start();
+            InterviewData interview =  this.TransactionManager.ExecuteInQueryTransaction(() => 
+                ServiceLocator.Current.GetInstance<IInterviewFactory>().GetInterviewDataWithLevelsOnly(interviewToExport.Id, exportStructure.Identity));
+            GetInterviewDataWatch.Stop();
+
+            CreateInterviewExportedDataWatch.Start();
             InterviewDataExportView interviewDataExportView =
                 ServiceLocator.Current.GetInstance<IExportViewFactory>().CreateInterviewDataExportView(exportStructure, interview);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
+            CreateInterviewExportedDataWatch.Stop();
 
             return exportedData;
         }
