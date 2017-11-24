@@ -518,7 +518,6 @@
     <Compile Include="BoundedContexts\Tester\Services\TesterPlainInterviewFileStorageTests.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\ExportQuestion_Variable_Tests.cs" />
     <Compile Include="DataExportTests\ExportQuestionServiceTests.cs" />
-    <Compile Include="DataExportTests\InterviewErrorsExporterTests\InterviewErrorsExporterTests.cs" />
     <Compile Include="GenericSubdomains\TreeTest.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\LazyNotificationServiceTests.cs" />
     <Compile Include="Infrastructure\CqrsPostgresTransactionManagerTests.cs" />
@@ -1632,6 +1631,7 @@
   <ItemGroup>
     <Folder Include="Applications\Headquarters\PublicApiTests\ApiTests\" />
     <Folder Include="BoundedContexts\Headquarters\UserBatchCreatorTests\" />
+    <Folder Include="DataExportTests\InterviewErrorsExporterTests\" />
     <Folder Include="DataExportTests\InterviewsExporterTests\" />
     <Folder Include="Properties\" />
     <Folder Include="Resources\" />

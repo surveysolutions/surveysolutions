@@ -1,113 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
-    public class InterviewErrorsExporter
+    public interface IInterviewErrorsExporter
     {
-        private readonly IInterviewFactory interviewFactory;
-        private readonly ILogger logger;
+        List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath);
+        void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath);
+    }
+
+    public class InterviewErrorsExporter : IInterviewErrorsExporter
+    {
         private readonly ICsvWriter csvWriter;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly ITransactionManagerProvider transactionManager;
-        private readonly InterviewDataExportSettings exportSettings;
-        private const string FileName = "interview__errors.tab";
+        public const string FileName = "interview__errors";
 
-        protected InterviewErrorsExporter()
+        public InterviewErrorsExporter(ICsvWriter csvWriter,
+            IQuestionnaireStorage questionnaireStorage)
         {
+            this.csvWriter = csvWriter ?? throw new ArgumentNullException(nameof(csvWriter));
+            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
         }
 
-        public InterviewErrorsExporter(IInterviewFactory interviewFactory,
-            ILogger logger,
-            ICsvWriter csvWriter,
-            IQuestionnaireStorage questionnaireStorage,
-            ITransactionManagerProvider transactionManager,
-            InterviewDataExportSettings exportSettings)
+        public List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath)
         {
-            this.interviewFactory = interviewFactory;
-            this.logger = logger;
-            this.csvWriter = csvWriter;
-            this.questionnaireStorage = questionnaireStorage;
-            this.transactionManager = transactionManager;
-            this.exportSettings = exportSettings;
-        }
+            var questionnaire = questionnaireStorage.GetQuestionnaire(exportStructure.Identity, null);
+            List<string[]> exportRecords = new List<string[]>();
 
-        public void Export(QuestionnaireExportStructure exportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress, CancellationToken cancellationToken)
-        {
-            long totalProcessed = 0;
-            long totalRowsWritten = 0;
-
-            bool hasAtLeastOneRoster = exportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
-            int maxRosterDepthInQuestionnaire = exportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
-
-            var filePath = Path.Combine(basePath, FileName);
-            WriteHeader(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire, filePath);
-
-            var questionnaire = questionnaireStorage.GetQuestionnaire(
-                new QuestionnaireIdentity(exportStructure.QuestionnaireId, exportStructure.Version), null);
-            Stopwatch watch = Stopwatch.StartNew();
-            foreach (var interviewsBatch in interviewIdsToExport.Batch(exportSettings.ErrorsExporterBatchSize))
+            foreach (var interviewEntity in entitiesToExport.Where(x => (x.EntityType == EntityType.Question  || x.EntityType == EntityType.StaticText) && x.InvalidValidations?.Length > 0))
             {
-                Stopwatch batchWatch = Stopwatch.StartNew();
-                cancellationToken.ThrowIfCancellationRequested();
-
-                Stopwatch readWatch = Stopwatch.StartNew();
-                var interveiws = interviewsBatch.ToList();
-                var exportedErrors =
-                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.interviewFactory.GetErrors(interveiws));
-                this.logger.Debug($"Read from db took {readWatch.Elapsed:g}. Received {exportedErrors.Count:N} rows");
-                readWatch.Stop();
-
-                List<string[]> exportRecords = new List<string[]>();
-                foreach (var error in exportedErrors)
+                foreach (var failedValidationConditionIndex in interviewEntity.InvalidValidations)
                 {
-                    foreach (var failedValidationConditionIndex in error.FailedValidationConditions)
-                    {
-                        string[] exportRow = CreateExportRow(questionnaire, error, maxRosterDepthInQuestionnaire, failedValidationConditionIndex);
-                        totalRowsWritten++;
-                        exportRecords.Add(exportRow);
-                    }
+                    string[] exportRow = CreateExportRow(questionnaire, interviewEntity, exportStructure.MaxRosterDepth, failedValidationConditionIndex);
+                    exportRecords.Add(exportRow);
                 }
-
-                if (exportRecords.Count > 0)
-                {
-                    this.csvWriter.WriteData(filePath, exportRecords, ExportFileSettings.DataFileSeparator.ToString());
-                }
-
-                totalProcessed += interveiws.Count;
-                if (totalProcessed % 10_000 == 0)
-                    this.logger.Debug($"Exported errors for batch. Processed {totalProcessed:N} of {interviewIdsToExport.Count:N}. Reported batch took {batchWatch.Elapsed:g}. Total rows written {totalRowsWritten:N} .Elapsed {watch.Elapsed:g}");
-                progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
             }
 
-            this.logger.Info($"Exported interview errors of {questionnaire.Title} ver {questionnaire.Version}. Processed {interviewIdsToExport.Count:N}. Elapsed {watch.Elapsed:g}");
-
-            progress.Report(100);
+            return exportRecords;
         }
 
-        private static string[] CreateExportRow(IQuestionnaire questionnaire, ExportedError error,
+        private static string[] CreateExportRow(IQuestionnaire questionnaire, InterviewEntity error,
             int maxRosterDepthInQuestionnaire, int failedValidationConditionIndex)
         {
             List<string> exportRow = new List<string>();
             if (error.EntityType == EntityType.Question)
             {
-                exportRow.Add(questionnaire.GetQuestionVariableName(error.EntityId));
+                exportRow.Add(questionnaire.GetQuestionVariableName(error.Identity.Id));
             }
             else
             {
@@ -115,9 +63,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
             exportRow.Add(error.EntityType.ToString());
 
-            if (error.RosterVector.Length > 0)
+            if (error.Identity.RosterVector.Length > 0)
             {
-                var parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(error.EntityId);
+                var parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(error.Identity.Id);
                 Guid lastRoster = parentRosters.Last();
                 var rosterName = questionnaire.GetRosterVariableName(lastRoster);
 
@@ -132,9 +80,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
             {
-                if (error.RosterVector.Length > i)
+                if (error.Identity.RosterVector.Length > i)
                 {
-                    exportRow.Add(error.RosterVector[i].ToString());
+                    exportRow.Add(error.Identity.RosterVector[i].ToString());
                 }
                 else 
                 {
@@ -142,11 +90,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 }
             }
             exportRow.Add((failedValidationConditionIndex + 1).ToString());
-            exportRow.Add(questionnaire.GetValidationMessage(error.EntityId, failedValidationConditionIndex).RemoveHtmlTags());
+            exportRow.Add(questionnaire.GetValidationMessage(error.Identity.Id, failedValidationConditionIndex).RemoveHtmlTags());
             return exportRow.ToArray();
         }
 
-        private void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath)
+        public void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath)
         {
             var header = new List<string> { "variable", "type" };
             if (hasAtLeastOneRoster)

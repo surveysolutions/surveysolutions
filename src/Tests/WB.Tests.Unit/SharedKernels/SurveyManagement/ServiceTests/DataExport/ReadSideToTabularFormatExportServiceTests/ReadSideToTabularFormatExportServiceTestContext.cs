@@ -28,12 +28,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         {
             // arrange
             string description = null;
-            IFileSystemAccessor fileSystemAccessor = Mock.Of<IFileSystemAccessor>();
-
-            Mock.Get(fileSystemAccessor)
-                .Setup(accessor => accessor.CombinePath(@"x:\", "description.txt"))
-                .Returns(@"x:\description.txt");
-            Mock.Get(fileSystemAccessor)
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
                 .Setup(accessor => accessor.WriteAllText(@"x:\description.txt", It.IsAny<string>()))
                 .Callback<string, string>((file, content) => description = content);
 
@@ -52,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             });
 
             var exportService = Create.Service.ReadSideToTabularFormatExportService(
-                fileSystemAccessor: fileSystemAccessor,
+                fileSystemAccessor: fileSystemAccessor.Object,
                 questionnaireExportStructure: questionnaireExportStructure);
 
             // act
