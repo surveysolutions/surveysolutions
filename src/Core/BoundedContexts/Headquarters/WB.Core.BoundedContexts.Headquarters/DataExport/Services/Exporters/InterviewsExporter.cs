@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -15,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 
@@ -28,7 +30,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ILogger logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
-        private readonly InterviewExportredDataRowReader rowReader;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private ITransactionManager TransactionManager => transactionManagerProvider.GetTransactionManager();
         private readonly ITransactionManagerProvider transactionManagerProvider;
@@ -49,7 +50,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.logger = logger;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
-            this.rowReader = rowReader;
             this.interviewSummaries = interviewSummaries;
             this.transactionManagerProvider = plainTransactionManagerProvider;
         }
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    },
                    interviewId => {
                        cancellationToken.ThrowIfCancellationRequested();
-                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(interviewId);
+                       InterviewExportedDataRecord exportedData = this.ExportSingleInterview(interviewId, questionnaireExportStructure);
                        exportBulk.Add(exportedData);
 
                        Interlocked.Increment(ref totalInterviewsProcessed);
@@ -191,12 +191,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
         }
 
-        private InterviewExportedDataRecord ExportSingleInterview(Guid interviewId)
+        private InterviewExportedDataRecord ExportSingleInterview(Guid interviewId, QuestionnaireExportStructure exportStructure)
         {
-            var records = this.rowReader.ReadExportDataForInterview(interviewId);
-            var interviewExportStructure = InterviewDataExportView.CreateFromRecords(interviewId, records);
-
-            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewExportStructure, interviewId);
+            var interview =  this.TransactionManager.ExecuteInQueryTransaction(() => 
+                ServiceLocator.Current.GetInstance<IInterviewFactory>().GetInterviewData(interviewId));
+            InterviewDataExportView interviewDataExportView =
+                ServiceLocator.Current.GetInstance<IExportViewFactory>().CreateInterviewDataExportView(exportStructure, interview);
+            InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewId);
 
             return exportedData;
         }
