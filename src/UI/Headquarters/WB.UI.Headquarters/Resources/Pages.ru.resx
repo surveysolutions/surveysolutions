@@ -1012,7 +1012,7 @@
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите разорвать связь пользователя и карты?</value>
-  </data>  
+  </data>
   <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
     <value>Удалить</value>
   </data>
@@ -1170,5 +1170,14 @@
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
     <value>Неправильные или несуществующие имена пользователей не будут загружены</value>
-  </data> 
+  </data>
+  <data name="Map_Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Map_Uploaded" xml:space="preserve">
+    <value>Фвйл загружен. Обработка.</value>
+  </data>
+  <data name="Map_Uploading" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
 </root>
