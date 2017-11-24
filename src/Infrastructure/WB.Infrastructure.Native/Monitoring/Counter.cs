@@ -14,7 +14,7 @@
             counter.Inc(amount);
         }
 
-        public ICounter Label(params string[] labels)
+        public ICounter Labels(params string[] labels)
         {
             return new ChildCounter(counter, labels);
         }
