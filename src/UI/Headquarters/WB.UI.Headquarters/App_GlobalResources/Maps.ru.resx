@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>Произошла ошибка. Файл не является .tsv</value>
+  </data>
   <data name="Levels" xml:space="preserve">
     <value>Уровни</value>
   </data>
@@ -125,6 +128,9 @@
   </data>
   <data name="MapLoadingNotZipError" xml:space="preserve">
     <value>Произошла ошибка. Файл не является .zip архивом</value>
+  </data>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Произошла ошибка во время загрузки.</value>
   </data>
   <data name="MapsLoadingError" xml:space="preserve">
     <value>Произошла ошибка при загрузке карт.</value>
@@ -143,5 +149,11 @@
   </data>
   <data name="UpdateDate" xml:space="preserve">
     <value>Дата изменения</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value> назначения для {0} карт было обработано с {1} ошибками</value>
+  </data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>{0} карт обработано из них с ошибками {1}</value>
   </data>
 </root>

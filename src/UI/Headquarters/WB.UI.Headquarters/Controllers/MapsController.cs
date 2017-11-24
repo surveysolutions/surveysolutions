@@ -65,7 +65,8 @@ namespace WB.UI.Headquarters.Controllers
                         controller = "MapsApi",
                         action = "MapList"
                     }),
-                UploadMapUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMaps" }),
+                
+                UploadMapsFileUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UploadMapsFile" }),
                 UserMapLinkingUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMapsLink" }),
                 DeleteMapLinkUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "MapsApi", action = "DeleteMap" }),
                 IsObserver = authorizedUser.IsObserver,
@@ -151,108 +152,106 @@ namespace WB.UI.Headquarters.Controllers
             return View(map);
         }
 
+        
         [HttpPost]
         [ObserverNotAllowed]
-        public async Task<ActionResult> UploadMaps(MapFileUploadModel model)
+        public async Task<ActionResult> UploadMapsFile(HttpPostedFileBase file)
         {
             if (!this.ModelState.IsValid)
             {
-                this.Error(Maps.MapsLoadingError);
-                return this.RedirectToAction(nameof(Index));
+                return this.Content(Maps.MapsLoadingError);
             }
-            
-            if (".zip" != this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower())
+
+            if (".zip" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
             {
-                this.Error(Maps.MapLoadingNotZipError);
-                return this.RedirectToAction(nameof(Index));
+                return this.Content(Maps.MapLoadingNotZipError);
             }
 
             string tempStore = null;
-            var invalidMaps = new List<string>();
+            var processedMaps = new Dictionary<string, bool>();
+
             try
             {
-                tempStore = mapRepository.StoreData(model.File.InputStream, model.File.FileName);
+                tempStore = mapRepository.StoreData(file.InputStream, file.FileName);
                 var maps = mapRepository.UnzipAndGetFileList(tempStore);
-                
+
+                if (maps == null)
+                    this.Content(Maps.MapsLoadingError);
+
                 foreach (var map in maps)
                 {
                     try
                     {
                         await mapRepository.SaveOrUpdateMapAsync(map);
+                        processedMaps.Add(map, true);
                     }
                     catch (Exception e)
                     {
                         Logger.Error($"Error on maps import map {map}", e);
-                        invalidMaps.Add(map);
+                        processedMaps.Add(map, false);
                     }
-                }
-
-                if (invalidMaps.Count > 0)
-                {
-                    this.Error(Maps.MapLoadingInvalidFilesError + string.Join(", ", invalidMaps));
                 }
             }
             catch (Exception e)
             {
                 Logger.Error("Error on maps import", e);
-                this.Error(Maps.MapsLoadingError);
+                return this.Content(Maps.MapsLoadingError);
 
             }
             finally
             {
-                if(tempStore != null)
+                if (tempStore != null)
                     mapRepository.DeleteTemporaryData(tempStore);
             }
 
-            return this.RedirectToAction("Index");
+            return this.Content(string.Format(Maps.UploadMapsSummaryFormat, processedMaps.Count, processedMaps.Values.Count(x => x == false)));
         }
 
 
         [HttpPost]
         [ObserverNotAllowed]
-        public ActionResult UploadMappings(MapFileUploadModel model)
+        public ActionResult UploadMappings(HttpPostedFileBase file)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.RedirectToAction(nameof(Index));
+                return this.Content(Maps.MappingsLoadingError);
             }
 
-            if (".tsv" != this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower())
+            if (".tsv" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
             {
-                this.Error("Error occurred. File is not a .tsv");
-                return this.RedirectToAction(nameof(Index));
+                return this.Content(Maps.FileLoadingNotTsvError);
             }
 
-            bool noErrors = true;
+            int errorsCount = 0;
+
+            List<MapUserMapping> mappings;
+
             try
             {
-                var mappings = ProcessDataFile(model);
-                foreach (var mapUserMapping in mappings)
-                {
-                    try
-                    {
-                        mapRepository.UpdateUserMaps(mapUserMapping.Map, mapUserMapping.Users.ToArray());
-                    }
-                    catch 
-                    {
-                        noErrors = false;
-                    }
-                    
-                }
-
-                this.Success("User map imported");
+                mappings = ProcessDataFile(file);
             }
             catch (Exception e)
             {
                 Logger.Error($"Error on maps import mapping", e);
-                this.Error("Error occurred");
-                return this.RedirectToAction("Index");
+
+                return this.Content(Maps.MappingsLoadingError);
             }
+            
+             foreach (var mapUserMapping in mappings)
+             {
+                try
+                {
+                    mapRepository.UpdateUserMaps(mapUserMapping.Map, mapUserMapping.Users.ToArray());
+                }
+                catch 
+                {
 
-            if (!noErrors)
-                this.Info("Imported with ignores");
+                    errorsCount ++;
+                }
+                    
+             }
 
-            return this.RedirectToAction("Index");
+            return this.Content(string.Format(Maps.UploadMappingsSummaryFormat, mappings.Count, errorsCount));
         }
 
         public class MapUserMapping
@@ -262,17 +261,17 @@ namespace WB.UI.Headquarters.Controllers
         }
 
 
-        private List<MapUserMapping> ProcessDataFile(MapFileUploadModel model)
+        private List<MapUserMapping> ProcessDataFile(HttpPostedFileBase file)
         {
             var records = new List<string[]>();
             try
             {
-                var recordsAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(model.File.InputStream, "\t");
+                var recordsAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(file.InputStream, "\t");
                 records = recordsAccessor.Records.ToList();
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message, e);
+                throw new Exception("Error on mapping file processing", e);
             }
 
             var dataColumnNamesMappedOnRecordSetter = new Dictionary<string, Action<MapUserMapping, string>>

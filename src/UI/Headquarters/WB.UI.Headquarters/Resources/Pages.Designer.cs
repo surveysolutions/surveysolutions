@@ -2068,6 +2068,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Map_Status {
+            get {
+                return ResourceManager.GetString("Map_Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File was uploaded. Processing..
+        /// </summary>
+        public static string Map_Uploaded {
+            get {
+                return ResourceManager.GetString("Map_Uploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploading.
+        /// </summary>
+        public static string Map_Uploading {
+            get {
+                return ResourceManager.GetString("Map_Uploading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delink User from map.
         /// </summary>
         public static string MapDetails_DelinkUser {
