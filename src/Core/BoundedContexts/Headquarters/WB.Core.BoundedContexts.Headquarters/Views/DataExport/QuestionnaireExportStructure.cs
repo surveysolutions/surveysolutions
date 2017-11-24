@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
     public class QuestionnaireExportStructure
     {
+        private QuestionnaireIdentity identity;
+
         public QuestionnaireExportStructure()
         {
             this.HeaderToLevelMap = new Dictionary<ValueVector<Guid>, HeaderStructureForLevel>();
@@ -17,6 +20,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public Guid QuestionnaireId { get; set; }
         public Dictionary<ValueVector<Guid>, HeaderStructureForLevel> HeaderToLevelMap { get; set; }
         public long Version { get; set; }
+
+        public QuestionnaireIdentity Identity => identity ?? (identity = new QuestionnaireIdentity(QuestionnaireId, Version));
 
         public IEnumerable<string> GetAllParentColumnNamesForLevel(ValueVector<Guid> levelScopeVector)
         {
@@ -34,5 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 yield return ServiceColumns.Key;
             }
         }
+
+        
     }
 }

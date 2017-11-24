@@ -449,19 +449,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 IsMissingAssignToInterviewer = !interviewSummary.IsAssignedToInterviewer
             };
 
+            interviewData.Levels = GetInterviewDataLevels(interviewId, QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity));
+
+            return interviewData;
+        }
+
+        public InterviewData GetInterviewDataWithLevelsOnly(Guid interviewId, QuestionnaireIdentity questionnaireId)
+        {
+            var interviewData = new InterviewData();
+            interviewData.Levels = GetInterviewDataLevels(interviewId, questionnaireId);
+            return interviewData;
+        }
+
+        private Dictionary<string, InterviewLevel> GetInterviewDataLevels(Guid interviewId, QuestionnaireIdentity questionnaireId)
+        {
             IQuestionnaire questionnaire =
-                this.questionnaireStorage.GetQuestionnaire(
-                    QuestionnaireIdentity.Parse(interviewSummary.QuestionnaireIdentity), null);
+                this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
 
             var interviewEntites = this.sessionProvider.GetSession().Connection
-                .Query($"SELECT * FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId", new {InterviewId = interviewId})
+                .Query($"SELECT * FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
+                    new {InterviewId = interviewId})
                 .ToList()
                 .Select(x => new InterviewEntity
                 {
                     InterviewId = x.interviewid,
                     Identity = Identity.Create(x.entityid, x.rostervector),
-                    EntityType = (EntityType)x.entitytype,
-                    AnswerType = (AnswerType?)x.answertype,
+                    EntityType = (EntityType) x.entitytype,
+                    AnswerType = (AnswerType?) x.answertype,
                     IsEnabled = x.isenabled,
                     IsReadonly = x.isreadonly,
                     HasFlag = x.hasflag,
@@ -482,17 +496,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 })
                 .ToList();
 
-            var groupBy = interviewEntites
+            var interviewEntitiesGroupedByRosterVector = interviewEntites
                 .GroupBy(x => x.Identity?.RosterVector ?? RosterVector.Empty)
                 .ToDictionary(x => x.Key, x => x.ToArray());
 
-            var interviewLevels = groupBy.Select(x => ToInterviewLevel(x.Key, x.Value, questionnaire)).ToList();
+            var interviewLevels = interviewEntitiesGroupedByRosterVector
+                .Select(x => ToInterviewLevel(x.Key, x.Value, questionnaire)).ToList();
 
-            interviewData.Levels =
+            var interviewDataLevels =
                 interviewLevels.ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
-
-            return interviewData;
+            return interviewDataLevels;
         }
+
         private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities,
             IQuestionnaire questionnaire)
         {
