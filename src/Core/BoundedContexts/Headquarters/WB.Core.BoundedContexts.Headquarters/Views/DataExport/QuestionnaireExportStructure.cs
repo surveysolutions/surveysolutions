@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
     public class QuestionnaireExportStructure
     {
         private QuestionnaireIdentity identity;
+        private int? maxRosterDepthInQuestionnaire = null;
 
         public QuestionnaireExportStructure()
         {
@@ -40,6 +41,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
             }
         }
 
-        
+        public int MaxRosterDepth
+        {
+            get
+            {
+                if (!maxRosterDepthInQuestionnaire.HasValue)
+                {
+                    maxRosterDepthInQuestionnaire = this.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
+                }
+
+                return maxRosterDepthInQuestionnaire.Value;
+            }
+        }
     }
 }
