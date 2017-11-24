@@ -33,6 +33,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
@@ -111,9 +112,16 @@ namespace WB.UI.Headquarters
                 AddAllSqlData(exception);
             });
 
+            InitMetrics();
+            
             StartMetricsPush(kernel, logger);
         }
-                
+
+        private static void InitMetrics()
+        {
+            CommonMetrics.StateFullInterviewsCount.Set(0);
+        }
+
         private void StartMetricsPush(IKernel kernel, Core.GenericSubdomains.Portable.Services.ILogger logger)
         {
             try
@@ -262,6 +270,8 @@ namespace WB.UI.Headquarters
 
         private static void OnShutdown()
         {
+            InitMetrics();
+
             var logger = LogManager.GetCurrentClassLogger();
 
             logger.Info(@"Ending application.");
