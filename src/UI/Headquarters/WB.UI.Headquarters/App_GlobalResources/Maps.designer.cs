@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred. File is not a .tsv.
+        /// </summary>
+        internal static string FileLoadingNotTsvError {
+            get {
+                return ResourceManager.GetString("FileLoadingNotTsvError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Levels.
         /// </summary>
         internal static string Levels {
@@ -84,6 +93,15 @@ namespace Resources {
         internal static string MapLoadingNotZipError {
             get {
                 return ResourceManager.GetString("MapLoadingNotZipError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred on map links loading..
+        /// </summary>
+        internal static string MappingsLoadingError {
+            get {
+                return ResourceManager.GetString("MappingsLoadingError", resourceCulture);
             }
         }
         
@@ -138,6 +156,24 @@ namespace Resources {
         internal static string UpdateDate {
             get {
                 return ResourceManager.GetString("UpdateDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to links for {0} maps was processed with {1} invalid.
+        /// </summary>
+        internal static string UploadMappingsSummaryFormat {
+            get {
+                return ResourceManager.GetString("UploadMappingsSummaryFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} maps was processed with {1} invalid map files.
+        /// </summary>
+        internal static string UploadMapsSummaryFormat {
+            get {
+                return ResourceManager.GetString("UploadMapsSummaryFormat", resourceCulture);
             }
         }
     }

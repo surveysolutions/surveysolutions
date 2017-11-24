@@ -19,13 +19,15 @@
                     </div>
                     <div>
                         <a :href="$config.model.downloadAllUrl">{{$t("Pages.MapLinking_DownloadExisting")}}</a>
-                    <div class="info-block" v-if="actionsAlowed">
-                        <form :action="$config.model.uploadUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post">
+                    <div class="info-block" v-if="actionsAlowed">                        
                             <label class="btn btn-success btn-file">
                                 {{$t("Pages.MapLinking_UploadFile")}}
-                            <input accept=".tsv" id="File" name="File" onchange="this.form.submit()" type="file" value="" />
-                            </label>
-                        </form>
+                            <input accept=".tsv" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
+                            </label>                        
+                    
+                    </div>
+                    <div class="info-block" v-if="actionsAlowed">
+                     <div ref="status" ><p>{{statusMessage}}</p></div>
                     </div>
                     <div>                    
                         <p>{{$t("Pages.MapLinking_UploadFileDescription")}}</p>
@@ -38,7 +40,12 @@
     </HqLayout>
 </template>
 <script>
-export default {   
+export default {  
+    data: function(){
+        return {        
+            statusMessage: ''
+        }        
+    }, 
     mounted() {},
     computed: {
         config(){
@@ -47,6 +54,40 @@ export default {
         actionsAlowed() {
             return !this.config.isObserver && !this.config.isObserving;
         }
+    },
+    methods:{
+        updateStatus(newMessage){
+          this.statusMessage = this.$t("Pages.Map_Status") + ": " + newMessage;
+      },
+        onFileChange(e){
+            const statusupdater = this.updateStatus;
+            const uploadingMessage = this.$t("Pages.Map_Uploading");
+            
+            const fd = new FormData();
+            fd.append("file", this.$refs.uploader.files[0]);
+        
+            $.ajax({
+                url: this.$config.model.uploadUrl,
+                xhr() {
+                    const xhr = $.ajaxSettings.xhr()
+                    xhr.upload.onprogress = (e) => {                        
+                        statusupdater(uploadingMessage + " " + parseInt((e.loaded / e.total) * 100) + "%");                        
+                    }
+                    return xhr
+                },
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function(data) {
+                    statusupdater(data);                                        
+                },
+                error : function(error){
+                    statusupdater(error);
+                }
+            });            
+    },
+
     }
 }
 </script>

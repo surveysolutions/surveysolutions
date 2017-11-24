@@ -2,14 +2,13 @@
     <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">        
         <div slot="headers">
             <div class="topic-with-button" >
-                <h1>{{$t('Pages.MapList_Title')}}</h1>
-                <form :action="$config.model.uploadMapUrl" enctype="multipart/form-data" id="MapsUploadForm" method="post" v-if="actionsAlowed">
+                <h1>{{$t('Pages.MapList_Title')}}</h1>                
                     <label class="btn btn-success btn-file">
                         {{$t('Pages.MapList_Upload')}}
-                        <input accept=".zip" id="File" name="File" onchange="this.form.submit()" type="file" value="" />
+                        <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
                     </label>
-                </form>
-            </div>
+                </div>
+                <div ref="status" ><p>{{statusMessage}}</p></div>
             <ol class="list-unstyled">
                 <li>{{$t('Pages.MapList_UploadDescription')}} </li>
                 <li>{{$t('Pages.MapList_UploadDescriptionExtra')}}</li>
@@ -28,19 +27,62 @@
                  slot="modals">
             {{ $t("Pages.Map_DiscardConfirm") }}
         </Confirm>
-
     </HqLayout>
 </template>
 
 <script>
 export default {
+    data: function(){
+        return {        
+            statusMessage: ''
+        }        
+    },
   mounted() {
-    this.reload();
+    this.$refs.table.reload();
   },
   methods: {
+      updateStatus(newMessage){
+          this.statusMessage = this.$t("Pages.Map_Status") + ": " + newMessage;
+      },
+      progressStyle() {
+                return {
+                    width: this.fileProgress + "%"
+                }
+            },
     reload() {
             this.$refs.table.reload();
         },
+    onFileChange(e){
+        const statusupdater = this.updateStatus;
+        const reloader = this.reload;
+        const uploadingMessage = this.$t("Pages.Map_Uploading");
+        
+        const fd = new FormData();
+        fd.append("file", this.$refs.uploader.files[0]);
+        
+        $.ajax({
+                url: this.$config.model.uploadMapsFileUrl,
+                xhr() {
+                    const xhr = $.ajaxSettings.xhr()
+                    xhr.upload.onprogress = (e) => {                        
+                        statusupdater(uploadingMessage + " " + parseInt((e.loaded / e.total) * 100) + "%");                        
+                    }
+                    return xhr
+                },
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: "POST",
+                success: function(data) {
+                    statusupdater(data);
+                    reloader();                    
+                },
+                error : function(error){
+                    statusupdater(error);
+                }
+            });            
+    },
+
     contextMenuItems({ rowData }) {
       return [
         {

@@ -144,4 +144,16 @@
   <data name="UpdateDate" xml:space="preserve">
     <value>Imported on</value>
   </data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>{0} maps was processed with {1} invalid map files</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>links for {0} maps was processed with {1} invalid</value>
+  </data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>Error occurred. File is not a .tsv</value>
+  </data>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>Error occurred on map links loading.</value>
+  </data>
 </root>
