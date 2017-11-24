@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using CSCore;
 using CSCore.Codecs.WAV;
 using CSCore.MediaFoundation;
-using Prometheus;
 using System.Diagnostics;
 using System.Threading;
 using System.Text;
 using System.Web;
 using StackExchange.Exceptional;
+using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.UI.Headquarters.Services
 {
@@ -53,15 +53,13 @@ namespace WB.UI.Headquarters.Services
                     {
                         byte[] buffer = new byte[EncoderBufferSize];
 
-                        long total = 0;
-                        int read = 0;
+                        int read;
                         wavFile.Position = 0;
 
                         while ((read = wavFile.Read(buffer, 0, EncoderBufferSize)) > 0)
                         {
                             encoder.Write(buffer, 0, read);
-                            total += read;
-                        }                        
+                        }
                     }
                 }
                 audioResult.Binary = File.ReadAllBytes(tempFile);
@@ -89,6 +87,8 @@ namespace WB.UI.Headquarters.Services
 
         private void AudioCompressionQueueProcessor()
         {
+            audioFilesInQueue.Set(0);
+
             Thread.CurrentThread.Name = "Audio compression queue";
             var sw = new Stopwatch();
             var hashBuilder = new StringBuilder();
@@ -125,9 +125,9 @@ namespace WB.UI.Headquarters.Services
         }
 
         // instrumentation
-        private readonly Gauge audioFilesInQueue = Metrics.CreateGauge("audio_files_in_queue", @"Number of audio files in queue");
-        private readonly Counter audioFilesProcessed = Metrics.CreateCounter(@"audio_files_total", @"Total count of processed audio files");
-        private readonly Counter audtioFilesProcessingTime = Metrics.CreateCounter(@"audio_files_processing_seconds", @"Total processing time");
+        private readonly Gauge audioFilesInQueue =new Gauge(@"wb_audio_queue_files_count", @"Number of audio files in queue");
+        private readonly Counter audioFilesProcessed = new Counter(@"wb_audio_files_total", @"Total count of processed audio files");
+        private readonly Counter audtioFilesProcessingTime = new Counter(@"wb_audio_files_processing_seconds", @"Total processing time");
     }
 
     public class AudioFileInformation
