@@ -4,7 +4,7 @@ namespace WB.Infrastructure.Native.Monitoring
 {
     public class MetricsRegistry
     {
-        public static MetricsRegistry Instance { get; set; }
+        public static MetricsRegistry Instance { get; set; } = new MetricsRegistry();
 
         public void RegisterOnDemandCollectors(params IOnDemandCollector[] collectors)
         {
@@ -14,14 +14,14 @@ namespace WB.Infrastructure.Native.Monitoring
 
         private Prometheus.Advanced.IOnDemandCollector Convert(IOnDemandCollector onDemandCollector)
         {
-            return new OnDemandCollectorWrappe(onDemandCollector);
+            return new OnDemandCollectorWrapper(onDemandCollector);
         }
 
-        private class OnDemandCollectorWrappe : Prometheus.Advanced.IOnDemandCollector
+        private class OnDemandCollectorWrapper : Prometheus.Advanced.IOnDemandCollector
         {
             private readonly IOnDemandCollector collector;
 
-            public OnDemandCollectorWrappe(IOnDemandCollector collector)
+            public OnDemandCollectorWrapper(IOnDemandCollector collector)
             {
                 this.collector = collector;
             }

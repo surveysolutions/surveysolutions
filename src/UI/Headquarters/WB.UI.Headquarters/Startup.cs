@@ -18,6 +18,7 @@ using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using NConfig;
+using NHibernate;
 using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.Common.WebHost;
@@ -28,12 +29,14 @@ using Owin;
 using Prometheus.Advanced;
 using Quartz;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
@@ -59,7 +62,7 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            DefaultCollectorRegistry.Instance.Clear();
+            // DefaultCollectorRegistry.Instance.Clear();
 
             app.Use(RemoveServerNameFromHeaders);
 
@@ -126,6 +129,10 @@ namespace WB.UI.Headquarters
         {
             try
             {
+                MetricsRegistry.Instance.RegisterOnDemandCollectors(
+                    new BrokenPackagesStatsCollector(
+                        kernel.Get<ISessionFactory>(PostgresPlainStorageModule.SessionFactoryName)));
+
                 // getting instance name from connection string information
                 var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[@"Postgres"];
                 var npgsConnectionString = new NpgsqlConnectionStringBuilder(connectionString.ConnectionString);
@@ -135,13 +142,14 @@ namespace WB.UI.Headquarters
                 var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
 
                 // initialize push mechanizm
-                new Prometheus.MetricPusher(metricsGateway, 
-                    job: "hq", 
-                    additionalLabels: new[] { Tuple.Create("site", instanceName) },
+                new Prometheus.MetricPusher(metricsGateway,
+                    job: "hq",
+                    additionalLabels: new[] {Tuple.Create("site", instanceName)},
                     intervalMilliseconds: 1000).Start();
             }
-        catch (Exception e)
+            catch (Exception e)
             {
+                e.Log(null);
                 logger.Error("Unable to start metrics push", e);
             }
         }
