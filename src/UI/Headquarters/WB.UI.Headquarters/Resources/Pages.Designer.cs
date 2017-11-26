@@ -457,7 +457,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tab separated values (.tsv).
+        ///   Looks up a localized string similar to Tab separated values (.tab).
         /// </summary>
         public static string ExportToTab {
             get {
@@ -2212,7 +2212,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload .tsv file.
+        ///   Looks up a localized string similar to Upload .tab file.
         /// </summary>
         public static string MapLinking_UploadFile {
             get {
@@ -2221,7 +2221,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload .tsv file with file mappings.
+        ///   Looks up a localized string similar to Upload .tab file with file mappings.
         /// </summary>
         public static string MapLinking_UploadFileDescription {
             get {
