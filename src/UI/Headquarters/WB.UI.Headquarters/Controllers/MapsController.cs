@@ -217,7 +217,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.Content(Maps.MappingsLoadingError);
             }
 
-            if (".tsv" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
+            if (".tab" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
             {
                 return this.Content(Maps.FileLoadingNotTsvError);
             }
