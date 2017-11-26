@@ -7,5 +7,9 @@
 
         public static readonly Counter ExceptionsLogged 
             = new Counter(@"wb_hq_exceptions_raised", @"Total exceptions raised on Headquarters");
+
+            public static readonly Gauge BrokenPackagesCount = new Gauge(
+            "wb_broken_packages_count",
+            "Amount of broken packages on server");
     }
 }
