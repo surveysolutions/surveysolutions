@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     internal class DataExportProcessesService : IDataExportProcessesService
     {
         private readonly IAuditLog auditLog;
-        private readonly ConcurrentDictionary<string, IDataExportProcessDetails> processes = new ConcurrentDictionary<string, IDataExportProcessDetails>();
+        private readonly ConcurrentDictionary<string, DataExportProcessDetails> processes = new ConcurrentDictionary<string, DataExportProcessDetails>();
 
         private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
 
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.auditLog = auditLog;
         }
 
-        public IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport()
+        public DataExportProcessDetails GetAndStartOldestUnprocessedDataExport()
         {
             var exportProcess = this.processes.Values
                 .Where(p => p.Status == DataExportStatus.Queued)
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return process.NaturalId;
         }
 
-        private void EnqueueProcessIfNotYetInQueue(IDataExportProcessDetails newProcess)
+        private void EnqueueProcessIfNotYetInQueue(DataExportProcessDetails newProcess)
         {
             if (this.processes.GetOrNull(newProcess.NaturalId)?.IsQueuedOrRunning() ?? false)
                 return;
@@ -65,23 +65,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.processes[newProcess.NaturalId] = newProcess;
         }
 
-        public IDataExportProcessDetails[] GetRunningExportProcesses()
-        {
-            return this.processes.Values
-                .Where(process => process.IsQueuedOrRunning())
-                .OrderBy(p => p.BeginDate)
-                .ToArray();
-        }
+        public DataExportProcessDetails[] GetRunningExportProcesses() 
+            => this.processes.Values
+            .Where(process => process.IsQueuedOrRunning())
+            .OrderBy(p => p.BeginDate)
+            .ToArray();
 
-        public IDataExportProcessDetails[] GetAllProcesses() => this.processes.Values.ToArray();
+        public DataExportProcessDetails[] GetAllProcesses() => this.processes.Values.ToArray();
 
         public void FinishExportSuccessfully(string processId)
         {
             var dataExportProcess = this.processes.GetOrNull(processId);
+            if (dataExportProcess == null) return;
 
-            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
-
-            dataExportProcess.Status=DataExportStatus.Finished;
+            dataExportProcess.Status = DataExportStatus.Finished;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.ProgressInPercents = 100;
         }
@@ -89,8 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void FinishExportWithError(string processId, Exception e)
         {
             var dataExportProcess = this.processes.GetOrNull(processId);
-
-            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
+            if (dataExportProcess == null) return;
 
             dataExportProcess.Status = DataExportStatus.FinishedWithError;
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
@@ -103,8 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     $"Progress of data export process '{processId}' equals to '{progressInPercents}', but it can't be greater then 100 or less then 0");
 
             var dataExportProcess = this.processes.GetOrNull(processId);
-
-            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
+            if (dataExportProcess == null) return;
 
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.ProgressInPercents = progressInPercents;
@@ -127,22 +122,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void ChangeStatusType(string processId, DataExportStatus status)
         {
             var dataExportProcess = this.processes.GetOrNull(processId);
-
-            ThrowIfProcessIsNullOrNotRunningNow(dataExportProcess, processId);
+            if (dataExportProcess == null) return;
 
             dataExportProcess.LastUpdateDate = DateTime.UtcNow;
             dataExportProcess.Status = status;
-        }
-
-        private static void ThrowIfProcessIsNullOrNotRunningNow(IDataExportProcessDetails dataExportProcess, string processId)
-        {
-            if (dataExportProcess == null)
-                throw new InvalidOperationException($"Process with id '{processId}' is absent");
-
-            if (dataExportProcess.Status != DataExportStatus.Running &&
-                dataExportProcess.Status != DataExportStatus.Compressing)
-                throw new InvalidOperationException(
-                    $"Process '{dataExportProcess.Name}' should be in Running state, but it is in state {dataExportProcess.Status}");
         }
     }
 }
