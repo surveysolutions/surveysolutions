@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -85,9 +86,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             var sessionFactory = cfg.BuildSessionFactory();
 
-            Prometheus.Advanced.DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new[] {
+            MetricsRegistry.Instance.RegisterOnDemandCollectors(
                 new NHibernateStatsCollector("plainstore", sessionFactory)
-            });
+            );
 
             return sessionFactory;
         }
