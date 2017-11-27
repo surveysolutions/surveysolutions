@@ -406,7 +406,7 @@ namespace WB.Tests.Abc.TestFactories
                parentLevelIds ?? new string[0],
                systemVariableValues ?? new string[0])
                { 
-                   Answers = answers ?? (string[][])Array.CreateInstance(typeof(string), 0, 0),
+                   Answers = answers ?? new string[][]{},
                    LevelName = levelName,
                    InterviewId = interviewId,
                    Id = id
