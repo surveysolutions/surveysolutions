@@ -378,4 +378,8 @@
   <data name="InterviewReceivedCantModify" xml:space="preserve">
     <value>Интервью получено интервьюером и не может быть изменено</value>
   </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Показать на карте</value>
+    <comment>Показать на карте</comment>
+  </data>
 </root>
