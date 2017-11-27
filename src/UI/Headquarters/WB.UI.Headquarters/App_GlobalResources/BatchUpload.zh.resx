@@ -405,9 +405,7 @@
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>没有创建访谈</value>
   </data>
-  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
-    <value>正在导入访谈</value>
-  </data>
+
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>手动模式</value>
   </data>
