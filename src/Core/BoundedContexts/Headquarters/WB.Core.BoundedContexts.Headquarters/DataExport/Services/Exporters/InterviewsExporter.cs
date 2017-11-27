@@ -133,12 +133,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                    });
 
                 batchWatch.Stop();
-                this.logger.Debug(string.Format("Exported {0:N0} in {3:g} interviews out of {1:N0}. for questionnaire {2}. GetInterviewDataWatch: {4:g}",
+                this.logger.Debug(string.Format("Exported {0:N0} in {3:g} interviews out of {1:N0}. for questionnaire {2}. Get data from db per batch: {4:g}",
                     totalInterviewsProcessed,
                     interviewIdsToExport.Count,
                     new QuestionnaireIdentity(questionnaireExportStructure.QuestionnaireId, questionnaireExportStructure.Version),
                     batchWatch.Elapsed,
-                    getInterviewDataWatch.Elapsed));
+                    getDbDataStopwatch.Elapsed));
+
+                getDbDataStopwatch.Reset();
 
                 this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
             }
@@ -190,14 +192,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
         }
 
-        private readonly Stopwatch getInterviewDataWatch = new Stopwatch();
+        private readonly Stopwatch getDbDataStopwatch = new Stopwatch();
 
         private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport, QuestionnaireExportStructure exportStructure, string basePath)
         {
-            getInterviewDataWatch.Start();
+            getDbDataStopwatch.Start();
             var interviewFactory = ServiceLocator.Current.GetInstance<IInterviewFactory>();
             var interview =  this.TransactionManager.ExecuteInQueryTransaction(() => interviewFactory.GetInterviewEntities(interviewToExport.Id, exportStructure.Identity));
-            getInterviewDataWatch.Stop();
+            getDbDataStopwatch.Stop();
 
             List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath);
 
