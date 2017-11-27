@@ -1056,7 +1056,7 @@
     <value>Comma separated values (.csv)</value>
   </data>
   <data name="ExportToTab" xml:space="preserve">
-    <value>Tab separated values (.tsv)</value>
+    <value>Tab separated values (.tab)</value>
   </data>
   <data name="ExportButton" xml:space="preserve">
     <value>Export</value>
@@ -1146,10 +1146,10 @@
     <value>Download existing links</value>
   </data>
   <data name="MapLinking_UploadFile" xml:space="preserve">
-    <value>Upload .tsv file</value>
+    <value>Upload .tab file</value>
   </data>
   <data name="MapLinking_UploadFileDescription" xml:space="preserve">
-    <value>Upload .tsv file with file mappings</value>
+    <value>Upload .tab file with file mappings</value>
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
     <value> Invalid names and user names will be ignored.</value>

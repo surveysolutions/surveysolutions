@@ -387,4 +387,7 @@
   <data name="InterviewReceivedCantModify" xml:space="preserve">
     <value>Interview is received by interviewer and cannot be modified</value>
   </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Show on map</value>
+  </data>
 </root>

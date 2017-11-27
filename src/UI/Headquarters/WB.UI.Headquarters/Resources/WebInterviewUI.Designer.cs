@@ -79,6 +79,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit area.
+        /// </summary>
+        internal static string AreaRecord {
+            get {
+                return ResourceManager.GetString("AreaRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click to record audio.
         /// </summary>
         internal static string AudioClickRecord {
@@ -750,6 +759,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string SessionTimeoutTitle {
             get {
                 return ResourceManager.GetString("SessionTimeoutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show on map.
+        /// </summary>
+        internal static string ShowOnMap {
+            get {
+                return ResourceManager.GetString("ShowOnMap", resourceCulture);
             }
         }
         

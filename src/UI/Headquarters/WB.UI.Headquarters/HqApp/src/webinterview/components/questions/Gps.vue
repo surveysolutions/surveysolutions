@@ -8,7 +8,7 @@
                             <img v-bind:src="googleMapPosition" draggable="false" />
                         </div>
                     </div>
-                    <div class="block-with-data"><a v-bind:href="goolgeMapUrl" target="_blank">{{$me.answer.latitude}}, {{$me.answer.longitude}}</a></div>
+                    <div class="block-with-data"><a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">{{$me.answer.latitude}}, {{$me.answer.longitude}}</a></div>
                      <wb-remove-answer />
                     <button type="submit" v-if="$me.acceptAnswer" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
