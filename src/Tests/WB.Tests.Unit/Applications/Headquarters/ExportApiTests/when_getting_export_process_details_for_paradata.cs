@@ -58,6 +58,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 
         private static IHttpActionResult result;
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static IDataExportProcessDetails paraDataExportProcessDetails;
+        private static DataExportProcessDetails paraDataExportProcessDetails;
     }
 }
