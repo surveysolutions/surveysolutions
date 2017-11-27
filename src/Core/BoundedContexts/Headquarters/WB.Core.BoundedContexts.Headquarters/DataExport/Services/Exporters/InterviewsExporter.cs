@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             var interviewData = new InterviewData();
             interviewData.Levels = interviewFactory.GetInterviewDataLevels(exportStructure.Identity, interview);
-
+            interviewData.InterviewId = interviewToExport.Id;
             InterviewDataExportView interviewDataExportView =
                 ServiceLocator.Current.GetInstance<IExportViewFactory>().CreateInterviewDataExportView(exportStructure, interviewData);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
@@ -222,13 +222,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var recordsByLevel = new List<string>();
                 foreach (var interviewDataExportRecord in interviewDataExportLevelView.Records)
                 {
-                    var parametersToConcatenate = new List<string> { interviewDataExportRecord.RecordId };
+                    var parametersToConcatenate = new List<string> { interviewDataExportView.InterviewId.FormatGuid() };
 
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ReferenceValues);
 
-                    foreach (var answer in interviewDataExportRecord.GetPlainAnswers())
+                    for (int i = 0; i < interviewDataExportRecord.Answers.Length; i++)
                     {
-                        parametersToConcatenate.AddRange(answer.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
+                        for (int j = 0; j < interviewDataExportRecord.Answers[i].Length; j++)
+                        {
+                            parametersToConcatenate.Add(interviewDataExportRecord.Answers[i][j] == null ? "" : interviewDataExportRecord.Answers[i][j]);
+                        }
                     }
 
                     var systemVariableValues = new List<string>(interviewDataExportRecord.SystemVariableValues);
@@ -248,6 +251,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                     parametersToConcatenate.AddRange(systemVariableValues);
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
+
                     if (systemVariableValues.Count == 0)
                     {
                         parametersToConcatenate.Add(interviewId.Key);

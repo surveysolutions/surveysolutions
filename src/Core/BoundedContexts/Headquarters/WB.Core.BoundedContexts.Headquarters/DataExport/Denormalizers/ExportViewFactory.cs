@@ -116,7 +116,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
-            var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelScopeVector);
 
             foreach (InterviewLevel dataByLevel in interviewDataByLevels)
@@ -160,7 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     parentRecordIds,
                     systemVariableValues)
                 {
-                    Answers = questionsForExport.Select(x => string.Join(answersSeparator,x.Select(s => s.Replace(answersSeparator, "")))).ToArray()
+                    Answers = questionsForExport
                 });
             }
 
