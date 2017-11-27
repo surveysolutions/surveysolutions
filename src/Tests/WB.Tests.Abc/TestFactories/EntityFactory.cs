@@ -398,7 +398,7 @@ namespace WB.Tests.Abc.TestFactories
             string[] referenceValues = null,
             string[] parentLevelIds = null,
             string[] systemVariableValues = null,
-            string[] answers = null,
+            string[][] answers = null,
             string id = null)
             => new InterviewDataExportRecord(
                id ?? interviewId.FormatGuid(), 
@@ -406,7 +406,7 @@ namespace WB.Tests.Abc.TestFactories
                parentLevelIds ?? new string[0],
                systemVariableValues ?? new string[0])
                { 
-                   Answers = answers ?? new string[0],
+                   Answers = answers ?? (string[][])Array.CreateInstance(typeof(string), 0, 0),
                    LevelName = levelName,
                    InterviewId = interviewId,
                    Id = id

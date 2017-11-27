@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -305,11 +306,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             if (questionType == QuestionType.Audio)
                 return ((AudioAnswer) obj)?.FileName;
 
+            var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
+
             if (questionType == QuestionType.TextList)
-                return ((InterviewTextListAnswer) obj)?.Answer;
+                return ((InterviewTextListAnswer) obj)?.Answer.Replace(answersSeparator, String.Empty);
 
-
-            return obj.ToString();
+            return obj.ToString().Replace(answersSeparator, string.Empty);
         }
     }
 }
