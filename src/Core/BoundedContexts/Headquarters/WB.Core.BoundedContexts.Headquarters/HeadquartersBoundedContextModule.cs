@@ -319,7 +319,6 @@ namespace WB.Core.BoundedContexts.Headquarters
          
             this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
             this.Bind<IInterviewErrorsExporter>().To<InterviewErrorsExporter>();
-            this.Bind<IInterviewsExporter>().To<InterviewsExporter>();
 
             this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
             this.Bind<ITabFileReader>().To<TabFileReader>();

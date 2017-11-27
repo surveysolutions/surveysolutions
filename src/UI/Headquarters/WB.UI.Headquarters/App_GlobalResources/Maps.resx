@@ -151,7 +151,7 @@
     <value>links for {0} maps was processed with {1} invalid</value>
   </data>
   <data name="FileLoadingNotTsvError" xml:space="preserve">
-    <value>Error occurred. File is not a .tsv</value>
+    <value>Error occurred. File is not a .tab</value>
   </data>
   <data name="MappingsLoadingError" xml:space="preserve">
     <value>Error occurred on map links loading.</value>

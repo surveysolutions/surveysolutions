@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
-using Prometheus;
 using WB.Core.GenericSubdomains.Portable.CustomCollections;
+using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
@@ -19,9 +18,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             this.currentConnectionsCount.Set(0);
         }
 
-        private readonly Gauge currentConnectionsCount = Metrics.CreateGauge(ConnectionLimiter.ConnectedMetricName, @"Number of connection to interview");
-        private readonly Gauge messageProcessTime = Metrics.CreateGauge("webinterview_message_processing_time", "Processing time per metric", "type");
-        private readonly Counter messagesTotal = Metrics.CreateCounter(@"webinterview_messages_processed", @"Total count messages", "direction");
+        private readonly Gauge currentConnectionsCount = new Gauge(ConnectionLimiter.ConnectedMetricName, @"Number of connection to interview");
+        private readonly Gauge messageProcessTime = new Gauge("webinterview_message_processing_time", "Processing time per metric", "type");
+        private readonly Counter messagesTotal = new Counter(@"webinterview_messages_processed", @"Total count messages", "direction");
 
         private readonly ConcurrentDictionary<string, ConcurrentHashSet<string>> connectedClients = new ConcurrentDictionary<string, ConcurrentHashSet<string>>();
 
@@ -85,12 +84,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
-            var requestIdentifier = context.Hub.Context.Request.Environment["server.reques.Id"] as string;
-
-            if (requestIdentifier != null)
+            if (context.Hub.Context.Request.Environment["server.reques.Id"] is string requestIdentifier)
             {
-                Stopwatch sw;
-                if (this._timeMetric.TryRemove(requestIdentifier, out sw))
+                if (this._timeMetric.TryRemove(requestIdentifier, out var sw))
                 {
                     this.messageProcessTime.Labels("incoming").Set(sw.Elapsed.TotalSeconds);
                 }
