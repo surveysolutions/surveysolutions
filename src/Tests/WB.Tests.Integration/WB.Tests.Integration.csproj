@@ -347,7 +347,6 @@
     <Compile Include="InterviewTests\Variables\when_creating_interview_from_questionnaire_with_selected_default_translation.cs" />
     <Compile Include="NpgsqltestContext.cs" />
     <Compile Include="PostgreSQLTests\NpgsqlStorageContext.cs" />
-    <Compile Include="PostgreSQLTests\PostgreReadSideStorageTests.cs" />
     <Compile Include="ReportTests\ReportContext.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\HqSurveysAndStatusesReportTests.cs" />
     <Compile Include="ReportTests\SurveyAndStatusesTests\SvSurveysAndStatusesReportTests.cs" />
