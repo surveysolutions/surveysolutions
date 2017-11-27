@@ -139,10 +139,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 batchWatch.Stop();
                 
-
-                getDbDataStopwatch.Reset();
-                exportProcessingStopwatch.Reset();
-
                 Stopwatch writeToFilesWatch = Stopwatch.StartNew();
                 this.WriteInterviewDataToCsvFile(basePath, exportBulk.ToList());
 
@@ -154,6 +150,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     getDbDataStopwatch.Elapsed,
                     exportProcessingStopwatch.Elapsed,
                     writeToFilesWatch.Elapsed));
+                getDbDataStopwatch.Reset();
+                exportProcessingStopwatch.Reset();
+
             }
 
             progress.Report(100);
