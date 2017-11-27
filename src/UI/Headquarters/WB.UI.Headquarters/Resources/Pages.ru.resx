@@ -1047,8 +1047,8 @@
     <comment>Значения, разделенные запятой (.csv)</comment>
   </data>
   <data name="ExportToTab" xml:space="preserve">
-    <value>Значения, разделенные табуляцией (.tsv)</value>
-    <comment>Значения, разделенные табуляцией (.tsv)</comment>
+    <value>Значения, разделенные табуляцией (.tab)</value>
+    <comment>Значения, разделенные табуляцией (.tab)</comment>
   </data>
   <data name="ExportButton" xml:space="preserve">
     <value>Экспорт</value>
@@ -1163,10 +1163,10 @@
     <value>Скачать существующие назначения</value>
   </data>
   <data name="MapLinking_UploadFile" xml:space="preserve">
-    <value>Загрузить .tsv файл</value>
+    <value>Загрузить .tab файл</value>
   </data>
   <data name="MapLinking_UploadFileDescription" xml:space="preserve">
-    <value>Загрузить .tsv файл с назначениями</value>
+    <value>Загрузить .tab файл с назначениями</value>
   </data>
   <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
     <value>Неправильные или несуществующие имена пользователей не будут загружены</value>

@@ -250,7 +250,7 @@
     <value>Excel (.XLSX)</value>
   </data>
   <data name="ExportToTab" xml:space="preserve">
-    <value>Valores separados por tab (.TSV)</value>
+    <value>Valores separados por tab (.tab)</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Asignación</value>
