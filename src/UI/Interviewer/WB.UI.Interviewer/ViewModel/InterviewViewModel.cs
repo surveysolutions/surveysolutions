@@ -108,7 +108,7 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (!lastCreatedInterviewStorage.WasJustCreated(interviewId))
             {
-                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now));
+                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now, DateTime.UtcNow));
             }
 
             base.ViewAppeared();
@@ -119,7 +119,7 @@ namespace WB.UI.Interviewer.ViewModel
             var interview = interviewRepository.Get(this.interviewId);
             if (!interview.IsCompleted)
             {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), interview.CurrentResponsibleId, DateTime.Now));
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
             }
 
             base.ViewDisappeared();
