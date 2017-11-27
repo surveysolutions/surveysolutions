@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 
                 this.cache.Set(idStringKey, 
                     cachedQuestionnaireExportStructure,
-                    DateTime.Now.AddMinutes(5));
+                    DateTime.Now.AddHours(1));
             }
 
             return (QuestionnaireExportStructure) cachedQuestionnaireExportStructure;
