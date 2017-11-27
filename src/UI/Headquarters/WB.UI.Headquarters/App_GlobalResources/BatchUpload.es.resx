@@ -345,9 +345,6 @@
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>No se crearon entrevistas</value>
   </data>
-  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
-    <value>Importando entrevistas</value>
-  </data>
   <data name="InVerificationProcess" xml:space="preserve">
     <value>está en proceso de verificación, verificado</value>
   </data>
