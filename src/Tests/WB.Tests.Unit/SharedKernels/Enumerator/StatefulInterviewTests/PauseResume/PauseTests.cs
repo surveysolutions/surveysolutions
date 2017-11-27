@@ -30,13 +30,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.PauseRes
             {
                 using (var context = new EventContext())
                 {
-                    interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now));
+                    interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now, DateTime.UtcNow));
                     context.ShouldContainEvent<InterviewPaused>();
                 }
             }
             else
             {
-                Assert.Throws<InterviewException>(() => interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now)));
+                Assert.Throws<InterviewException>(() => interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now, DateTime.UtcNow)));
             }
         }
     }

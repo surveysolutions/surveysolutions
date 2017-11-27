@@ -98,7 +98,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             ICommand pauseInterviewCommand = null;
             if (isInterviewer && !interview.IsCompleted)
             {
-                pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now);
+                pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now, DateTime.UtcNow);
             }
             else if (isSupervisor && interview.Status != InterviewStatus.ApprovedBySupervisor)
             {

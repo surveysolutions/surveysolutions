@@ -202,7 +202,7 @@ namespace WB.UI.Headquarters.Controllers
             var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
             if (lastCreatedInterview != id)
             {
-                this.commandService.Execute(new ResumeInterviewCommand(Guid.Parse(id), interview.CurrentResponsibleId, DateTime.Now));
+                this.commandService.Execute(new ResumeInterviewCommand(Guid.Parse(id), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
             }
 
             return View("Index");
