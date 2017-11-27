@@ -3,7 +3,6 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -19,7 +18,7 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
         Establish context = () =>
         {
             dataExportProcessesService.Setup(x => x.GetRunningExportProcesses())
-                .Returns(new IDataExportProcessDetails[]
+                .Returns(new []
                 {Create.Entity.DataExportProcessDetails(format:DataExportFormat.Paradata, questionnaireIdentity: questionnaireIdentity), Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity), Create.Entity.DataExportProcessDetails()});
 
             var tabularDataExportFilePath = "tabularDataExportFilePath";

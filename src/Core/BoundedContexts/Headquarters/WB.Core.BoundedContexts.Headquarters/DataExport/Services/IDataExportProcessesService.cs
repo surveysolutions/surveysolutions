@@ -8,13 +8,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportProcessesService
     {
-        IDataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
+        DataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
 
         string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status = null);
 
-        IDataExportProcessDetails[] GetRunningExportProcesses();
+        DataExportProcessDetails[] GetRunningExportProcesses();
 
-        IDataExportProcessDetails[] GetAllProcesses();
+        DataExportProcessDetails[] GetAllProcesses();
 
         void FinishExportSuccessfully(string processId);
 

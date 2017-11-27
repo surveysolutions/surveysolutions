@@ -628,7 +628,7 @@
     <value>Excel (.xlsx)</value>
   </data>
   <data name="ExportToTab" xml:space="preserve">
-    <value>Valeurs séparées par des tabulations (.tsv)</value>
+    <value>Valeurs séparées par des tabulations (.tab)</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Affectation</value>

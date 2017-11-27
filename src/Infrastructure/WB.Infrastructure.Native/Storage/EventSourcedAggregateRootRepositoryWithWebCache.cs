@@ -3,10 +3,10 @@ using System.Threading;
 using System.Web.Caching;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
-using Prometheus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Infrastructure.Native.Storage
 {
@@ -51,14 +51,10 @@ namespace WB.Infrastructure.Native.Storage
         }
 
         private static Cache Cache => System.Web.HttpRuntime.Cache;
-
-        private static readonly Gauge StatefullInterviewCacheCounter = Metrics.CreateGauge(
-            "wb_hq_cache_statefull_interview_counter",
-            "Number of statefull interviews stored in HttpRuntime.Cache");
-
+        
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
-            StatefullInterviewCacheCounter.Inc();
+            CommonMetrics.StateFullInterviewsCount.Inc();
             
             Cache.Insert(aggregateRoot.EventSourceId.FormatGuid(), aggregateRoot, null, Cache.NoAbsoluteExpiration,
                 TimeSpan.FromMinutes(5), OnUpdateCallback);
@@ -74,14 +70,14 @@ namespace WB.Infrastructure.Native.Storage
             absoluteExpiration = Cache.NoAbsoluteExpiration;
             slidingExpiration = Cache.NoSlidingExpiration;
 
-            StatefullInterviewCacheCounter.Dec();
+            CommonMetrics.StateFullInterviewsCount.Dec();
         }
 
         public void Evict(Guid aggregateId)
         {
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
-                StatefullInterviewCacheCounter.Dec();
+                CommonMetrics.StateFullInterviewsCount.Dec();
                 Cache.Remove(aggregateId.FormatGuid());
             });
         }

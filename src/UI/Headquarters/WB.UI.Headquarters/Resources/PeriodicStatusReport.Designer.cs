@@ -313,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Over the last.
+        ///   Looks up a localized string similar to Over the previous.
         /// </summary>
         public static string OverTheLast {
             get {

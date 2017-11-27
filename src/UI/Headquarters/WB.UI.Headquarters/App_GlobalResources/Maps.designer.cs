@@ -61,7 +61,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error occurred. File is not a .tsv.
+        ///   Looks up a localized string similar to Error occurred. File is not a .tab.
         /// </summary>
         internal static string FileLoadingNotTsvError {
             get {
