@@ -1877,5 +1877,16 @@ namespace WB.Tests.Abc.TestFactories
                 StorageTotalInBytes = 2000 * 1024 * 1024
             };
         }
+
+        public InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, int[] invalidValidations = null)
+        {
+            return new InterviewEntity
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                EntityType = entityType,
+                Identity = identity ?? Create.Identity(),
+                InvalidValidations = invalidValidations ?? Array.Empty<int>()
+            };
+        }
     }
 }
