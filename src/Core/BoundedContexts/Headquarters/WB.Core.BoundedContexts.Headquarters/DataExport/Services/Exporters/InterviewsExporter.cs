@@ -16,7 +16,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
@@ -28,6 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
     internal class InterviewsExporter : IInterviewsExporter
     {
+        private readonly IExportViewFactory exportViewFactory;
+        private readonly IInterviewFactory interviewFactory;
         private readonly string dataFileExtension = "tab";
 
         private readonly ILogger logger;
@@ -41,8 +42,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             InterviewDataExportSettings interviewDataExportSettings, 
             ICsvWriter csvWriter, 
             ITransactionManagerProvider plainTransactionManagerProvider,
-            IInterviewErrorsExporter errorsExporter)
+            IInterviewErrorsExporter errorsExporter,
+            IInterviewFactory interviewFactory,
+            IExportViewFactory exportViewFactory)
         {
+            this.exportViewFactory = exportViewFactory ?? throw new ArgumentNullException(nameof(exportViewFactory));
+            this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.interviewDataExportSettings = interviewDataExportSettings ?? throw new ArgumentNullException(nameof(interviewDataExportSettings));
             this.csvWriter = csvWriter ?? throw new ArgumentNullException(nameof(csvWriter));
@@ -142,14 +147,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 getDbDataStopwatch.Reset();
 
-                this.WriteInterviewDataToCsvFile(basePath, questionnaireExportStructure, exportBulk.ToList());
+                this.WriteInterviewDataToCsvFile(basePath, exportBulk.ToList());
             }
 
             progress.Report(100);
         }
 
-        private void WriteInterviewDataToCsvFile(string basePath, 
-            QuestionnaireExportStructure questionnaireExportStructure,
+        private void WriteInterviewDataToCsvFile(string basePath,
             List<InterviewExportedDataRecord> interviewsToDump)
         {
             var exportBulk = ConvertInterviewsToWriteBulk(interviewsToDump);
@@ -197,17 +201,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport, QuestionnaireExportStructure exportStructure, string basePath)
         {
             getDbDataStopwatch.Start();
-            var interviewFactory = ServiceLocator.Current.GetInstance<IInterviewFactory>();
             var interview =  this.TransactionManager.ExecuteInQueryTransaction(() => interviewFactory.GetInterviewEntities(interviewToExport.Id, exportStructure.Identity));
             getDbDataStopwatch.Stop();
 
             List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath);
 
-            var interviewData = new InterviewData();
-            interviewData.Levels = interviewFactory.GetInterviewDataLevels(exportStructure.Identity, interview);
-            interviewData.InterviewId = interviewToExport.Id;
-            InterviewDataExportView interviewDataExportView =
-                ServiceLocator.Current.GetInstance<IExportViewFactory>().CreateInterviewDataExportView(exportStructure, interviewData);
+            var interviewData = new InterviewData
+            {
+                Levels = interviewFactory.GetInterviewDataLevels(exportStructure.Identity, interview),
+                InterviewId = interviewToExport.Id
+            };
+            InterviewDataExportView interviewDataExportView = exportViewFactory.CreateInterviewDataExportView(exportStructure, interviewData);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
             var dataFileSeparator = ExportFileSettings.DataFileSeparator.ToString();
             exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x =>  string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();

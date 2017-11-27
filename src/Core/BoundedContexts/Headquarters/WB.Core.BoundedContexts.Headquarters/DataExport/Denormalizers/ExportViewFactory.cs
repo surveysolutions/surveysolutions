@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     ? interview.InterviewId.FormatGuid()
                     : dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
-                string[] systemVariableValues = new string[0];
+                string[] systemVariableValues = Array.Empty<string>();
                 if (vectorLength == 0)
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
 
@@ -142,11 +142,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     parentRecordIds = parentRecordIds.Reverse().ToArray();
                 }
 
-                string[] referenceValues = new string[0];
+                string[] referenceValues = Array.Empty<string>();
 
                 if (headerStructureForLevel.IsTextListScope)
                 {
-                    referenceValues = new string[]
+                    referenceValues = new[]
                     {
                         this.GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())
                     };
