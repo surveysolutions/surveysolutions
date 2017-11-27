@@ -388,7 +388,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.TeamLeadId,
                 @event.Payload.UserId,
                 InterviewExportedAction.Resumed,
-                @event.EventTimeStamp,
+                @event.Payload.UtcTime,
                 null);
         }
 
@@ -400,7 +400,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.TeamLeadId,
                 @event.Payload.UserId,
                 InterviewExportedAction.Paused,
-                @event.EventTimeStamp,
+                @event.Payload.UtcTime,
                 null);
         }
 
