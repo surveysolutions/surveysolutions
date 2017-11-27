@@ -456,18 +456,57 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return interviewData;
         }
 
+        struct DbRecord
+        {
+            public Guid interviewid { get; set; }
+
+            public Guid entityid { get; set; }
+
+            public int[] rostervector { get; set; }
+
+            public EntityType entitytype { get; set; }
+
+            public AnswerType? answertype { get; set; }
+
+            public bool isenabled { get; set; }
+
+            public bool isreadonly { get; set; }
+
+            public bool hasflag { get; set; }
+
+            public int[] invalidvalidations { get; set; }
+
+            public string asstring { get; set; }
+
+            public int? asint { get; set; }
+            public DateTime? asdatetime { get; set; }
+
+
+            public bool? asbool { get; set; }
+            public double? asdouble { get; set; }
+            public long? aslong { get; set; }
+            public int[] asintarray { get; set; }
+
+            public string asintmatrix { get; set; }
+            public string asgps { get; set; }
+            public string aslist { get; set; }
+            public string asyesno { get; set; }
+            public string asaudio { get; set; }
+            public string asarea { get; set; }
+
+        }
+
         public List<InterviewEntity> GetInterviewEntities(Guid interviewId, QuestionnaireIdentity questionnaireId)
         {
             var interviewEntites = this.sessionProvider.GetSession().Connection
-                .Query($"SELECT * FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
+                .Query<DbRecord>($"SELECT * FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
                     new { InterviewId = interviewId })
-                .ToList()
                 .Select(x => new InterviewEntity
                 {
                     InterviewId = x.interviewid,
                     Identity = Identity.Create(x.entityid, x.rostervector),
-                    EntityType = (EntityType)x.entitytype,
-                    AnswerType = (AnswerType?)x.answertype,
+                    EntityType = x.entitytype,
+                    AnswerType = x.answertype,
                     IsEnabled = x.isenabled,
                     IsReadonly = x.isreadonly,
                     HasFlag = x.hasflag,
