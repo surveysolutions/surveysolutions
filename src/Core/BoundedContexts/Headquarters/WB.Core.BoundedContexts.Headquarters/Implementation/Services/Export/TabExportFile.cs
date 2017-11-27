@@ -40,6 +40,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
         };
 
         public override string MimeType => "text/tab-separated-values";
-        public override string FileExtension => ".tsv";
+        public override string FileExtension => ".tab";
     }
 }

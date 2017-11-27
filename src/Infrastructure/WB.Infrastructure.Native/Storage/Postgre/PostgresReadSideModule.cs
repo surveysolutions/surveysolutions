@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +12,6 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Planning.Targets;
@@ -22,6 +20,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
@@ -142,10 +141,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             cfg.SessionFactory().GenerateStatistics();
 
             var sessionFactory = cfg.BuildSessionFactory();
-
-            Prometheus.Advanced.DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new[] {
+            
+            MetricsRegistry.Instance.RegisterOnDemandCollectors(
                 new NHibernateStatsCollector("readside", sessionFactory)
-            });
+            );
 
             return sessionFactory;
         }
