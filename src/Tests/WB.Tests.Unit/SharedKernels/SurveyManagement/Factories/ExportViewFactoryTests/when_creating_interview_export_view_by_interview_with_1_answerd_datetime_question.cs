@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 interviewData);
 
         It should_create_record__with_one_datetime_question_which_contains_composite_answer = () =>
-          result.Levels[0].Records[0].GetPlainAnswers().First().ShouldEqual(new[] { "1984-04-18"  });
+          result.Levels[0].Records[0].Answers.First().ShouldEqual(new[] { "1984-04-18"  });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

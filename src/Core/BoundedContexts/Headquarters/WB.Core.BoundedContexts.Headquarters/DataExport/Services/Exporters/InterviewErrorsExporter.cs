@@ -13,13 +13,13 @@ using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
-    public interface IInterviewErrorsExporter
+    internal interface IInterviewErrorsExporter
     {
         List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath);
         void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath);
     }
 
-    public class InterviewErrorsExporter : IInterviewErrorsExporter
+    internal class InterviewErrorsExporter : IInterviewErrorsExporter
     {
         private readonly ICsvWriter csvWriter;
         private readonly IQuestionnaireStorage questionnaireStorage;
