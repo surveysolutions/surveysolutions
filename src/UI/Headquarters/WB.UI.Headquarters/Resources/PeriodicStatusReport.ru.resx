@@ -223,7 +223,7 @@
     <value>От</value>
   </data>
   <data name="OverTheLast" xml:space="preserve">
-    <value>За последние</value>
+    <value>За предыдущие</value>
   </data>
   <data name="InterviewActions" xml:space="preserve">
     <value>Действия</value>
