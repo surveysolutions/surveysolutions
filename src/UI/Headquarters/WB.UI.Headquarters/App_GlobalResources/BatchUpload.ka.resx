@@ -345,9 +345,6 @@
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>არცერთი ინტერვიუ გაკეთებული არ არის</value>
   </data>
-  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
-    <value>ინტერვიუების იმპორტი</value>
-  </data>
   <data name="InVerificationProcess" xml:space="preserve">
     <value>არის ვერიფიკაციის პროცესში, დადასტურდა</value>
   </data>

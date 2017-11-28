@@ -201,9 +201,6 @@
   <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
     <value>ზედამხედველის მიერ დამტკიცებული ან უარყოფილი ინტერვიუები შეგროვებული {0} -ს მიერ.</value>
   </data>
-  <data name="OverTheLast" xml:space="preserve">
-    <value>უკანასკნელი</value>
-  </data>
   <data name="Period" xml:space="preserve">
     <value>პერიოდი</value>
   </data>
