@@ -3,7 +3,7 @@
         <div slot="headers">
             <div class="topic-with-button" >
                 <h1>{{$t('Pages.MapList_Title')}}</h1>                
-                    <label class="btn btn-success btn-file">
+                    <label class="btn btn-success btn-file" v-if="actionsAlowed">
                         {{$t('Pages.MapList_Upload')}}
                         <input accept=".zip" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
                     </label>
