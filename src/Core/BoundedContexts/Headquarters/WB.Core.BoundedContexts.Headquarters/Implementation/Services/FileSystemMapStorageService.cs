@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 List<string> itemIds = this.mapPlainStorageAccessor.Query(queryable =>
                 {
-                    IQueryable<MapBrowseItem> pagedResults = queryable.Skip((page - 1) * pageSize).Take(pageSize);
+                    IQueryable<MapBrowseItem> pagedResults = queryable.OrderBy(x =>x.FileName).Skip((page - 1) * pageSize).Take(pageSize);
 
                     itemIds = pagedResults.Select(x => x.Id).ToList();
 
