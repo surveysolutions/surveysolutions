@@ -515,8 +515,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             foreach (var groupChild in @group.Children)
             {
-                var question = groupChild as IQuestion;
-                if (question != null)
+                if (groupChild is IQuestion question)
                 {
                     if (this.IsQuestionMultiOption(question))
                     {
@@ -554,8 +553,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     continue;
                 }
 
-                var variable = groupChild as IVariable;
-                if (variable != null)
+                if (groupChild is IVariable variable)
                 {
                     if (supportVariables)
                         AddHeadersForVariable(headerStructureForLevel.HeaderItems, variable);
@@ -563,8 +561,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     continue;
                 }
 
-                var innerGroup = groupChild as IGroup;
-                if (innerGroup != null)
+                if (groupChild is IGroup innerGroup)
                 {
                     if (innerGroup.IsRoster)
                         continue;
