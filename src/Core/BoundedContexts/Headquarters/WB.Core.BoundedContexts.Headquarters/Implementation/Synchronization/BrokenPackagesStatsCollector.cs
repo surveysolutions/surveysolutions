@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Linq;
 using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -8,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
     public class BrokenPackagesStatsCollector : IOnDemandCollector
     {
         private readonly ISessionFactory sessionFactory;
-        private Gauge brokenPackagesCount;
+        private readonly Stopwatch throttle = new Stopwatch();
 
         public BrokenPackagesStatsCollector(ISessionFactory sessionFactory)
         {
@@ -17,18 +19,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public void RegisterMetrics()
         {
-            this.brokenPackagesCount = new Gauge(
-                "wb_broken_packages_count",
-                "Amount of broken packages on server");
+            throttle.Start();
         }
 
         public void UpdateMetrics()
         {
+            if (throttle.Elapsed <= TimeSpan.FromMinutes(5)) return;
+
             using (var session = sessionFactory.OpenStatelessSession())
             {
                 var packagesCount = session.Query<BrokenInterviewPackage>().Count();
-                this.brokenPackagesCount.Set(packagesCount);
+                CommonMetrics.BrokenPackagesCount.Set(packagesCount);
             }
+
+            throttle.Reset();
         }
     }
 }
