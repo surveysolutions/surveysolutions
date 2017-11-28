@@ -108,6 +108,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool HasSingleQuestionInRoster(IGroup rosterGroup)
             => rosterGroup.IsRoster
+               && rosterGroup.Children.Count == 1
                && rosterGroup.Children.OfType<IQuestion>().Count() == 1;
 
         private static bool EmptyGroup(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
