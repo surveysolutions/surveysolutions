@@ -87,7 +87,7 @@ export default {
       return [
         {
           name: this.$t("Common.Open"),
-          callback: () => this.$store.dispatch("openMap", rowData.fileName)
+          callback: () => window.location = window.input.settings.config.basePath + "Maps/Details?mapname=" + encodeURIComponent(rowData.fileName)           
         },
         {
           name: this.$t("Pages.MapList_DeleteMap"),
