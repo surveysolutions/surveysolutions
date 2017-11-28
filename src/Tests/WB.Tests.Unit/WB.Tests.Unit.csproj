@@ -519,6 +519,7 @@
     <Compile Include="BoundedContexts\Tester\Services\TesterPlainInterviewFileStorageTests.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\ExportQuestion_Variable_Tests.cs" />
     <Compile Include="DataExportTests\ExportQuestionServiceTests.cs" />
+    <Compile Include="DataExportTests\InterviewErrorsExporterTests\InterviewErrorsExporterTests.cs" />
     <Compile Include="GenericSubdomains\TreeTest.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\LazyNotificationServiceTests.cs" />
     <Compile Include="Infrastructure\CqrsPostgresTransactionManagerTests.cs" />
@@ -538,7 +539,6 @@
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_single_option_question.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_datetime_question.cs" />
     <Compile Include="DataExportTests\ExportedQuestionTests\when_creating_export_structure_for_text_question.cs" />
-    <Compile Include="BoundedContexts\Headquarters\InterviewsExportDenormalizerTests\InterviewsExportDenormalizerNunitTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\RosterStructureServiceTestsContext.cs" />
     <Compile Include="BoundedContexts\Headquarters\RosterStructureServiceTests\when_getting_roster_structures_for_questionnaire_with_multi_option_roster_title.cs" />
     <Compile Include="BoundedContexts\Headquarters\Views\Interview\AllInterviewsFactoryTests.cs" />
@@ -1632,7 +1632,6 @@
   <ItemGroup>
     <Folder Include="Applications\Headquarters\PublicApiTests\ApiTests\" />
     <Folder Include="BoundedContexts\Headquarters\UserBatchCreatorTests\" />
-    <Folder Include="DataExportTests\InterviewErrorsExporterTests\" />
     <Folder Include="DataExportTests\InterviewsExporterTests\" />
     <Folder Include="Properties\" />
     <Folder Include="Resources\" />

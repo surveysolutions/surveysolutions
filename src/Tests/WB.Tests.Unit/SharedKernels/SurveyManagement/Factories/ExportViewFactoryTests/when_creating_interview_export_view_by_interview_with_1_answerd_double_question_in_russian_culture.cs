@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
 
         It should_create_record__with_one_datetime_question_which_contains_composite_answer = () =>
-          result.Levels[0].Records[0].GetPlainAnswers().First().ShouldEqual(new[] { value.ToString(CultureInfo.InvariantCulture)  });
+          result.Levels[0].Records[0].Answers.First().ShouldEqual(new[] { value.ToString(CultureInfo.InvariantCulture)  });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

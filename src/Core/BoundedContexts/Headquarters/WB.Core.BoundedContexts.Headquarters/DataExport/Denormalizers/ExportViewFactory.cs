@@ -116,7 +116,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
-            var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
             var interviewDataByLevels = this.GetLevelsFromInterview(interview, headerStructureForLevel.LevelScopeVector);
 
             foreach (InterviewLevel dataByLevel in interviewDataByLevels)
@@ -127,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     ? interview.InterviewId.FormatGuid()
                     : dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
 
-                string[] systemVariableValues = new string[0];
+                string[] systemVariableValues = Array.Empty<string>();
                 if (vectorLength == 0)
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
 
@@ -143,11 +142,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     parentRecordIds = parentRecordIds.Reverse().ToArray();
                 }
 
-                string[] referenceValues = new string[0];
+                string[] referenceValues = Array.Empty<string>();
 
                 if (headerStructureForLevel.IsTextListScope)
                 {
-                    referenceValues = new string[]
+                    referenceValues = new[]
                     {
                         this.GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())
                     };
@@ -160,7 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     parentRecordIds,
                     systemVariableValues)
                 {
-                    Answers = questionsForExport.Select(x => string.Join(answersSeparator,x.Select(s => s.Replace(answersSeparator, "")))).ToArray()
+                    Answers = questionsForExport
                 });
             }
 
@@ -516,8 +515,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
             foreach (var groupChild in @group.Children)
             {
-                var question = groupChild as IQuestion;
-                if (question != null)
+                if (groupChild is IQuestion question)
                 {
                     if (this.IsQuestionMultiOption(question))
                     {
@@ -555,8 +553,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     continue;
                 }
 
-                var variable = groupChild as IVariable;
-                if (variable != null)
+                if (groupChild is IVariable variable)
                 {
                     if (supportVariables)
                         AddHeadersForVariable(headerStructureForLevel.HeaderItems, variable);
@@ -564,8 +561,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     continue;
                 }
 
-                var innerGroup = groupChild as IGroup;
-                if (innerGroup != null)
+                if (groupChild is IGroup innerGroup)
                 {
                     if (innerGroup.IsRoster)
                         continue;

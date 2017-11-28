@@ -398,7 +398,7 @@ namespace WB.Tests.Abc.TestFactories
             string[] referenceValues = null,
             string[] parentLevelIds = null,
             string[] systemVariableValues = null,
-            string[] answers = null,
+            string[][] answers = null,
             string id = null)
             => new InterviewDataExportRecord(
                id ?? interviewId.FormatGuid(), 
@@ -406,7 +406,7 @@ namespace WB.Tests.Abc.TestFactories
                parentLevelIds ?? new string[0],
                systemVariableValues ?? new string[0])
                { 
-                   Answers = answers ?? new string[0],
+                   Answers = answers ?? new string[][]{},
                    LevelName = levelName,
                    InterviewId = interviewId,
                    Id = id
@@ -1875,6 +1875,17 @@ namespace WB.Tests.Abc.TestFactories
                 RAMTotalInBytes = 1024 * 1024 * 1024,
                 StorageFreeInBytes = 5 * 1024 * 1024,
                 StorageTotalInBytes = 2000 * 1024 * 1024
+            };
+        }
+
+        public InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, int[] invalidValidations = null)
+        {
+            return new InterviewEntity
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                EntityType = entityType,
+                Identity = identity ?? Create.Identity(),
+                InvalidValidations = invalidValidations ?? Array.Empty<int>()
             };
         }
     }

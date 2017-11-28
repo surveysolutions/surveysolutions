@@ -337,6 +337,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<ICsvWriter>().To<CsvWriter>();
             this.Bind<ICsvReader>().To<CsvReader>();
             this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
+            this.Bind<IInterviewsExporter>().To<InterviewsExporter>();
 
             this.Bind<IExportQuestionService>().To<ExportQuestionService>();
 
