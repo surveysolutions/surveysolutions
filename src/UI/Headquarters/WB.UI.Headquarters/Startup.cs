@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +27,6 @@ using Ninject.Web.WebApi.OwinHost;
 using NLog;
 using Npgsql;
 using Owin;
-using Prometheus.Advanced;
 using Quartz;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -62,8 +62,6 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
-            // DefaultCollectorRegistry.Instance.Clear();
-
             app.Use(RemoveServerNameFromHeaders);
 
             var kernel = ConfigureNinject(app);
@@ -124,7 +122,8 @@ namespace WB.UI.Headquarters
         {
             CommonMetrics.StateFullInterviewsCount.Set(0);
         }
-
+        
+        [Localizable(false)]
         private void StartMetricsPush(IKernel kernel, Core.GenericSubdomains.Portable.Services.ILogger logger)
         {
             try
@@ -134,7 +133,7 @@ namespace WB.UI.Headquarters
                         kernel.Get<ISessionFactory>(PostgresPlainStorageModule.SessionFactoryName)));
 
                 // getting instance name from connection string information
-                var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings[@"Postgres"];
+                var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Postgres"];
                 var npgsConnectionString = new NpgsqlConnectionStringBuilder(connectionString.ConnectionString);
                 var instanceName = npgsConnectionString.ApplicationName;
 
@@ -145,7 +144,7 @@ namespace WB.UI.Headquarters
                 new Prometheus.MetricPusher(metricsGateway,
                     job: "hq",
                     additionalLabels: new[] {Tuple.Create("site", instanceName)},
-                    intervalMilliseconds: 1000).Start();
+                    intervalMilliseconds: 5000).Start();
             }
             catch (Exception e)
             {

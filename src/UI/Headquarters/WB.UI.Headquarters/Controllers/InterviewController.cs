@@ -91,6 +91,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
         private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
         {
+            if (interviewSummary == null)
+                return false;
+
             if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
                 return true;
 
@@ -113,13 +116,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ActivePage(MenuItem.Docs)]
         public ActionResult Review(Guid id, string url)
         {
-            this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
-
             InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
             bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
 
             if (!isAccessAllowed)
                 return HttpNotFound();
+
+            this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
+
 
             if (this.authorizedUser.IsSupervisor)
             {

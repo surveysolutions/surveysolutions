@@ -31,7 +31,7 @@
                         sectionId: this.$me.target,
                         interviewId: this.$route.params.interviewId
                     },
-                    hash: this.isParentButton ? '#' + this.$route.params.sectionId : null
+                    hash: this.isParentButton ? '#' + this.$route.params.sectionId : ''
                 }
             },
             isParentButton() {
