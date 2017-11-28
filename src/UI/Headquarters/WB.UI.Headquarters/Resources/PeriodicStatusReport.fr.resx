@@ -231,9 +231,6 @@
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
     <value>Nombre d'entretiens achevés par une équipe. Les entretiens rejetés puis achevés sont comptés comme des événements d'achèvement distincts.</value>
   </data>
-  <data name="OverTheLast" xml:space="preserve">
-    <value>Pendant le dernier</value>
-  </data>
   <data name="PeriodUnit" xml:space="preserve">
     <value>Durée</value>
   </data>

@@ -462,9 +462,6 @@
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>Aucun entretien n'a été créé</value>
   </data>
-  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
-    <value>Importation d'entretiens</value>
-  </data>
   <data name="ManualModeDescription" xml:space="preserve">
     <value>Vous pouvez créer des affectations individuelles en entrant toutes les données requises dans {0}</value>
   </data>
