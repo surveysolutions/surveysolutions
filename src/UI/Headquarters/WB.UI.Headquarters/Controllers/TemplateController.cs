@@ -69,19 +69,12 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var model = await this.GetImportModel(id);
-
-            if (this.designerUserCredentials.Get() == null)
-            {
-                Error(Resources.LoginToDesigner.SessionExpired);
-                return this.RedirectToAction("LoginToDesigner");
-            }
-
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ImportMode(Guid id, string name)
+        public async Task<ActionResult> Import(Guid id)
         {
             if (this.designerUserCredentials.Get() == null)
             {
@@ -89,22 +82,17 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("LoginToDesigner");
             }
 
-            var result = await this.importService.Import(id, name, false);
-            if (result.IsSuccess)
-            {
-                return this.RedirectToAction("Index", "SurveySetup");
-            }
-
             var model = await this.GetImportModel(id);
-
-            if (this.designerUserCredentials.Get() == null)
+            if (model.QuestionnaireInfo != null)
             {
-                Error(Resources.LoginToDesigner.SessionExpired);
-                return this.RedirectToAction("LoginToDesigner");
+                var result = await this.importService.Import(id, model?.QuestionnaireInfo?.Name, false);
+                model.ErrorMessage = result.ImportError;
+
+                if (result.IsSuccess)
+                    return this.RedirectToAction("Index", "SurveySetup");
             }
 
-            model.ErrorMessage = result.ImportError;
-            return this.View(model);
+            return this.View("ImportMode", model);
         }
 
         private async Task<ImportModeModel> GetImportModel(Guid id)
