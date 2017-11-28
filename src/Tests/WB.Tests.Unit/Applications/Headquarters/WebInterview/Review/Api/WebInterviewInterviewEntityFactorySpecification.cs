@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -22,38 +18,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 {
     public class WebInterviewInterviewEntityFactorySpecification
     {
+        protected IQuestionnaire questionnaire;
+        protected QuestionnaireDocument document;
+        
         [OneTimeSetUp]
-        public void Setup()
+        public void Prepare()
         {
-            QuestionnaireDocument document = Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
-
-                Create.Entity.Group(SecA.Id, "Section A", "SecA", children: new IComposite[]
-                {
-                    Create.Entity.TextQuestion(SecA_In.Id, text: "Interviewer Question", variable: "text_in"),
-                    Create.Entity.TextQuestion(SecA_Sup.Id, text: "Supervisor Questions", variable: "text_sup", scope: QuestionScope.Supervisor),
-
-                        Create.Entity.FixedRoster(SecA_Roster.Id, title: "roster", children: new IComposite[]
-                        {
-                            Create.Entity.TextQuestion(SecA_Roster_In.Id, text: "interviewer q in roster", variable: "text_in_r"),
-                            Create.Entity.TextQuestion(SecA_Roster_Sup.Id, text: "supervisor q in roster", variable: "text_s_r", scope: QuestionScope.Supervisor),
-                        }, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Test") }),
-                }),
-
-                Create.Entity.Group(SecB.Id, "Section B", "SecB", children: new IComposite[]
-                {
-                    Create.Entity.TextQuestion(SecB_In.Id, text: "Interviewer Question", variable: "text_in_B"),
-                    Create.Entity.TextQuestion(SecB_Sup.Id, text: "Supervisor Questions", variable: "text_sup_B", scope: QuestionScope.Supervisor),
-
-                    Create.Entity.FixedRoster(SecB_Group.Id,variable: "roster_b", title: "roster", children: new IComposite[]
-                    {
-                        Create.Entity.TextQuestion(SecB_Group_In.Id, text: "interviewer q in group", variable: "text_in_g_B", scope: QuestionScope.Interviewer),
-                        Create.Entity.TextQuestion(SecB_Group_Sup.Id, text: "supervisor q in group", variable: "text_s_g_B", scope: QuestionScope.Hidden),
-                    }, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Test") })
-                }));
-
-            this.interview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: document);
-
-            this.questionnaire = Create.Entity.PlainQuestionnaire(document);
+            this.document = GetDocument();
+            this.questionnaire = Create.Entity.PlainQuestionnaire(this.document);
+            this.interview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: this.document);
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -63,6 +36,35 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             this.authorizedUserMock = new Mock<IAuthorizedUser>();
 
             Subject = new WebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(), this.authorizedUserMock.Object);
+        }
+        
+        protected virtual QuestionnaireDocument GetDocument()
+        {
+            return Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
+
+                Create.Entity.Group(SecA.Id, "Section A", "SecA", children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(SecA_In.Id, text: "Interviewer Question", variable: "text_in"),
+                    Create.Entity.TextQuestion(SecA_Sup.Id, text: "Supervisor Questions", variable: "text_sup", scope: QuestionScope.Supervisor),
+
+                    Create.Entity.FixedRoster(SecA_Roster.Id, title: "roster", children: new IComposite[]
+                    {
+                        Create.Entity.TextQuestion(SecA_Roster_In.Id, text: "interviewer q in roster", variable: "text_in_r"),
+                        Create.Entity.TextQuestion(SecA_Roster_Sup.Id, text: "supervisor q in roster", variable: "text_s_r", scope: QuestionScope.Supervisor),
+                    }, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Test") }),
+                }),
+
+                Create.Entity.Group(SecB.Id, "Section B", "SecB", children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(SecB_In.Id, text: "Interviewer Question", variable: "text_in_B"),
+                    Create.Entity.TextQuestion(SecB_Sup.Id, text: "Supervisor Questions", variable: "text_sup_B", scope: QuestionScope.Supervisor),
+
+                    Create.Entity.FixedRoster(SecB_Group.Id,variable: "roster_b", title: "roster", children: new IComposite[]
+                    {
+                        Create.Entity.TextQuestion(SecB_Group_In.Id, text: "interviewer q in group", variable: "text_in_g_B"),
+                        Create.Entity.TextQuestion(SecB_Group_Sup.Id, text: "supervisor q in group", variable: "text_s_g_B", scope: QuestionScope.Hidden),
+                    }, fixedTitles: new [] { Create.Entity.FixedTitle(1, "Test") })
+                }));
         }
 
         protected void AnswerTextQuestions(params Identity[] ids)
@@ -81,13 +83,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 {
                     {
                         identity,
-                        new List<FailedValidationCondition>() {new FailedValidationCondition(0)}
+                        new List<FailedValidationCondition> {new FailedValidationCondition(0)}
                     }
                 };
 
                 this.interview.Apply(Create.Event.AnswersDeclaredInvalid(failedConditions));
             }
-            
+
         }
 
         protected Mock<IAuthorizedUser> authorizedUserMock;
@@ -110,8 +112,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         protected static readonly Identity SecB_Group_In = Create.Identity(Id.g7, 1);
         protected static readonly Identity SecB_Group_Sup = Create.Identity(Id.g8, 1);
 
-        private IQuestionnaire questionnaire;
-
+        
         protected InterviewGroupOrRosterInstance GetGroupDetails(Identity id)
         {
             var entity = Subject.GetEntityDetails(id.ToString(), this.interview, this.questionnaire, IsReviewMode);
@@ -122,6 +123,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         protected virtual bool IsReviewMode { get; set; }
 
         protected Identity[] AllGroups = { SecA, SecA_Roster, SecB, SecB_Group };
+        
 
         protected void AsInterviewer()
         {
