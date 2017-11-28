@@ -13,7 +13,6 @@ using System.Web.Routing;
 using System.Web.SessionState;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
@@ -37,6 +36,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
-            ConfigureWebApi(app);
+            ConfigureWebApi(app, kernel);
 
             Settings.Current.GetCustomData += (exception, dictionary) =>
             {
@@ -101,7 +101,7 @@ namespace WB.UI.Headquarters
                 {
                     if (e is Npgsql.PostgresException pe)
                     {
-                        error.AddCommand(new Command("NpgSql", pe.Statement.SQL));
+                        error.AddCommand(new Command(@"NpgSql", pe.Statement.SQL));
                     }
 
                     if (e.InnerException != null)
@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters
             return kernel;
         }
 
-        private void ConfigureWebApi(IAppBuilder app)
+        private void ConfigureWebApi(IAppBuilder app, IKernel kernel)
         {
             var config = new HttpConfiguration();
             config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
@@ -188,8 +188,7 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-
-            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+            API.WebInterview.Bootstrap.Configure(app, kernel);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);
