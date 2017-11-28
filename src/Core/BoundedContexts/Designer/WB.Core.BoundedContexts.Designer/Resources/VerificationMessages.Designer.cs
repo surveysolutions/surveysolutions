@@ -1727,7 +1727,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question cannot have empty title..
+        ///   Looks up a localized string similar to Question cannot have empty option title..
         /// </summary>
         public static string WB0269_QuestionTitleIsEmpty {
             get {
