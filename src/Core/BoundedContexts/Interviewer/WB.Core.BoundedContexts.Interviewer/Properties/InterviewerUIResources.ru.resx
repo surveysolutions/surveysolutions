@@ -148,7 +148,12 @@
     <value>Синхронизировать</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Синхронизируйтесь для получения новых заданий
+    <value>Синхронизируйтесь для получения новых карт
+или свяжитесь с Вашим супервизором
+для дальнейших инструкций</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>Синхронизируйтесь для получения новых карт
 или свяжитесь с Вашим супервизором
 для дальнейших инструкций</value>
   </data>
@@ -710,7 +715,7 @@
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
     <value>Обработка карты {0}, {1} из {2}. 
- Скачано {3}%</value>
+Скачано {3}%</value>
   </data>
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
     <value>Карты успешно обновлены</value>
