@@ -9,6 +9,8 @@
             this.gauge = Prometheus.Metrics.CreateGauge(name, help, labelNames);
         }
 
+        public double Value => this.gauge.Value;
+
         public void Inc(double amount = 1)
         {
             gauge.Inc(amount);

@@ -1,6 +1,5 @@
-using System.Linq;
 using System.Web.WebPages;
-using Prometheus.Advanced;
+using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
@@ -14,17 +13,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.configurationManager = configurationManager;
         }
 
-        private int CurrentlyConnectedCount
-        {
-            get
-            {
-                var metric = DefaultCollectorRegistry.Instance.CollectAll()
-                    .Where(f => f.name == ConnectedMetricName)
-                    .SelectMany(f => f.metric).FirstOrDefault();
-
-                return (int) (metric?.gauge?.value ?? 0d);
-            }
-        }
+        private int CurrentlyConnectedCount => (int) CommonMetrics.WebInterviewOpenConnections.Value;
 
         private int ConnectionLimit => this.configurationManager.AppSettings[@"MaxWebInterviewsCount"].AsInt();
 
@@ -32,7 +21,5 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         {
             return this.CurrentlyConnectedCount < this.ConnectionLimit;
         }
-
-        public const string ConnectedMetricName = "webinterview_connected_count";
     }
 }
