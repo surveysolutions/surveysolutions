@@ -27,7 +27,7 @@
                             data: "title",
                             name: "Title", // case-sensitive!
                             render: function (data, type, row) {
-                                return "<a href=" + "@Url.Action("ImportMode", "Template")" + "/" + row.id + ">" + data + "</a>";
+                                return "<a href=" + "@Url.Action("ImportMode", "Template")" + "/" + row.id + ">" + $("<div>").text(data).html() + "</a>";
                             }
                         },
                         {
