@@ -226,20 +226,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                 cancellationToken.ThrowIfCancellationRequested();
 
-                try
+                if (SendStatistics)
                 {
-                    DeviceInfo deviceInfo = null;
-
-                    using (var deviceInformationService = ServiceLocator.Current.GetInstance<IDeviceInformationService>())
+                    try
                     {
-                        deviceInfo = await deviceInformationService.GetDeviceInfoAsync();
-                    }
+                        DeviceInfo deviceInfo = null;
 
-                    await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo), cancellationToken);
-                }
-                catch (Exception e)
-                {
-                    await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                        using (var deviceInformationService =
+                            ServiceLocator.Current.GetInstance<IDeviceInformationService>())
+                        {
+                            deviceInfo = await deviceInformationService.GetDeviceInfoAsync();
+                        }
+
+                        await this.synchronizationService.SendDeviceInfoAsync(this.ToDeviceInfoApiView(deviceInfo),
+                            cancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                    }
                 }
 
                 await Synchronize(progress, cancellationToken, statistics);

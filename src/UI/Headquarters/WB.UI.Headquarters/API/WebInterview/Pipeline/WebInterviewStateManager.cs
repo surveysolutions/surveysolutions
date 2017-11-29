@@ -81,8 +81,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         protected override bool OnBeforeDisconnect(IHub hub, bool stopCalled)
         {
-            RecordInterviewPause(hub);
-
             return base.OnBeforeDisconnect(hub, stopCalled);
         }
 

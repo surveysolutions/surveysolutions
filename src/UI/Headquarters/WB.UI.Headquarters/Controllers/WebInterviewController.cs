@@ -199,12 +199,6 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
-            var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
-            if (lastCreatedInterview != id)
-            {
-                this.commandService.Execute(new ResumeInterviewCommand(Guid.Parse(id), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
-            }
-
             return View("Index");
         }
 
