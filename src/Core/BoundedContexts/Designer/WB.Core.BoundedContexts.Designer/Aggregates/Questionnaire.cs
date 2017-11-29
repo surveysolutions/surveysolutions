@@ -185,6 +185,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 var newTranslationId = Guid.NewGuid();
                 this.translationService.CloneTranslation(document.PublicKey, translation.Id, clonedDocument.PublicKey, newTranslationId);
+                if (translation.Id == clonedDocument.DefaultTranslation)
+                {
+                    clonedDocument.DefaultTranslation = newTranslationId;
+                }
+
                 translation.Id = newTranslationId;
             }
 
