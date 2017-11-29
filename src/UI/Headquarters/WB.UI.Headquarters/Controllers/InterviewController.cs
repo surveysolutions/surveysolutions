@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -33,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IPauseResumeQueue pauseResumeQueue;
 
         public InterviewController(
             ICommandService commandService, 
@@ -42,7 +44,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory,
-            IStatefulInterviewRepository statefulInterviewRepository)
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IPauseResumeQueue pauseResumeQueue)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -51,6 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.pauseResumeQueue = pauseResumeQueue;
         }
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? questionsTypes, string currentGroupId)
@@ -123,6 +127,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return HttpNotFound();
 
             this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
+
+
+            if (this.authorizedUser.IsSupervisor)
+            {
+                this.pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id, DateTime.Now));
+            }
 
             ViewBag.SpecificPageCaption = interviewSummary.Key;
 
