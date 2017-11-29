@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using AutoMapper;
@@ -32,6 +34,8 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -209,6 +213,9 @@ namespace WB.UI.Headquarters
                 AssembliesDirectoryName = "QuestionnaireAssemblies"
             });
 
+
+            var trackingSettings = GetTrackingSettings(settingsProvider);
+
             kernel.Load(
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 eventStoreModule,
@@ -220,6 +227,7 @@ namespace WB.UI.Headquarters
                     interviewDataExportSettings,
                     sampleImportSettings,
                     synchronizationSettings,
+                    trackingSettings,
                     interviewCountLimit),
                 new WebInterviewNinjectModule(),
                 new OwinSecurityModule());
@@ -248,6 +256,7 @@ namespace WB.UI.Headquarters
             ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
             ServiceLocator.Current.GetInstance<ExportJobScheduler>().Configure();
+            ServiceLocator.Current.GetInstance<PauseResumeJobScheduler>().Configure();
 
             ServiceLocator.Current.GetInstance<IScheduler>().Start();
             
@@ -290,6 +299,16 @@ namespace WB.UI.Headquarters
             kernel.Bind<IMapPropertiesProvider>().To<MapPropertiesProvider>();
 
             return kernel;
+        }
+
+        private static TrackingSettings GetTrackingSettings(SettingsProvider settingsProvider)
+        {
+            if (TimeSpan.TryParse(settingsProvider.AppSettings["Tracking.WebInterviewPauseResumeGraceTimespan"],
+                CultureInfo.InvariantCulture, out TimeSpan timespan))
+            {
+                return new TrackingSettings(timespan);
+            }
+            return new TrackingSettings(TimeSpan.FromMinutes(2));
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)

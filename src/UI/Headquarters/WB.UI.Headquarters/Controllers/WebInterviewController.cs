@@ -51,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioProcessingService audioProcessingService;
+        private readonly IPauseResumeQueue pauseResumeQueue;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
@@ -85,7 +86,8 @@ namespace WB.UI.Headquarters.Controllers
             ICaptchaProvider captchaProvider,
             IPlainStorageAccessor<Assignment> assignments, 
             IAudioFileStorage audioFileStorage,
-            IAudioProcessingService audioProcessingService)
+            IAudioProcessingService audioProcessingService,
+            IPauseResumeQueue pauseResumeQueue)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -103,6 +105,7 @@ namespace WB.UI.Headquarters.Controllers
             this.assignments = assignments;
             this.audioFileStorage = audioFileStorage;
             this.audioProcessingService = audioProcessingService;
+            this.pauseResumeQueue = pauseResumeQueue;
         }
         
         [WebInterviewAuthorize]
@@ -202,7 +205,7 @@ namespace WB.UI.Headquarters.Controllers
             var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
             if (lastCreatedInterview != id)
             {
-                this.commandService.Execute(new ResumeInterviewCommand(Guid.Parse(id), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+                this.pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(Guid.Parse(id), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
             }
 
             return View("Index");

@@ -505,6 +505,7 @@
     <Compile Include="BoundedContexts\Headquarters\Security\HqUserManagerTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\Views\Interview\TeamInterviewsFactoryTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\MappingTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\WebInterview\PauseResumeQueueTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\ReviewAllowedServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\SampleWebInterviewServiceTests.cs" />
     <Compile Include="BoundedContexts\Headquarters\WebInterview\WebInterviewAllowServiceTests.cs" />
