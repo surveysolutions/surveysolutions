@@ -6,8 +6,6 @@ using Microsoft.AspNet.SignalR.Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.Infrastructure.Versions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
@@ -18,27 +16,24 @@ namespace WB.UI.Headquarters.API.WebInterview
         public override void Load()
         {
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(this.Kernel);
-            var pipiline = GlobalHost.DependencyResolver.Resolve<IHubPipeline>();
 
-            pipiline.AddModule(new SignalrErrorHandler());
-            pipiline.AddModule(new PlainSignalRTransactionManager());
-            pipiline.AddModule(new InterviewAuthorizationModule());
-            pipiline.AddModule(new WebInterviewStateManager(
-                GlobalHost.DependencyResolver.Resolve<IProductVersion>(), 
-                GlobalHost.DependencyResolver.Resolve<IStatefulInterviewRepository>(),
-                GlobalHost.DependencyResolver.Resolve<IPauseResumeQueue>()
-            ));
-            pipiline.AddModule(new WebInterviewConnectionsCounter());
-
+            
+            this.Bind<IConnectionsMonitor>().To<ConnectionsMonitor>().InSingletonScope();
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewLazyNotificationService>().InSingletonScope();
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
             this.Bind<IStatefullInterviewSearcher>().To<StatefullInterviewSearcher>();
             this.Bind<IWebInterviewInterviewEntityFactory>().To<WebInterviewInterviewEntityFactory>();
-
+            
             this.Bind<IJavaScriptMinifier>().ToConstant(new SignalRHubMinifier());
 
+            this.Bind<IHubPipelineModule>().To<SignalrErrorHandler>();
+            this.Bind<IHubPipelineModule>().To<PlainSignalRTransactionManager>();
+            this.Bind<IHubPipelineModule>().To<InterviewAuthorizationModule>();
+            this.Bind<IHubPipelineModule>().To<WebInterviewStateManager>();
+            this.Bind<IHubPipelineModule>().To<WebInterviewConnectionsCounter>();
+            
             this.Bind<IHubContext>()
-                .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
+                .ToMethod(_ => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
                 .InSingletonScope()
                 .Named(@"WebInterview");
         }
