@@ -152,11 +152,6 @@
 или свяжитесь с Вашим супервизором
 для дальнейших инструкций</value>
   </data>
-  <data name="Maps_NoMapsText" xml:space="preserve">
-    <value>Синхронизируйтесь для получения новых карт
-или свяжитесь с Вашим супервизором
-для дальнейших инструкций</value>
-  </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
     <value>У Вас нет новых заданий</value>
   </data>
