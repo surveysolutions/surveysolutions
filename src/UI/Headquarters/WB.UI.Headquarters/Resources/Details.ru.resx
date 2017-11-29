@@ -144,6 +144,12 @@
   <data name="SearchResult_Count" xml:space="preserve">
     <value>{{ count }} объект найден:</value>
   </data>
+  <data name="SearchResult_Count_1" xml:space="preserve">
+    <value>{{ count }} объекта найдено:</value>
+  </data>
+  <data name="SearchResult_Count_2" xml:space="preserve">
+    <value>{{ count }} объектов найдено:</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Статус: {{ name }}</value>
   </data>
