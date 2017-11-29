@@ -2,6 +2,7 @@
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Transactions;
@@ -17,12 +18,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
     {
         private readonly IProductVersion productVersion;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IPauseResumeQueue pauseResumeQueue;
 
         public WebInterviewStateManager(IProductVersion productVersion, 
-            IStatefulInterviewRepository statefulInterviewRepository)
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IPauseResumeQueue pauseResumeQueue)
         {
             this.productVersion = productVersion;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.pauseResumeQueue = pauseResumeQueue;
         }
 
         protected override bool OnBeforeConnect(IHub hub)
@@ -93,33 +97,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             var interview = this.statefulInterviewRepository.Get(interviewId);
             Guid userId = Guid.Parse(hub.Context.User.Identity.GetUserId());
 
-            ICommand pauseInterviewCommand = null;
             if (isInterviewer && !interview.IsCompleted)
             {
-                pauseInterviewCommand = new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now, DateTime.UtcNow);
+                pauseResumeQueue.EnqueuePause(new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now, DateTime.UtcNow));
             }
             else if (isSupervisor && interview.Status != InterviewStatus.ApprovedBySupervisor)
             {
-                pauseInterviewCommand =
-                    new CloseInterviewBySupervisorCommand(Guid.Parse(interviewId), userId, DateTime.Now);
-            }
-
-            if (pauseInterviewCommand != null)
-            {
-                // There is no request scope so no other way to get scoped transaction
-                var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>()
-                    .GetTransactionManager();
-                try
-                {
-                    transactionManager.BeginCommandTransaction();
-                    ServiceLocator.Current.GetInstance<ICommandService>().Execute(pauseInterviewCommand);
-                    transactionManager.CommitCommandTransaction();
-                }
-                catch (Exception)
-                {
-                    transactionManager.RollbackCommandTransaction();
-                    throw;
-                }
+                pauseResumeQueue.EnqueueCloseBySupervisor(new CloseInterviewBySupervisorCommand(Guid.Parse(interviewId), userId, DateTime.Now));
             }
         }
     }

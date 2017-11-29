@@ -1,32 +1,30 @@
 ﻿using System;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
+namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
 {
-    public class ExportJobScheduler
+    public class PauseResumeJobScheduler
     {
         private readonly IScheduler scheduler;
 
-        private readonly ExportSettings settings;
-
-        public ExportJobScheduler(IScheduler scheduler, ExportSettings settings)
+        public PauseResumeJobScheduler(IScheduler scheduler)
         {
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<ExportJob>()
-                .WithIdentity("export job", "Export")
+            IJobDetail job = JobBuilder.Create<PauseResumeJob>()
+                .WithIdentity("pause resume job", "WebInterview")
                 .StoreDurably(true)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("export trigger", "Export")
+                .WithIdentity("pause resume queue procesor", "WebInterview")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(this.settings.BackgroundExportIntervalInSeconds)
+                    .WithIntervalInSeconds(10)
                     .RepeatForever())
                 .Build();
 
