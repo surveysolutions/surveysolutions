@@ -86,6 +86,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         private void RecordInterviewPause(IHub hub)
         {
+            var isAuthenticated = hub.Context.User.Identity.IsAuthenticated;
+            if (!isAuthenticated)
+                return;
+
             var isInterviewer = hub.Context.User.IsInRole(UserRoles.Interviewer.ToString());
             var isSupervisor = hub.Context.User.IsInRole(UserRoles.Supervisor.ToString());
 
