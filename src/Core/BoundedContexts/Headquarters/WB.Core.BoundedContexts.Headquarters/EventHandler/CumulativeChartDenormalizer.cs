@@ -40,6 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 .FirstOrDefault())?.Status;
 
             InterviewStatus newStatus = @event.Payload.Status;
+            if (newStatus == InterviewStatus.Deleted)
+                return;
 
             var questionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(@event.EventSourceId);
 
