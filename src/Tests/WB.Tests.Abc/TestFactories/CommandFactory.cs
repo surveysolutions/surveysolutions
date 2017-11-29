@@ -315,5 +315,15 @@ namespace WB.Tests.Abc.TestFactories
                 supervisorId ?? Guid.NewGuid(),
                 assignTime ?? DateTime.UtcNow);
         }
+
+        public ResumeInterviewCommand ResumeInterview(Guid interviewId, DateTime utcDate)
+        {
+            return new ResumeInterviewCommand(interviewId, Guid.NewGuid(), DateTime.Now, utcDate);
+        }
+
+        public PauseInterviewCommand PauseInterview(Guid interviewId, DateTime utcDate)
+        {
+            return new PauseInterviewCommand(interviewId, Guid.NewGuid(), DateTime.Now, utcDate);
+        }
     }
 }
