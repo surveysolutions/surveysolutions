@@ -90,6 +90,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly SampleImportSettings sampleImportSettings;
         private readonly SyncSettings syncSettings;
+        private readonly TrackingSettings trackingSettings;
 
         public HeadquartersBoundedContextModule(string currentFolderPath,
             SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
@@ -98,6 +99,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             InterviewDataExportSettings interviewDataExportSettings,
             SampleImportSettings sampleImportSettings,
             SyncSettings syncSettings,
+            TrackingSettings trackingSettings, 
             int? interviewLimitCount = null,
             string syncDirectoryName = "SYNC")
         {
@@ -110,6 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
+            this.trackingSettings = trackingSettings;
         }
 
         public override void Load()
@@ -120,6 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
             this.Bind<SyncSettings>().ToConstant(this.syncSettings);
+            this.Bind<TrackingSettings>().ToConstant(this.trackingSettings);
 
             this.Bind<InterviewPreconditionsServiceSettings>().ToConstant(new InterviewPreconditionsServiceSettings(this.interviewLimitCount));
 
@@ -354,6 +358,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.Bind<IAssignmetnsDeletionService>().To<AssignmetnsDeletionService>();
             this.Bind<IAuditLog>().To<AuditLog>();
             this.Bind<IAuditLogReader>().To<AuditLogReader>();
+
+            this.Bind<IPauseResumeQueue>().To<PauseResumeQueue>().InSingletonScope();
         }
     }
 }

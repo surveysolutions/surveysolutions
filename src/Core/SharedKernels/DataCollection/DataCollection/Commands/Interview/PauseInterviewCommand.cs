@@ -3,40 +3,41 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class PauseInterviewCommand : InterviewCommand
+    public abstract class TimestampedInterviewCommand : InterviewCommand
     {
-        public PauseInterviewCommand(Guid interviewId, Guid userId, DateTime localTime, DateTime utcTime) : base(interviewId, userId)
+        protected TimestampedInterviewCommand(Guid interviewId, Guid userId, DateTime localTime, DateTime utcTime) : base(interviewId, userId)
         {
             LocalTime = localTime;
             UtcTime = utcTime;
         }
 
         public DateTime LocalTime { get; set; }
-
         public DateTime UtcTime { get; set; }
     }
 
-    public class ResumeInterviewCommand : InterviewCommand
+    public class PauseInterviewCommand : TimestampedInterviewCommand
     {
-        public ResumeInterviewCommand(Guid interviewId, Guid userId, DateTime localTime, DateTime utcTime) : base(interviewId, userId)
+        public PauseInterviewCommand(Guid interviewId, Guid userId, DateTime localTime, DateTime utcTime) : base(interviewId, userId, localTime, utcTime)
         {
             LocalTime = localTime;
-            UtcTime = utcTime;
         }
-
-        public DateTime UtcTime { get; set; }
-
-        public DateTime LocalTime { get; set; }
     }
 
-    public class CloseInterviewBySupervisorCommand : PauseInterviewCommand
+    public class ResumeInterviewCommand : TimestampedInterviewCommand
+    {
+        public ResumeInterviewCommand(Guid interviewId, Guid userId, DateTime localTime, DateTime utcTime) : base(interviewId, userId, localTime, utcTime)
+        {
+        }
+    }
+
+    public class CloseInterviewBySupervisorCommand : TimestampedInterviewCommand
     {
         public CloseInterviewBySupervisorCommand(Guid interviewId, Guid userId, DateTime localTime) : base(interviewId, userId, localTime, DateTime.UtcNow)
         {
         }
     }
 
-    public class OpenInterviewBySupervisorCommand : ResumeInterviewCommand
+    public class OpenInterviewBySupervisorCommand : TimestampedInterviewCommand
     {
         public OpenInterviewBySupervisorCommand(Guid interviewId, Guid userId, DateTime localTime) : base(interviewId, userId, localTime, DateTime.UtcNow)
         {

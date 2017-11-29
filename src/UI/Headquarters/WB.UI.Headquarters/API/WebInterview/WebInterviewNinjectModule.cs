@@ -5,6 +5,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
@@ -24,7 +25,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             pipiline.AddModule(new InterviewAuthorizationModule());
             pipiline.AddModule(new WebInterviewStateManager(
                 GlobalHost.DependencyResolver.Resolve<IProductVersion>(), 
-                GlobalHost.DependencyResolver.Resolve<IStatefulInterviewRepository>()
+                GlobalHost.DependencyResolver.Resolve<IStatefulInterviewRepository>(),
+                GlobalHost.DependencyResolver.Resolve<IPauseResumeQueue>()
             ));
             pipiline.AddModule(new WebInterviewConnectionsCounter());
 
