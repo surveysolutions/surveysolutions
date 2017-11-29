@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 case GeoPosition asgps:
                     return Interview.AnswerType.Gps;
                 case InterviewTextListAnswers astextlist:
-                //case Tuple<decimal, string>[] astuple:
+                case Tuple<decimal, string>[] astuple:
                 case InterviewTextListAnswer[] astextlistanswers:
                     return Interview.AnswerType.TextList;
                 case AnsweredYesNoOption[] asyesnolist:
