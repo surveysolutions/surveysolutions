@@ -345,12 +345,12 @@
 
                                             <button type="button" class="btn btn-default"
                                                 ng-show="translation.isDefault"
-                                                ng-click="setDefaultTranslation(null);$event.stopPropagation()" ng-i18next>UnMarkAsDefault</button>
+                                                ng-click="setDefaultTranslation($index, false);$event.stopPropagation()" ng-i18next>UnMarkAsDefault</button>
 
                                             <div class="permanent-actions pull-right">
                                                 <button type="button" class="btn lighter-hover"
                                                     ng-show="!translation.isDefault"
-                                                    ng-click="setDefaultTranslation($index);$event.stopPropagation()" ng-i18next>MarkAsDefault</button>
+                                                    ng-click="setDefaultTranslation($index, true);$event.stopPropagation()" ng-i18next>MarkAsDefault</button>
 
                                                 <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default"
                                                     target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
