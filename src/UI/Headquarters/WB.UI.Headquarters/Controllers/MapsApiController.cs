@@ -182,7 +182,7 @@ namespace WB.UI.Headquarters.Controllers
             public string UserName { set; get; }
         }
 
-        [ObserverNotAllowedApi]
+        
         [HttpGet]
         public HttpResponseMessage MappingDownload()
         {

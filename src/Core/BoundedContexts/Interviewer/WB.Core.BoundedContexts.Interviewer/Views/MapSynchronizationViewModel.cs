@@ -92,6 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void CancelSynchronizaion()
         {
+            this.IsSynchronizationInfoShowed = false;
             if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)
                 this.synchronizationCancellationTokenSource.Cancel();
         }
