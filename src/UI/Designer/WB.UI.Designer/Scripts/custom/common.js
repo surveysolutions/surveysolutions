@@ -38,6 +38,8 @@
         self.pdfRetryUrl = pdfRetryUrl;
         self.getLanguagesUrl = getLanguagesUrl;
 
+        self.setPdfMessage('');
+
         $('#export-pdf-modal-questionnaire-id').val(self.itemId);
         $('#export-pdf-modal-questionnaire-title').text(self.itemName);
 
@@ -156,6 +158,7 @@
         $('.close-pdf-dialog').unbind('click');
         $('.close-pdf-dialog').click(function (evn) {
             self.ExportDialogClosed = true;
+            self.setPdfMessage('');
         });
     }
 }
