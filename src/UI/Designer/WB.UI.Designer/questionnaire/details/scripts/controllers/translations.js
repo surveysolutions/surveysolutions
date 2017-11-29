@@ -164,19 +164,15 @@
             $scope.getDefaultTemplate = function () {
             };
 
-            $scope.setDefaultTranslation = function (translationIndex) {
-                var translationId = null;
+            $scope.setDefaultTranslation = function (translationIndex, isDefault) {
+                var translation = $scope.translations[translationIndex];
 
-                _.forEach($scope.translations, function(translation, index) {
-                    if(translationIndex === index) {
-                        translation.isDefault = true;
-                        translationId = translation.translationId;
-                    } else {
-                        translation.isDefault = false;
-                    }
+                commandService.setDefaultTranslation($state.params.questionnaireId, isDefault ? translation.translationId : null).then(function () {
+                    _.each($scope.translations, function(translation) {
+                        translation.isDefault = translation.checkpoint.isDefault = false;
+                    });
+                    translation.isDefault = translation.checkpoint.isDefault = isDefault;
                 });
-
-                commandService.setDefaultTranslation($state.params.questionnaireId, translationId);
             };
 
             $scope.foldback = function () {
