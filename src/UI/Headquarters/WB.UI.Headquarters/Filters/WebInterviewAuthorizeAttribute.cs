@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -32,8 +33,25 @@ namespace WB.UI.Headquarters.Filters
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            filterContext.Result = filterContext.HttpContext.User.Identity.IsAuthenticated ? 
-                new HttpStatusCodeResult(403) : new HttpUnauthorizedResult();
+            var interviewId = filterContext.RequestContext.RouteData.Values["id"].ToString();
+            try
+            {
+                webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);
+
+                filterContext.Result = filterContext.HttpContext.User.Identity.IsAuthenticated 
+                    ? new HttpStatusCodeResult(403) 
+                    : new HttpUnauthorizedResult();
+            }
+            catch (InterviewAccessException ie)
+            {
+                string errorMessage = WebInterview.GetUiMessageFromException(ie);
+
+                filterContext.Result = new ViewResult
+                {
+                    ViewName = @"~/Views/WebInterview/Error.cshtml",
+                    ViewData = new ViewDataDictionary(new WebInterviewError { Message = errorMessage })
+                };
+            }
         }
     }
 }

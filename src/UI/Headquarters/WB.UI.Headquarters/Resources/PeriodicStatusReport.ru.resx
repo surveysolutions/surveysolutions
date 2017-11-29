@@ -235,4 +235,7 @@
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
     <value>командой {0}</value>
   </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>Начиная с</value>
+  </data>
 </root>
