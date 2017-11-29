@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using Owin;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -32,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private const string MapsFolderName = "MapsData";
         private readonly string path;
 
-        private readonly string[] permittedFileExtensions = { ".tpk" };
+        private readonly string[] permittedFileExtensions = { ".tpk", ".mmpk" };
 
         private readonly string mapsFolderPath;
 
@@ -128,7 +129,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.fileSystemAccessor.CopyFileOrDirectory(map, this.mapsFolderPath, true);
 
             var filename = this.fileSystemAccessor.GetFileName(map);
-            var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(map);
+            var fileExtension = this.fileSystemAccessor.GetFileExtension(map);
+
+
+            MapType mapType;
+
+            switch (fileExtension)
+            {
+                case ".tpk":
+                    mapType = MapType.Tpk;
+                    break;
+                case ".mmpk":
+                    mapType = MapType.Mmpk;
+                    break;
+                default:
+                    mapType = MapType.Unknown;
+                    break;
+            }
+
+            var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(map, mapType);
 
             var mapItem = new MapBrowseItem()
             {
