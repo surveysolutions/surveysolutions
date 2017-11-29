@@ -121,7 +121,7 @@
     <value>Все права защищены.</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>Это инструмент для создания опросов на платформе CAPI  от Всемирного банка с возможностями совместной работы и экспорта в PDF.</value>
+    <value>Инструмент для совместного создания опросников для CAPI/CAWI платформы Мирового Банка</value>
   </data>
   <data name="AppName" xml:space="preserve">
     <value>Дизайнер опросников</value>
