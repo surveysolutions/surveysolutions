@@ -1642,7 +1642,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
             propertiesInvariants.ThrowIfInterviewHardDeleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
-                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, 
+                InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Completed,
                 InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
             if (!this.properties.SupervisorId.HasValue)

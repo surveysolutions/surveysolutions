@@ -710,7 +710,7 @@
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
     <value>Обработка карты {0}, {1} из {2}. 
- Скачано {3}%</value>
+Скачано {3}%</value>
   </data>
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
     <value>Карты успешно обновлены</value>

@@ -3,24 +3,6 @@ import UserMapLinking from "./UserMapLinking"
 import MapList from "./MapList"
 import Vue from "vue"
 
-const store = {
-    state: {
-        pendingHandle: null
-    },
-    actions: {        
-        openMap(context, fileName) {            
-            window.location = window.input.settings.config.basePath + "Maps/Details?mapname=" + encodeURIComponent(fileName)
-        },
-        deleteMap(context, { callback, mapName }) {
-            $.ajax({
-                url: window.input.settings.config.basePath + "Maps/DeleteMap/" + mapName,
-                type: 'DELETE',
-                success: callback
-            })
-        }
-    }
-}
-
 export default class MapComponent {
     get routes() {
         return [{
@@ -31,6 +13,4 @@ export default class MapComponent {
             path: '/Maps/', component: MapList
         }]
     }
-    
-    get modules() { return { maps: store }}
 }
