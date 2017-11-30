@@ -62,11 +62,6 @@ export default {
         Vue.set(question, "postingComment", true)
     },
 
-    SET_QUESTION_COMMENTS(state, { questionId, comments }) {
-        const question = state.entityDetails[questionId]
-        question.comments = comments
-        Vue.set(question, "postingComment", false)
-    },
     LOG_LAST_ACTIVITY(state){
         state.lastActivityTimestamp = new Date()
     },

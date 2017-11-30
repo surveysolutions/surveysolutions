@@ -250,22 +250,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }
         }
 
-        public void RefreshComment(Guid interviewId, Identity question)
-        {
-            var interview = this.statefulInterviewRepository.Get(interviewId.FormatGuid());
-
-            if (interview == null)
-            {
-                return;
-            }
-
-            var clientQuestionIdentity = this.GetClientGroupIdentity(question, interview);
-
-            if (clientQuestionIdentity != null)
-                this.webInterviewHubContext.Clients
-                    .Group(clientQuestionIdentity).refreshComment(question.ToString());
-        }
-
         public void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
             => this.webInterviewHubContext.Clients.Group(questionnaireIdentity.ToString()).reloadInterview();
     }

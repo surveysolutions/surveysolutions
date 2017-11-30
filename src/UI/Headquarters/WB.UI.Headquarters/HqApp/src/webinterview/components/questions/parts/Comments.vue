@@ -38,7 +38,7 @@
         mixins: [entityPartial],
         data() {
             return {
-                comment: null,
+                comment: null
             }
         },
         props: {
@@ -64,13 +64,14 @@
 
                 return this.$t("WebInterviewUI.Comment") //'Comment';
             },
-            postComment(evnt) {
+
+            async postComment(evnt) {
                 const com = this.comment
 
                 if (!com || !com.trim())
                     return
 
-                this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: com.trim() })
+                await this.$store.dispatch("sendNewComment", { questionId: this.$me.id, comment: com.trim() })
 
                 this.comment = ''
                 if(evnt && evnt.target) {
