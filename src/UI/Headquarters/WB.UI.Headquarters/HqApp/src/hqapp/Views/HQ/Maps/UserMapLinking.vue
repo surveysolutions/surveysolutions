@@ -22,7 +22,7 @@
                     <div class="info-block" v-if="actionsAlowed">                        
                             <label class="btn btn-success btn-file">
                                 {{$t("Pages.MapLinking_UploadFile")}}
-                            <input accept=".tab" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
+                            <input :accept="$config.model.fileExtension" ref="uploader" id="File" name="File" @change="onFileChange" type="file" value="" />
                             </label>                        
                     
                     </div>

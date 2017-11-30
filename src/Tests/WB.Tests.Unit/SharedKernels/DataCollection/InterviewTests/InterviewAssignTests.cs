@@ -16,7 +16,6 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     [TestOf(typeof(Interview))]
-    [TestFixture]
     internal class InterviewAssignTests : InterviewTestsContext
     {
         EventContext eventContext;
@@ -245,7 +244,28 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             // assert
             eventContext.ShouldContainEvent<SupervisorAssigned>();
             eventContext.ShouldContainEvent<InterviewerAssigned>();
-            eventContext.ShouldContainEvent<InterviewStatusChanged>();
+            eventContext.ShouldNotContainEvent<InterviewStatusChanged>();
+        }
+
+        [Test]
+        public void Interview_in_status_Completed_And_interview_being_reassigned_to_another_supervisor_As_result_supervisor_should_be_changed()
+        {
+            // arrange
+            var interview = SetupInterview();
+            interview.Apply(Create.Event.SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(Create.Event.InterviewerAssigned(supervisorId, interviewerId, DateTime.UtcNow.AddHours(-1)));
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.InterviewerAssigned));
+            interview.Apply(Create.Event.InteviewCompleted());
+            interview.Apply(Create.Event.InterviewStatusChanged(InterviewStatus.Completed));
+            SetupEventContext();
+
+            // act
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: null, assignTime: DateTime.UtcNow));
+
+            // assert
+            eventContext.ShouldContainEvent<SupervisorAssigned>();
+            eventContext.ShouldContainEvent<InterviewerAssigned>(x => x.InterviewerId == null);
+            eventContext.ShouldNotContainEvent<InterviewStatusChanged>();
         }
 
         [Test]
