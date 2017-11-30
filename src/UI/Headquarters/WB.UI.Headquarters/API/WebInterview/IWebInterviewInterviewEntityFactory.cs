@@ -7,7 +7,6 @@ namespace WB.UI.Headquarters.API.WebInterview
     public interface IWebInterviewInterviewEntityFactory
     {
         Sidebar GetSidebarChildSectionsOf(string currentSectionId, IStatefulInterview interview, string[] sectionIds, bool isReviewMode);
-        Comment[] GetComments(InterviewTreeQuestion question, IStatefulInterview statefulInterview);
         InterviewEntity GetEntityDetails(string id, IStatefulInterview callerInterview, IQuestionnaire questionnaire, bool isReviewMode);
         GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode);
         GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode);

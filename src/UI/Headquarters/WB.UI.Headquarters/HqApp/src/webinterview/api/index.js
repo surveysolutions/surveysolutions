@@ -39,10 +39,6 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("refreshEntities", questions)
         }
 
-        interviewProxy.client.refreshComment = (question) => {
-            store.dispatch("refreshComment", question)
-        }
-
         interviewProxy.client.refreshSection = () => {
             store.dispatch("fetchSectionEntities")          // fetching entities in section
             store.dispatch("refreshSectionState")           // fetching breadcrumbs/sidebar/buttons
