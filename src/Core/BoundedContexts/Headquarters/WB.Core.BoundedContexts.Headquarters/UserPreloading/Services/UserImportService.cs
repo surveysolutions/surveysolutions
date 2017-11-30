@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
@@ -127,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             if (!hasErrors) this.Save(fileName, usersToImport);
 
-            this.scheduler.ResumeJob(new JobKey("import users job", "Import users"));
+            this.scheduler.ResumeJob(UsersImportTask.JobKey);
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();
