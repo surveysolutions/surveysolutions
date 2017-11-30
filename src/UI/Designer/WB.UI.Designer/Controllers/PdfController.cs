@@ -104,6 +104,7 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
+        [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
         public ActionResult Download(Guid id, Guid? translation)
         {
             var pdfKey = id.ToString() + translation;
