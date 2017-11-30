@@ -92,7 +92,7 @@
         @foreach (DictionaryEntry entry in UserPreloadingVerificationMessages.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true))
     {
         <text>
-        errorMessages["@entry.Key"] = '@Html.Raw(entry.Value)';
+        errorMessages["@entry.Key"] = "@Html.Raw(entry.Value)";
         </text>
     }
 
