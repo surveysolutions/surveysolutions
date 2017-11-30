@@ -33,6 +33,7 @@
         StatusDuration = 29,
         SurveyAndStatuses = 30,
         AuditLog = 31,
-        Maps = 32
+        Maps = 32,
+        TeamMembersAndStatuses = 33
     }
 }
