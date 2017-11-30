@@ -39,7 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
-        IUpdateHandler<InterviewSummary, AnswerRemoved>,
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>,
@@ -202,18 +201,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TextQuestionAnswered> @event)
         {
             return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer, @event.EventTimeStamp);
-        }
-
-
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswerRemoved> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == @event.Payload.QuestionId))
-                {
-                    interview.AnswerFeaturedQuestion(@event.Payload.QuestionId, "");
-                }
-            });
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)

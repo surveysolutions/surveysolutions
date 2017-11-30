@@ -1661,7 +1661,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
-            if (this.properties.Status != InterviewStatus.InterviewerAssigned && this.properties.Status != InterviewStatus.RejectedBySupervisor)
+            if (this.properties.Status != InterviewStatus.InterviewerAssigned && 
+                this.properties.Status != InterviewStatus.RejectedBySupervisor &&
+                this.properties.Status != InterviewStatus.Completed)
             {
                 this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
             }

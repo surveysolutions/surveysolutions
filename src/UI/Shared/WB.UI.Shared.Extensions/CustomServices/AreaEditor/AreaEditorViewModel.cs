@@ -28,22 +28,19 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private readonly IUserInteractionService userInteractionService;
 
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IAsyncRunner asyncRunner;
 
         public AreaEditorViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IFileSystemAccessor fileSystemAccessor,
-            IAsyncRunner asyncRunner)
+            IFileSystemAccessor fileSystemAccessor)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
             this.mapService = mapService;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.asyncRunner = asyncRunner;
         }
 
         public override void Load()
@@ -66,8 +63,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 this.SelectedMap = this.MapsList.FirstOrDefault();
             }
-
-            this.asyncRunner.RunAsync(UpdateBaseMap);
         }
 
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
@@ -278,6 +273,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () =>
         {
+            if (this.Map == null)
+                await UpdateBaseMap();
+
             if (this.IsEditing || this.Map == null)
                 return;
 
