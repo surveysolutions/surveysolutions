@@ -24,6 +24,12 @@
             this.loadSection()
         },
 
+        mounted() {
+            if(this.$route.hash){
+                this.$store.dispatch("sectionRequireScroll", { id: this.$route.hash })
+            }
+        },
+
         async beforeRouteEnter (to, from, next) {
             if(checkSectionPermission(to)) {
                 next(vm => vm.$store.dispatch("changeSection", to.params.sectionId))

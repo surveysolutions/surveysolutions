@@ -127,10 +127,10 @@
                     params: {
                         sectionId: entityWithError.parentId,
                         interviewId: this.$route.params.interviewId
-                    }
+                    },
+                    hash: '#' + entityWithError.id
                 }
 
-                this.$store.dispatch("sectionRequireScroll", { id: entityWithError.id })
                 this.$router.push(navigateToEntity)
             }
         }
