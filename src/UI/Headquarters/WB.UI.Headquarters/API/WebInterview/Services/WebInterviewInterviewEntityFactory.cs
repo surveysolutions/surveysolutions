@@ -352,7 +352,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }));
         }
 
-        public Comment[] GetComments(InterviewTreeQuestion question, IStatefulInterview statefulInterview)
+        private Comment[] GetComments(InterviewTreeQuestion question, IStatefulInterview statefulInterview)
         {
             return question.AnswerComments.Select(ac
                     => new Comment
