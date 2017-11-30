@@ -8,6 +8,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         private Guid? interviewerId;
 
+        public InterviewProperties()
+        {
+            this.IsValid = true;
+        }
+
         public string Id { get; set; }
 
         public Guid? InterviewerId
