@@ -9,11 +9,21 @@
 
     export default {
         mixins: [entityPartial],
+        props: {
+            onRemove: {
+                default: null
+            }
+        },
         name: "wb-remove-answer",
         methods: {
             removeAnswer() {
-                this.$store.dispatch("removeAnswer", this.$me.id)
-                this.$emit('answerRemoved', this.$me.id)
+                if(this.onRemove) {
+                    this.onRemove()
+                }
+                else {
+                    this.$store.dispatch("removeAnswer", this.$me.id)
+                    this.$emit('answerRemoved', this.$me.id)
+                }
             }
         }
     }
