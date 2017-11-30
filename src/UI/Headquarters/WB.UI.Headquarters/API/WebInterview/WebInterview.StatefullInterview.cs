@@ -399,17 +399,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             };
             return completeInfo;
         }
-
-        public Comment[] GetQuestionComments(string questionId)
-        {
-            var identity = Identity.Parse(questionId);
-
-            var interview = this.GetCallerInterview();
-            InterviewTreeQuestion question = interview.GetQuestion(identity);
-
-            return this.interviewEntityFactory.GetComments(question, interview);
-        }
-
+        
         public CoverInfo GetCoverInfo()
         {
             var interview = this.GetCallerInterview();

@@ -55,7 +55,7 @@
         <div class="modal-backdrop in" style="display: none"></div>
         <!-- /.modal -->
         <li slot="sideMenu">
-            <a :href="audioRecordPath">{{$t("Common.Download")}}</a>
+            <a :href="audioRecordPath" v-if="isRecorded">{{$t("Common.Download")}}</a>
         </li>
     </wb-question>
 </template>
@@ -99,6 +99,9 @@ export default {
                     return moment.duration(this.$me.answer, 'milliseconds').humanize();
                 }
                 return ''
+            },
+            isRecorded() {
+                return this.isRecording == false && this.$me.isAnswered;
             }
         },
     methods: {
