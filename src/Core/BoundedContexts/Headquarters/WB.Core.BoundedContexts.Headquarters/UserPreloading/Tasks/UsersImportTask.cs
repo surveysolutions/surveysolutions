@@ -6,6 +6,11 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
 {
     public class UsersImportTask
     {
+        private const string GroupName = "Import users";
+
+        public static JobKey JobKey = new JobKey("import users job", GroupName);
+        public static TriggerKey TriggerKey = new TriggerKey("import users trigger", GroupName);
+
         readonly IScheduler scheduler;
 
         private readonly UserPreloadingSettings userPreloadingSettings;
@@ -19,12 +24,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
         public void Configure()
         {
             IJobDetail job = JobBuilder.Create<UsersImportJob>()
-                .WithIdentity("import users job", "Import users")
+                .WithIdentity(JobKey)
                 .StoreDurably(true)
                 .Build();
 
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("import users trigger", "Import users")
+                .WithIdentity(TriggerKey)
                 .StartNow()
                 .WithSimpleSchedule(x => x
                     .WithIntervalInSeconds(userPreloadingSettings.ExecutionIntervalInSeconds)

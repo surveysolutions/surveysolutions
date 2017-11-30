@@ -4,6 +4,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -47,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                 } while (userToImport != null);
 
-                this.scheduler.PauseJob(new JobKey("import users job", "Import users"));
+                this.scheduler.PauseJob(UsersImportTask.JobKey);
             }
             catch (Exception ex)
             {
