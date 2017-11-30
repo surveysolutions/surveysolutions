@@ -2,11 +2,14 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -16,7 +19,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
         private readonly IMapService mapService;
-
+        private readonly IPermissionsService permissions;
+        private readonly IUserInteractionService userInteractionService;
 
         public MapSynchronizationViewModel Synchronization { set; get; }
 
@@ -25,6 +29,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPrincipal principal,
             MapSynchronizationViewModel synchronization,
             IMapService mapService,
+            IPermissionsService permissions,
+            IUserInteractionService userInteractionService,
             ILogger logger)
             : base(principal, viewModelNavigationService)
         {
@@ -33,6 +39,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Synchronization = synchronization;
             this.Synchronization.SyncCompleted += this.Refresh;
             this.mapService = mapService;
+            this.permissions = permissions;
+            this.userInteractionService = userInteractionService;
+
         }
 
         public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
@@ -52,13 +61,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        private IMvxCommand mapSynchronizationCommand;
-        public IMvxCommand MapSynchronizationCommand
+        private IMvxAsyncCommand mapSynchronizationCommand;
+        public IMvxAsyncCommand MapSynchronizationCommand
         {
             get
             {
                 return mapSynchronizationCommand ??
-                       (mapSynchronizationCommand = new MvxCommand(this.RunMapSync,
+                       (mapSynchronizationCommand = new MvxAsyncCommand(this.RunMapSyncAsync,
                            () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
@@ -66,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string MapsTitle => InterviewerUIResources.Maps_Title;
 
         
-        private void RunMapSync()
+        private async Task RunMapSyncAsync()
         {
             if (this.viewModelNavigationService.HasPendingOperations)
             {
@@ -74,7 +83,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 return;
             }
 
-            
+            try
+            {
+                await this.permissions.AssureHasPermission(Permission.Storage);
+            }
+            catch (MissingPermissionsException e) when (e.Permission == Permission.Storage)
+            {
+                this.userInteractionService.ShowToast(UIResources.MissingPermissions_Storage);
+                return;
+            }
+
             this.Synchronization.Synchronize();
         }
 
