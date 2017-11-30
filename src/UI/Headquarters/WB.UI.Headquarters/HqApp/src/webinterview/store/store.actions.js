@@ -120,7 +120,7 @@ export default {
     },
 
     // called by server side. refresh
-    refreshEntities({ state, dispatch }, questions) {
+    refreshEntities({ state, dispatch, getters }, questions) {
         questions.forEach(id => {
             if (state.entityDetails[id]) { // do not fetch entity that is no in the visible list
                 dispatch("fetchEntity", { id, source: "server" })
@@ -128,7 +128,9 @@ export default {
         })
 
         dispatch("refreshSectionState", null)
-        dispatch("refreshSearchResults")
+        
+        if(getters.isReviewMode)
+            dispatch("refreshSearchResults")
     },
 
     refreshSectionState: debounce(({ dispatch }) => {
