@@ -153,11 +153,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(title);
 
-            var document = source as QuestionnaireDocument;
-            if (document == null)
+            if (!(source is QuestionnaireDocument document))
                 throw new QuestionnaireException(DomainExceptionType.TemplateIsInvalid, ExceptionMessages.OnlyQuestionnaireDocumentsAreSupported);
 
-            var clonedDocument = (QuestionnaireDocument)document.Clone();
+            var clonedDocument = document.Clone();
             clonedDocument.PublicKey = this.Id;
             clonedDocument.CreatedBy = createdBy;
             clonedDocument.CreationDate = this.clock.UtcNow();
