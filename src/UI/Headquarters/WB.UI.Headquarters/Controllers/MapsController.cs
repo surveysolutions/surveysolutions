@@ -23,6 +23,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Maps;
 using WB.UI.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -93,6 +94,7 @@ namespace WB.UI.Headquarters.Controllers
                 MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
+                FileExtension = TabExportFile.Extention
             };
             return View(model);
         }
@@ -217,7 +219,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.Content(Maps.MappingsLoadingError);
             }
 
-            if (".tab" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
+            if (TabExportFile.Extention != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
             {
                 return this.Content(Maps.FileLoadingNotTsvError);
             }

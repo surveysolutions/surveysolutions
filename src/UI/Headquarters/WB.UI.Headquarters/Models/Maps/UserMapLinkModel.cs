@@ -9,5 +9,7 @@
         public bool IsObserver { get; set; }
         public bool IsObserving { get; set; }
 
+        public string FileExtension { get; set; }       
+
     }
 }
