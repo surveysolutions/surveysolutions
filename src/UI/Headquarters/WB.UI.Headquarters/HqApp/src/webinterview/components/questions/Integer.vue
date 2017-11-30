@@ -10,7 +10,7 @@
                         :value="$me.answer" v-blurOnEnterKey 
                         :disabled="!$me.acceptAnswer" @blur="answerIntegerQuestion" 
                         v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
-                        <wb-remove-answer />
+                        <wb-remove-answer :on-remove="removeAnswer"/>
                         </button>
                     </div>
                 </div>

@@ -78,11 +78,9 @@ export default {
     removeAnswer({ dispatch }, questionId) {
         Vue.$api.callAndFetch(questionId, api => api.removeAnswer(questionId))
     },
-    sendNewComment({ dispatch, commit }, { questionId, comment }) {
-        commit("POSTING_COMMENT", {questionId: questionId})
-        return Vue.$api.call(api => {
-            return api.sendNewComment(questionId, comment)
-        })
+    async sendNewComment({ dispatch, commit }, { questionId, comment }) {
+        commit("POSTING_COMMENT", { questionId: questionId })
+        await Vue.$api.call(api => api.sendNewComment(questionId, comment))
     },
 
     setAnswerAsNotSaved({ commit }, { id, message }) {
@@ -122,7 +120,7 @@ export default {
     },
 
     // called by server side. refresh
-    refreshEntities({ state, dispatch }, questions) {
+    refreshEntities({ state, dispatch, getters }, questions) {
         questions.forEach(id => {
             if (state.entityDetails[id]) { // do not fetch entity that is no in the visible list
                 dispatch("fetchEntity", { id, source: "server" })
@@ -130,12 +128,9 @@ export default {
         })
 
         dispatch("refreshSectionState", null)
-    },
-    // called by server side. refresh
-    refreshComment({ state, dispatch }, questionId) {
-        if (state.entityDetails[questionId]) { // do not fetch entity comments that is no in the visible list
-            dispatch("fetchQuestionComments", questionId)
-        }
+        
+        if(getters.isReviewMode)
+            dispatch("refreshSearchResults")
     },
 
     refreshSectionState: debounce(({ dispatch }) => {
@@ -217,16 +212,8 @@ export default {
         commit("SET_COVER_INFO", coverInfo)
     }, 200),
 
-    fetchQuestionComments: debounce(({ commit }, questionId) => {
-        return Vue.$api.call(api => {
-            return api.getQuestionComments(questionId)})
-            .then((comments) => {
-                commit("SET_QUESTION_COMMENTS", { questionId, comments })
-            })
-    }, 200),
-
-    completeInterview({state, commit }, comment) {
-        if(state.interviewCompleted) return;
+    completeInterview({ state, commit }, comment) {
+        if (state.interviewCompleted) return;
 
         commit("COMPLETE_INTERVIEW");
 
@@ -237,7 +224,7 @@ export default {
         commit("CLEAR_ENTITIES", { ids })
     }, null, /* limit */ 100),
 
-    changeLanguage({ commit }, language) {
+    changeLanguage(ctx, language) {
         Vue.$api.call(api => api.changeLanguage(language))
     },
 
