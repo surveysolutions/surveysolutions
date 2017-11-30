@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private string interviewId;
         private Guid[] rostersInGroup;
+        private Guid[] subSectionsWithEnablemetConditionsInGroup;
         
         public event EventHandler OnSectionUpdated;
 
@@ -68,8 +69,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.SectionIdentity = sectionIdentity;
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            this.rostersInGroup = questionnaire
-                    .GetAllUnderlyingChildRosters(this.SectionIdentity.Id).ToArray();
+            this.rostersInGroup = questionnaire.GetAllUnderlyingChildRosters(this.SectionIdentity.Id).ToArray();
+            this.subSectionsWithEnablemetConditionsInGroup = questionnaire.GetSubSectionsWithEnablementCondition(this.SectionIdentity.Id).ToArray();
 
             groupStateViewModel.Init(interviewId, sectionIdentity);
 
@@ -197,8 +198,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(GroupsEnabled @event)
         {
-            if (!this.HasChildren && @event.Groups.Any(g => this.rostersInGroup.Contains(g.Id)))
+            if (!this.HasChildren 
+                && (@event.Groups.Any(g => this.rostersInGroup.Contains(g.Id))
+                    || @event.Groups.Any(g => this.subSectionsWithEnablemetConditionsInGroup.Contains(g.Id)))
+                )
+            {
                 this.UpdateHasChildren();
+            }
 
             if (this.Expanded)
             {
@@ -208,8 +214,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Handle(GroupsDisabled @event)
         {
-            if (@event.Groups.Select(group => group.Id).Any(groupId => this.rostersInGroup.Contains(groupId)))
+            if (@event.Groups.Select(group => group.Id)
+                .Any(groupId => this.rostersInGroup.Contains(groupId) || this.subSectionsWithEnablemetConditionsInGroup.Contains(groupId)))
+            {
                 this.UpdateHasChildren();
+            }
         }
 
         public void Dispose()
