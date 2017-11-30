@@ -290,9 +290,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
-            this.ApplyEvent(this.HasInvalidAnswers() || this.HasInvalidStaticTexts
-                ? new InterviewDeclaredInvalid() as IEvent
-                : new InterviewDeclaredValid());
+            var becomesValid = !(this.HasInvalidAnswers() || this.HasInvalidStaticTexts);
+            if (this.properties.IsValid != becomesValid)
+            {
+                this.ApplyEvent(becomesValid
+                    ? new InterviewDeclaredValid()
+                    : new InterviewDeclaredInvalid() as IEvent);
+            }
         }
 
         public void Synchronize(SynchronizeInterviewCommand command)
