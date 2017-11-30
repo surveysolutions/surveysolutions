@@ -839,6 +839,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
 
+        public IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId)
+        {
+            var result = GetChildEntityIds(groupId)
+                .Where(x => this.IsSubSection(x) && !string.IsNullOrWhiteSpace(this.GetCustomEnablementConditionForGroup(x)));
+
+            return new ReadOnlyCollection<Guid>(result.ToList());
+        }
+
+
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
             => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
                     .GetGroupOrThrow(groupId)
