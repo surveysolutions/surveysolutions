@@ -124,31 +124,31 @@
     <value>Il existe des doublons dans le fichier listant les utilisateurs</value>
   </data>
   <data name="PLU0003" xml:space="preserve">
-    <value> La connexion d'un utilisateur archivé ne peut pas être réutilisée car elle appartient à une autre équipe</value>
+    <value>La connexion d'un utilisateur archivé ne peut pas être réutilisée car elle appartient à une autre équipe</value>
   </data>
   <data name="PLU0004" xml:space="preserve">
-    <value> La connexion d'un utilisateur archivé ne peut pas être réutilisée car elle existe dans un autre rôle</value>
+    <value>La connexion d'un utilisateur archivé ne peut pas être réutilisée car elle existe dans un autre rôle</value>
   </data>
   <data name="PLU0005" xml:space="preserve">
-    <value> La connexion doit comporter entre 3 et 15 caractères et ne doit contenir que des lettres, des chiffres et le symbole de soulignement.</value>
+    <value>La connexion doit comporter entre 3 et 15 caractères et ne doit contenir que des lettres, des chiffres et le symbole de soulignement.</value>
   </data>
   <data name="PLU0006" xml:space="preserve">
-    <value> Le mot de passe doit contenir au moins un chiffre, un caractère majuscule et un caractère minuscule. La longueur doit être comprise entre 10 et 100 caractères.</value>
+    <value>Le mot de passe doit contenir au moins un chiffre, un caractère majuscule et un caractère minuscule. La longueur doit être comprise entre 10 et 100 caractères.</value>
   </data>
   <data name="PLU0007" xml:space="preserve">
-    <value> Le courriel est invalide</value>
+    <value>Le courriel est invalide</value>
   </data>
   <data name="PLU0008" xml:space="preserve">
-    <value> Le numéro de téléphone est invalide</value>
+    <value>Le numéro de téléphone est invalide</value>
   </data>
   <data name="PLU0009" xml:space="preserve">
-    <value> Le rôle est invalide. Seul "Superviseur" ou "entretiener" sont autorisés</value>
+    <value>Le rôle est invalide. Seul 'Superviseur' ou 'entretiener' sont autorisés</value>
   </data>
   <data name="PLU0010" xml:space="preserve">
-    <value> Le superviseur doit être un utilisateur existant ou créé dans le fichier présent</value>
+    <value>Le superviseur doit être un utilisateur existant ou créé dans le fichier présent</value>
   </data>
   <data name="PLU0011" xml:space="preserve">
-    <value> La colonne superviseur doit être vide pour l'utilisateur dans le rôle "Superviseur"</value>
+    <value>La colonne superviseur doit être vide pour l'utilisateur dans le rôle 'Superviseur'</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
     <value>Le nom complet ne doit pas contenir plus de 100 caractères</value>
