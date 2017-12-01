@@ -173,6 +173,11 @@
 or contact your supervisor
 for further instructions</value>
   </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Synchronize to get maps
+or contact your supervisor
+for further instructions</value>
+  </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
     <value>You have no new assignments</value>
   </data>

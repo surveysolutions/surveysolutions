@@ -121,7 +121,7 @@
     <value>El servidor no está registrado con Questionnaire Designer. Por favor, póngase en contacto con soporte para el registro.</value>
   </data>
   <data name="DesignerAppDescription" xml:space="preserve">
-    <value>Esta es una herramienta gratuita para crear cuestionarios para la plataforma CAPI del Banco Mundial. Se puede encontrar en</value>
+    <value>Esta es una herramienta gratuita para crear cuestionarios para la plataforma CAPI del Banco Mundial. Puede encontrarla en</value>
   </data>
   <data name="InvalidCredentials" xml:space="preserve">
     <value>El usuario no está autorizado. Por favor, compruebe su nombre de usuario y contraseña.</value>

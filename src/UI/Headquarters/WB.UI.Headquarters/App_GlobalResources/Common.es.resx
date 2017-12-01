@@ -181,7 +181,7 @@
     <value>Bitácora de errores</value>
   </data>
   <data name="GetInterviewerApp" xml:space="preserve">
-    <value>Descarge aplicación Interviewer</value>
+    <value>Descargue aplicación Interviewer</value>
   </data>
   <data name="HideIdentifying" xml:space="preserve">
     <value>Ocultar</value>
@@ -196,7 +196,7 @@
     <value>Actualizado</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Nota Legal</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Cargando. Favor esperar</value>
