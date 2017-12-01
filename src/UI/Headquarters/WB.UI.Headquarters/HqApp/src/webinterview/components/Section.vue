@@ -1,7 +1,7 @@
 <template>
     <div id="questionsList" class="unit-section" :class="sectionClass">
         <SectionLoadingProgress />
-        <Breadcrumbs />
+        <Breadcrumbs :showHumburger="showHumburger" />
         <component v-for="entity in entities" :key="entity.identity" :is="entity.entityType" :id="entity.identity"></component>
     </div>
 </template>
@@ -19,6 +19,13 @@
 
     export default {
         name: 'section-view',
+
+        props:{
+            showHumburger: {
+                type: Boolean,
+                default: true
+            }
+        },
 
         beforeMount() {
             this.loadSection()
