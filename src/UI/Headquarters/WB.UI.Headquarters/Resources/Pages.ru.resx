@@ -1011,7 +1011,7 @@
     <value>Вы уверены, что хотите удалить карту?</value>
   </data>
   <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
-    <value>Вы уверены, что хотите разорвать связь пользователя и карты?</value>
+    <value>Вы уверены, что хотите отменить назначение на пользователя?</value>
   </data>
   <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
     <value>Удалить</value>
@@ -1179,5 +1179,8 @@
   </data>
   <data name="Map_Uploading" xml:space="preserve">
     <value>Загрузка</value>
+  </data>
+  <data name="Map_UploadingError" xml:space="preserve">
+    <value>Произошла ошибка во время загрузки</value>
   </data>
 </root>

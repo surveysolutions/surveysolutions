@@ -163,7 +163,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 .Parents?.Any(x => x.Identity == this.SectionIdentity) ?? false);
 
             this.IsCurrent = this.SectionIdentity.Equals(targetGroup);
-            this.Expanded = this.IsSelected = this.IsCurrent || isParentSelected;
+            this.IsSelected = this.IsCurrent || isParentSelected;
+            this.Expanded = this.Expanded || this.IsSelected;
         }
 
         private void UpdateHasChildren()

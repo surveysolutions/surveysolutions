@@ -4,15 +4,41 @@ using System.Threading.Tasks;
 using System.Web.Hosting;
 using Esri.ArcGISRuntime.Mapping;
 using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.UI.Headquarters.Implementation.Maps
 {
     public class MapPropertiesProvider : IMapPropertiesProvider
     {
-        public async Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToMap, MapType mapType)
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
+        public MapPropertiesProvider(IFileSystemAccessor fileSystemAccessor)
+        {
+            this.fileSystemAccessor = fileSystemAccessor;
+        }
+
+        public async Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToMap)
         {
             if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
                 Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = HostingEnvironment.MapPath(@"~/bin");
+
+            var fileExtension = this.fileSystemAccessor.GetFileExtension(pathToMap);
+
+            MapType mapType;
+
+            switch (fileExtension)
+            {
+                case ".tpk":
+                    mapType = MapType.Tpk;
+                    break;
+                case ".mmpk":
+                    mapType = MapType.Mmpk;
+                    break;
+                default:
+                    mapType = MapType.Unknown;
+                    break;
+            }
+
             switch (mapType)
             {
                 case MapType.Tpk:

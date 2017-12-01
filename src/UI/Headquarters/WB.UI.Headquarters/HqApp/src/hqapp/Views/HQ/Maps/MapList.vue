@@ -56,6 +56,7 @@ export default {
         const statusupdater = this.updateStatus;
         const reloader = this.reload;
         const uploadingMessage = this.$t("Pages.Map_Uploading");
+        const uploadingErrorMessage = this.$t("Pages.Map_UploadingError");
         
         const fd = new FormData();
         fd.append("file", this.$refs.uploader.files[0]);
@@ -78,7 +79,7 @@ export default {
                     reloader();                    
                 },
                 error : function(error){
-                    statusupdater(error);
+                    statusupdater(uploadingErrorMessage);
                 }
             });            
     },

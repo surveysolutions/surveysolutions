@@ -82,9 +82,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             return statefulInterview.IsEnabled(Identity.Parse(id));
         }
 
-        public string GetInterviewStatus()
+        public GroupStatus GetInterviewStatus()
         {
-            return this.interviewEntityFactory.GetInterviewSimpleStatus(this.GetCallerInterview(), IsReviewMode).ToString();
+            return this.interviewEntityFactory.GetInterviewSimpleStatus(this.GetCallerInterview(), IsReviewMode);
         }
 
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
