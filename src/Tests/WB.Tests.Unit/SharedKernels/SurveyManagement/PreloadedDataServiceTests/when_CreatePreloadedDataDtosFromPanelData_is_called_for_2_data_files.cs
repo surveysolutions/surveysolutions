@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             // Act
             var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[] {
                 CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] { new[] { "1", "2" } }, questionnaireDocument.Title),
-                CreatePreloadedDataByFile(new[] { $"{rosterVariable}__id", "nq2", "ParentId1" }, new[] { new[] { "1", "2", "1" } }, rosterVariable)
+                CreatePreloadedDataByFile(new[] { $"{rosterVariable}__id", "nq2", ServiceColumns.InterviewId }, new[] { new[] { "1", "2", "1" } }, rosterVariable)
             });
 
             Assert.That(result, Is.Not.Null);
