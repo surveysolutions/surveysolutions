@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -29,9 +30,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: Guid.NewGuid(),
                     obsoleteFixedTitles: new[] {"a"}, title: rosterTitle));
             questionnaire.Title = questionnaireTitle;
-            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { "Id"}, new string[][] { new string[] { "1"} },
+            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId}, new string[][] { new string[] { "1"} },
                 questionnaireTitle + ".csv");
-            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId1" }, new string[][] { new string[] { "unparsed", "1" } },
+            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { rosterTitle+ "__id", "ParentId1" }, new string[][] { new string[] { "unparsed", "1" } },
                 rosterTitle + ".csv");
 
             files = new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel };

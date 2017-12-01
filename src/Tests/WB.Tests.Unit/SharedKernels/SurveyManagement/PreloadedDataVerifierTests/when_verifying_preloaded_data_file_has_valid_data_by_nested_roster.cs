@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -39,11 +40,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             questionnaire.Title = questionnaireTitle;
 
-            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { "Id" }, new string[][] { new string[] { "1" } },
+            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId }, new string[][] { new string[] { "1" } },
                 questionnaireTitle + ".csv");
-            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId1" }, new string[][] { new string[] { "5", "1" } },
+            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { rosterTitle + "__id", "ParentId1" }, new string[][] { new string[] { "5", "1" } },
                 rosterTitle + ".csv");
-            preloadedDataByFileNestedRosterLevel = CreatePreloadedDataByFile(new[] { "Id", "ParentId1", "ParentId2" }, new string[][] { new string[] { "10", "5", "1" } },
+            preloadedDataByFileNestedRosterLevel = CreatePreloadedDataByFile(new[] { nestedRosterTitle + "__id", "ParentId1", "ParentId2" }, new string[][] { new string[] { "10", "5", "1" } },
                 nestedRosterTitle + ".csv");
 
             files = new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel, preloadedDataByFileNestedRosterLevel };
