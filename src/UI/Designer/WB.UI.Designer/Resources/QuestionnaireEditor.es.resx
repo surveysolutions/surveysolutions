@@ -349,7 +349,7 @@
     <value>Texto que se mostrará junto a una variable para fines de prueba</value>
   </data>
   <data name="HelpVariableLabel" xml:space="preserve">
-    <value>Texto de hasta 80 caracteres que será adjunto a la variable exportada</value>
+    <value>Texto de hasta {{maxLength}} caracteres que será adjunto a la variable exportada</value>
   </data>
   <data name="HelpVariableName" xml:space="preserve">
     <value>Los nombres de las variables y los identificadores de lista pueden ser de {{minLength}} a {{maxLength}} caracteres de largo y solo deben contener los siguientes caracteres: a-z, A-Z, _ o 0-9. El primer carácter no puede ser 0-9 o _ y el último no puede ser _.</value>
