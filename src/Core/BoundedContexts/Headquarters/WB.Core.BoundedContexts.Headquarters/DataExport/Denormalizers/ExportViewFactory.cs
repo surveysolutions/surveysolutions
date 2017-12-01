@@ -274,7 +274,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             var headerStructureForLevel = new HeaderStructureForLevel();
             headerStructureForLevel.LevelScopeVector = levelVector;
-            headerStructureForLevel.LevelIdColumnName = (levelVector == null || levelVector.Length == 0) ? ServiceColumns.InterviewId : string.Format(ServiceColumns.IdSuffixFormat, levelTitle);
+            headerStructureForLevel.LevelIdColumnName = ServiceColumns.Id;
 
             headerStructureForLevel.LevelName = levelTitle;
 

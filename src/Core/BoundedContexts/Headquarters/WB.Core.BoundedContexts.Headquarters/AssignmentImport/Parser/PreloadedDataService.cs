@@ -195,11 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
         public int GetIdColumnIndex(PreloadedDataByFile dataFile)
         {
-            var levelExportStructure = this.FindLevelInPreloadedData(dataFile.FileName);
-            if (levelExportStructure?.LevelScopeVector == null || levelExportStructure.LevelScopeVector.Length == 0)
-                return -1;
-
-            return this.GetColumnIndexByHeaderName(dataFile, levelExportStructure.LevelIdColumnName);
+            return this.GetColumnIndexByHeaderName(dataFile, ServiceColumns.Id);
         }
 
         public int GetColumnIndexByHeaderName(PreloadedDataByFile dataFile, string columnName)

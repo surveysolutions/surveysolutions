@@ -250,7 +250,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (parentColumnNames.Any(x => string.Equals(columnName, x, StringComparison.OrdinalIgnoreCase)))
                     continue;
 
-                if (string.Equals(columnName, levelExportStructure.LevelIdColumnName, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(columnName, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
                 if (listOfServiceVariableNames.Any(x => string.Equals(columnName, x, StringComparison.OrdinalIgnoreCase)))
@@ -285,8 +285,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (levelExportStructure == null)
                 yield break;
 
-            if (levelData.Header.Count(h => string.Equals(h, levelExportStructure.LevelIdColumnName, StringComparison.InvariantCultureIgnoreCase)) != 1)
-                yield return levelExportStructure.LevelIdColumnName;
+            if (levelData.Header.Count(h => string.Equals(h, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase)) != 1)
+                yield return ServiceColumns.Id;
 
             var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure);
             foreach (var parentIdColumn in listOfParentIdColumns)
