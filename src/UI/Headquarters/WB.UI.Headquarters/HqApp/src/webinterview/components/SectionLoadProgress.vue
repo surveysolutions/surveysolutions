@@ -1,33 +1,36 @@
 <template>
-    <div v-if="visible" class="loading">
-        <div>{{ $t("WebInterviewUI.LoadingWait") }}</div>
-    </div>
+    <transition name="slide-fade">
+        <div v-if="visible" class="loading">
+            <div>{{ $t("WebInterviewUI.LoadingWait") }}</div>
+        </div>
+    </transition>
 </template>
-<script lang="js">
-    import { delay } from "lodash"
 
+<style lang='css' scoped>
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-to {
+  opacity: 0;
+}
+</style>
+
+<script lang="js">
+    import { debounce } from "lodash"
+  
     export default {
         data() {
             return {
                 visible: false,
                 timerId: null,
-                delay: 100
+                delay: 50
             }
         },
         watch: {
-            isLoading(to, from) {
-                if (from === false) {
-                    this.timerId = delay(() => this.visible = to, this.delay)
-                } else {
-                    if (this.timerId != null) {
-                        clearTimeout(this.timerId)
-                        this.timerId = null
-                    }
-
-                    this.visible = to
-                }
+            isLoading() {
+                this.setVisibility(this);
             },
-            
+           
             '$store.state.webinterview.connection.isDisconnected' (to) {
                 if (to) {
                     this.visible = false
@@ -38,6 +41,11 @@
             isLoading() {
                 return this.$store.getters.loadingProgress;
             }
+        },
+        methods: {
+            setVisibility: debounce((self) => {
+                self.visible = self.isLoading
+            }, 200)
         }
     }
 
