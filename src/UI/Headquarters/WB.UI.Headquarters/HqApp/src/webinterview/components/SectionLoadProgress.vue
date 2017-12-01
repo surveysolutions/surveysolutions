@@ -22,8 +22,7 @@
         data() {
             return {
                 visible: false,
-                timerId: null,
-                delay: 50
+                timerId: null
             }
         },
         watch: {
@@ -45,7 +44,7 @@
         methods: {
             setVisibility: debounce((self) => {
                 self.visible = self.isLoading
-            }, 200)
+            }, 300)
         }
     }
 
