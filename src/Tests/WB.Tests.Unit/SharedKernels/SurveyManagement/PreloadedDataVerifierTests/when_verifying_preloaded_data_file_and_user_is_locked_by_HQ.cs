@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
@@ -18,18 +19,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 {
     internal class when_verifying_preloaded_data_file_and_user_is_locked_by_HQ : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
+        [Test]
+        public void Should_return_1_error()
         {
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter();
+            var QuestionnaireCsvFileName = "questionnaire.csv";
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "_responsible" }, new string[][] { new string[] { "1", "fd" } },
+            var preloadedDataByFile = CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId, "_responsible"},
+                new string[][] {new string[] {"1", "fd"}},
                 QuestionnaireCsvFileName);
 
-            preloadedDataServiceMock = new Mock<IPreloadedDataService>();
+            var preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(1);
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName))
+                .Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId });
+            preloadedDataServiceMock
+                .Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(1);
             var userViewFactory = new Mock<IUserViewFactory>();
 
             var user = new UserView()
@@ -41,33 +47,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 
-            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object, userViewFactory.Object);
-        };
+            var importDataVerifier =
+                CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object, userViewFactory.Object);
 
-        Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
 
-        It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            //act
+            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] {preloadedDataByFile}, status);
 
-        It should_return_single_PL0006_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0027");
+            Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
 
-        It should_return_reference_with_Cell_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            Assert.AreEqual(status.VerificationState.Errors.First().Code,"PL0027");
 
-        It should_error_PositionX_be_equal_to_0 = () =>
-            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(1);
+            Assert.AreEqual(
+                status.VerificationState.Errors.First().References.First().Type,
+                    PreloadedDataVerificationReferenceType.Cell);
 
-        It should_error_PositionY_be_equal_to_1 = () =>
-            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
+            Assert.AreEqual(
+                status.VerificationState.Errors.First().References.First().PositionX,1);
 
-        private static ImportDataVerifier importDataVerifier;
-        private static QuestionnaireDocument questionnaire;
-        private static Guid questionnaireId;
-        private static PreloadedDataByFile preloadedDataByFile;
-
-        private static Mock<IPreloadedDataService> preloadedDataServiceMock;
-        private const string QuestionnaireCsvFileName = "questionnaire.csv";
+            Assert.AreEqual(
+                status.VerificationState.Errors.First().References.First().PositionY, 0);
+        
     }
+}
 }
