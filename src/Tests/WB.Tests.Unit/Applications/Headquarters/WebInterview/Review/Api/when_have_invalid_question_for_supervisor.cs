@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
         public static (Identity sectionId, GroupStatus expectedStatus, bool isValid)[] ForSupervisor =
         {
-            (SecA,        GroupStatus.Started, false),
+            (SecA,        GroupStatus.Started, true),
             (SecA_Roster, GroupStatus.Completed, false),
 
             (SecB,        GroupStatus.Started, true),
