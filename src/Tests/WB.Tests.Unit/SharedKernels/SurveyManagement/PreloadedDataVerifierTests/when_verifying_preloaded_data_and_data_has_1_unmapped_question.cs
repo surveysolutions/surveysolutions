@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1" }, null, QuestionnaireCsvFileName);
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "q1" }, null, QuestionnaireCsvFileName);
 
             preloadedDataServiceMock=new Mock<IPreloadedDataService>();
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
