@@ -222,7 +222,7 @@
                                             <th  title="@Interviews.Tooltip_Table_InterviewKey" class="sorting_disabled  interview-id  title-row">
                                                 @Common.InterviewKey
                                                 <a href="javascript:void(0);" class="show-prefield-btn"  title="@Interviews.Tooltip_Table_HideShowIdentifying"
-                                                   data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
+                                                   data-bind="text : $root.IsVisiblePrefilledColumns() ? '@HttpUtility.JavaScriptStringEncode(Common.HideIdentifying)' : '@HttpUtility.JavaScriptStringEncode(Common.ShowIdentifying)', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
                                             <th title="@Interviews.Tooltip_Table_IdentifyingQuestions" class="prefield-column first-identifying last-identifying sorting_disabled" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
