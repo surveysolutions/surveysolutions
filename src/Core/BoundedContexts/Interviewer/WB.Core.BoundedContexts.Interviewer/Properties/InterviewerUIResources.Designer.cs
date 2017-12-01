@@ -922,6 +922,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronize to get maps
+        ///or contact your supervisor
+        ///for further instructions.
+        /// </summary>
+        public static string Maps_NoMapsText {
+            get {
+                return ResourceManager.GetString("Maps_NoMapsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All maps were synchronized.
         /// </summary>
         public static string Maps_Synchronization_Success_Description {

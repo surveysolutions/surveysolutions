@@ -181,7 +181,7 @@
     <value>Número de entrevistas completadas</value>
   </data>
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
-    <value>Número de entrevistas completadas por equipo. Entrevista rechazadas y completadas son contadas como eventos separados</value>
+    <value>Número de entrevistas completadas por equipo. Las entrevistas rechazadas y completadas son contadas como eventos separados</value>
   </data>
   <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
     <value>Número de entrevistas aprobadas por usuario sede</value>

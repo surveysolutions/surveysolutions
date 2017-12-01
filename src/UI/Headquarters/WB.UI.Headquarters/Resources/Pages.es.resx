@@ -250,7 +250,7 @@
     <value>Excel (.XLSX)</value>
   </data>
   <data name="ExportToTab" xml:space="preserve">
-    <value>Valores separados por tab (.tab)</value>
+    <value>Valores separados por tab (.TSV)</value>
   </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Asignación</value>
@@ -745,7 +745,7 @@
     <value>Filtro</value>
   </data>
   <data name="Layout_Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Nota Legal</value>
   </data>
   <data name="Layout_RightsReserved" xml:space="preserve">
     <value>Todos los derechos reservados</value>
@@ -1045,25 +1045,25 @@
     <value>Presione el botón "Adicionar usuario HQ" para adiciona un usuario de tipo HQ (sede)</value>
   </data>
   <data name="Users_Headquarters_Instruction2" xml:space="preserve">
-    <value>De clic en login para modificar el perfil de usuario HQ (sede)</value>
+    <value>Haga clic en login para modificar el perfil de usuario HQ (sede)</value>
   </data>
   <data name="Users_Interviewers_Instruction1" xml:space="preserve">
     <value>Presione el botón "Adicionar entrevistador" para crear nuevo entrevistador</value>
   </data>
   <data name="Users_Interviewers_Instruction2" xml:space="preserve">
-    <value>Presione login para ver la información de un entrevistador y modificar su perfil</value>
+    <value>Haga clic en login para ver la información de un entrevistador y modificar su perfil</value>
   </data>
   <data name="Users_Observers_Instruction1" xml:space="preserve">
     <value>Presione el botón "Adicionar observador" para crear un nuevo observador</value>
   </data>
   <data name="Users_Observers_Instruction2" xml:space="preserve">
-    <value>Presione en login para modificar el perfil de un usuario observador</value>
+    <value>Haga clic en login para modificar el perfil de un usuario observador</value>
   </data>
   <data name="Users_Supervisors_Instruction1" xml:space="preserve">
     <value>Presione el botón de "Adicionar supervisor" para crear un nuevo supervisor.</value>
   </data>
   <data name="Users_Supervisors_Instruction2" xml:space="preserve">
-    <value>De clic en login para modificar el perfil de un supervisor existente</value>
+    <value>Haga clic en login para modificar el perfil de un supervisor existente</value>
   </data>
   <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
     <value>La carpeta que contiene el webzine tiene una ruta demasiado larga. Por favor mover el website a otra carpeta con una ruta mas corta</value>
