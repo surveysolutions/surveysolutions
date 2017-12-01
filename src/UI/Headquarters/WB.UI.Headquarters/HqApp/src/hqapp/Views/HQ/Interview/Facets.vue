@@ -8,7 +8,7 @@
                     <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
                 </div>
                 <div class="filters-container">
-                    <h2>{{$config.model.key}}</h2>
+                    <h2 :style="[titleStyle]">{{$config.model.key}}</h2>
                     <ul class="list-unstyled about-questionnaire">
                         <li>
                             {{$t("Details.Questionnaire", {name: this.$store.state.webinterview.questionnaireTitle})}}
@@ -153,6 +153,18 @@ export default {
         this.$store.state.webinterview.languages != undefined &&
         this.$store.state.webinterview.languages.length > 0
       );
+    },
+    
+    titleStyle() {
+        const needToAdjust = this.$store.state.webinterview.sidebar.sidebarHidden 
+            && this.$store.state.webinterview.sidebar.searchResultsHidden
+
+        if(needToAdjust){
+            return {
+                ["padding-left"]: "24px"
+            }
+        }
+        return {};
     }
   },
 
