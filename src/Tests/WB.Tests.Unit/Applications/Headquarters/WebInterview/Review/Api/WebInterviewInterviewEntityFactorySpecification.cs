@@ -20,13 +20,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
     {
         protected IQuestionnaire questionnaire;
         protected QuestionnaireDocument document;
-        
+        protected InterviewGroupOrRosterInstance RootGroupDetails;
+
+
         [OneTimeSetUp]
         public void Prepare()
         {
             this.document = GetDocument();
             this.questionnaire = Create.Entity.PlainQuestionnaire(this.document);
-            this.interview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: this.document);
+            
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -37,6 +39,18 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
             Subject = new WebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(), this.authorizedUserMock.Object);
         }
+
+        [SetUp]
+        public void Setup()
+        {
+            this.interview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid(), questionnaire: this.document);
+            Because();
+            SetRootGroupDetails();
+        }
+
+        protected virtual void Because() { }
+
+        protected virtual void SetRootGroupDetails() => this.RootGroupDetails = this.GetGroupDetails(SecA);
         
         protected virtual QuestionnaireDocument GetDocument()
         {
@@ -120,7 +134,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             return entity as InterviewGroupOrRosterInstance;
         }
 
-        protected virtual bool IsReviewMode { get; set; }
+        protected virtual bool IsReviewMode { get; set; } = false;
 
         protected Identity[] AllGroups = { SecA, SecA_Roster, SecB, SecB_Group };
         

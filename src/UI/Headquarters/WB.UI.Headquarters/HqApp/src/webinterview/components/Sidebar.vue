@@ -59,7 +59,7 @@
                     to: {
                         name: 'complete'
                     },
-                    state: this.interviewState,
+                    status: this.interviewState,
                     validity: {
                         isValid: !(this.interviewState == "Invalid")
                     }
