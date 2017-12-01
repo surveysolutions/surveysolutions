@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AutoMapper;
-using Microsoft.Ajax.Utilities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -367,8 +365,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         public void ApplyValidity(Validity validity, InterviewTreeGroup group, bool isReviewMode)
         {
-            validity.IsValid = group.TreeToEnumerableDepthFirst(g => g.Children.OfType<InterviewTreeGroup>())
-                .All(g => !HasQuestionsWithInvalidAnswers(g, isReviewMode));
+            validity.IsValid = !HasQuestionsWithInvalidAnswers(group, isReviewMode);
         }
 
         private void ApplyGroupStateData(InterviewGroupOrRosterInstance group, InterviewTreeGroup treeGroup, bool isReviewMode)

@@ -1,5 +1,5 @@
 <template>
-    <Section />
+    <Section :showHumburger="false" />
 </template>
 <script>
 export default {

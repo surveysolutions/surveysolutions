@@ -1163,4 +1163,7 @@
   <data name="Map_Uploading" xml:space="preserve">
     <value>Uploading</value>
   </data>
+  <data name="Map_UploadingError" xml:space="preserve">
+    <value>Error occurred during upload</value>
+  </data>
 </root>

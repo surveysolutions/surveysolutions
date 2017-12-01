@@ -471,11 +471,13 @@
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_with_nonprintable_symbols.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\ConnectionsMonitorTests.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\WebInterviewNotificationServiceTests.cs" />
-    <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_group_contains_hidden_and_prefilled_questions.cs" />
+    <Compile Include="Applications\Headquarters\WebInterview\Review\Api\InterviewSimpleStatusTests.cs" />
+    <Compile Include="Applications\Headquarters\WebInterview\Review\Api\Group_state_and_validitiy_depend_on_viewer_for_groups_with_hidden_and_prefilled_questions.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\WebInterviewInterviewEntityFactorySpecification.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_all_answers_valid_and_answered.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_have_invalid_question_for_supervisor.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_have_mixed_answeres_across_groups_questions.cs" />
+    <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_valid_section_have_invalid_question_in_subgroup.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\FilterTestCase.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\StatefullInterviewSearchTests.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\when_interview_has_prefilled_readonly_question.cs" />
