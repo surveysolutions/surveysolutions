@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaire.Title = questionnaireTitle;
             preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId }, new string[0][],
                 questionnaireTitle + ".csv");
-            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { rosterTitle + "__id", "ParentId1" }, new string[][] { new string[] { "0", "1" } },
+            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { $"{rosterTitle}__id", ServiceColumns.InterviewId }, new string[][] { new string[] { "0", "1" } },
                 rosterTitle + ".csv");
             files = new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel };
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();

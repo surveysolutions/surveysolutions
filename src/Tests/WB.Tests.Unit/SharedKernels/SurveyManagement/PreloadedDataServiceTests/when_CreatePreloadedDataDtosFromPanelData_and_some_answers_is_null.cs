@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             Assert.DoesNotThrow(() => importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[]
             {
                 CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] {new[] {"1", null}}, questionnaireDocument.Title),
-                CreatePreloadedDataByFile(new[] { "rostergroup__id", "nq2", "ParentId1"}, new[] {new[] {"1", null, "1"}}, "rostergroup")
+                CreatePreloadedDataByFile(new[] { "rostergroup__id", "nq2", ServiceColumns.InterviewId}, new[] {new[] {"1", null, "1"}}, "rostergroup")
             }));
         }
     }
