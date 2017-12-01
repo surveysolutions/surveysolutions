@@ -127,7 +127,7 @@
     <value>Aucune donnée disponible dans le tableau</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Affichage_DEBUT_ à _FIN_ de _TOTAL_ entrées</value>
+    <value>Affichage _START_ à _END_ de _TOTAL_ entrées</value>
   </data>
   <data name="InfoEmpty" xml:space="preserve">
     <value>Affiche 0 à 0 de 0 entrées</value>

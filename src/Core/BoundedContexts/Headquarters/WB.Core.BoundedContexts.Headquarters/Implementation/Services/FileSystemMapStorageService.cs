@@ -129,25 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.fileSystemAccessor.CopyFileOrDirectory(map, this.mapsFolderPath, true);
 
             var filename = this.fileSystemAccessor.GetFileName(map);
-            var fileExtension = this.fileSystemAccessor.GetFileExtension(map);
-
-
-            MapType mapType;
-
-            switch (fileExtension)
-            {
-                case ".tpk":
-                    mapType = MapType.Tpk;
-                    break;
-                case ".mmpk":
-                    mapType = MapType.Mmpk;
-                    break;
-                default:
-                    mapType = MapType.Unknown;
-                    break;
-            }
-
-            var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(map, mapType);
+            var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(map);
 
             var mapItem = new MapBrowseItem()
             {

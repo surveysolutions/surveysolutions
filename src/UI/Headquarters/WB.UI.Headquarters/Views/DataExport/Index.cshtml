@@ -81,7 +81,7 @@
                 </div>
                 
                 <div class="preset-filters-container" data-bind="visible: RunningDataExportProcesses().length > 0">
-                    <span class="export-queue" data-bind="text:'@DataExport.ItemsInQueue ' + RunningDataExportProcesses().length"></span>
+                    <span class="export-queue" data-bind="text:'@HttpUtility.JavaScriptStringEncode(DataExport.ItemsInQueue) ' + RunningDataExportProcesses().length"></span>
                 </div>
             </aside>
             <div class="export-types">

@@ -167,16 +167,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             List<Identity> parentsOfCurrentGroup = GetCurrentSectionAndItsParentsIdentities(interview, this.navigationState.CurrentGroup);
 
-            List<Identity> itemsToBeEpanded = expandedSectionIdentities.Union(parentsOfCurrentGroup).Distinct().ToList();
+            List<Identity> itemsToBeExpanded = expandedSectionIdentities.Union(parentsOfCurrentGroup).Distinct().ToList();
 
             var isSomeSectionBeingCollapled = toggledSection!=null && !toggledSection.IsExpandedNow;
             if (isSomeSectionBeingCollapled)
             {
-                RemoveItemsUnderSectionBeingCollapsed(itemsToBeEpanded, toggledSection.ToggledSection, interview);
+                RemoveItemsUnderSectionBeingCollapsed(itemsToBeExpanded, toggledSection.ToggledSection, interview);
             }
 
             var itemsToBeExpandedAndTheirImmidiateChildren = new HashSet<Identity>();
-            foreach (var identity in itemsToBeEpanded)
+            foreach (var identity in itemsToBeExpanded)
             {
                 itemsToBeExpandedAndTheirImmidiateChildren.Add(identity);
                 interview.GetGroup(identity)?.GetEnabledSubGroups().ForEach(x => itemsToBeExpandedAndTheirImmidiateChildren.Add(x));

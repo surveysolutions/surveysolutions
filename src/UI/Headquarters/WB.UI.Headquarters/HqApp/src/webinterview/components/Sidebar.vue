@@ -11,6 +11,7 @@
 <script lang="js">
     import SidebarPanel from "./SidebarPanel"
     import Vue from "vue"
+    import { GroupStatus } from "./questions"
 
     export default {
         name: 'sidebar',
@@ -59,9 +60,9 @@
                     to: {
                         name: 'complete'
                     },
-                    state: this.interviewState,
+                    status: this.interviewState,
                     validity: {
-                        isValid: !(this.interviewState == "Invalid")
+                        isValid: !(this.interviewState == GroupStatus.Invalid)
                     }
                 }
             }

@@ -154,7 +154,7 @@
     <value>Откатить опросник до версии от {0}?</value>
   </data>
   <data name="reverted_to" xml:space="preserve">
-    <value>Опросник "{0}" бы вернут к версии по состоянию на  {1}</value>
+    <value>Опросник "{0}" был вернут к версии по состоянию на  {1}</value>
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>Отмена</value>
