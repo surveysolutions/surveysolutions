@@ -48,7 +48,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         It should_return_reference_of_second_error_with_Column_type = () =>
             status.VerificationState.Errors.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
-        
+        It should_firt_error_has_content_with_id = () =>
+            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("Id");
+
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;

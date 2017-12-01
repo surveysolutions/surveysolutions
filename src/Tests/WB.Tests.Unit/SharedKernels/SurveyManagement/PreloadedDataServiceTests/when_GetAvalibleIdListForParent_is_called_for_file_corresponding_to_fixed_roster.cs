@@ -3,7 +3,6 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 
@@ -24,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             () =>
                 result =
                     importDataParsingService.GetAvailableIdListForParent(
-                        CreatePreloadedDataByFile(new string[] { ServiceColumns.InterviewId }, new string[][] { new string[] { "1" } },
+                        CreatePreloadedDataByFile(new string[] { "Id" }, new string[][] { new string[] { "1" } },
                             questionnaireDocument.Title), new ValueVector<Guid> { rosterGroupId }, new []{"1"}, new PreloadedDataByFile[0]);
 
         It should_return_not_null_result = () =>

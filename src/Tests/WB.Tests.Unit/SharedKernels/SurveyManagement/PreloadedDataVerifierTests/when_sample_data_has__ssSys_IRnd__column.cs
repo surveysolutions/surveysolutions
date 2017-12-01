@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -16,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(question);
             questionnaire.Title = "questionnaire";
-            var preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "num", "ssSys_IRnd" },
+            var preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "num", "ssSys_IRnd" },
                 new[] { new string[] { "1", "5", "3.22" } },
                 "questionnaire.csv");
 

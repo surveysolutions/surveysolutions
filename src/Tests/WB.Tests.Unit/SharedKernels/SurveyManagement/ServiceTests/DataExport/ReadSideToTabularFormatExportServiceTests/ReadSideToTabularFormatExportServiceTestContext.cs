@@ -138,7 +138,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             {
                 LevelScopeVector = levelScopeVector ?? new ValueVector<Guid>(),
                 LevelName = levelName,
-                LevelIdColumnName = (levelScopeVector == null || levelScopeVector.Length == 0) ? ServiceColumns.InterviewId : string.Format(ServiceColumns.IdSuffixFormat, levelName),
+                LevelIdColumnName = "Id",
                 IsTextListScope = referenceNames != null,
                 ReferencedNames = referenceNames,
                 HeaderItems = headerItems?.ToDictionary(item => item.PublicKey, item => item)
