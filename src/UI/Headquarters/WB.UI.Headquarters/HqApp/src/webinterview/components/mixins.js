@@ -51,10 +51,6 @@ export const entityDetails = {
         }
     },
     props: ["id"],
-
-    mounted() {
-        this.fetch()
-    },
     
     watch: {
         id(to, from) {
