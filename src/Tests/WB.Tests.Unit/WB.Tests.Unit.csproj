@@ -479,6 +479,7 @@
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_all_answers_valid_and_answered.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_have_invalid_question_for_supervisor.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_have_mixed_answeres_across_groups_questions.cs" />
+    <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_valid_section_have_invalid_question_in_subgroup.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\FilterTestCase.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\StatefullInterviewSearchTests.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\when_interview_has_prefilled_readonly_question.cs" />
