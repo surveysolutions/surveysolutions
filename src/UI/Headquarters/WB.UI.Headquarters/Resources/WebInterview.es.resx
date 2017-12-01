@@ -208,7 +208,7 @@
     <value>Solo se aceptan archivos de imagen</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Por favor, rellene el campo captcha</value>
+    <value>Por favor, rellene el campo capacha</value>
   </data>
   <data name="RefreshPage" xml:space="preserve">
     <value>Actualizar página</value>
