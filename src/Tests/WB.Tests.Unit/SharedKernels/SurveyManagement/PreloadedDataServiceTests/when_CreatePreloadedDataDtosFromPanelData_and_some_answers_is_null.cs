@@ -1,34 +1,41 @@
-﻿using Main.Core.Entities.Composite;
-using NUnit.Framework;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+﻿using System;
+using Machine.Specifications;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
-    [TestOf(typeof(PreloadedDataServiceTestContext))]
     internal class when_CreatePreloadedDataDtosFromPanelData_and_some_answers_is_null : PreloadedDataServiceTestContext
     {
-        [Test]
-        public void should_not_throw_null_reference_exception()
+        Establish context = () =>
         {
-            var questionnaireDocument =
+            questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    Create.Entity.NumericIntegerQuestion(variable: "nq1", id: Id.gA),
-                    Create.Entity.TextQuestion(questionId: Id.gB, variable: "tq1"),
-                       Create.Entity.FixedRoster(rosterId: Id.g1,
+                    new NumericQuestion() { StataExportCaption = "nq1", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() },
+                    new TextQuestion() { StataExportCaption = "tq1", QuestionType = QuestionType.Text, PublicKey = Guid.NewGuid() },
+                       Create.Entity.FixedRoster(rosterId: Guid.NewGuid(),
                         obsoleteFixedTitles: new[] { "t1", "t2" },
                         children: new IComposite[]
-                        {
-                            Create.Entity.NumericIntegerQuestion(id: Id.gC, variable: "nq2")
-                        }));
+                        { new NumericQuestion() { StataExportCaption = "nq2", QuestionType = QuestionType.Numeric, PublicKey = Guid.NewGuid() }}));
 
-            var importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
+            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
+        };
 
-            Assert.DoesNotThrow(() => importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[]
-            {
-                CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] {new[] {"1", null}}, questionnaireDocument.Title),
-                CreatePreloadedDataByFile(new[] { "rostergroup__id", "nq2", "ParentId1"}, new[] {new[] {"1", null, "1"}}, "rostergroup")
-            }));
-        }
+        Because of = () => exception = Catch.Exception(() => importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[]
+        {
+            CreatePreloadedDataByFile(new[] {"Id", "nq1"}, new[] {new[] {"1", null}}, questionnaireDocument.Title),
+            CreatePreloadedDataByFile(new[] {"Id", "nq2", "ParentId1"}, new[] {new[] {"1", null, "1"}}, "Roster Group")
+        }));
+
+        It should_not_throw_null_reference_exception = () =>
+            exception.ShouldBeNull();
+
+        private static ImportDataParsingService importDataParsingService;
+        private static QuestionnaireDocument questionnaireDocument;
+        private static Exception exception;
     }
 }

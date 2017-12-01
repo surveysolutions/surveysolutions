@@ -9,7 +9,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Tests.Abc;
 
@@ -36,8 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 result =
                     importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[]
                     {
-                        CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] { new[] { "1", "2" } }, questionnaireDocument.Title),
-                        CreatePreloadedDataByFile(new[] { "rostergroup__id", "nq2", "ParentId1" }, new[] { new[] { "1", "2", "1" } }, "rostergroup")
+                        CreatePreloadedDataByFile(new[] { "Id", "nq1" }, new[] { new[] { "1", "2" } }, questionnaireDocument.Title),
+                        CreatePreloadedDataByFile(new[] { "Id", "nq2", "ParentId1" }, new[] { new[] { "1", "2", "1" } }, "Roster Group")
                     });
 
         It should_return_not_null_result = () =>
