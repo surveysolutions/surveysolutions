@@ -104,25 +104,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             Assert.That(rows[0].First(), 
                 Is.EqualTo(new object[]
                 {
-                    ServiceColumns.Id, "1", "a", "long__var", "ssSys_IRnd", ServiceColumns.Key, ServiceColumns.HasAnyError, ServiceColumns.InterviewStatus
+                    ServiceColumns.InterviewId, "1", "a", "long__var", "ssSys_IRnd", ServiceColumns.Key, ServiceColumns.HasAnyError, ServiceColumns.InterviewStatus
                 }));
 
             Assert.That(rows[1].First(),
                 Is.EqualTo(new string[]
                 {
-                    ServiceColumns.Id, "r1", "r2", "1", "a", "long__var", ServiceColumns.InterviewId, ServiceColumns.Key
+                    "first_roster_level__id", "r1", "r2", "1", "a", "long__var", ServiceColumns.InterviewId, ServiceColumns.Key
                 }));
 
             Assert.That(rows[2].First(), 
                 Is.EqualTo(new string[]
                 {
-                    ServiceColumns.Id, "r1", "r2", "1", "a", "long__var", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
+                    "second_roster_level__id", "r1", "r2", "1", "a", "long__var", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
                 }));
 
             Assert.That(rows[3].First(),
                 Is.EqualTo(new string[]
                 {
-                    ServiceColumns.Id, "r1", "r2", "1", "a", "long__var", "second_roster_level__id", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
+                    "third_roster_level__id", "r1", "r2", "1", "a", "long__var", "second_roster_level__id", "first_roster_level__id", ServiceColumns.InterviewId, ServiceColumns.Key
                 }));
         }
     }
