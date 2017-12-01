@@ -61,24 +61,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 result =
                     importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[]
                     {
-                        CreatePreloadedDataByFile(new[] { "Id", "nq1" }, new[]
+                        CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[]
                         {
                             new[] { "top1", "2" },
                             new[] { "top2", "3" }
                         }, questionnaireDocument.Title),
-                        CreatePreloadedDataByFile(new[] { "Id", "nq2", ServiceColumns.InterviewId  }, new[]
+                        CreatePreloadedDataByFile(new[] { "roster__id", "nq2", ServiceColumns.InterviewId  }, new[]
                         {
                             new[] { "1", "11", "top1" },
                             new[] { "1", "21", "top2" },
                             new[] { "2", "22", "top2" }
                         }, "roster"),
-                        CreatePreloadedDataByFile(new[] { "Id", "nq3", "roster__id", ServiceColumns.InterviewId  }, new[]
+                        CreatePreloadedDataByFile(new[] { "nestedroster_id", "nq3", "roster__id", ServiceColumns.InterviewId  }, new[]
                         {
                             new[] { "1", "11", "1", "top1" },
                             new[] { "2", "12", "1", "top1" },
                             new[] { "1", "21", "1", "top2" },
                             new[] { "2", "31", "2", "top2" }
-                        }, "nestedRoster")
+                        }, "nestedroster")
                     });
 
         It should_return_not_null_result = () =>
