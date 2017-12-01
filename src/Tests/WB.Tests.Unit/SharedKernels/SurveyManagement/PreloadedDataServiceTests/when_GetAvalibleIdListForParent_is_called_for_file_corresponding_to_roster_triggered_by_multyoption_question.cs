@@ -6,7 +6,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -41,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 result =
                     importDataParsingService.GetAvailableIdListForParent(
                         CreatePreloadedDataByFile(
-                            new string[] { ServiceColumns.InterviewId, rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" },
+                            new string[] { "Id", rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" },
                             new string[][] { new string[] { "1", "3", "" } },
                             questionnaireDocument.Title),new ValueVector<Guid> { rosterSizeQuestionId}, new []{"1"}, new PreloadedDataByFile[0]);
 
