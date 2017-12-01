@@ -16,6 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                     Create.Entity.NumericIntegerQuestion(variable: "nq1", id: Id.gA),
                     Create.Entity.TextQuestion(questionId: Id.gB, variable: "tq1"),
                        Create.Entity.FixedRoster(rosterId: Id.g1,
+                        variable: "rostergroup",
                         obsoleteFixedTitles: new[] { "t1", "t2" },
                         children: new IComposite[]
                         {
