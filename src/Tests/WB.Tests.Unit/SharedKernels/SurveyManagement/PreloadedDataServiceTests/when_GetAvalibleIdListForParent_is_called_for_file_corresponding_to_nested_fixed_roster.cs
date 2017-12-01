@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Because of = () => 
             result = importDataParsingService.GetAvailableIdListForParent(
                 CreatePreloadedDataByFile(
-                    header: new string[] { "Id", "rosterGroup__id", ServiceColumns.InterviewId  },
+                    header: new string[] { ServiceColumns.InterviewId, "rosterGroup__id", ServiceColumns.InterviewId  },
                     content: new string[][]
                     {
                         new string[] { "1", "1", "1"}
