@@ -45,9 +45,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetMap)]
-        public HttpResponseMessage GetMapContent(string id)
+        public HttpResponseMessage GetMapContent([FromUri]string mapName)
         {
-            var mapContent = this.mapRepository.GetMapContent(id);
+            var mapContent = this.mapRepository.GetMapContent(mapName);
 
             if (mapContent == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);
@@ -57,8 +57,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 Content = new ByteArrayContent(mapContent)
             };
 
-            //response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            
             response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = true,
