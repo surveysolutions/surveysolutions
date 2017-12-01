@@ -1,5 +1,5 @@
 <template>
-    <div :class="cssClass" @click="toggleSidebarPanel">
+    <div v-if="visible" :class="cssClass" @click="toggleSidebarPanel">
         <span v-if="showFoldbackButtonAsHamburger"></span>
         <template v-else>
             <span class="arrow"></span>
@@ -15,6 +15,9 @@
             showFoldbackButtonAsHamburger: {
                 type: Boolean,
                 default: true
+            },
+            visible: {
+                type: Boolean, default: true
             }
         },
         computed: {
