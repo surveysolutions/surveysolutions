@@ -178,7 +178,7 @@
     <value>El nombre de usuario provisto es inválido.  Por favor revise e intente nuevamente.</value>
   </data>
   <data name="Legal" xml:space="preserve">
-    <value>Legal</value>
+    <value>Nota Legal</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Inicio de sesión</value>

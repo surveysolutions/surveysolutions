@@ -217,7 +217,7 @@
     <value>se puede encontrar en el panel {{-settingsBtn}} (esquina superior derecha)</value>
   </data>
   <data name="EnablingCondition" xml:space="preserve">
-    <value>Condiciona habilitante</value>
+    <value>Condición habilitante</value>
   </data>
   <data name="EnteredMoreThanAllowed" xml:space="preserve">
     <value>Usted ha ingresado mas del máximo permitido {{max}}</value>
@@ -721,10 +721,10 @@
     <value>Use esta pestaña para cargar archivos multimedia a los cuales se puede hacer referencia en el cuestionario</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine2" xml:space="preserve">
-    <value>Para evitar una sincronización lenta, recomendamos que el tamaño combinado de todos los archivos adjuntos no exceda los 2MB. Para tipos de archivos compatibles, formatos y dimensiones</value>
+    <value>Para evitar una sincronización lenta, recomendamos que el tamaño combinado de todos los archivos adjuntos no exceda los 2MB. Para conocer los tipos de archivos compatibles, formatos y dimensiones</value>
   </data>
   <data name="SideBarAttachmentsEmptyLine3" xml:space="preserve">
-    <value>puede ser usado para usar un archivo adjunto en el cuestionario agregar un elemento de texto estático y especificar el nombre en su propiedad de archivo adjunto</value>
+    <value>puede ser usado para manejar un archivo adjunto en el cuestionario agregar un elemento de texto estático y especificar el nombre en su propiedad de archivo adjunto</value>
   </data>
   <data name="SideBarAttachmentsEstimate" xml:space="preserve">
     <value>Tiempo estimado de carga: {{timeString}} a {{downloadSpeed}}Kb/s (EDGE)</value>
@@ -742,7 +742,7 @@
     <value>Use esta pestaña para definir tablas de búsqueda</value>
   </data>
   <data name="SideBarLookupEmptyLine2" xml:space="preserve">
-    <value>Una tabla de búsqueda proporciona información de referencia que puede ser consultada por una clave y utilizada en condiciones habilitantes y expresiones de validación.</value>
+    <value>Una tabla de búsqueda proporciona información de referencia que puede ser consultada a través de una clave para ser utilizada en condiciones habilitantes y expresiones de validación.</value>
   </data>
   <data name="SideBarLookupEmptyLine3" xml:space="preserve">
     <value>Una tabla de búsqueda consiste en un nombre y el archivo de búsqueda, que puede contener múltiples columnas de valores numéricos delimitados por tabuladores.</value>
@@ -796,7 +796,7 @@
     <value>Una macro es una expresión nombrada que se puede usar para habilitar condiciones y expresiones de validación. Una macro consiste de nombre y contenido.</value>
   </data>
   <data name="SideBarMacroEmptyLine3" xml:space="preserve">
-    <value>se puede usar en una expresión, para referirse a macro</value>
+    <value>se puede usar en una expresión para referirse a macro</value>
   </data>
   <data name="SideBarMacroHideDescription" xml:space="preserve">
     <value>ocultar descripción</value>
@@ -844,13 +844,13 @@
     <value>{{count}} Traducciones</value>
   </data>
   <data name="SideBarTranslationsEmptyLine1" xml:space="preserve">
-    <value>Use esta pestana para administrar traducciones de cuestionarios</value>
+    <value>Use esta pestaña para administrar traducciones de cuestionarios</value>
   </data>
   <data name="SideBarTranslationsEmptyLine2" xml:space="preserve">
     <value>Puede descargar y actualizar traducciones a diferentes idiomas</value>
   </data>
   <data name="SideBarTranslationsEmptyLine3" xml:space="preserve">
-    <value>La traducción se aplicará a los textos originales y anulará los valores. Puede dejar algunos textos vacíos para usar traducciones originales predeterminadas.</value>
+    <value>La traducción se aplicará a los textos originales y sobrescribirá los valores. Al dejar textos vacíos se usará las traducciones originales por defecto.</value>
   </data>
   <data name="SideBarTranslationsTitle" xml:space="preserve">
     <value>Traducciones</value>

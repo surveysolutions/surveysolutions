@@ -549,4 +549,7 @@
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>Ver la lista de datos de identificación requeridos</value>
   </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importando entrevistas</value>
+  </data>
 </root>
