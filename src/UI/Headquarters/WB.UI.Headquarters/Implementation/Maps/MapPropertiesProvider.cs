@@ -24,24 +24,9 @@ namespace WB.UI.Headquarters.Implementation.Maps
 
             var fileExtension = this.fileSystemAccessor.GetFileExtension(pathToMap);
 
-            MapType mapType;
-
             switch (fileExtension)
             {
                 case ".tpk":
-                    mapType = MapType.Tpk;
-                    break;
-                case ".mmpk":
-                    mapType = MapType.Mmpk;
-                    break;
-                default:
-                    mapType = MapType.Unknown;
-                    break;
-            }
-
-            switch (mapType)
-            {
-                case MapType.Tpk:
                 {
                     TileCache titleCache = new TileCache(pathToMap);
                     await titleCache.LoadAsync();
@@ -63,7 +48,7 @@ namespace WB.UI.Headquarters.Implementation.Maps
 
                     return properties;
                 }
-                case MapType.Mmpk:
+                case ".mmpk":
                 {
                     MobileMapPackage package = await MobileMapPackage.OpenAsync(pathToMap);
 

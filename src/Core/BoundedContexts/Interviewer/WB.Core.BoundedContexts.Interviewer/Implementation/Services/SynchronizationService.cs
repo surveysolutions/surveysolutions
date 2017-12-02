@@ -244,7 +244,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 await this.restService.DownloadFileAndSaveAsync(
-                    url: $"{this.mapsController}/{mapName}",
+                    url: $"{this.mapsController}/details?mapName={WebUtility.UrlEncode(mapName)}",
                     streamToSave:streamToSave,
                     token: cancellationToken,
                     credentials: this.restCredentials,

@@ -214,7 +214,7 @@
     <value>lista</value>
   </data>
   <data name="QuestionType_MultiSelect" xml:space="preserve">
-    <value>seleccion-multiple</value>
+    <value>selección-múltiple</value>
   </data>
   <data name="QuestionType_Numeric" xml:space="preserve">
     <value>numérico:</value>
@@ -226,7 +226,7 @@
     <value>imagen</value>
   </data>
   <data name="QuestionType_SingleSelect" xml:space="preserve">
-    <value>seleccion-individual</value>
+    <value>selección-única</value>
   </data>
   <data name="QuestionType_Text" xml:space="preserve">
     <value>texto</value>
