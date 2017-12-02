@@ -184,8 +184,12 @@ export default {
         }
     }, 200),
 
-    fetchSectionData({ dispatch, commit, state }) {
-        const ids = map(state.entities, "identity")
+    fetchSectionData({ dispatch, commit, rootState, state }) {
+        const sectionId = rootState.route.params.sectionId
+        
+        const ids = sectionId == null 
+            ? map(state.coverInfo.identifyingQuestions, "identity")
+            : map(state.entities, "identity")
 
         return dispatch('getEntitiesDetails', ids)
             .then(details => {
@@ -236,12 +240,12 @@ export default {
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
-    fetchCoverInfo: debounce(async ({ commit }) => {
+    fetchCoverInfo: debounce(async ({ dispatch, commit }) => {
         const coverInfo = await Vue.$api.call(api => api.getCoverInfo())
         commit("SET_COVER_INFO", coverInfo)
+        dispatch("fetchSectionData")
     }, 200),
 
-        
     completeInterview({ state, commit }, comment) {
         if (state.interviewCompleted) return;
 
