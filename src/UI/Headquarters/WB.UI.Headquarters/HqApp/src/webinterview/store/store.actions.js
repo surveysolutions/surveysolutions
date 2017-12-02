@@ -27,55 +27,64 @@ export default {
         })
     }, "fetch", /* limit */ 100),
 
-    answerSingleOptionQuestion({ dispatch }, { answer, questionId }) {
+    getEntitiesDetails({ dispatch }, ids) {
+        dispatch("fetch", { ids })
+        return Vue.$api.call(api => api.getEntitiesDetails(uniq(ids)))
+            .then(details => {
+                dispatch("fetch", { ids, done: true })
+                return details;
+            });
+    },
+
+    answerSingleOptionQuestion(ctx, { answer, questionId }) {
         Vue.$api.callAndFetch(questionId, api => api.answerSingleOptionQuestion(answer, questionId))
     },
-    answerTextQuestion({ dispatch }, { identity, text }) {
+    answerTextQuestion(ctx, { identity, text }) {
         Vue.$api.callAndFetch(identity, api => api.answerTextQuestion(identity, text))
     },
-    answerMultiOptionQuestion({ dispatch }, { answer, questionId }) {
+    answerMultiOptionQuestion(ctx, { answer, questionId }) {
         Vue.$api.callAndFetch(questionId, api => api.answerMultiOptionQuestion(answer, questionId))
     },
-    answerYesNoQuestion({ dispatch }, { questionId, answer }) {
+    answerYesNoQuestion(ctx, { questionId, answer }) {
         Vue.$api.callAndFetch(questionId, api => api.answerYesNoQuestion(questionId, answer))
     },
-    answerIntegerQuestion({ dispatch }, { identity, answer }) {
+    answerIntegerQuestion(ctx, { identity, answer }) {
         Vue.$api.callAndFetch(identity, api => api.answerIntegerQuestion(identity, answer))
     },
-    answerDoubleQuestion({ dispatch }, { identity, answer }) {
+    answerDoubleQuestion(ctx, { identity, answer }) {
         Vue.$api.callAndFetch(identity, api => api.answerDoubleQuestion(identity, answer))
     },
-    answerGpsQuestion({ dispatch }, { identity, answer }) {
+    answerGpsQuestion(ctx, { identity, answer }) {
         Vue.$api.callAndFetch(identity, api => api.answerGpsQuestion(identity, answer))
     },
-    answerDateQuestion({ dispatch }, { identity, date }) {
+    answerDateQuestion(ctx, { identity, date }) {
         Vue.$api.callAndFetch(identity, api => api.answerDateQuestion(identity, date))
     },
-    answerTextListQuestion({ dispatch }, { identity, rows }) {
+    answerTextListQuestion(ctx, { identity, rows }) {
         Vue.$api.callAndFetch(identity, api => api.answerTextListQuestion(identity, rows))
     },
-    answerLinkedSingleOptionQuestion({ dispatch }, { questionIdentity, answer }) {
+    answerLinkedSingleOptionQuestion(ctx, { questionIdentity, answer }) {
         Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedSingleOptionQuestion(questionIdentity, answer))
     },
-    answerLinkedMultiOptionQuestion({ dispatch }, { questionIdentity, answer }) {
+    answerLinkedMultiOptionQuestion(ctx, { questionIdentity, answer }) {
         Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedMultiOptionQuestion(questionIdentity, answer))
     },
-    answerLinkedToListMultiQuestion({ dispatch }, { questionIdentity, answer }) {
+    answerLinkedToListMultiQuestion(ctx, { questionIdentity, answer }) {
         Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedToListMultiQuestion(questionIdentity, answer))
     },
-    answerLinkedToListSingleQuestion({ dispatch }, { questionIdentity, answer }) {
+    answerLinkedToListSingleQuestion(ctx, { questionIdentity, answer }) {
         Vue.$api.callAndFetch(questionIdentity, api => api.answerLinkedToListSingleQuestion(questionIdentity, answer))
     },
-    answerMultimediaQuestion({ dispatch }, { id, file }) {
+    answerMultimediaQuestion(ctx, { id, file }) {
         Vue.$api.callAndFetch(id, api => api.answerPictureQuestion(id, file))
     },
-    answerAudioQuestion({ dispatch }, { id, file }) {
+    answerAudioQuestion(ctx, { id, file }) {
         Vue.$api.callAndFetch(id, api => api.answerAudioQuestion(id, file))
     },
-    answerQRBarcodeQuestion({ dispatch }, { identity, text }) {
+    answerQRBarcodeQuestion(ctx, { identity, text }) {
         Vue.$api.callAndFetch(identity, api => api.answerQRBarcodeQuestion(identity, text))
     },
-    removeAnswer({ dispatch }, questionId) {
+    removeAnswer(ctx, questionId) {
         Vue.$api.callAndFetch(questionId, api => api.removeAnswer(questionId))
     },
     async sendNewComment({ dispatch, commit }, { questionId, comment }) {
@@ -141,33 +150,57 @@ export default {
         dispatch("fetchInterviewStatus")
     }, 200),
 
-    fetchSectionEntities: debounce(async ({ dispatch, commit, rootState }) => {
-        const sectionId = rootState.route.params.sectionId
+    fetсhSectionEntitiesList: debounce(({ dispatch, commit, rootState }) => {
+        const isPrefilledSection = rootState.route.params.sectionId === undefined
         const interviewId = rootState.route.params.interviewId
 
-        const id = sectionId
-        const isPrefilledSection = id === undefined
-
         if (isPrefilledSection) {
-            const prefilledPageData = await Vue.$api.call(api => api.getPrefilledEntities())
-            if (!prefilledPageData.hasAnyQuestions) {
-                const loc = {
-                    name: "section",
-                    params: {
-                        interviewId: interviewId,
-                        sectionId: prefilledPageData.firstSectionId
-                    }
-                }
+            return Vue.$api.call(api => api.getPrefilledEntities())
+                .then(prefilledPageData => {
+                    if (!prefilledPageData.hasAnyQuestions) {
+                        const loc = {
+                            name: "section",
+                            params: {
+                                interviewId: interviewId,
+                                sectionId: prefilledPageData.firstSectionId
+                            }
+                        }
 
-                dispatch("navigeToRoute", loc)
-            } else {
-                commit("SET_SECTION_DATA", prefilledPageData.entities)
-            }
+                        dispatch("navigeToRoute", loc)
+                    } else {
+                        commit("SET_SECTION_DATA", prefilledPageData.entities)
+                        return dispatch("fetchSectionData")
+                    }
+                })
         } else {
-            const section = await Vue.$api.call(api => api.getSectionEntities(id))
-            commit("SET_SECTION_DATA", section)
+            return Vue.$api.call(api => api.getSectionDetails(rootState.route.params.sectionId))
+                .then(({entities, details}) => {
+                    commit("SET_SECTION_DATA", entities)
+                    commit("SET_ENTITIES_DETAILS", {
+                        entities: details,
+                        lastActivityTimestamp: new Date()
+                    })
+                })
         }
     }, 200),
+
+    fetchSectionData({ dispatch, commit, rootState, state }) {
+        const sectionId = rootState.route.params.sectionId
+        
+        const ids = sectionId == null 
+            ? map(state.coverInfo.identifyingQuestions, "identity")
+            : map(state.entities, "identity")
+
+        return dispatch('getEntitiesDetails', ids)
+            .then(details => {
+                commit("SET_ENTITIES_DETAILS", {
+                    entities: details,
+                    lastActivityTimestamp: new Date()
+                })
+
+                return details
+            })
+    },
 
     fetchSectionEnabledStatus: debounce(async ({ dispatch, state, rootState }) => {
         const sectionId = rootState.route.params.sectionId
@@ -207,9 +240,10 @@ export default {
         commit("SET_INTERVIEW_STATUS", interviewState)
     }, 200),
 
-    fetchCoverInfo: debounce(async ({ commit }) => {
+    fetchCoverInfo: debounce(async ({ dispatch, commit }) => {
         const coverInfo = await Vue.$api.call(api => api.getCoverInfo())
         commit("SET_COVER_INFO", coverInfo)
+        dispatch("fetchSectionData")
     }, 200),
 
     completeInterview({ state, commit }, comment) {
@@ -234,5 +268,11 @@ export default {
 
     changeSection(ctx, sectionId) {
         return Vue.$api.setState((state) => state.sectionId = sectionId)
+    },
+
+    uploadProgress({ commit }, { id, now, total }) {
+        commit("SET_UPLOAD_PROGRESS", {
+            id, now, total
+        })
     }
 }

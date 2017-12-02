@@ -19,7 +19,7 @@ function toastErr(err, message) {
 
 function wrap(name, method, section) {
     // tslint:disable-next-line:only-arrow-functions - we need arguments param here, it cannot be used in arrow function
-    return function() {
+    return function __action_wrapper() {
         try {
             if (window.CONFIG.verboseMode) {
                 const argument = arguments[1] == null ? null : JSON.parse(JSON.stringify(arguments[1]))
@@ -57,6 +57,7 @@ function handleErrors(object, section) {
     for (const name in object) {
         if (typeof object[name] === "function") {
             method = object[name]
+            if(method.name != "__action_wrapper")
             object[name] = wrap(name, method, section)
         }
     }
