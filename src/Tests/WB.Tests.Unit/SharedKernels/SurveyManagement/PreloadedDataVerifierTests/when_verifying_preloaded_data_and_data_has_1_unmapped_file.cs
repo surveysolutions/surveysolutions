@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -15,33 +16,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 {
     internal class when_verifying_preloaded_data_and_data_has_1_unmapped_file : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
+        [Test]
+        public void Should_return_1_error()
         {
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter();
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            importDataVerifier = CreatePreloadedDataVerifier(questionnaire);
-        };
+            var  questionnaire = CreateQuestionnaireDocumentWithOneChapter();
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var importDataVerifier = CreatePreloadedDataVerifier(questionnaire);
+            
 
-        Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 
-                1, 
-                new[]
-                {
-                    CreatePreloadedDataByFile(fileName: questionnaire.Title + ".csv"),
-                }, 
-                status);
-        
-        It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            importDataVerifier.VerifyPanelFiles(questionnaireId,
+                    1,
+                    new[]
+                    {
+                        CreatePreloadedDataByFile(fileName: questionnaire.Title + ".csv"),
+                    },
+                    status);
 
-        It should_return_single_PL0004_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0004");
+            Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
+            Assert.AreEqual(status.VerificationState.Errors.First().Code,"PL0004");
+            Assert.AreEqual(status.VerificationState.Errors.First().References.First().Type, PreloadedDataVerificationReferenceType.File);
 
-        It should_return_reference_with_File_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.File);
-
-        private static ImportDataVerifier importDataVerifier;
-        private static QuestionnaireDocument questionnaire;
-        private static Guid questionnaireId;
-    }
+     }
+}
 }

@@ -41,6 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(Moq.It.IsAny<string>()))
                 .Returns(new HeaderStructureForLevel()
                 {
+                    LevelIdColumnName = ServiceColumns.InterviewId,
                     HeaderItems =
                         new Dictionary<Guid, IExportedHeaderItem>
                         {
