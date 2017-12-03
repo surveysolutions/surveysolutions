@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -16,73 +11,81 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     internal class when_verifying_preloaded_data_file_has_orphan_roster_data : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
+        [Test]
+        public void Should_return_1_error()
         {
+            ImportDataVerifier importDataVerifier;
+            QuestionnaireDocument questionnaire;
+            Guid questionnaireId;
+            PreloadedDataByFile preloadedDataByFileTopLevel;
+            PreloadedDataByFile preloadedDataByFileRosterLevel;
+            string questionnaireTitle = "questionnaire";
+            string rosterTitle = "roster";
+
+            Mock<IPreloadedDataService> preloadedDataServiceMock;
+            PreloadedDataByFile[] files;
+
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             var rosterId = Guid.NewGuid();
             questionnaire =
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterId,
                     obsoleteFixedTitles: new[] {"a"}, title: rosterTitle));
             questionnaire.Title = questionnaireTitle;
-            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId }, new string[0][],
+            preloadedDataByFileTopLevel = CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId}, new string[0][],
                 questionnaireTitle + ".csv");
-            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { $"{rosterTitle}__id", ServiceColumns.InterviewId }, new string[][] { new string[] { "0", "1" } },
+            preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(
+                new[] {$"{rosterTitle}__id", ServiceColumns.InterviewId}, new string[][] {new string[] {"0", "1"}},
                 rosterTitle + ".csv");
-            files = new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel };
+            files = new[] {preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel};
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);
-            preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFileRosterLevel)).Returns(new []{1});
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileRosterLevel, Moq.It.IsAny<string>())).Returns(-1);
-            
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName)).Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId});
+            preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFileRosterLevel))
+                .Returns(new[] {1});
+            preloadedDataServiceMock
+                .Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileRosterLevel, Moq.It.IsAny<string>()))
+                .Returns(-1);
+
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName))
+                .Returns(new HeaderStructureForLevel() {LevelIdColumnName = ServiceColumns.InterviewId});
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
-                .Returns(new HeaderStructureForLevel() { LevelIdColumnName = preloadedDataByFileRosterLevel.FileName + "__id", LevelScopeVector = new ValueVector<Guid>(new[] { rosterId }) });
+                .Returns(new HeaderStructureForLevel()
+                {
+                    LevelIdColumnName = preloadedDataByFileRosterLevel.FileName + "__id",
+                    LevelScopeVector = new ValueVector<Guid>(new[] {rosterId})
+                });
             preloadedDataServiceMock.Setup(x => x.GetParentDataFile(preloadedDataByFileRosterLevel.FileName, files))
                 .Returns(preloadedDataByFileTopLevel);
 
-            preloadedDataServiceMock.Setup(x => x.GetAvailableIdListForParent(preloadedDataByFileTopLevel, Moq.It.IsAny<ValueVector<Guid>>(), new []{"1"}, files))
-                .Returns((int[])null);
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>())).Returns(-1);
+            preloadedDataServiceMock.Setup(x => x.GetAvailableIdListForParent(preloadedDataByFileTopLevel,
+                    Moq.It.IsAny<ValueVector<Guid>>(), new[] {"1"}, files))
+                .Returns((int[]) null);
+            preloadedDataServiceMock
+                .Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>()))
+                .Returns(-1);
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
-        };
 
-        Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
+            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
 
-        It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
 
-        It should_return_single_PL0008_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0008");
+            Assert.AreEqual(status.VerificationState.Errors.First().Code, "PL0008");
 
-        It should_return_reference_with_Cell_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            Assert.AreEqual(status.VerificationState.Errors.First().References.First().Type,
+                PreloadedDataVerificationReferenceType.Cell);
 
-        It should_error_PositionX_be_equal_to_1 = () =>
-            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(1);
+            Assert.AreEqual(status.VerificationState.Errors.First().References.First().PositionX, 1);
 
-        It should_error_PositionY_be_equal_to_0 = () =>
-            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
+            Assert.AreEqual(
+                status.VerificationState.Errors.First().References.First().PositionY, 0);
 
-        It should_error_has_content_id_of_orphan_record = () =>
-            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("1");
+            Assert.AreEqual(status.VerificationState.Errors.First().References.First().Content, "1");
 
-        private static ImportDataVerifier importDataVerifier;
-        private static QuestionnaireDocument questionnaire;
-        private static Guid questionnaireId;
-        private static PreloadedDataByFile preloadedDataByFileTopLevel;
-        private static PreloadedDataByFile preloadedDataByFileRosterLevel;
-        private static string questionnaireTitle = "questionnaire";
-        private static string rosterTitle = "roster";
-
-        private static Mock<IPreloadedDataService> preloadedDataServiceMock;
-        private static PreloadedDataByFile[] files;
+        }
     }
 }
