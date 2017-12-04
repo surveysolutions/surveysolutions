@@ -86,7 +86,8 @@ export default {
                 error : function(error){
                     statusupdater(uploadingErrorMessage);
                 }
-            });            
+            });  
+            this.$refs.uploader.value = '';             
     },
 
     }
