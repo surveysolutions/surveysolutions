@@ -22,7 +22,8 @@ export default class ReviewComponent {
                     path: '',
                     component: Cover,
                     props: {
-                        navigateToPrefilled: true
+                        navigateToPrefilled: true,
+                        showHumburger: false
                     },
                     beforeEnter(to, from, next){
                         self.changeSection(null)
@@ -34,7 +35,8 @@ export default class ReviewComponent {
                     name: 'prefilled',
                     component: Cover,
                     props: {
-                        navigateToPrefilled: true
+                        navigateToPrefilled: true,
+                        showHumburger: false
                     },
                     beforeEnter(to, from, next){
                         self.changeSection(null)

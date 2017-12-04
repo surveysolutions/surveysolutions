@@ -1,7 +1,7 @@
 <template>
     <div class="unit-section complete-section">
         <div class="unit-title">
-            <wb-humburger></wb-humburger>
+            <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
             <h3>{{ $t("WebInterviewUI.Cover")}}</h3>
         </div>
         <div class="wrapper-info">
@@ -62,6 +62,10 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        showHumburger: {
+            type: Boolean,
+            default: true
         }
     },
     beforeMount() {
