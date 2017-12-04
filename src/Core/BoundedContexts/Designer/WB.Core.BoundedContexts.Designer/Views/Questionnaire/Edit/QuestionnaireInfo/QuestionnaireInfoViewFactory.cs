@@ -125,7 +125,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 .OrderBy(x => x.Name)
                 .ToList();
 
-            
             var attachments = this.attachmentService.GetAttachmentsByQuestionnaire(questionnaireDocument.PublicKey);
 
             questionnaireInfoView.Attachments = questionnaireDocument.Attachments
