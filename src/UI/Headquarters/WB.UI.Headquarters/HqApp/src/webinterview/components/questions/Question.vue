@@ -55,7 +55,7 @@
                  this.scroll();
             },
 
-            isFetchInProgress(to) {
+            isFetchInProgress() {
                 this.setAnswerLoadingVisibility(this)
             }
         },
@@ -133,7 +133,7 @@
         methods : {
             setAnswerLoadingVisibility: debounce((self) => {
                 self.isInFetchState = self.isFetchInProgress
-            }, 10),
+            }, 200),
 
             doScroll: debounce(function() {
                 if(this.$store.getters.scrollState ==  "#" + this.id){
