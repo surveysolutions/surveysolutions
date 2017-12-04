@@ -152,7 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             if (hasAtLeastOneRoster)
                 header.Add("roster");
 
-            header.Add("interviewid");
+            header.Add("interview__id");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
