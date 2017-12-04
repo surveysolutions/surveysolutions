@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,27 +17,23 @@ using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using NConfig;
-using NHibernate;
 using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Ninject.Web.Common.WebHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
-using Npgsql;
 using Owin;
 using Quartz;
 using StackExchange.Exceptional;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Monitoring;
-using WB.Infrastructure.Native.Storage.Postgre;
-using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
@@ -115,42 +110,12 @@ namespace WB.UI.Headquarters
 
             InitMetrics();
             
-            StartMetricsPush(kernel, logger);
+            MetricsService.Start(kernel, logger);
         }
 
         private static void InitMetrics()
         {
             CommonMetrics.StateFullInterviewsCount.Set(0);
-        }
-        
-        [Localizable(false)]
-        private void StartMetricsPush(IKernel kernel, Core.GenericSubdomains.Portable.Services.ILogger logger)
-        {
-            try
-            {
-                MetricsRegistry.Instance.RegisterOnDemandCollectors(
-                    new BrokenPackagesStatsCollector(
-                        kernel.Get<ISessionFactory>(PostgresPlainStorageModule.SessionFactoryName)));
-
-                // getting instance name from connection string information
-                var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Postgres"];
-                var npgsConnectionString = new NpgsqlConnectionStringBuilder(connectionString.ConnectionString);
-                var instanceName = npgsConnectionString.ApplicationName;
-
-                // configuring address for metrics pushgateway
-                var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
-
-                // initialize push mechanizm
-                new Prometheus.MetricPusher(metricsGateway,
-                    job: "hq",
-                    additionalLabels: new[] {Tuple.Create("site", instanceName)},
-                    intervalMilliseconds: 5000).Start();
-            }
-            catch (Exception e)
-            {
-                e.Log(null);
-                logger.Error("Unable to start metrics push", e);
-            }
         }
 
         private IKernel ConfigureNinject(IAppBuilder app)

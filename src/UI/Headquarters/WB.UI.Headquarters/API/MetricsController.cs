@@ -5,15 +5,15 @@ using System.Text;
 using System.Web.Http;
 using Prometheus;
 using Prometheus.Advanced;
+using WB.UI.Headquarters.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
-    
     public class MetricsController : ApiController
     {
         public HttpResponseMessage Get()
         {
-            if (Request.IsLocal())
+            if (Request.IsLocal() && MetricsService.IsEnabled)
             {
                 using (var ms = new MemoryStream())
                 {
