@@ -45,42 +45,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
         public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
         {
-            var syncWithNotEmptyStat = this.dbContext.DeviceSyncInfo
-                .OrderByDescending(deviceInfo => deviceInfo.Id)
-                .Where(x => interviewerIds.Contains(x.InterviewerId))
-                .Where(d => d.StatisticsId != null && d.Statistics.DownloadedInterviewsCount +
-                            d.Statistics.UploadedInterviewsCount +
-                            d.Statistics.DownloadedQuestionnairesCount +
-                            d.Statistics.RejectedInterviewsOnDeviceCount > 0)
-                .GroupBy(x => x.InterviewerId)
-                .Select(x => new {
-                    x.Key,
-                    DeciveInfo = x.FirstOrDefault()
-                })
-                .ToList();
+            var syncWithNotEmptyStat =
+                (from device in this.dbContext.DeviceSyncInfo
+                where interviewerIds.Contains(device.InterviewerId)
+                      && (device.StatisticsId != null &&
+                          device.Statistics.DownloadedInterviewsCount +
+                          device.Statistics.UploadedInterviewsCount +
+                          device.Statistics.DownloadedQuestionnairesCount +
+                          device.Statistics.RejectedInterviewsOnDeviceCount > 0)
+                group device by device.InterviewerId
+                into grouping
+                select new
+                {
+                    grouping.Key,
+                    DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
+                }).ToList();
 
-            var lastSync = this.dbContext.DeviceSyncInfo
-                .OrderByDescending(deviceInfo => deviceInfo.Id)
-                .Where(x => interviewerIds.Contains(x.InterviewerId))
-                .GroupBy(x => x.InterviewerId)
-                .Select(x => new {
-                    x.Key,
-                    DeciveInfo = x.FirstOrDefault()
-                })
-                .ToList();
+            var lastSync = (from device in this.dbContext.DeviceSyncInfo
+                where interviewerIds.Contains(device.InterviewerId)
+                group device by device.InterviewerId
+                into grouping
+                select new
+                {
+                    grouping.Key,
+                    DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
+                }).ToList();
 
             foreach (var interviewerId in interviewerIds)
             {
                 var notEmptyStat = syncWithNotEmptyStat.FirstOrDefault(x => x.Key == interviewerId);
                 if (notEmptyStat != null)
                 {
-                    yield return notEmptyStat.DeciveInfo;
+                    yield return notEmptyStat.DeviceInfo;
                     continue;
                 }
 
                 var lastStat = lastSync.FirstOrDefault(x => x.Key == interviewerId);
                 if (lastStat!=null)
-                    yield return lastStat.DeciveInfo;
+                    yield return lastStat.DeviceInfo;
             }
         }
 
