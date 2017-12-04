@@ -139,13 +139,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SupervisorAssigned> @event)
         {
+            var expectedStatus = InterviewExportedAction.SupervisorAssigned;
+
+            var lastStatusInfo = state?.InterviewCommentedStatuses?.LastOrDefault();
+            if (lastStatusInfo?.Status == InterviewExportedAction.Completed)
+                expectedStatus = InterviewExportedAction.Completed;
+
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
                 state,
                 @event.Payload.UserId,
                 @event.Payload.SupervisorId,
                 null,
-                InterviewExportedAction.SupervisorAssigned,
+                expectedStatus,
                 @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
@@ -217,13 +223,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewerAssigned> @event)
         {
+            if (@event.Payload.InterviewerId == null)
+                return state;
+
+            var expectedStatus = InterviewExportedAction.InterviewerAssigned;
+
+            var lastStatusInfo = state?.InterviewCommentedStatuses?.LastOrDefault();
+            if(lastStatusInfo?.Status == InterviewExportedAction.Completed)
+                expectedStatus = InterviewExportedAction.Completed;
+
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
                 state,
                 @event.Payload.UserId,
                 state.TeamLeadId,
                 @event.Payload.InterviewerId,
-                InterviewExportedAction.InterviewerAssigned,
+                expectedStatus,
                 @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
