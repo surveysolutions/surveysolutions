@@ -27,8 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             
 
             var preloadedDataServiceMock = new Mock<IPreloadedDataService>();
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(questionnaire.Title + ".csv"))
-                .Returns(new HeaderStructureForLevel() { LevelIdColumnName = ServiceColumns.InterviewId });
+
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
 
             importDataVerifier.VerifyPanelFiles(questionnaireId,
