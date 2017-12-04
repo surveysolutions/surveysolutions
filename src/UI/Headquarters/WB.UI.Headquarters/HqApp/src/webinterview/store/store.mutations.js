@@ -1,6 +1,5 @@
 import { forEach } from "lodash"
 import Vue from "vue"
-import { fetch } from "./store.fetch";
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
