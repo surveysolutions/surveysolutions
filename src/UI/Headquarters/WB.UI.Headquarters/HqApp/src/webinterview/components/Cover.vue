@@ -48,7 +48,7 @@
 
         </template>
 
-        <NavigationButton id="NavigationButton" :target="firstSectionId"></NavigationButton>
+        <NavigationButton id="NavigationButton" :target="firstSectionId" forceFetch></NavigationButton>
     </div>
 </template>
 
