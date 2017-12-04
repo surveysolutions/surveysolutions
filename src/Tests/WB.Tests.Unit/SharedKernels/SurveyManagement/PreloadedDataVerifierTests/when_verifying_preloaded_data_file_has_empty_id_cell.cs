@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -24,14 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id"}, new string[][] { new string[] { "" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId}, new string[][] { new string[] { "" } },
                 QuestionnaireCsvFileName);
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFile)).Returns(0);
             preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFile)).Returns(new []{1});
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel());
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId });
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(-1);
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
