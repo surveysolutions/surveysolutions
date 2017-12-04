@@ -1,7 +1,5 @@
-﻿@using System
-@using System.Web.Optimization
+﻿@using Microsoft.Security.Application
 @using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
-@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @model WB.UI.Headquarters.Models.ExportModel
 
@@ -27,9 +25,14 @@
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
         $(function() {
             var templates = [
-                @foreach (var item in Model.Questionnaires)
-                {
-                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
+                @foreach (var item in Model.Questionnaires) {
+                    <text>
+                        {
+                            id: '@item.TemplateId',
+                            version: '@item.TemplateVersion',
+                            title: @Html.Raw(Encoder.JavaScriptEncode(Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)))
+                        },
+                    </text>
                 }
             ];
             var exportFromats = [];
@@ -39,10 +42,10 @@
             }
 
             var statuses = [
-                { status: null, title: '@Common.AllStatuses' },
+                { status: null, title: @Html.Raw(Encoder.JavaScriptEncode(Common.AllStatuses)) },
                 @foreach (var item in Model.ExportStatuses)
                 {
-                    <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
+                    <text>{ status: @((int)item), title: @Html.Raw(Encoder.JavaScriptEncode(item.ToUiString())) },</text>
                 }
             ];
 

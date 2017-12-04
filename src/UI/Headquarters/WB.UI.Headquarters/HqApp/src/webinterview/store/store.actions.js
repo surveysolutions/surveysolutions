@@ -151,7 +151,7 @@ export default {
     }, 200),
 
     fetсhSectionEntitiesList: debounce(({ dispatch, commit, rootState }) => {
-        const isPrefilledSection = rootState.route.params.sectionId === undefined
+        const isPrefilledSection = rootState.route.params.sectionId == null
         const interviewId = rootState.route.params.interviewId
 
         if (isPrefilledSection) {
