@@ -50,8 +50,16 @@ export const entityDetails = {
             return this.$me.acceptAnswer;
         }
     },
-    props: ["id"],
-    
+    props: {
+        "id": { type: String, required: true },
+        "forceFetch": { type: Boolean, default: false }
+    },
+
+    mounted() {
+        if(this.forceFetch)
+            this.fetch()
+    },
+
     watch: {
         id(to, from) {
             this.$store.dispatch("cleanUpEntity", from)

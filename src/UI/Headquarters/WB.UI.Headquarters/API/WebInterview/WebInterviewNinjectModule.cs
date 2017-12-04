@@ -26,11 +26,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             
             this.Bind<IJavaScriptMinifier>().ToConstant(new SignalRHubMinifier());
 
-            this.Bind<IHubPipelineModule>().To<SignalrErrorHandler>();
-            this.Bind<IHubPipelineModule>().To<PlainSignalRTransactionManager>();
-            this.Bind<IHubPipelineModule>().To<InterviewAuthorizationModule>();
-            this.Bind<IHubPipelineModule>().To<WebInterviewStateManager>();
-            this.Bind<IHubPipelineModule>().To<WebInterviewConnectionsCounter>();
+            this.Bind<IHubPipelineModule>().To<SignalrErrorHandler>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<PlainSignalRTransactionManager>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<InterviewAuthorizationModule>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<WebInterviewStateManager>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<WebInterviewConnectionsCounter>().InSingletonScope();
             
             this.Bind<IHubContext>()
                 .ToMethod(_ => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
