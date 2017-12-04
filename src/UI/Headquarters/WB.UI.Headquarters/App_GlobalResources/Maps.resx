@@ -147,6 +147,9 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} maps was processed with {1} invalid map files</value>
   </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>Maps compenent was not initialized. Please contact Your server administrator.</value>
+  </data>
   <data name="UploadMappingsSummaryFormat" xml:space="preserve">
     <value>links for {0} maps was processed with {1} invalid</value>
   </data>

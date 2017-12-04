@@ -154,7 +154,7 @@ namespace WB.UI.Headquarters.Controllers
             return View(map);
         }
 
-        
+
         [HttpPost]
         [ObserverNotAllowed]
         public async Task<ActionResult> UploadMapsFile(HttpPostedFileBase file)
@@ -171,6 +171,7 @@ namespace WB.UI.Headquarters.Controllers
 
             string tempStore = null;
             var processedMaps = new Dictionary<string, bool>();
+            bool esriThroughtError = false;
 
             try
             {
@@ -186,6 +187,13 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         await mapRepository.SaveOrUpdateMapAsync(map);
                         processedMaps.Add(map, true);
+                    }
+                    catch (InvalidOperationException exc)
+                    {
+                        esriThroughtError = true;
+
+                        Logger.Error($"Error on maps import map {map}", exc);
+                        processedMaps.Add(map, false);
                     }
                     catch (Exception e)
                     {
@@ -206,7 +214,13 @@ namespace WB.UI.Headquarters.Controllers
                     mapRepository.DeleteTemporaryData(tempStore);
             }
 
-            return this.Content(string.Format(Maps.UploadMapsSummaryFormat, processedMaps.Count, processedMaps.Values.Count(x => x == false)));
+            var resultMessage = string.Format(Maps.UploadMapsSummaryFormat, processedMaps.Count,
+                processedMaps.Values.Count(x => x == false));
+
+            if (esriThroughtError)
+                resultMessage = $"{Maps.MapEngineIsNotInitialized}\r\n{resultMessage}";
+
+            return this.Content(resultMessage);
         }
 
 
