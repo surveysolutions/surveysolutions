@@ -33,7 +33,7 @@
                     ? $t('WebInterviewUI.CompleteFirstErrors', { count: completeInfo.entitiesWithError.length })
                     : $t('WebInterviewUI.CompleteErrors') }}</h4>
                 <ul class="list-unstyled marked-questions">
-                    <li v-for="entity in completeInfo.entitiesWithError">
+                    <li v-for="entity in completeInfo.entitiesWithError" :key="entity.id">
                         <a href="javascript:void(0);" @click="navigateTo(entity)">{{ entity.title }}</a>
                     </li>
                 </ul>
