@@ -21,8 +21,7 @@
     export default {
         data() {
             return {
-                visible: false,
-                timerId: null
+                visible: false
             }
         },
         watch: {
@@ -44,7 +43,7 @@
         methods: {
             setVisibility: debounce((self) => {
                 self.visible = self.isLoading
-            }, 300)
+            }, 500)
         }
     }
 
