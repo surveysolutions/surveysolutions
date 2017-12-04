@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileRosterLevel, Moq.It.IsAny<string>())).Returns(-1);
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName)).Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId});
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
-                .Returns(new HeaderStructureForLevel { LevelIdColumnName = preloadedDataByFileRosterLevel.FileName + "__id", LevelScopeVector = new ValueVector<Guid>(new[] { Guid.NewGuid() }) });
+                .Returns(new HeaderStructureForLevel { LevelIdColumnName = preloadedDataByFileRosterLevel.Header[0], LevelScopeVector = new ValueVector<Guid>(new[] { Guid.NewGuid() }) });
             preloadedDataServiceMock.Setup(x => x.GetParentDataFile(preloadedDataByFileRosterLevel.FileName, files))
                 .Returns(preloadedDataByFileTopLevel);
 
