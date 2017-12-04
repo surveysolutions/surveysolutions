@@ -28,7 +28,26 @@ const store = safeStore({
     mutations,
     getters: {
         loadingProgress(state) {
-            return state.fetch.inProgress > 0
+            let localFetchInProgress = state.fetch.inProgress > 0
+
+            if (localFetchInProgress) {
+                // if there is any pending fetch state local to some questions,
+                // then do not show global loading Progress
+
+                if(!state.entities || !state.entityDetails) return true;
+
+                const keys = Object.keys(state.entityDetails)
+                for(var i  = 0, len = keys.length; i < len; i++) {
+                    const key = keys[i]
+
+                    if(state.entityDetails[key].fetching === true) {
+                        return false;
+                    }
+                }
+
+                return true
+            }
+            return false
         },
         addCommentsAllowed(state) {
             return !state.interviewCannotBeChanged;

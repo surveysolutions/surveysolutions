@@ -40,6 +40,7 @@
                 return this.$store.getters.loadingProgress;
             }
         },
+        
         methods: {
             setVisibility: debounce((self) => {
                 self.visible = self.isLoading
