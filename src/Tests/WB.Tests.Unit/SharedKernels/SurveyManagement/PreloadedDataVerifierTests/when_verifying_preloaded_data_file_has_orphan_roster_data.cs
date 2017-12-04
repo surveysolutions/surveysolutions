@@ -56,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
                 .Returns(new HeaderStructureForLevel()
                 {
-                    LevelIdColumnName = preloadedDataByFileRosterLevel.Header[0],
+                    LevelIdColumnName = $"{rosterTitle}__id",
                     LevelScopeVector = new ValueVector<Guid>(new[] {rosterId})
                 });
             preloadedDataServiceMock.Setup(x => x.GetParentDataFile(preloadedDataByFileRosterLevel.FileName, files))
@@ -67,7 +67,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 .Returns((int[]) null);
             preloadedDataServiceMock
                 .Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>()))
-                .Returns(-1);
+                .Returns(0);
+            preloadedDataServiceMock.Setup(x => x.GetAllParentColumnNamesForLevel(
+                    Moq.It.IsAny<ValueVector<Guid>>()))
+                .Returns(new string[] {ServiceColumns.InterviewId});
+            
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
 
             importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
