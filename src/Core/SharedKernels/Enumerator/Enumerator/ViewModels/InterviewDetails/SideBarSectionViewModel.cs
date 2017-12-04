@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.UpdateHasChildren();
             this.UpdateSelection(navigationState.CurrentGroup);
-            
+
             this.answerNotifier.Init(this.interviewId);
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
         }
@@ -164,7 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.IsCurrent = this.SectionIdentity.Equals(targetGroup);
             this.IsSelected = this.IsCurrent || isParentSelected;
-            this.Expanded = this.Expanded || this.IsSelected;
+            this.Expanded = this.IsSelected;
         }
 
         private void UpdateHasChildren()
