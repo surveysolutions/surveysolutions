@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string interviewActionsFileName = "interview_actions";
-        private readonly string[] actionFileColumns = { "InterviewId", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" };
+        private readonly string[] actionFileColumns = { "interview__id", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" };
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITransactionManagerProvider transactionManager;

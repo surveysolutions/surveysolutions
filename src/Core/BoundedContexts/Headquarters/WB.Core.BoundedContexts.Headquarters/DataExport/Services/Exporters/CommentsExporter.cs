@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             if (hasAtLeastOneRoster)
                 commentsHeader.Add("Roster");
 
-            commentsHeader.Add("InterviewId");
+            commentsHeader.Add("interview__id");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
