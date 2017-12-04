@@ -147,7 +147,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 CancellationToken.None);
 
             // Assert
-            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "variable", "type", "roster", "interviewid", "id1", "id2", "message_number", "message" }));
+            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "variable", "type", "roster", "interview__id", "id1", "id2", "message_number", "message" }));
             Assert.That(dataInCsvFile[1].Data[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(), "0", "1", "2", questionMsg }));
             Assert.That(dataInCsvFile[1].Data[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "0", "", "1", staticTextInvalid }));
         }
