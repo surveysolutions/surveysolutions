@@ -263,9 +263,9 @@
   </data>
   <data name="FoldersDescription" xml:space="preserve">
     <value>You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:
-&lt;br/&gt;- "Create folder" use for creating subfolder 
-&lt;br/&gt;- "Edit" to rename folder name
-&lt;br/&gt;- "Remove" to delete folder with subfolders</value>
+&lt;br/&gt;- "Create SubFolder" use for creating subfolder 
+&lt;br/&gt;- "Rename" to rename folder name
+&lt;br/&gt;- "Delete" to delete folder with subfolders</value>
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
     <value>Questionnaire Title</value>
