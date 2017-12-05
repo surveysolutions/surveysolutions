@@ -4,6 +4,8 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
+using WB.Core.SharedKernels.DataCollection.Generated;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
@@ -1246,6 +1249,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
+            GlobalStopwatcher.DumpToDebug();
+            ServiceLocator.Current.GetInstance<ILogger>().Error(GlobalStopwatcher.GetMeasureDetails());
+
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
@@ -2315,29 +2321,51 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
 
         protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
-            => sourceInterview.Clone().Compare(changedInterview);
+        {
+            using (GlobalStopwatcher.Scope("IN", "FindDifferenceBetweenTrees"))
+            {
+                return sourceInterview.Clone().Compare(changedInterview);
+            }
+        }
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, bool removeLinkedAnswers = true)
         {
             if (questionnaire.IsUsingExpressionStorage())
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
-                var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-                expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
-
+                using (GlobalStopwatcher.Scope("IN", "expressionStorage.Initialize"))
+                {
+                    var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
+                    expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
+                }
                 using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
-                    var playOrder = questionnaire.GetExpressionsPlayOrder();
+                    List<Guid> playOrder;
+                    using (GlobalStopwatcher.Scope("IN", "questionnaire.GetExpressionsPlayOrder"))
+                    {
+                        playOrder = questionnaire.GetExpressionsPlayOrder();
+                    }
 
                     foreach (var entityId in playOrder)
                     {
-                        var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
+                        List<IInterviewTreeNode> entityIdentities;
+
+                        using (GlobalStopwatcher.Scope("IN", " changedInterviewTree.FindEntity"))
+                        {
+                            entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
+                        }
 
                         foreach (var entity in entityIdentities)
                         {
-                            IInterviewTreeNode changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
-
-                            changedNode?.Accept(updater);
+                            IInterviewTreeNode changedNode;
+                            using (GlobalStopwatcher.Scope("IN", "changedInterviewTree.GetNodeByIdentity"))
+                            {
+                                changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
+                            }
+                            using (GlobalStopwatcher.Scope("IN", "changedNode?.Accept(updater)"))
+                            {
+                                changedNode?.Accept(updater);
+                            }
                         }
                     }
                 }
@@ -2347,7 +2375,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
             }
 
-            changedInterviewTree.ReplaceSubstitutions();
+            using (GlobalStopwatcher.Scope("IN", "changedInterviewTree.ReplaceSubstitutions"))
+            {
+                changedInterviewTree.ReplaceSubstitutions();
+            }
         }
 
         private void UpdateTreeWithDependentChangesWithExpressionState(InterviewTree changedInterviewTree,
