@@ -53,11 +53,21 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
         }
 
 		private <#=typeof(IInterviewLevel).Name#> CreateLevel(Identity rosterIdentity)
-		{
-			if (levelFactory.ContainsKey(rosterIdentity.Id))
-				return levelFactory[rosterIdentity.Id](rosterIdentity.RosterVector, this);
-			return null;
-		}
+        {
+            if (levelsCache.ContainsKey(rosterIdentity))
+                return levelsCache[rosterIdentity];
+
+            if (levelFactory.ContainsKey(rosterIdentity.Id))
+            {
+                var level = levelFactory[rosterIdentity.Id](rosterIdentity.RosterVector, this);
+                levelsCache[rosterIdentity] = level;
+                return level;
+            }
+
+            return null;
+        }
+
+        private Dictionary<Identity, <#=typeof(IInterviewLevel).Name#>> levelsCache = new Dictionary<Identity, <#=typeof(IInterviewLevel).Name#>>();
 	}
 
 <#
