@@ -341,9 +341,9 @@ namespace WB.UI.Designer.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:
-        ///&lt;br/&gt;- &quot;Create folder&quot; use for creating subfolder 
-        ///&lt;br/&gt;- &quot;Edit&quot; to rename folder name
-        ///&lt;br/&gt;- &quot;Remove&quot; to delete folder with subfolders.
+        ///&lt;br/&gt;- &quot;Create SubFolder&quot; use for creating subfolder 
+        ///&lt;br/&gt;- &quot;Rename&quot; to rename folder name
+        ///&lt;br/&gt;- &quot;Delete&quot; to delete folder with subfolders.
         /// </summary>
         public static string FoldersDescription {
             get {
