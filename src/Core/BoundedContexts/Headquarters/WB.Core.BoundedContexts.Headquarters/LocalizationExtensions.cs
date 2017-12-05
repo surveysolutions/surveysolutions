@@ -1,4 +1,6 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Resources;
+﻿using System.Text.RegularExpressions;
+using System.Web;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters
@@ -51,6 +53,11 @@ namespace WB.Core.BoundedContexts.Headquarters
                     break;
             }
             return returnValue;
+        }
+
+        public static string ToLocalizeJavaScriptString(this InterviewStatus status)
+        {
+            return HttpUtility.JavaScriptStringEncode(ToLocalizeString(status));
         }
     }
 }

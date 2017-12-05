@@ -36,6 +36,27 @@
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers"})';
         var usersToAssignUrl =
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Responsibles"})';
+
+        GetInterviewStatusString = function(status) {
+            switch (status) {
+                case '@InterviewStatus.Completed': return '@Html.Raw(InterviewStatus.Completed.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.SupervisorAssigned': return '@Html.Raw(InterviewStatus.SupervisorAssigned.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.InterviewerAssigned': return '@Html.Raw(InterviewStatus.InterviewerAssigned.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Created': return '@Html.Raw(InterviewStatus.Created.ToLocalizeJavaScriptString()))';
+                case '@InterviewStatus.Completed': return '@Html.Raw(InterviewStatus.Completed.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Deleted': return '@Html.Raw(InterviewStatus.Deleted.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Restored': return '@Html.Raw(InterviewStatus.Restored.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.ReadyForInterview': return '@Html.Raw(InterviewStatus.ReadyForInterview.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.SentToCapi': return '@Html.Raw(InterviewStatus.SentToCapi.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Restarted': return '@Html.Raw(InterviewStatus.Restarted.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.ApprovedBySupervisor': return '@Html.Raw(InterviewStatus.ApprovedBySupervisor.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.RejectedBySupervisor': return '@Html.Raw(InterviewStatus.RejectedBySupervisor.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.ApprovedByHeadquarters': return '@Html.Raw(InterviewStatus.ApprovedByHeadquarters.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.RejectedByHeadquarters': return '@Html.Raw(InterviewStatus.RejectedByHeadquarters.ToLocalizeJavaScriptString())';
+                default: return status;
+            }
+        };
+
         $(function() {
             var notifier = new Notifier();
             var model = new Supervisor.VM.HQInterviews(statistics,
@@ -290,7 +311,7 @@
                                                 <span class="empty"></span>
                                                 <!-- /ko -->
                                             </td>
-                                            <td class="status" data-bind="text: Status"></td>
+                                            <td class="status" data-bind="text: GetInterviewStatusString(Status())"></td>
                                             <td class="download-on-device" data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
                                                 <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>
