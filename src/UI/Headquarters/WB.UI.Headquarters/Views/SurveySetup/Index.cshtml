@@ -81,12 +81,12 @@
                             <text>
                                 if (!selectedRow.allowCensusMode) {
                                     items["addNew"] = {
-                                        name: "@Dashboard.NewAssignment",
+                                        name: "@HttpUtility.JavaScriptStringEncode(Dashboard.NewAssignment)",
                                         callback: model.addNewInterview
                                     };
                                 }
                                 items["batchUpload"] = {
-                                    name: "@Dashboard.UploadAssignments",
+                                    name: "@Html.Raw(HttpUtility.JavaScriptStringEncode(Dashboard.UploadAssignments))",
                                     callback: model.interviewsBatchUpload
                                 };
                             </text>
@@ -105,7 +105,7 @@
                         <text>
                         if (!selectedRow.isDisabled) {
                             items["webSetup"] = {
-                                name: "@Dashboard.WebInterviewSetup",
+                                name: "@HttpUtility.JavaScriptStringEncode(Dashboard.WebInterviewSetup)",
                                 callback: model.webInterviewSetup
                             }
                         }
@@ -118,13 +118,13 @@
                         <text>
                     items["clone"] =
                     {
-                        name: "@Dashboard.CloneQuestionnaire",
+                        name: "@HttpUtility.JavaScriptStringEncode(Dashboard.CloneQuestionnaire)",
                         callback: model.cloneQuestionnaire,
                         disabled: selectedRow.isDisabled
                     };
                         items["delete"] =
                         {
-                            name: "@Dashboard.DeleteQuestionnaire",
+                            name: "@HttpUtility.JavaScriptStringEncode(Dashboard.DeleteQuestionnaire)",
                             callback: model.deleteQuestionnaire
                             /*,disabled: selectedRow.isDisabled*/
                         };
