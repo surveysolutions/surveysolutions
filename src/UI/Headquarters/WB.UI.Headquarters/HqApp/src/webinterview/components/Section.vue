@@ -89,7 +89,7 @@
         },
         methods: {
             loadSection() {
-                this.$store.dispatch("fetсhSectionEntitiesList", this.$route.params.sectionId)
+                this.$store.dispatch("fetchSectionEntities")
             }
         },
         components: {
