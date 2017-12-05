@@ -12,9 +12,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var result = changedNode as IInterviewTreeValidateable;
 
             ChangedNodeBecameValid = source == null || !source.IsValid && result.IsValid;
-            ChangedNodeBecameInvalid = source == null ? !result.IsValid : source.IsValid && !result.IsValid;
+            ChangedNodeBecameInvalid = ChangedNodeBecameInvalidImp(source, result) ;
             AreValidationMessagesChanged = AreValidationMessagesChangedIml(source, result);
             IsFailedValidationIndexChanged = IsFailedValidationIndexChangedIml(source, result);
+        }
+
+        private bool ChangedNodeBecameInvalidImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
+        {
+            if (this.IsNodeRemoved) return false;
+            return source == null ? !result.IsValid : source.IsValid && !result.IsValid;
         }
 
         public bool AreValidationMessagesChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
@@ -32,7 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsNodeRemoved) return false;
             if (result.IsValid) return false;
-            var targetChangedValidations = result.FailedValidations;
+            var targetChangedValidations = result.FailedValidations ?? new List<FailedValidationCondition>();
             if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
 
             var sourceMessages = source?.FailedValidations ?? new List<FailedValidationCondition>();
