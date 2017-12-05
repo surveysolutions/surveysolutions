@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.C
         private static CommentsExporter readSideToTabularFormatExportService;
         private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static long questionnaireVersion = 3;
-        private static string fileName = "interview_comments.tab";
+        private static string fileName = "interview__comments.tab";
         private static string comment = "test";
         private static Mock<ICsvWriter> csvWriterMock;
         private static QuestionnaireExportStructure questionnaireExportStructure;

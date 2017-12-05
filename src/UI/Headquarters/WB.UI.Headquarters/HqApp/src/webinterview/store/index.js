@@ -28,7 +28,21 @@ const store = safeStore({
     mutations,
     getters: {
         loadingProgress(state) {
-            return state.fetch.inProgress > 0
+            let loadedCount = 0;
+
+            state.entities.forEach(entity => {
+                if (state.entityDetails[entity.identity] != null) {
+                    loadedCount = loadedCount + 1;
+                }
+            })
+
+            const totalCount = state.entities != null
+                ? state.entities.length
+                : 0
+                
+            var result = loadedCount === 0 || totalCount === 0 || (loadedCount < totalCount);
+
+            return result;
         },
         addCommentsAllowed(state) {
             return !state.interviewCannotBeChanged;

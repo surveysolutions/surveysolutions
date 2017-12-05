@@ -8,7 +8,7 @@ using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Models.WebInterview;
 
-namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
+namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGroupDetailsTests
 {
     [TestOf(typeof(WebInterviewInterviewEntityFactory))]
     public class Group_state_and_validitiy_depend_on_viewer_for_groups_with_hidden_and_prefilled_questions : WebInterviewInterviewEntityFactorySpecification
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         protected override QuestionnaireDocument GetDocument()
         {
             return Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
-                Create.Entity.Group(SecA.Id, "Section A", "SecA", children: new IComposite[]
+                Create.Entity.Group(SectionA.Id, "Section A", "SecA", children: new IComposite[]
                 {
                     Create.Entity.TextQuestion(QuestionInterviewer.Id,
                         text: "Interviewer Question", variable: "text_in"),
@@ -34,23 +34,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
                 }));
         }
         
-        private InterviewGroupOrRosterInstance GetGroupFromInterviewEntityFactory(bool asReviewer)
-        {
-            if (asReviewer)
-                this.AsSupervisor();
-            else
-                this.AsInterviewer();
-
-            var entity = this.Subject.GetEntityDetails(SecA.ToString(), this.interview, this.questionnaire, asReviewer);
-            return entity as InterviewGroupOrRosterInstance;
-        }
-
         [Test]
         public void when_group_has_unanswered_hidden_question_then_should_be_STARTED_for_reviewer()
         {
             this.AnswerTextQuestions(QuestionInterviewer, QuestionSupervisor, QuestionPrefilled);
 
-            var group = GetGroupFromInterviewEntityFactory(asReviewer: true);
+            var group = this.GetGroupDetails(SectionA, asReviewer: true);
 
             Assert.That(group.Status, Is.EqualTo(GroupStatus.Started));
         }
@@ -60,7 +49,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         {
             this.AnswerTextQuestions(QuestionInterviewer, QuestionPrefilled);
 
-            var group = GetGroupFromInterviewEntityFactory(asReviewer: false);
+            var group = this.GetGroupDetails(SectionA, asReviewer: false);
 
             Assert.That(group.Status, Is.EqualTo(GroupStatus.Completed));
         }
@@ -70,7 +59,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         {
             this.AnswerTextQuestions(QuestionHidden);
 
-            var group = GetGroupFromInterviewEntityFactory(asReviewer: true);
+            var group = this.GetGroupDetails(SectionA, asReviewer: true);
 
             Assert.That(group.Status, Is.EqualTo(GroupStatus.Started));
         }
@@ -80,7 +69,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         {
             this.AnswerTextQuestions(QuestionHidden);
 
-            var group = GetGroupFromInterviewEntityFactory(asReviewer: false);
+            var group = this.GetGroupDetails(SectionA, asReviewer: false);
 
             Assert.That(group.Status, Is.EqualTo(GroupStatus.NotStarted));
         }
@@ -91,8 +80,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             this.AnswerTextQuestions(QuestionHidden);
             this.MarkQuestionAsInvalid(QuestionHidden);
 
-            var group = GetGroupFromInterviewEntityFactory(asReviewer: false);
-            
+            var group = this.GetGroupDetails(SectionA, asReviewer: false);
+
             Assert.That(group.Validity.IsValid, Is.EqualTo(true));
         }
 
@@ -102,8 +91,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             this.AnswerTextQuestions(QuestionHidden);
             this.MarkQuestionAsInvalid(QuestionHidden);
 
-            var group = GetGroupFromInterviewEntityFactory(asReviewer: true);
-            
+            var group = this.GetGroupDetails(SectionA, asReviewer: true);
+
             Assert.That(group.Validity.IsValid, Is.EqualTo(false));
         }
 
@@ -113,9 +102,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             this.AnswerTextQuestions(QuestionPrefilled);
             this.MarkQuestionAsInvalid(QuestionPrefilled);
 
-            var reviewerView = GetGroupFromInterviewEntityFactory(asReviewer: true);
+            var group = this.GetGroupDetails(SectionA, asReviewer: true);
 
-            Assert.That(reviewerView.Validity.IsValid, Is.EqualTo(false));
+            Assert.That(group.Validity.IsValid, Is.EqualTo(false));
         }
 
         [Test]
@@ -124,9 +113,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             this.AnswerTextQuestions(QuestionPrefilled);
             this.MarkQuestionAsInvalid(QuestionPrefilled);
 
-            var reviewerView = GetGroupFromInterviewEntityFactory(asReviewer: true);
+            var group = this.GetGroupDetails(SectionA, asReviewer: false);
 
-            Assert.That(reviewerView.Validity.IsValid, Is.EqualTo(false));
+            Assert.That(group.Validity.IsValid, Is.EqualTo(true));
         }
     }
 }
