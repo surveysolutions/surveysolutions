@@ -8,44 +8,46 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeValidateableDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
             : base(sourceNode, changedNode)
         {
+            var source = sourceNode as IInterviewTreeValidateable;
+            var result = changedNode as IInterviewTreeValidateable;
+
+            ChangedNodeBecameValid = source == null || !source.IsValid && result.IsValid;
+            ChangedNodeBecameInvalid = source == null
+                ? !result.IsValid
+                : source.IsValid && !result.IsValid;
+            AreValidationMessagesChanged = AreValidationMessagesChangedIml(source, result);
+            IsFailedValidationIndexChanged = IsFailedValidationIndexChangedIml(source, result);
         }
 
-        private IInterviewTreeValidateable source => this.SourceNode as IInterviewTreeValidateable;
-        private IInterviewTreeValidateable result => this.ChangedNode as IInterviewTreeValidateable;
-
-        public bool ChangedNodeBecameValid => this.source == null || !this.source.IsValid && this.result.IsValid;
-
-        public bool ChangedNodeBecameInvalid => this.source == null
-            ? !this.result.IsValid
-            : this.source.IsValid && !this.result.IsValid;
-
-        public bool AreValidationMessagesChanged
+        public bool AreValidationMessagesChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
-            get
-            {
-                if (this.IsNodeRemoved) return false;
-                if (this.result.IsValid) return false;
-                var changedMessages = this.result.ValidationMessages.Select(x => x.Text).ToArray();
-                if (this.IsNodeAdded && !changedMessages.Any()) return false;
-                var validationMessages = this.source?.ValidationMessages;
-                var sourceMessages = validationMessages?.Select(x => x.Text) ?? new string[0];
-                return !changedMessages.SequenceEqual(sourceMessages);
-            }
+            if (this.IsNodeRemoved) return false;
+            if (result.IsValid) return false;
+            var changedMessages = result.ValidationMessages.Select(x => x.Text).ToArray();
+            if (this.IsNodeAdded && !changedMessages.Any()) return false;
+            var validationMessages = source?.ValidationMessages;
+            var sourceMessages = validationMessages?.Select(x => x.Text) ?? new string[0];
+            return !changedMessages.SequenceEqual(sourceMessages);
         }
 
-        public bool IsFailedValidationIndexChanged
+        public bool IsFailedValidationIndexChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
-            get
-            {
-                if (this.IsNodeRemoved) return false;
-                if (this.result.IsValid) return false;
-                var targetChangedValidations = this.result.FailedValidations;
-                if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
+            if (this.IsNodeRemoved) return false;
+            if (result.IsValid) return false;
+            var targetChangedValidations = result.FailedValidations;
+            if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
 
-                var sourceMessages = this.source?.FailedValidations ?? new List<FailedValidationCondition>();
-                return !targetChangedValidations.SequenceEqual(sourceMessages);
-            }
+            var sourceMessages = source?.FailedValidations ?? new List<FailedValidationCondition>();
+            return !targetChangedValidations.SequenceEqual(sourceMessages);
         }
+
+        public bool ChangedNodeBecameValid { get; private set; }
+
+        public bool ChangedNodeBecameInvalid { get; private set; }
+
+        public bool AreValidationMessagesChanged { get; private set; }
+
+        public bool IsFailedValidationIndexChanged { get; private set; }
     }
 
     public interface IInterviewTreeValidateable
