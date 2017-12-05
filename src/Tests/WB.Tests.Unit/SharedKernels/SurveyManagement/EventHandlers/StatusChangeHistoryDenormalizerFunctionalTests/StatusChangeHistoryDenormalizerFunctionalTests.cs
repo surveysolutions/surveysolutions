@@ -22,12 +22,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, assignTime: currentTime.AddSeconds(3)));
 
             var statuses = interviewSummary.InterviewCommentedStatuses;
-            Assert.AreEqual(statuses[0].Status, InterviewExportedAction.Created);
-            Assert.AreEqual(statuses[0].Timestamp, currentTime.AddSeconds(1));
-            Assert.AreEqual(statuses[1].Status, InterviewExportedAction.SupervisorAssigned);
-            Assert.AreEqual(statuses[1].Timestamp, currentTime.AddSeconds(2));
-            Assert.AreEqual(statuses[2].Status, InterviewExportedAction.InterviewerAssigned);
-            Assert.AreEqual(statuses[2].Timestamp, currentTime.AddSeconds(3));
+            Assert.That(InterviewExportedAction.Created, Is.EqualTo(statuses[0].Status));
+            Assert.That(currentTime.AddSeconds(1), Is.EqualTo(statuses[0].Timestamp));
+            Assert.That(InterviewExportedAction.SupervisorAssigned, Is.EqualTo(statuses[1].Status));
+            Assert.That(currentTime.AddSeconds(2), Is.EqualTo(statuses[1].Timestamp));
+            Assert.That(InterviewExportedAction.InterviewerAssigned, Is.EqualTo(statuses[2].Status));
+            Assert.That(currentTime.AddSeconds(3), Is.EqualTo(statuses[2].Timestamp));
         }
 
         [Test]
@@ -43,8 +43,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId));
             denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
 
-            Assert.AreEqual(InterviewExportedAction.Completed,
-                interviewSummary.InterviewCommentedStatuses.LastOrDefault().Status);
+            Assert.That(interviewSummary.InterviewCommentedStatuses.LastOrDefault().Status,
+                Is.EqualTo(InterviewExportedAction.Completed));
         }
 
         [Test]
@@ -60,8 +60,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId));
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
 
-            Assert.AreEqual(InterviewExportedAction.Completed,
-                interviewSummary.InterviewCommentedStatuses.LastOrDefault().Status);
+            Assert.That(interviewSummary.InterviewCommentedStatuses.LastOrDefault().Status, Is.EqualTo(InterviewExportedAction.Completed));
         }
 
         [Test]
@@ -78,7 +77,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, interviewerId: null));
 
-            Assert.AreEqual(new[]
+            Assert.That(interviewSummary.InterviewCommentedStatuses.Select(x => x.Status).ToArray(), Is.EqualTo(new[]
             {
                 InterviewExportedAction.Created,
                 InterviewExportedAction.SupervisorAssigned,
@@ -86,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                 InterviewExportedAction.Completed,
                 InterviewExportedAction.Completed
 
-            }, interviewSummary.InterviewCommentedStatuses.Select(x => x.Status).ToArray());
+            }));
         }
     }
 }
