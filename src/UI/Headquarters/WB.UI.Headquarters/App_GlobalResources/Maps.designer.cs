@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maps compenent was not initialized. Please contact Your server administrator..
+        /// </summary>
+        internal static string MapEngineIsNotInitialized {
+            get {
+                return ResourceManager.GetString("MapEngineIsNotInitialized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred. Following files were ignored:.
         /// </summary>
         internal static string MapLoadingInvalidFilesError {

@@ -15,25 +15,25 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         {
             return Create.Entity.QuestionnaireDocument(Guid.NewGuid(),
 
-                Create.Entity.Group(SecA.Id, "Section A", "SecA", children: new IComposite[]
+                Create.Entity.Group(SectionA.Id, "Section A", "SecA", children: new IComposite[]
                 {
-                    Create.Entity.TextQuestion(SecA_In.Id, text: "Interviewer Question", variable: "text_in"),
+                    Create.Entity.TextQuestion(SecA_InterviewerQuestion.Id, text: "Interviewer Question", variable: "text_in"),
 
                     Create.Entity.FixedRoster(SecA_Roster.Id, title: "roster", children: new IComposite[]
                     {
-                        Create.Entity.TextQuestion(SecA_Roster_In.Id, text: "interviewer q in roster",
+                        Create.Entity.TextQuestion(SecA_Roster_InterviewerQuestion.Id, text: "interviewer q in roster",
                             variable: "text_in_r"),
 
                     }, fixedTitles: new[] {Create.Entity.FixedTitle(1, "Test")}),
                 }));
         }
 
-        protected GroupStatus GetInterviewSimpleStatus() => Subject.GetInterviewSimpleStatus(this.interview, this.IsReviewMode);
+        protected GroupStatus GetInterviewSimpleStatus() => Subject.GetInterviewSimpleStatus(this.CurrentInterview, this.IsReviewMode);
 
         [Test]
         public void when_all_questions_answered_should_return_completed_state()
         {
-            AnswerTextQuestions(SecA_In, SecA_Roster_In);
+            AnswerTextQuestions(SecA_InterviewerQuestion, SecA_Roster_InterviewerQuestion);
 
             Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.Completed));
         }
@@ -41,8 +41,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         [Test]
         public void when_subgroups_has_errors_should_return_interview_invalid_status()
         {
-            AnswerTextQuestions(SecA_In, SecA_Roster_In);
-            MarkQuestionAsInvalid(SecA_Roster_In);
+            AnswerTextQuestions(SecA_InterviewerQuestion, SecA_Roster_InterviewerQuestion);
+            MarkQuestionAsInvalid(SecA_Roster_InterviewerQuestion);
 
             Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.Invalid));
         }
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
         [Test]
         public void when_any_group_without_answers_should_return_not_started_status()
         {
-            AnswerTextQuestions(SecA_In);
+            AnswerTextQuestions(SecA_InterviewerQuestion);
 
             Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.NotStarted));
         }

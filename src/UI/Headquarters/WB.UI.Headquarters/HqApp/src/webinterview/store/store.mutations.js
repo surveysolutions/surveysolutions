@@ -1,6 +1,5 @@
 import { forEach } from "lodash"
 import Vue from "vue"
-import { fetch } from "./store.fetch";
 
 export default {
     SET_ENTITIES_DETAILS(state, { entities, lastActivityTimestamp }) {
@@ -61,30 +60,6 @@ export default {
     POSTING_COMMENT(state, {questionId}){
         const question = state.entityDetails[questionId]
         Vue.set(question, "postingComment", true)
-    },
-
-
-    SET_UPLOAD_PROGRESS(state, { id, now, total }) {
-        const fetchState = {}
-
-        Vue.set(fetchState, "uploaded", now)
-        Vue.set(fetchState, "total", total)
-
-        Vue.set(state.entityDetails[id], "fetchState", fetchState)
-    },
-
-    SET_FETCH(state, { id, ids, done }) {
-        if (id && state.entityDetails[id]) {
-            Vue.set(state.entityDetails[id], "fetching", !done)
-        }
-
-        if (ids) {
-            ids.forEach(element => {
-                if (state.entityDetails[element]) {
-                    Vue.set(state.entityDetails[element], "fetching", !done)
-                }
-            })
-        }
     },
 
     LOG_LAST_ACTIVITY(state){

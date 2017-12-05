@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.Headquarters.Models.WebInterview;
-using WebInterviewResources = WB.UI.Headquarters.Resources.WebInterview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
@@ -233,7 +232,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 this.PutInstructions(result, identity, questionnaire);
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
-                result.Comments = this.GetComments(question, callerInterview);
+                result.Comments = this.GetComments(question);
 
                 return result;
             }
@@ -350,16 +349,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }));
         }
 
-        private Comment[] GetComments(InterviewTreeQuestion question, IStatefulInterview statefulInterview)
+        private Comment[] GetComments(InterviewTreeQuestion question)
         {
-            return question.AnswerComments.Select(ac
-                    => new Comment
-                    {
-                        Text = ac.Comment,
-                        IsOwnComment = ac.UserId == this.authorizedUser.Id,
-                        UserRole = ac.UserRole,
-                        CommentTimeUtc = ac.CommentTime
-                    })
+            return question.AnswerComments.Select(
+                ac => new Comment
+                {
+                    Text = ac.Comment,
+                    IsOwnComment = ac.UserId == this.authorizedUser.Id,
+                    UserRole = ac.UserRole,
+                    CommentTimeUtc = ac.CommentTime
+                })
                 .ToArray();
         }
 
@@ -370,8 +369,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private void ApplyGroupStateData(InterviewGroupOrRosterInstance group, InterviewTreeGroup treeGroup, bool isReviewMode)
         {
-            group.Stats  = this.GetGroupStatistics(treeGroup, isReviewMode);
-            group.Status = this.CalculateSimpleStatus(  treeGroup, isReviewMode);
+            group.Stats = this.GetGroupStatistics(treeGroup, isReviewMode);
+            group.Status = this.CalculateSimpleStatus(treeGroup, isReviewMode);
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group, bool isReviewMode) =>
@@ -397,14 +396,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode)
         {
             GroupStatus status;
-            
+
             if (HasUnansweredQuestions(group, isReviewMode))
                 status = CountEnabledAnsweredQuestions(group, isReviewMode) > 0
                     ? GroupStatus.Started
                     : GroupStatus.NotStarted;
             else
             {
-                status = GroupStatus.Completed;
+                status = HasQuestionsWithInvalidAnswers(@group, isReviewMode)
+                    ? GroupStatus.Started
+                    : GroupStatus.Completed;
             }
 
             foreach (var subGroup in GetSubgroupStatuses())
