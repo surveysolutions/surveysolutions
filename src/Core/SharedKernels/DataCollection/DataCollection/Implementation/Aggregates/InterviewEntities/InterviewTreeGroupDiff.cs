@@ -5,19 +5,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeGroupDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
             : base(sourceNode, changedNode)
         {
-            var sourceGroupNode = sourceNode as InterviewTreeGroup;
-            var changedGroupNode = changedNode as InterviewTreeGroup;
-
-            bool IsTitleChangedImpl()
-            {
-                if (this.IsNodeRemoved) return false;
-                if (this.IsNodeAdded && !changedGroupNode.Title.HasSubstitutions) return false;
-                return sourceGroupNode?.Title.Text != changedGroupNode.Title.Text;
-            }
-
-            this.IsTitleChanged = IsTitleChangedImpl();
+            this.IsTitleChanged = IsTitleChangedImpl(sourceNode as InterviewTreeGroup, changedNode as InterviewTreeGroup);
         }
 
-        public bool IsTitleChanged {get; private set; }
+        bool IsTitleChangedImpl(InterviewTreeGroup sourceGroupNode, InterviewTreeGroup changedGroupNode)
+        {
+            if (this.IsNodeRemoved) return false;
+            if (this.IsNodeAdded && !changedGroupNode.Title.HasSubstitutions) return false;
+            return sourceGroupNode?.Title.Text != changedGroupNode.Title.Text;
+        }
+
+        public bool IsTitleChanged {get; }
     }
 }

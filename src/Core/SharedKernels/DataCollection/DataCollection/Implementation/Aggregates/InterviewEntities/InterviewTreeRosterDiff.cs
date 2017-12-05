@@ -12,6 +12,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public new InterviewTreeRoster ChangedNode => base.ChangedNode as InterviewTreeRoster;
 
 
-        public bool IsRosterTitleChanged { get; private set; }
+        public bool IsRosterTitleChanged { get; }
     }
 }
