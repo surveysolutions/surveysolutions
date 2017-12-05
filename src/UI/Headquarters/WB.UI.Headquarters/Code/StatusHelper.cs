@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Views.Survey;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -35,7 +36,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                    select new SurveyStatusViewItem
                    {
                        Status = status,
-                       StatusName = GetEnumDescription(status)
+                       StatusName = status.ToLocalizeString()
                    };
         }
 
@@ -46,17 +47,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 : invisibleForUserStatuses;
             return GetAllSurveyStatusViewItems(ignoreStatuses)
                 .OrderBy(status=>status.StatusName);
-        }
-
-        private static string GetEnumDescription(InterviewStatus value)
-        {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-
-            var attributes = (DescriptionAttribute[]) fi.GetCustomAttributes(typeof (DescriptionAttribute), false);
-
-            return attributes.Length > 0
-                       ? attributes[0].Description
-                       : value.ToString();
         }
     }
 }
