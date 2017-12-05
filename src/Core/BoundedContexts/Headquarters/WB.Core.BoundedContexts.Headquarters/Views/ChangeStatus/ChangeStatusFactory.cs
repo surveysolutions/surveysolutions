@@ -78,6 +78,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
                 case InterviewExportedAction.Created:
                     return commentedStatus.StatusChangeOriginatorName;
                 case InterviewExportedAction.Completed:
+                    return commentedStatus.InterviewerId.HasValue && commentedStatus.InterviewerId != commentedStatus.StatusChangeOriginatorId
+                        ? commentedStatus.InterviewerName
+                        : commentedStatus.SupervisorName;
                 case InterviewExportedAction.RejectedByHeadquarter:
                 case InterviewExportedAction.SupervisorAssigned:
                     return commentedStatus.SupervisorName;
