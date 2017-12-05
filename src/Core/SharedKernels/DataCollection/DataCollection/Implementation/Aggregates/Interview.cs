@@ -2323,7 +2323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             using (GlobalStopwatcher.Scope("IN", "FindDifferenceBetweenTrees"))
             {
-                return sourceInterview.Clone().Compare(changedInterview);
+                return sourceInterview.Compare(changedInterview);
             }
         }
 
