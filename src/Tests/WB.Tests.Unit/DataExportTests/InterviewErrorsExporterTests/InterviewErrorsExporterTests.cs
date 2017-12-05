@@ -69,8 +69,6 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
 
             // Assert
             Assert.That(export, Has.Count.EqualTo(2));
-
-
             Assert.That(export[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
             Assert.That(export[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
         }

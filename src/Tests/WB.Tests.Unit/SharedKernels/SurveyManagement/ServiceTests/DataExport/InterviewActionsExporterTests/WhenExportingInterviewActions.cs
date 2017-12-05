@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[0], Is.EqualTo(new []{ "InterviewId", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" }));
+            Assert.That(fileData[0], Is.EqualTo(new []{ "interview__id", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" }));
         }
 
         [Test]

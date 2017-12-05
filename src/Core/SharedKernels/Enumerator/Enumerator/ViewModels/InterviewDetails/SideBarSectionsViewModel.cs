@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.UpdateSections();
         }
 
-        private void OnScreenChanged(ScreenChangedEventArgs e) => this.UpdateSections();
+        private void OnScreenChanged(ScreenChangedEventArgs e) => this.UpdateSections(clearExpanded: true);
 
         public void Handle(GroupsEnabled @event)
         {
@@ -111,12 +111,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var args = e as ToggleSectionEventArgs;
 
-            this.UpdateSections(args);
+            this.UpdateSections(args, false);
         }
 
-        private void UpdateSections(ToggleSectionEventArgs toggledSection = null)
+        private void UpdateSections(ToggleSectionEventArgs toggledSection = null, bool clearExpanded = false)
         {
-            var expectedSectionIdentities = this.GetSectionsAndExpandedSubSections(toggledSection).ToList();
+            var expectedSectionIdentities = this.GetSectionsAndExpandedSubSections(clearExpanded, toggledSection).ToList();
             this.UpdateViewModels(expectedSectionIdentities);
             this.UpdateUI();
         }
@@ -160,11 +160,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.AllVisibleSections.Insert(this.items.IndexOf(addedSectionViewModel) + 1, addedSectionViewModel);
         });
 
-        internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(ToggleSectionEventArgs toggledSection = null)
+        internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(bool clearExpanded, ToggleSectionEventArgs toggledSection = null)
         {
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
+            var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
             List<Identity> parentsOfCurrentGroup = GetCurrentSectionAndItsParentsIdentities(interview, this.navigationState.CurrentGroup);
 
             List<Identity> itemsToBeExpanded = expandedSectionIdentities.Union(parentsOfCurrentGroup).Distinct().ToList();
@@ -189,7 +190,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 if (sectionOrSubSection.Parent == null) continue;
 
-                if (itemsToBeExpandedAndTheirImmidiateChildren.Contains(sectionOrSubSection.Identity))
+                var isInCurrentSection = sectionOrSubSection.Parent.Identity == currentGroup?.Identity;
+                var isParentOfCurrentSection = parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity);
+                var isExpandedSection = itemsToBeExpandedAndTheirImmidiateChildren.Contains(sectionOrSubSection.Identity);
+
+                if (clearExpanded && (isParentOfCurrentSection || isInCurrentSection))
+                    yield return sectionOrSubSection.Identity;
+
+                if (!clearExpanded && isExpandedSection)
                     yield return sectionOrSubSection.Identity;
             }
         }

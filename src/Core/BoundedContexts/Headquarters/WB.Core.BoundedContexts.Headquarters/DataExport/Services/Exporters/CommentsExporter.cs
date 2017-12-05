@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly string dataFileExtension = "tab";
-        private readonly string commentsFileName = "interview_comments";
+        private readonly string commentsFileName = "interview__comments";
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
         private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             if (hasAtLeastOneRoster)
                 commentsHeader.Add("Roster");
 
-            commentsHeader.Add("InterviewId");
+            commentsHeader.Add("interview__id");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
