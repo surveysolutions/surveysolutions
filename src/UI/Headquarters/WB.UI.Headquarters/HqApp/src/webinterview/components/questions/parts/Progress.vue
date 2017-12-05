@@ -1,21 +1,10 @@
 <template>
-    <transition name="slide-fade">
-        <div class="progress question-progress" v-if="isVisible">
-            <div class="progress-bar progress-bar-striped active" role="progressbar" :style="style">
-                <span class="sr-only"> {{ $t("WebInterviewUI.ProgressText", { progress } ) }}</span>
-            </div>
+    <div class="progress question-progress" v-if="isVisible">
+        <div class="progress-bar progress-bar-striped active" role="progressbar" :style="style">
+            <span class="sr-only"> {{ $t("WebInterviewUI.ProgressText", { progress } ) }}</span>
         </div>
-    </transition>
+    </div>
 </template>
-<style lang='css' scoped>
-.slide-fade-leave-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-leave-to {
-  opacity: 0;
-}
-</style>
-
 <script lang="js">
     import { delay } from "lodash"
     

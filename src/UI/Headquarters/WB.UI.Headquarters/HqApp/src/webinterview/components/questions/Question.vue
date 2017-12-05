@@ -28,7 +28,7 @@
             <wb-validation v-if="!noValidation" />
             <wb-comments v-if="!noComments" :isShowingAddCommentDialog="isShowingAddCommentDialog" />
         </div>
-        <wb-progress :visible="isInFetchState" :valuenow="valuenow" :valuemax="valuemax" />
+        <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
     </div>
 </template>
 
@@ -41,8 +41,7 @@
         props: ["question", 'questionCssClassName', 'noTitle', 'noInstructions', 'noValidation', 'noAnswer', 'noComments', 'isDisabled', 'noFlag'],
         data() {
             return {
-                isShowingAddCommentDialogFlag: undefined,
-                isInFetchState: false
+                isShowingAddCommentDialogFlag: undefined
             }
         },
 
@@ -53,10 +52,6 @@
 
             "question.updatedAt"() {
                  this.scroll();
-            },
-
-            isFetchInProgress() {
-                this.setAnswerLoadingVisibility(this)
             }
         },
 
@@ -91,7 +86,7 @@
                 return getLocationHash(this.question.id)
             },
             isFetchInProgress() {
-                return this.question.fetching || false
+                return this.question.fetching
             },
             isVisible() {
                 return !this.question.isLoading && 
@@ -131,10 +126,6 @@
             }
         },
         methods : {
-            setAnswerLoadingVisibility: debounce((self) => {
-                self.isInFetchState = self.isFetchInProgress
-            }, 200),
-
             doScroll: debounce(function() {
                 if(this.$store.getters.scrollState ==  "#" + this.id){
                     window.scroll({ top: this.$el.offsetTop, behavior: "smooth" })
