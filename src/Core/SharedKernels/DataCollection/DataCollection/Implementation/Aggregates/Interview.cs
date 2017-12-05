@@ -14,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
-using WB.Core.SharedKernels.DataCollection.Generated;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
