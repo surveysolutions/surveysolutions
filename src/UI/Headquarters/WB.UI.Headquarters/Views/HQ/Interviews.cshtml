@@ -70,7 +70,7 @@
                 var items = {}
 
                 items["open"] = {
-                    name: "@Common.Open",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Open)",
                     callback: function(t, e) {
                         var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId().replace(/-/g, '');
                         window.location = detailsUrl;
@@ -78,7 +78,7 @@
                 };
 
                 items["showStatusHistory"] = {
-                    name: "@Common.ShowStatusHistory",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.ShowStatusHistory)",
                     callback: function(t, e) {
                         model.ShowStatusHistory(
                             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "ChangeStateHistory"})',
@@ -87,7 +87,7 @@
                 };
                 if (selectedRow.ResponsibleRole() === 4 /* Interviewer */) {
                     items["openInterviewerProfile"] = {
-                        name: "@Html.Raw(Common.OpenResponsiblesProfile)",
+                        name: "@Html.Raw(HttpUtility.JavaScriptStringEncode(Common.OpenResponsiblesProfile))",
                         callback: function(t, e) {
                             var profileUrl = $profileUrl + '/' + selectedRow.ResponsibleId();
                             window.location = profileUrl;
@@ -97,7 +97,7 @@
                 items["sep1"] = "---------";
 
                 items["assign"] = {
-                    name: "@Common.Assign",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Assign)",
                     className: "primary-text",
                     callback: function(t, e) {
                         model.AssignInterview();
@@ -105,7 +105,7 @@
                 };
 
                 items["approve"] = {
-                    name: "@Common.Approve",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Approve)",
                     className: "success-text",
                     callback: function(t, e) {
                         model.ApproveInterview();
@@ -113,7 +113,7 @@
                 };
 
                 items["reject"] = {
-                    name: "@Common.Reject",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Reject)",
                     className: "error-text",
                     callback: function(t, e) {
                         model.RejectInterview();
@@ -121,7 +121,7 @@
                 };
 
                 items["unapprove"] = {
-                    name: "@Common.Unapprove",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Unapprove)",
                     callback: function(t, e) {
                         model.UnapproveInterview();
                     }
@@ -130,7 +130,7 @@
                 items["sep2"] = "---------";
 
                 items["delete"] = {
-                    name: "@Common.Delete",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Delete)",
                     className: "error-text",
                     callback: function(t, e) {
                         model.DeleteInterview();
