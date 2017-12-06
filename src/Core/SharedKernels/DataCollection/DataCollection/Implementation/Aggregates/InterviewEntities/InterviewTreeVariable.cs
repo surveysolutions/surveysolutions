@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -28,8 +29,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void Accept(IInterviewTreeUpdater updater)
         {
-            updater.UpdateEnablement(this);
-            updater.UpdateVariable(this);
+            using (GlobalStopwatcher.Scope("Accept", "Variable.UpdateEnablement"))
+            {
+                updater.UpdateEnablement(this);
+            }
+            using (GlobalStopwatcher.Scope("Accept", "Variable.UpdateVariable"))
+            {
+                updater.UpdateVariable(this); 
+            }
         }
     }
 }
