@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
-                new HeadquartersUIModule(),
+                new HeadquartersUIModule().AsNinject(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
