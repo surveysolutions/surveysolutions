@@ -1,5 +1,6 @@
 using System;
 using Autofac;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
 
 namespace WB.UI.Shared.Enumerator.Services.Ninject
@@ -29,6 +30,16 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.RegisterType<TImplementation>().As<TInterface>();
         }
 
+        public void Bind<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface1, TInterface2
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2>();
+        }
+
+        public void Bind<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
+        {
+            throw new NotImplementedException();
+        }
+
         public void Bind<TImplementation>()
         {
             containerBuilder.RegisterType<TImplementation>();
@@ -37,6 +48,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
         public void BindGeneric(Type implemenation)
         {
             containerBuilder.RegisterGeneric(implemenation);
+        }
+
+        public void RegisterDenormalizer<T>() where T : IEventHandler
+        {
+            throw new NotImplementedException();
         }
 
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
