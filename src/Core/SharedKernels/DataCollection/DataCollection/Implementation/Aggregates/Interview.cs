@@ -2341,25 +2341,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
                 using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
-                    List<Guid> playOrder;
-                    playOrder = questionnaire.GetExpressionsPlayOrder();
+                    var playOrder = questionnaire.GetExpressionsPlayOrder();
 
                     foreach (var entityId in playOrder)
                     {
-                        List<IInterviewTreeNode> entityIdentities;
-
-                        using (GlobalStopwatcher.Scope("IN", " changedInterviewTree.FindEntity"))
-                        {
-                            entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
-                        }
+                        var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
 
                         foreach (var entity in entityIdentities)
                         {
-                            IInterviewTreeNode changedNode;
-                            using (GlobalStopwatcher.Scope("IN", "changedInterviewTree.GetNodeByIdentity"))
-                            {
-                                changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
-                            }
+                            var changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
                             changedNode?.Accept(updater);
                         }
                     }

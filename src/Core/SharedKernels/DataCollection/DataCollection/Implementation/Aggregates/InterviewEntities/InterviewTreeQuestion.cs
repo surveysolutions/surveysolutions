@@ -659,11 +659,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (this.IsCascading) // is IsSingleFixedOption too
             {
-                using (GlobalStopwatcher.Scope("Accept", "Question. UpdateSingleOptionQuestion"))
-                {
-                    updater.UpdateSingleOptionQuestion(this);
-                    updater.UpdateCascadingQuestion(this);
-                }
+                updater.UpdateSingleOptionQuestion(this);
+                updater.UpdateCascadingQuestion(this);
             }
 
             using (GlobalStopwatcher.Scope("Accept", "Question. UpdateValidations"))
