@@ -43,7 +43,6 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.sectionChangeSubscriptionToken = messenger.Subscribe<SectionChangeMessage>(this.OnSectionChange);
             this.interviewCompleteActivityToken = messenger.Subscribe<InterviewCompletedMessage>(this.OnInterviewCompleteActivity);
             base.OnStart();
-            throw new Exception("Test 3");
         }
 
         public override void OnBackPressed()
