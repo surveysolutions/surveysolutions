@@ -133,10 +133,10 @@
     <value>Aide</value>
   </data>
   <data name="Interviewers" xml:space="preserve">
-    <value>enquêteurs</value>
+    <value>Enquêteurs</value>
   </data>
   <data name="Interviews" xml:space="preserve">
-    <value>entretiens</value>
+    <value>Entretiens</value>
   </data>
   <data name="MapReport" xml:space="preserve">
     <value>Rapport de carte</value>

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using Owin;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -65,58 +64,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
 
-        public string StoreData(Stream dataFile, string fileName)
+        public string[] UnzipAndGetFileList(byte[] fileBytes, out string tempStore)
         {
-            var folderName = Guid.NewGuid().FormatGuid();
-            var folderPath = this.fileSystemAccessor.CombinePath(this.path, folderName);
+            var processId = Guid.NewGuid().FormatGuid();
+            var pathToUnzip = this.fileSystemAccessor.CombinePath(this.path, processId);
 
-            if (this.fileSystemAccessor.IsDirectoryExists(folderPath))
-                this.fileSystemAccessor.DeleteDirectory(folderPath);
+            if (!this.fileSystemAccessor.IsDirectoryExists(pathToUnzip))
+                this.fileSystemAccessor.CreateDirectory(pathToUnzip);
 
-            this.fileSystemAccessor.CreateDirectory(folderPath);
+            tempStore = pathToUnzip;
 
-            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(this.fileSystemAccessor.CombinePath(folderPath, this.fileSystemAccessor.GetFileName(fileName)), false))
-            {
-                dataFile.CopyTo(fileStream);
-            }
-
-            createdFolders.Add(folderName);
-
-            return folderName;
-        }
-        
-        public string[] UnzipAndGetFileList(string id)
-        {
-            var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
-            if (!this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                return new string[0];
-
-            var filesInDirectory = this.fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
-            return this.TryToGetMapsFromZipArchive(filesInDirectory, id, currentFolderPath);
-        }
-
-        private string[] TryToGetMapsFromZipArchive(IEnumerable<string> filesInDirectory, string id, string currentFolderPath)
-        {
-            var archivesInDirectory = filesInDirectory.Where(this.archiveUtils.IsZipFile).ToArray();
-            if (archivesInDirectory.Length == 0)
-                return new string[0];
-
-            var archivePath = archivesInDirectory[0];
-            var unzippedDirectoryPath = this.fileSystemAccessor.CombinePath(currentFolderPath, UnzippedFoldername);
-
-            if (!this.fileSystemAccessor.IsDirectoryExists(unzippedDirectoryPath))
-            {
-                try
+            try
                 {
-                    this.archiveUtils.Unzip(archivePath, unzippedDirectoryPath);
+                    this.archiveUtils.Unzip(fileBytes, pathToUnzip);
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e.Message, e);
-                    return null;
+                    throw;
                 }
-            }
-            var unzippedFiles = this.fileSystemAccessor.GetFilesInDirectory(unzippedDirectoryPath)
+            
+            var unzippedFiles = this.fileSystemAccessor.GetFilesInDirectory(pathToUnzip)
                 .Where(file => this.permittedFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(file)))
                 .ToArray();
 

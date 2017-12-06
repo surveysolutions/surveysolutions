@@ -156,4 +156,7 @@
   <data name="UploadMapsSummaryFormat" xml:space="preserve">
     <value>{0} карт обработано из них с ошибками {1}</value>
   </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>Компонент для карт не был инициализирован. Обратитесь к Вашему администратору сервера.</value>
+  </data>
 </root>

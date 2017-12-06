@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -323,16 +321,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.interviewEntityFactory.ApplyValidity(info.Validity, currentTreeGroup, IsReviewMode);
 
             return info;
-        }
-
-        public InterviewSectionDetails GetSectionDetails(string sectionId)
-        {
-            InterviewEntityWithType[] entities = GetSectionEntities(sectionId);
-
-            return new InterviewSectionDetails { 
-                Entities = entities,
-                Details = GetEntitiesDetails(entities.Select(e => e.Identity.ToString()).ToArray())
-            };
         }
 
         public InterviewEntity[] GetEntitiesDetails(string[] ids)
