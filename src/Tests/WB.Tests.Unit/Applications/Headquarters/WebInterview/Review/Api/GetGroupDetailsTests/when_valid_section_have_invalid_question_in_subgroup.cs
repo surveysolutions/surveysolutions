@@ -38,6 +38,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
 
         [Test]
         public void should_have_section_status_Started() => 
-            Assert.That(GetGroupDetails(SectionA, asReviewer: false).Status, Is.EqualTo(GroupStatus.Started));
+            Assert.That(GetGroupDetails(SectionA, asReviewer: false).Status, Is.EqualTo(GroupStatus.Completed));
     }
 }

@@ -68,6 +68,15 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
             return profile;
         }
+
+        /*
+         * Conventions for indicators naming:
+         * i – interviewer
+         * t – tablet device
+         * s – status
+         * z – last synchronization
+         * d – dashboard
+         */
         public ReportView GetInterviewersReport(Guid[] interviewersIdsToExport)
         {
             var userProfiles = GetProfilesForInterviewers(interviewersIdsToExport);
@@ -76,47 +85,46 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             {
                 Headers = new[]
                 {
-                    "InterviewerName",
-                    "InterviewerId",
-                    "SupervisorName",
-                    "InterviewerAppVersion",
-                    "HasUpdateForInterviewerApp",
-                    "DeviceAssignmentDate",
-                    "TotalNumberOfSuccessSynchronizations",
-                    "TotalNumberOfFailedSynchronizations",
-                    "AverageSyncSpeedBytesPerSecond",
-                    "LastCommunicationDate",
-                    "DeviceID",
-                    "DeviceSerialNumber",
-                    "DeviceType",
-                    "DeviceManufacturer",
-                    "DeviceModel",
-                    "DeviceBuildNumber",
-                    "DeviceLanguage",
-                    "AndroidVersion",
-                    "SurveySolutionsVersion",
-                    "LastSurveySolutionsUpdatedDate",
-                    "DeviceLocationOrLastKnownLocationLat",
-                    "DeviceLocationOrLastKnownLocationLon",
-                    "DeviceOrientation",
-                    "BatteryStatus",
-                    "BatteryPowerSource",
-                    "IsPowerSaveMode",
-                    "StorageFreeInBytes",
-                    "StorageTotalInBytes",
-                    "RAMFreeInBytes",
-                    "RAMTotalInBytes",
-                    "DatabaseSizeInBytes",
-                    "ServerTimeAtTheBeginningOfSync",
-                    "TabletTimeAtTeBeginningOfSync",
-                    "ConnectionType",
-                    "ConnectionSubType",
-                    "QuestionnairesReceived",
-                    "InterviewsReceived",
-                    "CompletedInterviewsReceivedFromInterviewer",
-                    "AssignmentsThatHaveBeenStarted",
-                    "NewInterviewsOnDevice",
-                    "RejectedInterviewsOnDevice"
+                    "i_name",
+                    "i_id",
+                    "i_supervisorName",
+                    "s_appVersion",
+                    "s_updateAvailable",
+                    "s_linkedDate",
+                    "i_nSyncSucc",
+                    "i_nSyncFail",
+                    "n_avgSyncSpeed",
+                    "t_lastCommDate",
+                    "t_id",
+                    "t_serialNumber",
+                    "t_deviceType",
+                    "t_manufacturer",
+                    "t_model",
+                    "t_buildNumber",
+                    "s_language",
+                    "s_androidVersion",
+                    "s_updatedDate",
+                    "s_lastKnownLocationLat",
+                    "s_lastKnownLocationLon",
+                    "s_orientation",
+                    "s_batteryStatus",
+                    "s_powerSource",
+                    "s_powerSaveMode",
+                    "s_storageFree",
+                    "t_storageTotal",
+                    "s_RAMFree",
+                    "t_RAMTotal",
+                    "s_databaseSize",
+                    "z_serverClockAtBeginLastSync",
+                    "z_tabletClockAtBeginLastSync",
+                    "z_connectionType",
+                    "z_connectionSubType",
+                    "z_questReceivedOnTablet",
+                    "z_intervReceivedOnTablet",
+                    "z_intervReceivedOnServer",
+                    "d_numberAssignments",
+                    "d_numberNewInterviews",
+                    "d_numberRejectedInterviews"
                 },
                 Data = userProfiles.Where(x => x != null).Select(x => new object[]
                 {
@@ -138,7 +146,6 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                     x.DeviceBuildNumber,
                     x.DeviceLanguage,
                     x.AndroidVersion,
-                    x.SurveySolutionsVersion,
                     x.LastSurveySolutionsUpdatedDate,
                     x.DeviceLocationOrLastKnownLocationLat,
                     x.DeviceLocationOrLastKnownLocationLon,
@@ -306,3 +313,4 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         }
     }
 }
+ 

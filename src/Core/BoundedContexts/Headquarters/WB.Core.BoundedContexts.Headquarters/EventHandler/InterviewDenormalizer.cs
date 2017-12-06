@@ -5,8 +5,10 @@ using System.Runtime.Caching;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -60,12 +62,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IEventHandler<InterviewOnClientCreated>
     {
         private readonly IInterviewFactory repository;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
 
-        public InterviewDenormalizer(IInterviewFactory interviewFactory)
+        public InterviewDenormalizer(IInterviewFactory interviewFactory, IQueryableReadSideRepositoryReader<InterviewSummary> summaries )
         {
             this.repository = interviewFactory;
+            this.summaries = summaries;
         }
-
 
         public override object[] Writers => new object[0];
 
@@ -79,8 +82,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.repository.AddRosters(evnt.EventSourceId, evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
 
         public void Handle(IPublishedEvent<RosterInstancesRemoved> evnt)
-            => this.repository.RemoveRosters(this.interviewToQuestionnaire[evnt.EventSourceId], evnt.EventSourceId,
-                evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
+        {
+            if(!this.interviewToQuestionnaire.TryGetValue(evnt.EventSourceId, out var questionnaireIdentity))
+            {
+                questionnaireIdentity = this.summaries.GetQuestionnaireIdentity(evnt.EventSourceId);
+                this.AddQuestionnaireToDictionary(evnt.EventSourceId, questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);                
+            }
+
+            this.repository.RemoveRosters(questionnaireIdentity, evnt.EventSourceId,
+                           evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray());
+        }
 
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
             => this.repository.UpdateAnswer(evnt.EventSourceId, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),

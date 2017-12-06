@@ -77,6 +77,16 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
+        
+        public void Unzip(byte[] archivedFileAsArray, string extractToFolder)
+        {
+            using (MemoryStream stream = new MemoryStream(archivedFileAsArray))
+            using (ZipFile decompress = ZipFile.Read(stream))
+            {
+                decompress.ExtractAll(extractToFolder, ExtractExistingFileAction.OverwriteSilently);
+            }
+        }
+
         public bool IsZipFile(string filePath)
         {
             return ZipFile.IsZipFile(filePath);

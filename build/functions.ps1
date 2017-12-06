@@ -16,7 +16,7 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 #https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
 ##############################
 function GetMsBuildFromVsWhere() {
-    $path = & $vswhere -latest -products * -version 15.0,15.1 -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
+    $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
     if ($path) {
         $path = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
         if (test-path $path) {

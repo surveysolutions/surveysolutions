@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace WB.Core.Infrastructure.FileSystem
 {
@@ -6,7 +7,9 @@ namespace WB.Core.Infrastructure.FileSystem
     {
         void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath);
         void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
-        
+
+        void Unzip(byte[] archivedFileByteArray, string extractToFolder);
+
         bool IsZipFile(string filePath);
 
         Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath);

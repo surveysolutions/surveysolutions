@@ -392,7 +392,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             isReviewMode
                 ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor()
                 : group.CountEnabledInvalidQuestionsAndStaticTexts();
-
+        
         public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode)
         {
             GroupStatus status;
@@ -402,11 +402,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     ? GroupStatus.Started
                     : GroupStatus.NotStarted;
             else
-            {
-                status = HasQuestionsWithInvalidAnswers(@group, isReviewMode)
-                    ? GroupStatus.Started
-                    : GroupStatus.Completed;
-            }
+                status = GroupStatus.Completed;
 
             foreach (var subGroup in GetSubgroupStatuses())
             {
