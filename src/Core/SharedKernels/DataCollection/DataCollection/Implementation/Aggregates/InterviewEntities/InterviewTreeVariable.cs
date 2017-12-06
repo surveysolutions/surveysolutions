@@ -29,10 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void Accept(IInterviewTreeUpdater updater)
         {
-            using (GlobalStopwatcher.Scope("Accept", "Variable.UpdateEnablement"))
-            {
-                updater.UpdateEnablement(this);
-            }
+            updater.UpdateEnablement(this);
             using (GlobalStopwatcher.Scope("Accept", "Variable.UpdateVariable"))
             {
                 updater.UpdateVariable(this); 

@@ -76,10 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 updater.UpdateEnablement(this);
             }
-            using (GlobalStopwatcher.Scope("Accept", "Roster.UpdateRoster"))
-            {
-                updater.UpdateRoster(this); 
-            }
+            updater.UpdateRoster(this); 
         }
 
 
