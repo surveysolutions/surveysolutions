@@ -67,14 +67,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void Accept(IInterviewTreeUpdater updater)
         {
-            using (GlobalStopwatcher.Scope("Accept", "StaticText.UpdateEnablement"))
-            {
-                updater.UpdateEnablement(this);
-            }
-            using (GlobalStopwatcher.Scope("Accept", "StaticText.UpdateValidations"))
-            {
-                updater.UpdateValidations(this); 
-            }
+            updater.UpdateEnablement(this);
+            updater.UpdateValidations(this); 
         }
 
         public void ReplaceSubstitutions()
