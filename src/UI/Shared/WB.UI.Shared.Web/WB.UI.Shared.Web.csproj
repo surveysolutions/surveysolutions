@@ -176,7 +176,8 @@
     <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
-    <Compile Include="Modules\IIocRegistryExtensions.cs" />
+    <Compile Include="Modules\IWebIocRegistry.cs" />
+    <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
     <Compile Include="Modules\NinjectModuleAdapter.cs" />

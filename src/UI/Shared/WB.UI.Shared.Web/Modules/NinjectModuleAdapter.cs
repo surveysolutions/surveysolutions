@@ -28,8 +28,24 @@ namespace WB.UI.Shared.Web.Modules
         }
     }
 
+    public  class NinjectWebModuleAdapter<TModule> : NinjectModuleAdapter
+        where TModule : IWebModule
+    {
+        private readonly TModule module;
 
-    public abstract class NinjectModuleAdapter : NinjectModule, IIocRegistry
+        public NinjectWebModuleAdapter(TModule module)
+        {
+            this.module = module;
+        }
+
+        public override void Load()
+        {
+            this.module.Load(this);
+        }
+    }
+
+
+    public abstract class NinjectModuleAdapter : NinjectModule, IWebIocRegistry
     {
         void IIocRegistry.Bind<TInterface, TImplementation>()
         {
@@ -73,50 +89,50 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<TInterface>().ToMethod<TInterface>(context => context.Kernel.Get<TRegisteredInterface>());
         }
 
-        public void BindToMethod<T>(Func<T> func)
+        void IIocRegistry.BindToMethod<T>(Func<T> func)
         {
             this.Kernel.Bind<T>().ToMethod(ctx => func());
         }
 
-        public void BindToConstant<T>(Func<T> func)
+        void IIocRegistry.BindToConstant<T>(Func<T> func)
         {
             this.Kernel.Bind<T>().ToMethod(ctx => func()).InSingletonScope();
         }
 
-        public void BindAsSingleton(Type @interface, Type implementation)
+        void IIocRegistry.BindAsSingleton(Type @interface, Type implementation)
         {
             this.Kernel.Bind(@interface).To(implementation).InSingletonScope();
         }
 
-        public void BindGeneric(Type implementation)
+        void IIocRegistry.BindGeneric(Type implementation)
         {
             this.Kernel.Bind(implementation);
         }
 
-        public void RegisterDenormalizer<T>() where T : IEventHandler
+        void IIocRegistry.RegisterDenormalizer<T>() 
         {
             this.RegisterDenormalizer<T>(this.Kernel);
         }
 
-        internal void BindMvcFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order)
+        void IWebIocRegistry.BindMvcFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order)
         {
             this.Kernel.BindFilter<T>(filterScope, order);
         }
 
-        internal void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order)
+        void IWebIocRegistry.BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order)
         {
             this.Kernel.BindFilter<T>(filterScope, order).WhenActionMethodHasNo<TAttribute>();
         }
 
-        internal void BindHttpFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) where T : IFilter
+        void IWebIocRegistry.BindHttpFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) 
         {
             this.Kernel.BindHttpFilter<T>(filterScope);
         }
 
-        internal void BindHttpFilterWhenActionMethodHasNoAttribute<T>(System.Web.Http.Filters.FilterScope filterScope, int? order, Type attributeType) where T : IFilter
+        void IWebIocRegistry.BindHttpFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order) 
         {
             this.Kernel.BindHttpFilter<T>(filterScope)
-                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(attributeType).Any());
+                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(TAttribute)).Any());
         }
 
         public void RegisterDenormalizer<T>(IKernel kernel) where T : IEventHandler
