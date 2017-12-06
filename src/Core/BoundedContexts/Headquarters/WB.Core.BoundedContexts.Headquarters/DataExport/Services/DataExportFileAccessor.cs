@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -11,7 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public class DataExportFileAccessor : IDataExportFileAccessor
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExportSettings exportSettings;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IProtectedArchiveUtils archiveUtils;
@@ -19,38 +19,25 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
-        public DataExportFileAccessor(IFileSystemAccessor fileSystemAccessor, 
-            IExportSettings exportSettings, 
+        public DataExportFileAccessor(IExportSettings exportSettings, 
             IPlainTransactionManagerProvider plainTransactionManagerProvider, 
             IProtectedArchiveUtils archiveUtils,
             ILogger logger)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
             this.exportSettings = exportSettings;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.archiveUtils = archiveUtils;
             this.logger = logger;
         }
 
-        public void RecreateExportArchive(string folderForDataExport, string archiveFilePath)
+        public void RecreateExportArchive(string folderForDataExport, string archiveFilePath, IProgress<int> progress = null)
         {
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-            {
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-            }
-
             var password = this.GetPasswordFromSettings();
-            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath, password);
+            this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath, password, progress);
         }
 
         public void RecreateExportArchive(IEnumerable<string> filesToArchive, string archiveFilePath)
         {
-            if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-            {
-                this.logger.Info($"{archiveFilePath} existed, deleting");
-                this.fileSystemAccessor.DeleteFile(archiveFilePath);
-            }
-
             this.logger.Debug($"Starting creation of {Path.GetFileName(archiveFilePath)} archive");
             Stopwatch watch = Stopwatch.StartNew();
 

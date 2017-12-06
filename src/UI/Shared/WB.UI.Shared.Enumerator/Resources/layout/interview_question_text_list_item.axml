@@ -7,7 +7,7 @@
                              LongClick QuestionState.ShowCommentEditorCommand">
   
   <EditText style="@style/Interview_Question_Answer_Text_Editor"
-            local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand;" />
+            local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand; Tag ItemTag" />
 
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
                local:MvxBind="HideKeyboardOnClick .;Click DeleteListItemCommand;"/>

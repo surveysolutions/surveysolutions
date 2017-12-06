@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -19,17 +20,20 @@ namespace WB.UI.Headquarters.API.Resources
     [System.Web.Http.AllowAnonymous]
     public class WebInterviewResourcesController : ApiController
     {
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IImageProcessingService imageProcessingService;
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentStorage;
 
         public WebInterviewResourcesController(
+            IAuthorizedUser authorizedUser,
             IImageFileStorage imageFileStorage,
             IStatefulInterviewRepository statefulInterviewRepository,
             IImageProcessingService imageProcessingService,
             IPlainStorageAccessor<AttachmentContent> attachmentStorage)
         {
+            this.authorizedUser = authorizedUser;
             this.imageFileStorage = imageFileStorage;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.imageProcessingService = imageProcessingService;
@@ -41,7 +45,7 @@ namespace WB.UI.Headquarters.API.Resources
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
 
-            if (!interview.AcceptsInterviewerAnswers())
+            if (!interview.AcceptsInterviewerAnswers() && !this.authorizedUser.CanConductInterviewReview())
             {
                 return new HttpResponseMessage(HttpStatusCode.NotFound);
             }
@@ -62,11 +66,14 @@ namespace WB.UI.Headquarters.API.Resources
         }
 
         [HttpGet]
-        public HttpResponseMessage Image([FromUri]string interviewId, [FromUri]string questionId, [FromUri]string filename)
+        public HttpResponseMessage Image([FromUri] string interviewId, [FromUri] string questionId,
+            [FromUri] string filename)
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
-            
-            if (!interview.AcceptsInterviewerAnswers() && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null)
+
+            if (!interview.AcceptsInterviewerAnswers() 
+                && interview.GetMultimediaQuestion(Identity.Parse(questionId)) != null
+                && !this.authorizedUser.CanConductInterviewReview())
             {
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);
             }
@@ -86,7 +93,8 @@ namespace WB.UI.Headquarters.API.Resources
 
         private string GetQueryStringValue(string key)
         {
-            return (this.Request.GetQueryNameValuePairs().Where(query => query.Key == key).Select(query => query.Value)).FirstOrDefault();
+            return (this.Request.GetQueryNameValuePairs().Where(query => query.Key == key).Select(query => query.Value))
+                .FirstOrDefault();
         }
 
         private HttpResponseMessage GetBinaryMessageWithEtag(byte[] resultFile)

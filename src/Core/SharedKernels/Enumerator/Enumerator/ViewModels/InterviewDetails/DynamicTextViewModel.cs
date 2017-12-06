@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private string interviewId;
-        private Identity identity;
+        protected Identity identity;
         private bool isRoster;
 
         public void InitAsStatic(string textWithoutSubstitutions)

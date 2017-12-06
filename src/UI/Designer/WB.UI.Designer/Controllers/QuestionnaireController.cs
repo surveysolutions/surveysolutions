@@ -22,7 +22,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Infrastructure.Native.Sanitizer;
+using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -38,31 +38,37 @@ namespace WB.UI.Designer.Controllers
         private readonly IQuestionnaireHelper questionnaireHelper;
         private readonly IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILookupTableService lookupTableService;
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
         private readonly ILogger logger;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
+        private readonly IPublicFoldersStorage publicFoldersStorage;
 
         public QuestionnaireController(
             ICommandService commandService,
             IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper,
             IQuestionnaireViewFactory questionnaireViewFactory,
+            IFileSystemAccessor fileSystemAccessor,
             ILogger logger,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
             IQuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory, 
             ILookupTableService lookupTableService, 
-            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory)
+            IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
+            IPublicFoldersStorage publicFoldersStorage)
             : base(userHelper)
         {
             this.commandService = commandService;
             this.questionnaireHelper = questionnaireHelper;
             this.questionnaireViewFactory = questionnaireViewFactory;
+            this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.questionnaireInfoFactory = questionnaireInfoFactory;
             this.questionnaireChangeHistoryFactory = questionnaireChangeHistoryFactory;
             this.lookupTableService = lookupTableService;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
+            this.publicFoldersStorage = publicFoldersStorage;
         }
 
         [NoCache]
@@ -173,14 +179,14 @@ namespace WB.UI.Designer.Controllers
             {
                 if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
                 {
-                    this.Error("You don't  have permissions to delete this questionnaire.");
+                    this.Error(Resources.QuestionnaireController.ForbiddenDelete);
                 }
                 else
                 {
                     var command = new DeleteQuestionnaire(model.PublicKey, UserHelper.WebUser.UserId);
                     this.commandService.Execute(command);
 
-                    this.Success($"Questionnaire \"{model.Title}\" successfully deleted");
+                    this.Success(string.Format(Resources.QuestionnaireController.SuccessDeleteMessage, model.Title));
                 }
             }
             return this.Redirect(this.Request.UrlReferrer.ToString());
@@ -194,7 +200,7 @@ namespace WB.UI.Designer.Controllers
             bool hasAccess = this.UserHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.UserHelper.WebUser.UserId);
             if (!hasAccess)
             {
-                this.Error("You don't  have permissions to restore operation for this questionnaire.");
+                this.Error(Resources.QuestionnaireController.ForbiddenRevert);
                 return this.RedirectToAction("Index");
             }
 
@@ -213,17 +219,36 @@ namespace WB.UI.Designer.Controllers
         }
 
         [ValidateInput(false)]
-        public ActionResult Index(int? p, string sb, int? so, string f)
+        public ActionResult Index(int? p, string sb, int? so, string f) 
+            => this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f, showPublic: false, folderId: null));
+
+        [ValidateInput(false)]
+        public ActionResult Public(int? p, string sb, int? so, string f, Guid? id)
         {
-            return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f));
+            var questionnaires = this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f,
+                showPublic: true, folderId: id);
+
+            var folderPath = publicFoldersStorage.GetFoldersPath(folderId: id);
+            var breadcrumbs = folderPath.Select(folder => new FolderBreadcrumbsModel()
+            {
+                FolderId = folder.PublicId,
+                Title = folder.Title
+            }).ToArray();
+
+            var model = new QuestionnaireListModel()
+            {
+                IsSupportAssignFolders = UserHelper.WebUser.IsAdmin,
+                CurrentFolderId = id,
+                Breadcrumbs = breadcrumbs,
+                Questionnaires = questionnaires
+            };
+
+            return this.View(model);
         }
 
         [ValidateInput(false)]
-        public ActionResult Public(int? p, string sb, int? so, string f)
-        {
-            var questionnairePublicListViewModels = this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, searchFor: f);
-            return this.View(questionnairePublicListViewModels);
-        }
+        public ActionResult PublicFolders() 
+            => this.View();
 
         public ActionResult QuestionnaireHistory(Guid id, int? page)
         {
@@ -266,18 +291,17 @@ namespace WB.UI.Designer.Controllers
         {
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
-            var options = editQuestionView != null
-                ? editQuestionView.Options.Select(
-                    option => new Option(Guid.NewGuid(), option.Value.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue))
-                : new Option[0];
+            var options = editQuestionView?.Options.Select(
+                              option => new Option(Guid.NewGuid(), option.Value?.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
+            var optionsList = options.ToList();
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
             {
                 QuestionnaireId = id,
                 QuestionId = questionId,
                 QuestionTitle = editQuestionView.Title,
-                Options = options,
-                SourceOptions = options
+                Options = optionsList,
+                SourceOptions = optionsList
             };
         }
 
@@ -398,11 +422,8 @@ namespace WB.UI.Designer.Controllers
 
         public FileResult ExportOptions()
         {
-            var title = this.questionWithOptionsViewModel.QuestionTitle.RemoveHtmlTags();
-            var questionTitle = title.Length > 50
-                ? title.Substring(0, 50)
-                : title;
-            var fileDownloadName = $"Options-in-question-{questionTitle}.txt";
+            var title = this.questionWithOptionsViewModel.QuestionTitle ?? "";
+            var fileDownloadName = this.fileSystemAccessor.MakeValidFileName($"Options-in-question-{title}.txt");
             return
                 File(SaveOptionsToStream(this.questionWithOptionsViewModel.SourceOptions), "text/csv",
                     fileDownloadName);
@@ -412,12 +433,12 @@ namespace WB.UI.Designer.Controllers
         {
             public string QuestionnaireId { get; set; }
             public Guid QuestionId { get; set; }
-            public IEnumerable<Option> Options { get; set; }
-            public IEnumerable<Option> SourceOptions { get; set; }
+            public List<Option> Options { get; set; }
+            public List<Option> SourceOptions { get; set; }
             public string QuestionTitle { get; set; }
         }
 
-        private IEnumerable<Option> ExtractOptionsFromStream(Stream inputStream, bool isCascade)
+        private List<Option> ExtractOptionsFromStream(Stream inputStream, bool isCascade)
         {
             var importedOptions = new List<Option>();
 
@@ -469,20 +490,6 @@ namespace WB.UI.Designer.Controllers
 
         #endregion
 
-        private IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
-            int? pageIndex, string sortBy, int? sortOrder, string searchFor)
-        {
-            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
-
-            return this.questionnaireHelper.GetPublicQuestionnaires(
-                pageIndex: pageIndex,
-                sortBy: sortBy,
-                sortOrder: sortOrder,
-                searchFor: searchFor,
-                viewerId: UserHelper.WebUser.UserId,
-                isAdmin: UserHelper.WebUser.IsAdmin);
-        }
-
         private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
@@ -501,25 +508,28 @@ namespace WB.UI.Designer.Controllers
             return questionnaire;
         }
 
-        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor)
+        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(int? pageIndex, string sortBy, int? sortOrder, string searchFor, bool showPublic, Guid? folderId)
         {
-            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor);
+            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, searchFor: searchFor, folderId: folderId);
 
             return this.questionnaireHelper.GetQuestionnaires(
                 pageIndex: pageIndex,
                 sortBy: sortBy,
                 sortOrder: sortOrder,
                 searchFor: searchFor,
+                folderId: folderId,
                 viewerId: UserHelper.WebUser.UserId,
-                isAdmin: UserHelper.WebUser.IsAdmin);
+                isAdmin: UserHelper.WebUser.IsAdmin,
+                showPublic: showPublic);
         }
         
-        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor)
+        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string searchFor, Guid? folderId)
         {
             this.ViewBag.PageIndex = pageIndex;
             this.ViewBag.SortBy = sortBy;
-            this.ViewBag.SearchFor = searchFor;
+            this.ViewBag.Filter = searchFor;
             this.ViewBag.SortOrder = sortOrder;
+            this.ViewBag.FolderId = folderId;
 
             if (sortOrder.ToBool())
             {
@@ -529,8 +539,33 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult LackOfPermits()
         {
-            this.Error("You don't have permission to edit this questionnaire");
+            this.Error(Resources.QuestionnaireController.Forbidden);
             return this.RedirectToAction("Index");
+        }
+
+        private class ComboItem
+        {
+            public string Name { get; set; }
+            public Guid? Value { get; set; }
+        }
+
+        [HttpPost]
+        public ActionResult GetLanguages(Guid id)
+        {
+            var questionnaire = GetQuestionnaireOrThrow404(id);
+            var comboBoxItems =
+                new ComboItem { Name = QuestionnaireHistoryResources.Translation_Original, Value = null }.ToEnumerable().Concat(
+                    questionnaire.Source.Translations.Select(i => new ComboItem { Name = i.Name ?? Resources.QuestionnaireController.Untitled, Value = i.Id })
+                );
+            return this.Json(comboBoxItems);
+        }
+
+        [HttpPost]
+        public ActionResult AssignFolder(Guid id, Guid folderId)
+        {
+            var questionnaire = GetQuestionnaireOrThrow404(id);
+
+            return this.Redirect(this.Request.UrlReferrer.ToString());
         }
     }
 }

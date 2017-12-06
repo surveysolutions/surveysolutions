@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
         };
 
         Because of = () => exception = Catch.Exception(() =>
-            attribute.OnActionExecuting(CreateFilterContext(new ControlPanelController(null, null, null, null, null, null))));
+            attribute.OnActionExecuting(CreateFilterContext(new ControlPanelController(null, null, null, null, null))));
 
         It should_exception_be_null = () =>
             exception.ShouldBeNull();

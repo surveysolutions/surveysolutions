@@ -9,9 +9,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using OfficeOpenXml;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                     {
                         if (package.Workbook.Worksheets.Count == 0)
                         {
-                            throw new InvalidExcelFileException("Excel file is empty - contains no worksheets");
+                            throw new InvalidExcelFileException(ExceptionMessages.TranslationFileIsEmpty);
                         }
 
                         var sheetsWithTranslation = package.Workbook.Worksheets
@@ -113,11 +113,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             .ToList();
 
                         if (!sheetsWithTranslation.Any())
-                            throw new InvalidExcelFileException("Worksheet with translations not found");
+                            throw new InvalidExcelFileException(ExceptionMessages.TranslationWorksheetIsMissing);
 
                         var translationErrors = this.Verify(sheetsWithTranslation).Take(10).ToList();
                         if (translationErrors.Any())
-                            throw new InvalidExcelFileException("Found errors in excel file") { FoundErrors = translationErrors };
+                            throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
 
                         var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
                         HashSet<Guid> idsOfAllQuestionnaireEntities =
@@ -159,11 +159,12 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         {
                             this.translations.Store(translationInstance, translationInstance);
                         }
+                        this.translations.Flush();
                     }
                 }
                 catch (COMException e)
                 {
-                    throw new InvalidExcelFileException("Failed to extract translations from uploaded file", e);
+                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
             }
         }
@@ -229,7 +230,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                     yield return new TranslationValidationError
                     {
-                        Message = $"{EntityIdColumnName} has invalid id at [{cellAddress}]",
+                        Message = string.Format(ExceptionMessages.TranslationCel_A_lIsInvalid, EntityIdColumnName, cellAddress),
                         ErrorAddress = cellAddress
                     };
                 }
@@ -241,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                     yield return new TranslationValidationError
                     {
-                        Message = $"{TranslationTypeColumnName} has invalid type [{cellAddress}]",
+                        Message = string.Format(ExceptionMessages.TranslationCellTypeIsInvalid, TranslationTypeColumnName, cellAddress),
                         ErrorAddress = cellAddress
                     };
                 }
@@ -252,7 +253,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                     yield return new TranslationValidationError
                     {
-                        Message = $"{TranslationTypeColumnName} has invalid index at [{cellAddress}]",
+                        Message = string.Format(ExceptionMessages.TranslationCellIndexIsInvalid, TranslationTypeColumnName,
+                            cellAddress),
                         ErrorAddress = cellAddress
                     };
                 }

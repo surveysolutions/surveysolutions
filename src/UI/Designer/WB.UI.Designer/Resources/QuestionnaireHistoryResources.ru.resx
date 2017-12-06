@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="reverted" xml:space="preserve">
+    <value>Откат опросника  "{0}"</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Редактировать</value>
+  </data>
+  <data name="QuestionnaireChangeHistory" xml:space="preserve">
+    <value>История изменений опросника</value>
+  </data>
+  <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+    <value>Нет записей</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>Дата изменения</value>
+  </data>
+  <data name="UnknownUserName" xml:space="preserve">
+    <value>&lt;&lt;НЕИЗВЕСТНЫЙ&gt;&gt;</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Кто изменил</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Изменение</value>
+  </data>
+  <data name="TextsReplaced" xml:space="preserve">
+    <value>Все '{0}' были заменены на '{1}'. {2} изменений</value>
+  </data>
+  <data name="RevertToThisVersion" xml:space="preserve">
+    <value>Откатиться до этой версии</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Подтверждение</value>
+  </data>
+  <data name="ResetQuestionnaireToThis" xml:space="preserve">
+    <value>Откатить опросник до версии от {0}?</value>
+  </data>
+  <data name="reverted_to" xml:space="preserve">
+    <value>Опросник "{0}" был вернут к версии по состоянию на  {1}</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Revert" xml:space="preserve">
+    <value>Откатить</value>
+  </data>
+  <data name="Macro_Delete" xml:space="preserve">
+    <value>Удален макрос {0} </value>
+  </data>
+  <data name="Macro_Update" xml:space="preserve">
+    <value>Обновлен макрос {0}</value>
+  </data>
+  <data name="LookupTable_Delete" xml:space="preserve">
+    <value>Удалена справочная таблица {0}</value>
+  </data>
+  <data name="LookupTable_Update" xml:space="preserve">
+    <value>Обновлена справочная таблица {0}</value>
+  </data>
+  <data name="Attachment_Delete" xml:space="preserve">
+    <value>Удалено вложение {0}</value>
+  </data>
+  <data name="Attachment_Update" xml:space="preserve">
+    <value>Обновлено вложение {0}</value>
+  </data>
+  <data name="Variable_Add" xml:space="preserve">
+    <value>Добавлена переменная {0}</value>
+  </data>
+  <data name="Variable_Delete" xml:space="preserve">
+    <value>Удалена переменная {0}</value>
+  </data>
+  <data name="Variable_Update" xml:space="preserve">
+    <value>Обновлена переменная {0}</value>
+  </data>
+  <data name="Translation_Delete" xml:space="preserve">
+    <value>Удален перевод {0}</value>
+  </data>
+  <data name="Translation_Update" xml:space="preserve">
+    <value>Обновлен перевод {0}</value>
+  </data>
+  <data name="Section_Add" xml:space="preserve">
+    <value>Добавлена секция {0}</value>
+  </data>
+  <data name="Section_Delete" xml:space="preserve">
+    <value>Удалена секция {0}</value>
+  </data>
+  <data name="Section_Update" xml:space="preserve">
+    <value>Обновлена секция {0}</value>
+  </data>
+  <data name="Question_Add" xml:space="preserve">
+    <value>Добавлен вопрос {0}</value>
+  </data>
+  <data name="Question_Delete" xml:space="preserve">
+    <value>Удален вопрос {0}</value>
+  </data>
+  <data name="Question_Update" xml:space="preserve">
+    <value>Обновлен вопрос {0}</value>
+  </data>
+  <data name="Roster_Add" xml:space="preserve">
+    <value>Добавлен ростер {0}</value>
+  </data>
+  <data name="Roster_Delete" xml:space="preserve">
+    <value>Удален ростер {0}</value>
+  </data>
+  <data name="Roster_Update" xml:space="preserve">
+    <value>Обновлен ростер {0}</value>
+  </data>
+  <data name="StaticText_Add" xml:space="preserve">
+    <value>Добавлен статический текст {0}</value>
+  </data>
+  <data name="StaticText_Delete" xml:space="preserve">
+    <value>Удален статический текст {0}</value>
+  </data>
+  <data name="StaticText_Update" xml:space="preserve">
+    <value>Обновлен статический текст {0}</value>
+  </data>
+  <data name="NoTitle" xml:space="preserve">
+    <value>Без имени</value>
+  </data>
+  <data name="LookupTable_Add" xml:space="preserve">
+    <value>Добавлена стравочная таблица {0}</value>
+  </data>
+  <data name="Macro_Add" xml:space="preserve">
+    <value>Добавлен макрос {0}</value>
+  </data>
+  <data name="StaticText_Clone" xml:space="preserve">
+    <value>Статический текст {0} скопирован из статического текста {1}</value>
+  </data>
+  <data name="Questionnaire_Add" xml:space="preserve">
+    <value>Создан опросник {0}</value>
+  </data>
+  <data name="Questionnaire_Update" xml:space="preserve">
+    <value>Обновлен опросник {0}</value>
+  </data>
+  <data name="Questionnaire_Delete" xml:space="preserve">
+    <value>Удален опросник {0}</value>
+  </data>
+  <data name="Person_Delete" xml:space="preserve">
+    <value>Пользователь с почтовым адресом {0} удален из списка редакторов опросника</value>
+  </data>
+  <data name="Person_Add" xml:space="preserve">
+    <value>Пользователь с почтовым адресом {0} добавлен в список редакторов опросника</value>
+  </data>
+  <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+    <value>Ростер {0} стал секцией</value>
+  </data>
+  <data name="Section_GroupBecameARoster" xml:space="preserve">
+    <value>Секция {0} стала ростером</value>
+  </data>
+  <data name="Questionnaire_Import" xml:space="preserve">
+    <value>Импортирован опросник {0}</value>
+  </data>
+  <data name="Questionnaire_Replace" xml:space="preserve">
+    <value>Заменен опросник {0}</value>
+  </data>
+  <data name="Questionnaire_Clone" xml:space="preserve">
+    <value>Опросник {0} скопирован из опросника {1}</value>
+  </data>
+  <data name="Roster_Clone" xml:space="preserve">
+    <value>Ростер {0} скопирован из ростера {1}</value>
+  </data>
+  <data name="Section_Clone" xml:space="preserve">
+    <value>Секция {0} скопирована из секции {1}</value>
+  </data>
+  <data name="Question_Clone" xml:space="preserve">
+    <value>Вопрос {0} скопирован из вопроса {1}</value>
+  </data>
+  <data name="Variable_Clone" xml:space="preserve">
+    <value>Переменная {0} скопирована из переменной {1}</value>
+  </data>
+  <data name="Question_Move_To_Section" xml:space="preserve">
+    <value>Вопрос {0} перемещен в секцию {1}</value>
+  </data>
+  <data name="Question_Move_To_Roster" xml:space="preserve">
+    <value>Вопрос {0} перемещен в ростер {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Section" xml:space="preserve">
+    <value>Статический текст {0} перемещен в секцию {1}</value>
+  </data>
+  <data name="StaticText_Move_To_Roster" xml:space="preserve">
+    <value>Статический текст {0} перемещен в ростер {1}</value>
+  </data>
+  <data name="Variable_Move_To_Section" xml:space="preserve">
+    <value>Переменная {0} перемещена в секцию {1}</value>
+  </data>
+  <data name="Variable_Move_To_Roster" xml:space="preserve">
+    <value>Переменная {0} перемещена в ростер {1}</value>
+  </data>
+  <data name="Section_Move_To_Section" xml:space="preserve">
+    <value>Секция {0} перемещена в секцию {1}</value>
+  </data>
+  <data name="Section_Move_To_Roster" xml:space="preserve">
+    <value>Секция {0} перемещена в ростер {1}</value>
+  </data>
+  <data name="Roster_Move_To_Section" xml:space="preserve">
+    <value>Ростер {0} перемещен в секцию {1}</value>
+  </data>
+  <data name="Roster_Move_To_Roster" xml:space="preserve">
+    <value>Ростер {0} перемещен в ростер {1}</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Оргинальный</value>
+  </data>
+  <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+    <value>Установлен язык по умолчанию {0}</value>
+  </data>
+</root>

@@ -107,6 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public CovariantObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options { get; }
+        public Identity QuestionIdentity => this.Identity;
         IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
         public bool HasOptions => this.Options.Any();
 

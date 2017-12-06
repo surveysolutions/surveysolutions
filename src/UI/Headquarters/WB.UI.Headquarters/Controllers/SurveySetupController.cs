@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -18,13 +17,14 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Infrastructure.Native.Threading;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Administrator, Headquarter")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter")]
     public class SurveySetupController : BaseController
     {
         private readonly IPreloadingTemplateService preloadingTemplateService;
@@ -118,6 +118,18 @@ namespace WB.UI.Headquarters.Controllers
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
 
+            if (questionnaireInfo.IsDeleted)
+            {
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        model.QuestionnaireId,
+                        model.QuestionnaireVersion,
+                        questionnaireInfo?.Title,
+                        global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                        AssignmentImportType.Panel,
+                        model.File.FileName));
+            }
+
             if (".zip" != this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower())
             {
                 return this.View("InterviewImportVerificationErrors",
@@ -185,6 +197,9 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
+            this.interviewImportService.Status.QuestionnaireTitle = questionnaireInfo.Title;
+
+
 
             return this.RedirectToAction("InterviewVerificationProgress", new { id = interviewImportProcessId });
         }
@@ -207,6 +222,18 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion));
+
+            if (questionnaireInfo.IsDeleted)
+            {
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        model.QuestionnaireId,
+                        model.QuestionnaireVersion,
+                        questionnaireInfo?.Title,
+                        global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                        AssignmentImportType.Panel,
+                        model.File.FileName));
+            }
 
             var extension = this.fileSystemAccessor.GetFileExtension(model.File.FileName).ToLower();
             if (extension != ".tab" && extension != ".txt" && extension != ".zip")
@@ -276,7 +303,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpGet]
-        public ActionResult InterviewImportVerificationCompleted(Guid id)
+        public ActionResult InterviewImportVerificationCompleted()
         {
             AssignmentImportStatus status = this.interviewImportService.Status;
 
@@ -298,7 +325,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var verificationState = status.VerificationState;
 
-            var interviewImportProcessId = id.FormatGuid();
+            var interviewImportProcessId = status.InterviewImportProcessId;
 
             //clean up for security reasons
             if (verificationState.Errors.Any() || status.State.Errors.Any())
@@ -369,6 +396,20 @@ namespace WB.UI.Headquarters.Controllers
             {
                 // load persisted state in future
                 var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+
+                if (questionnaireInfo.IsDeleted)
+                {
+                    return this.View("InterviewImportVerificationErrors",
+                        ImportDataParsingErrorsView.CreatePrerequisiteError(
+                            questionnaireId,
+                            version,
+                            questionnaireInfo?.Title,
+                            global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                            AssignmentImportType.Panel,
+                            null));
+                }
+
                 model = new PreloadedDataConfirmationModel
                 {
                     Id = id,
@@ -417,9 +458,23 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
-            this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
-
             QuestionnaireBrowseItem questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+
+            if (questionnaireInfo.IsDeleted)
+            {
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        model.QuestionnaireId,
+                        model.Version,
+                        questionnaireInfo?.Title,
+                        global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                        model.AssignmentImportType,
+                        null));
+            }
+
+            this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
+            this.interviewImportService.Status.QuestionnaireTitle = questionnaireInfo.Title;
+            
             if (!this.ModelState.IsValid)
             {
                 model.QuestionnaireTitle = questionnaireInfo.Title;

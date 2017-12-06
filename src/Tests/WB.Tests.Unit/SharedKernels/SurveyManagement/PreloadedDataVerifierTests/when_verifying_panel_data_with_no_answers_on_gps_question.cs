@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
             preloadedDataByFile = CreatePreloadedDataByFile(
-                new[] { "Id", "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude", "gps__Timestamp" },
+                new[] { ServiceColumns.InterviewId, "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude", "gps__Timestamp" },
                 new[] { new[] { "1", "", "", "", "", "" } },
                 "questionnaire.tab");
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -12,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Designer.Pdf;
+using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Controllers
@@ -53,7 +56,7 @@ namespace WB.UI.Designer.Controllers
 
         #endregion
 
-        private static readonly ConcurrentDictionary<Guid, PdfGenerationProgress> GeneratedPdfs = new ConcurrentDictionary<Guid, PdfGenerationProgress>();
+        private static readonly ConcurrentDictionary<string, PdfGenerationProgress> GeneratedPdfs = new ConcurrentDictionary<string, PdfGenerationProgress>();
 
         private readonly IPdfFactory pdfFactory;
         private readonly PdfSettings pdfSettings;
@@ -76,9 +79,15 @@ namespace WB.UI.Designer.Controllers
 
         [LocalOrDevelopmentAccessOnly]
         [System.Web.Mvc.AllowAnonymous]
-        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName)
+        public ActionResult RenderQuestionnaire(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, string cultureCode)
         {
-            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName);
+            if (!string.IsNullOrWhiteSpace(cultureCode))
+            {
+                CultureInfo culture = CultureInfo.GetCultureInfo(cultureCode);
+                Thread.CurrentThread.CurrentCulture = culture;
+                Thread.CurrentThread.CurrentUICulture = culture;
+            }
+            var questionnaire = this.LoadQuestionnaireOrThrow404(id, requestedByUserId, requestedByUserName, translation, false);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -91,13 +100,15 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult PrintPreview(Guid id)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation: null, useDefaultTranslation: true);
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
-        public ActionResult Download(Guid id)
+        [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
+        public ActionResult Download(Guid id, Guid? translation)
         {
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(id);
+            var pdfKey = id.ToString() + translation;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrNull(pdfKey);
 
             if (pdfGenerationProgress?.IsFinished == true)
             {
@@ -106,7 +117,7 @@ namespace WB.UI.Designer.Controllers
                 byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
                 this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
-                GeneratedPdfs.TryRemove(id);
+                GeneratedPdfs.TryRemove(pdfKey);
 
                 return this.File(content, "application/pdf", $"{questionnaireTitle}.pdf");
             }
@@ -118,54 +129,58 @@ namespace WB.UI.Designer.Controllers
 
         [OutputCache(VaryByParam = "*", Duration = 0, NoStore = true)]
         [System.Web.Mvc.HttpGet]
-        public JsonResult Status(Guid id)
+        public JsonResult Status(Guid id, Guid? translation)
         {
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(id, StartNewPdfGeneration);
+            var pdfKey = id.ToString() + translation;
+            var cultureCode = CultureInfo.CurrentUICulture.Name;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
 
             if (pdfGenerationProgress.IsFailed)
-                return this.Json(PdfStatus.Failed("Failed to generate PDF.\r\nPlease reload the page and try again or contact support@mysurvey.solutions"), JsonRequestBehavior.AllowGet);
+                return this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate), JsonRequestBehavior.AllowGet);
 
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
             if (sizeInKb == 0)
-                return this.Json(PdfStatus.InProgress("Preparing to generate your PDF.\r\nPlease wait..."), JsonRequestBehavior.AllowGet);
+                return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate), JsonRequestBehavior.AllowGet);
 
             return this.Json(
                 pdfGenerationProgress.IsFinished
                     ? PdfStatus.Ready(
                         pdfGenerationProgress.TimeSinceFinished.TotalMinutes < 1
-                            ? $"PDF document generated less than a minute ago.\r\nSize: {sizeInKb}Kb"
-                            : $"PDF document generated {(int) pdfGenerationProgress.TimeSinceFinished.TotalMinutes} minute(s) ago.\r\nSize: {sizeInKb}Kb")
-                    : PdfStatus.InProgress($"Your PDF is being generated.\r\nSize: {sizeInKb}Kb"),
+                            ? string.Format(PdfMessages.GenerateLessMinute, sizeInKb)
+                            : string.Format(PdfMessages.Generate, (int)pdfGenerationProgress.TimeSinceFinished.TotalMinutes, sizeInKb))
+                    : PdfStatus.InProgress(string.Format(PdfMessages.GeneratingSuccess, sizeInKb)),
                 JsonRequestBehavior.AllowGet);
         }
 
         [System.Web.Mvc.HttpPost]
-        public ActionResult Retry(Guid id)
+        public ActionResult Retry(Guid id, Guid? translation)
         {
-            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(id, StartNewPdfGeneration);
+            var pdfKey = id.ToString() + translation;
+            var cultureCode = CultureInfo.CurrentUICulture.Name;
+            PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
-                GeneratedPdfs.TryRemove(id);
+                GeneratedPdfs.TryRemove(pdfKey);
             }
-            GeneratedPdfs.GetOrAdd(id, this.StartNewPdfGeneration);
-            return this.Json(PdfStatus.InProgress("Retring export as PDF."));
+            GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
+            return this.Json(PdfStatus.InProgress(PdfMessages.Retry));
         }
 
-        private PdfGenerationProgress StartNewPdfGeneration(Guid id)
+        private PdfGenerationProgress StartNewPdfGeneration(Guid id, Guid? translation, string cultureCode)
         {
             var newPdfGenerationProgress = new PdfGenerationProgress();
-            this.StartRenderPdf(id, newPdfGenerationProgress);
+            this.StartRenderPdf(id, newPdfGenerationProgress, translation, cultureCode);
             return newPdfGenerationProgress;
         }
-
-
-        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress)
+        
+        private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, string cultureCode)
         {
             var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
-            var pdfDocument = this.GetSourceUrlsForPdf(id);
+            var pdfDocument = this.GetSourceUrlsForPdf(id, translation, cultureCode);
             var pdfOutput = new PdfOutput {OutputFilePath = generationProgress.FilePath};
-            Task.Run(() =>
+
+            Task.Factory.StartNew(() =>
             {
                 try
                 {
@@ -177,7 +192,7 @@ namespace WB.UI.Designer.Controllers
                     this.logger.Error($"Failed to generate PDF {id.FormatGuid()}", exception);
                     generationProgress.Fail();
                 }
-            });
+            }, TaskCreationOptions.LongRunning);
         }
 
         private PdfConvertEnvironment GetPdfConvertEnvironment() => new PdfConvertEnvironment
@@ -187,13 +202,15 @@ namespace WB.UI.Designer.Controllers
             WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow()
         };
 
-        private PdfDocument GetSourceUrlsForPdf(Guid id) => new PdfDocument
+        private PdfDocument GetSourceUrlsForPdf(Guid id, Guid? translation, string cultureCode) => new PdfDocument
         {
             Url = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaire), "Pdf", new
             {
                 id = id,
                 requestedByUserId = this.UserHelper.WebUser.UserId,
                 requestedByUserName = this.UserHelper.WebUser.UserName,
+                translation = translation,
+                cultureCode = cultureCode
             }),
             FooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new
             {
@@ -213,9 +230,9 @@ namespace WB.UI.Designer.Controllers
             return path;
         }
 
-        private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName)
+        private PdfQuestionnaireModel LoadQuestionnaireOrThrow404(Guid id, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
-            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName);
+            PdfQuestionnaireModel questionnaire = this.pdfFactory.Load(id.FormatGuid(), requestedByUserId, requestedByUserName, translation, useDefaultTranslation);
             if (questionnaire == null)
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);

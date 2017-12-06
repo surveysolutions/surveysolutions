@@ -61,6 +61,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to complete registration.
+        /// </summary>
+        public static string CompleteRegistration {
+            get {
+                return ResourceManager.GetString("CompleteRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ConfirmationEmail {
+            get {
+                return ResourceManager.GetString("ConfirmationEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to view.
         /// </summary>
         public static string MailNotifier_NotifyOwnerAboutShareChange_view {
@@ -113,6 +131,24 @@ namespace WB.UI.Designer.Resources {
             get {
                 return ResourceManager.GetString("OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_" +
                         "access_for__2__to_your_questionnaire___3_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to reset password.
+        /// </summary>
+        public static string ResetPassword {
+            get {
+                return ResourceManager.GetString("ResetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ResetPasswordEmail {
+            get {
+                return ResourceManager.GetString("ResetPasswordEmail", resourceCulture);
             }
         }
         

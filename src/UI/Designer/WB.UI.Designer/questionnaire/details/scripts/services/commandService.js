@@ -135,6 +135,14 @@
                 return commandCall("DeleteTranslation", command);
             };
 
+            commandService.setDefaultTranslation = function(questionnaireId, translationId) {
+                var command = {
+                    questionnaireId: questionnaireId,
+                    translationId: translationId
+                };
+                return commandCall("SetDefaultTranslation", command);
+            };
+
             commandService.addMacro = function (questionnaireId, macro) {
                 var command = {
                     questionnaireId: questionnaireId,
@@ -184,9 +192,9 @@
                     }
                 };
 
-                var isPrefilledScopeSelected = question.questionScope === 'Identifying';
+                var isPrefilledScopeSelected = question.questionScope.value === 'Identifying';
                 command.isPreFilled = isPrefilledScopeSelected;
-                command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
+                command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope.value;
 
                 switch (question.type) {
                     case "SingleOption":

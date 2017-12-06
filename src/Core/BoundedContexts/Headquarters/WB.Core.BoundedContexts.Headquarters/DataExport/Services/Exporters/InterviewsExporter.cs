@@ -15,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 
@@ -30,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
         private readonly InterviewExportredDataRowReader rowReader;
-        private readonly IReadSideRepositoryReader<InterviewSummary> interviewSummaries;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private ITransactionManager TransactionManager => transactionManagerProvider.GetTransactionManager();
         private readonly ITransactionManagerProvider transactionManagerProvider;
 
@@ -43,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             InterviewDataExportSettings interviewDataExportSettings, 
             ICsvWriter csvWriter,
             InterviewExportredDataRowReader rowReader,
-            IReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries, 
             ITransactionManagerProvider plainTransactionManagerProvider)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -94,14 +93,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 if (level.LevelScopeVector.Length == 0)
                 {
-                    interviewLevelHeader.AddRange(ServiceColumns.SystemVariables.Select(systemVariable => systemVariable.VariableExportColumnName));
+                    interviewLevelHeader.AddRange(ServiceColumns.SystemVariables.Values.Select(systemVariable => systemVariable.VariableExportColumnName));
                 }
 
-                for (int i = 0; i < level.LevelScopeVector.Length; i++)
-                {
-                    interviewLevelHeader.Add($"{ServiceColumns.ParentId}{i + 1}");
-                }
-
+                interviewLevelHeader.AddRange(questionnaireExportStructure.GetAllParentColumnNamesForLevel(level.LevelScopeVector));
+                
                 this.csvWriter.WriteData(filePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
             }
         }
@@ -207,8 +203,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, Guid interviewId)
         {
-            var interviewKey = this.TransactionManager.ExecuteInQueryTransaction(() => interviewSummaries.GetById(interviewId).Key);
-            var interviewKeyIndex = Array.FindIndex(ServiceColumns.SystemVariables, x => x.VariableType == ServiceVariableType.InterviewKey); 
+            var interviewSummary = this.TransactionManager.ExecuteInQueryTransaction(() => 
+                interviewSummaries.Query(_ =>
+                    _.Where(i => i.SummaryId == interviewId.FormatGuid()).Select(i => new
+                    {
+                        i.Key,
+                        i.HasErrors,
+                        i.Status
+                    }).FirstOrDefault()
+                ));
+            var interviewKey = interviewSummary.Key;
             var interviewData = new Dictionary<string, string[]>(); // file name, array of rows
 
             var stringSeparator = ExportFileSettings.DataFileSeparator.ToString();
@@ -226,17 +230,27 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         parametersToConcatenate.AddRange(answer.Select(itemValue => string.IsNullOrEmpty(itemValue) ? "" : itemValue));
                     }
 
-                    var systemVariableValues =new List<string>(interviewDataExportRecord.SystemVariableValues);
+                    var systemVariableValues = new List<string>(interviewDataExportRecord.SystemVariableValues);
                     if (systemVariableValues.Count > 0) // main file?
                     {
-                        if (systemVariableValues.Count < interviewKeyIndex+1)
+                        var interviewKeyIndex = ServiceColumns.SystemVariables[ServiceVariableType.InterviewKey].Index;
+                        if (systemVariableValues.Count < interviewKeyIndex + 1)
                             systemVariableValues.Add(interviewKey);
                         if (string.IsNullOrEmpty(systemVariableValues[interviewKeyIndex]))
                             systemVariableValues[interviewKeyIndex] = interviewKey;
+
+                        systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.HasAnyError].Index,
+                            interviewSummary.HasErrors ? "1" : "0");
+                        systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.InterviewStatus].Index,
+                            interviewSummary.Status.ToString());
                     }
 
                     parametersToConcatenate.AddRange(systemVariableValues);
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ParentRecordIds);
+                    if (systemVariableValues.Count == 0)
+                    {
+                        parametersToConcatenate.Add(interviewKey);
+                    }
 
                     recordsByLevel.Add(string.Join(stringSeparator,
                             parametersToConcatenate.Select(v => v?.Replace(stringSeparator, ""))));

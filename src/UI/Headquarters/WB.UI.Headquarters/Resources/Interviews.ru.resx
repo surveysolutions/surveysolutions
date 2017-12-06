@@ -210,4 +210,8 @@
   <data name="Tooltip_Table_Status" xml:space="preserve">
     <value>Статус интервью в системе. Кликните по иконке сортировки для упорядочивания по статусу интервью.</value>
   </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>Нет ответственного для некоторых интервью. Пожалуйста выберите ответственного.</value>
+    <comment>Нет ответственного для некоторых интервью. Пожалуйста выберите ответственного.</comment>
+  </data>
 </root>

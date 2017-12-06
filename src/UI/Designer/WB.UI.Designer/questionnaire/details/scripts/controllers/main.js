@@ -1,9 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
-
-            $(document).on('click', "a[href='javascript:void(0);']", function (e) { e.preventDefault(); }); // remove when we will stop support of IE 9 KP-6076
-
+        function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,
@@ -35,7 +32,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+p',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Print',
+                description: $i18next.t('HotkeysPrint'),
                 callback: function (event) {
                     
                     var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
@@ -51,7 +48,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+b',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Compile',
+                description: $i18next.t('Compile'),
                 callback: function (event) {
                     $scope.verify();
                     event.preventDefault();
@@ -72,7 +69,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: focusTreePane,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Focus questionnaire tree',
+                description: $i18next.t('HotkeysFocusTree'),
                 callback: function (event) {
                     event.preventDefault();
                     document.activeElement.blur();
@@ -85,7 +82,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: focusEditorPane,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Focus title field in editor',
+                description: $i18next.t('HotkeysFocusTitle'),
                 callback: function (event) {
                     event.preventDefault();
                     $($(".question-editor textarea").get(0)).focus();
@@ -95,7 +92,7 @@ angular.module('designerApp')
             if (hotkeys.get(openChaptersPane) !== false) {
                 hotkeys.del(openChaptersPane);
             }
-            hotkeys.add(openChaptersPane, 'Open section', function (event) {
+            hotkeys.add(openChaptersPane, $i18next.t('OpenSection'), function (event) {
                 event.preventDefault();
                 $scope.$broadcast("openChaptersList", "");
             });
@@ -103,7 +100,7 @@ angular.module('designerApp')
             hotkeys.add({
                 combo: 'ctrl+h',
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-                description: 'Find and replace',
+                description: $i18next.t('FindReplaceTitle'),
                 callback: function (event) {
                     event.preventDefault();
                     $scope.showFindReplaceDialog();
@@ -496,7 +493,11 @@ angular.module('designerApp')
                 setCommonAceOptions(editor);
             };
 
-            $scope.aceLoaded = function (editor) {
+            $scope.aceLoadedForOtionFilter = $scope.aceLoaded = function (editor) {
+                $scope.aceLoaded(editor, "linkedOptionsFilter");
+            }
+            $scope.aceLoaded = function (editor, editorType) {
+                editorType = editorType || 'regular';
                 editor.setOptions({
                     maxLines: Infinity,
                     fontSize: 16,
@@ -505,10 +506,10 @@ angular.module('designerApp')
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true
                 });
-                $scope.aceEditorUpdateMode(editor);
+                $scope.aceEditorUpdateMode(editor, editorType);
                 
                 $rootScope.$on('variablesChanged', function () {
-                    $scope.aceEditorUpdateMode(editor);
+                    $scope.aceEditorUpdateMode(editor, editorType);
                 });
 
                 setCommonAceOptions(editor);
@@ -518,7 +519,7 @@ angular.module('designerApp')
                 return _($rootScope.variableNames);
             }
 
-            $scope.aceEditorUpdateMode = function(editor) {
+            $scope.aceEditorUpdateMode = function (editor, editorType) {
                 if (editor) {
                     var CSharpExtendableMode = window.ace.require("ace/mode/csharp-extended").Mode;
                     editor.getSession().setMode(new CSharpExtendableMode(function () {
@@ -529,13 +530,29 @@ angular.module('designerApp')
                     {
                         getCompletions: function(editor, session, pos, prefix, callback) {
                             var i = 0;
-                            callback(null,
-                                $scope.getVariablesNames()
+
+                            var variables = $scope.getVariablesNames()
                                 .sortBy('name')
                                 .reverse()
                                 .map(function(variable) {
-                                    return { name: variable.name, value: variable.name, score: i++, meta: variable.type }
-                                }));
+                                    return {
+                                        name: variable.name,
+                                        value: variable.name,
+                                        score: i++,
+                                        meta: variable.type
+                                    }
+                                });
+
+                            if (editorType === "linkedOptionsFilter") {
+                                variables.push({
+                                    name: "@current",
+                                    value: "@current",
+                                    score: i++,
+                                    meta: "Roster"
+                                });
+                            }
+
+                            callback(null, variables);
                         },
 
                         identifierRegexps : [/[@a-zA-Z_0-9\$\-\u00A2-\uFFFF]/]

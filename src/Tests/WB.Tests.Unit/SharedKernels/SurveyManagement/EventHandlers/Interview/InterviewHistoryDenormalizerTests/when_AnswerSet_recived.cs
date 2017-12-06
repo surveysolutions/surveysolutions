@@ -12,6 +12,8 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Tests.Abc;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
@@ -21,6 +23,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         Establish context = () =>
         {
             interviewHistoryView = CreateInterviewHistoryView(interviewId);
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
+            {
+                Create.Entity.DateTimeQuestion(questionId, isTimestamp: false)
+            });
+            var questionnaireStorage = Stub<IQuestionnaireStorage>.Returning(questionnaireDocument);
+
             answerEvents = new List<IEvent>();
             answerEvents.Add(new TextQuestionAnswered(userId, questionId, new decimal[]{1,2}, DateTime.Now, "hi"));
             answerEvents.Add(new MultipleOptionsQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, new decimal[] { 1, 2 }));
@@ -36,7 +44,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 new Tuple<decimal, string>[] { new Tuple<decimal, string>(1, "2"), new Tuple<decimal, string>(2, "3") }));
             answerEvents.Add(new QRBarcodeQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, "test"));
             answerEvents.Add(new PictureQuestionAnswered(userId, questionId, new decimal[0], DateTime.Now, "my.png"));
-            interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(questionnaire: CreateQuestionnaireExportStructure(questionId, variableName));
+            interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(
+                questionnaire: CreateQuestionnaireExportStructure(questionId, variableName),
+                questionnaireStorage: questionnaireStorage);
         };
 
          Because of =
@@ -79,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewHistoryView.Records[5].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
 
         It should_answer_on_DateTimeQuestionAnswered_be_4_18_1984 = () =>
-            interviewHistoryView.Records[5].Parameters["answer"].ShouldEqual("04/18/1984");
+            interviewHistoryView.Records[5].Parameters["answer"].ShouldEqual("1984-04-18");
 
         It should_action_of_GeoLocationQuestionAnswered_be_AnswerSet = () =>
             interviewHistoryView.Records[6].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);

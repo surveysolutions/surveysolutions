@@ -69,14 +69,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
         {
             var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
             if (questionnaire == null)
-                throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
 
             if (!questionnaire.LookupTables.ContainsKey(lookupTableId))
-                throw new ArgumentException($"lookup table with id {lookupTableId} is missing");
+                throw new ArgumentException(string.Format(ExceptionMessages.LookupTableIsMissing, lookupTableId));
 
             var lookupTable = questionnaire.LookupTables[lookupTableId];
             if (lookupTable == null)
-                throw new ArgumentException($"lookup table with id {lookupTableId} doen't have content");
+                throw new ArgumentException(string.Format(ExceptionMessages.LookupTableHasEmptyContent, lookupTableId));
 
             var lookupTableStorageId = this.GetLookupTableStorageId(questionnaire.PublicKey, lookupTableId);
 
@@ -90,7 +90,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
 
             if (questionnaire == null)
-                throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
 
             return GetLookupTableContentFileImpl(questionnaire, lookupTableId);
         }
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
             var questionnaire = this.documentStorage.GetById(questionnaireId.FormatGuid());
 
             if (questionnaire == null)
-                throw new ArgumentException($"questionnaire with id {questionnaireId} is missing");
+                throw new ArgumentException(string.Format(ExceptionMessages.QuestionCannotBeFound, questionnaireId));
 
             var result = new Dictionary<Guid, string>();
 

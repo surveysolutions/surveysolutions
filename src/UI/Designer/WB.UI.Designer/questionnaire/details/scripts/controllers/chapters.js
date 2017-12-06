@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('ChaptersCtrl', 
-        function ($rootScope, $scope, $state, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
+        function ($rootScope, $scope, $state, $i18next, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
             'use strict';
 
             var hideChaptersPane = 'right';
@@ -8,7 +8,7 @@
             if (hotkeys.get(hideChaptersPane) !== false) {
                 hotkeys.del(hideChaptersPane);
             }
-            hotkeys.add(hideChaptersPane, 'Close sections', function (event) {
+            hotkeys.add(hideChaptersPane, $i18next.t('HotkeysHideSections'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
@@ -40,7 +40,7 @@
                 var newId = utilityService.guid();
 
                 var newChapter = {
-                    title: 'New Section',
+                    title: $i18next.t('DefaultNewSection'),
                     itemId: newId,
                     itemType: "Chapter"
                 };
@@ -55,7 +55,7 @@
             $scope.deleteChapter = function (chapter) {
                 var itemIdToDelete = chapter.itemId || $state.params.itemId;
 
-                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(chapter.title));
+                var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(chapter.title || $i18next.t('UntitledSection')));
 
                 modalInstance.result.then(function (confirmResult) {
                     if (confirmResult === 'ok') {

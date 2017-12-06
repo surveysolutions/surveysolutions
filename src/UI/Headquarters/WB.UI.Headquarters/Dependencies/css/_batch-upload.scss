@@ -5,6 +5,11 @@
 	&>a{
 		display: block;
 		margin-bottom: 30px;
+		&.btn-link{
+			display: inline-block;
+			padding-left: 0;
+			margin-bottom: 0;
+		}
 	}
 	ul{
 		margin-left: 30px;
@@ -12,6 +17,16 @@
 		font-family: "RobotoBold";
 		li{
 			margin: 5px 0;
+		}
+	}
+	dl{
+		margin-bottom: 0;
+		margin-left: 30px;
+		dd{
+			margin: 5px 0;
+			&:last-of-type{
+				margin: 0;
+			}
 		}
 	}
 }
@@ -88,6 +103,20 @@
 		}
 	}
 }
+.progress-wrapper-block{
+	font: 14px/16px "RobotoRegular";
+	border: 2px solid $gray_form;
+	border-radius: 10px;
+	margin-left: -15px;
+	padding: 15px;
+	.progress{
+		margin-bottom: 10px;
+		background-color: $gray-super-light;
+		.progress-bar-info{
+			background-color: #c8cbce;
+		}
+	}
+}
 @media (max-width: $screen-sm-min){
 	.prefilled-data-info{
 		margin-bottom: 0;
@@ -101,8 +130,6 @@
 		.back-link{
 			margin: 30px 0 0;
 		}
-		
-		
 		.btn-input .dropdown-toggle{
 			width: 250px;
 		}

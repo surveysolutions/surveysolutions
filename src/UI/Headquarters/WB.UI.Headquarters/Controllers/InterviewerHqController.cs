@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
-using System.Resources;
 using System.Web.Mvc;
-using Resources;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -20,16 +18,14 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.ComponentModels;
-using WB.UI.Headquarters.Resources;
-using WB.UI.Headquarters.Utils;
-using CommonRes = Resources.Common;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
-    [Authorize(Roles = "Interviewer")]
+    [AuthorizeOr403(Roles = "Interviewer")]
     public class InterviewerHqController : BaseController
     {
         private readonly ICommandService commandService;
@@ -90,19 +86,10 @@ namespace WB.UI.Headquarters.Controllers
                 AllInterviews = Url.Content(@"~/api/InterviewApi/GetInterviews"),
                 InterviewerHqEndpoint = Url.Content(@"~/InterviewerHq"),
                 Statuses = statuses.Select(s => s.ToString()).ToArray(),
-                Resources = InterviewHqResources.Translations(),
                 Questionnaires = this.GetQuestionnaires(statuses)
             };
         }
-
-        private static readonly ResourceManager[] InterviewHqResources =
-        {
-            MainMenu.ResourceManager,
-            Assignments.ResourceManager,
-            Pages.ResourceManager,
-            CommonRes.ResourceManager
-        };
-
+        
         private string CreateInterview(Assignment assignment)
         {
             var interviewer = this.usersRepository.GetUser(new UserViewInputModel(assignment.ResponsibleId));
@@ -132,6 +119,7 @@ namespace WB.UI.Headquarters.Controllers
             var assignment = this.assignments.GetById(id);
 
             var interviewId = CreateInterview(assignment);
+            TempData[WebInterviewController.LastCreatedInterviewIdKey] = interviewId;
 
             return Content(Url.Content(GenerateUrl(@"Cover", interviewId)));
         }

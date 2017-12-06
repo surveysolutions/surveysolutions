@@ -243,4 +243,7 @@
   <data name="ConfirmPasswordRequired" xml:space="preserve">
     <value>Confirm password is required</value>
   </data>
+  <data name="UserIsLockedByHq" xml:space="preserve">
+    <value>User is locked by Headquarter</value>
+  </data>
 </root>

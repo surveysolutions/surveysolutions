@@ -96,7 +96,8 @@ body > .ui-pnotify{
     }
 }
 @media only screen and (max-width: 840px){
-    #statusHistoryModal .modal-dialog {
+    #statusHistoryModal .modal-dialog,
+    .statusHistoryModal .modal-dialog {
 		width: calc(100% - 40px) !important;
         margin: 20px; 
 	}
@@ -151,28 +152,24 @@ body > .ui-pnotify{
 	.title-row{
 		font-size: 16px;
 		line-height: 18px;
-		//margin-right: 10px; 
 		@extend %hover;
 	}
 	.interviewer{
 		@extend %hover;
 	}	
 }
-#statusHistoryModal .modal-dialog { 
+#statusHistoryModal .modal-dialog,
+.statusHistoryModal .modal-dialog { 
     width: 800px; 
 }
 .modal-dialog {
   display: inline-block;
   text-align: left;
   vertical-align: middle;
-  //max-height: 85%;
   width: 660px;
-  //overflow-y: auto;
-//   @extend %modal-window;
 }
 .modal-content{
 	padding: 20px;
-    //overflow: hidden;
     border: none;
     box-shadow: none;
     h3{

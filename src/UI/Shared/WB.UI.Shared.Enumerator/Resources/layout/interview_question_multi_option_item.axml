@@ -6,10 +6,10 @@
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered))">
   <TextView
     style="@style/Interview_Question_MultiOptionOrder"
-    local:MvxBind="Text CheckedOrder; Visible CheckedOrder"/>
+    local:MvxBind="Text CheckedOrder; Visible CheckedOrder;"/>
 
   <CheckBox 
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked;" />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked; Tag ItemTag" />
 
 </LinearLayout>

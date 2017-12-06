@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -44,11 +43,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
-        private IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
 
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
         public IQuestionStateViewModel QuestionState => this.questionState;
-        public AnsweringViewModel Answering { get; private set; }
+        public AnsweringViewModel Answering { get; }
 
         public MultiOptionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
@@ -137,7 +136,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState.Dispose();
         }
 
-        public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> Options { get; private set; }
+        public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> Options { get; }
+        public Identity QuestionIdentity => this.Identity;
 
         IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
 

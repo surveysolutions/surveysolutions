@@ -3,7 +3,6 @@ using System.Linq;
 using WebActivatorEx;
 using WB.UI.Headquarters;
 using Swashbuckle.Application;
-using Swashbuckle.Swagger;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 

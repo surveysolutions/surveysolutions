@@ -127,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
-            this.HasCommentsFromSupervior = interview.CountCommentedQuestionsVisibledToInterviewer() > 0;
+            this.HasCommentsFromSupervior = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Any();
 
             var prefilledQuestions = questionnaire
                 .GetPrefilledQuestions();
@@ -177,14 +177,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             switch (eventArgs.TargetStage)
             {
                 case ScreenType.Complete:
+                    this.vibrationViewModel.Disable();
                     this.interviewState.Init(this.navigationState.InterviewId, null);
                     this.Status = this.interviewState.Status;
                     break;
                 case ScreenType.Cover:
+                    this.vibrationViewModel.Disable();
                     this.coverState.Init(this.navigationState.InterviewId, null);
                     this.Status = this.coverState.Status;
                     break;
                 case ScreenType.Group:
+                    this.vibrationViewModel.Enable();
                     var interview = this.interviewRepository.Get(this.interviewId);
                     IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
                     this.answerNotifier.Init(this.interviewId, questionsToListen.ToArray());

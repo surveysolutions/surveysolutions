@@ -132,6 +132,9 @@ namespace WB.UI.Headquarters
                 c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
             config.TypedRoute("api/interviewer/v2/assignments/{id}",
                 c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
+            config.TypedRoute("api/interviewer/v2/maps", c => c.Action<MapsApiV2Controller>(x => x.GetMaps()));
+            config.TypedRoute("api/interviewer/v2/maps/{id}",
+                c => c.Action<MapsApiV2Controller>(x => x.GetMapContent((Param.Any<string>()))));
         }
         #pragma warning restore 4014
     }

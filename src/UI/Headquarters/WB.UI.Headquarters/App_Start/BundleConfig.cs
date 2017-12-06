@@ -14,13 +14,6 @@ namespace WB.UI.Headquarters
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new ScriptBundle("~/js/assignments").Include(
-                "~/Dependencies/build/vue-libs.js",
-                "~/Dependencies/vendor/vee-validate/dist/vee-validate.min.js",
-                "~/Dependencies/js/dataTables.conditionalPaging.js",
-                "~/Dependencies/js/searchHighlight.js"
-            ));
-
             bundles.Add(new ScriptBundle("~/js/app/assignments").Include(
                 "~/Dependencies/build/vendor.bundle.js",
                 "~/Dependencies/build/assignments.bundle.js"
@@ -142,7 +135,8 @@ namespace WB.UI.Headquarters
                 "~/Scripts/viewmodels/listview.js",
                 "~/Scripts/components/bindings.js",
                 "~/Scripts/spin.js",
-                "~/Scripts/knockout/ko.spin.js"
+                "~/Scripts/knockout/ko.spin.js",
+                "~/Scripts/jquery.highlight.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interview-general").Include(
@@ -232,7 +226,8 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.typeahead.js",
                 "~/Scripts/viewmodels/pages/interviews.base.js",
                 "~/Scripts/viewmodels/pages/interview/hq.interviews.js",
-                "~/Scripts/knockout/ko.numericformatter.js"
+                "~/Scripts/knockout/ko.numericformatter.js",
+                "~/Scripts/moment-with-locales.js"
                 ));
 
             bundles.Add(new ScriptBundle("~/js/interviews-sv").Include(
@@ -267,8 +262,15 @@ namespace WB.UI.Headquarters
                 ));
 
             bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
-                "~/Scripts/viewmodels/pages/questionnaires.js"
-                ));
+                "~/Scripts/viewmodels/pages/questionnaires.js"));
+
+            bundles.Add(new ScriptBundle("~/js/maps").Include(
+                "~/Scripts/viewmodels/pages/maps.js"
+            ));
+
+            bundles.Add(new ScriptBundle("~/js/mapusers").Include(
+                "~/Scripts/viewmodels/pages/mapusers.js"
+            ));
 
             bundles.Add(new ScriptBundle("~/js/exportdata").Include(
                 "~/Scripts/bootbox.min.js",
@@ -338,9 +340,6 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new ScriptBundle("~/js/importquestionaires").Include(
                 "~/Scripts/viewmodels/pages/importquestionaires.js"));
-
-            bundles.Add(new ScriptBundle("~/js/questionnaires").Include(
-                "~/Scripts/viewmodels/pages/questionnaires.js"));
         }
     }
 }

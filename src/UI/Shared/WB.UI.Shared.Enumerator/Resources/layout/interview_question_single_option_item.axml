@@ -6,7 +6,7 @@
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered))">
   <RadioButton
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Selected; Bold Selected" />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Selected; Bold Selected; Tag ItemTag" />
     
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
                local:MvxBind="HideKeyboardOnClick .;Click RemoveAnswerCommand; Visible Selected"/>

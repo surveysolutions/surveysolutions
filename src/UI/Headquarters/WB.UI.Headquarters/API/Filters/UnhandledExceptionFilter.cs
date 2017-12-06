@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.API.Filters
     {
         public override void OnException(HttpActionExecutedContext context)
         {
-            if (context.Exception is WebInterviewAccessException)
+            if (context.Exception is InterviewAccessException)
                 return;
 
             context.Exception.Log(HttpContext.Current);

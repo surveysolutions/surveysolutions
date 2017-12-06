@@ -151,6 +151,44 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(substitutedRawText, Is.EqualTo($"{rosterRawValue} {questionRawAnswer} {variableRawValue}"));
         }
 
+        [Test]
+        public void when_date_and_dateTime_question_is_used_in_substitutions()
+        {
+            var substitutedQuestionId1 = Id.g1;
+            var substitutedQuestionId2 = Id.g2;
+
+            SubstitutionText text = CreateSubstitutionText(Create.Identity(Id.gA),
+                "%date% %dateTime%",
+                new SubstitutionVariable
+                {
+                    Id = substitutedQuestionId1,
+                    Name = "date"
+                },
+                new SubstitutionVariable
+                {
+                    Id = substitutedQuestionId2,
+                    Name = "dateTime"
+                }
+            );
+            var dateAnswer = new DateTime(2010, 4, 6);
+            var dateTimeAnswer = new DateTime(2010, 4, 6, 4, 30, 50);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(substitutedQuestionId1), answer: dateAnswer, questionType: QuestionType.DateTime),
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(substitutedQuestionId2), answer: dateTimeAnswer, questionType: QuestionType.DateTime, isTimestamp: true)
+            });
+
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+            text.SetTree(tree);
+
+            // Act
+            text.ReplaceSubstitutions();
+            var browserReadyText = text.BrowserReadyText;
+
+            Assert.That(browserReadyText, Is.EqualTo($"<time date=\"2010-04-06\">2010-04-06</time> <time datetime=\"2010-04-06T04:30:50\">2010-04-06 04:30:50</time>"));
+        }
+
         private SubstitutionText CreateSubstitutionText(
             Identity id,
             string template,

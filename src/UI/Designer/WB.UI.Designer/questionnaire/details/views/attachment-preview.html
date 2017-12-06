@@ -1,6 +1,6 @@
 ﻿<div class="modal-header blue-strip">
     <button type="button" class="close" aria-hidden="true" ng-click="cancel()"><!--&times;--></button>
-    <h1>Attachment preview</h1>
+    <h1 ng-i18next="AttachmentPreview">Attachment preview</h1>
 </div>
 <div class="modal-body">
     <img class="attachment-preview-img" ngf-size="{width: 568, height: 568}" ngf-thumbnail="attachment.file || '{{attachmentUrl()}}'">

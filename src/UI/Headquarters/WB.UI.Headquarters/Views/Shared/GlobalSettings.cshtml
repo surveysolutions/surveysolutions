@@ -27,7 +27,9 @@
                     notifyNoMarkersText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyNoMarkersDialogText)",
                     deleteQuestionnaireConfirmationMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_DeleteQuestionnareConfirmation)",
                     notifyMarkersLimitReachedTitle: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyMarkersLimitReachedTitle)",
-                    notifyNoMarkersLimitReachedText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyMarkersLimitReachedText)"
+                    notifyNoMarkersLimitReachedText: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_NotifyMarkersLimitReachedText)",
+                    deleteMapConfirmationMessage: "@Html.ToSafeJavascriptMessage(Pages.GlobalSettings_DeleteMapConfirmation)",
+                    confirmationNeededTitle: "@Html.ToSafeJavascriptMessage(Pages.ConfirmationNeededTitle)"
                 },
                 acsrf: {
                     tokenName : '@TokenValidationAuthorizationFilter.Apikey',
@@ -46,4 +48,15 @@
         };
     }(document));
     window.input = input;
+
+    window.CONFIG = {
+        verboseMode: false,
+        googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
+        basePath: '@Url.Content(@"~/")',
+        imageGetBase:  '@Url.Content("~/api/WebInterviewResources")',
+        appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
+        dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',
+        signalrPath: '@Url.Content("~/signalr/hubs")',
+        supportedTransports: ["webSockets", "longPolling"],
+    }
 </script>

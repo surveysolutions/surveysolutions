@@ -5,13 +5,9 @@ namespace WB.UI.Designer.Models
 {
     public class QuestionnaireListViewModel : ActionItem
     {
-        public override bool CanPreview
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CanPreview => false;
+
+        public bool IsFolder { get; set; }
 
         [Key]
         public string Id { get; set; }
@@ -36,5 +32,7 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Public?", Order = 6)]
         [OnlyForAdmin]
         public bool IsPublic { get; set; }
+
+        public string Location { get; set; }
     }
 }

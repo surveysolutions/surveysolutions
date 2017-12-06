@@ -121,24 +121,24 @@
     <value>Annuler</value>
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
-    <value>Aucun questionnaire disponible pour l'instant
+    <value>Aucun masque disponible pour l'instant
 
 Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins</value>
   </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
-    <value>Aucun questionnaire trouvé</value>
+    <value>Aucun masque trouvé</value>
   </data>
   <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
     <value>{0:dd MMM HH:mm}</value>
   </data>
   <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
-    <value>Mes questionnaires</value>
+    <value>Mes masques</value>
   </data>
   <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
-    <value>Questionnaires publics</value>
+    <value>Masques publics</value>
   </data>
   <data name="Dashboard_ToolbarText" xml:space="preserve">
-    <value>Questionnaires</value>
+    <value>Masques</value>
   </data>
   <data name="DateQuestion_Hint" xml:space="preserve">
     <value>Appuyer pour sélectionner la date</value>
@@ -147,25 +147,25 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Point de synchronisation</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
-    <value>Web Service Endpoint:</value>
+    <value>Point du service web : </value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
     <value>Votre compte d'utilisateur est verrouillé. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions.</value>
   </data>
   <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Votre compte n'est pas approuvé. Veuillez confirmer votre compte d'abord.</value>
+    <value>Votre compte n'est pas approuvé. Veuillez vérifier votre compte d'abord.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions</value>
+    <value>Erreur du serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
-    <value>Ll'URL de Survey Solutions Designer n'est pas valide. Vérifiez l'adresse dans les paramètres.</value>
+    <value>L'URL de Survey Solutions Designer n'est pas valide. Vérifiez l'adresse dans les paramètres.</value>
   </data>
   <data name="ErrorMessage_Maintenance" xml:space="preserve">
     <value>Le site web de Survey Solutions Designer est actuellement en cours de maintenance. Désolé pour le désagrément</value>
   </data>
   <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
-    <value>Dépassement du délai de réponses lors de la connexion au au site web de Survey Solutions Designer. Vérifiez votre connexion internet.</value>
+    <value>Délai d'attente de réponse dépassé lors de la connexion au site Designer. Vérifiez votre connexion internet.</value>
   </data>
   <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
     <value>Aucune connexion avec le site Designer de Survey Solutions. Veuillez vous assurer que le site est disponible.</value>
@@ -174,7 +174,7 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Votre login ou mot de passe est invalide</value>
   </data>
   <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
-    <value>Nouvelle version de l'application disponible. Veuillez mettre à jour l'application</value>
+    <value>Nouvelle version de l'application Tester disponible. Veuillez mettre à jour l'application</value>
   </data>
   <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
     <value>Appuyer pour saisir du texte</value>
@@ -192,19 +192,19 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Renseignées</value>
   </data>
   <data name="Interview_Complete_Button" xml:space="preserve">
-    <value>Terminer</value>
+    <value>Achever</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>Après avoir marqué cet entretien comme étant, il sera transféré au superviseur lors de votre prochaine synchronisation</value>
+    <value>Après avoir marqué cet entretien comme étant achevé, il sera transféré au chef d'équipe lors de votre prochaine synchronisation</value>
   </data>
   <data name="Interview_Complete_Errors" xml:space="preserve">
-    <value>Erreurs</value>
+    <value>Erreur(s)</value>
   </data>
   <data name="Interview_Complete_No" xml:space="preserve">
     <value>Non</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>Remarque à l'attention du superviseur</value>
+    <value>Remarque à l'attention du chef d'équipe</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Statut du questionnaire</value>
@@ -231,7 +231,7 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>une seule erreur</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Section terminée : {0}</value>
+    <value>Section achevée : {0}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
     <value>Section non encore entamée</value>
@@ -252,16 +252,16 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Instruction</value>
   </data>
   <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
-    <value>Les modalités ne seront disponibles qu'après avoir renseigné la question référencée</value>
+    <value>Les modalités ne seront disponibles qu'après avoir renseigné la question source</value>
   </data>
   <data name="Interview_NextSection_ButtonText" xml:space="preserve">
     <value>Section suivante</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
-    <value>Chacun des {0} questions a été renseigné</value>
+    <value>Chacune des {0} questions a été renseigné</value>
   </data>
   <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
-    <value>Remarque : {0} questions sont sans réponse</value>
+    <value>Remarquer : {0} questions sont sans réponse</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
     <value>La réponse « {0} » ne correspond pas à une modalité possible</value>
@@ -279,13 +279,13 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Valeur inscrite ne peut pas être analysée comme un nombre entier</value>
   </data>
   <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
-    <value>La réponse "{0}" est invalide parce qu'elle dépasse à la limite supérieure du roster « {1} ».</value>
+    <value>La réponse "{0}" est invalide parce qu'elle dépasse la taille maximale du roster « {1} ».</value>
   </data>
   <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
     <value>Les valeurs vides ne sont pas autorisés</value>
   </data>
   <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
-    <value>Valeur composé ne peut pas être analysée comme valeur décimale</value>
+    <value>Valeur renseignée ne peut pas être analysée comme une valeur décimale</value>
   </data>
   <data name="Interview_Question_Text_MaskError" xml:space="preserve">
     <value>Veuillez remplir toutes les cases requises</value>
@@ -300,7 +300,7 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Appuyer pour capter le code-barres</value>
   </data>
   <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir supprimer {0} ligne (s) de chaque roster qui y est lié ?</value>
+    <value>Êtes-vous sûr de vouloir supprimer {0} ligne (s) de chaque roster qui y est lié à cette question ?</value>
   </data>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
@@ -312,10 +312,10 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Votre compte est déjà associé à un autre appareil</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
-    <value>S'associer à cet appareil</value>
+    <value>Relier</value>
   </data>
   <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
-    <value>Si vous liez votre compte à ce nouvel appareil&lt;br&gt;toutes les données sur votre ancien appareil seront supprimées</value>
+    <value>Si vous reliez votre compte à ce nouvel appareil&lt;br&gt;toutes les données sur votre ancien appareil seront supprimées</value>
   </data>
   <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
     <value>Essayez de vous connecter en ligne</value>
@@ -339,10 +339,10 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Google Play Services n'est pas disponible</value>
   </data>
   <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
-    <value>Location Client n'a pas démarré</value>
+    <value>Le service de localisation, Location Client, n'a pas démarré</value>
   </data>
   <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
-    <value>Impossible de démarrer le service MvxLocation plus d'une fois</value>
+    <value>Impossible de démarrer plusieurs instances de MvxLocation</value>
   </data>
   <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
     <value>DÉBUT</value>
@@ -376,5 +376,194 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Aller à 'écran de résumé</value>
+  </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>CARTE ACTIVE : </value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Superficie : </value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>CARES DISPONIBLES SUR L'APPAREIL</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Périmètre : </value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Emplacement</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Carte</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>Aucun changement à sauvegarder</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>Aucune carte retrouvée. Veuillez mettre à jour les cartes</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Mettre à jour les cartes</value>
+  </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Mise à jour échouée</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Mettre à jour les cartes</value>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Affectation #{0}</value>
+  </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>Sauvegardedu fichier audio échoué. Vérifier que l'appareil dispose encore de stockage interne</value>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Erreur inattendue survenue lors d'enregistrement audio</value>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} d'enregistrement sonore</value>
+  </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Votre appareil ne prend pas en charge cette fonctionnalité</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Erreur</value>
+  </data>
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>Afin de répondre à cette question, l'appli Interviewer a besoin d'une autorisation pour d'accéder au service de localisation de l'appareil. Afin d'accorder autorisation, répondre au dialogue qui s'affiche lors de la prochaine tentative de réponse à cette question. Si un dialogue ne s'affiche pas, naviguer vers le menu Paramètrage d'Android et accorder cette autorisation à l'appli Interviewer.</value>
+  </data>
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>Entités avec erreurs</value>
+  </data>
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>Premières {0} entités avec erreurs</value>
+  </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>Vous êtes sur le point d'achever l'entretien {0}</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>Premières {0} questions avec des commentaires</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Questions avec des commentaires du chef d'équipe : </value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Page de garde</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Remarque du chef d'équipe : </value>
+  </data>
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>Commentaire de la coordination : </value>
+  </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>Montrer l'instruction</value>
+  </data>
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>Commentaire de l'enquêteur</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>Commentaire de l'utilisateur</value>
+  </data>
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>Réponse ne peux pas être vide</value>
+  </data>
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Appuyer afin de modifier la superficie</value>
+  </data>
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Enregistrer maintenant</value>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Appuyer pour faire un enregistrement sonore</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Appuyer pour capter l'heure actuelle</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Commentaire du chef d'équipe</value>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>Enegistrement sonore</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Diagnostiques</value>
+  </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>Achevé</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Numéro d'entretien : {0}</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Quitter l'éditeur de carte</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Effacer tout</value>
+  </data>
+  <data name="Messages_WaitPendingOperation" xml:space="preserve">
+    <value>Veuillez attendre la fin de l'opération en cours</value>
+  </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>L'appli Interviewer n'a pas assez d'autorisation pour exécuter l'action demandée</value>
+  </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>L'appli Interviewer doit avoir la permission d'utiliser la caméra pour répondre à cette question. Réessayez de répondre à la question et accordez les permissions. Si vous ne voyez pas les autorisations contextuelles, allez dans Paramètres d'Android et autorisez l'application à utiliser la caméra.</value>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>L'appli Interviewer doit avoir la permission d'utiliser le microphone pour répondre à cette question. Réessayez de répondre à la question et accordez les permissions. Si vous ne voyez pas les autorisations contextuelles, allez dans Paramètres d'Android et autorisez l'application à utiliser le microphone.</value>
+  </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>L'appli Interviewer doit avoir la permission d'utiliser le stockage interne pour répondre à cette question. Réessayez de répondre à la question et accordez les permissions. Si vous ne voyez pas les autorisations contextuelles, allez dans Paramètres d'Android et autorisez l'application à utiliser le stockage interne.</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Choisissez dans la galerie</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Sélectionner une modalité</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Prendre une photo</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>Précision, en metres, des coordonnées GPS</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>Précision minime des questions GPS</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Montrer l'emplacement sur la carte</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Afficher la carte afin de montrer l'emplacement des questions GPS. Noter: la carte ne sera affichée qu'en cas de connexion internet</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>La tablette va vibrer lorsqu'une réponse va à l'encontre d'une condition de validation</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Vibrer quand une réponse invalide est renseignée</value>
+  </data>
+  <data name="VariableEmptyValue" xml:space="preserve">
+    <value>&lt;empty&gt;</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Votre appareil ne prend pas en charge cette fonctionnalité</value>
   </data>
 </root>

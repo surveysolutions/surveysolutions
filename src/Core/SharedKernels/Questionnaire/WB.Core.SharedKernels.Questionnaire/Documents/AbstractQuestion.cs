@@ -139,6 +139,8 @@ namespace Main.Core.Entities.SubEntities
             
         }
 
+        public string VariableName => this.StataExportCaption;
+
         public void ConnectChildrenWithParent()
         {
         }

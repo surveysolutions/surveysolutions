@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
@@ -16,12 +16,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
     internal class UserViewFactory : IUserViewFactory
     {
         private readonly IUserRepository userRepository;
+        private readonly IInterviewerProfileFactory interviewerProfileFactory;
 
         protected IUserRepository UserRepository => this.userRepository ?? ServiceLocator.Current.GetInstance<IUserRepository>();
 
-        public UserViewFactory(IUserRepository userRepository)
+        protected IInterviewerProfileFactory InterviewerProfileFactory => this.interviewerProfileFactory ?? ServiceLocator.Current.GetInstance<IInterviewerProfileFactory>();
+
+        public UserViewFactory(
+            IUserRepository userRepository, 
+            IInterviewerProfileFactory interviewerProfileFactory)
         {
             this.userRepository = userRepository;
+            this.interviewerProfileFactory = interviewerProfileFactory;
         }
 
         public UserViewFactory()
@@ -156,60 +162,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 var interviewers = ApplyFilter(allUsers, searchBy, archived, UserRoles.Interviewer);
 
-                switch (facet)
-                {
-                    case InterviewerFacet.NeverSynchonized:
-                        interviewers = interviewers.Where(x => x.Profile.DeviceId == null);
-                        break;
-                    case InterviewerFacet.OutdatedApp:
-                        interviewers = interviewers.Where(x => x.Profile.DeviceAppBuildVersion.HasValue && x.Profile.DeviceAppBuildVersion < apkBuildVersion);
-                        break;
-                    case InterviewerFacet.LowStorage:
-                        interviewers = from i in interviewers
-                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
-                                       where deviceSyncInfo != null && deviceSyncInfo.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
-                                       select i;
-                        break;
-                    case InterviewerFacet.WrongTime:
-                        interviewers = from i in interviewers
-                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
-                                       where deviceSyncInfo != null &&
-                                                (
-                                                deviceSyncInfo.DeviceDate == DateTime.MinValue ||
-                                                Math.Abs((long)DbFunctions.DiffMinutes(
-                                                    deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) >
-                                                    InterviewerIssuesConstants.MinutesForWrongTime
-                                                    )
-                                       select i;
-                        break;
-                    case InterviewerFacet.OldAndroid:
-                        interviewers = from i in interviewers
-                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id).OrderByDescending(x => x.Id).FirstOrDefault()
-                                       where deviceSyncInfo != null && deviceSyncInfo.AndroidSdkVersion < InterviewerIssuesConstants.MinAndroidSdkVersion
-                                       select i;
-                        break;
-                    case InterviewerFacet.NoAssignmentsReceived:
-                        interviewers = from i in interviewers
-                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
-                                       where !deviceSyncInfo.Any(s => s.Statistics.DownloadedQuestionnairesCount > 0)
-                                       select i;
-                        break;
-                    case InterviewerFacet.NeverUploaded:
-                        interviewers = from i in interviewers
-                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
-                                       where !deviceSyncInfo.Any(s => s.Statistics.UploadedInterviewsCount > 0)
-                                       select i;
-                        break;
-                    case InterviewerFacet.TabletReassigned:
-                        interviewers = from i in interviewers
-                                       let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
-                                       where deviceSyncInfo.Any() && deviceSyncInfo.Select(s => s.DeviceId).Distinct().Count() > 1
-                                       select i;
-                        break;
-                }
+                interviewers = ApplyFacetFilter(apkBuildVersion, facet, interviewers, repository);
 
-                if (supervisorId.HasValue)
-                    interviewers = interviewers.Where(x => x.Profile.SupervisorId != null && x.Profile.SupervisorId == supervisorId);
+                interviewers = AppySupervisorFilter(supervisorId, interviewers);
 
                 return interviewers.Select(x => new InterviewersItem
                 {
@@ -240,6 +195,95 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
+        public Guid[] GetInterviewersIds(string searchBy, bool archived, int? apkBuildVersion, Guid? supervisorId, InterviewerFacet facet = InterviewerFacet.None)
+        {
+            var repository = this.UserRepository;
+
+            Func<IQueryable<HqUser>, IQueryable<Guid>> query = allUsers =>
+            {
+                var interviewers = ApplyFilter(allUsers, searchBy, archived, UserRoles.Interviewer);
+
+                interviewers = ApplyFacetFilter(apkBuildVersion, facet, interviewers, repository);
+
+                interviewers = AppySupervisorFilter(supervisorId, interviewers);
+
+                return interviewers.Select(x => x.Id);
+            };
+
+            return query.Invoke(repository.Users).ToArray();
+        }
+
+        private static IQueryable<HqUser> AppySupervisorFilter(Guid? supervisorId, IQueryable<HqUser> interviewers)
+        {
+            if (supervisorId.HasValue)
+                interviewers =
+                    interviewers.Where(x => x.Profile.SupervisorId != null && x.Profile.SupervisorId == supervisorId);
+            return interviewers;
+        }
+
+        private static IQueryable<HqUser> ApplyFacetFilter(int? apkBuildVersion, InterviewerFacet facet, IQueryable<HqUser> interviewers,
+            IUserRepository repository)
+        {
+            switch (facet)
+            {
+                case InterviewerFacet.NeverSynchonized:
+                    interviewers = interviewers.Where(x => x.Profile.DeviceId == null);
+                    break;
+                case InterviewerFacet.OutdatedApp:
+                    interviewers = interviewers.Where(x =>
+                        x.Profile.DeviceAppBuildVersion.HasValue && x.Profile.DeviceAppBuildVersion < apkBuildVersion);
+                    break;
+                case InterviewerFacet.LowStorage:
+                    interviewers = from i in interviewers
+                        let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                            .OrderByDescending(x => x.Id).FirstOrDefault()
+                        where deviceSyncInfo != null &&
+                              deviceSyncInfo.StorageFreeInBytes < InterviewerIssuesConstants.LowMemoryInBytesSize
+                        select i;
+                    break;
+                case InterviewerFacet.WrongTime:
+                    interviewers = from i in interviewers
+                        let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                            .OrderByDescending(x => x.Id).FirstOrDefault()
+                        where deviceSyncInfo != null &&
+                              (
+                                  deviceSyncInfo.DeviceDate == DateTime.MinValue ||
+                                  Math.Abs((long) DbFunctions.DiffMinutes(
+                                      deviceSyncInfo.DeviceDate, deviceSyncInfo.SyncDate)) >
+                                  InterviewerIssuesConstants.MinutesForWrongTime
+                              )
+                        select i;
+                    break;
+                case InterviewerFacet.OldAndroid:
+                    interviewers = from i in interviewers
+                        let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                            .OrderByDescending(x => x.Id).FirstOrDefault()
+                        where deviceSyncInfo != null &&
+                              deviceSyncInfo.AndroidSdkVersion < InterviewerIssuesConstants.MinAndroidSdkVersion
+                        select i;
+                    break;
+                case InterviewerFacet.NoAssignmentsReceived:
+                    interviewers = from i in interviewers
+                        let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                        where !deviceSyncInfo.Any(s => s.Statistics.DownloadedQuestionnairesCount > 0)
+                        select i;
+                    break;
+                case InterviewerFacet.NeverUploaded:
+                    interviewers = from i in interviewers
+                        let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                        where !deviceSyncInfo.Any(s => s.Statistics.UploadedInterviewsCount > 0)
+                        select i;
+                    break;
+                case InterviewerFacet.TabletReassigned:
+                    interviewers = from i in interviewers
+                        let deviceSyncInfo = repository.DeviceSyncInfos.Where(x => x.InterviewerId == i.Id)
+                        where deviceSyncInfo.Any() && deviceSyncInfo.Select(s => s.DeviceId).Distinct().Count() > 1
+                        select i;
+                    break;
+            }
+            return interviewers;
+        }
+
         public ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false)
         {
             Func<IQueryable<HqUser>, IQueryable<ResponsiblesViewItem>> query = users =>
@@ -247,7 +291,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 bool? isArchivedShowed = showArchived ? (bool?)null : false;
 
                 var responsible = ApplyFilter(users, searchBy, isArchivedShowed, UserRoles.Supervisor, UserRoles.Interviewer)
-                    .Where(user => showLocked || !user.IsLockedByHeadquaters);
+                    .Where(user => showLocked || !user.IsLockedByHeadquaters && !user.IsLockedBySupervisor);
 
                 return responsible.Select(x => new ResponsiblesViewItem
                 {

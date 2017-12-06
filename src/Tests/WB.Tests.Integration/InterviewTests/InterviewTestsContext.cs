@@ -32,7 +32,7 @@ using It = Moq.It;
 namespace WB.Tests.Integration.InterviewTests
 {
     [Subject(typeof(Interview))]
-    internal class InterviewTestsContext
+    public class InterviewTestsContext
     {
         internal static AnsweredYesNoOption Yes(decimal value)
         {
@@ -283,8 +283,7 @@ namespace WB.Tests.Integration.InterviewTests
                     IntegrationCreate.CodeGeneratorV2(),
                     new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
 
-            string resultAssembly;
-            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, engineVersion, out resultAssembly);
+            var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, engineVersion, out var resultAssembly);
 
             var filePath = Path.GetTempFileName();
 
@@ -312,8 +311,7 @@ namespace WB.Tests.Integration.InterviewTests
                 throw new Exception("Type InterviewExpressionState was not found");
 
 
-            var interviewExpressionStorage = Activator.CreateInstance(interviewExpressionStorageType) as IInterviewExpressionStorage;
-            if (interviewExpressionStorage == null)
+            if (!(Activator.CreateInstance(interviewExpressionStorageType) is IInterviewExpressionStorage interviewExpressionStorage))
                 throw new Exception("Error on IInterviewExpressionState generation");
 
             return interviewExpressionStorage;

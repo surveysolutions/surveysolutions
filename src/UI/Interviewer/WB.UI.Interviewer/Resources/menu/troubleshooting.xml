@@ -2,16 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
-  <item
-      android:id="@+id/menu_login"
+  <item android:id="@+id/menu_login"
       local:showAsAction="never" />
-  <item
-       android:id="@+id/menu_dashboard"
+  <item android:id="@+id/menu_dashboard"
        local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_settings"
+  <item android:id="@+id/menu_settings"
       local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_signout"
+  <item android:id="@+id/menu_maps"
+        local:showAsAction="never" />
+  <item android:id="@+id/menu_signout"
       local:showAsAction="never" />
 </menu>

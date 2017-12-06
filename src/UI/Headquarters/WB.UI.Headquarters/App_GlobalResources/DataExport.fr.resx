@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BinaryData" xml:space="preserve">
-    <value>Données binaires</value>
+    <value>Données multi-média</value>
   </data>
   <data name="ConfirmStop" xml:space="preserve">
-    <value>Êtes-vous sûr de que vouloir arrêter</value>
+    <value>Êtes-vous sûr de vouloir arrêter</value>
   </data>
   <data name="DataExport_Header" xml:space="preserve">
-    <value>Sélectionnez le type et le format de données à exporter</value>
+    <value>Sélectionnez le type et le format des données à exporter</value>
   </data>
   <data name="DataExport_Title" xml:space="preserve">
     <value>Exportation de données</value>
@@ -133,7 +133,7 @@
     <value>DDI</value>
   </data>
   <data name="export" xml:space="preserve">
-    <value>Exporter</value>
+    <value>exporter</value>
   </data>
   <data name="Format" xml:space="preserve">
     <value>Format</value>
@@ -155,5 +155,77 @@
   </data>
   <data name="StartDate" xml:space="preserve">
     <value>Date de début</value>
+  </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>Fichier zip avec des données multi-média (par exemple, des images, de l'audio)</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>MB</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Achevé</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>Non généré</value>
+  </data>
+  <data name="DDIDescription" xml:space="preserve">
+    <value>Données XML de l'initiative de documentation des données</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Télécharger</value>
+  </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>Vous ne pouvez pas modifier les paramètres d'exportation car le processus d'exportation est déjà en cours d'exécution.</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>Appuyer sur le bouton Générer crée une archive de données d'entretiens disponibles sur le serveur à ce moment-là. L'heure de la création de l'archive et la taille de l'archive sont affichées dans le tableau. La dernière archive de données générée peut être téléchargée en appuyant sur le bouton Télécharger. Appuyez à nouveau sur le bouton Générer pour créer une nouvelle archive.</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>Etendue d'exportation:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>Taille du fichier</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>format</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Générer</value>
+  </data>
+  <data name="Generating" xml:space="preserve">
+    <value>Générer</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>Éléments dans la file d'attente d'exportation:</value>
+  </data>
+  <data name="LastGeneratedTitle" xml:space="preserve">
+    <value>Généré le</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>Données de l'enquête principale</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>Pas de données disponibles</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>Métadonnées sur le processus d'entretien (événements et calendrier)</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>En file d'attente</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>Statut des entretiens exportés</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>(version) Questionnaire d'enquête</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>Format tabulaire</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>Format XML</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>Archive zip avec les principales données d'entretien</value>
   </data>
 </root>

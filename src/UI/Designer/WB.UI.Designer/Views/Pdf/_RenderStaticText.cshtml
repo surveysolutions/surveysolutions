@@ -1,4 +1,6 @@
-﻿@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+﻿@using WB.Core.BoundedContexts.Designer.Resources
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@using WB.UI.Designer.Utils
 @model Main.Core.Entities.SubEntities.IStaticText
 @{
     PdfQuestionnaireModel questionnaire = ViewBag.Questionnaire;
@@ -7,7 +9,7 @@
 <div class="static-text">
     <div class="static-text_container">
         <div class="question-meta">
-            <div class="type">Static text</div>
+            <div class="type">@PdfStrings.StaticText</div>
         </div>
         <div class="common-info">
             @if (questionnaire.StaticTextHasEnablementCondition(staticText))
@@ -15,10 +17,12 @@
                 <div class="condition">
                     <span>E</span>@questionnaire.GetExpressionExcerpt(staticText.ConditionExpression)
                     @if (questionnaire.ExpressionIsTooLong(staticText.ConditionExpression))
-                {
-                        <div class="more">
-                            And <a href="#@questionnaire.GetConditionRef(staticText.PublicKey)">@(staticText.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "E")]</a>
-                        </div>
+                    {
+                    <div class="more">
+                         <a href="#@questionnaire.GetConditionRef(staticText.PublicKey)">
+                            @Pdf.Format(PdfStrings.AppendixLink, staticText.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "E"))
+                        </a>
+                    </div>
                     }
                 </div>
             }
@@ -30,7 +34,9 @@
                     @if (questionnaire.ExpressionIsTooLong(validation.Expression))
                     {
                         <div class="more">
-                            And <a href="#@questionnaire.GetValidationsRef(staticText.PublicKey)">@(validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "V")]</a>
+                            <a href="#@questionnaire.GetValidationsRef(staticText.PublicKey)">
+                                @Pdf.Format(PdfStrings.AppendixLink, validation.Expression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(staticText.PublicKey, "V"))
+                            </a>
                         </div>
                     }
                 </div>

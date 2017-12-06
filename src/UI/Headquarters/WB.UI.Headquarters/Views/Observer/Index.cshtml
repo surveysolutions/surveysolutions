@@ -55,7 +55,7 @@
             <div class="page-header clearfix">
                 <div class="neighbor-block-to-search">
                     <div class="topic-with-button">
-                        <h1>@Html.Raw(string.Format(Users.ObserversCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
+                        <h1>@Html.Raw(string.Format(Users.ObserversCountDescription, @"<span data-bind='text: formatNumber(UsersCount())'></span>"))</h1>
                         <a class="btn btn-success" href="@Url.Action("Create", "Observer", new {area = string.Empty})">@Users.AddObserver</a>
                     </div>
                     <ol class="list-unstyled">

@@ -182,6 +182,8 @@ table.table-header {
     tr {
         th {
             padding-top: 5px;
+            padding-right: 21px;
+            line-height: 14px;
 
             a {
                 color: @pagination-active-color;
@@ -196,6 +198,7 @@ table.table-header {
             }
 
             &.ordered {
+                padding-right: 8px;
                 a, span.glyphicon {
                     color: @btn-default-color;
                 }
@@ -207,6 +210,7 @@ table.table-header {
 
 table.table-content {
     cursor: default;
+    table-layout: fixed;
 
     tr {
         td {
@@ -267,11 +271,11 @@ table#questionnaire-table-content {
     tr {
         td, th {
             &:nth-child(2) {
-                width: 11%;
+                width: 16%;
             }
 
             &:nth-child(3) {
-                width: 11%;
+                width: 15%;
             }
 
             &:nth-child(4) {
@@ -522,4 +526,281 @@ table.table-content {
             }
         }
     }
+}
+
+.start-pdf-generation .dropdown .dropdown-toggle {
+    width: 300px;
+    background: transparent;
+    position: relative;
+    float: left;
+    text-align: left;
+    font: 14px/16px Arial,Helvetica,sans-serif;
+    border: 1px solid #dbdfe2;
+    text-transform: none;
+    color: #555;
+    height: 42px;
+    letter-spacing: normal;
+    color: #a6a8a9;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 5px 0 0 5px;
+    padding-right: 30px;
+}
+
+.start-pdf-generation .dropdown .dropdown-toggle:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    display: block;
+    border-top: 12px solid #a6a8a9;
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+    border-bottom: none;
+}
+
+.start-pdf-generation .dropdown.open .dropdown-toggle:after {
+    border-top: none;
+    border-bottom: 12px solid #a6a8a9;
+}
+
+.start-pdf-generation .dropdown .dropdown-menu {
+    width: 300px;
+}
+
+.start-pdf-generation .dropdown .dropdown-menu > li > a {
+    display: block;
+    padding: 7px 20px;
+    color: #6b6b6b;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    -ms-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.start-pdf-generation .dropdown .dropdown-menu > li > a:hover,
+.start-pdf-generation .dropdown .dropdown-menu > li > a:focus {
+    color: #000;
+}
+
+.start-pdf-generation .dropdown .dropdown-toggle:hover,
+.start-pdf-generation .dropdown .dropdown-toggle:focus,
+.start-pdf-generation .dropdown .dropdown-toggle:active {
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+}
+
+.start-pdf-generation .btn-default {
+    padding: 14px 10px;
+    background: transparent;
+    border: 1px solid #dbdfe2;
+    color: #555;
+    float: left;
+    border-radius: 0 5px 5px 0;
+    position: relative;
+    left: -1px;
+}
+
+.start-pdf-generation .btn-default:hover,
+.start-pdf-generation .btn-default:focus,
+.start-pdf-generation .btn-default:active {
+    background-color: #f3f3f3;
+    color: #000;
+}
+
+.disableSelection {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: 0;
+}
+
+
+
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-node {
+    display: block;
+    overflow: hidden;
+    margin: 0;
+}
+
+.folder-tree .fancytree-expander {
+    margin: 8px 5px 8px 0;
+    color: #a6a8a9;
+}
+
+.folder-tree span.fancytree-node span.fancytree-expander:hover,
+.folder-tree span.fancytree-node span.fancytree-expander:focus,
+.folder-tree span.fancytree-node span.fancytree-expander:active,
+.folder-tree .fancytree-expander:active,
+.folder-tree .fancytree-checkbox:hover,
+.folder-tree .fancytree-checkbox:focus,
+.folder-tree .fancytree-checkbox:active {
+    color: #000;
+}
+
+.folder-tree .fancytree-node:hover .fancytree-title {
+    text-decoration: underline;
+}
+
+.folder-tree .fancytree-container {
+    border: none;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb:before,
+.folder-tree .tree-icon,
+.tree-icon {
+    background: url("images/DR-2017-folders-icons-G2-color.png") no-repeat;
+    background-size: 32px 96px;
+    vertical-align: top;
+    background-position: 0 -66px;
+}
+
+.folder-tree .tree-icon {
+    width: 30px;
+    height: 30px;
+    margin: 0;
+    display: inline-block;
+}
+
+.folder-tree .tree-icon.folder-open,
+.tree-icon.folder-open {
+    background-position: 0 -2px;
+}
+
+.folder-tree .tree-icon.folder-closed,
+.tree-icon.folder-closed {
+    background-position: 0 -34px;
+}
+
+.folder-tree .fancytree-title {
+    width: calc(100% - 50px);
+    font: 18px/20px "Roboto-Bold";
+    padding: 5px 10px;
+    margin: 0;
+    color: #4d4d4d;
+    border: none;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-line;
+}
+
+.folder-tree .fancytree-plain.fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-active:hover span.fancytree-title,
+.folder-tree .fancytree-plain.fancytree-container.fancytree-treefocus span.fancytree-node.fancytree-active span.fancytree-title,
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active:hover span.fancytree-title {
+    background: transparent;
+    border-color: transparent;
+}
+
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-node.fancytree-active span.fancytree-title {
+    background-color: transparent;
+    text-decoration: underline;
+    color: #4d4d4d;
+}
+
+.folder-tree .fancytree-plain.fancytree-container span.fancytree-title:hover {
+    background: transparent;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb {
+    border-top: 1px solid #ddd;
+    font-weight: bold;
+    background-color: transparent;
+    border-radius: 0;
+    margin-bottom: 0;
+    padding-left: 55px;
+    border-left: 13px solid #bcc3c8;
+}
+
+.public-questionnaires-breadcrumb li {
+    display: inline-block;
+    max-width: 400px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb.tree-icon {
+    background-position: 10px -28px;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb a {
+    color: #777;
+}
+
+table.table-header.page-with-breadcrumbs {
+    border-top: none;
+}
+
+.list-with-icons .search-value {
+    position: relative;
+}
+
+.list-with-icons .search-value a {
+    padding-left: 40px;
+    display: inline-block;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb:before,
+.list-with-icons .tree-icon {
+    display: block;
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    width: 30px;
+    height: 30px;
+}
+
+.breadcrumb.public-questionnaires-breadcrumb:before {
+    content: "";
+    background-position: 0 -2px;
+    left: 30px;
+}
+
+.folder-tree .fancytree-checkbox ~ .fancytree-title {
+    width: calc(100% - 65px);
+}
+
+.folder-tree .fancytree-checkbox {
+    margin: 6px 5px 6px 0;
+    cursor: pointer;
+    width: 24px;
+    height: 18px;
+    background: transparent url("images/chekboxes2k.png") no-repeat;
+    background-size: 68px 350px;
+    background-position: 0 0px;
+}
+
+.folder-tree .fancytree-checkbox:hover,
+.folder-tree .fancytree-checkbox:focus {
+    background-position: 0 -36px;
+}
+
+.folder-tree .fancytree-checkbox.tree-checkbox-checked {
+    background-position: 0 -72px;
+}
+
+.folder-tree .fancytree-checkbox.tree-checkbox-checked:hover,
+.folder-tree .fancytree-checkbox.tree-checkbox-checked:focus {
+    background-position: 0 -108px;
+}
+
+.modal-body .folder-tree {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.container-wb-list .wrapper-questionnaire-table {
+    position: relative;
+    width: 100%;
+    height: 100%;
 }

@@ -130,14 +130,16 @@
     <value>Assignments</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{0} Assignment(s) selected</value>
+    <value>{{count}} Assignment selected</value>
+  </data>
+  <data name="AssignmentsSelected_plural" xml:space="preserve">
+    <value>{{count}} Assignments selected</value>
   </data>
   <data name="SizeExplanation" xml:space="preserve">
     <value>Specify maximum number of interviews to be generated for that assignment. Permitted values: -1 is for Unlimited assignment, 0 is for Empty assignment, numbers for assignment size</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
-    <value>Edit size for assignment {0}</value>
-    <comment>{0} - id of the assignment</comment>
+    <value>Edit size for assignment {{assignmentId}}</value>
   </data>
   <data name="CreatedAt" xml:space="preserve">
     <value>Created on</value>
@@ -149,7 +151,10 @@
     <value>Count</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{0} Assignment(s) are going to be changed</value>
+    <value>{{count}} Assignment is going to be changed</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+    <value>{{count}} Assignments are going to be changed</value>
   </data>
   <data name="Size" xml:space="preserve">
     <value>Size</value>
@@ -185,7 +190,7 @@
     <value>Questionnaire</value>
   </data>
   <data name="AllAssignments" xml:space="preserve">
-    <value>All Assignments</value>
+    <value>All assignments</value>
   </data>
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
     <value>Indicator of whether the assignment is active or has been archived.</value>

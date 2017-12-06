@@ -1,4 +1,5 @@
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -13,5 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public DynamicTextViewModel CreateDynamicTextViewModel()
             => this.serviceLocator.GetInstance<DynamicTextViewModel>();
+
+        public ErrorMessageViewModel CreateErrorMessage() => this.serviceLocator.GetInstance<ErrorMessageViewModel>();
     }
 }

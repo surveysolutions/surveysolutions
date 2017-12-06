@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
-using MvvmCross.Platform.ExtensionMethods;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -12,8 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public abstract class SingleInterviewViewModel : BaseViewModel
     {
-        private readonly ICommandService commandService;
-        private readonly VibrationViewModel vibrationViewModel;
+        protected readonly ICommandService commandService;
+        protected readonly VibrationViewModel vibrationViewModel;
 
         protected SingleInterviewViewModel(
             IPrincipal principal,

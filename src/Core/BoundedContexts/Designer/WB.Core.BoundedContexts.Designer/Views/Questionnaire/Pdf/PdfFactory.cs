@@ -4,20 +4,21 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Views.Account;
+using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 {
     public interface IPdfFactory
     {
-        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName);
+        PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation);
         string LoadQuestionnaireTitle(Guid questionnaireId);
     }
 
@@ -25,30 +26,52 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
     {
         private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
+        private readonly ITranslationsService translationService;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly PdfSettings pdfSettings;
+        private readonly IQuestionnaireTranslator questionnaireTranslator;
 
         public PdfFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeHistoryStorage, 
             IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
-            PdfSettings pdfSettings)
+            ITranslationsService translationService,
+            PdfSettings pdfSettings,
+            IQuestionnaireTranslator questionnaireTranslator)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireChangeHistoryStorage = questionnaireChangeHistoryStorage;
             this.accountsStorage = accountsStorage;
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
+            this.translationService = translationService;
             this.pdfSettings = pdfSettings;
+            this.questionnaireTranslator = questionnaireTranslator;
         }
 
-        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName)
+        public PdfQuestionnaireModel Load(string questionnaireId, Guid requestedByUserId, string requestedByUserName, Guid? translation, bool useDefaultTranslation)
         {
             var questionnaire = this.questionnaireStorage.GetById(questionnaireId);
+            
             if (questionnaire == null || questionnaire.IsDeleted)
             {
                 return null;
+            }
+
+            if (translation.HasValue)
+            {
+                var translationMetadata = questionnaire.Translations.FirstOrDefault(t => t.Id == translation.Value);
+                if (translationMetadata == null)
+                    throw new ArgumentException("Questionnaire doesn't contains translation: " + translation);
+
+                var translationData = translationService.Get(questionnaire.PublicKey, translationMetadata.Id);
+                questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
+            } 
+            else if (useDefaultTranslation && questionnaire.DefaultTranslation != null)
+            {
+                var translationData = translationService.Get(questionnaire.PublicKey, questionnaire.DefaultTranslation.Value);
+                questionnaire = questionnaireTranslator.Translate(questionnaire, translationData);
             }
 
             var listItem = this.questionnaireListViewItemStorage.GetById(questionnaireId);
@@ -64,31 +87,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     Name = grouping.Key.UserName,
                 })).ToList();
 
-            var allItems = questionnaire.Children.SelectMany<IComposite, IComposite>(x => x.TreeToEnumerable<IComposite>(g => g.Children)).ToList();
+            var allItems = questionnaire.Children.SelectMany(x => x.TreeToEnumerable(g => g.Children)).ToList();
+
+            var modificationStatisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser
+            {
+                UserId = requestedByUserId,
+                Name = requestedByUserName,
+                Date = DateTime.Now
+            };
+
+            var statisticsByUser = new PdfQuestionnaireModel.ModificationStatisticsByUser
+            {
+                UserId = questionnaire.CreatedBy ?? Guid.Empty,
+                Name = questionnaire.CreatedBy.HasValue
+                    ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value.FormatGuid())?.UserName
+                    : string.Empty,
+                Date = questionnaire.CreationDate
+            };
+            var lastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).FirstOrDefault();
+            var statisticsByUsers = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
+            {
+                UserId = person.UserId,
+                Name = this.accountsStorage.GetById(person.UserId.FormatGuid())?.UserName,
+                Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
+            }).Where(sharedPerson => sharedPerson.Name != requestedByUserName);
 
             var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings)
             {
-                Requested = new PdfQuestionnaireModel.ModificationStatisticsByUser
-                {
-                    UserId = requestedByUserId,
-                    Name = requestedByUserName,
-                    Date = DateTime.Now
-                },
-                Created = new PdfQuestionnaireModel.ModificationStatisticsByUser
-                {
-                    UserId = questionnaire.CreatedBy ?? Guid.Empty,
-                    Name = questionnaire.CreatedBy.HasValue
-                        ? this.accountsStorage.GetById(questionnaire.CreatedBy.Value.FormatGuid())?.UserName
-                        : string.Empty,
-                    Date = questionnaire.CreationDate
-                },
-                LastModified = modificationStatisticsByUsers.OrderByDescending(x => x.Date).First(),
-                SharedPersons = sharedPersons.Select(person => new PdfQuestionnaireModel.ModificationStatisticsByUser
-                {
-                    UserId = person.UserId,
-                    Name = this.accountsStorage.GetById(person.UserId.FormatGuid())?.UserName,
-                    Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
-                }).Where(sharedPerson => sharedPerson.Name != requestedByUserName),
+                Requested = modificationStatisticsByUser,
+                Created = statisticsByUser,
+                LastModified = lastModified,
+                SharedPersons = statisticsByUsers,
                 AllItems = allItems,
                 ItemsWithLongConditions = CollectEntitiesWithLongConditions(allItems, pdfSettings),
                 ItemsWithLongValidations = CollectItemsWithLongValidations(allItems, pdfSettings),

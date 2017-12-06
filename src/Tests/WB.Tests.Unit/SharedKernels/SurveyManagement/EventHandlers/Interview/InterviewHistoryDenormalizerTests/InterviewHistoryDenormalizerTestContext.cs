@@ -19,6 +19,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         protected static InterviewParaDataEventHandler CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryWriter = null, IUserViewFactory userDocumentWriter = null,
-            QuestionnaireExportStructure questionnaire = null)
+            QuestionnaireExportStructure questionnaire = null, IQuestionnaireStorage questionnaireStorage = null)
         {
             return new InterviewParaDataEventHandler(
                 interviewHistoryViewWriter ?? Mock.Of<IReadSideRepositoryWriter<InterviewHistoryView>>(),
@@ -40,16 +41,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 Mock.Of<IReadSideRepositoryWriter<InterviewSummary>>(
                     _ => _.GetById(It.IsAny<string>()) == new InterviewSummary()),
                 userDocumentWriter ?? Mock.Of<IUserViewFactory>(),
-                new InterviewDataExportSettings("", false, 10000, 100, 1, 1),
+                new InterviewDataExportSettings("", false, 10000, 100, 1, 1, 10),
                 Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ =>
                         _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
-                        (questionnaire ?? new QuestionnaireExportStructure())));
+                        (questionnaire ?? new QuestionnaireExportStructure())),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
-        protected static InterviewHistoryView CreateInterviewHistoryView(Guid? interviewId=null)
+        protected static InterviewHistoryView CreateInterviewHistoryView(Guid? interviewId=null, Guid? questionnaireId = null)
         {
-            return new InterviewHistoryView(interviewId??Guid.NewGuid(), new List<InterviewHistoricalRecordView>(), Guid.NewGuid(), 1);
+            return new InterviewHistoryView(interviewId??Guid.NewGuid(), new List<InterviewHistoricalRecordView>(), questionnaireId ?? Guid.NewGuid(), 1);
         }
 
         protected static IPublishedEvent<T> CreatePublishableEvent<T>(Func<T> eventCreator, Guid? eventSourceId = null)

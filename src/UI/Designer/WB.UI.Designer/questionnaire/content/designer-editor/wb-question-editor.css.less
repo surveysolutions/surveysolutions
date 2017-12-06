@@ -1,4 +1,4 @@
-@import (reference) "../../vendor/bootstrap/less/bootstrap.less";
+@import (reference) "../../node_modules/bootstrap/less/bootstrap.less";
 
 input#edit-question-title, input#edit-group-title {
     .edit-question-title-fontstyle();
@@ -22,6 +22,10 @@ input#edit-question-title, input#edit-group-title {
 
 #main .ace_hidden-cursors {
   opacity: 0;
+}
+
+#main .ace_editor.ace_autocomplete .ace_completion-highlight {
+    text-shadow: none;
 }
 
 #roster-editor .dropdown-with-breadcrumbs-and-icons,

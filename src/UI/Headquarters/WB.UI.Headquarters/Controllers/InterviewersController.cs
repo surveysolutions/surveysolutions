@@ -5,11 +5,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [ValidateInput(false)]
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     public class InterviewersController : TeamController
     {
         public InterviewersController(ICommandService commandService, 

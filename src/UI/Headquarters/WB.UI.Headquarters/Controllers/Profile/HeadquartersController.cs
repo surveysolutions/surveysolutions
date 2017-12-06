@@ -11,11 +11,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Observer")]
+    [AuthorizeOr403(Roles = "Administrator, Observer")]
     [ValidateInput(false)]
     public class HeadquartersController : TeamController
     {
@@ -25,7 +26,6 @@ namespace WB.UI.Headquarters.Controllers
                               HqUserManager userManager)
             : base(commandService, logger, authorizedUser, userManager)
         {
-            
         }
 
         public ActionResult Create()
@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         [ObserverNotAllowed]
         public async Task<ActionResult> Create(UserModel model)
         {
@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Administrator, Observer")]
+        [AuthorizeOr403(Roles = "Administrator, Observer")]
         public ActionResult Index()
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         public async Task<ActionResult> Edit(Guid id)
         {
             this.ViewBag.ActivePage = MenuItem.Headquarters;
@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         [ObserverNotAllowed]
         public async Task<ActionResult> Edit(UserEditModel model)
         {

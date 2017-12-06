@@ -97,15 +97,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Count Days of interview in Status.
-        /// </summary>
-        internal static string StatusDuration {
-            get {
-                return ResourceManager.GetString("StatusDuration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cumulative Interview Chart.
         /// </summary>
         internal static string CumulativeInterviewChart {
@@ -138,6 +129,15 @@ namespace Resources {
         internal static string InterviewerAssigned {
             get {
                 return ResourceManager.GetString("InterviewerAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewers.
+        /// </summary>
+        internal static string Interviewers {
+            get {
+                return ResourceManager.GetString("Interviewers", resourceCulture);
             }
         }
         
@@ -372,6 +372,15 @@ namespace Resources {
         internal static string Restarted {
             get {
                 return ResourceManager.GetString("Restarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Count Days of interview in Status.
+        /// </summary>
+        internal static string StatusDuration {
+            get {
+                return ResourceManager.GetString("StatusDuration", resourceCulture);
             }
         }
         

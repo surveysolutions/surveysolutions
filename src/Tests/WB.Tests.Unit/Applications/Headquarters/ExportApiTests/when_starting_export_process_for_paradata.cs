@@ -1,10 +1,11 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.UI.Headquarters.API;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
@@ -17,13 +18,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             controller = CreateExportController(dataExportProcessesService: mockOfDataExportProcessesService.Object);
         };
 
-        Because of = () => result = controller.StartProcess(null, DataExportFormat.Paradata);
+        Because of = () => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Paradata);
 
         It should_return_http_ok_response = () =>
             result.ShouldBeOfExactType<OkResult>();
 
         It should_call_add_paradata_export_method_in_data_export_processes_service = () =>
-            mockOfDataExportProcessesService.Verify(x=>x.AddParaDataExport(DataExportFormat.Tabular), Times.Once);
+            mockOfDataExportProcessesService.Verify(x=>x.AddDataExport(Moq.It.IsAny<QuestionnaireIdentity>(), DataExportFormat.Paradata, null), Times.Once);
 
         private static ExportController controller;
 
@@ -31,5 +32,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             new Mock<IDataExportProcessesService>();
 
         private static IHttpActionResult result;
+        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
     }
 }

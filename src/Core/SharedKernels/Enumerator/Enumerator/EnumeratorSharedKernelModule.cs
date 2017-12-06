@@ -86,8 +86,9 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<RejectInterviewFromHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RejectInterviewFromHeadquarters(command.UserId, command.SupervisorId, command.InterviewerId, command.InterviewDto, command.SynchronizationTime))
                 .Handles<RestartInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restart(command.UserId, command.Comment, command.RestartTime))
                 .Handles<RestoreInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restore(command.UserId))
-               
-                .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
+                .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation)
+                .Handles<ResumeInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Resume)
+                .Handles<PauseInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Pause);
         }
 
         private static void RegisterViewModels(IIocRegistry registry)
@@ -162,6 +163,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<QuestionHeaderViewModel>();
             registry.Bind<QuestionInstructionViewModel>();
             registry.Bind<ValidityViewModel>();
+            registry.Bind<ErrorMessageViewModel>();
             registry.BindGeneric(typeof(QuestionStateViewModel<>));
         }
     }

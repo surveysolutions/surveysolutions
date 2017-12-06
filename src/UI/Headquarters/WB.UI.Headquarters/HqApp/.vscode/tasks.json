@@ -10,14 +10,33 @@
             "problemMatcher": []
         },
         {
-            "type": "npm",
-            "script": "watch",
-            "isBackground": true,
+            "type": "gulp",
+            "task": "watch",
             "problemMatcher": []
         },
         {
-            "type": "npm",
-            "script": "dev",
+            "type": "gulp",
+            "task": "resx2json",
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "taskName": "Rebuild",
+            "command": "yarn",
+            "args": [
+                "gulp",
+                "default"
+            ],
+            "options": {
+                "env": {
+                    "FORCE_CLEANUP": "true"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "gulp",
+            "task": "default",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -30,14 +49,13 @@
             "problemMatcher": []
         },
         {
-            "type": "npm",
-            "script": "vendor",
+            "type": "gulp",
+            "task": "vendor",
             "problemMatcher": []
         },
         {
-            "label": "rebuild",
-            "type": "npm",
-            "script": "rebuild",
+            "type": "gulp",
+            "task": "hot",
             "problemMatcher": []
         }
     ]

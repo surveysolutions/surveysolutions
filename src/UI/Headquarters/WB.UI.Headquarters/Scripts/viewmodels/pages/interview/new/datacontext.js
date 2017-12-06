@@ -52,7 +52,8 @@
 
                         if (!_.isEmpty(question.mask())) {
                             // doesn't match the mask
-                            var reqexpMask = question.mask().replace(new RegExp("\#", 'g'), "[0-9]");
+                            var reqexpMask = question.mask().replace(/[\-\[\]\/\{\}\(\)\+\?\.\\\^\$\|]/g, "\\$&");
+                            reqexpMask = reqexpMask.replace(new RegExp("\#", 'g'), "[0-9]");
                             reqexpMask = reqexpMask.replace(new RegExp("\~", 'g'), "[A-Za-z]");
                             reqexpMask = reqexpMask.replace(new RegExp("[*]", 'g'), "[A-Za-z0-9]");
 

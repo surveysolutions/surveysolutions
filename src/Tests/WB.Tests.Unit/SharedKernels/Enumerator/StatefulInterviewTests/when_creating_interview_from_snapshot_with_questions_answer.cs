@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -17,13 +19,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_creating_interview_from_snapshot_with_questions_answer : StatefulInterviewTestsContext
     {
-        private Establish context = () =>
+        [OneTimeSetUp]
+        public void Establish()
         {
-            Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            Guid integerQuestionId = Guid.Parse("00000000000000000000000000000001");
+            Guid questionnaireId = Id.gC;
+            Guid integerQuestionId = Id.g10;
             RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
-            fixedRosterIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), Create.Entity.RosterVector(1));
-            fixedNestedRosterIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"), Create.Entity.RosterVector(1,0));
+            fixedRosterIdentity = Identity.Create(Id.g1, Create.Entity.RosterVector(1));
+            fixedNestedRosterIdentity = Identity.Create(Id.g2, Create.Entity.RosterVector(1,0));
             questionIdentity = Create.Identity(integerQuestionId, rosterVector);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId,
@@ -67,28 +70,43 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
 
             command = Create.Command.CreateInterviewFromSnapshot(userId, synchronizationDto);
-        };
 
-        Because of = () => interview.CreateInterviewFromSnapshot(command);
+            Because();
+        }
 
-        It should_return_empty_failed_condition_messages = () => 
+        public void Because()
+        {
+            this.eventContext = new EventContext();
+            interview.CreateInterviewFromSnapshot(command);
+        }
+
+        [Test]
+        public void It_should_return_empty_failed_condition_messages() => 
             interview.GetFailedValidationMessages(questionIdentity, "Error").Count().ShouldEqual(0);
 
-        It should_create_roster_instance = () => 
+        [Test]
+        public void It_should_create_roster_instance() => 
             interview.GetRoster(fixedRosterIdentity).ShouldNotBeNull();
 
-        It should_create_nested_roster_instance = () => 
+        [Test]
+        public void It_should_create_nested_roster_instance() => 
             interview.GetRoster(fixedNestedRosterIdentity).ShouldNotBeNull();
 
-        It should_set_answer = () => 
+        [Test]
+        public void It_should_set_answer() => 
             interview.GetQuestion(questionIdentity).GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.ShouldEqual(1);
+
+        [Test]
+        public void It_should_not_switch_translation() =>
+            Assert.IsEmpty(this.eventContext.GetEvents<TranslationSwitched>());
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;
-        static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
+        static readonly Guid userId = Id.g9;
         static Identity questionIdentity;
         static Identity fixedRosterIdentity;
         static Identity fixedNestedRosterIdentity;
-        private static CreateInterviewFromSnapshotCommand command;
+        private CreateInterviewFromSnapshotCommand command;
+        private EventContext eventContext;
     }
 }

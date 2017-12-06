@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('MacrosCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService) {
+    function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService) {
             'use strict';
 
             var hideMacrosPane = 'ctrl+m';
@@ -9,7 +9,7 @@
                 hotkeys.del(hideMacrosPane);
             }
 
-            hotkeys.add(hideMacrosPane, 'Close macros panel', function (event) {
+            hotkeys.add(hideMacrosPane, $i18next.t('HotkeysCloseMacros'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
@@ -73,7 +73,7 @@
 
             $scope.deleteMacro = function (index) {
                 var macro = $scope.macros[index];
-                var macroName = macro.name || "macro with no name";
+                var macroName = macro.name || $i18next.t("SideBarMacroNoName");
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(macroName));
 
                 modalInstance.result.then(function (confirmResult) {
@@ -93,7 +93,7 @@
             };
 
             $scope.aceLoaded = function (editor) {
-                var expressionEditorPlaceholder = "content";
+                var expressionEditorPlaceholder = $i18next.t('SideBarMacroContent');
 
                 // Editor part
                 var renderer = editor.renderer;
@@ -108,6 +108,7 @@
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true
                 });
+                editor.$blockScrolling = Infinity;
 
                 $scope.aceEditorUpdateMode(editor);
 

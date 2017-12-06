@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.UI.Headquarters.Models.WebInterview
 {
@@ -17,6 +16,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string QuestionnaireTitle { get; set; }
         public string FirstSectionId { get; set; }
         public string InterviewKey { get; set; }
+        public bool InterviewCannotBeChanged { get; set; }
+        public bool ReceivedByInterviewer { get; set; }
     }
 
     public class LanguageInfo
@@ -84,8 +85,16 @@ namespace WB.UI.Headquarters.Models.WebInterview
     public class InterviewAudioQuestion : GenericQuestion
     {
         public long? Answer { get; set; }
+        public string Filename { get; set; }
     }
-    
+
+    public class InterviewAreaQuestion : GenericQuestion
+    {
+        public string DisplayUrl { get; set; }
+        public double Answer { get; set; }
+        public string Coordinates { get; set; }
+    }
+
     public class InterviewDateQuestion : GenericQuestion
     {
         public bool IsTimestamp { get; set; }
@@ -167,6 +176,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
         public bool IsAnswered { get; set; }
+        public bool AcceptAnswer { get; set; }
+        public bool IsForSupervisor { get; set; }
         public Validity Validity { get; set; } = new Validity();
         public Comment[] Comments { get; set; }
     }
@@ -203,11 +214,20 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         public bool IsRoster { set; get; }
         public string RosterTitle { get; set; }
-        public string Status { get; set; }
-        public string StatisticsByAnswersAndSubsections { get; set; }
-        public string StatisticsByInvalidAnswers { get; set; }
+        public GroupStatus Status { get; set; }
+
         public Validity Validity { get; set; } = new Validity();
+        public AnswersStats Stats { get; set; }
+
+        public class AnswersStats
+        {
+            public int InvalidCount { get; set; }
+            public int AnsweredCount { get; set; }
+            public int SubSectionsCount { get; set; }
+            public bool HasUnanswered { get; set; }
+        }
     }
+    
 
     public class Sidebar
     {
@@ -225,7 +245,7 @@ namespace WB.UI.Headquarters.Models.WebInterview
         public string ParentId { get; set; }
         public string Title { get; set;}
         public string RosterTitle { get; set; }
-        public string State { get;set; }
+        public GroupStatus Status { get;set; }
         public bool Collapsed { get; set; }
         public bool HasChildren { get; set; }
         public Validity Validity { get; set; } = new Validity();
@@ -237,7 +257,8 @@ namespace WB.UI.Headquarters.Models.WebInterview
     {
         NotStarted = 1,
         Started,
-        Completed
+        Completed,
+        Invalid
     }
 
     public class DropdownItem

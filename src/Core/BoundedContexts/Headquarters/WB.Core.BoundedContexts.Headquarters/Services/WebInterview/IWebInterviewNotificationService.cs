@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.WebInterview
         void RefreshLinkedToRosterQuestions(Guid interviewId, Identity[] rosterIdentities);
         void RefreshEntitiesWithFilteredOptions(Guid interviewId);
         void RefreshLinkedToListQuestions(Guid interviewId, Identity[] identities);
-        void RefreshComment(Guid interviewId, Identity question);
         void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
     }
 }

@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -43,7 +42,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, PictureQuestionAnswered>,
         IUpdateHandler<InterviewSummary, UnapprovedByHeadquarters>,
         IUpdateHandler<InterviewSummary, AreaQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>
+        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, InterviewResumed>,
+        IUpdateHandler<InterviewSummary, InterviewPaused>,
+        IUpdateHandler<InterviewSummary, InterviewOpenedBySupervisor>,
+        IUpdateHandler<InterviewSummary, InterviewClosedBySupervisor>,
+        IUpdateHandler<InterviewSummary, TranslationSwitched>
     {
         private readonly IUserViewFactory users;
         private readonly string unknown = "Unknown";
@@ -135,13 +139,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<SupervisorAssigned> @event)
         {
+            var expectedStatus = InterviewExportedAction.SupervisorAssigned;
+
+            var lastStatusInfo = state?.InterviewCommentedStatuses?.LastOrDefault();
+            if (lastStatusInfo?.Status == InterviewExportedAction.Completed)
+                expectedStatus = InterviewExportedAction.Completed;
+
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
                 state,
                 @event.Payload.UserId,
                 @event.Payload.SupervisorId,
                 null,
-                InterviewExportedAction.SupervisorAssigned,
+                expectedStatus,
                 @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
@@ -213,13 +223,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewerAssigned> @event)
         {
+            if (@event.Payload.InterviewerId == null)
+                return state;
+
+            var expectedStatus = InterviewExportedAction.InterviewerAssigned;
+
+            var lastStatusInfo = state?.InterviewCommentedStatuses?.LastOrDefault();
+            if(lastStatusInfo?.Status == InterviewExportedAction.Completed)
+                expectedStatus = InterviewExportedAction.Completed;
+
             return this.AddCommentedStatus(
                 @event.EventIdentifier,
                 state,
                 @event.Payload.UserId,
                 state.TeamLeadId,
                 @event.Payload.InterviewerId,
-                InterviewExportedAction.InterviewerAssigned,
+                expectedStatus,
                 @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 null);
         }
@@ -374,6 +393,66 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AudioQuestionAnswered> @event)
         {
             return this.RecordFirstAnswerIfNeeded(@event.EventIdentifier, state, @event.EventSourceId, @event.Payload.UserId, @event.Payload.AnswerTimeUtc);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewResumed> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.Resumed,
+                @event.Payload.UtcTime,
+                null);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewPaused> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.Paused,
+                @event.Payload.UtcTime,
+                null);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<TranslationSwitched> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.TranslationSwitched,
+                @event.EventTimeStamp,
+                @event.Payload.Language);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOpenedBySupervisor> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.OpenedBySupervisor,
+                @event.EventTimeStamp,
+                null);
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewClosedBySupervisor> @event)
+        {
+            return AddCommentedStatus(@event.EventIdentifier,
+                state,
+                @event.Payload.UserId,
+                state.TeamLeadId,
+                @event.Payload.UserId,
+                InterviewExportedAction.ClosedBySupervisor,
+                @event.EventTimeStamp,
+                null);
         }
     }
 }

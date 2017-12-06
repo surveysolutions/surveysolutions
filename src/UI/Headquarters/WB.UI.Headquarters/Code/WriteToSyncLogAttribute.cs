@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http.Filters;
+
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
@@ -21,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.UI.Headquarters.Code
@@ -66,8 +68,8 @@ namespace WB.UI.Headquarters.Code
                     Type = this.logAction
                 };
 
-                Guid parsedId;
-                Guid? idAsGuid = Guid.TryParse(context.GetActionArgumentOrDefault<string>("id", string.Empty), out parsedId) ? parsedId : context.GetActionArgumentOrDefault<Guid?>("id", null);
+                Guid? idAsGuid = Guid.TryParse(context.GetActionArgumentOrDefault<string>("id", string.Empty), 
+                    out var parsedId) ? parsedId : context.GetActionArgumentOrDefault<Guid?>("id", null);
 
                 switch (this.logAction)
                 {
@@ -166,16 +168,28 @@ namespace WB.UI.Headquarters.Code
                     case SynchronizationLogType.GetAssignment:
                         logItem.Log = GetAssignmentLogMessage(context);
                         break;
+                    case SynchronizationLogType.GetMapList:
+                        logItem.Log = this.GetMapListLogMessage(context);
+                        break;
+                    case SynchronizationLogType.GetMap:
+                        logItem.Log = SyncLogMessages.GetMap.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }
+
+                messagesTotal.Labels(this.logAction.ToString()).Inc();
                 this.synchronizationLogItemPlainStorageAccessor.Store(logItem, Guid.NewGuid());
+
             }
             catch (Exception exception)
             {
                 this.logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
             }
         }
+
+        private readonly Counter messagesTotal = new Counter(@"wb_hq_sync_log_total_count", @"Count of sync log actions", "action");
+
 
         private string GetInterviewsLogMessage(HttpActionExecutedContext context)
         {
@@ -187,6 +201,17 @@ namespace WB.UI.Headquarters.Code
                 ? SyncLogMessages.NoNewInterviewPackagesToDownload
                 : string.Join("<br />", messagesByInterviews);
             return SyncLogMessages.GetInterviews.FormatString(readability);
+        }
+
+        private string GetMapListLogMessage(HttpActionExecutedContext context)
+        {
+            var mapsApiView = this.GetResponseObject<List<MapView>>(context);
+
+            var readability = !mapsApiView.Any()
+                ? SyncLogMessages.NoMapsForUser
+                : string.Join("<br />", mapsApiView.Select(x => x.MapName));
+
+            return SyncLogMessages.GetMaps.FormatString(readability);
         }
 
         private static string GetInterviewLink(Guid interviewId)

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -14,11 +15,13 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
 {
     [Authorize]
     [QuestionnairePermissions]
+    [ApiNoCache]
     public class QuestionnaireController : ApiController
     {
         private readonly IVerificationErrorsMapper verificationErrorsMapper;
@@ -59,7 +62,7 @@ namespace WB.UI.Designer.Api
 
             if (questionnaireInfoView == null)
             {
-                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, $"Questionnaire with id={id} cannot be found");
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, string.Format(ExceptionMessages.QuestionCannotBeFound , id));
             }
 
             return this.Request.CreateResponse(HttpStatusCode.OK, questionnaireInfoView);
@@ -86,7 +89,7 @@ namespace WB.UI.Designer.Api
             var variableView = this.questionnaireInfoFactory.GetVariableEditView(id, variableId);
 
             if (variableView == null) return this.Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                $"variable with id {variableId} was not found in questionnaire {id}");
+                string.Format(ExceptionMessages.VariableWithIdWasNotFound, variableId, id));
 
             var result = this.Request.CreateResponse(HttpStatusCode.OK, new
             {

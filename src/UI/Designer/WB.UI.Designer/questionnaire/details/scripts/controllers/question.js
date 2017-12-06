@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, alertService) {
+        function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, alertService) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
 
@@ -20,12 +20,14 @@
             hotkeys.bindTo($scope)
                 .add({
                     combo: saveQuestion,
-                    description: 'Save changes',
+                    description: $i18next.t('Save'),
                     allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                     callback: function(event) {
                         if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                            $scope.saveQuestion();
-                            $scope.questionForm.$setPristine();
+                            if ($scope.questionForm.$dirty) {
+                                $scope.saveQuestion();
+                                $scope.questionForm.$setPristine();
+                            }
                             event.preventDefault();
                         }
                     }
@@ -90,7 +92,7 @@
                 $scope.activeQuestion.isInteger = (question.type === 'Numeric') ? question.isInteger : true;
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
-                $scope.activeQuestion.questionScope = question.isPreFilled ? 'Identifying' : question.questionScope;
+                $scope.activeQuestion.questionScope = _.find(question.allQuestionScopeOptions, {value: question.isPreFilled ? 'Identifying' : question.questionScope});
 
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
@@ -168,7 +170,7 @@
             $scope.saveQuestion = function (callback) {
                 if ($scope.questionForm.$valid) {
                     $scope.showOptionsInList();
-                    $scope.trimLastEmptyOptions();
+                    $scope.trimEmptyOptions();
                     var shouldGetOptionsOnServer = wasThereOptionsLooseWhileChanginQuestionProperties($scope.initialQuestion, $scope.activeQuestion) && $scope.activeQuestion.isCascade;
                     commandService.sendUpdateQuestionCommand($state.params.questionnaireId, $scope.activeQuestion, shouldGetOptionsOnServer).then(function () {
                         $scope.initialQuestion = angular.copy($scope.activeQuestion);
@@ -236,7 +238,7 @@
 
                 var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Identifying';
                 if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type === 'DateTime') {
@@ -244,19 +246,19 @@
                         return val.value !== 'Supervisor';
                     });
                     if ($scope.activeQuestion.questionScope === 'Supervisor') {
-                        $scope.activeQuestion.questionScope = 'Interviewer';
+                        $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                     }
                 }
                 if (_.contains(questionsWithOnlyInterviewerScope, type)) {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
-                    $scope.activeQuestion.questionScope = 'Interviewer';
+                    $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
                 if (type !== "SingleOption" && type !== "MultyOption") {
@@ -293,9 +295,9 @@
             $scope.editFilteredComboboxOptions = function () {
                 if ($scope.questionForm.$dirty) {
                     var modalInstance = confirmService.open({
-                        title: "To open options editor all unsaved changes must be saved. Should we save them now?",
-                        okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later",
+                        title: $i18next.t('QuestionOpenEditorConfirm'),
+                        okButtonTitle: $i18next.t('Save'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
                         isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
@@ -303,8 +305,8 @@
                         if (confirmResult === 'ok') {
                             $scope.saveQuestion(function () {
                                 var alertInstance = alertService.open({
-                                    title: "It was saved successfully. The window for file upload will be opened.",
-                                    okButtonTitle: "OK",
+                                    title: $i18next.t('QuestionOpenEditorSaved'),
+                                    okButtonTitle: $i18next.t('Ok'),
                                     isReadOnly: $scope.questionnaire.isReadOnlyForUser
                                 });
 
@@ -323,9 +325,9 @@
                 var wasCascadeFromQuestionIdChanged = ($scope.activeQuestion.cascadeFromQuestionId != $scope.initialQuestion.cascadeFromQuestionId);
                 if ($scope.questionForm.$dirty || wasCascadeFromQuestionIdChanged) {
                     var modalInstance = confirmService.open({
-                        title: "To open options editor all unsaved changes must be saved. Should we save them now?",
-                        okButtonTitle: "Save",
-                        cancelButtonTitle: "No, later",
+                        title: $i18next.t('QuestionOpenEditorConfirm'),
+                        okButtonTitle: $i18next.t('Save'),
+                        cancelButtonTitle: $i18next.t('Cancel'),
                         isReadOnly: $scope.questionnaire.isReadOnlyForUser
                     });
 
@@ -333,8 +335,8 @@
                         if (confirmResult === 'ok') {
                             $scope.saveQuestion(function () {
                                 var alertInstance = alertService.open({
-                                    title: "It was saved successfully. The window for file upload will be opened.",
-                                    okButtonTitle: "OK",
+                                    title: $i18next.t('QuestionOpenEditorSaved'),
+                                    okButtonTitle: $i18next.t('Ok'),
                                     isReadOnly: $scope.questionnaire.isReadOnlyForUser
                                 });
 
@@ -404,20 +406,16 @@
                 $scope.activeQuestion.useListAsOptionsEditor = true;
             };
 
-            $scope.trimLastEmptyOptions = function () {
-                var count = $scope.activeQuestion.options.length;
-                if (count > 0) {
-                    var lastoption = $scope.activeQuestion.options[count - 1];
-                    if (_.isNull(lastoption.value) && lastoption.title === '') {
-                        $scope.activeQuestion.options.splice(count - 1, 1);
-                        $scope.activeQuestion.optionsCount = $scope.activeQuestion.options.length;
-                    }
-                }
+            $scope.trimEmptyOptions = function () {
+                var notEmptyOptions = _.filter($scope.activeQuestion.options, function (o) {
+                    return !_.isNull(o.value || null) || !_.isEmpty(o.title || '');
+                });
+                $scope.activeQuestion.options = notEmptyOptions;
             }
 
             $scope.changeQuestionScope = function (scope) {
-                $scope.activeQuestion.questionScope = scope.text;
-                if ($scope.activeQuestion.questionScope === 'Identifying') {
+                $scope.activeQuestion.questionScope = scope;
+                if ($scope.activeQuestion.questionScope.value === 'Identifying') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
                 markFormAsChanged();
@@ -470,7 +468,7 @@
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
+                        if ($scope.activeQuestion.questionScope.value !== 'Interviewer' && $scope.activeQuestion.questionScope.value !== 'Hidden') {
                             $scope.activeQuestion.questionScope = 'Interviewer';
                             $scope.activeQuestion.optionsFilterExpression = null;
                         }
@@ -481,6 +479,9 @@
                 }
             });
 
+            $scope.getQuestionScopeByValue = function(value) {
+                return _.find($scope.activeQuestion.allQuestionScopeOptions, { value: value });
+            }
             $scope.$on('verifing', function () {
                 if ($scope.questionForm.$dirty)
                     $scope.saveQuestion(function() {

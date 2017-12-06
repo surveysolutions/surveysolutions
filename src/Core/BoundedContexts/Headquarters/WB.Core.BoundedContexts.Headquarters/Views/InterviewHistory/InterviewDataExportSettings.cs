@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             this.LimitOfCachedItemsByDenormalizer = 100;
             this.InterviewsExportParallelTasksLimit = 1;
             this.DirectoryPath = String.Empty;
+            this.ErrorsExporterBatchSize = 20;
         }
 
         public InterviewDataExportSettings(string directoryPath, 
@@ -18,15 +19,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             int maxRecordsCountPerOneExportQuery, 
             int limitOfCachedItemsByDenormalizer,
             int interviewsExportParallelTasksLimit,
-            int interviewIdsQueryBatchSize)
+            int interviewIdsQueryBatchSize,
+            int errorsExporterBatchSize)
         {
             this.EnableInterviewHistory = enableInterviewHistory;
             this.MaxRecordsCountPerOneExportQuery = maxRecordsCountPerOneExportQuery;
             this.LimitOfCachedItemsByDenormalizer = limitOfCachedItemsByDenormalizer;
             this.InterviewsExportParallelTasksLimit = interviewsExportParallelTasksLimit;
             this.InterviewIdsQueryBatchSize = interviewIdsQueryBatchSize;
+            this.ErrorsExporterBatchSize = errorsExporterBatchSize;
             this.DirectoryPath = directoryPath;
         }
+
+        public int ErrorsExporterBatchSize { get; }
 
         public string DirectoryPath { get; private set; }
 

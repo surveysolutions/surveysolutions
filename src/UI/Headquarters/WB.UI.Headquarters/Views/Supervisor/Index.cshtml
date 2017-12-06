@@ -147,7 +147,7 @@
             <div class="page-header clearfix">
                 <div class="neighbor-block-to-search">
                     <div class="topic-with-button">
-                        <h1>@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: UsersCount'></span>"))</h1>
+                        <h1>@Html.Raw(string.Format(Users.SupervisorsCountDescription, @"<span data-bind='text: formatNumber(UsersCount())'></span>"))</h1>
                         @if ((authorizedUser.IsAdministrator || authorizedUser.IsHeadquarter) && !authorizedUser.IsObserving)
                         {
                             <a class="btn btn-success" href="@Url.Action("Create", "Supervisor", new {area = string.Empty})">@Users.AddSupervisor</a>
@@ -190,7 +190,7 @@
                     <div class="panel-body">
                         <input class="double-checkbox-white" id="q1az" type="checkbox" checked disabled="disabled">
                         <label for="q1az">
-                            <span class="tick"></span>  <span data-bind="text: SelectedItems().length + ' @Pages.Supervisors_Selected'"></span>
+                            <span class="tick"></span>  <span data-bind="text: SelectedItems().length + ' @HttpUtility.JavaScriptStringEncode(Pages.Supervisors_Selected)'"></span>
                         </label>
                         <button type="button" class="btn btn-default btn-danger" data-bind="disable: IsNothingSelected, click: $root.archiveSupervisors">@Pages.Supervisors_Archive</button>
                         <button type="button" class="btn btn-default btn-success" data-bind="disable: IsNothingSelected, click: $root.unarchiveSupervisors">@Pages.Supervisors_Unarchive</button>

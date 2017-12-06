@@ -173,6 +173,11 @@
 or contact your supervisor
 for further instructions</value>
   </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Synchronize to get maps
+or contact your supervisor
+for further instructions</value>
+  </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
     <value>You have no new assignments</value>
   </data>
@@ -186,13 +191,16 @@ for further instructions</value>
     <value>Rejected ({0})</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Are you sure you want to delete this interview #{0}?</value>
+    <value>Are you sure you want to delete this interview {0}?</value>
   </data>
   <data name="Dashboard_StartedLinkText" xml:space="preserve">
     <value>Started ({0})</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
     <value>{0} interviews for {1}</value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Maps</value>
   </data>
   <data name="HostUnreachable" xml:space="preserve">
     <value>No internet access to your server. Check server address and(or) network settings</value>
@@ -307,6 +315,9 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>All assignments were updated</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>All maps were synchronized</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
     <value>{0} new interviews downloaded</value>
@@ -506,6 +517,9 @@ for further instructions</value>
   <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Maps</value>
+  </data>
   <data name="Share_to_Title" xml:space="preserve">
     <value>Share information to..</value>
   </data>
@@ -681,7 +695,7 @@ your next synchronization</value>
     <value>{0} question(s) answered</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat">
-    <value>Assignment {0}</value>
+    <value>Assignment #{0}</value>
     <comment>{0} - is an assignment id</comment>
   </data>
   <data name="Dashboard_No_InterviewKey">
@@ -689,5 +703,18 @@ your next synchronization</value>
   </data>
   <data name="Dashboard_CensusAssignment">
     <value>Census</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Checking maps on server</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Handling map {0}, {1} out of {2}.
+Downloaded {3}%</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Map synchronization succesfuly finished</value>
+  </data>
+    <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Map sync error</value>
   </data>
 </root>

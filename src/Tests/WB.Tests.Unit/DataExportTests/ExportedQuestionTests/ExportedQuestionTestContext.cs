@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
                 Answer = value,
                 QuestionState = isDisabled ? QuestionState.Valid : QuestionState.Valid | QuestionState.Enabled,
             };
-            decimal columnIndex = 0;
+            int columnIndex = 0;
             var columnValues = columnNames.Select(v => columnIndex++).ToArray();
             ExportedQuestionHeaderItem headerItem = new ExportedQuestionHeaderItem()
             {
@@ -43,10 +43,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,
             object value,
             QuestionSubtype? questionSubType = null)
-        {
-            var columnNames = new []{ "single column" };
-            return CreateExportedQuestion(questionType, value, columnNames, questionSubType, false);
-        }
+            => CreateExportedQuestion(questionType, value, new[] {"single column"}, questionSubType, false);
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,
             int columnsCount,

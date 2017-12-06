@@ -1,5 +1,4 @@
-﻿extern alias designer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;

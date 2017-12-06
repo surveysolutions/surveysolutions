@@ -12,7 +12,6 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Tool.hbm2ddl;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Planning.Targets;
@@ -21,6 +20,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
@@ -30,11 +30,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
     public class PostgresReadSideModule : PostgresModuleWithCache
     {
         public const string ReadSideSessionFactoryName = "ReadSideSessionFactory";
+        public static readonly string ReadSideSchemaName = "readside";
         internal const string SessionProviderName = "ReadSideProvider";
         private readonly string connectionString;
         private readonly string schemaName;
         private readonly DbUpgradeSettings dbUpgradeSettings;
         private readonly IEnumerable<Assembly> mappingAssemblies;
+
 
         public PostgresReadSideModule(string connectionString, 
             string schemaName,
@@ -69,7 +71,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
             {
                 ConnectionString = this.connectionString,
-                SchemaName = "readside",
+                SchemaName = ReadSideSchemaName
             });
 
             this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()
@@ -129,15 +131,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 db.ConnectionString = this.connectionString;
                 db.Dialect<PostgreSQL91Dialect>();
-                db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
-                
+                db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
             });
+            
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
             cfg.AddDeserializedMapping(this.GetMappings(), "Main");
 
             cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, this.schemaName);
+            cfg.SessionFactory().GenerateStatistics();
 
-            return cfg.BuildSessionFactory();
+            var sessionFactory = cfg.BuildSessionFactory();
+            
+            MetricsRegistry.Instance.RegisterOnDemandCollectors(
+                new NHibernateStatsCollector("readside", sessionFactory)
+            );
+
+            return sessionFactory;
         }
 
         /// <summary>

@@ -6,17 +6,18 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
+    [Ignore("KP-10197. Disabled verification")]
     internal class when_verifying_preloaded_data_with_linked_question : PreloadedDataVerifierTestContext
     {
         private Establish context = () =>
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     QuestionType = QuestionType.Numeric
                 });
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { "Id", "q1" },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "q1" },
                 new string[][] { new string[] { "1", "text" } },
                 "questionnaire.csv");
 
@@ -62,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         It should_result_has_1_error = () =>
             status.VerificationState.Errors.Count().ShouldEqual(1);
 
-        It should_return_single_PL0013_error = () =>
+        It should_return_single_PL0010_error = () =>
             status.VerificationState.Errors.First().Code.ShouldEqual("PL0010");
 
         It should_return_reference_with_Cell_type = () =>

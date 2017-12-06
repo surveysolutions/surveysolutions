@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.3.1" />
-    <PackageReference Include="Ninject" Version="3.2.2" />
+    <PackageReference Include="Ninject" Version="3.3.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
@@ -95,24 +95,51 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>OptionsFilterMethodTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="Properties\Roster.Designer.cs">
+    <Compile Update="Resources\Common.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Roster.resx</DependentUpon>
+      <DependentUpon>Common.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\ExceptionMessages.Designer.cs">
+     <Compile Update="Resources\ExceptionMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\PdfStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PdfStrings.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\VerificationMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>VerificationMessages.resx</DependentUpon>
     </Compile>
+	<Compile Update="Resources\QuestionnaireEditor.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </Compile>
+	<Compile Update="Resources\Roster.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Roster.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Roster.resx">
+	<EmbeddedResource Update="Resources\Common.ru.resx">
+	  <DependentUpon>Common.resx</DependentUpon>
+	  <Generator>ResXFileCodeGenerator</Generator>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\Common.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>Common.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\Roster.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+	  <DependentUpon>Roster.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Roster.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Roster.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -120,6 +147,30 @@
       <CustomToolNamespace></CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ExceptionMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\ExceptionMessages.ru.resx">
+      <Generator></Generator>
+	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfStrings.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\PdfStrings.ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+	   <DependentUpon>Resources\PdfStrings.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
+      <Generator></Generator>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\VerificationMessages.ru.resx">
+      <Generator></Generator>
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\VerificationMessages.resx">
       <CustomToolNamespace></CustomToolNamespace>

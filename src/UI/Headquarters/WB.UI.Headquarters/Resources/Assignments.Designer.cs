@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Assignment(s) selected.
+        ///   Looks up a localized string similar to {{count}} Assignment selected.
         /// </summary>
         public static string AssignmentsSelected {
             get {
@@ -115,7 +115,16 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit size for assignment {0}.
+        ///   Looks up a localized string similar to {{count}} Assignments selected.
+        /// </summary>
+        public static string AssignmentsSelected_plural {
+            get {
+                return ResourceManager.GetString("AssignmentsSelected_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit size for assignment {{assignmentId}}.
         /// </summary>
         public static string ChangeSizeModalTitle {
             get {
@@ -196,11 +205,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Assignment(s) are going to be changed.
+        ///   Looks up a localized string similar to {{count}} Assignment is going to be changed.
         /// </summary>
         public static string NumberOfAssignmentsAffected {
             get {
                 return ResourceManager.GetString("NumberOfAssignmentsAffected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Assignments are going to be changed.
+        /// </summary>
+        public static string NumberOfAssignmentsAffected_plural {
+            get {
+                return ResourceManager.GetString("NumberOfAssignmentsAffected_plural", resourceCulture);
             }
         }
         

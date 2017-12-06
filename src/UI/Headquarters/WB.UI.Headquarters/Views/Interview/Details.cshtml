@@ -121,13 +121,13 @@
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
                 @{
-                    bool isSupervisorApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
-                    bool isHeadquarteerOrAdminApproveSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor) && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
+                    bool isSupervisorApproveSupport = Model.ApproveReject.SupervisorApproveAllowed;
+                    bool isHeadquarteerOrAdminApproveSupport = Model.ApproveReject.HqOrAdminApproveAllowed;
 
-                    bool isSupervisorRedjectSupport = ((Model.InterviewDetails.Status == InterviewStatus.Completed || Model.InterviewDetails.Status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
-                    bool isHeadquarteerOrAdminRedjectSupport = (Model.InterviewDetails.Status == InterviewStatus.ApprovedBySupervisor && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
+                    bool isSupervisorRedjectSupport = Model.ApproveReject.SupervisorRejectAllowed;
+                    bool isHeadquarteerOrAdminRedjectSupport = Model.ApproveReject.HqOrAdminRejectAllowed;
 
-                    bool isHeadquarteerOrAdminUnapproveSupport = Model.InterviewDetails.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
+                    bool isHeadquarteerOrAdminUnapproveSupport = Model.ApproveReject.HqOrAdminUnapproveAllowed;
                 }
 
                 @if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
