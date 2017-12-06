@@ -79,7 +79,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maps compenent was not initialized. Please contact Your server administrator..
+        ///   Looks up a localized string similar to Maps component was not initialized. Please contact system administrator..
         /// </summary>
         internal static string MapEngineIsNotInitialized {
             get {

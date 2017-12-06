@@ -14,19 +14,20 @@
     {
         @Styles.Render("~/Content/plugins/folders-skin")
         @Scripts.Render("~/folders")
-        <script type="text/javascript">
-            var ajusteHeight = function(){
-                var height = $(".public-questionnaires-breadcrumb").outerHeight();
-                $( ".wrapper-questionnaire-table #table-content-holder" ).css("bottom", height);
-            };
-            $(document).ready(function () { 
-                ajusteHeight();
-            });
-            $( window ).resize(function() {
-                ajusteHeight();
-            });
-        </script>
     }
+    
+    <script type="text/javascript">
+        var ajusteHeight = function(){
+            var height = $(".public-questionnaires-breadcrumb").outerHeight();
+            $( ".wrapper-questionnaire-table #table-content-holder" ).css("bottom", height);
+        };
+        $(document).ready(function () { 
+            ajusteHeight();
+        });
+        $( window ).resize(function() {
+            ajusteHeight();
+        });
+    </script>
 }
 
 <ol class="breadcrumb public-questionnaires-breadcrumb">
