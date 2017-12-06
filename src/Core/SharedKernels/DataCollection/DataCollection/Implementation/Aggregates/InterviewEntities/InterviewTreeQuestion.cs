@@ -626,36 +626,59 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void Accept(IInterviewTreeUpdater updater)
         {
-            updater.UpdateEnablement(this);
-
+            using (GlobalStopwatcher.Scope("Accept", "Question.UpdateEnablement"))
+            {
+                updater.UpdateEnablement(this);
+            }
             if (this.IsSingleFixedOption)
             {
-                updater.UpdateSingleOptionQuestion(this);
+                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateSingleOptionQuestion"))
+                {
+                    updater.UpdateSingleOptionQuestion(this); 
+                }
             }
             else if (this.IsMultiFixedOption)
             {
-                updater.UpdateMultiOptionQuestion(this);
+                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateMultiOptionQuestion"))
+                {
+                    updater.UpdateMultiOptionQuestion(this);
+                }
             }
             else if (this.IsYesNo)
             {
-                updater.UpdateYesNoQuestion(this);
+                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateYesNoQuestion"))
+                {
+                    updater.UpdateYesNoQuestion(this);
+                }
             }
             else if (this.IsLinked)
             {
-                updater.UpdateLinkedQuestion(this);
+                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateLinkedQuestion"))
+                {
+                    updater.UpdateLinkedQuestion(this);
+                }
             }
             else if (this.IsLinkedToListQuestion)
             {
-                updater.UpdateLinkedToListQuestion(this);
+                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateLinkedToListQuestion"))
+                {
+                    updater.UpdateLinkedToListQuestion(this);
+                }
             }
 
             if (this.IsCascading) // is IsSingleFixedOption too
             {
-                updater.UpdateSingleOptionQuestion(this);
-                updater.UpdateCascadingQuestion(this);
+                using (GlobalStopwatcher.Scope("Accept", "Question. UpdateSingleOptionQuestion"))
+                {
+                    updater.UpdateSingleOptionQuestion(this);
+                    updater.UpdateCascadingQuestion(this);
+                }
             }
 
-            updater.UpdateValidations(this);
+            using (GlobalStopwatcher.Scope("Accept", "Question. UpdateValidations"))
+            {
+                updater.UpdateValidations(this);
+            }
         }
 
         public void ReplaceSubstitutions()

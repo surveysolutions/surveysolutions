@@ -1948,34 +1948,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
         {
-            var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
-            var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
-            var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
-
-            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
-
-            var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
-            var rosterLevels = changedRosters.Select(x => x.Identity.RosterVector).ToHashSet();
-            var intersection = questionsRosterLevels.Intersect(rosterLevels).ToList();
-
-            var aggregatedEventsShouldBeFired = intersection.Count == 0;
-            if (aggregatedEventsShouldBeFired)
+            using (GlobalStopwatcher.Scope("IN", "ApplyEvents"))
             {
-                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
-                this.ApplyRosterEvents(changedRosters);
-            }
-            else
-            {
-                var maxDepth = Math.Max(questionsRosterLevels.Max(x => x.Length), rosterLevels.Select(x => x.Length).Max());
-                // events fired by levels (from the questionnaire level down to nested rosters)
-                for (int i = 0; i <= maxDepth; i++)
+                var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
+                var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
+                var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
+
+                var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+
+                var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
+                var rosterLevels = changedRosters.Select(x => x.Identity.RosterVector).ToHashSet();
+                var intersection = questionsRosterLevels.Intersect(rosterLevels).ToList();
+
+                var aggregatedEventsShouldBeFired = intersection.Count == 0;
+                if (aggregatedEventsShouldBeFired)
                 {
-                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId.Value);
-                    this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
+                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
+                    this.ApplyRosterEvents(changedRosters);
                 }
+                else
+                {
+                    var maxDepth = Math.Max(questionsRosterLevels.Max(x => x.Length), rosterLevels.Select(x => x.Length).Max());
+                    // events fired by levels (from the questionnaire level down to nested rosters)
+                    for (int i = 0; i <= maxDepth; i++)
+                    {
+                        this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId.Value);
+                        this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
+                    }
+                }
+                this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
+                this.ApplyPassiveEvents(diff); 
             }
-            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
-            this.ApplyPassiveEvents(diff);
         }
 
         private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
@@ -2332,18 +2335,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (questionnaire.IsUsingExpressionStorage())
             {
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
-                using (GlobalStopwatcher.Scope("IN", "expressionStorage.Initialize"))
-                {
-                    var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-                    expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
-                }
+                var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
+                expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
                 using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
                     List<Guid> playOrder;
-                    using (GlobalStopwatcher.Scope("IN", "questionnaire.GetExpressionsPlayOrder"))
-                    {
-                        playOrder = questionnaire.GetExpressionsPlayOrder();
-                    }
+                    playOrder = questionnaire.GetExpressionsPlayOrder();
 
                     foreach (var entityId in playOrder)
                     {
@@ -2361,10 +2358,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             {
                                 changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
                             }
-                            using (GlobalStopwatcher.Scope("IN", "changedNode?.Accept(updater)"))
-                            {
-                                changedNode?.Accept(updater);
-                            }
+                            changedNode?.Accept(updater);
                         }
                     }
                 }

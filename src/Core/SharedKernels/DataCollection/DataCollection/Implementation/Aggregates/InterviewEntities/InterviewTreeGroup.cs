@@ -264,7 +264,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public virtual void Accept(IInterviewTreeUpdater updater)
         {
-            updater.UpdateEnablement(this);
+            using (GlobalStopwatcher.Scope("Accept", "Group UpdateEnablement"))
+            {
+                updater.UpdateEnablement(this); 
+            }
         }
 
         public void ReplaceSubstitutions()
