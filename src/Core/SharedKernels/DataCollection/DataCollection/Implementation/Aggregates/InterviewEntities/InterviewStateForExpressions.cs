@@ -22,7 +22,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector)
         {
             var question = this.tree.GetQuestion(questionId, new RosterVector(rosterVector));
+            return GetAnswerImpl<T>(questionId, question);
+        }
 
+        public T GetAnswer<T>(Guid questionId, RosterVector rosterVector)
+        {
+            var question = this.tree.GetQuestion(questionId, rosterVector);
+            return GetAnswerImpl<T>(questionId, question);
+        }
+
+        private T GetAnswerImpl<T>(Guid questionId, InterviewTreeQuestion question)
+        {
             if ((!question.IsAnswered() || question.IsDisabled()) && !question.IsYesNo) // because of missing field
                 return default(T);
 
@@ -35,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsYesNo)
             {
                 return new YesNoAndAnswersMissings(
-                    this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value), 
+                    this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value),
                     question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
             }
 
@@ -50,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (question.IsSingleLinkedToList) return question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue.To<T>(); //int?
             if (question.IsMultiLinkedToList) return question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().ToInts().ToArray().To<T>(); // int[]
-           
+
             if (question.IsMultimedia) return question.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName.To<T>();//string
             if (question.IsQRBarcode) return question.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer().DecodedText.To<T>();//string
 
