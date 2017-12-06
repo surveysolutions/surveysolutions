@@ -1,3 +1,5 @@
+$vswhere = [io.path]::combine(${env:ProgramFiles(x86)}, "Microsoft Visual Studio", "Installer", "vswhere.exe")
+
 function GetPathRelativeToCurrectLocation($FullPath) {
     return $FullPath.Substring((Get-Location).Path.Length + 1)
 }
@@ -14,7 +16,7 @@ function GetPathRelativeToCurrectLocation($FullPath) {
 #https://docs.microsoft.com/en-us/visualstudio/install/workload-and-component-ids
 ##############################
 function GetMsBuildFromVsWhere() {
-    $path = vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
+    $path = & $vswhere -latest -products * -requires Microsoft.Component.MSBuild -requires Component.Xamarin -property installationPath
     if ($path) {
         $path = join-path $path 'MSBuild\15.0\Bin\MSBuild.exe'
         if (test-path $path) {
@@ -32,7 +34,7 @@ function GetMsBuildFromVsWhere() {
 #
 ##############################
 function GetPathToMSBuild() {
-    if (Get-Command "vswhere.exe" -ErrorAction SilentlyContinue) { 
+    if (Test-Path $vswhere) { 
         return GetMsBuildFromVsWhere
     }
 
@@ -143,7 +145,7 @@ function RunBlock($blockName, $targetLocation, [ScriptBlock] $block) {
 #
 # to execute pre build step - use script with name `preproduction`
 ##############################
-function BuildStaticContent($blockName, $targetLocation) {
+function BuildStaticContent($blockName, $targetLocation, $runTests = $false) {
     return RunBlock "Building static files: $blockName" $targetLocation -block {
         Write-Host "Running npm install"
 
@@ -152,51 +154,17 @@ function BuildStaticContent($blockName, $targetLocation) {
         
         $wasBuildSuccessfull = $LASTEXITCODE -eq 0
         if (-not $wasBuildSuccessfull) {
-            Write-Host "##teamcity[message status='ERROR' text='Failed to run npm install']"
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run yarn']"
             return $wasBuildSuccessfull
         }
 
-        if (Test-Path "bower.json") {
-            Write-Host "Running bower install --force"
+        Write-Host "Running gulp --production"
+        &node_modules\.bin\gulp --production | Write-Host
 
-            if(Test-Path ".bowerrc") {
-                
-                $bowerSettings =Get-Content -Raw -Path ".bowerrc" | ConvertFrom-Json
-                Write-Host "Cleaning up bower_components folder - $($bowerSettings.directory)"
-                Remove-Item $bowerSettings.directory -Recurse -ErrorAction SilentlyContinue
-            } else {
-                Remove-Item "bower_components" -Recurse -ErrorAction SilentlyContinue
-            }
-
-            &node_modules\.bin\bower install | Write-Host
-
-            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-            if (-not $wasBuildSuccessfull) {
-                Write-Host "##teamcity[message status='ERROR' text='Failed to run bower install --force']"
-                return $wasBuildSuccessfull
-            }
-        }
-
-        if (Test-Path "gulpfile.js") {
-            Write-Host "Running gulp --production"
-            &node_modules\.bin\gulp --production | Write-Host
-
-            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-            if (-not $wasBuildSuccessfull) {
-                Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
-                return $wasBuildSuccessfull
-            }
-        }
-        else {
-            Write-Host "Running npm run production"
-            #will execute script gulpfile.js in target folder
-            &yarn run production | Write-Host
-
-            $wasBuildSuccessfull = $LASTEXITCODE -eq 0
-            if (-not $wasBuildSuccessfull) {
-                Write-Host "##teamcity[message status='ERROR' text='Failed to run &npm run production']"
-                return $wasBuildSuccessfull
-            }
+        $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+        if (-not $wasBuildSuccessfull) {
+            Write-Host "##teamcity[message status='ERROR' text='Failed to run &Running gulp --production']"
+            return $wasBuildSuccessfull
         }
 
         return $true
@@ -242,7 +210,13 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     Write-Host "##teamcity[blockOpened name='$(TeamCityEncode $blockMessage)']"
     Write-Host "##teamcity[progressStart '$(TeamCityEncode $progressMessage)']"
 
-    & (GetPathToMSBuild) $Solution /t:Build /nologo /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
+    $verbosity = "minimal"
+
+    if((Test-Path variable:$env:MSBUILD_VERBOSITY) -eq $False){
+        $verbosity = $env:MSBUILD_VERBOSITY
+    }
+
+    & (GetPathToMSBuild) $Solution /t:Build /nologo /m /v:$verbosity /p:CodeContractsRunCodeAnalysis=false /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
@@ -303,7 +277,7 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
     Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
-    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' /nologo | Write-Host
+    & (GetPathToMSBuild) $Project '/t:Package' /p:CodeContractsRunCodeAnalysis=false /p:ExcludeGeneratedDebugSymbol=true /p:DebugSymbols=false "/p:Configuration=$BuildConfiguration" '/verbosity:quiet' /nologo | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
