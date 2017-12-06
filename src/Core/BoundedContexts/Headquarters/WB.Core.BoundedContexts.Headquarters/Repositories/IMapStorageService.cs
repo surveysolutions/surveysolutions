@@ -6,8 +6,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     public interface IMapStorageService
     {
-        string StoreData(Stream preloadedDataFile, string fileName);
-        string[] UnzipAndGetFileList(string id);
+        string[] UnzipAndGetFileList(byte[] fileStreamByteArray, out string tempStore);
+
         Task SaveOrUpdateMapAsync(string map);
         void DeleteTemporaryData(string id);
         void DeleteMap(string map);

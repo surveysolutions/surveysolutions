@@ -33,11 +33,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
 
             Assert.That(report.Data[0], Is.EquivalentTo(new object[]{ "u1", Id.g1, "super", "AppVersion", false, null, 0, 0, null, null, "device1",
                 "DeviceSerialNumber", "DeviceType", "DeviceManufacturer", "DeviceModel", "DeviceBuildNumber", "DeviceLanguage", "Android AndroidSdkVersionName(25)",
-                "AppVersion", deviceSyncInfos[0].LastAppUpdatedDate, 14.15, 16.17, "AppOrientation", 88, "BatteryPowerSource", false,
+                deviceSyncInfos[0].LastAppUpdatedDate, 14.15, 16.17, "AppOrientation", 88, "BatteryPowerSource", false,
                 5242880, 2097152000, 52428800, 1073741824, 76546048,
                 deviceSyncInfos[0].SyncDate, deviceSyncInfos[0].DeviceDate, "NetworkType", "NetworkSubType", 0, 0, 0, 10, 0, 0 }));
 
-            Assert.That(report.Data[1], Is.EquivalentTo(new object[]{ "u2", Id.g2, "super", null, false, null, 0, 0, null, null, null,
+            Assert.That(report.Data[1], Is.EquivalentTo(new object[]{ "u2", Id.g2, "super", null, false, null, 0, 0, null, null,
                 null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, 0, 0, 0, 0, 0, 0 }));
         }

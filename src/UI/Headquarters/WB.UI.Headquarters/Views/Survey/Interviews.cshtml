@@ -28,6 +28,27 @@
         var $commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
         var $statistics = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "TeamInterviews" })';
         var $profileUrl = '@Url.Action("Profile", "Interviewer")';
+
+        GetInterviewStatusString = function(status) {
+            switch (status) {
+                case '@InterviewStatus.Completed': return '@Html.Raw(InterviewStatus.Completed.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.SupervisorAssigned': return '@Html.Raw(InterviewStatus.SupervisorAssigned.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.InterviewerAssigned': return '@Html.Raw(InterviewStatus.InterviewerAssigned.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Created': return '@Html.Raw(InterviewStatus.Created.ToLocalizeJavaScriptString()))';
+                case '@InterviewStatus.Completed': return '@Html.Raw(InterviewStatus.Completed.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Deleted': return '@Html.Raw(InterviewStatus.Deleted.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Restored': return '@Html.Raw(InterviewStatus.Restored.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.ReadyForInterview': return '@Html.Raw(InterviewStatus.ReadyForInterview.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.SentToCapi': return '@Html.Raw(InterviewStatus.SentToCapi.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.Restarted': return '@Html.Raw(InterviewStatus.Restarted.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.ApprovedBySupervisor': return '@Html.Raw(InterviewStatus.ApprovedBySupervisor.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.RejectedBySupervisor': return '@Html.Raw(InterviewStatus.RejectedBySupervisor.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.ApprovedByHeadquarters': return '@Html.Raw(InterviewStatus.ApprovedByHeadquarters.ToLocalizeJavaScriptString())';
+                case '@InterviewStatus.RejectedByHeadquarters': return '@Html.Raw(InterviewStatus.RejectedByHeadquarters.ToLocalizeJavaScriptString())';
+                default: return status;
+            }
+        };
+
         $(function () {
             var notifier = new Notifier();
             var usersToAssignUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "Interviewers" })';
@@ -42,7 +63,7 @@
                 var items = {}
 
                 items["open"] = {
-                    name: "Open",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Open)",
                     callback: function(t, e) {
                         var detailsUrl = $detailsUrl + '/' + selectedRow.InterviewId().replace(/-/g, '');
                         window.location = detailsUrl;
@@ -50,7 +71,7 @@
                 };
 
                 items["showStatusHistory"] = {
-                    name: "Show Status History",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.ShowStatusHistory)",
                     callback: function(t, e) {
                         model.ShowStatusHistory('@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "ChangeStateHistory" })', selectedRow);
                     }
@@ -58,7 +79,7 @@
 
                 if (selectedRow.ResponsibleRole() === 4 /* Interviewer */) {
                     items["openInterviewerProfile"] = {
-                        name: "@Html.Raw(Common.OpenResponsiblesProfile)",
+                        name: "@Html.Raw(HttpUtility.JavaScriptStringEncode(Common.OpenResponsiblesProfile))",
                         callback: function(t, e) {
                             var profileUrl = $profileUrl + '/' + selectedRow.ResponsibleId();
                             window.location = profileUrl;
@@ -69,7 +90,7 @@
                 items["sep1"] = "---------";
 
                 items["assign"] = {
-                    name: "@Common.Assign",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Assign)",
                     className: "primary-text",
                     callback: function(t, e) {
                         model.AssignInterview();
@@ -77,7 +98,7 @@
                 };
 
                 items["approve"] = {
-                    name: "@Common.Approve",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Approve)",
                     className: "success-text",
                     callback: function(t, e) {
                         model.ApproveInterview();
@@ -85,7 +106,7 @@
                 };
 
                 items["reject"] = {
-                    name: "@Common.Reject",
+                    name: "@HttpUtility.JavaScriptStringEncode(Common.Reject)",
                     className: "error-text",
                     callback: function(t, e) {
                         model.RejectInterview();
@@ -197,7 +218,7 @@
                                             <th class="sorting_disabled interview-id  title-row" title="@Interviews.Tooltip_Table_InterviewKey">
                                                 @Common.InterviewKey
                                                 <a href="javascript:void(0);" title="@Interviews.Tooltip_Table_HideShowIdentifying"
-                                                   class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@Common.HideIdentifying' : '@Common.ShowIdentifying', click: $root.ToggleVisiblePrefilledColumns()"></a>
+                                                   class="show-prefield-btn" data-bind="text : $root.IsVisiblePrefilledColumns() ? '@HttpUtility.JavaScriptStringEncode(Common.HideIdentifying)' : '@HttpUtility.JavaScriptStringEncode(Common.ShowIdentifying)', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
                                             <th title="@Interviews.Tooltip_Table_IdentifyingQuestions" class="sorting_disabled prefield-column first-identifying last-identifying" data-bind='css: { visible : $root.IsVisiblePrefilledColumns }'>@Common.PrefilledQuestions</th>
@@ -264,7 +285,7 @@
                                                 <span class="empty"></span>
                                                 <!-- /ko -->
                                             </td>
-                                            <td class="status" data-bind="text: Status"></td>
+                                            <td class="status" data-bind="text: GetInterviewStatusString(Status())"></td>
                                             <td class="download-on-device" data-bind="css: { 'error-text' : !ReceivedByInterviewer(), 'success-text': ReceivedByInterviewer() } ">
                                                 <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span>
                                             </td>

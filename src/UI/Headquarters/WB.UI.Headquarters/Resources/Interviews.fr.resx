@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevue (s) seront approuvées. &lt;/ h3&gt;               
-&lt;b&gt; Remarque! &lt;/ b&gt; Vous pouvez approuver des entretiens avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/ i&gt; et &lt;i&gt; {2} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entrevue (s) seront approuvées. &lt;/h3&gt;               
+&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. </value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>"&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/ h3&gt;
-&lt;b&gt; Attention! &lt;/ b&gt; Vous pouvez affecter des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/ i&gt;, &lt;i&gt; {2} (seulement à un autre enuêteur de la même équipe) &lt;/ i&gt; et &lt;i&gt; {3} &lt;/ i&gt;. "</value>
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/h3&gt;
+&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez affecter des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt;, &lt;i&gt; {2} (seulement à un autre enuêteur de la même équipe) &lt;/i&gt; et &lt;i&gt; {3} &lt;/i&gt;.</value>
   </data>
   <data name="AssignReceivedConfirm" xml:space="preserve">
     <value>Faire appliquer sur {0} entretiens déjà reçus par l'enquêteur</value>
@@ -135,40 +135,34 @@
     <value>Voulez-vous continuer?</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entretien (s) seront supprimés. &lt;/ h3&gt;
-&lt;b&gt; Attention! &lt;/ b&gt; Vous ne pouvez supprimer les entretiens qu'avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/ i&gt; et &lt;i&gt; {2} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront supprimés. &lt;/h3&gt;
+&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez supprimer les entretiens qu'avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. </value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>"&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entretien (s) seront rejetés. &lt;/ h3&gt;
-&lt;b&gt; Attention! &lt;/ b&gt; Vous ne pouvez rejeter les entretiens qu'avec les états suivants uniquement: &lt;i&gt; {1} &lt;/ i&gt; et &lt;i&gt; {2} &lt;/ i&gt;. "
-
-
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;
+&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.
 </value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>"&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entretien (s) seront rejetés. &lt;/ h3&gt;
-&lt;b&gt; Attention! &lt;/ b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/ i&gt;. "
-
-
-
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;
+&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.
 </value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>"&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entretien (s) ne seront pas approuvés. &lt;/ h3&gt;
-&lt;b&gt; Attention! &lt;/ b&gt; Vous ne pouvez désapprouver que les entretiens qui ont l'état suivant uniquement: &lt;i&gt; {1} &lt;/ i&gt;. "
-
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) ne seront pas approuvés. &lt;/h3&gt;
+&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez désapprouver que les entretiens qui ont l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.
 </value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entretien (s) seront approuvées. &lt;/ h3&gt;  
-&lt;b&gt; Remarque! &lt;/ b&gt; Vous pouvez approuver des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/ i&gt; et &lt;i&gt; {2} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront approuvées. &lt;/h3&gt;  
+&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
     <value>Affectation</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>"&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entretien (s) seront assignés. &lt;/ h3&gt;
-&lt;b&gt; Note! &lt;/ b&gt; Seuls les entretiens qui ne sont pas dans l'état &lt;i&gt; {1} &lt;/ i&gt; et &lt;i&gt; {2} &lt;/ i&gt; peuvent être réaffectés. "
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront assignés. &lt;/h3&gt;
+&lt;b&gt; Note! &lt;/b&gt; Seuls les entretiens qui ne sont pas dans l'état &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt; peuvent être réaffectés.
 </value>
   </data>
   <data name="ChooseResponsible" xml:space="preserve">
