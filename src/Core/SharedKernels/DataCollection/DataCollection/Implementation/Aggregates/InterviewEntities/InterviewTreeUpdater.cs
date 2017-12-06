@@ -64,7 +64,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 x.Disable();
                 this.disabledNodes.Add(x.Identity);
                 List<Identity> disabledChildNodes = x.DisableChildNodes();
-                disabledChildNodes.ForEach(d => this.disabledNodes.Add(d));
+                disabledNodes.UnionWith(disabledChildNodes);
             });
         }
 
@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 group.Disable();
                 List<Identity> disabledChildNodes = group.DisableChildNodes();
-                disabledChildNodes.ForEach(x => this.disabledNodes.Add(x));
+                disabledNodes.UnionWith(disabledChildNodes);
             }
         }
 
