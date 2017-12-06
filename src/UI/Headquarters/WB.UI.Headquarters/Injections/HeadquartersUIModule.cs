@@ -23,6 +23,7 @@ using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
@@ -36,79 +37,67 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Modules;
 
 namespace WB.UI.Headquarters.Injections
 {
-    public class HeadquartersUIModule : NinjectModule
+    public class HeadquartersUIModule : IModule
     {
-        protected void RegisterDenormalizers()
+        public void Load(IIocRegistry registry)
         {
-            this.Kernel.RegisterDenormalizer<CumulativeChartDenormalizer>();
-        }
+            registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
-        public override void Load()
-        {
-            RegisterDenormalizers();
+            registry.Bind<IInterviewImportService, InterviewImportService>();
+            registry.Bind<IFormDataConverterLogger, FormDataConverterLogger>();
+            registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
+            registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
+            registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
+            registry.Bind<IUserImportService, UserImportService>();
+            registry.Bind<IAttachmentContentService, AttachmentContentService>();
+            registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
+            registry.Bind<IDataExportProcessDetails, DataExportProcessDetails>();
 
-            this.Kernel.Bind<IInterviewImportService>().To<InterviewImportService>();
-            this.Kernel.Bind<IFormDataConverterLogger>().To<FormDataConverterLogger>();
-            this.Kernel.Bind<IInterviewTreeBuilder>().To<InterviewTreeBuilder>();
-            this.Kernel.Bind<IInterviewExpressionStateUpgrader>().To<InterviewExpressionStateUpgrader>();
-            this.Kernel.Bind<IMetaInfoBuilder>().To<MetaInfoBuilder>();
-            this.Kernel.Bind<IUserImportService>().To<UserImportService>();
-            this.Kernel.Bind<IAttachmentContentService>().To<AttachmentContentService>();
-            this.Kernel.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
-            this.Kernel.Bind<IDataExportProcessDetails>().To<DataExportProcessDetails>();
+            registry.Bind<IRecordsAccessor, CsvRecordsAccessor>();
+            registry.Bind<IExceptionFilter, HandleUIExceptionAttribute>();
 
-            this.Kernel.Bind<IRecordsAccessor>().To<CsvRecordsAccessor>();
-            this.Kernel.Bind<IExceptionFilter>().To<HandleUIExceptionAttribute>();
+            registry.Bind<IAssemblyService, AssemblyService>();
+            registry.Bind<IImageProcessingService, ImageProcessingService>();
 
-            this.Kernel.Bind<IAssemblyService>().To<AssemblyService>();
-            this.Kernel.Bind<IImageProcessingService>().To<ImageProcessingService>();
+            registry.BindAsSingleton<IVersionCheckService, VersionCheckService>();
+            registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
+            registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
 
-            this.Kernel.Bind<IVersionCheckService>().To<VersionCheckService>().InSingletonScope();
-            this.Kernel.Bind<IHttpStatistician>().To<HttpStatistician>().InSingletonScope();
-            this.Kernel.Bind<IAudioProcessingService>().To<AudioProcessingService>().InSingletonScope();
+            registry.BindToMethod<ISerializer>(() => new NewtonJsonSerializer());
+            registry.BindToMethod<IInterviewAnswerSerializer>(() => new NewtonInterviewAnswerJsonSerializer());
 
+            registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
 
-            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
-            this.Bind<IInterviewAnswerSerializer>().ToMethod(ctx => new NewtonInterviewAnswerJsonSerializer());
-            
-            this.Bind<IJsonAllTypesSerializer>().ToMethod(ctx => new JsonAllTypesSerializer());
+            registry.Bind<IStringCompressor, JsonCompressor>();
+            registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
-            this.Bind<IStringCompressor>().To<JsonCompressor>();
-            this.Bind<IRestServiceSettings>().To<DesignerQuestionnaireApiRestServiceSettings>().InSingletonScope();
+            registry.Bind<IHttpClientFactory, DefaultHttpClientFactory>();
+            registry.Bind<IRestService, RestService>(
+                new ConstructorArgument("networkService", _ => null),
+                new ConstructorArgument("restServicePointManager", _ => null),
+                new ConstructorArgument("httpStatistican", _ => _.Resolve<IHttpStatistician>()));
 
-            this.Bind<IHttpClientFactory>().To<DefaultHttpClientFactory>();
-            this.Bind<IRestService>()
-                .To<RestService>()
-                .WithConstructorArgument("networkService", _ => null)
-                .WithConstructorArgument("restServicePointManager", _ => null)
-                .WithConstructorArgument("httpStatistican", _ => _.Kernel.Get<IHttpStatistician>());
+            registry.Bind<IExportSettings, ExportSettings>();
 
-            this.Bind<IExportSettings>().To<ExportSettings>();
+            registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
 
-            this.Bind<IArchiveUtils, IProtectedArchiveUtils>().To<ZipArchiveUtils>();
+            registry.BindFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
 
-            this.BindFilter<TransactionFilter>(FilterScope.First, 0)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
-            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
-
-            this.BindHttpFilter<ApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
-                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
-            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Controller)
-                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
-            this.BindFilter<GlobalNotificationAttribute>(FilterScope.Global, null)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
+            registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Controller);
+            registry.BindHttpFilterWhenActionMethodHasNoAttribute<PlainApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Controller);
+            registry.BindFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, null);
 
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
-            this.Bind<ICommandDeserializer>().To<SurveyManagementCommandDeserializer>();
-            this.Bind<IRevalidateInterviewsAdministrationService>().To<RevalidateInterviewsAdministrationService>().InSingletonScope();
-            this.Bind<IInterviewerVersionReader>().To<InterviewerVersionReader>().InSingletonScope();
-            this.Bind<IWebInterviewAllowService>().To<WebInterviewAllowService>();
-            this.Bind<IReviewAllowedService>().To<ReviewAllowedService>();
-            this.Bind<IInterviewerProfileFactory>().To<InterviewerProfileFactory>();
+            registry.Bind<ICommandDeserializer, SurveyManagementCommandDeserializer>();
+            registry.BindAsSingleton<IRevalidateInterviewsAdministrationService, RevalidateInterviewsAdministrationService>();
+            registry.BindAsSingleton<IInterviewerVersionReader, InterviewerVersionReader>();
+            registry.Bind<IWebInterviewAllowService, WebInterviewAllowService>();
+            registry.Bind<IReviewAllowedService, ReviewAllowedService>();
+            registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
         }
     }
 }
