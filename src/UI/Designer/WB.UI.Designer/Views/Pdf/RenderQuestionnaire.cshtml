@@ -38,11 +38,11 @@
                         <li>
                             @if (person.Date.HasValue)
                             {
-                                <span>@string.Format(PdfStrings.LastEdited, person.Name, person.Date))</span>
+                                <span>@string.Format(PdfStrings.LastEdited, person.Name, person.Date)</span>
                             }
                             else
                             {
-                                <span>@string.Format(PdfStrings.NeverEdited, person.Name))</span>
+                                <span>@string.Format(PdfStrings.NeverEdited, person.Name)</span>
                             }
                         </li>
                     }
