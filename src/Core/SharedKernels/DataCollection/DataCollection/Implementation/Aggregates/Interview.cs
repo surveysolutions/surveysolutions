@@ -68,9 +68,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             set => expressionProcessorStatePrototype = value;
         }
 
+
+        private IInterviewExpressionStorage expressionStorageCached = null;
         protected IInterviewExpressionStorage GetExpressionStorage()
         {
-            return this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity);
+            return expressionStorageCached ?? (expressionStorageCached = this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity));
         }
 
         /// <remarks>
