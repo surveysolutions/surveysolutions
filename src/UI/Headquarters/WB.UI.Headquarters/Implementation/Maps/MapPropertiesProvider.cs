@@ -10,6 +10,14 @@ namespace WB.UI.Headquarters.Implementation.Maps
 {
     public class MapPropertiesProvider : IMapPropertiesProvider
     {
+        private static bool? isEngineOperatible = null;
+
+        private void CheckEnvironmentInitialized()
+        {
+            if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
+                Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = HostingEnvironment.MapPath(@"~/bin");
+        }
+
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         public MapPropertiesProvider(IFileSystemAccessor fileSystemAccessor)
@@ -19,8 +27,7 @@ namespace WB.UI.Headquarters.Implementation.Maps
 
         public async Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToMap)
         {
-            if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
-                Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = HostingEnvironment.MapPath(@"~/bin");
+            this.CheckEnvironmentInitialized();
 
             var fileExtension = this.fileSystemAccessor.GetFileExtension(pathToMap);
 
@@ -79,6 +86,26 @@ namespace WB.UI.Headquarters.Implementation.Maps
                     throw new ArgumentException("Unsupported map type");
             }
             
+        }
+
+        public bool IsMapEngineOperational()
+        {
+            if (isEngineOperatible != null)
+                return isEngineOperatible.Value;
+
+            this.CheckEnvironmentInitialized();
+
+            try
+            {
+                var map = new Map();
+                isEngineOperatible = true;
+            }
+            catch
+            {
+                isEngineOperatible = false;
+            }
+
+            return isEngineOperatible.Value;
         }
     }
 }
