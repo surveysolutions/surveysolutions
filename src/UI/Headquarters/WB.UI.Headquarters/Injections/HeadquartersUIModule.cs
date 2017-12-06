@@ -41,9 +41,9 @@ using WB.UI.Shared.Web.Modules;
 
 namespace WB.UI.Headquarters.Injections
 {
-    public class HeadquartersUIModule : IModule
+    public class HeadquartersUIModule : IWebModule
     {
-        public void Load(IIocRegistry registry)
+        public void Load(IWebIocRegistry registry)
         {
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
@@ -85,11 +85,11 @@ namespace WB.UI.Headquarters.Injections
 
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
 
-            registry.BindFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
-
+            registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
+            registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
             registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Controller);
             registry.BindHttpFilterWhenActionMethodHasNoAttribute<PlainApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Controller);
-            registry.BindFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, null);
+            registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, null);
 
             //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
             registry.Bind<ICommandDeserializer, SurveyManagementCommandDeserializer>();
