@@ -632,24 +632,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
             if (this.IsSingleFixedOption)
             {
-                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateSingleOptionQuestion"))
-                {
-                    updater.UpdateSingleOptionQuestion(this); 
-                }
+                updater.UpdateSingleOptionQuestion(this); 
             }
             else if (this.IsMultiFixedOption)
             {
-                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateMultiOptionQuestion"))
-                {
-                    updater.UpdateMultiOptionQuestion(this);
-                }
+                updater.UpdateMultiOptionQuestion(this);
             }
             else if (this.IsYesNo)
             {
-                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateYesNoQuestion"))
-                {
-                    updater.UpdateYesNoQuestion(this);
-                }
+                updater.UpdateYesNoQuestion(this);
             }
             else if (this.IsLinked)
             {
