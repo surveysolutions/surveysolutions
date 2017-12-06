@@ -145,28 +145,28 @@
     <value>处理中</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0}个答案</value>
+    <value>{{value}}个答案</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
     <value>1个答案</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0}个错误</value>
+    <value>{{value}}个错误</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>1个错误</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>已完成的部分：{0}</value>
+    <value>已完成的部分：{{value}}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
     <value>尚未开始的部分</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>已经开始的部分：{0}</value>
+    <value>已经开始的部分：{{value}}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0}个子部分</value>
+    <value>{{value}}个子部分</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
     <value>1个子部分</value>

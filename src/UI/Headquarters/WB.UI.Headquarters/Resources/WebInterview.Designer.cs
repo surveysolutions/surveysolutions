@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class WebInterview {
@@ -142,6 +142,114 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Answered.
+        /// </summary>
+        public static string Filters_Answered {
+            get {
+                return ResourceManager.GetString("Filters_Answered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View all (reset all filters).
+        /// </summary>
+        public static string Filters_ClearSelection {
+            get {
+                return ResourceManager.GetString("Filters_ClearSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flagged.
+        /// </summary>
+        public static string Filters_Flagged {
+            get {
+                return ResourceManager.GetString("Filters_Flagged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For interviewer.
+        /// </summary>
+        public static string Filters_ForInterviewer {
+            get {
+                return ResourceManager.GetString("Filters_ForInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For supervisor.
+        /// </summary>
+        public static string Filters_ForSupervisor {
+            get {
+                return ResourceManager.GetString("Filters_ForSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid.
+        /// </summary>
+        public static string Filters_Invalid {
+            get {
+                return ResourceManager.GetString("Filters_Invalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string Filters_NotAnswered {
+            get {
+                return ResourceManager.GetString("Filters_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No flag.
+        /// </summary>
+        public static string Filters_NotFlagged {
+            get {
+                return ResourceManager.GetString("Filters_NotFlagged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old interview details.
+        /// </summary>
+        public static string Filters_OldDetailsLink {
+            get {
+                return ResourceManager.GetString("Filters_OldDetailsLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter Questions.
+        /// </summary>
+        public static string Filters_Title {
+            get {
+                return ResourceManager.GetString("Filters_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid.
+        /// </summary>
+        public static string Filters_Valid {
+            get {
+                return ResourceManager.GetString("Filters_Valid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With comments.
+        /// </summary>
+        public static string Filters_WithComments {
+            get {
+                return ResourceManager.GetString("Filters_WithComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This interview has been completed.
         /// </summary>
         public static string FinishInterviewText {
@@ -169,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} answers.
+        ///   Looks up a localized string similar to {{value}} answers.
         /// </summary>
         public static string Interview_Group_AnsweredQuestions_Many {
             get {
@@ -187,7 +295,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} errors.
+        ///   Looks up a localized string similar to {{value}} errors.
         /// </summary>
         public static string Interview_Group_InvalidAnswers_ManyFormat {
             get {
@@ -205,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section completed: {0}.
+        ///   Looks up a localized string similar to Section completed: {{value}}.
         /// </summary>
         public static string Interview_Group_Status_CompletedFormat {
             get {
@@ -223,7 +331,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Section started: {0}.
+        ///   Looks up a localized string similar to Section started: {{value}}.
         /// </summary>
         public static string Interview_Group_Status_StartedIncompleteFormat {
             get {
@@ -232,7 +340,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} sub-sections.
+        ///   Looks up a localized string similar to {{value}} sub-sections.
         /// </summary>
         public static string Interview_Group_Subgroups_ManyFormat {
             get {
@@ -273,6 +381,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewIdFormatText {
             get {
                 return ResourceManager.GetString("InterviewIdFormatText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot modify interview that were received on interviewer device.
+        /// </summary>
+        public static string InterviewReceivedByInterviewer {
+            get {
+                return ResourceManager.GetString("InterviewReceivedByInterviewer", resourceCulture);
             }
         }
         

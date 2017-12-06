@@ -10,12 +10,12 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.UI.Shared.Enumerator.Services.Internals.MapService;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -27,29 +27,34 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private readonly IMapService mapService;
         private readonly IUserInteractionService userInteractionService;
 
+        private readonly IFileSystemAccessor fileSystemAccessor;
+
         public AreaEditorViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
             IUserInteractionService userInteractionService,
-            ILogger logger)
+            ILogger logger,
+            IFileSystemAccessor fileSystemAccessor)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
             this.mapService = mapService;
             this.logger = logger;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public override void Load()
         {
-            this.AvailableMaps = new MvxObservableCollection<MapDescription>(this.mapService.GetAvailableMaps());
+            var localmaps = this.mapService.GetAvailableMaps();
+            localmaps.Add(this.mapService.PrepareAndGetDefaultMap());
+
+
+            this.AvailableMaps = new MvxObservableCollection<MapDescription>(localmaps);
             this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
-            if (this.AvailableMaps.Count == 0) return;
-            this.ReloadMap();
-        }
+            if (this.AvailableMaps.Count == 0)
+                return;
 
-        private void ReloadMap()
-        {
             if (!string.IsNullOrEmpty(this.MapName) && this.MapsList.Contains(this.MapName))
             {
                 this.SelectedMap = this.MapName;
@@ -66,7 +71,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             get => this.availableMaps;
             protected set => this.RaiseAndSetIfChanged(ref this.availableMaps, value);
         }
-        
+
 
         private List<string> mapsList = new List<string>();
         public List<string> MapsList
@@ -79,50 +84,66 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public string SelectedMap
         {
             get => this.selectedMap;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref this.selectedMap, value);
-
-                var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == value);
-
-                if (existingMap != null)
-                {
-                    this.UpdateBaseMap(existingMap.MapFullPath);
-                }
-            }
+            set => RaiseAndSetIfChanged(ref this.selectedMap, value);
+            
         }
 
-        public void UpdateBaseMap(string pathToMap)
+        public async Task UpdateBaseMap()
         {
-            if (pathToMap != null)
+            var existingMap = this.AvailableMaps.FirstOrDefault(x => x.MapName == this.SelectedMap);
+
+            if (existingMap != null)
             {
                 //woraround to fix size of map
                 //on map reload
                 if (MapView?.LocationDisplay != null)
                     this.MapView.LocationDisplay.IsEnabled = false;
 
-                TileCache titleCache = new TileCache(pathToMap);
-                var layer = new ArcGISTiledLayer(titleCache)
-                {
-                    //zoom to any level
-                    //if area is out of the map
-                    // should be available to navigate
-                    MinScale = 100000000,
-                    MaxScale = 1
-                };
 
-                this.Map = new Map
-                {
-                    Basemap = new Basemap(layer),
-                    MinScale = 100000000,
-                    MaxScale = 1
-                };
+                this.Map = await GetMap(existingMap.MapFullPath);
             }
             else
             {
                 this.Map = null;
             }
         }
+
+        private async Task<Map> GetMap(string pathToMapFile)
+        {
+            var mapFileExtention = this.fileSystemAccessor.GetFileExtension(pathToMapFile);
+
+            switch (mapFileExtention)
+            {
+                case ".mmpk":
+                {
+                    MobileMapPackage package = await MobileMapPackage.OpenAsync(pathToMapFile);
+                    if (package.Maps.Count > 0)
+                        return package.Maps.First();
+                    break;
+                }
+                case ".tpk":
+                {
+                    TileCache titleCache = new TileCache(pathToMapFile);
+                    var layer = new ArcGISTiledLayer(titleCache)
+                    {
+                        //zoom to any level
+                        //if area is out of the map
+                        // should be available to navigate
+                        MinScale = 100000000,
+                        MaxScale = 1
+                    };
+                    return new Map
+                    {
+                        Basemap = new Basemap(layer),
+                        MinScale = 100000000,
+                        MaxScale = 1
+                    };
+                }
+            }
+
+            return null;
+        }
+
 
         public void Init(string geometry, string mapName)
         {
@@ -165,10 +186,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 }
             }
         }
-       
-        public IMvxCommand SwitchMapCommand => new MvxCommand<MapDescription>((MapDescription map) => { this.SelectedMap = map.MapName; });
 
-       
+        public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
+            {
+                this.SelectedMap = mapDescription.MapName;
+                IsPanelVisible = false;
+                await this.UpdateBaseMap();
+            });
+
+        
         public IMvxAsyncCommand RotateMapToNorth => new MvxAsyncCommand(async () =>
             await this.MapView?.SetViewpointRotationAsync(0));
 
@@ -215,7 +241,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 if (!this.MapView.LocationDisplay.IsEnabled && !this.MapView.LocationDisplay.Started
                     && (this.MapView.LocationDisplay.DataSource != null && !this.MapView.LocationDisplay.DataSource.IsStarted))
-                        this.MapView.LocationDisplay.IsEnabled = true;
+                    this.MapView.LocationDisplay.IsEnabled = true;
                 else
                     this.MapView.LocationDisplay.IsEnabled = false;
             }
@@ -245,55 +271,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             IsPanelVisible = !IsPanelVisible;
         });
 
-        
-
-        public IMvxAsyncCommand UpdateMapsCommand => new MvxAsyncCommand(async () =>
-        {
-            try
-            {
-                if (!this.IsInProgress)
-                {
-                    this.IsInProgress = true;
-                    this.cancellationTokenSource = new CancellationTokenSource();
-                    await this.mapService.SyncMaps(this.cancellationTokenSource.Token).ConfigureAwait(false);
-
-                    this.AvailableMaps = new MvxObservableCollection<MapDescription>(this.mapService.GetAvailableMaps());
-                    this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
-
-                    if (this.Map == null)
-                    {
-                        this.ReloadMap();
-                        this.StartEditAreaCommand.Execute();
-                    }
-                }
-                else
-                {
-                    if (this.cancellationTokenSource != null && this.cancellationTokenSource.Token.CanBeCanceled)
-                        this.cancellationTokenSource.Cancel();
-                }
-            }
-            catch (Exception exc)
-            {
-                logger.Error("Error occured on map update.", exc);
-                this.userInteractionService.ShowToast(UIResources.AreaMap_UpdateFailed);
-            }
-            finally
-            {
-                this.IsInProgress = false;
-            }
-        });
-
-        private CancellationTokenSource cancellationTokenSource;
-
         public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () =>
         {
+            if (this.Map == null)
+                await UpdateBaseMap();
+
             if (this.IsEditing || this.Map == null)
                 return;
 
             this.IsEditing = true;
             try
             {
-                this.MapView.SketchEditor.GeometryChanged += delegate(object sender, GeometryChangedEventArgs args)
+                this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
                     bool isCanCalculateAreaDimensions = IsCanCalculateAreaDimensions(geometry);
@@ -340,7 +329,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 //project to geocoordinates
                 SpatialReference reference = new SpatialReference(4326);
                 var projectedPolygon = GeometryEngine.Project(result, reference) as Polygon;
-                
+
                 string coordinates = string.Empty;
                 if (projectedPolygon != null)
                 {
@@ -389,8 +378,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 return false;
 
             var groupedPoints = from point in readOnlyPart.Points
-                group point by new { X = point.X, Y = point.Y } into xyPoint
-                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
+                                group point by new { X = point.X, Y = point.Y } into xyPoint
+                                select new { X = xyPoint.Key.X, Y = xyPoint.Key.Y, Count = xyPoint.Count() };
 
             if (groupedPoints.Count() < 3)
                 return false;
@@ -466,7 +455,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.isPanelVisible, value);
         }
 
-        private bool isLocationServiceSwitchEnabled = true; 
+        private bool isLocationServiceSwitchEnabled = true;
         public bool IsLocationServiceSwitchEnabled
         {
             get => this.isLocationServiceSwitchEnabled;

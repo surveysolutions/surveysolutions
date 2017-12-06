@@ -17,7 +17,7 @@ namespace WB.UI.Shared.Web.Filters
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            if (!this.TransactionManager.IsTransactionStarted)
+            if (!this.TransactionManager.TransactionStarted)
                 return;
 
             if (filterContext.Exception != null)

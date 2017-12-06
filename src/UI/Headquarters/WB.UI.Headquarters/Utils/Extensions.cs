@@ -28,11 +28,5 @@ namespace WB.UI.Headquarters.Utils
                 return defaultValue;
             }
         }
-
-        [Localizable(false)]
-        public static TranslationModel Translations(this ResourceManager[] resources)
-        {
-            return new TranslationModel(resources);
-        }
     }
 }

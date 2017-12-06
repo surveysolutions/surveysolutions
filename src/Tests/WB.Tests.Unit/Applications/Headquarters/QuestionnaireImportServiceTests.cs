@@ -177,6 +177,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 Mock.Of<ITranslationManagementService>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
+                Mock.Of<IAuditLog>(),
                 globalInfoProvider,
                 designerUserCredentials);
             return questionnaireImportService;

@@ -11,6 +11,10 @@
         {
             "type": "npm",
             "script": "gulp",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": []
         }
     ]

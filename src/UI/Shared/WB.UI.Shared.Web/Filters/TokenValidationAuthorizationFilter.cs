@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Web.Filters
 {
     public class TokenValidationAuthorizationFilter : IAuthorizationFilter
     {
-        public const string Apikey = "Authorization";
+        public const string Apikey = "acsrfToken";
         private readonly ITokenVerifier tokenVerifier;
 
         public TokenValidationAuthorizationFilter(ITokenVerifier tokenVerifier)

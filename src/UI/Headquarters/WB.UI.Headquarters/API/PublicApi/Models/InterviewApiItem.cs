@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     public class InterviewApiItem
     {
         public InterviewApiItem(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,
-            string responsibleName, bool hasErrors, InterviewStatus status, string lastEntryDate, IEnumerable<InterviewFeaturedQuestion> featuredQuestions)
+            string responsibleName, bool hasErrors, InterviewStatus status, DateTime lastEntryDate, IEnumerable<InterviewFeaturedQuestion> featuredQuestions)
         {
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;
@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
                 
         [DataMember]
         [Required]
-        public string LastEntryDate { get; set; }
+        public DateTime LastEntryDate { get; set; }
         
     }
 }

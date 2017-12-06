@@ -23,9 +23,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
-using WB.Core.BoundedContexts.Headquarters.EventHandler.WB.Core.SharedKernels.SurveyManagement.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -81,6 +81,7 @@ using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc.Storage;
+using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using AssignmentDocument = WB.Core.BoundedContexts.Interviewer.Views.AssignmentDocument;
@@ -232,17 +233,6 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
-        public MapReportDenormalizer MapReportDenormalizer(
-            IReadSideRepositoryWriter<MapReportPoint> mapReportPointStorage = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage = null,
-            QuestionnaireQuestionsInfo questionnaireQuestionsInfo = null,
-            QuestionnaireDocument questionnaireDocument = null)
-            => new MapReportDenormalizer(
-                interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
-                mapReportPointStorage ?? new TestInMemoryWriter<MapReportPoint>(),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<Guid>(), It.IsAny<long>()) == questionnaireDocument),
-                Mock.Of<IPlainKeyValueStorage<QuestionnaireQuestionsInfo>>(_ => _.GetById(It.IsAny<string>()) == questionnaireQuestionsInfo));
-
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
@@ -261,7 +251,7 @@ namespace WB.Tests.Abc.TestFactories
                 new RosterStructureService().GetRosterScopes(questionnaire), 
                 questionnaire,
                 new QuestionDataParser(),
-                new UserViewFactory(Mock.Of<IUserRepository>()));
+                new UserViewFactory(Mock.Of<IUserRepository>(), Mock.Of<IInterviewerProfileFactory>()));
 
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
@@ -308,13 +298,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public IDataExportStatusReader DataExportStatusReader(IDataExportProcessesService dataExportProcessesService = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
-            IParaDataAccessor paraDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
         {
             return new DataExportStatusReader(dataExportProcessesService: dataExportProcessesService ?? Substitute.For<IDataExportProcessesService>(),
                 filebasedExportedDataAccessor: filebasedExportedDataAccessor ?? Substitute.For<IFilebasedExportedDataAccessor>(),
-                paraDataAccessor: paraDataAccessor ?? Substitute.For<IParaDataAccessor>(),
                 fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
         }
@@ -533,6 +521,39 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewStatusTimeSpanDenormalizer InterviewStatusTimeSpanDenormalizer()
         {
             return new InterviewStatusTimeSpanDenormalizer();
+        }
+
+        public ICsvWriter CsvWriter(List<CsvData> writeTo)
+        {
+            var csvWriterMock = new Mock<ICsvWriter>();
+            csvWriterMock
+                .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
+                .Callback((string s, IEnumerable<string[]> p, string t) =>
+                {
+                    writeTo.Add(new CsvData
+                    {
+                        File = s,
+                        Data = p.ToList()
+                    });
+                });
+            return csvWriterMock.Object;
+        }
+
+        public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
+            IDeviceSyncInfoRepository deviceSyncInfoRepository = null, 
+            IInterviewerVersionReader interviewerVersionReader = null)
+        {
+            return new InterviewerProfileFactory(
+                userManager ?? Mock.Of<HqUserManager>(),
+                interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(), 
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>());
+        }
+
+        public StatefullInterviewSearcher StatefullInterviewSearcher()
+        {
+            return new StatefullInterviewSearcher(Mock.Of<IInterviewFactory>(x=> x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[]{}));
         }
     }
 }

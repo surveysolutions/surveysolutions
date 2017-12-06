@@ -1,10 +1,11 @@
 using System;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -18,6 +19,7 @@ namespace WB.UI.Interviewer.ViewModel
     public class InterviewViewModel : BaseInterviewViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -35,12 +37,14 @@ namespace WB.UI.Interviewer.ViewModel
             ICommandService commandService,
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
-            IEnumeratorSettings enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
         }
 
         public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
@@ -51,6 +55,13 @@ namespace WB.UI.Interviewer.ViewModel
         });
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
+
+        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
+
+        private void NavigateToMaps()
+        {
+            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
+        }
 
         public override void NavigateBack()
         {
@@ -91,6 +102,27 @@ namespace WB.UI.Interviewer.ViewModel
                 default:
                     return null;
             }
+        }
+
+        public override void ViewAppeared()
+        {
+            if (!lastCreatedInterviewStorage.WasJustCreated(interviewId))
+            {
+                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now, DateTime.UtcNow));
+            }
+
+            base.ViewAppeared();
+        }
+
+        public override void ViewDisappearing()
+        {
+            var interview = interviewRepository.Get(this.interviewId);
+            if (!interview.IsCompleted)
+            {
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+            }
+
+            base.ViewDisappeared();
         }
     }
 }

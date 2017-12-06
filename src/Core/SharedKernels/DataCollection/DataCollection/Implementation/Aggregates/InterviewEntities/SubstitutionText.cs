@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                             var dateTime = asDateTime.GetAnswer().Value;
 
                             substitutionResult = asDateTime.IsTimestamp 
-                                ? $"<time datetime=\"{dateTime:s}Z\">{dateTime.ToLocalTime().ToString(asDateTime.UiFormatString)}</time>" 
+                                ? $"<time datetime=\"{dateTime:s}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>" 
                                 : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
                         }
                         

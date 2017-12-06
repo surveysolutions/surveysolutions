@@ -66,8 +66,7 @@
 				background-color: $gray-super-light;
 			}
 			.format-data{
-				@include font(14px, 16px);
-				font-weight: bold;
+				font: 14px/16px "RobotoBold";
 				width: 34%;
 				position: relative;
 				padding-left: 80px;
@@ -128,10 +127,6 @@
 			border-right: 1px solid #f2f4f4;
 		}
 	}
-}
-.cancel{
-	$cross-height: 24px;
-	@include cancel($cross-height);
 }
 .footer{
 	@include transition(padding, 0.3s);

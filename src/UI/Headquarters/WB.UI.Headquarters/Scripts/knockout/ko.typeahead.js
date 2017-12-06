@@ -16,12 +16,16 @@ ko.bindingHandlers.typeahead = {
 
         $(element).prop('maxLength', 256);
         $(element).typeahead(options);
-        $(element).change(function () {
+
+
+        var oldValue;
+        $(element).change(function (evt) {
             var selectedItem = $(element).typeahead("getActive");
-            if (selectedItem) {
+            if (selectedItem && oldValue != selectedItem) {
                 var observable = valueAccessor();
                 observable(selectedItem);
             }
+            oldValue = selectedItem;
         });
         valueAccessor().extend({ notify: 'always' });
     },

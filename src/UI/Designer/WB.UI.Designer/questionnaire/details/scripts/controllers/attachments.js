@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('AttachmentsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
+        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
             'use strict';
 
             $scope.downloadLookupFileBaseUrl = '../../attachments';
@@ -17,7 +17,7 @@
                 hotkeys.del(hideAttachmentsPane);
             }
 
-            hotkeys.add(hideAttachmentsPane, 'Close attachments panel', function (event) {
+            hotkeys.add(hideAttachmentsPane, $i18next.t('HotkeysHideAttachments'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
@@ -65,7 +65,7 @@
                 }
 
                 if (!_.isUndefined(attachmentDto.meta) && !_.isNull(attachmentDto.meta)) {
-                    attachment.meta.lastUpdated = moment(attachmentDto.meta.lastUpdateDate);
+                    attachment.meta.lastUpdated = moment.utc(attachmentDto.meta.lastUpdateDate).local();
                     attachment.meta.fileName = attachmentDto.meta.fileName;
                 }
             };
@@ -114,7 +114,7 @@
                 }
 
                 if ($scope.isReadOnlyForUser) {
-                    notificationService.notice("You don't have permissions for changing this questionnaire");
+                    notificationService.notice($i18next.t('NoPermissions'));
                     return;
                 }
 
@@ -167,7 +167,7 @@
                         }
                     })
                     .catch(function() {
-                        notificationService.error('Chosen file is not image');
+                        notificationService.error($i18next.t('NotAnImage'));
                     });
             }
 
@@ -202,7 +202,7 @@
 
             $scope.deleteAttachment = function (index) {
                 var attachment = $scope.attachments[index];
-                var attachmentName = attachment.name || "attachment with no name";
+                var attachmentName = attachment.name || $i18next.t('SideBarAttachmentNoName');
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(attachmentName));
 
                 modalInstance.result.then(function (confirmResult) {

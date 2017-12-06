@@ -97,6 +97,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compressing.
+        /// </summary>
+        internal static string Compressing {
+            get {
+                return ResourceManager.GetString("Compressing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to stop.
         /// </summary>
         internal static string ConfirmStop {
@@ -169,7 +178,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to export.
+        ///   Looks up a localized string similar to export process.
         /// </summary>
         internal static string export {
             get {

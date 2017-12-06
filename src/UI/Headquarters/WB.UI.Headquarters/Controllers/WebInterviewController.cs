@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Resources;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -31,12 +28,8 @@ using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
 using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 using Microsoft.AspNet.Identity;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
+using StackExchange.Exceptional;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Models;
-using WB.UI.Headquarters.Resources;
-using WB.UI.Headquarters.Utils;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -60,6 +53,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAudioProcessingService audioProcessingService;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
+        public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
 
         private bool CapchaVerificationNeededForInterview(string interviewId)
         {
@@ -147,12 +141,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.Archived || assignment.IsCompleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
@@ -167,7 +161,7 @@ namespace WB.UI.Headquarters.Controllers
             var assignment = this.assignments.GetById(id);
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
             if (!this.connectionLimiter.CanConnect())
             {
@@ -189,6 +183,7 @@ namespace WB.UI.Headquarters.Controllers
             var interviewId = this.CreateInterview(assignment);
 
             RememberCapchaFilled(interviewId);
+            TempData[LastCreatedInterviewIdKey] = interviewId;
 
             return this.Redirect(GenerateUrl("Cover", interviewId));
         }
@@ -266,10 +261,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!isAuthorizedUser)
             {
                 if (!webInterviewConfig.Started)
-                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
 
                 if(interview.Status == InterviewStatus.Completed)
-                    throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
             }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -308,10 +303,6 @@ namespace WB.UI.Headquarters.Controllers
             return View();
         }
 
-        private static readonly ResourceManager[] WebUiLocales = { WebInterviewUI.ResourceManager, global::Resources.Common.ResourceManager };
-        
-        public static string Locale() => WebUiLocales.Translations().ToString();
-
         private string CreateInterview(Assignment assignment)
         {
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
@@ -346,7 +337,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             return new ResumeWebInterview
@@ -364,7 +355,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             var view = new StartWebInterview
@@ -382,7 +373,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
             }
 
             return new FinishWebInterview
@@ -422,27 +413,11 @@ namespace WB.UI.Headquarters.Controllers
         protected override void OnException(ExceptionContext filterContext)
         {
             var interviewException = filterContext.Exception.GetSelfOrInnerAs<InterviewException>();
-            if (interviewException != null)
+            if (interviewException != null 
+                && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
             {
-                string errorMessage = "";
-                switch (interviewException.ExceptionType)
-                {
-                    case InterviewDomainExceptionType.InterviewLimitReached:
-                        errorMessage = WebInterview.ServerUnderLoad;
-                        break;
-
-                    case InterviewDomainExceptionType.QuestionnaireIsMissing:
-                    case InterviewDomainExceptionType.InterviewHardDeleted:
-                        errorMessage = WebInterview.Error_InterviewExpired;
-                        break;
-                    case InterviewDomainExceptionType.OtherUserIsResponsible:
-                    case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
-                        errorMessage = WebInterview.Error_NoActionsNeeded;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                string errorMessage = Headquarters.API.WebInterview.WebInterview.GetUiMessageFromException(interviewException);
+                
                 this.HandleInterviewAccessError(filterContext, errorMessage);
                 return;
             }
@@ -452,8 +427,7 @@ namespace WB.UI.Headquarters.Controllers
                 return;
             }
 
-            var interviewAccessException = filterContext.Exception as WebInterviewAccessException;
-            if (interviewAccessException != null)
+            if (filterContext.Exception is InterviewAccessException interviewAccessException)
             {
                 if (interviewAccessException.Reason == InterviewAccessExceptionReason.UserNotAuthorised)
                 {
@@ -484,9 +458,9 @@ namespace WB.UI.Headquarters.Controllers
                 return;
             }
 
+            filterContext.Exception.Log(System.Web.HttpContext.Current);
             this.HandleInDebugMode(filterContext);
         }
-
 
         [Conditional("DEBUG")]
         private void HandleInDebugMode(ExceptionContext filterContext)

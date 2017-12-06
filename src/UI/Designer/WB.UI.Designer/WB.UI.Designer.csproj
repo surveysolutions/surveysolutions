@@ -26,6 +26,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,8 +53,14 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AntiXssLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\AntiXssLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Antlr3.Runtime">
       <HintPath>..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
@@ -64,6 +71,9 @@
     <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -98,29 +108,29 @@
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.3.3.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.3.3.3\lib\net45\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Extensions.Conventions, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\Ninject.Extensions.Conventions.3.2.0.0\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    <Reference Include="Ninject.Extensions.Conventions, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.Extensions.Conventions.3.3.0\lib\net45\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Common, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Ninject.Web.Common.3.2.3.0\lib\net45-full\Ninject.Web.Common.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Ninject.Extensions.Factory, Version=3.3.2.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.Extensions.Factory.3.3.2\lib\net45\Ninject.Extensions.Factory.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.Mvc, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Ninject.MVC5.3.2.1.0\lib\net45-full\Ninject.Web.Mvc.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Ninject.Web.Common, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.Web.Common.3.3.0\lib\net45\Ninject.Web.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.WebApi, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Ninject.Web.Common.WebHost, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.Web.Common.WebHost.3.3.0\lib\net45\Ninject.Web.Common.WebHost.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Web.WebApi.WebHost, Version=3.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.WebHost.3.2.4.0\lib\net45-full\Ninject.Web.WebApi.WebHost.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Ninject.Web.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.MVC5.3.3.0\lib\net45\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.3.3.0\lib\net45\Ninject.Web.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject.Web.WebApi.WebHost, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.WebHost.3.3.0\lib\net45\Ninject.Web.WebApi.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NLog.4.4.11\lib\net45\NLog.dll</HintPath>
@@ -253,6 +263,7 @@
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
+    <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Code\DesignerOldCompatibilityBinder.cs" />
@@ -299,17 +310,34 @@
     <Compile Include="Migrations\PlainStore\M001-100\M012_MigrateSharedPersonsToListStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M014_AddCanImportOnHQColumnToUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M015_AddAllowedAddressesTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M021_AddCreatorNameFieldForFolders.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M020_AddHierarhyFieldForFolders.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M019_AddRelationsForFolders.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M017_AddQuestionnaireListViewFolderTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
+    <Compile Include="Models\FolderBreadcrumbsModel.cs" />
     <Compile Include="Models\IEmailNotification.cs" />
     <Compile Include="Models\JsonResponseResult.cs" />
     <Compile Include="Models\LogonModel.cs" />
     <Compile Include="Models\QuestionnaireDocumentWithLookUpTables.cs" />
+    <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
     <Compile Include="Models\VerificationReferenceEnriched.cs" />
+    <Compile Include="Resources\Paging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Paging.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\PdfMessages.Designer.cs">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\ErrorMessages.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -378,7 +406,6 @@
     <Compile Include="Models\VerificationMessage.cs" />
     <Compile Include="Models\VerificationResult.cs" />
     <Compile Include="Models\PasswordModel.cs" />
-    <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\QuestionnaireCloneModel.cs" />
@@ -419,6 +446,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Resources\QuestionnaireEditor.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\QuestionnaireHistoryResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -430,6 +462,7 @@
     <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Services\QuestionnaireDowngradeService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
+    <Compile Include="Utils\Pdf.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewItemMessage.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListViewMessage.cs" />
@@ -448,6 +481,11 @@
     <Content Include="Content\identity\favicon-designer-72x72.png" />
     <Content Include="Content\identity\favicon-designer-76x76.png" />
     <Content Include="Content\identity\favicon-designer.png" />
+    <Content Include="Content\images\chekboxes.png" />
+    <Content Include="Content\images\chekboxes2k.png" />
+    <Content Include="Content\images\DR-2017-folders-icons-2x.png" />
+    <Content Include="Content\images\DR-2017-folders-icons-G2-color.png" />
+    <Content Include="Content\images\DR-2017-folders-icons.png" />
     <Content Include="Content\images\pdf-question-legend.png" />
     <Content Include="Content\images\pdf-roster-legend.png" />
     <Content Include="Content\images\pdf_logo.png" />
@@ -457,23 +495,71 @@
     <Content Include="Content\pdf.min.css">
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
+    <Content Include="questionnaire\details\scripts\modules\ng-context-menu.js" />
+    <Content Include="questionnaire\details\scripts\modules\perfect_scrollbar.js" />
+    <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
+    <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
     <Content Include="questionnaire\details\scripts\services\alertService.js" />
+    <Content Include="questionnaire\details\scripts\services\translate.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
+    <EmbeddedResource Include="Resources\AccountResources.es.resx" />
+    <EmbeddedResource Include="Resources\AccountResources.fr.resx" />
     <EmbeddedResource Include="Resources\AccountResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Content Include="Scripts\custom\editForm.js" />
+    <EmbeddedResource Include="Resources\AccountResources.ru.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.es.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FindReplaceResources.es.resx" />
+    <EmbeddedResource Include="Resources\FindReplaceResources.fr.resx" />
+    <EmbeddedResource Include="Resources\FindReplaceResources.ru.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.es.resx" />
+    <EmbeddedResource Include="Resources\NotificationResources.fr.resx" />
+    <EmbeddedResource Include="Resources\NotificationResources.ru.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Paging.es.resx" />
+    <EmbeddedResource Include="Resources\Paging.fr.resx" />
+    <EmbeddedResource Include="Resources\Paging.ru.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.es.resx" />
+    <EmbeddedResource Include="Resources\PdfMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireController.es.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireController.fr.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireController.ru.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.es.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.fr.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.es.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.fr.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ru.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -503,9 +589,6 @@
     <Content Include="questionnaire\details\views\variable.html" />
     <Content Include="questionnaire\details\views\help-link.html" />
     <Content Include="questionnaire\details\views\attachment-preview.html" />
-    <Content Include="questionnaire\content\designer-start\bootstrap-custom.min.css">
-      <DependentUpon>bootstrap-custom.css</DependentUpon>
-    </Content>
     <Content Include="questionnaire\content\designer-start\bootstrap-override.css">
       <DependentUpon>bootstrap-override.less</DependentUpon>
     </Content>
@@ -547,9 +630,7 @@
     <Content Include="questionnaire\details\views\treegroup.html" />
     <Content Include="questionnaire\details\views\treequestion.html" />
     <Content Include="questionnaire\details\views\treestatictext.html" />
-    <Content Include="questionnaire\build\*.js" />
-    <Content Include="questionnaire\build\*.css" />
-    <Content Include="questionnaire\vendor\**" />
+    <Content Include="questionnaire\build\**\*" />
     <Content Include="questionnaire\details\scripts\app.js" />
     <Content Include="questionnaire\details\scripts\controllers\chapters.js" />
     <Content Include="questionnaire\details\scripts\controllers\confirm.js" />
@@ -622,7 +703,6 @@
     <Content Include="questionnaire\content\markup.css.css.map">
       <DependentUpon>markup.css.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\details\index.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-question-list.css.css">
       <DependentUpon>wb-question-list.css.less</DependentUpon>
@@ -653,6 +733,7 @@
     <Content Include="Configuration\ANK.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Scripts\custom\public-folders.js" />
     <Content Include="Scripts\custom\common.js" />
     <Content Include="Scripts\custom\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
@@ -710,13 +791,9 @@
     <Content Include="questionnaire\content\designer-start\bootstrap-override.css.map">
       <DependentUpon>bootstrap-override.css</DependentUpon>
     </Content>
-    <Content Include="questionnaire\content\designer-start\bootstrap-custom.css.map">
-      <DependentUpon>bootstrap-custom.css</DependentUpon>
-    </Content>
     <Content Include="Views\Questionnaire\Create.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Details.cshtml" />
-    <Content Include="questionnaire\content\fonts\Roboto300.woff" />
     <Content Include="Views\Error\Layout.Error.cshtml" />
     <Content Include="Views\Questionnaire\QuestionnaireHistory.cshtml" />
     <Content Include="Views\SystemMailer\TargetPersonShareNotification.cshtml" />
@@ -742,6 +819,16 @@
     <Content Include="Views\ControlPanel\CompilationVersionsViews\CompilationVersions.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\AddCompilationVersion.cshtml" />
     <Content Include="Views\ControlPanel\CompilationVersionsViews\EditCompilationVersion.cshtml" />
+    <Content Include="Views\Shared\QuestionnairesList.cshtml" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="questionnaire\content\fonts\OpenSans300.woff" />
+    <Content Include="questionnaire\content\fonts\Roboto300.woff" />
+    <Content Include="Views\Questionnaire\PublicFolders.cshtml" />
+    <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
+    <Content Include="Views\Shared\_alerts.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -760,7 +847,6 @@
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Shared\Layout.cshtml" />
-    <Content Include="Views\Shared\_html5shiv.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
@@ -794,27 +880,21 @@
     <Content Include="questionnaire\content\lib\wb-vars.css.less" />
     <Content Include="questionnaire\content\markup.css.less" />
     <Content Include="questionnaire\content\wb-init.css.less" />
-    <Content Include="questionnaire\.bowerrc" />
-    <Content Include="questionnaire\bower.json" />
     <Content Include="questionnaire\.jscsrc" />
     <Content Include="questionnaire\.jshintrc" />
     <Content Include="Views\Shared\_commonFooter.cshtml" />
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="questionnaire\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="questionnaire\fonts\Roboto300.woff" />
     <Content Include="questionnaire\content\lib\controls\wb-modal.css.less" />
     <Content Include="questionnaire\content\lib\wb-customfonts.css.less" />
     <Content Include="questionnaire\content\designer-editor\wb-share.css.less" />
     <Content Include="questionnaire\content\dropdown.css.less" />
     <Content Include="Views\ControlPanel\Index.cshtml" />
     <Content Include="Views\ControlPanel\Layout.ControlPanel.cshtml" />
-    <Content Include="questionnaire\fonts\OpenSans300.woff" />
     <Content Include="Views\Questionnaire\EditOptions.cshtml" />
     <Content Include="Views\Error\RequestLengthExceeded.cshtml" />
     <Content Include="Views\Questionnaire\EditCascadingOptions.cshtml" />
     <Content Include="questionnaire\package.json" />
     <Content Include="Views\ControlPanel\MakeAdmin.cshtml" />
+    <Content Include="Content\plugins\**\*" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -855,6 +935,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Paging.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Paging.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PdfMessages.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
@@ -867,6 +956,14 @@
     <EmbeddedResource Include="Resources\NotificationResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>NotificationResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.ru.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -876,8 +973,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\QuestionnaireController.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireController.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -890,15 +988,12 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-
   <!-- questionnaire -->
-
   <Target Name="CleanupQuestionnaire" BeforeTargets="BeforeRebuild">
     <Message Text="Cleaning up questionnaire" />
     <RemoveDir Directories="questionnaire\vendor" ContinueOnError="true" />
   </Target>
-  
-  <Target Name="RestoreNodeModules" BeforeTargets="BowerInstall" Condition=" '$(Configuration)' == 'Debug'">
+  <Target Name="RestoreNodeModules" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug'">
     <Message Importance="High" Text="Restoring node_modules" />
     <Exec Command="yarn --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
@@ -906,18 +1001,15 @@
     <Exec Command="yarn --ignore-scripts" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' == '0'" />
     <Exec Command="npm install" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' != '0'" />
   </Target>
-
-  <Target Name="BowerInstall" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And !Exists('questionnaire\vendor') ">
-    <Message Importance="High" Text="Restoring vendor from bower" />
-    <Exec Command="node_modules\.bin\bower install" WorkingDirectory="questionnaire" />
-  </Target>
-  
   <!-- /questionnaire -->
-
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
   </Target>
-  
+  <Target Name="RemoveNetFxForceConflicts" BeforeTargets="BuiltProjectOutputGroupDependencies">
+    <ItemGroup>
+      <ReferencePath Remove="@(ReferencePath)" Condition="'%(FileName)' == 'netfx.force.conflicts.dll'" />
+    </ItemGroup>
+  </Target>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

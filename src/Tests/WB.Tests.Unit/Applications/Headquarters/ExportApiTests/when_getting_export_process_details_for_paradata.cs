@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             var questionnaireExportStructureStorage = Mock.Of<IQuestionnaireExportStructureStorage>(
                     x => x.GetQuestionnaireExportStructure(questionnaireIdentity) == new QuestionnaireExportStructure());
 
-            paraDataExportProcessDetails = new ParaDataExportProcessDetails(DataExportFormat.Tabular)
+            paraDataExportProcessDetails = new DataExportProcessDetails(DataExportFormat.Paradata, questionnaireIdentity, "questionnaire title")
             {
                 Status = DataExportStatus.Running,
                 ProgressInPercents = 98
@@ -58,6 +58,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 
         private static IHttpActionResult result;
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static IDataExportProcessDetails paraDataExportProcessDetails;
+        private static DataExportProcessDetails paraDataExportProcessDetails;
     }
 }

@@ -121,18 +121,60 @@
     <value>Activer le cryptage</value>
   </data>
   <data name="ExportEncryption_Title" xml:space="preserve">
-    <value>Cryptage des données à exporter</value>
+    <value>Exporter le cryptage</value>
   </data>
   <data name="ExportEncryptionSettings" xml:space="preserve">
-    <value>Paramètres de cryptage</value>
+    <value>Exporter les paramètres du cryptage</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
   </data>
   <data name="RegeneratePasswordConfirm" xml:space="preserve">
-    <value>Êtes-vous sûr de que vouloir créer un nouveau mot de passe ? Vous aurez à exporter les données à nouveau afin de les ouvrir.</value>
+    <value>Êtes-vous sûr de vouloir créer un nouveau mot de passe? Vous devrez régénérer les données exportées pour les ouvrir.</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Paramètres</value>
+  </data>
+  <data name="ChangeStateConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir changer l'état de la protection? Vous devrez régénérer les données exportées afin de l'ouvrir.</value>
+  </data>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>Logo actuel</value>
+  </data>
+  <data name="ExportEncryption_Description" xml:space="preserve">
+    <value>Cochez la case Activer le cryptage pour crypter les archives de données d'exportation et protégez-les avec le mot de passe fourni. Changez le mot de passe en appuyant sur le bouton d'erreur circulaire. Après le cryptage, seules les personnes connaissant le mot de passe peuvent ouvrir les données exportées.</value>
+  </data>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer la note globale?</value>
+  </data>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>Note sauvegardée</value>
+  </data>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>Note globale</value>
+  </data>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve">
+    <value>Spécifiez le texte dans le champ Note globale à afficher en haut de chaque écran sur le serveur.</value>
+  </data>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>Note globale</value>
+  </data>
+  <data name="Logo" xml:space="preserve">
+    <value>Logo d'entreprise</value>
+  </data>
+  <data name="LogoNotUpdated" xml:space="preserve">
+    <value>Le logo de l'entreprise n'a pas été mis à jour. Veuillez fournir une image valide</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>Logo d'entreprise</value>
+  </data>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>Le logo de la société affiche une image personnalisée sur la page de connexion du serveur et sur la page de connexion de l'application Interviewer. Cliquez sur le bouton Choisir un fichier pour télécharger une image de votre ordinateur sur le serveur.</value>
+  </data>
+  <data name="LogoUpdated" xml:space="preserve">
+    <value>Le logo de l'entreprise</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>Supprimer le logo</value>
   </data>
 </root>

@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
                     for (int columnIndex = 0; columnIndex < rowData.Length; columnIndex++)
                     {
-                        worksheet.Cells[rowIndex + 2, columnIndex + 1].Value = rowData[columnIndex];
+                        worksheet.Cells[rowIndex + 2, columnIndex + 1].Value = rowData[columnIndex]?.ToString() ?? "";
                     }
                 }
 

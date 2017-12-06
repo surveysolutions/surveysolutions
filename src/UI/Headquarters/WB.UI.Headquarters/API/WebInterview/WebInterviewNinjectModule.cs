@@ -1,17 +1,10 @@
-using System;
 using System.Collections.Concurrent;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.AspNet.SignalR.Messaging;
 using Microsoft.AspNet.SignalR.Ninject;
-using Ninject;
 using Ninject.Modules;
-using Prometheus.Advanced;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Versions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
@@ -22,26 +15,23 @@ namespace WB.UI.Headquarters.API.WebInterview
         public override void Load()
         {
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(this.Kernel);
-            var pipiline = GlobalHost.DependencyResolver.Resolve<IHubPipeline>();
-
-            pipiline.AddModule(new SignalrErrorHandler());
-            pipiline.AddModule(new PlainSignalRTransactionManager());
-            pipiline.AddModule(new WebInterviewAllowedModule());
-            pipiline.AddModule(new WebInterviewStateManager(GlobalHost.DependencyResolver.Resolve<IProductVersion>(), GlobalHost.DependencyResolver.Resolve<IStatefulInterviewRepository>()));
-            pipiline.AddModule(new WebInterviewConnectionsCounter());
-
+            
+            this.Bind<IConnectionsMonitor>().To<ConnectionsMonitor>().InSingletonScope();
             this.Bind<IWebInterviewNotificationService>().To<WebInterviewLazyNotificationService>().InSingletonScope();
             this.Bind<IConnectionLimiter>().To<ConnectionLimiter>();
-
-            DefaultCollectorRegistry.Instance.RegisterOnDemandCollectors(new IOnDemandCollector[]
-            {
-                new DotNetStatsCollector ()
-            });
-
+            this.Bind<IStatefullInterviewSearcher>().To<StatefullInterviewSearcher>();
+            this.Bind<IWebInterviewInterviewEntityFactory>().To<WebInterviewInterviewEntityFactory>();
+            
             this.Bind<IJavaScriptMinifier>().ToConstant(new SignalRHubMinifier());
 
+            this.Bind<IHubPipelineModule>().To<SignalrErrorHandler>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<PlainSignalRTransactionManager>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<InterviewAuthorizationModule>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<WebInterviewStateManager>().InSingletonScope();
+            this.Bind<IHubPipelineModule>().To<WebInterviewConnectionsCounter>().InSingletonScope();
+            
             this.Bind<IHubContext>()
-                .ToMethod(context => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
+                .ToMethod(_ => GlobalHost.ConnectionManager.GetHubContext<WebInterview>())
                 .InSingletonScope()
                 .Named(@"WebInterview");
         }

@@ -138,6 +138,9 @@
   <data name="InterviewChart" xml:space="preserve">
     <value>График интервью</value>
   </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Интервьюеры</value>
+  </data>
   <data name="InterviewerAssigned" xml:space="preserve">
     <value>Интервьюер назначен</value>
   </data>

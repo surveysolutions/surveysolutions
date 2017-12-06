@@ -2,7 +2,7 @@
 	@include absolute(5px, 10px, null, null);
 	z-index: 1;
 	button{
-		display: block;
+		display: inline-block;
 		position: relative;
 		text-align: center;
 		@include size(40px, 45px);
@@ -15,6 +15,7 @@
 			}
 		}
 		span{
+			vertical-align: middle;
 			display: inline-block;
 			@include square(5px);
 			border-radius: 100%;

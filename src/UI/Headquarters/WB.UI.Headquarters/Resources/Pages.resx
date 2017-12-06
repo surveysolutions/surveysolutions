@@ -1022,6 +1022,12 @@
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
     <value>Are You sure that You want to discard interview data?</value>
   </data>
+  <data name="Map_DiscardConfirm" xml:space="preserve">
+    <value>Are You sure You want to delete the map?</value>
+  </data>
+  <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
+    <value>Are You sure You want to delink user from the map?</value>
+  </data>
   <data name="CautionTitle" xml:space="preserve">
     <value>Caution:</value>
   </data>
@@ -1039,8 +1045,8 @@
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>
-  </data>  
-  <data name="StatusDurationDescription">
+  </data>
+  <data name="StatusDurationDescription" xml:space="preserve">
     <value>Number of days that assignments and interviews have stayed in their current status</value>
   </data>
   <data name="ExportToExcel" xml:space="preserve">
@@ -1050,7 +1056,7 @@
     <value>Comma separated values (.csv)</value>
   </data>
   <data name="ExportToTab" xml:space="preserve">
-    <value>Tab separated values (.tsv)</value>
+    <value>Tab separated values (.tab)</value>
   </data>
   <data name="ExportButton" xml:space="preserve">
     <value>Export</value>
@@ -1069,5 +1075,95 @@
   </data>
   <data name="Or" xml:space="preserve">
     <value>or</value>
+  </data>
+  <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+    <value>Do you want to delete map?</value>
+  </data>
+  <data name="MapDetails_InterviewerName" xml:space="preserve">
+    <value>Interviewer name</value>
+  </data>
+  <data name="MapDetails_DelinkUser" xml:space="preserve">
+    <value>Delink User from map</value>
+  </data>
+  <data name="MapDetails_MapDisclaimer" xml:space="preserve">
+    <value>This preview shows the loaded map superimposed on the world map</value>
+  </data>
+  <data name="MapDetails_MapTitle" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="MapDetails_ImportedOn" xml:space="preserve">
+    <value>Imported on</value>
+  </data>
+  <data name="MapDetails_Size" xml:space="preserve">
+    <value>Size(MB)</value>
+  </data>
+  <data name="MapDetails_MinScale" xml:space="preserve">
+    <value>Min Scale</value>
+  </data>
+  <data name="MapDetails_MaxScale" xml:space="preserve">
+    <value>Max Scale</value>
+  </data>
+  <data name="MapList_Title" xml:space="preserve">
+    <value>Maps</value>
+  </data>
+  <data name="MapList_Upload" xml:space="preserve">
+    <value>Upload .zip file</value>
+  </data>
+  <data name="MapList_UploadDescription" xml:space="preserve">
+    <value>Upload zip archive containing maps.</value>
+  </data>
+  <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
+    <value>Files with same name will be overridden.</value>
+  </data>
+  <data name="MapList_UserLinking" xml:space="preserve">
+    <value>Update user-to-map linking</value>
+  </data>
+  <data name="MapList_DeleteMap" xml:space="preserve">
+    <value>Delete Map</value>
+  </data>
+  <data name="MapList_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="MapList_Size" xml:space="preserve">
+    <value>Size (MB)</value>
+  </data>
+  <data name="MapList_Updated" xml:space="preserve">
+    <value>Updated on</value>
+  </data>
+  <data name="MapLinking_DescriptionTitle" xml:space="preserve">
+    <value>Manage user map links</value>
+  </data>
+  <data name="MapLinking_Description" xml:space="preserve">
+    <value>Upload file containing correspondence between maps and users</value>
+  </data>
+  <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
+    <value>Upload users mappings</value>
+  </data>
+  <data name="MapLinking_UploadDescription" xml:space="preserve">
+    <value>This will allow you to create map to user correspondence.</value>
+  </data>
+  <data name="MapLinking_DownloadExisting" xml:space="preserve">
+    <value>Download existing links</value>
+  </data>
+  <data name="MapLinking_UploadFile" xml:space="preserve">
+    <value>Upload .tab file</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription" xml:space="preserve">
+    <value>Upload .tab file with file mappings</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
+    <value> Invalid names and user names will be ignored.</value>
+  </data>
+  <data name="Map_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Map_Uploaded" xml:space="preserve">
+    <value>File was uploaded. Processing.</value>
+  </data>
+  <data name="Map_Uploading" xml:space="preserve">
+    <value>Uploading</value>
+  </data>
+  <data name="Map_UploadingError" xml:space="preserve">
+    <value>Error occurred during upload</value>
   </data>
 </root>

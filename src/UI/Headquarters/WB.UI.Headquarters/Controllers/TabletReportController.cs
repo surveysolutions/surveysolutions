@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.Code;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -15,7 +16,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.tabletInformationService = tabletInformationService;
         }
 
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         public ActionResult DownloadPackages(string fileName)
         {
             var hostName = this.Request?.Url?.Host.Split('.').FirstOrDefault() ?? @"unknownhost";
@@ -23,7 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 this.tabletInformationService.GetFileName(fileName, hostName));
         }
 
-        [Authorize(Roles = "Administrator")]
+        [AuthorizeOr403(Roles = "Administrator")]
         public ActionResult PackagesInfo()
         {
             return this.View();

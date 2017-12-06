@@ -5,13 +5,9 @@
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-designer"))
-   
-    <link rel="stylesheet" href="@Url.Content("~/questionnaire/vendor/bootstrap/dist/css/bootstrap.min.css")" />
-    <link rel="stylesheet" href="@Url.Content("~/questionnaire/vendor/bootstrap/dist/css/bootstrap-theme.min.css")" />
+    <link href="~/questionnaire/content/designer-start/bootstrap-custom.css" rel="stylesheet" />
     <link rel="stylesheet" href="@Url.Content("~/Content/admin.css")"/>
-
-    <script src="@Url.Content("~/questionnaire/vendor/jquery/dist/jquery.min.js")"></script>
-    <script src="@Url.Content("~/questionnaire/vendor/bootstrap/dist/js/bootstrap.min.js")"></script>
+    @Scripts.Render("~/simplepage")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">

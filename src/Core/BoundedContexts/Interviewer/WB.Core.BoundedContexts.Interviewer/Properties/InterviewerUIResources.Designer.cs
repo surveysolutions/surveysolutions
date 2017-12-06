@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class InterviewerUIResources {
@@ -180,7 +180,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignment {0}.
+        ///   Looks up a localized string similar to Assignment #{0}.
         /// </summary>
         public static string Dashboard_Interview_AssignmentLabelFormat {
             get {
@@ -300,7 +300,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete this interview #{0}?.
+        ///   Looks up a localized string similar to Are you sure you want to delete this interview {0}?.
         /// </summary>
         public static string Dashboard_RemoveInterviewQuestion {
             get {
@@ -922,6 +922,72 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronize to get maps
+        ///or contact your supervisor
+        ///for further instructions.
+        /// </summary>
+        public static string Maps_NoMapsText {
+            get {
+                return ResourceManager.GetString("Maps_NoMapsText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All maps were synchronized.
+        /// </summary>
+        public static string Maps_Synchronization_Success_Description {
+            get {
+                return ResourceManager.GetString("Maps_Synchronization_Success_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string Maps_Title {
+            get {
+                return ResourceManager.GetString("Maps_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking maps on server.
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map sync error.
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Map_sync_error {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Map_sync_error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map synchronization succesfuly finished.
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Handling map {0}, {1} out of {2}.
+        ///Downloaded {3}%.
+        /// </summary>
+        public static string MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format {
+            get {
+                return ResourceManager.GetString("MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard.
         /// </summary>
         public static string MenuItem_Title_Dashboard {
@@ -963,6 +1029,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string MenuItem_Title_Login {
             get {
                 return ResourceManager.GetString("MenuItem_Title_Login", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        public static string MenuItem_Title_Maps {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Maps", resourceCulture);
             }
         }
         

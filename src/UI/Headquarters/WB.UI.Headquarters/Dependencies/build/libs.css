@@ -316,7 +316,7 @@ select.selectpicker {
  * Licensed under
  *   MIT License http://www.opensource.org/licenses/mit-license
  *
- * Date: 2017-05-25T11:30:28.663Z
+ * Date: 2017-09-08T12:18:57.153Z
  */
 @-webkit-keyframes cm-spin {
   0% {
@@ -344,8 +344,8 @@ select.selectpicker {
   font-style: normal; 
   font-weight: normal;
 
-  src: url("font/context-menu-icons.eot?4yg1f");
-  src: url("font/context-menu-icons.eot?4yg1f#iefix") format("embedded-opentype"), url("font/context-menu-icons.woff2?4yg1f") format("woff2"), url("font/context-menu-icons.woff?4yg1f") format("woff"), url("font/context-menu-icons.ttf?4yg1f") format("truetype");
+  src: url("font/context-menu-icons.eot?2u731");
+  src: url("font/context-menu-icons.eot?2u731#iefix") format("embedded-opentype"), url("font/context-menu-icons.woff2?2u731") format("woff2"), url("font/context-menu-icons.woff?2u731") format("woff"), url("font/context-menu-icons.ttf?2u731") format("truetype");
 }
 
 .context-menu-icon-add:before {

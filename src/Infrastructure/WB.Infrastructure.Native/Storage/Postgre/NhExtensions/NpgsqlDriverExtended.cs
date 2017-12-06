@@ -1,4 +1,5 @@
 using System.Data;
+using System.Data.Common;
 using NHibernate;
 using NHibernate.Driver;
 using NHibernate.SqlTypes;
@@ -8,11 +9,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 {
     public class NpgsqlDriverExtended : NpgsqlDriver
     {
-        protected override void InitializeParameter(IDbDataParameter dbParam, string name, SqlType sqlType)
+        protected override void InitializeParameter(DbParameter dbParam, string name, SqlType sqlType)
         {
             if (sqlType is NpgsqlExtendedSqlType && dbParam is NpgsqlParameter)
             {
-                this.InitializeParameter(dbParam as NpgsqlParameter, name, sqlType as NpgsqlExtendedSqlType);
+                this.InitializeParameter((NpgsqlParameter) dbParam, name, (NpgsqlExtendedSqlType) sqlType);
             }
             else
             {

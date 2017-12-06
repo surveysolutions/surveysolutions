@@ -78,7 +78,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (this.InterviewProperties.IsReceivedByInterviewer)
                 throw new InterviewException(
-                    $"Can't modify Interview {this.InterviewProperties.Id} on server, because it received by interviewer.");
+                    $"Can't modify Interview {this.InterviewProperties.Id} on server, because it received by interviewer.",
+                    InterviewDomainExceptionType.InterviewRecievedByDevice);
         }
 
         public void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)

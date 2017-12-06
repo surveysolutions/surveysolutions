@@ -47,5 +47,12 @@ namespace WB.UI.Interviewer.ViewModel
             this.viewModelNavigationService.SignOutAndNavigateToLogin();
             this.Dispose();
         });
+
+        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
+
+        private void NavigateToMaps()
+        {
+            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
+        }
     }
 }

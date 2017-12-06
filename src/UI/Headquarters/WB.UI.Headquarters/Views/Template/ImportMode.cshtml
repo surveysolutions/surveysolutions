@@ -56,10 +56,8 @@
                     </ul>
                 </div>
             </div>
-            <form action="@Url.Action("ImportMode")" method="post" class="import-questionnaire-form">
+            <form action="@Url.Action("Import", new { id = Model.QuestionnaireInfo.Id })" method="post" class="import-questionnaire-form">
                 @Html.AntiForgeryToken()
-                @Html.Hidden("id", Model.QuestionnaireInfo.Id)
-                @Html.Hidden("name", Model.QuestionnaireInfo.Name)
                 @if (Model.NewVersionNumber > 1)
                 {
                     <div class="row">

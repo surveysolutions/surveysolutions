@@ -1,4 +1,6 @@
-﻿@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+﻿@using WB.Core.BoundedContexts.Designer.Resources
+@using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@using WB.UI.Designer.Utils
 @model WB.Core.SharedKernels.QuestionnaireEntities.IVariable
 
 @{
@@ -8,14 +10,16 @@
 
 <div class="question-container">
     <div class="question">
-        <div class="question-title" ><div class="type">Variable</div></div>
+        <div class="question-title" ><div class="type">@PdfStrings.Variable</div></div>
         <div class="common-info">
             <div class="variable-expression">
                 @questionnaire.GetVariableExpressionExcerpt(variable)
                 @if (questionnaire.VariableExpressionIsTooLong(variable))
                 {
                     <div class="more">
-                        And <a href="#@questionnaire.GetVariableRef(variable.PublicKey)">@(variable.Expression.Length - questionnaire.Settings.VariableExpressionExcerptLength) other symbols [@questionnaire.GetEntityIndexInAppendix(variable.PublicKey, "VE")]</a>
+                        <a href="#@questionnaire.GetVariableRef(variable.PublicKey)">
+                            @Pdf.Format(PdfStrings.AppendixLink, variable.Expression.Length - questionnaire.Settings.VariableExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(variable.PublicKey, "VE"))
+                        </a>
                     </div>
                 }
             </div>

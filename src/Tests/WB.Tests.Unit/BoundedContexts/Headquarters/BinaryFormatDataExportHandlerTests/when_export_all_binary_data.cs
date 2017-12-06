@@ -22,45 +22,25 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
     {
         private Establish context = () =>
         {
-            var questionnaireExportStructure =
-                Create.Entity.QuestionnaireExportStructure(questionnaireId: questionnaireIdentity.QuestionnaireId,
-                    version: questionnaireIdentity.Version);
-            var headerToLevelMap = Create.Entity.HeaderStructureForLevel();
-
-            var multiMediaQuestion = Create.Entity.ExportedQuestionHeaderItem();
-            multiMediaQuestion.QuestionType = QuestionType.Multimedia;
-            headerToLevelMap.HeaderItems.Add(multiMediaQuestion.PublicKey, multiMediaQuestion);
-
-            var audioMediaQuestion = Create.Entity.ExportedQuestionHeaderItem();
-            audioMediaQuestion.QuestionType = QuestionType.Audio;
-            headerToLevelMap.HeaderItems.Add(audioMediaQuestion.PublicKey, audioMediaQuestion);
-
-            questionnaireExportStructure.HeaderToLevelMap.Add(headerToLevelMap.LevelScopeVector, headerToLevelMap);
+            var questionnaireStorage = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.AudioQuestion(Guid.Parse("11111111111111111111111111111111"), "audio"),
+                    Create.Entity.MultimediaQuestion()));
 
             var interviewSummary = Create.Entity.InterviewSummary(
                 interviewId: interviewId, 
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
                 questionnaireVersion: questionnaireIdentity.Version);
 
-            var interviewDataStorage = new TestInMemoryWriter<InterviewData>();
-            var interviewSummarytorage = new TestInMemoryWriter<InterviewSummary>();
+            var mockOfInterviewFactory = new Mock<IInterviewFactory>();
+            var interviewSummaryStorage = new TestInMemoryWriter<InterviewSummary>();
 
-            interviewSummarytorage.Store(interviewSummary, interviewId.FormatGuid());
-            interviewDataStorage.Store(
-                Create.Entity.InterviewData(
-                    Create.Entity.InterviewQuestion(
-                        questionId: multiMediaQuestion.PublicKey,
-                        answer: "var.jpg"),
-                    Create.Entity.InterviewQuestion(
-                        questionId: audioMediaQuestion.PublicKey,
-                        answer: audioFileName)), 
-                interviewId.FormatGuid());
-
-            var questionnaireStorage = new Mock<IQuestionnaireExportStructureStorage>();
-
-            questionnaireStorage.Setup(x => x.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()))
-                .Returns(questionnaireExportStructure);
-
+            interviewSummaryStorage.Store(interviewSummary, interviewId.FormatGuid());
+            mockOfInterviewFactory.Setup(x => x.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, Moq.It.IsAny<Guid[]>())).Returns(new[]
+                {new InterviewStringAnswer {InterviewId = interviewId, Answer = "var.jpg"}});
+            mockOfInterviewFactory.Setup(x => x.GetAudioAnswersByQuestionnaire(questionnaireIdentity)).Returns(new[]
+                {new InterviewStringAnswer {InterviewId = interviewId, Answer = audioFileName}});
+            
             plainInterviewFileStorageMock = new Mock<IImageFileStorage>();
             plainInterviewFileStorageMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
                 .Returns(new[] {Create.Entity.InterviewBinaryDataDescriptor()}.ToList());
@@ -79,14 +59,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
 
             binaryFormatDataExportHandler =
                 CreateBinaryFormatDataExportHandler(
-                    interviewSummaries: interviewSummarytorage,
-                    interviewDatas: interviewDataStorage,
-                    questionnaireExportStructureStorage: questionnaireStorage.Object,
+                    interviewSummaries: interviewSummaryStorage,
+                    interviewFactory: mockOfInterviewFactory.Object,
                     imageFileRepository: plainInterviewFileStorageMock.Object,
                     fileSystemAccessor: fileSystemAccessor.Object,
                     dataExportFileAccessor: dataExportFileAccessor,
                     audioFileStorage : audioFileStorage.Object,
-                    plainTransactionManagerProvider: plainTransactionManagerProvider.Object);
+                    plainTransactionManagerProvider: plainTransactionManagerProvider.Object,
+                    questionnaireStorage: questionnaireStorage);
         };
 
         Because of = () => binaryFormatDataExportHandler.ExportData(Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity));

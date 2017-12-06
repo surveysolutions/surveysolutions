@@ -9,6 +9,8 @@ using System.Web.Hosting;
 using System.Web.Mvc;
 using AutoMapper;
 using Main.DenormalizerStorage;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Security;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -22,6 +24,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -55,6 +58,7 @@ using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
@@ -137,12 +141,12 @@ namespace WB.UI.Headquarters
                 new CaptchaModule(),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(HeadquartersRegistry).Assembly),
-                new HeadquartersRegistry(),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
+                new HeadquartersUIModule(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                    "readside", DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
+                    PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
                     mappingAssemblies)
             );
@@ -192,7 +196,8 @@ namespace WB.UI.Headquarters
                     settingsProvider.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
                     settingsProvider.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
                     settingsProvider.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
-                    settingsProvider.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000));
+                    settingsProvider.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000),
+                    settingsProvider.AppSettings["Export.ErrorsExporterBatchSize"].ToIntOrDefault(20));
 
             var sampleImportSettings = new SampleImportSettings(
                 settingsProvider.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
@@ -248,8 +253,6 @@ namespace WB.UI.Headquarters
             
             kernel.Unbind<IInterviewImportService>();
             kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
-            kernel.Bind<IRestoreDeletedQuestionnaireProjectionsService>()
-                .To<RestoreDeletedQuestionnaireProjectionsService>();
 
             var autoMapperConfig = new MapperConfiguration(cfg =>
             {
@@ -283,6 +286,8 @@ namespace WB.UI.Headquarters
                 .InSingletonScope();
 
             kernel.Bind<IInterviewCreatorFromAssignment>().To<InterviewCreatorFromAssignment>();
+
+            kernel.Bind<IMapPropertiesProvider>().To<MapPropertiesProvider>();
 
             return kernel;
         }

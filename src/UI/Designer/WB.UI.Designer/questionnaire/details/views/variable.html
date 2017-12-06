@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="form-group col-xs-6">
-                <label class="wb-label">Variable type</label><br>
+                <label class="wb-label">{{'VariableType' | i18next}}</label><br>
                 <div class="btn-group type-container-dropdown" uib-dropdown>
                     <button id="variableTypeBtn" class="btn btn-default form-control" uib-dropdown-toggle type="button">
                         {{activeVariable.typeName}}
@@ -24,21 +24,21 @@
             </div>
 
             <div class="form-group input-variable-name col-xs-5 pull-right">
-                <label for="edit-question-variable-name" class="wb-label">Variable name <help key="variableName" placement="left" /></label>
+                <label for="edit-question-variable-name" class="wb-label">{{'VariableName' | i18next}} <help key="variableName" placement="left" /></label>
                 <br />
                 <input id="edit-question-variable-name" type="text" ng-model="activeVariable.variable" spellcheck="false" autocomplete="false"
                        class="form-control" maxlength="32"/>
             </div>
         </div>
         <div class="form-group">
-            <label for="edit-variable-title-highlight" class="wb-label">Variable label <help key="variableDescription"/></label>
+            <label for="edit-variable-title-highlight" class="wb-label">{{'VariableLabel' | i18next}} <help key="variableDescription"/></label>
             <div class="pseudo-form-control">
                 <div id="edit-variable-title-highlight"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeVariable.label"></div>
             </div>
         </div>
         <div class="form-group">
-            <label for="edit-group-condition">Expression <help key="expression" /></label>
+            <label for="edit-group-condition">{{'VariableExpression' | i18next }} <help key="expression" /></label>
             <div class="pseudo-form-control">
                 <div id="edit-group-condition" ui-ace="{ onLoad : aceLoaded , require: ['ace/ext/language_tools']}" ng-model="activeVariable.expression"></div>
             </div>
@@ -46,11 +46,11 @@
     </div>
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': variableForm.$dirty }" ng-click="saveVariable()" unsaved-warning-clear ng-disabled="!variableForm.$valid">Save</button>
-            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()" unsaved-warning-clear unsaved-warning-clear>Cancel</button>
+            <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': variableForm.$dirty }" ng-click="saveVariable()" unsaved-warning-clear ng-disabled="!variableForm.$valid" ng-i18next>Save</button>
+            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()" unsaved-warning-clear unsaved-warning-clear ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
-            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteVariable(activeVariable)" unsaved-warning-clear>Delete</button>
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteVariable(activeVariable)" unsaved-warning-clear ng-i18next>Delete</button>
             <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" ng-if="!activeGroup.isChapter" />
         </div>
     </div>

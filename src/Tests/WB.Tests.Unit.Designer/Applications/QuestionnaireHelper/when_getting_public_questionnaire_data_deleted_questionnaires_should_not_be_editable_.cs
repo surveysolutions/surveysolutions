@@ -18,14 +18,14 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
                 );
 
             var userViewFactoryMock = Mock.Of<IQuestionnaireListViewFactory>(x =>
-                x.Load(Moq.It.IsAny<QuestionnaireListInputModel>()) == CreateQuestionnaireListView(user));
+                x.LoadFoldersAndQuestionnaires(Moq.It.IsAny<QuestionnaireListInputModel>()) == CreateQuestionnaireListView(user));
 
             questionnaireHelper = new UI.Designer.Code.QuestionnaireHelper(userViewFactoryMock);
             BecauseOf();
         }
 
         private void BecauseOf() =>
-            result = questionnaireHelper.GetPublicQuestionnaires(Moq.It.IsAny<Guid>(), true);
+            result = questionnaireHelper.GetQuestionnaires(Moq.It.IsAny<Guid>(), true, true, null);
 
         [NUnit.Framework.Test] public void should_be_not_allowed_to_open_deleted_questionnaire_for_zero_element () =>
             result[0].CanOpen.ShouldEqual(false);
@@ -34,6 +34,6 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
             result[1].CanOpen.ShouldEqual(true);
 
         private static UI.Designer.Code.QuestionnaireHelper questionnaireHelper;
-        private static IPagedList<QuestionnairePublicListViewModel> result;
+        private static IPagedList<QuestionnaireListViewModel> result;
     }
 }

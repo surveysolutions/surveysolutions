@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             Type = a.Type
                         }).ToList(),
                     InterviewId = x.InterviewId,
-                    LastEntryDate = x.UpdateDate.FormatDateWithTime(),
+                    LastEntryDateUtc = x.UpdateDate,
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     ResponsibleRole = x.ResponsibleRole,
@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || (s.Status == InterviewExportedAction.RejectedBySupervisor && i.Status == InterviewStatus.RejectedBySupervisor)
                         || (s.Status == InterviewExportedAction.RejectedByHeadquarter && i.Status == InterviewStatus.RejectedByHeadquarters)
                     )
-                    .OrderByDescending(s => Projections.Property("position"))
+                    .OrderByDescending(s => s.Position)
                     .Select(s => s.Timestamp)
                     .First()
                 where (input.UnactiveDateStart <= statusChangeTime || input.UnactiveDateStart == null)

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
@@ -8,11 +9,19 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
     [TestFixture]
     internal class ResourcesTranslationTests : ResourcesTranslationTestsContext
     {
+        private static readonly Regex PluralizationRegex = new Regex(@"(_plural|_\d+)$", RegexOptions.Compiled);
+
+        private static List<string> fileNamesToExculde = new List<string>()
+        {
+        };
+
         [Test]
         public void when_checking_that_translated_resources_have_same_property_names_in_format_elements_as_original()
         {
             var csproj = TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.csproj");
-            var translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains(".")).ToList();
+            var translatedResourceFiles = GetAllLinkedResourceFiles(csproj).Where(file => Path.GetFileNameWithoutExtension(file).Contains("."))
+                .Where(file => !fileNamesToExculde.Any(x => Path.GetFileName(file).Contains(x)))
+                .ToList();
 
             var translatedResourceStringsNotCorrespondingToOriginal =
                 from translatedResourceFile in translatedResourceFiles
@@ -35,7 +44,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 if (!originalResources.ContainsKey(translatedResource.Key))
                 {
-                    yield return $"<{translatedResourceFile}> {translatedResource.Key}: no original resource string found";
+                    var cleanKey = PluralizationRegex.Replace(translatedResource.Key, "");
+                    if (!originalResources.ContainsKey(cleanKey))
+                    {
+                        yield return $"<{translatedResourceFile}> {translatedResource.Key}: no original resource string found";
+                    }
+
                     continue;
                 }
 

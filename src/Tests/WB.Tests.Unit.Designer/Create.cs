@@ -1,5 +1,4 @@
-﻿extern alias designer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -58,6 +57,7 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using Questionnaire = WB.Core.BoundedContexts.Designer.Aggregates.Questionnaire;
+using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 using QuestionnaireVersion = WB.Core.SharedKernel.Structures.Synchronization.Designer.QuestionnaireVersion;
 using QuestionnaireView = WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireView;
 using Translation = WB.Core.SharedKernels.SurveySolutions.Documents.Translation;
@@ -443,7 +443,7 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = "test")
+            string title = "test", string variableLabel = null)
         {
             return new NumericQuestion
             {
@@ -458,12 +458,13 @@ namespace WB.Tests.Unit.Designer
                 Featured = isPrefilled,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
-                QuestionText = title
+                QuestionText = title,
+                VariableLabel = variableLabel
             };
         }
 
         public static NumericQuestion NumericRealQuestion(Guid? id = null, string variable = null, string enablementCondition = null, string validationExpression = null, IEnumerable<ValidationCondition> validationConditions = null,
-            string title = "test test")
+            string title = "test test", int? decimalPlaces = null)
         {
             return new NumericQuestion
             {
@@ -474,7 +475,8 @@ namespace WB.Tests.Unit.Designer
                 ConditionExpression = enablementCondition,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression,
-                QuestionText = title
+                QuestionText = title,
+                CountOfDecimalPlaces = decimalPlaces
             };
         }
 
@@ -557,9 +559,6 @@ namespace WB.Tests.Unit.Designer
             return new Questionnaire(
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
-                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                Create.SubstitutionService(),
-                Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
@@ -572,9 +571,6 @@ namespace WB.Tests.Unit.Designer
             var questionnaire = new Questionnaire(
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
-                Mock.Of<IExpressionProcessor>(),
-                Create.SubstitutionService(),
-                Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
@@ -600,7 +596,7 @@ namespace WB.Tests.Unit.Designer
                 QuestionnaireId = questionnaireId,
                 ActionType = action ?? QuestionnaireActionType.Add,
                 TargetItemId = targetId ?? Guid.NewGuid(),
-                TargetItemType = targetType ?? QuestionnaireItemType.Group,
+                TargetItemType = targetType ?? QuestionnaireItemType.Section,
                 References = reference.ToHashSet(),
                 Sequence = sequence ?? 1,
                 ResultingQuestionnaireDocument = resultingQuestionnaireDocument
@@ -614,7 +610,7 @@ namespace WB.Tests.Unit.Designer
             return new QuestionnaireChangeReference()
             {
                 ReferenceId = referenceId ?? Guid.NewGuid(),
-                ReferenceType = referenceType ?? QuestionnaireItemType.Group
+                ReferenceType = referenceType ?? QuestionnaireItemType.Section
             };
         }
 
@@ -665,6 +661,7 @@ namespace WB.Tests.Unit.Designer
         {
             var result = new QuestionnaireDocument
             {
+                Title = "Q",
                 PublicKey = questionnaireId ?? Guid.NewGuid(),
                 Children = new IComposite[]
                 {
@@ -712,14 +709,83 @@ namespace WB.Tests.Unit.Designer
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
         public static Group FixedRoster(Guid? rosterId = null, IEnumerable<string> fixedTitles = null, IEnumerable<IComposite> children = null, 
-            string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null)
+            string variable = "roster_var", string title = "Roster X", FixedRosterTitle[] fixedRosterTitles = null, string enablementCondition = null)
             => Create.Roster(
                 rosterId: rosterId,
                 children: children,
                 variable: variable,
                 title: title,
                 fixedTitles: fixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" },
-                fixedRosterTitles: fixedRosterTitles);
+                fixedRosterTitles: fixedRosterTitles,
+                enablementCondition: enablementCondition);
+
+        public static Group ListRoster(
+            Guid? rosterId = null,
+            string title = "Roster List",
+            string variable = "roster_list",
+            string enablementCondition = null,
+            Guid? rosterSizeQuestionId = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group roster = Create.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            roster.IsRoster = true;
+            roster.RosterSizeSource = RosterSizeSourceType.Question;
+            roster.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return roster;
+        }
+
+        public static Group MultiRoster(
+            Guid? rosterId = null,
+            string title = "Roster Multi",
+            string variable = "roster_mul",
+            string enablementCondition = null,
+            Guid? rosterSizeQuestionId = null,
+            IEnumerable<IComposite> children = null)
+        {
+            Group roster = Create.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            roster.IsRoster = true;
+            roster.RosterSizeSource = RosterSizeSourceType.Question;
+            roster.RosterSizeQuestionId = rosterSizeQuestionId;
+
+            return roster;
+        }
+
+        public static Group NumericRoster(
+            Guid? rosterId = null,
+            string title = "Roster Numeric",
+            string variable = "roster_num",
+            string enablementCondition = null,
+            IEnumerable<IComposite> children = null,
+            Guid? rosterSizeQuestionId = null,
+            Guid? rosterTitleQuestionId = null)
+        {
+            Group roster = Create.Group(
+                groupId: rosterId,
+                title: title,
+                variable: variable,
+                enablementCondition: enablementCondition,
+                children: children);
+
+            roster.IsRoster = true;
+            roster.RosterSizeSource = RosterSizeSourceType.Question;
+            roster.RosterSizeQuestionId = rosterSizeQuestionId;
+            roster.RosterTitleQuestionId = rosterTitleQuestionId;
+
+            return roster;
+        }
 
         public static Group Roster(
             Guid? rosterId = null,
@@ -780,7 +846,7 @@ namespace WB.Tests.Unit.Designer
                 LinkedToQuestionId = linkedToQuestionId,
                 LinkedToRosterId = linkedToRosterId,
                 CascadeFromQuestionId = cascadeFromQuestionId,
-                Answers = answers ?? (answerCodes ?? new decimal[] { 1, 2, 3 }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
+                Answers = answers ?? (answerCodes ?? new decimal[0] { }).Select(a => Create.Answer(a.ToString(), a)).ToList(),
                 LinkedFilterExpression = linkedFilterExpression,
                 Featured = isPrefilled,
                 IsFilteredCombobox = isComboBox,
@@ -1005,6 +1071,11 @@ namespace WB.Tests.Unit.Designer
             public static DeleteTranslation DeleteTranslation(Guid questionnaireId, Guid translationId, Guid responsibleId)
             {
                 return new DeleteTranslation(questionnaireId, responsibleId, translationId);
+            }
+
+            public static SetDefaultTranslation SetDefaultTranslation(Guid questionnaireId, Guid? translationId, Guid responsibleId)
+            {
+                return new SetDefaultTranslation(questionnaireId, responsibleId, translationId);
             }
 
             public static MoveGroup MoveGroup(Guid questionnaireId, Guid groupId, Guid responsibleId, Guid? targetGroupId = null, int? tagretIndex = null)

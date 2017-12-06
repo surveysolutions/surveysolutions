@@ -45,6 +45,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboard());
 
+        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
+
+        private void NavigateToMaps()
+        {
+            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
+        }
+
         public IMvxCommand SignOutCommand
             => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
 

@@ -470,4 +470,11 @@
   <data name="SelectResponsibleToAssign" xml:space="preserve">
     <value>Выберите ответственного за эти задания</value>
   </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Опросник не может быть использован для загрузки данных</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Импорт заданий</value>
+    <comment>Импорт заданий</comment>
+  </data>
 </root>

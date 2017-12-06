@@ -151,28 +151,28 @@
     <value>En progreso</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} respuesta</value>
+    <value>{{value}} respuesta</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
     <value>una respuesta</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} errores</value>
+    <value>{{value}} errores</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>un error</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Sección completada: {0}</value>
+    <value>Sección completada: {{value}}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
     <value>Sección no iniciada</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Sección iniciada: {0}</value>
+    <value>Sección iniciada: {{value}}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} sub-secciones</value>
+    <value>{{value}} sub-secciones</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
     <value>una sub-sección</value>
@@ -208,7 +208,7 @@
     <value>Solo se aceptan archivos de imagen</value>
   </data>
   <data name="PleaseFillCaptcha" xml:space="preserve">
-    <value>Por favor, rellene el campo captcha</value>
+    <value>Por favor, rellene el campo capacha</value>
   </data>
   <data name="RefreshPage" xml:space="preserve">
     <value>Actualizar página</value>
@@ -248,5 +248,50 @@
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Hola y bienvenido a la Encuesta Web de Survey Solutions </value>
+  </data>
+  <data name="CompleteInterview" xml:space="preserve">
+    <value>Entrevista completada</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Contestadas</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Ver todos (eliminar todos los filtros)</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>Marcada</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>Para el entrevistador</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>Para el supervisor</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>Inválido</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Sin respuesta</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>Sin marca</value>
+  </data>
+  <data name="Filters_OldDetailsLink" xml:space="preserve">
+    <value>Detalles de entrevista anterior</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Preguntas filtradas</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Valido</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>Con comentarios</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>No se puede modificar una entrevista que ha sido recibida en el dispositivo del entrevistador</value>
+  </data>
+  <data name="PoweredBy" xml:space="preserve">
+    <value>Powered by</value>
   </data>
 </root>

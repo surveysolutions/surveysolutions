@@ -485,7 +485,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 var interviewTreeDateTimeQuestion = (InterviewTreeDateTimeQuestion)this.InterviewQuestion;
                 DateTime? dateTime = interviewTreeDateTimeQuestion.GetAnswer()?.Value;
-                return AnswerUtils.AnswerToString(dateTime, cultureInfo: cultureInfo, isTimestamp: ((InterviewTreeDateTimeQuestion)this.InterviewQuestion).IsTimestamp);
+                return AnswerUtils.AnswerToString(dateTime, isTimestamp: ((InterviewTreeDateTimeQuestion)this.InterviewQuestion).IsTimestamp);
             }
             if (this.IsGps) return AnswerUtils.AnswerToString(((InterviewTreeGpsQuestion)this.InterviewQuestion).GetAnswer()?.Value);
             if (this.IsTextList) return AnswerUtils.AnswerToString(((InterviewTreeTextListQuestion)this.InterviewQuestion).GetAnswer()?.ToTupleArray());

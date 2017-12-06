@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string Value { get; set; }
 
-        public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim()) : null;
+        public static TextAnswer FromString(string value) => value != null ? new TextAnswer(value.Trim().RemoveControlChars()) : null;
 
         public override string ToString() => Value;
     }
@@ -221,7 +221,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static TextListAnswer FromTupleArray(Tuple<decimal, string>[] tupleArray)
             => tupleArray == null ? null : new TextListAnswer(
-               tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim())));
+               tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim().RemoveControlChars())));
 
         public override string ToString() => string.Join(", ", Rows.Select(x => x.Text));
     }
@@ -303,7 +303,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return fileName != null ? new AudioAnswer(fileName, length.Value) : null;
         }
 
-        public override string ToString() => FileName;
+        public override string ToString() => $"{FileName} => {Length}";
 
         public AudioAnswerForConditions ToAudioAnswerForContions()
         {
@@ -313,6 +313,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 Length = this.Length
             };
         }
+
+        public override bool Equals(object obj)
+        {
+            var target = obj as AudioAnswer;
+            if (target == null) return false;
+
+            return target.Length == this.Length && target.FileName == this.FileName;
+        }
+
+        public override int GetHashCode() => this.Length.GetHashCode() ^ this.FileName.GetHashCode();
     }
 
     [DebuggerDisplay("{ToString()}")]

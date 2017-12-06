@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
                 idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");
             });
+            DynamicUpdate(true);
 
             Property(x => x.PublicId);
             Property(x => x.CreationDate);
@@ -25,6 +26,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.IsDeleted);
             Property(x => x.IsPublic);
             Property(x => x.Owner);
+            Property(x => x.FolderId);
 
             Set(x => x.SharedPersons, m =>
             {
@@ -45,6 +47,14 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
                 e.Property(x => x.IsOwner);
                 e.Property(x => x.ShareType);
             }));
+
+            ManyToOne(x => x.Folder, m =>
+            {
+                m.Column(nameof(QuestionnaireListViewItem.FolderId).ToLower());
+                m.Cascade(Cascade.None);
+                m.Update(false);
+                m.Insert(false);
+            });
         }
     }
 }

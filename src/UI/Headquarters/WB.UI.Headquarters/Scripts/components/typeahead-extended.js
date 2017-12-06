@@ -127,6 +127,7 @@
             e.preventDefault();
             this.extendedSelect();
             this.$element.focus();
+            this.focused = false;
         },
         extendedSelect: function() {
             if (this.shouldLoadMoreItems()) {

@@ -86,6 +86,16 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             }
         }
 
+        public Stream GetDecompressingGZipStream(Stream outputStream)
+        {
+            return new GZipStream(outputStream, CompressionMode.Decompress);
+        }
+
+        public Stream GetDecompressingDeflateStream(Stream outputStream)
+        {
+            return new DeflateStream(outputStream, CompressionMode.Decompress);
+        }
+
         public string CompressString(string s)
         {
             var bytes = Encoding.Unicode.GetBytes(s);

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ExceptionMessages {
@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing attachment with id {0}.
+        /// </summary>
+        public static string AttachmentIdIsMissing {
+            get {
+                return ResourceManager.GetString("AttachmentIdIsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploaded content is not supported.
         /// </summary>
         public static string Attachments_Unsupported_content {
@@ -79,47 +88,38 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question can&apos;t be linked and cascading at the same time..
+        ///   Looks up a localized string similar to You can&apos;t move to sub-section {0} because it position {1} in not acceptable..
         /// </summary>
-        public static string CantBeLinkedAndCascadingAtSameTime {
+        public static string CantMoveSubsectionInWrongPosition {
             get {
-                return ResourceManager.GetString("CantBeLinkedAndCascadingAtSameTime", resourceCulture);
+                return ResourceManager.GetString("CantMoveSubsectionInWrongPosition", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed..
+        ///   Looks up a localized string similar to Question cannot be pasted here..
         /// </summary>
-        public static string CantRemoveParentQuestionInCascading {
+        public static string CantPasteQuestion {
             get {
-                return ResourceManager.GetString("CantRemoveParentQuestionInCascading", resourceCulture);
+                return ResourceManager.GetString("CantPasteQuestion", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sub-section or roster containing question that is used as parent for cascading combo box cannot be removed before all child questions are removed..
+        ///   Looks up a localized string similar to Last existing section can not be removed from questionnaire.
         /// </summary>
-        public static string CantRemoveSectionParentQuestionInCascading {
+        public static string CantRemoveLastSectionInQuestionnaire {
             get {
-                return ResourceManager.GetString("CantRemoveSectionParentQuestionInCascading", resourceCulture);
+                return ResourceManager.GetString("CantRemoveLastSectionInQuestionnaire", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cascading questions can&apos;t have enabling condition..
+        ///   Looks up a localized string similar to Couldn&apos;t remove user, because it doesn&apos;t exist in share list.
         /// </summary>
-        public static string CascadingCantHaveConditionExpression {
+        public static string CantRemoveUserFromTheList {
             get {
-                return ResourceManager.GetString("CascadingCantHaveConditionExpression", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cascading questions can&apos;t have validation condition..
-        /// </summary>
-        public static string CascadingCantHaveValidationExpression {
-            get {
-                return ResourceManager.GetString("CascadingCantHaveValidationExpression", resourceCulture);
+                return ResourceManager.GetString("CantRemoveUserFromTheList", resourceCulture);
             }
         }
         
@@ -151,11 +151,56 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Categorical question contains more than 200 options.
+        ///   Looks up a localized string similar to Combo box question with public key {0} can&apos;t be found.
         /// </summary>
-        public static string CategoricalQuestionHasMoreThan200Options {
+        public static string ComboboxCannotBeFound {
             get {
-                return ResourceManager.GetString("CategoricalQuestionHasMoreThan200Options", resourceCulture);
+                return ResourceManager.GetString("ComboboxCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}.
+        /// </summary>
+        public static string FailedToAddGroup {
+            get {
+                return ResourceManager.GetString("FailedToAddGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trying to import template of deleted questionnaire.
+        /// </summary>
+        public static string ImportOfDeletedQuestionnaire {
+            get {
+                return ResourceManager.GetString("ImportOfDeletedQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid title list.
+        /// </summary>
+        public static string InvalidFixedTitle {
+            get {
+                return ResourceManager.GetString("InvalidFixedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed set of items roster value is required.
+        /// </summary>
+        public static string InvalidValueOfFixedTitle {
+            get {
+                return ResourceManager.GetString("InvalidValueOfFixedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more questionnaire item(s) with same ID {0} already exists..
+        /// </summary>
+        public static string ItemWithIdExistsAlready {
+            get {
+                return ResourceManager.GetString("ItemWithIdExistsAlready", resourceCulture);
             }
         }
         
@@ -169,11 +214,29 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lookup table with id {0} doen&apos;t have content.
+        /// </summary>
+        public static string LookupTableHasEmptyContent {
+            get {
+                return ResourceManager.GetString("LookupTableHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lookup table with such id is absent..
         /// </summary>
         public static string LookupTableIsAbsent {
             get {
                 return ResourceManager.GetString("LookupTableIsAbsent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lookup table with id {0} is missing.
+        /// </summary>
+        public static string LookupTableIsMissing {
+            get {
+                return ResourceManager.GetString("LookupTableIsMissing", resourceCulture);
             }
         }
         
@@ -268,15 +331,6 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Macro can not have empty content..
-        /// </summary>
-        public static string MacroContentIsEmpty {
-            get {
-                return ResourceManager.GetString("MacroContentIsEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Macro with such is is absent..
         /// </summary>
         public static string MacroIsAbsent {
@@ -286,29 +340,272 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifier &apos;{0}&apos; from expression &apos;{1}&apos; is not valid question or roster identifier. Question or roster with such an identifier is missing..
+        ///   Looks up a localized string similar to One or more question(s) with same ID {0} already exist:{1}{2}..
         /// </summary>
-        public static string QuestionOrRosterIdentifierIsMissing {
+        public static string MoreThanOneQuestionWithSameId {
             get {
-                return ResourceManager.GetString("QuestionOrRosterIdentifierIsMissing", resourceCulture);
+                return ResourceManager.GetString("MoreThanOneQuestionWithSameId", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question to cascade from should exist in questionnaire..
+        ///   Looks up a localized string similar to One or more sub-section(s) with same ID {0} already exist:{1}{2}..
         /// </summary>
-        public static string ShouldCascadeFromExistingQuestion {
+        public static string MoreThanOneSubSectionWithSameId {
             get {
-                return ResourceManager.GetString("ShouldCascadeFromExistingQuestion", resourceCulture);
+                return ResourceManager.GetString("MoreThanOneSubSectionWithSameId", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to It is not allowed to use substitutions in variable label.
+        ///   Looks up a localized string similar to You don&apos;t have permissions for changing this questionnaire.
         /// </summary>
-        public static string VariableLabelContainsSubstitutionReference {
+        public static string NoPremissionsToEditQuestionnaire {
             get {
-                return ResourceManager.GetString("VariableLabelContainsSubstitutionReference", resourceCulture);
+                return ResourceManager.GetString("NoPremissionsToEditQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Old attachment id is empty and file is absent for attachment {0} in questionnaire {1}.
+        /// </summary>
+        public static string OldAttachmentIdIsEmpty {
+            get {
+                return ResourceManager.GetString("OldAttachmentIdIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only QuestionnaireDocuments are supported for now.
+        /// </summary>
+        public static string OnlyQuestionnaireDocumentsAreSupported {
+            get {
+                return ResourceManager.GetString("OnlyQuestionnaireDocumentsAreSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option value should have only number characters.
+        /// </summary>
+        public static string OptionValuesShouldBeNumbers {
+            get {
+                return ResourceManager.GetString("OptionValuesShouldBeNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question with id {0} can&apos;t be found..
+        /// </summary>
+        public static string QuestionCannotBeFound {
+            get {
+                return ResourceManager.GetString("QuestionCannotBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question {0} is not a combo box.
+        /// </summary>
+        public static string QuestionIsNotCombobox {
+            get {
+                return ResourceManager.GetString("QuestionIsNotCombobox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire item with id {0} can&apos;t be found..
+        /// </summary>
+        public static string QuestionnaireCantBeFound {
+            get {
+                return ResourceManager.GetString("QuestionnaireCantBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnire {0} of version {1} can&apos;t be found.
+        /// </summary>
+        public static string QuestionnaireRevisionCantBeFound {
+            get {
+                return ResourceManager.GetString("QuestionnaireRevisionCantBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire&apos;s title can not be empty or contains whitespace only..
+        /// </summary>
+        public static string QuestionnaireTitleIsEmpty {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitleIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question type is not supported: {0}.
+        /// </summary>
+        public static string QuestionTypeIsNotSupported {
+            get {
+                return ResourceManager.GetString("QuestionTypeIsNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster cannot be pasted here..
+        /// </summary>
+        public static string RosterCantBePaste {
+            get {
+                return ResourceManager.GetString("RosterCantBePaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Section cannot have more than {0} child items.
+        /// </summary>
+        public static string SectionCantHaveMoreThan_Items {
+            get {
+                return ResourceManager.GetString("SectionCantHaveMoreThan_Items", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static Text cannot be pasted here..
+        /// </summary>
+        public static string StaticTextCantBePaste {
+            get {
+                return ResourceManager.GetString("StaticTextCantBePaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-section with public key {0} can&apos;t be found..
+        /// </summary>
+        public static string SubSectionCantBeFound {
+            get {
+                return ResourceManager.GetString("SubSectionCantBeFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-section or roster depth cannot be higher than {0}..
+        /// </summary>
+        public static string SubSectionDepthLimit {
+            get {
+                return ResourceManager.GetString("SubSectionDepthLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found errors in excel file.
+        /// </summary>
+        public static string TranlationExcelFileHasErrors {
+            get {
+                return ResourceManager.GetString("TranlationExcelFileHasErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has invalid id at [{1}].
+        /// </summary>
+        public static string TranslationCel_A_lIsInvalid {
+            get {
+                return ResourceManager.GetString("TranslationCel_A_lIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has invalid index at [{1}].
+        /// </summary>
+        public static string TranslationCellIndexIsInvalid {
+            get {
+                return ResourceManager.GetString("TranslationCellIndexIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has invalid type [{1}].
+        /// </summary>
+        public static string TranslationCellTypeIsInvalid {
+            get {
+                return ResourceManager.GetString("TranslationCellTypeIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel file is empty - contains no worksheets.
+        /// </summary>
+        public static string TranslationFileIsEmpty {
+            get {
+                return ResourceManager.GetString("TranslationFileIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to extract translations from uploaded file.
+        /// </summary>
+        public static string TranslationsCantBeExtracted {
+            get {
+                return ResourceManager.GetString("TranslationsCantBeExtracted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Worksheet with translations not found.
+        /// </summary>
+        public static string TranslationWorksheetIsMissing {
+            get {
+                return ResourceManager.GetString("TranslationWorksheetIsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown item type. Paste failed..
+        /// </summary>
+        public static string UnknownTypeCantBePaste {
+            get {
+                return ResourceManager.GetString("UnknownTypeCantBePaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} already exist in share list..
+        /// </summary>
+        public static string UserIsInTheList {
+            get {
+                return ResourceManager.GetString("UserIsInTheList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User {0} is an owner of this questionnaire. Please, input another email..
+        /// </summary>
+        public static string UserIsOwner {
+            get {
+                return ResourceManager.GetString("UserIsOwner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed set of items roster value should have only number characters.
+        /// </summary>
+        public static string ValueOfFixedTitleCantBeParsed {
+            get {
+                return ResourceManager.GetString("ValueOfFixedTitleCantBeParsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable cannot be pasted here..
+        /// </summary>
+        public static string VariableCantBePaste {
+            get {
+                return ResourceManager.GetString("VariableCantBePaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable with id {0} was not found in questionnaire {1}.
+        /// </summary>
+        public static string VariableWithIdWasNotFound {
+            get {
+                return ResourceManager.GetString("VariableWithIdWasNotFound", resourceCulture);
             }
         }
     }

@@ -1,10 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web;
+using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.UI.Headquarters.Filters
 {
-    public class WebInterviewAuthorizeAttribute : ActionFilterAttribute
+    public class WebInterviewAuthorizeAttribute : AuthorizeAttribute
     {
         public WebInterviewAuthorizeAttribute()
         {
@@ -13,10 +17,41 @@ namespace WB.UI.Headquarters.Filters
 
         private IWebInterviewAllowService webInterviewAllowService => ServiceLocator.Current.GetInstance<IWebInterviewAllowService>();
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            var interviewId = filterContext.ActionParameters[@"id"].ToString();
-            webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);
+            var interviewId = httpContext.Request.RequestContext.RouteData.Values["id"].ToString();
+            try
+            {
+                webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);
+                return true;
+            }
+            catch (InterviewAccessException)
+            {
+                return false;
+            }
+        }
+
+        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
+        {
+            var interviewId = filterContext.RequestContext.RouteData.Values["id"].ToString();
+            try
+            {
+                webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);
+
+                filterContext.Result = filterContext.HttpContext.User.Identity.IsAuthenticated 
+                    ? new HttpStatusCodeResult(403) 
+                    : new HttpUnauthorizedResult();
+            }
+            catch (InterviewAccessException ie)
+            {
+                string errorMessage = WebInterview.GetUiMessageFromException(ie);
+
+                filterContext.Result = new ViewResult
+                {
+                    ViewName = @"~/Views/WebInterview/Error.cshtml",
+                    ViewData = new ViewDataDictionary(new WebInterviewError { Message = errorMessage })
+                };
+            }
         }
     }
 }

@@ -45,6 +45,10 @@ namespace WB.Core.Infrastructure.Implementation
             }
         }
 
+        public void Flush()
+        {
+        }
+
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
             return query.Invoke(this.inMemroyStorage.Values.AsQueryable());

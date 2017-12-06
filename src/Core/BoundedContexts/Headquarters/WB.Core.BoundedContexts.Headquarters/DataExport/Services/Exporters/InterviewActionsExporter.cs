@@ -25,8 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
     {
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly string interviewActionsFileName = "interview_actions";
-        private readonly string[] actionFileColumns = { "InterviewId", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" };
+        private readonly string interviewActionsFileName = "interview__actions";
+        private readonly string[] actionFileColumns = { "interview__id", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" };
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITransactionManagerProvider transactionManager;
@@ -54,10 +54,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         public void Export(QuestionnaireIdentity questionnaireIdentity, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
         {
-            this.ExportActionsInTabularFormatAsync(interviewIdsToExport, basePath, progress);
+            this.ExportActionsInTabularFormat(interviewIdsToExport, basePath, progress);
         }
 
-        private void ExportActionsInTabularFormatAsync(List<Guid> interviewIdsToExport,
+        private void ExportActionsInTabularFormat(List<Guid> interviewIdsToExport,
             string basePath,
             IProgress<int> progress)
         {
@@ -102,9 +102,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         i.StatusHistory.StatusChangeOriginatorRole,
                         i.StatusHistory.Timestamp,
                         i.StatusHistory.SupervisorName,
-                        i.StatusHistory.InterviewerName
+                        i.StatusHistory.InterviewerName,
+                        i.StatusHistory.Position
                     })
-                    .OrderBy(i => i.Timestamp).ToList());
+                    .OrderBy(x => x.InterviewId).ThenBy(x => x.Position).ToList());
 
             var result = new List<string[]>();
 
@@ -118,7 +119,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     this.GetUserRole(interview.StatusChangeOriginatorRole),
                     this.GetResponsibleName(interview.Status, interview.InterviewerName, interview.SupervisorName, interview.StatusChangeOriginatorName),
                     this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole, interview.InterviewerName),
-                    interview.Timestamp.ToString("d", CultureInfo.InvariantCulture),
+                    interview.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
                     interview.Timestamp.ToString("T", CultureInfo.InvariantCulture)
                 };
                 result.Add(resultRow.ToArray());

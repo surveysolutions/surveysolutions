@@ -13,12 +13,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
     abstract class AbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
-        private readonly string exportTempDirectoryPath;
-
         protected readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        protected readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
+
+        private readonly string exportTempDirectoryPath;
 
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
@@ -31,8 +32,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportProcessesService = dataExportProcessesService;
             this.dataExportFileAccessor = dataExportFileAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.interviewDataExportSettings = interviewDataExportSettings;
 
-            this.exportTempDirectoryPath = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, "ExportTemp");
+            exportTempDirectoryPath = this.fileSystemAccessor.CombinePath(
+                interviewDataExportSettings.DirectoryPath, "ExportTemp");
         }
 
         public void ExportData(DataExportProcessDetails dataExportProcessDetails)
@@ -56,12 +59,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
                 dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus);
+            
+            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
+            this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
 
-            dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName);
+            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName, exportProgress);
 
             this.DeleteExportTempDirectory();
         }
-
+        
         protected abstract DataExportFormat Format { get; }
 
         protected abstract void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity,

@@ -2,6 +2,7 @@ using System;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Abc.TestFactories
@@ -33,8 +34,9 @@ namespace WB.Tests.Abc.TestFactories
                 .ToPublishedEvent(origin: origin, eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewerAssigned> InterviewerAssigned(
-            Guid? interviewId = null, string userId = null, string interviewerId = null, DateTime? assignTime = null)
-            => new InterviewerAssigned(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(interviewerId) ?? Guid.NewGuid(), assignTime ?? DateTime.Now)
+            Guid? interviewId = null, string userId = null, string interviewerId = "", DateTime? assignTime = null)
+            => new InterviewerAssigned(ToGuid(userId) ?? Guid.NewGuid(),
+                    interviewerId == null ? (Guid?) null : (ToGuid(interviewerId) ?? Guid.NewGuid()), assignTime ?? DateTime.Now)
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewFromPreloadedDataCreated> InterviewFromPreloadedDataCreated(
@@ -108,6 +110,14 @@ namespace WB.Tests.Abc.TestFactories
         public IPublishedEvent<UnapprovedByHeadquarters> UnapprovedByHeadquarters(
             Guid? interviewId = null, string userId = null, string comment = null)
             => new UnapprovedByHeadquarters(ToGuid(userId) ?? Guid.NewGuid(), comment)
+                .ToPublishedEvent(eventSourceId: interviewId);
+
+        public IPublishedEvent<RosterInstancesRemoved> RosterInstancesRemoved(Guid interviewId, params RosterInstance[] instances)
+            => new RosterInstancesRemoved(instances).ToPublishedEvent(eventSourceId: interviewId);
+
+        public IPublishedEvent<DateTimeQuestionAnswered> DateTimeQuestionAnswered(Guid? interviewId = null, Guid? userId = null, 
+            Guid? questionId = null, DateTime? answer = null)
+            => new DateTimeQuestionAnswered(userId ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), new decimal[0], DateTime.UtcNow, answer ?? DateTime.UtcNow)
                 .ToPublishedEvent(eventSourceId: interviewId);
     }
 }

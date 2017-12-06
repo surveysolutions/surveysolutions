@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApproveConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;</value>
+  </data>
+  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;</value>
+  </data>
+  <data name="AssignConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) seleccionadas para reasignar. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt;, &lt;i&gt; {2} (solo en otro entrevistador) &lt;/ i&gt; y &lt;i&gt; {3} &lt;/ i&gt;</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Asignación</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>Aplicar en {0} entrevista (s) que el Entrevistador ya recibió</value>
+  </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt; podrían reasignarse.</value>
+  </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>No se ha elegido responsable para alguna entrevista (s). Por favor elija un supervisor o entrevistador responsable.</value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>No se ha elegido responsable para alguna entrevista (s). Por favor elija un supervisor o entrevistador responsable.</value>
+  </data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
+    <value>No se ha elegido responsable para alguna entrevista (s). Por favor elija un supervisor o entrevistador responsable.</value>
+  </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>La clave fue generada en el dispositivo, pero se cambió debido a la colisión con la entrevista existente en el servidor</value>
+  </data>
+  <data name="ContinueConfirmMessage" xml:space="preserve">
+    <value>Desea continuar?</value>
+  </data>
+  <data name="ContinueConfirmMessageHQ" xml:space="preserve">
+    <value>Desea continuar?</value>
+  </data>
+  <data name="DeleteConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;.</value>
+  </data>
+  <data name="RejectConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;</value>
+  </data>
+  <data name="RejectConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede rechazar entrevistas solo con el siguiente estado: &lt;i&gt; {1} &lt;/ i&gt;.</value>
+  </data>
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve">
+    <value>ID de asignación. Haga clic en el campo para escribir el número de identificación completo.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione "Todos los cuestionarios" para ver las entrevistas asociadas con cualquier cuestionario.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Usuario responsable. Haga clic en el campo para elegir un nombre de usuario ya sea seleccionándolo directamente o escribiendo en el filtro de  listas de nombres de usuario.</value>
+  </data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+    <value>Estado de la entrevista. Seleccione un estado para ver todas las entrevistas en ese estado. Seleccione "Todos los estados" para ver entrevistas con cualquier estado.</value>
+  </data>
+  <data name="Tooltip_Table_Assignment" xml:space="preserve">
+    <value>Identificador de la tarea a la que pertenece esta entrevista. Haga clic en el icono de ordenar para ordenar por número de tarea</value>
+  </data>
+  <data name="Tooltip_Table_HasErrors" xml:space="preserve">
+    <value>Indicador si la entrevista tiene al menos un error de validación. "Sí" indica al menos un error; "-" indica que no hay error. Haga clic en el icono de ordenar para ordenar por la presencia de errores.</value>
+  </data>
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
+    <value>Haga clic aquí para ocultar o mostrar las preguntas de identificación. Ocultar preguntas de identificación puede proporcionar más espacio para otra información. Mostrar preguntas de identificación puede proporcionar detalles para diferenciar entre entrevistas.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Información que identifica cada tarea. Estas son las respuestas a las preguntas marcadas como identificadas en Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
+    <value>Identificador de caso corto que aparece en todo el sistema: en la Sede, el Supervisor y el Entrevistador. Considere usar esta identificación cuando se comunique con el equipo de campo, en lugar de un conjunto grande de preguntas de identificación</value>
+  </data>
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
+    <value>Cuando los cambios a la entrevista fueron publicados por última vez en el servidor. Haga clic en el icono de ordenar para ordenar por tiempo.</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
+    <value>Indicador  si la entrevista se descargó en la tableta del entrevistador. Haga clic en el icono de ordenar para ordenar por recibo por el entrevistador.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Usuario actualmente responsable de la tarea. Haga clic en el icono de ordenar para ordenar el nombre de usuario.</value>
+  </data>
+  <data name="Tooltip_Table_Status" xml:space="preserve">
+    <value>Estado de la entrevista en el flujo de trabajo de la encuesta. Haga clic en el icono de ordenar para ordenar por estado.</value>
+  </data>
+  <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {1} &lt;/ i&gt;. </value>
+  </data>
+</root>

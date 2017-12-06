@@ -167,6 +167,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.IsCompleted = true;
         }
 
+        private void Apply(InterviewPaused @event)
+        {
+        }
+
+        private void Apply(InterviewResumed @event)
+        {
+        }
+
+        private void Apply(InterviewOpenedBySupervisor @event)
+        {
+        }
+
+        private void Apply(InterviewClosedBySupervisor @event)
+        {
+        }
+
         public new void Apply(InterviewRejected @event)
         {
             base.Apply(@event);
@@ -274,9 +290,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
 
-            this.ApplyEvent(this.HasInvalidAnswers() || this.HasInvalidStaticTexts
-                ? new InterviewDeclaredInvalid() as IEvent
-                : new InterviewDeclaredValid());
+            var becomesValid = !(this.HasInvalidAnswers() || this.HasInvalidStaticTexts);
+            if (this.properties.IsValid != becomesValid)
+            {
+                this.ApplyEvent(becomesValid
+                    ? new InterviewDeclaredValid()
+                    : new InterviewDeclaredInvalid() as IEvent);
+            }
         }
 
         public void Synchronize(SynchronizeInterviewCommand command)
@@ -300,6 +320,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.CreatedOnClient,
                 questionnaire.IsUsingExpressionStorage()
             );
+            
+            if (command.SynchronizedInterview.Language != null)
+                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId));
+            
             var synchronizedInterviewInterviewKey = command.SynchronizedInterview.InterviewKey;
             if (synchronizedInterviewInterviewKey != null)
             {
@@ -330,9 +354,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaire.IsUsingExpressionStorage()
             );
 
+            if (command.SynchronizedInterview.Language != null)
+                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId));
+
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
 
-            var answeredQuestions = this.Tree.AllNodes.OfType<InterviewTreeQuestion>().Where(q => q.IsAnswered()).Select(q => q.Identity);
             this.UpdateTreeWithDependentChanges(this.Tree, questionnaire);
         }
 
@@ -348,6 +374,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     .Any(x => !x.IsReadonly);
             }
         }
+
+        public bool ReceivedByInterviewer => this.properties.IsReceivedByInterviewer;
 
         public bool HasGroup(Identity group) => this.Tree.GetGroup(group) != null;
 
@@ -393,6 +421,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return this.Tree.GetQuestion(entityIdentity)?.IsPrefilled ?? false;
         }
 
+        public IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId)
+        {
+            var section = this.Tree.GetNodeByIdentity(sectionId);
+            if (section == null)
+            {
+                throw new ArgumentException($"Section not found", nameof(sectionId))
+                {
+                    Data =
+                    {
+                        { "SectionId", sectionId },
+                        { "InterviewId", Id }
+                    }
+                };
+            }
+
+            return section.Children.Where(x => !(x is InterviewTreeVariable)).Select(x => x.Identity);
+        }
+
         public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
             => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);
 
@@ -415,14 +461,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.GetEnabledNotHiddenQuestions().Where(question =>
                 question.IsInterviewer && !question.IsReadonly);
 
-        public int CountActiveAnsweredQuestionsInInterview()
-            => this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
+        private IEnumerable<InterviewTreeQuestion> GetEnabledQuestionsForSupervisor()
+            => this.GetEnabledNotHiddenQuestions().Where(question =>
+                (question.IsInterviewer || question.IsSupervisors) && !question.IsReadonly);
 
-        public int CountActiveQuestionsInInterview() => this.GetEnabledInterviewerQuestions().Count();
 
-        public int CountAllEnabledUnansweredQuestions()
-            => this.GetEnabledNotHiddenQuestions().Count(question => !question.IsAnswered());
+        public int CountActiveAnsweredQuestionsInInterview() => 
+            this.GetEnabledInterviewerQuestions().Count(question => question.IsAnswered());
 
+        public int CountActiveQuestionsInInterview() => 
+            this.GetEnabledInterviewerQuestions().Count();
+
+        public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
+
+        public int CountActiveAnsweredQuestionsInInterviewForSupervisor() => 
+            this.GetEnabledQuestionsForSupervisor().Count(question => question.IsAnswered());
+
+        public int CountActiveQuestionsInInterviewForSupervisor() => 
+            this.GetEnabledQuestionsForSupervisor().Count();
+
+        public int CountInvalidEntitiesInInterviewForSupervisor() => this.GetInvalidEntitiesInInterviewForSupervisor().Count();
+
+
+        public int CountAllEnabledUnansweredQuestions() => 
+            this.GetEnabledNotHiddenQuestions().Count(question => !question.IsAnswered());
+        
         public int CountAllEnabledAnsweredQuestions()
             => this.GetEnabledNotHiddenQuestions().Count(question => question.IsAnswered());
         public int CountAllEnabledQuestions() => this.GetEnabledNotHiddenQuestions().Count();
@@ -433,9 +496,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public int CountEnabledHiddenQuestions() => 
             this.Tree.FindQuestions().Where(question => !question.IsDisabled()).Count(question => question.IsHidden);
-
-        public int CountInvalidEntitiesInInterview() => this.GetInvalidEntitiesInInterview().Count();
-
+        
         public IEnumerable<Identity> GetAllInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions(true).Select(question => question.Identity));
@@ -443,6 +504,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<Identity> GetInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer)
+                    .Select(question => question.Identity));
+
+        private IEnumerable<Identity> GetInvalidEntitiesInInterviewForSupervisor()
+            => this.GetEnabledInvalidStaticTexts()
+                .Concat(this.GetEnabledInvalidQuestions().Where(question => question.IsInterviewer || question.IsSupervisors)
                     .Select(question => question.Identity));
 
         public bool IsFirstEntityBeforeSecond(Identity first, Identity second)
@@ -544,6 +610,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>();
 
+        public IEnumerable<IInterviewTreeNode> GetAllInterviewNodes()
+        {
+            return this.Tree.GetAllNodesInEnumeratorOrder();
+        }
+
         public InterviewTreeSection FirstSection => this.Tree.Sections.First();
 
         public Guid CurrentResponsibleId
@@ -634,8 +705,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         CategoricalOption IStatefulInterview.GetOptionForQuestionWithFilter(Identity question, string value,
             int? parentQuestionValue) => this.GetOptionForQuestionWithFilter(question, value, parentQuestionValue);
-
-        public int CountCommentedQuestionsVisibledToInterviewer() => this.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Count();
 
         private static AnswerComment ToAnswerComment(AnsweredQuestionSynchronizationDto answerDto, CommentSynchronizationDto commentDto)
             => new AnswerComment(
@@ -775,6 +844,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 disabledVariables: disabledVariables,
                 wasCompleted: this.properties.WasCompleted,
                 createdOnClient: true);
+            interviewSynchronizationDto.Language = this.Language;
             interviewSynchronizationDto.InterviewKey = GetInterviewKey();
             interviewSynchronizationDto.AssignmentId = GetAssignmentId();
 
@@ -794,6 +864,48 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public int? GetAssignmentId()
         {
             return this.properties.AssignmentId;
+        }
+
+        public bool IsParentOf(Identity parentIdentity, Identity childIdentity)
+        {
+            if ((parentIdentity ?? childIdentity) == null)
+                return false;
+
+            var childNode = this.Tree.GetNodeByIdentity(childIdentity);
+
+            return childNode != null && childNode.Parents.Select(x => x.Identity).Any(x => x.Equals(parentIdentity));
+        }
+
+        public void Pause(PauseInterviewCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+
+            ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime, command.UtcTime));
+        }
+
+        public void Resume(ResumeInterviewCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
+
+            ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime, command.UtcTime));
+        }
+
+        public void CloseBySupevisor(CloseInterviewBySupervisorCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+
+            ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.LocalTime));
+        }
+
+        public void OpenBySupevisor(OpenInterviewBySupervisorCommand command)
+        {
+            var invariants = new InterviewPropertiesInvariants(properties);
+            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
+
+            ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.LocalTime));
         }
     }
 }

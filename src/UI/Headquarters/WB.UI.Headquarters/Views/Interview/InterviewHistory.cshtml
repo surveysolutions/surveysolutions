@@ -1,57 +1,57 @@
-﻿@using System.Web.Optimization
-@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
-@using WB.UI.Headquarters.Resources
-@model WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory.InterviewHistoryView
+﻿@model WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory.InterviewHistoryView
            
 
 @{
-    Layout = "~/Views/Shared/_LayoutWithoutSidebar.cshtml";
-    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = @Pages.InterviewHistory_Header;
 }
 
-<div class="page-header">
-    <h2>@Pages.InterviewHistory_Header</h2>
-</div>
-<div class="table-responsive">
-    <table class="table table-striped table-condensed table-break-words questionnaires-table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Action</th>
-                <th>Parameters</th>
-                <th>Originator</th>
-                <th>Role</th>
-                <th>Timestamp</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Records)
-            {
-                <tr>
-                    <td>
-                        @item.Index
-                    </td>
-                    <td>
-                        @item.Action
-                    </td>
-                    <td>
-                        @foreach (var parameter in item.Parameters)
-                        {
-                            <small>@parameter.Key: </small>@parameter.Value
-                            <br/>
-                        }
-                    </td>
-                    <td>
-                        @item.OriginatorName
-                    </td>
-                    <td>
-                        @item.OriginatorRole
-                    </td>
-                    <td>
-                        @item.Timestamp
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
+<main class="main">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="main-information-no-filter">
+                @Html.Partial("_alerts")
+                <div class="page-header clearfix">
+                    <h1>@Pages.InterviewHistory_Header</h1>
+                </div>
+                <table class="table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Parameters</th>
+                        <th>Originator</th>
+                        <th>Role</th>
+                        <th>Timestamp</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Records)
+                    {
+                        <tr>
+                            <td>
+                                @item.Action
+                            </td>
+                            <td>
+                                @foreach (var parameter in item.Parameters)
+                                {
+                                    <small>@parameter.Key: </small>@parameter.Value
+                                    <br/>
+                                }
+                            </td>
+                            <td>
+                                @item.OriginatorName
+                            </td>
+                            <td>
+                                @item.OriginatorRole
+                            </td>
+                            <td>
+                                @(item.Timestamp.HasValue ? item.Timestamp.Value.ToString("s") : "<NULL>")
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>

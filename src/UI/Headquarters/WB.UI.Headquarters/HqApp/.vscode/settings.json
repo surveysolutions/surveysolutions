@@ -4,10 +4,10 @@
         "**/dist": true
     },
     "eslint.enable": true,
-    "eslint.autoFixOnSave": true,
+    "eslint.autoFixOnSave": false,
     "eslint.run": "onType",
     "eslint.workingDirectories": [
-        "app"
+        "src"
     ],
     "eslint.validate": [
         {
@@ -23,5 +23,8 @@
             "autoFix": true
         }     
     ],
-    "vetur.format.html.wrap_attributes": "force-aligned" 
+    "html.format.wrapAttributes": "force-aligned",
+    "vetur.format.defaultFormatter.js": "prettier",
+    
+    "vetur.format.defaultFormatter.html": "js-beautify-html"
 }

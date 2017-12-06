@@ -5,6 +5,7 @@ using System.Text;
 using System.Web.Http;
 using Prometheus;
 using Prometheus.Advanced;
+using WB.UI.Headquarters.Services;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
@@ -12,14 +13,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     {
         public HttpResponseMessage Get()
         {
-            using (var ms = new MemoryStream())
+            if (Request.IsLocal() && MetricsService.IsEnabled)
             {
-                ScrapeHandler.ProcessScrapeRequest(DefaultCollectorRegistry.Instance.CollectAll(), @"text/plain", ms);
+                using (var ms = new MemoryStream())
+                {
+                    ScrapeHandler.ProcessScrapeRequest(DefaultCollectorRegistry.Instance.CollectAll(), @"text/plain", ms);
 
-                var resp = new HttpResponseMessage(HttpStatusCode.OK);
-                resp.Content = new StringContent(Encoding.UTF8.GetString(ms.ToArray()), Encoding.UTF8, @"text/plain");
-                return resp;
+                    var resp = new HttpResponseMessage(HttpStatusCode.OK);
+                    resp.Content = new StringContent(Encoding.UTF8.GetString(ms.ToArray()), Encoding.UTF8, @"text/plain");
+                    return resp;
+                }
             }
+
+            return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Not available");
         }
     }
 }

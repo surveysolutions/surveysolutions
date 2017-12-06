@@ -215,7 +215,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetChildStaticTexts(Guid groupId);
 
-        IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId);
+        IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid id);
+
+        IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId);
 
         bool IsPrefilled(Guid questionId);
         bool ShouldBeHiddenIfDisabled(Guid entityId);
@@ -240,6 +242,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsNumericRoster(Guid id);
 
         IReadOnlyCollection<string> GetTranslationLanguages();
+        string GetDefaultTransation();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
         bool IsSubSection(Guid groupId);
         bool IsVariable(Guid id);
@@ -257,5 +260,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         List<Guid> GetExpressionsPlayOrder();
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
+        string GetRosterVariableName(Guid id);
     }
 }

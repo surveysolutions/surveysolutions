@@ -58,13 +58,13 @@
                         "class": "date"
                     },
                     {
-                        data: "creationDate",
-                        name: "CreationDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        data: "lastEntryDate",
+                        name: "LastEntryDate",// case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
                         "class": "date"
                     },
                     {
-                        data: "lastEntryDate",
-                        name: "LastEntryDate",// case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                        data: "creationDate",
+                        name: "CreationDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                         "class": "date"
                     }
                 ];
@@ -81,12 +81,12 @@
                             <text>
                                 if (!selectedRow.allowCensusMode) {
                                     items["addNew"] = {
-                                        name: "@Dashboard.NewAssignment",
+                                        name: "@HttpUtility.JavaScriptStringEncode(Dashboard.NewAssignment)",
                                         callback: model.addNewInterview
                                     };
                                 }
                                 items["batchUpload"] = {
-                                    name: "@Dashboard.UploadAssignments",
+                                    name: "@Html.Raw(HttpUtility.JavaScriptStringEncode(Dashboard.UploadAssignments))",
                                     callback: model.interviewsBatchUpload
                                 };
                             </text>
@@ -105,7 +105,7 @@
                         <text>
                         if (!selectedRow.isDisabled) {
                             items["webSetup"] = {
-                                name: "@Dashboard.WebInterviewSetup",
+                                name: "@HttpUtility.JavaScriptStringEncode(Dashboard.WebInterviewSetup)",
                                 callback: model.webInterviewSetup
                             }
                         }
@@ -118,13 +118,13 @@
                         <text>
                     items["clone"] =
                     {
-                        name: "@Dashboard.CloneQuestionnaire",
+                        name: "@HttpUtility.JavaScriptStringEncode(Dashboard.CloneQuestionnaire)",
                         callback: model.cloneQuestionnaire,
                         disabled: selectedRow.isDisabled
                     };
                         items["delete"] =
                         {
-                            name: "@Dashboard.DeleteQuestionnaire",
+                            name: "@HttpUtility.JavaScriptStringEncode(Dashboard.DeleteQuestionnaire)",
                             callback: model.deleteQuestionnaire
                             /*,disabled: selectedRow.isDisabled*/
                         };
@@ -181,8 +181,8 @@
                     <th>@Dashboard.Questionnaire</th>
                     <th>@Dashboard.Version</th>
                     <th>@Dashboard.ImportDate</th>
-                    <th>@Dashboard.CreationDate</th>
                     <th>@Dashboard.LastEntryDate</th>
+                    <th>@Dashboard.CreationDate</th>
                 </tr>
                 </thead>
             </table>

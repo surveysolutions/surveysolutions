@@ -49,5 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             return this.FailedConditionIndex.GetHashCode();
         }
+
+        public override string ToString() => this.FailedConditionIndex.ToString();
     }
 }

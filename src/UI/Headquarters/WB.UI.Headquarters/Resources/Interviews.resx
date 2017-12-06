@@ -142,6 +142,9 @@
   <data name="ChooseResponsibleSupervisor" xml:space="preserve">
     <value>No responsible chosen for some interview(s). Please choose a responsible supervisor.</value>
   </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>No responsible chosen for some interview(s). Please choose a responsible supervisor or interviewer.</value>
+  </data>
   <data name="ContinueConfirmMessage" xml:space="preserve">
     <value>Do you want to continue?</value>
   </data>

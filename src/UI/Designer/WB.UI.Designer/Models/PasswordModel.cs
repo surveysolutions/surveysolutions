@@ -12,7 +12,7 @@ namespace WB.UI.Designer.Models
         [Compare("Password", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "The_password_and_confirmation_password_do_not_match")]
         public string ConfirmPassword { get; set; }
 
-        [Required]
+        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_required")]
         [PasswordStringLength(100, ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_must_be_at_least_characters_long")]
         [PasswordRegularExpression(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character")]
         [DataType(DataType.Password)]

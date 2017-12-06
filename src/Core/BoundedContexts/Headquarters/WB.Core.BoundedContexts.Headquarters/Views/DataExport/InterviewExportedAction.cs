@@ -14,6 +14,12 @@
         Deleted = 9,
         Restored = 10,
         UnapprovedByHeadquarter = 11,
-        Created = 12
+        Created = 12,
+        InterviewReceivedByTablet = 13,
+        Resumed = 14,
+        Paused = 15,
+        TranslationSwitched = 16,
+        OpenedBySupervisor = 17,
+        ClosedBySupervisor = 18
     }
 }

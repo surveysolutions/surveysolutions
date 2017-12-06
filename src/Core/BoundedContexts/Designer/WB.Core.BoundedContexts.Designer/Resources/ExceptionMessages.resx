@@ -117,30 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CantBeLinkedAndCascadingAtSameTime" xml:space="preserve">
-    <value>Question can't be linked and cascading at the same time.</value>
-  </data>
-  <data name="CantRemoveParentQuestionInCascading" xml:space="preserve">
-    <value>Question that is used as parent in cascading dropdowns cant be removed before all child questions are removed.</value>
-  </data>
-  <data name="CantRemoveSectionParentQuestionInCascading" xml:space="preserve">
-    <value>Sub-section or roster containing question that is used as parent for cascading combo box cannot be removed before all child questions are removed.</value>
-  </data>
-  <data name="CascadingCantHaveConditionExpression" xml:space="preserve">
-    <value>Cascading questions can't have enabling condition.</value>
-  </data>
-  <data name="CascadingCantHaveValidationExpression" xml:space="preserve">
-    <value>Cascading questions can't have validation condition.</value>
-  </data>
-  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have empty ParentValue column.</value>
-  </data>
-  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
-    <value>Options in cascading question can not have not numeric value in ParentValue column.</value>
-  </data>
-  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
-  </data>
   <data name="LookupTableAlreadyExist" xml:space="preserve">
     <value>Lookup table with such id already exist.</value>
   </data>
@@ -174,23 +150,11 @@
   <data name="MacroAlreadyExist" xml:space="preserve">
     <value>Macro with such is is already exist.</value>
   </data>
-  <data name="MacroContentIsEmpty" xml:space="preserve">
-    <value>Macro can not have empty content.</value>
-  </data>
   <data name="MacroIsAbsent" xml:space="preserve">
     <value>Macro with such is is absent.</value>
   </data>
-  <data name="QuestionOrRosterIdentifierIsMissing" xml:space="preserve">
-    <value>Identifier '{0}' from expression '{1}' is not valid question or roster identifier. Question or roster with such an identifier is missing.</value>
-  </data>
-  <data name="ShouldCascadeFromExistingQuestion" xml:space="preserve">
-    <value>Question to cascade from should exist in questionnaire.</value>
-  </data>
   <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
     <value>Headers with the same name are not allowed</value>
-  </data>
-  <data name="CategoricalQuestionHasMoreThan200Options" xml:space="preserve">
-    <value>Categorical question contains more than 200 options</value>
   </data>
   <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
     <value>Uploaded file is not an image</value>
@@ -198,7 +162,142 @@
   <data name="Attachments_Unsupported_content" xml:space="preserve">
     <value>Uploaded content is not supported</value>
   </data>
-  <data name="VariableLabelContainsSubstitutionReference" xml:space="preserve">
-    <value>It is not allowed to use substitutions in variable label</value>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>You can't move to sub-section {0} because it position {1} in not acceptable.</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>Combo box question with public key {0} can't be found</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>One or more questionnaire item(s) with same ID {0} already exists.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>One or more sub-section(s) with same ID {0} already exist:{1}{2}.</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>You don't have permissions for changing this questionnaire</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>Question with public key {0} can't be found.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>Question {0} is not a combo box</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>Questionnaire item with id {0} can't be found.</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>Questionnaire's title can not be empty or contains whitespace only.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>Sub-section with public key {0} can't be found.</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>Sub-section or roster depth cannot be higher than {0}.</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>Section cannot have more than {0} child items</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>One or more question(s) with same ID {0} already exist:{1}{2}.</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>Question cannot be pasted here.</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>Last existing section can not be removed from questionnaire</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Couldn't remove user, because it doesn't exist in share list</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Trying to import template of deleted questionnaire</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Invalid title list</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Fixed set of items roster value is required</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>Only QuestionnaireDocuments are supported for now</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>Questionnire {0} of version {1} can't be found</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>Question type is not supported: {0}</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>Roster cannot be pasted here.</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>Static Text cannot be pasted here.</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Unknown item type. Paste failed.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>User {0} already exist in share list.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>User {0} is an owner of this questionnaire. Please, input another email.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>Fixed set of items roster value should have only number characters</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>Variable cannot be pasted here.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>Options in cascading question can not have empty ParentValue column.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>Options in cascading question can not have not numeric value in ParentValue column.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type.</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>Option value should have only number characters</value>
+  </data>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Missing attachment with id {0}</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Lookup table with id {0} doen't have content</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Lookup table with id {0} is missing</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>Old attachment id is empty and file is absent for attachment {0} in questionnaire {1}</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Found errors in excel file</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} has invalid index at [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} has invalid type [{1}]</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} has invalid id at [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Excel file is empty - contains no worksheets</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Failed to extract translations from uploaded file</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Worksheet with translations not found</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>Variable with id {0} was not found in questionnaire {1}</value>
   </data>
 </root>

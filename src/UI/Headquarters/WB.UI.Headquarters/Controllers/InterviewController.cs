@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -11,9 +12,14 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 {
@@ -26,6 +32,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
         public InterviewController(
             ICommandService commandService, 
@@ -34,7 +41,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IChangeStatusFactory changeStatusFactory,
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
-            IInterviewDetailsViewFactory interviewDetailsViewFactory)
+            IInterviewDetailsViewFactory interviewDetailsViewFactory,
+            IStatefulInterviewRepository statefulInterviewRepository)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -42,6 +50,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewSummaryViewFactory = interviewSummaryViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
+            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? questionsTypes, string currentGroupId)
@@ -66,9 +75,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewInfo == null || interviewSummary == null)
                 return HttpNotFound();
 
-            bool isAccessAllowed =
-                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
-                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
+            bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
 
             if (!isAccessAllowed)
                 return HttpNotFound();
@@ -77,7 +84,80 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 questionsTypes: questionsTypes ?? InterviewDetailsFilter.All,
                 currentGroupIdentity: string.IsNullOrEmpty(currentGroupId) ? null : Identity.Parse(currentGroupId));
 
+            detailsViewModel.ApproveReject = GetApproveReject(interviewSummary);
+
             return View(detailsViewModel);
+        }
+
+        private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
+        {
+            if (interviewSummary == null)
+                return false;
+
+            if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
+                return true;
+
+            if (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId)
+            {
+                var hasSupervisorAccessToInterview = interviewSummary.Status == InterviewStatus.InterviewerAssigned
+                                                    || interviewSummary.Status == InterviewStatus.SupervisorAssigned
+                                                    || interviewSummary.Status == InterviewStatus.Completed
+                                                    || interviewSummary.Status == InterviewStatus.RejectedBySupervisor
+                                                    || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters;
+
+                if (hasSupervisorAccessToInterview)
+                    return true;
+
+            }
+
+            return false;
+        }
+
+        [ActivePage(MenuItem.Docs)]
+        public ActionResult Review(Guid id, string url)
+        {
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+            bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
+
+            if (!isAccessAllowed)
+                return HttpNotFound();
+
+            this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
+
+            ViewBag.SpecificPageCaption = interviewSummary.Key;
+
+            return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
+            {
+                Id = id.FormatGuid(),
+                Key = interviewSummary.Key,
+                LastUpdatedAtUtc = interviewSummary.UpdateDate,
+                StatusName = interviewSummary.Status.ToLocalizeString(),
+                Responsible = interviewSummary.ResponsibleName,
+                ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
+                ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
+                                            Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
+                                            "javascript:void(0);",
+                InterviewsUrl = authorizedUser.IsSupervisor ? Url.Action("Interviews", "Survey") : Url.Action("Interviews", "HQ")
+            });
+        }
+
+        private ApproveRejectAllowed GetApproveReject(InterviewSummary interviewSummary)
+        {
+            var approveRejectAllowed = new ApproveRejectAllowed
+            {
+                SupervisorApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                           authorizedUser.IsSupervisor,
+                HqOrAdminApproveAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
+                                          (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
+                                          authorizedUser.IsSupervisor,
+                HqOrAdminRejectAllowed = interviewSummary.Status == InterviewStatus.ApprovedBySupervisor &&
+                                         (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
+                InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "InterviewersCombobox" })
+        };
+            approveRejectAllowed.InterviewerShouldbeSelected = approveRejectAllowed.SupervisorRejectAllowed && !interviewSummary.IsAssignedToInterviewer;
+            return approveRejectAllowed;
         }
 
         public ActionResult InterviewHistory(Guid id)
@@ -111,5 +191,31 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             return this.View(question);
         }
+    }
+
+    public class InterviewReviewModel
+    {
+        public InterviewReviewModel(ApproveRejectAllowed approveRejectAllowed)
+        {
+            this.ApproveReject = approveRejectAllowed;
+        }
+
+        public string Id { get; set; }
+        
+        public string Key { get; set; }
+
+        public DateTime LastUpdatedAtUtc { get; set; }
+
+        public ApproveRejectAllowed ApproveReject { get; }
+
+        public string StatusName { get; set; }
+
+        public string Responsible { get; set; }
+
+        public string ResponsibleRole { get; set; }
+
+        public string InterviewsUrl { get; set; }
+
+        public string ResponsibleProfileUrl { get; set; }
     }
 }

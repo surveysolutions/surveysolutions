@@ -3,7 +3,7 @@
 
     angular.module('designerApp')
         .controller('RosterCtrl',
-            function ($rootScope, $scope, $state, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, optionsService) {
+            function ($rootScope, $scope, $state, $i18next, questionnaireService, commandService, confirmService, $log, utilityService, hotkeys, optionsService) {
                 $scope.currentChapterId = $state.params.chapterId;
                 $scope.selectedNumericQuestion = null;
                 $scope.selectedMultiQuestion = null;
@@ -20,12 +20,14 @@
                 hotkeys.bindTo($scope)
                     .add({
                         combo: saveRoster,
-                        description: 'Save changes',
+                        description: $i18next.t('Save'),
                         allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                         callback: function (event) {
                             if ($scope.questionnaire !== null && !$scope.questionnaire.isReadOnlyForUser) {
-                                $scope.saveRoster();
-                                $scope.editRosterForm.$setPristine();
+                                if ($scope.editRosterForm.$dirty) {
+                                    $scope.saveRoster();
+                                    $scope.editRosterForm.$setPristine();
+                                }
                                 event.preventDefault();
                             }
                         }
@@ -69,21 +71,29 @@
                     }
                 };
 
-                var getSelected = function (collection, id) {
+                var getSelected = function (collection, id, errorTitleCode) {
                     if (_.isNull(id)) return null;
 
                     var current = _.find(collection, { 'id': id });
                     if (!_.isUndefined(current)) {
                         return current;
                     }
-                    return null;
+                    return {
+                        isSectionPlaceHolder: false,
+                        id: id,
+                        title: $i18next.t(_.isEmpty(errorTitleCode) ? 'SelectedInvalidItem' : errorTitleCode),
+                        breadcrumbs: null,
+                        type: null,
+                        varName: $i18next.t('SelectItemFromTheList'),
+                        questionType: null
+                    };
                 };
 
                 var bindListsWithSelectedElements = function () {
                     $scope.selectedNumericQuestion = getSelected($scope.activeRoster.numerics, $scope.activeRoster.rosterSizeNumericQuestionId);
                     $scope.selectedListQuestion = getSelected($scope.activeRoster.lists, $scope.activeRoster.rosterSizeListQuestionId);
                     $scope.selectedMultiQuestion = getSelected($scope.activeRoster.multiOption, $scope.activeRoster.rosterSizeMultiQuestionId);
-                    $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId);
+                    $scope.selectedTitleQuestion = getSelected($scope.activeRoster.titles, $scope.activeRoster.rosterTitleQuestionId, 'IncorrectRosterTitle');
                 };
 
                 $scope.wasTitlesLimitReached = function () {
@@ -204,7 +214,7 @@
                 };
 
                 $scope.deleteRoster = function () {
-                    var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup($scope.activeRoster.title));
+                    var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup($scope.activeRoster.title || $i18next.t('UntitledRoster')));
 
                     modalInstance.result.then(function (confirmResult) {
                         if (confirmResult === 'ok') {

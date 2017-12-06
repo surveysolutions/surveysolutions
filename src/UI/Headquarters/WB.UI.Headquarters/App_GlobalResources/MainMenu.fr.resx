@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApiUsers" xml:space="preserve">
-    <value>Utilisateurs de l’API</value>
+    <value>Utilisateurs de l'API</value>
   </data>
   <data name="CumulativeChart" xml:space="preserve">
-    <value>Tableau du progrès cumulatif de collecte</value>
+    <value>Graphique d'entretiens cumulatifs</value>
   </data>
   <data name="DataExport" xml:space="preserve">
     <value>Exportation de données</value>
   </data>
   <data name="Headquarters" xml:space="preserve">
-    <value>Headquarters</value>
+    <value>Quartier Général</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Aide</value>
@@ -139,7 +139,7 @@
     <value>Entretiens</value>
   </data>
   <data name="MapReport" xml:space="preserve">
-    <value>Rapport cartographique</value>
+    <value>Rapport de carte</value>
   </data>
   <data name="Observers" xml:space="preserve">
     <value>Observateurs</value>
@@ -148,10 +148,10 @@
     <value>Quantité</value>
   </data>
   <data name="SurveySetup" xml:space="preserve">
-    <value>Paramètres d'enquête</value>
+    <value>Configuration de l'enquête</value>
   </data>
   <data name="QueueSizeTitle" xml:space="preserve">
-    <value>Nombre d'entretiens synchronisés mais pas encore décryptés</value>
+    <value>Nombre d'entretiens synchronisées mais pas encore traitées</value>
   </data>
   <data name="Reports" xml:space="preserve">
     <value>Rapports</value>
@@ -166,10 +166,10 @@
     <value>Enquêtes et statuts</value>
   </data>
   <data name="TeamAndRoles" xml:space="preserve">
-    <value>Équipes et rôles</value>
+    <value>Équipe et rôles</value>
   </data>
   <data name="TeamMembersAndStatuses" xml:space="preserve">
-    <value>Membres de l’équipe et statuts</value>
+    <value>Membres de l'équipe et statuts</value>
   </data>
   <data name="TeamsAndRoles" xml:space="preserve">
     <value>Équipes et rôles</value>
@@ -178,9 +178,39 @@
     <value>Équipes et statuts</value>
   </data>
   <data name="UserBatchUpload" xml:space="preserve">
-    <value>Importation en lots de comptes d'utilisateur</value>
+    <value>Téléchargement d'utilisateurs par lots</value>
   </data>
   <data name="Users" xml:space="preserve">
     <value>Utilisateurs</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>Affectations</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Achevé</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Créer un nouveau</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>Appareils / enquêteurs</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Cartes</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Questionnaires</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>Rejeté</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>Commencé</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Durée du statut</value>
+  </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>Dépannage</value>
   </data>
 </root>

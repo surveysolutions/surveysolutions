@@ -5,6 +5,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -12,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 {
     public static class AnswerUtils
     {
-        public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null, CultureInfo cultureInfo = null, bool isTimestamp = false)
+        public static string AnswerToString(object answer, Func<decimal, string> getCategoricalAnswerOptionText = null, bool isTimestamp = false)
         {
             if (answer == null)
                 return string.Empty;
@@ -26,8 +27,8 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             if (answer is DateTime dateTime)
             {
                 return isTimestamp 
-                    ? dateTime.ToString(cultureInfo ?? CultureInfo.InvariantCulture) 
-                    : dateTime.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern, CultureInfo.InvariantCulture);
+                    ? dateTime.ToString(DateTimeFormat.DateWithTimeFormat) 
+                    : dateTime.ToString(DateTimeFormat.DateFormat);
             }
 
             if (answer is decimal decimalAnswer)

@@ -5,19 +5,29 @@
     @include transition(background, 0.2s);
     word-break: break-word;
 	&:disabled, &.disabled{
-		border-color: transparent !important;	
-		color: #fff !important;
+		border-color: #d7d7d7 !important;	
+		//color: #fff !important;
+		color: $gray_light !important;
 		cursor: not-allowed;
-		@include stripe-gradient(#d7d7d7, $gray_light);
+		@include stripe-gradient(#d7d7d7, #fff);
+		&.btn-clear{
+			background: none;
+			border-color: transparent !important;
+		}
 		&:hover, &:focus{
-			border-color: $gray-super-light;
+			border-color: #d7d7d7;
 			outline: none;
+			box-shadow: none !important;
+			//background-color: green;
 		}
 	}
 }
 a.disabled{
 	pointer-events: none;
 	cursor: not-allowed;
+	&.btn{
+		background-color: $gray-highlighting;
+	}
 }
 .btn-link{
 	@extend %gray-uppercase;
@@ -31,7 +41,7 @@ a.disabled{
 	display: none;
 	@include size($width-foldback-button, $height-foldback-button);
 	cursor: pointer;
-	@include absolute(75px, 0, null, null);
+	@include absolute(5px, 0, null, null);
 	border-radius: 4px;
 	z-index: 3;
 	@include transition(all, 0.2s);
@@ -129,7 +139,8 @@ a.disabled{
 	&.btn-post-comment{
 		@include transition(all, 0.2s);
 		padding: 12px;
-		color: $gray_form;
+		background-color: #fff;
+		color: $gray_light;
 		border-color: $gray_form;
 		border-radius: 5px;
 		&:hover, &:focus, &:active, &.comment-added{
@@ -150,18 +161,22 @@ a.disabled{
 	.btn.btn-post-comment{
 		@include transition(all, 0.2s);
 		padding: 12px;
-		color: $gray_form;
+		color: $gray_light;
+		background-color: #fff;
 		border-color: $gray_form;
 		border-radius: 5px;
-		border-left: 1px solid;
+		border-left: 1px solid $gray_form;
 		&:hover, &:focus, &:active, &.comment-added{
 			color: $blue;
 			border-color: $blue;
-			background-color: transparent;
+			background-color: #fff;
 		}
 		&:active{
 			background-color: #dfeaf4;
 			box-shadow: none;
+		}
+		&:disabled{
+			@include stripe-gradient($gray_form, #fff);
 		}
 	}
 }
@@ -176,6 +191,8 @@ a.disabled{
 }
 .cancel{
 	border: none;
+	$cross-height: 24px;
+	@include cancel($cross-height);
 }
 .button-flag{
 	display: inline-block;
@@ -185,15 +202,16 @@ a.disabled{
     background-size: 75px 22px;
     background-position: -38px 0;  
 	border: none;
+	outline: none;
 	&:hover, &:focus{
 		background-position: -57px 0;
 	}
-	&.flagged, &:active{
-    	background-position: 0 0;
-    	&:hover, &:focus{
-    		background-position: -19px 0;
-    	}
-	}
+	// &.flagged, &:active{
+    // 	background-position: 0 0;
+    // 	&:hover, &:focus{
+    // 		background-position: -19px 0;
+    // 	}
+	// }
 }
 .reject{
 	border-width: 3px;
@@ -251,8 +269,7 @@ a.disabled{
 }
 .btn-roster-section{
 	letter-spacing: normal;
-	font: 14px/16px Arial, sans-serif;
-	font-weight: bold;
+	font: 14px/16px "RobotoBold";
 	width: 100%;
 	text-transform: none;
 	padding: 11px 15px;
@@ -287,6 +304,13 @@ a.disabled{
 	}
 	&.btn-primary{
 		@include btn-back-questionnaire ($blue, "back-to-parrent-1-no-animation-1.png");
+	}
+	&.btn-success,
+	&.btn-primary,
+	&.btn-danger{
+		&.disabled{
+			@include btn-back-questionnaire (transparent, "back-to-parrent-1-no-animation-4.png");
+		}
 	}
 }
 .section-blocker{

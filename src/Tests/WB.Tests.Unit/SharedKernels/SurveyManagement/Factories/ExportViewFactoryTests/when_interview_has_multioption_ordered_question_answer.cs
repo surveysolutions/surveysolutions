@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.PublicKey, 1);
 
-            interview = Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId, new[] { 42m, 28m }));
+            interview = Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId, new[] { 42, 28 }));
         };
 
         Because of = () => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);

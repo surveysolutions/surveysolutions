@@ -6,7 +6,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Properties;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
@@ -30,21 +30,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
        
         private readonly IExpressionProcessor expressionProcessor;
 
-        private static readonly SelectOption[] AllQuestionScopeOptions =
+        private SelectOption[] AllQuestionScopeOptions => new []
         {
-            new SelectOption { Value = "Interviewer", Text = "Interviewer" },
-            new SelectOption { Value = "Supervisor", Text = "Supervisor" },
-            new SelectOption { Value = "Hidden", Text = "Hidden" },
-            new SelectOption { Value = "Identifying", Text = "Identifying" }
+            new SelectOption {Value = "Interviewer", Text = QuestionnaireEditor.QuestionScopeInterviewer},
+            new SelectOption {Value = "Supervisor", Text = QuestionnaireEditor.QuestionScopeSupervisor},
+            new SelectOption {Value = "Hidden", Text = QuestionnaireEditor.QuestionScopeHidden},
+            new SelectOption {Value = "Identifying", Text = QuestionnaireEditor.QuestionScopeIdentifying}
         };
 
         private static readonly HashSet<QuestionType> QuestionsWhichCanBeUsedAsSourceOfLinkedQuestion = new HashSet<QuestionType>
         { QuestionType.Text, QuestionType.Numeric, QuestionType.DateTime };
 
-        private static readonly HashSet<QuestionType> QuestionsWhichCanBeReferencedByLinkedQuestion = new HashSet<QuestionType>
-        { QuestionType.TextList };
-
-        private static readonly SelectOption[] VariableTypeOptions =
+        private SelectOption[] VariableTypeOptions => new []
         {
             new SelectOption
             {
@@ -73,69 +70,69 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             }
         };
 
-        private static readonly SelectOption[] QuestionTypeOptions =
+        private SelectOption[] QuestionTypeOptions => new []
         {
             new SelectOption
             {
                 Value = "SingleOption",
-                Text = "Categorical: Single-select"
+                Text = QuestionnaireEditor.QuestionTypeSingleSelect
             },
             new SelectOption
             {
                 Value = "MultyOption",
-                Text = "Categorical: Multi-select"
+                Text = QuestionnaireEditor.QuestionTypeMultiSelect
             },
             new SelectOption
             {
                 Value = "Numeric",
-                Text = "Numeric"
+                Text = QuestionnaireEditor.QuestionTypeNumeric
             },
             new SelectOption
             {
                 Value = "DateTime",
-                Text = "Date"
+                Text = QuestionnaireEditor.QuestionTypeDate
             },
             new SelectOption
             {
                 Value = "Text",
-                Text = "Text"
+                Text = QuestionnaireEditor.QuestionTypeText
             },
             new SelectOption
             {
                 Value = "GpsCoordinates",
-                Text = "GPS"
+                Text = QuestionnaireEditor.QuestionTypeGPS
             }
             ,
             new SelectOption
             {
                 Value = "TextList",
-                Text = "List"
+                Text = QuestionnaireEditor.QuestionTypeList
             },
             new SelectOption
             {
                 Value = "QRBarcode",
-                Text = "Barcode"
+                Text = QuestionnaireEditor.QuestionTypeBarcode
             },
             new SelectOption
             {
                 Value = "Multimedia",
-                Text = "Picture"
+                Text = QuestionnaireEditor.QuestionTypePicture
             },
             new SelectOption
             {
                 Value = "Audio",
-                Text = "Audio"
+                Text = QuestionnaireEditor.QuestionTypeAudio
             },
             new SelectOption
             {
                 Value = "Area",
-                Text = "Area"
+                Text = QuestionnaireEditor.QuestionTypeArea
             }
         };
 
         private readonly string rosterType = "roster";
 
-        private static readonly SelectOption[] RosterTypeOptions =
+        private SelectOption[] RosterTypeOptions => new[]
         {
             new SelectOption {Value = RosterType.Fixed.ToString(), Text = Roster.RosterType_Fixed},
             new SelectOption {Value = RosterType.List.ToString(), Text = Roster.RosterType_List},
@@ -435,7 +432,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             questionView.RosterScopeIds = new Guid[0];
             questionView.ParentGroupsIds = new Guid[0];
 
-
             switch (question.QuestionType)
             {
                 case QuestionType.MultyOption:
@@ -488,35 +484,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
         {
-            if (answers == null)
-                return null;
-
-            return GetValidAnswersCollection(answers.ToArray()).Select(x => new CategoricalOption
+            return answers?.Select(x => new CategoricalOption
             {
                 Title = x.AnswerText,
-                Value = decimal.Parse(x.AnswerValue),
+                Value = x.AnswerValue == null ? (decimal?)null : decimal.Parse(x.AnswerValue),
                 ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
             }).ToArray();
         }
 
-        private static Answer[] GetValidAnswersCollection(Answer[] answers)
-        {
-            if (answers == null)
-                return null;
-
-            foreach (var answer in answers)
-            {
-                if (string.IsNullOrWhiteSpace(answer.AnswerValue))
-                {
-                    answer.AnswerValue = (new Random().NextDouble() * 100).ToString("0.00");
-                }
-                if (string.IsNullOrWhiteSpace(answer.AnswerText))
-                {
-                    answer.AnswerText = "Option " + answer.AnswerValue;
-                }
-            }
-            return answers;
-        }
 
         private List<DropdownEntityView> GetSourcesOfSingleQuestionBriefs(ReadOnlyQuestionnaireDocument document, Guid questionId)
         {

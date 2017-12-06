@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Resources;
@@ -15,7 +16,7 @@ using WB.UI.Headquarters.Utils;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor, Observer")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Observer")]
     [LimitsFilter]
     [ActivePage(MenuItem.Assignments)]
     public class AssignmentsController : BaseController
@@ -34,6 +35,7 @@ namespace WB.UI.Headquarters.Controllers
         }
         
         [Localizable(false)]
+        [ActivePage(MenuItem.Assignments)]
         public ActionResult Index()
         {
             var model = new AssignmentsFilters
@@ -41,8 +43,7 @@ namespace WB.UI.Headquarters.Controllers
                 IsSupervisor = this.currentUser.IsSupervisor,
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
-                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator,
-                resources = Resources.Translations()
+                IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator
             };
 
             model.Api = new AssignmentsFilters.ApiEndpoints
@@ -59,21 +60,10 @@ namespace WB.UI.Headquarters.Controllers
 
             return View(model);
         }
-
-        private static readonly ResourceManager[] Resources =
-        {
-            MainMenu.ResourceManager,
-            Assignments.ResourceManager,
-            Pages.ResourceManager,
-            global::Resources.Common.ResourceManager,
-            Strings.ResourceManager
-        };
-
     }
 
     public class AssignmentsFilters
     {
-        public TranslationModel resources { get; set; }
         public bool IsHeadquarter { get; set; }
         public bool IsSupervisor { get; set; }
         public ApiEndpoints Api { get; set; }

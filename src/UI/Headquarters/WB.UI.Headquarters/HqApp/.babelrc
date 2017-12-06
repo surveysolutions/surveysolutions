@@ -1,6 +1,7 @@
 {
     "plugins": [
         [
+            "syntax-dynamic-import",
             "transform-async-to-generator",
             "transform-runtime",
             {
@@ -22,5 +23,12 @@
                 }
             }
         ]
-    ]
+    ],
+    "env": {
+        "test": {
+            "plugins": [
+                "transform-es2015-modules-commonjs"
+            ]
+        }
+    }
 }

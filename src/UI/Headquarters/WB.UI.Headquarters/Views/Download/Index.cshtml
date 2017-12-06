@@ -15,9 +15,10 @@
     <title>@Pages.DownloadPage_PageTitle</title>
     @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
     <!-- cssLibs:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
     <!-- endinject -->
-    <!-- cssApp:css -->
-    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/markup.css")">
+    <!-- css_markup:css -->
+    <link rel="stylesheet" async href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
 </head>
 <body>

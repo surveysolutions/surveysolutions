@@ -8,6 +8,7 @@ using Main.DenormalizerStorage;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Tests.Abc;
@@ -22,7 +23,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         private Establish context = () =>
         {
             var interviewReferences = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
-            interviewReferences.Store(Create.Entity.InterviewSummary(interviewId, Guid.NewGuid(), questionnaireVersion: 1), "1");
+            interviewReferences.Store(Create.Entity.InterviewSummary(interviewId, Guid.NewGuid(), questionnaireVersion: 1), interviewId.FormatGuid());
 
             var userViewFactory =
                 Mock.Of<IUserViewFactory>(

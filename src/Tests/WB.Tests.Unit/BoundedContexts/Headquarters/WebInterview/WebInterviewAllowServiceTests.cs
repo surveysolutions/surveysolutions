@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -31,6 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private IWebInterviewConfigProvider webInterviewConfigProvider;
         private IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private WebInterviewConfig webInterviewConfig;
+        private Mock<IAuthorizedUser> authorizedUserMock;
 
         [SetUp]
         public void Setup()
@@ -45,17 +44,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
+            authorizedUserMock = new Mock<IAuthorizedUser>();
 
             webInterviewAllowService = new WebInterviewAllowService(transactionManagerProvider, 
                 plainTransactionManagerProvider,
                 interviewSummaryRepoMock.Object, 
-                webInterviewConfigProvider);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Thread.CurrentPrincipal = null;
+                webInterviewConfigProvider,
+                authorizedUserMock.Object);
         }
 
         private void Act()
@@ -64,33 +59,39 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         }
 
         private void ArrangeTest(
-            UserRoles? userRole = null, 
+            UserRoles? loggedInUserRole = null, 
             InterviewStatus? interviewStatus = InterviewStatus.InterviewerAssigned, 
             bool webInterviewEnabled = true, 
-            Guid? interviewerId = null, 
-            Guid? responsibleId = null)
+            Guid? loggedInUserId = null, 
+            Guid? responsibleId = null,
+            Guid? teamLeadId = null)
         {
-            if (interviewerId.HasValue && userRole.HasValue)
+            if (loggedInUserId.HasValue && loggedInUserRole.HasValue)
             {
-                var claims = new List<Claim>
+                this.authorizedUserMock.Setup(x => x.Id).Returns(loggedInUserId.Value);
+                this.authorizedUserMock.Setup(x => x.IsAuthenticated).Returns(true);
+                switch (loggedInUserRole)
                 {
-                    new Claim(ClaimTypes.NameIdentifier, interviewerId.ToString()),
-                    new Claim(ClaimTypes.Role, userRole.ToString())
-                };
-
-                Thread.CurrentPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claims));
+                    case UserRoles.Headquarter:
+                        this.authorizedUserMock.Setup(x => x.IsHeadquarter).Returns(true);
+                        break;
+                    case UserRoles.Supervisor:
+                        this.authorizedUserMock.Setup(x => x.IsSupervisor).Returns(true);
+                        break;
+                    case UserRoles.Interviewer:
+                        this.authorizedUserMock.Setup(x => x.IsInterviewer).Returns(true);
+                        break;
+                }
             }
 
             if (interviewStatus.HasValue)
             {                
-                interview = Create.Entity.InterviewSummary(responsibleId: responsibleId ?? Guid.NewGuid(), status: interviewStatus.Value);
+                interview = Create.Entity.InterviewSummary(responsibleId: responsibleId ?? Guid.NewGuid(), 
+                                                        status: interviewStatus.Value,
+                                                        teamLeadId: teamLeadId);
                 
                 webInterviewConfig.Started = webInterviewEnabled;
                 
-                if (interviewerId.HasValue)
-                {
-                }
-
                 interviewSummaryRepoMock
                     .Setup(s => s.GetById(It.IsAny<string>()))
                     .Returns(interview);
@@ -111,7 +112,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             {
                 Act();
             }
-            catch(WebInterviewAccessException)
+            catch(InterviewAccessException)
             {
                 return false;
             }
@@ -122,9 +123,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         public void should_not_allow_user_that_is_not_responsible()
         {
             ArrangeTest(UserRoles.Interviewer, InterviewStatus.InterviewerAssigned, 
-                webInterviewEnabled: false, interviewerId: Id.g1, responsibleId:Id.g2);
+                webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId:Id.g2);
 
-            Assert.Throws<WebInterviewAccessException>(Act);
+            Assert.Throws<InterviewAccessException>(Act);
         }
 
         [Test]
@@ -139,34 +140,34 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         public void should_allow_for_interviewer_when_interview_is_rejected()
         {
             ArrangeTest(UserRoles.Interviewer, InterviewStatus.RejectedBySupervisor,
-                webInterviewEnabled: false, interviewerId: Id.g1, responsibleId: Id.g1);
+                webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId: Id.g1);
             Act();
         }
 
         [TestCase(UserRoles.Interviewer, ExpectedResult = true)]
-        [TestCase(UserRoles.Supervisor, ExpectedResult = false)]
         [TestCase(UserRoles.Headquarter, ExpectedResult = false)]
         public bool should_allow_access_for_interviewerOnly_when_webInterview_disabled(UserRoles userRole)
         {
-            ArrangeTest(userRole, webInterviewEnabled: false, interviewerId: Id.g1, responsibleId: Id.g1);
+            ArrangeTest(userRole, webInterviewEnabled: false, loggedInUserId: Id.g1, responsibleId: Id.g1);
 
             try
             {
                 Act();
             }
-            catch(WebInterviewAccessException)
+            catch(InterviewAccessException)
             {
                 return false;
             }
             return true;
         }
 
+
         [Test]
         public void should_not_allow_access_if_interview_is_not_exists()
         {
             ArrangeTest(interviewStatus: null);
 
-            Assert.Throws<WebInterviewAccessException>(Act);
+            Assert.Throws<InterviewAccessException>(Act);
         }
 
         [Test]
@@ -174,7 +175,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         {
             ArrangeTest(interviewStatus: InterviewStatus.Deleted);
 
-            Assert.Throws<WebInterviewAccessException>(Act);
+            Assert.Throws<InterviewAccessException>(Act);
         }
     }
 }
