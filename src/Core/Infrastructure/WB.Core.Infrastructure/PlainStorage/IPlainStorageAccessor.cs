@@ -15,6 +15,8 @@ namespace WB.Core.Infrastructure.PlainStorage
 
         void Store(IEnumerable<Tuple<TEntity, object>> entities);
 
+        void Flush();
+
         TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query);
     }
 }

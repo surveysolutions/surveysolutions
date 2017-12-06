@@ -4,23 +4,23 @@
             <div data-item-breadcrumbs data-crumbs="activeStaticText.breadcrumbs"></div>
         </div>
         <div class="form-group">
-            <label for="edit-static-text-highlight" class="wb-label">Static Text</label><br>
+            <label for="edit-static-text-highlight" class="wb-label" ng-i18next="StaticText"></label><br>
             <div class="pseudo-form-control">
                 <div id="edit-static-text-highlight"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeStaticText.text"></div>
             </div>
         </div>
         <div class="form-group">
-            <label for="edit-static-attachment-name" class="wb-label">Attachment name</label><br>
-            <input id="edit-static-attachment-name" type="text" class="form-control" ng-model="activeStaticText.attachmentName" spellcheck="false" maxlength="32">
+            <label for="edit-static-attachment-name" class="wb-label" ng-i18next="StaticTextAttachmentName"></label><br>
+            <input id="edit-static-attachment-name" type="text" class="form-control" ng-model="activeStaticText.attachmentName" spellcheck="false" maxlength="32"/>
         </div>
 
         <div class="form-group enabling-group">
             <div class="enabling-group-marker"></div>
-            <label for="edit-question-enablement-condition">Enabling condition <help key="conditionExpression" /></label>
+            <label for="edit-question-enablement-condition">{{'EnablingCondition' | i18next}} <help key="conditionExpression" /></label>
 
             <input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="activeStaticText.hideIfDisabled" />
-            <label for="cb-hideIfDisabled"><span></span>Hide if disabled <help key="hideIfDisabled" /></label>
+            <label for="cb-hideIfDisabled"><span></span>{{'HideIfDisabled' | i18next }} <help key="hideIfDisabled" /></label>
 
             <div class="pseudo-form-control">
                 <div id="edit-question-enablement-condition" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" ng-model="activeStaticText.enablementCondition"></div>
@@ -29,7 +29,7 @@
 
         <div class="form-group validation-group" ng-repeat="validation in activeStaticText.validationConditions" id="validationCondition{{$index}}">
             <div class="validation-group-marker"></div>
-            <label>Validation condition {{$index + 1}} <help key="validationExpression" /></label>
+            <label>{{'ValidationCondition' | i18next}} {{$index + 1}} <help key="validationExpression" /></label>
 
             <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
@@ -39,25 +39,25 @@
                      ng-attr-tabindex="{{$index + 1}}"></div>
             </div>
 
-            <label for="validation-message-{{$index}}" class="validation-message">Error message <help key="validationMessage" /></label>
+            <label for="validation-message-{{$index}}" class="validation-message">{{'ErrorMessage' | i18next}} <help key="validationMessage" /></label>
             <div class="pseudo-form-control">
                 <div ng-attr-id="{{'validation-message-' + $index}}" ng-attr-tabindex="{{$index + 1}}"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="validation.message"></div>
             </div>
         </div>
         <div class="form-group" ng-if="activeStaticText.validationConditions.length < 10">
-            <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()">Add new validation rule</button>
+            <button type="button" class="btn btn-lg btn-link" ng-click="addValidationCondition()" ng-i18next="AddValidationRule"></button>
         </div>
 
 
     </div>
     <div class="form-buttons-holder">
         <div class="pull-left">
-            <button id="edit-static-text-save-button" ng-show="!questionnaire.isReadOnlyForUser" ng-class="{ 'btn-primary': staticTextForm.$dirty }"  class="btn btn-lg" unsaved-warning-clear ng-click="saveStaticText()">Save</button>
-            <button id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelStaticText()">Cancel</button>
+            <button id="edit-static-text-save-button" ng-show="!questionnaire.isReadOnlyForUser" ng-class="{ 'btn-primary': staticTextForm.$dirty }"  class="btn btn-lg" unsaved-warning-clear ng-click="saveStaticText()" ng-i18next>Save</button>
+            <button id="edit-static-text-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelStaticText()" ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
-            <button id="edit-static-text-delete-button" ng-show="!questionnaire.isReadOnlyForUser" class="btn btn-lg btn-link" ng-click="deleteStaticText()" unsaved-warning-clear>Delete</button>
+            <button id="edit-static-text-delete-button" ng-show="!questionnaire.isReadOnlyForUser" class="btn btn-lg btn-link" ng-click="deleteStaticText()" unsaved-warning-clear ng-i18next>Delete</button>
             <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
         </div>
     </div>

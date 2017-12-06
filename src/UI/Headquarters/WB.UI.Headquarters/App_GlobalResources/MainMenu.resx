@@ -153,6 +153,9 @@
   <data name="SurveySetup" xml:space="preserve">
     <value>Survey Setup</value>
   </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Maps</value>
+  </data>
   <data name="QueueSizeTitle" xml:space="preserve">
     <value>Number of interviews synchronized but not yet processed</value>
   </data>

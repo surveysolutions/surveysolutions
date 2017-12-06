@@ -17,7 +17,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             IDataExportProcessesService dataExportProcessesService = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IDdiMetadataAccessor ddiMetadataAccessor = null,
-            IParaDataAccessor paraDataAccessor = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IDataExportStatusReader dataExportStatusReader = null)
         {
@@ -26,7 +25,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
                 dataExportProcessesService: dataExportProcessesService ?? Substitute.For<IDataExportProcessesService>(),
                 fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
                 ddiMetadataAccessor: ddiMetadataAccessor ?? Substitute.For<IDdiMetadataAccessor>(),
-                paraDataAccessor: paraDataAccessor ?? Substitute.For<IParaDataAccessor>(),
                 filebasedExportedDataAccessor: filebasedExportedDataAccessor ?? Substitute.For<IFilebasedExportedDataAccessor>(),
                 dataExportStatusReader: dataExportStatusReader ?? Substitute.For<IDataExportStatusReader>());
         }

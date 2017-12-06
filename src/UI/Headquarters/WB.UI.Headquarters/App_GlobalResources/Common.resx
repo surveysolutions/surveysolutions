@@ -186,6 +186,9 @@
   <data name="NoResultsFound" xml:space="preserve">
     <value>No results found</value>
   </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Processing...</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
@@ -240,6 +243,9 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value>Audit log</value>
+  </data>
   <data name="Logoff" xml:space="preserve">
     <value>Logoff</value>
   </data>
@@ -284,5 +290,8 @@
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Archived</value>
   </data>
 </root>

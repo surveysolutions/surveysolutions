@@ -159,6 +159,9 @@
   <data name="Questionnaires" xml:space="preserve">
     <value>Questionnaires</value>
   </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Maps</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>
   </data>
@@ -189,4 +192,11 @@
   <data name="UploadAssignments" xml:space="preserve">
     <value>Upload assignments</value>
   </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>Delete map</value>
+  </data>
+    <data name="DeleteMapUser" xml:space="preserve">
+    <value>Delete map user</value>
+  </data>
+
 </root>

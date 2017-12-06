@@ -219,19 +219,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>>> AtomicVerifiers => new[]
         {
-            this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
-                PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion,
-                PreloadedDataVerificationReferenceType.Column),
-            this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004",
-                PreloadingVerificationMessages.PL0004_FileWasntMappedRoster,
-                PreloadedDataVerificationReferenceType.File),
-            this.Verifier(this.ServiceColumnsAreAbsent, "PL0007",
-                PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent,
-                PreloadedDataVerificationReferenceType.Column),
+            this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003", PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
+            this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004", PreloadingVerificationMessages.PL0004_FileWasntMappedRoster, PreloadedDataVerificationReferenceType.File),
+            this.Verifier(this.ServiceColumnsAreAbsent, "PL0007", PreloadingVerificationMessages.PL0007_ServiceColumnIsAbsent, PreloadedDataVerificationReferenceType.Column),
             this.Verifier(this.IdDuplication, "PL0006", PreloadingVerificationMessages.PL0006_IdDublication),
             this.Verifier(this.OrphanRosters, "PL0008", PreloadingVerificationMessages.PL0008_OrphanRosterRecord),
-            this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009",
-                PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
+            this.Verifier(this.RosterIdIsInconsistencyWithRosterSizeQuestion, "PL0009", PreloadingVerificationMessages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             this.ErrorsByQuestionsWasntParsed,
             this.Verifier(this.ColumnDuplications),
             this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
@@ -245,14 +238,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
                 yield break;
+
+            var parentColumnNames = preloadedDataService.GetAllParentColumnNamesForLevel(levelExportStructure.LevelScopeVector).ToList();
             var referenceNames = levelExportStructure.ReferencedNames ?? new string[0];
             var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure).ToArray();
             var listOfPermittedExtraColumns = this.GetListOfPermittedExtraColumnsForLevel(levelExportStructure).ToArray(); 
-            var listOfServiceVariableNames = ServiceColumns.SystemVariables.Select(x => x.VariableExportColumnName).ToList();
+            var listOfServiceVariableNames = ServiceColumns.SystemVariables.Values.Select(x => x.VariableExportColumnName).ToList();
 
             foreach (var columnName in levelData.Header)
             {
-                if (string.Equals(columnName, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase))
+                if (parentColumnNames.Any(x => string.Equals(columnName, x, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
+                if (string.Equals(columnName, levelExportStructure.LevelIdColumnName, StringComparison.InvariantCultureIgnoreCase))
                     continue;
 
                 if (listOfServiceVariableNames.Any(x => string.Equals(columnName, x, StringComparison.OrdinalIgnoreCase)))
@@ -287,8 +285,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (levelExportStructure == null)
                 yield break;
 
-            if (levelData.Header.Count(h => string.Equals(h, ServiceColumns.Id, StringComparison.InvariantCultureIgnoreCase)) != 1)
-                yield return ServiceColumns.Id;
+            if (levelData.Header.Count(h => string.Equals(h, levelExportStructure.LevelIdColumnName, StringComparison.InvariantCultureIgnoreCase)) != 1)
+                yield return levelExportStructure.LevelIdColumnName;
 
             var listOfParentIdColumns = this.GetListOfParentIdColumns(levelData, levelExportStructure);
             foreach (var parentIdColumn in listOfParentIdColumns)
@@ -613,9 +611,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if(exportedLevel==null)
                     continue;
 
+                var parentColumnNames = preloadedDataService.GetAllParentColumnNamesForLevel(exportedLevel.LevelScopeVector).ToList();
                 for (int columnIndex = 0; columnIndex < levelData.Header.Length; columnIndex++)
                 {
                     var columnName = levelData.Header[columnIndex];
+                    if (parentColumnNames.Contains(columnName))
+                        continue;
+
+                    if (preloadedDataService.IsVariableColumn(columnName))
+                        continue;
 
                     for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
                     {
@@ -726,24 +730,24 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                                             levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedLinkedQuestion:
-                                yield return
-                                    new PanelImportVerificationError("PL0010",
-                                        PreloadingVerificationMessages.PL0010_UnsupportedLinkedQuestion,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
+                                //yield return
+                                //    new PanelImportVerificationError("PL0010",
+                                //        PreloadingVerificationMessages.PL0010_UnsupportedLinkedQuestion,
+                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                //            PreloadedDataVerificationReferenceType.Cell,
+                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                //                row[columnIndex]),
+                                //            levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedMultimediaQuestion:
-                                yield return
-                                    new PanelImportVerificationError("PL0023",
-                                        PreloadingVerificationMessages.PL0023_UnsupportedMultimediaQuestion,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
+                                //yield return
+                                //    new PanelImportVerificationError("PL0023",
+                                //        PreloadingVerificationMessages.PL0023_UnsupportedMultimediaQuestion,
+                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                //            PreloadedDataVerificationReferenceType.Cell,
+                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                //                row[columnIndex]),
+                                //            levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedAreaQuestion:
                                 yield return
@@ -756,14 +760,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                                             levelData.FileName));
                                 break;
                             case ValueParsingResult.UnsupportedAudioQuestion:
-                                yield return
-                                    new PanelImportVerificationError("PL0039",
-                                        PreloadingVerificationMessages.PL0039_UnsupportedAudioQuestion,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
+                                //yield return
+                                //    new PanelImportVerificationError("PL0039",
+                                //        PreloadingVerificationMessages.PL0039_UnsupportedAudioQuestion,
+                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                //            PreloadedDataVerificationReferenceType.Cell,
+                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                //                row[columnIndex]),
+                                //            levelData.FileName));
                                 break;
                             case ValueParsingResult.GeneralErrorOccured:
                             default:

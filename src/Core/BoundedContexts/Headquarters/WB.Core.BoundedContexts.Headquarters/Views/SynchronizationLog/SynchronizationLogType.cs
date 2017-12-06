@@ -25,6 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         DeviceUnexpectedException,
         InterviewerLogin,
         GetAssignmentsList,
-        GetAssignment
+        GetAssignment,
+        GetMapList,
+        GetMap
     }
 }

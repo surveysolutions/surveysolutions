@@ -1,7 +1,5 @@
-﻿@using System
-@using System.Web.Optimization
+﻿@using Microsoft.Security.Application
 @using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
-@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
 @model WB.UI.Headquarters.Models.ExportModel
 
@@ -20,7 +18,6 @@
 
         var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"})';
         var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"})';
-        var $UpdateHistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdateOfParadata"})';
         var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
 
         var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
@@ -28,9 +25,14 @@
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
         $(function() {
             var templates = [
-                @foreach (var item in Model.Questionnaires)
-                {
-                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
+                @foreach (var item in Model.Questionnaires) {
+                    <text>
+                        {
+                            id: '@item.TemplateId',
+                            version: '@item.TemplateVersion',
+                            title: @Html.Raw(Encoder.JavaScriptEncode(Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)))
+                        },
+                    </text>
                 }
             ];
             var exportFromats = [];
@@ -40,17 +42,16 @@
             }
 
             var statuses = [
-                { status: null, title: '@Common.AllStatuses' },
+                { status: null, title: @Html.Raw(Encoder.JavaScriptEncode(Common.AllStatuses)) },
                 @foreach (var item in Model.ExportStatuses)
                 {
-                    <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
+                    <text>{ status: @((int)item), title: @Html.Raw(Encoder.JavaScriptEncode(item.ToUiString())) },</text>
                 }
             ];
 
             var model = new Supervisor.VM.ExportData(templates,
                 statuses,
                 $ExportedDataReferencesForQuestionnaireUrl,
-                $UpdateHistoryUrl,
                 exportFromats,
                 $DeleteDataExportProcessUrl,
                 $UpdateTabularDataUrl);
@@ -83,7 +84,7 @@
                 </div>
                 
                 <div class="preset-filters-container" data-bind="visible: RunningDataExportProcesses().length > 0">
-                    <span class="export-queue" data-bind="text:'@DataExport.ItemsInQueue ' + RunningDataExportProcesses().length"></span>
+                    <span class="export-queue" data-bind="text:'@HttpUtility.JavaScriptStringEncode(DataExport.ItemsInQueue) ' + RunningDataExportProcesses().length"></span>
                 </div>
             </aside>
             <div class="export-types">
@@ -138,7 +139,7 @@
                 </div>
                 @if (this.ViewBag.EnableInterviewHistory)
                 {
-                    <div class="paradata data" data-bind="visible: selectedStatus().status == null">
+                    <div class="paradata data">
                         <h3>@DataExport.ParaData</h3>
                         <p>
                             <span>@DataExport.ParadataDescription</span>
@@ -148,7 +149,7 @@
                                 <div class="cell-data size">@DataExport.FileSizeTitle</div>
                                 <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                             </div>
-                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Tabular, dataUrl: "$HistoryUrl", styleName: "separated-data")
+                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Paradata, dataUrl: "$AllDataUrl", styleName: "separated-data", addFromat: true)
                         </div>
                     </div>
                 }
@@ -182,7 +183,7 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
             @formatTitle
         </div>
         <div class="cell-data  download-block">
-            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: request@(type)Update(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
+            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
             <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">@DataExport.Download</a>
             <div class="not-generated ">@DataExport.DataWasNotGenerated</div>
         </div>
@@ -196,7 +197,7 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
         </div>
 
         <div class="cell-data progress-block">
-            <div class="cancelable-progress queued" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) < 1)">
+            <div class="cancelable-progress queued" data-bind="visible: isInQueue(@exportParameters)">
                 <div class="wrapper-progress">
                     <span>@DataExport.QueuedTitle</span>
                     <div class="progress">
@@ -208,16 +209,21 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
                 <button type="button" class="btn btn-link" data-bind="click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
             </div>
 
-            <div class="cancelable-progress" data-bind="visible: hasAnyDataToBePrepared(@exportParameters) && (getProgressInPercents(@exportParameters) > 0)">
+            <div class="cancelable-progress" data-bind="visible: isRunning(@exportParameters) || isCompessing(@exportParameters)">
                 <div class="wrapper-progress">
-                    <span data-bind="text:'@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                    <!-- ko if: isCompessing(@Html.Raw(exportParameters)) -->
+                    <span data-bind="text: '@DataExport.Compressing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                    <!-- /ko -->
+                    <!-- ko if: isRunning(@Html.Raw(exportParameters)) -->
+                    <span data-bind="text: '@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                    <!-- /ko -->
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">
                             <span class="sr-only" data-bind="text: getProgressInPercents(@exportParameters) + '% @DataExport.Completed'"></span>
                         </div>
                     </div>
                 </div>
-                <button type="button" class="close" data-bind="click : requestStopExportProcess(@exportParameters)"></button>
+                <button type="button" class="btn btn-link" data-bind="visible: isRunning(@exportParameters), click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
             </div>
         </div>
 
@@ -228,6 +234,6 @@ var exportParameters = "'" + (int)type + "','" + (int)format + "'";
 
 <script type="text/html" id="confirm-stop-export">
     <h3>
-        @DataExport.ConfirmStop @DataExport.export ?
+        @DataExport.ConfirmStop @DataExport.export?
     </h3>
 </script>

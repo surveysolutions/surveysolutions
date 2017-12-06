@@ -2,25 +2,23 @@
     <a class="designer-logo" href="../../"></a>
     <div class="header-line">
         <div class="header-menu">
-            <!--This document is <strong>{{questionnaire.isPublic ? 'public' : 'private'}}</strong>-->
             <div class="buttons">
-                <a class="btn" href="http://docs.mysurvey.solutions/designer.pdf" target="_blank">Help</a>
-                <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank">History</a>
-                <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" href="../../admin/backupquestionnaire/{{questionnaire.questionnaireId}}">Backup</a>
-                <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights" ng-click="showShareInfo()">Settings</button>
+                <a class="btn" href="http://docs.mysurvey.solutions/designer.pdf" target="_blank" ng-i18next>Help</a>
+                <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
+                <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" href="../../admin/backupquestionnaire/{{questionnaire.questionnaireId}}" ng-i18next>Backup</a>
+                <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights" ng-click="showShareInfo()" ng-i18next>Settings</button>
 
                 <div class="btn-group">
-                    <a class="btn btn-default">Hi, {{::currentUserName}}</a>
+                    <a class="btn btn-default" ng-i18next="[i18next]({currentUserName: '{{ currentUserName }}' })HellowMessageBtn"></a>
                     <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
+                        <span class="sr-only" ng-i18next>ToggleDropdown</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="../../account/manage">Change password</a></li>
-                        <li><a href="../../account/logoff">Log out</a></li>
+                        <li><a href="../../account/manage" ng-i18next>ChangePassword</a></li>
+                        <li><a href="../../account/logoff" ng-i18next>LogOut</a></li>
                     </ul>
                 </div>
-
             </div>
         </div>
         <div class="questionnarie-title">
@@ -29,37 +27,31 @@
                     {{questionnaire.title}}
                 </div>
                 <div class="questionnarie-title-buttons">
-                    <span class="text-muted">({{questionnaire.questionsCount}}Q, {{questionnaire.groupsCount}}S, {{questionnaire.rostersCount}}R)</span>
-                    <input id="verification-btn" type="button" class="btn" value="COMPILE" ng-click="verify()" />
+                    <span class="text-muted" ng-i18next="[i18next]({questionsCount: '{{questionnaire.questionsCount}}', 
+                                                                    groupsCount: '{{questionnaire.groupsCount}}',
+                                                                    rostersCount: '{{questionnaire.rostersCount}}' })QuestionnaireSummary">
+                        
+                    </span>
+                    <input id="verification-btn" type="button" class="btn" ng-i18next="[value]Compile" value="COMPILE" ng-click="verify()" />
                     <span ng-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
                         <span data-toggle="modal" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) > 0" class="error-message ng-hide" ng-class="{'no-errors': verificationStatus.errors.length == 0}">
                             <a href="javascript:void(0);"
                                ng-click="showVerificationErrors()"
-                               ng-pluralize
-                               count="verificationStatus.errors.length"
-                               when="{
-                               '0': 'No errors',
-                               '1': '{} error',
-                              '100' : '{}+ errors',
-                              'other': '{} errors'}">
+                               ng-i18next="[i18next]({count: verificationStatus.errors.length})ErrorsCounter">
                             </a>
                         </span>
                         <span data-toggle="modal" ng-show="verificationStatus.warnings.length > 0" class="warning-message ng-hide">
                             <a href="javascript:void(0);"
                                ng-click="showVerificationWarnings()"
-                               ng-pluralize
-                               count="verificationStatus.warnings.length"
-                               when="{
-                                '1': '{} warning',
-                                '100' : '{}+ warnings',
-                                'other': '{} warnings'}">
+                               ng-i18next="[i18next]({count: verificationStatus.warnings.length})WarningsCounter"
+                               >
                             </a>
                         </span>
-                        <span class="text-success" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0">OK</span>
+                        <span class="text-success" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0" ng-i18next>Ok</span>
 
-                        <span class="text-success"><em>saved at <span>{{verificationStatus.time | date:'H:mm'}}</span></em></span>
+                        <span class="text-success"><em ng-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
                     </span>
-                    <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser">Read Only</span>
+                    <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
 
                 </div>
             </div>
@@ -81,7 +73,9 @@
             <div class="ul-holder">
                 <div class="chapters">
                     <perfect-scrollbar class="scroller">
-                        <h3><span ng-show="questionnaire.chapters.length!=0">{{questionnaire.chapters.length}}</span> Section<span ng-show="questionnaire.chapters.length!=1">s</span>:</h3>
+                        <h3>
+                            <span ng-i18next="[i18next]({count: questionnaire.chapters.length})SideBarSectionsCounter"></span>
+                        </h3>
                         <ul ui-tree-nodes ng-model="questionnaire.chapters" class="chapters-list">
                             <li class="chapter-panel-item"
                                     ng-repeat="chapter in questionnaire.chapters"
@@ -97,18 +91,18 @@
                                 </div>
                                 <div class="dropdown position-fixed" id="chapter-context-menu-{{ chapter.itemId }}">
                                     <ul class="dropdown-menu" role="menu">
-                                        <li><a ng-click="editChapter(chapter);">Open</a></li>
-                                        <li><a ng-click="copyRef(chapter);">Copy</a></li>
+                                        <li><a ng-click="editChapter(chapter);" ng-i18next>Open</a></li>
+                                        <li><a ng-click="copyRef(chapter);" ng-i18next>Copy</a></li>
                                         <li>
-                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser">Paste after</a>
+                                            <a ng-disabled="!readyToPaste" ng-click="pasteAfterChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>PasteAfter</a>
                                         </li>
-                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser">Delete</a></li>
+                                        <li><a ng-click="deleteChapter(chapter);$event.stopPropagation();"  ng-if="!questionnaire.isReadOnlyForUser" ng-i18next>Delete</a></li>
                                     </ul>
                                 </div>
                             </li>
                         </ul>
                         <div class="button-holder">
-                            <input type="button" class="btn lighter-hover" value="ADD NEW SECTION" ng-click="addNewChapter()" ng-if="!questionnaire.isReadOnlyForUser">
+                            <input type="button" class="btn lighter-hover" ng-i18next="[value]AddNewSection" value="ADD NEW SECTION" ng-click="addNewChapter()" ng-if="!questionnaire.isReadOnlyForUser">
                         </div>
                     </perfect-scrollbar>
                 </div>
@@ -124,12 +118,15 @@
             <div class="macroses">
                 <perfect-scrollbar class="scroller">
                     <h3>
-                        <span ng-show="macros.length!=0">{{macros.length}}</span> Macro<span ng-show="macros.length!=1">s</span>:
+                        <span ng-i18next="[i18next]({count: macros.length})SideBarMacroCounter"></span>
                     </h3>
                     <div class="empty-list" ng-show="macros.length == 0">
-                        <p>Use this tab to define macro substitutions.</p>
-                        <p>A macro is a named expression that can be used in enabling conditions and validation expressions. A macro consists of name and content. </p>
-                        <p>To use a macro in an expression, refer to it by its <span class="variable-name">$macroname</span></p>
+                        <p ng-i18next>SideBarMacroEmptyLine1</p>
+                        <p ng-i18next>SideBarMacroEmptyLine2</p>
+                        <p>
+                            <span class="variable-name" ng-i18next="VariableName"></span>
+                            {{'SideBarMacroEmptyLine3' | i18next}}
+                        </p>
                     </div>
                     <form role="form" name="macrosForm" novalidate>
                         <ul ng-model="macros">
@@ -138,18 +135,20 @@
                                     <a href ng-click="deleteMacro($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="input-group macros-name">
                                         <span class="input-group-addon">$</span>
-                                        <input focus-on-out="focusMacro{{macro.itemId}}" placeholder="macro name" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
+                                        <input focus-on-out="focusMacro{{macro.itemId}}" ng-i18next="[placeholder]SideBarMacroName" maxlength="32" spellcheck="false" ng-model="macro.name" name="name" class="form-control" type="text" />
                                     </div>
                                     <div class="divider"></div>
-                                    <input placeholder="content" ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" class="form-control" type="text" />
+                                    <input ng-model="macro.content" ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" class="form-control" type="text" />
                                     <div ng-show="macro.isDescriptionVisible">
                                         <div class="divider"></div>
-                                        <textarea placeholder="description" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
+                                        <textarea ng-i18next="[placeholder]SideBarMacroDescription" type="text" ng-model="macro.description" class="form-control macros-description" msd-elastic></textarea>
                                     </div>
                                     <div class="actions" ng-show="macro.form.$dirty">
-                                        <button type="submit" ng-disabled="macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)">Save</button>
-                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macro)">Cancel</button>
-                                        <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)" type="button" ng-click="toggleDescription(macro)">{{ macro.isDescriptionVisible? "hide" : "add" }} description</button>
+                                        <button type="submit" ng-disabled="macro.form.$invalid" class="btn lighter-hover" ng-click="saveMacro(macro)" ng-i18next>Save</button>
+                                        <button type="button" class="btn lighter-hover" ng-click="cancel(macro)" ng-i18next>Cancel</button>
+                                        <button class="btn btn-default pull-right" ng-show="isDescriptionEmpty(macro)" type="button" ng-click="toggleDescription(macro)" 
+                                                ng-i18next="{{macro.isDescriptionVisible ? 'SideBarMacroHideDescription' : 'SideBarMacroShowDescription'}}">
+                                        </button>
                                     </div>
                                 </ng-form>
                             </li>
@@ -157,7 +156,7 @@
 
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW Macro" ng-click="addNewMacro()">
+                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarAddMacro" value="ADD NEW Macro" ng-click="addNewMacro()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -172,38 +171,36 @@
             <div class="lookup-tables">
                 <perfect-scrollbar class="scroller">
                     <h3>
-                        <span ng-show="lookupTables.length!=0">{{lookupTables.length}}</span> Lookup Table<span ng-show="lookupTables.length!=1">s</span>:
+                        <span ng-i18next="[i18next]({count: lookupTables.length})SideBarLookupTablesCounter"></span>
                     </h3>
-                    <div class="empty-list" ng-show="lookupTables.length == 0">
-                        <p>Use this tab to define lookup tables.</p>
-                        <p>A lookup table provides reference information that may be queried by a key and used in enabling conditions and validation expressions.</p>
-                        <p>A lookup table consists of a name and the lookup file, which may contain multiple tab-delimited columns of numeric values.</p>
+                    <div class="empty-list" ng-show="lookupTables.length === 0">
+                        <p ng-i18next>SideBarLookupEmptyLine1</p>
+                        <p ng-i18next>SideBarLookupEmptyLine2</p>
+                        <p ng-i18next>SideBarLookupEmptyLine3</p>
                     </div>
                     <form role="form" name="lookupTablesForm" novalidate>
                         <ul ng-model="lookupTables">
                             <li class="lookup-table-panel-item" ng-repeat="table in lookupTables" ngf-drop="" ngf-change="fileSelected(table, $file)" ngf-max-size="1MB" accept=".tab,.txt" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                 <ng-form name="table.form">
                                     <a href="javascript:void(0);" ng-click="deleteLookupTable($index)" class="btn delete-btn" tabindex="-1"></a>
-                                    <input focus-on-out="focusLookupTable{{table.itemId}}" required="" placeholder="table name" 
+                                    <input focus-on-out="focusLookupTable{{table.itemId}}" required="" ng-i18next="[placeholder]SideBarLookupTableName" 
                                            maxlength="32" spellcheck="false" autocomplete="off" 
                                            ng-model="table.name" name="name" class="form-control table-name" type="text" />
                                     <div class="divider"></div>
-                                    <input placeholder="file name" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
+                                    <input ng-i18next="[placeholder]SideBarLookupTableFileName" required="" spellcheck="false" ng-model="table.fileName" name="fileName" class="form-control" disabled="" type="text" />
 
-                                    <div class="drop-box">
-                                        Drop File here
-                                    </div>
+                                    <div class="drop-box" ng-i18next>SideBarLookupTableDropFile</div>
 
                                     <div class="actions clearfix" ng-class="{dirty: table.form.$dirty }">
                                         <div ng-show="table.form.$dirty" class="pull-left">
-                                            <button type="submit" ng-disabled="table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()">Save</button>
-                                            <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()">Cancel</button>
+                                            <button type="submit" ng-disabled="table.form.$invalid" class="btn lighter-hover" ng-click="saveLookupTable(table);$event.stopPropagation()" ng-i18next>Save</button>
+                                            <button type="button" class="btn lighter-hover" ng-click="cancel(table);$event.stopPropagation()" ng-i18next>Cancel</button>
                                         </div>
                                         <div class="permanent-actions clearfix">
-                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank">Download</a>
+                                            <a href="{{downloadLookupFileBaseUrl + questionnaire.questionnaireId +'?lookupTableId='+ table.itemId}}" ng-show="table.hasUploadedFile" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
                                             <button class="btn btn-default pull-right" ngf-select="" ngf-change="fileSelected(table, $file);$event.stopPropagation()" accept=".tab,.txt" ngf-max-size="1MB" type="file">
-                                                <span ng-hide="table.hasUploadedFile">Select file</span>
-                                                <span ng-show="table.hasUploadedFile">Update file</span>
+                                                <span ng-hide="table.hasUploadedFile" ng-i18next="SideBarLookupTableSelectFile">Select file</span>
+                                                <span ng-show="table.hasUploadedFile" ng-i18next="SideBarLookupTableUpdateFile">Update file</span>
                                             </button>
                                         </div>
                                     </div>
@@ -212,7 +209,7 @@
                         </ul>
                     </form>
                     <div class="button-holder">
-                        <input type="button" class="btn lighter-hover" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
+                        <input type="button" class="btn lighter-hover" ng-i18next="[value]SideBarLookupTableAdd" value="ADD NEW Lookup table" ng-click="addNewLookupTable()">
                     </div>
                 </perfect-scrollbar>
             </div>
@@ -229,30 +226,31 @@
                 <perfect-scrollbar class="scroller">
                     <div class="panel-header clearfix">
                         <div class="title pull-left">
-                            <h3 ng-pluralize
-                                count="attachments.length"
-                                when="{
-                            '0': 'No Files Attachment to questionnaire',
-                            '1': '{} File Attachment ({{formatBytes(totalSize())}} total)',
-                            'other': '{} Files Attachments ({{formatBytes(totalSize())}} total)'}"></h3>
-                            <p class="estimated-download-time">
-                                Est. loading time: <span>{{formatSeconds(estimatedLoadingTime())}}</span> at {{benchmarkDownloadSpeed}}Kb/s (EDGE)
+                            <h3 ng-i18next="[i18next]({count: attachments.length, bytes: formatBytes(totalSize())})SideBarAttachmentsCounter" />
+                            <p class="estimated-download-time"
+                               ng-i18next="[i18next]({timeString: formatSeconds(estimatedLoadingTime()), downloadSpeed: benchmarkDownloadSpeed})SideBarAttachmentsEstimate">
                             </p>
 
                         </div>
-                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser" ngf-drop-disabled="isReadOnlyForUser">
+                        <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}" 
+                                ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()" 
+                                ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser"
+                                ngf-drop-disabled="isReadOnlyForUser"
+                                ng-i18next="SideBarAttachmentsUpload">
                             Upload new
                         </button>
                     </div>
                     <div class="empty-list" ng-show="attachments.length == 0">
-                        <p>Use this tab to upload multimedia files that may be referenced in the questionnaire.</p>
+                        <p ng-i18next="SideBarAttachmentsEmptyLine1"></p>
                         <p>
-                            To avoid slow synchronization we recommend combined size of all attached files not to exceed 2MB.
-                            For supported file types, formats, and dimensions <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/multimedia_formats.pdf" target="_blank">click here</a>
+                            <span ng-i18next="SideBarAttachmentsEmptyLine2"></span>
+                            <a href="http://siteresources.worldbank.org/INTCOMPTOOLS/Resources/8213623-1380598436379/multimedia_formats.pdf" target="_blank" ng-i18next="ClickHere">
+                                click here
+                            </a>
                         </p>
                         <p>
-                            To refer to an attachment in the questionnaire add a static text element and
-                            specify the attachment <span class="variable-name">name</span> in its attachment property.
+                            <span class="variable-name" ng-i18next="VariableName"></span>
+                            {{'SideBarAttachmentsEmptyLine3' | i18next}}
                         </p>
                     </div>
                     <form role="form" name="attachmentsForm" novalidate>
@@ -269,7 +267,7 @@
                                         <div class="attachment-content">
                                             <input focus-on-out="focusAttachment{{attachment.attachmentId}}"
                                                    required=""
-                                                   placeholder="attachment name"
+                                                   ng-i18next="[placeholder]SideBarAttachmentName"
                                                    maxlength="32"
                                                    spellcheck="false"
                                                    ng-model="attachment.name"
@@ -277,20 +275,20 @@
                                                    class="form-control table-name"
                                                    type="text" />
                                             <div class="divider"></div>
-                                            <div class="drop-box">
+                                            <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
                                                 Drop File here
                                             </div>
                                             <div class="attachment-meta" ng-include="'Image-attachment-info-template.html'"></div>
                                             <div class="actions clearfix" ng-class="{dirty: attachment.form.$dirty }">
                                                 <div ng-show="attachment.form.$dirty" class="pull-left">
-                                                    <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()">Save</button>
-                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()">Cancel</button>
+                                                    <button type="submit" ng-disabled="attachment.form.$invalid" class="btn lighter-hover" ng-click="saveAttachment(attachment);$event.stopPropagation()" ng-i18next>Save</button>
+                                                    <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()" ng-i18next>Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
                                                     <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
-                                                        <span>Update</span>
+                                                        <span ng-i18next>Update</span>
                                                     </button>
-                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank">Download</a>
+                                                    <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -311,47 +309,55 @@
             </div>
             <div class="translations">
                 <perfect-scrollbar class="scroller">
-                    
-                    <h3 ng-pluralize
-                        count="translations.length"
-                        when="{
-                        '0': 'Translations:',
-                        '1': '{} Translation:',
-                        'other': '{} Translations:'}"></h3>
+                    <h3 ng-i18next="[i18next]({count: translations.length })SideBarTranslationsCounter"></h3>
                     
                     <div class="empty-list" ng-show="translations.length == 0">
-                        <p>Use this tab to manage questionnaire translations.</p>
-                        <p>You may download and update translations to different languages.</p>
-                        <p>Translation will be applied on original texts and override values. You may leave some texts empty to use default original translations.</p>
+                        <p ng-i18next="SideBarTranslationsEmptyLine1"></p>
+                        <p ng-i18next="SideBarTranslationsEmptyLine2"></p>
+                        <p ng-i18next="SideBarTranslationsEmptyLine3"></p>
                     </div>
                     <form role="form" name="translationsForm" novalidate>
                         <div class="translation-list">
                             <ng-form name="translation.form" ng-repeat="translation in translations">
-                                <div class="translations-panel-item" ng-class="{'has-error': translation.form.name.$error.pattern}" ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)" ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
+                                <div class="translations-panel-item" ng-class="{'has-error': translation.form.name.$error.pattern}" 
+                                        ngf-drop="" ngf-max-size="4MB" ngf-change="fileSelected(translation, $file)" 
+                                        ngf-drag-over-class="{accept:'dragover', reject:'dragover-err'}">
                                     <a href ng-click="deleteTranslation($index)" class="btn delete-btn" tabindex="-1"></a>
                                     <div class="translation-content">
                                         <input focus-on-out="focusTranslation{{translation.translationId}}"
                                                 required=""
-                                                placeholder="translation name"
+                                                ng-i18next="[placeholder]SideBarTranslationName"
                                                 maxlength="32"
                                                 spellcheck="false"
                                                 ng-model="translation.name"
                                                 name="name"
                                                 class="form-control table-name"
                                                 type="text" />
-                                        <div class="drop-box">
+                                        <div class="drop-box" ng-i18next="SideBarLookupTableDropFile">
                                             Drop File here
                                         </div>
                                         <div class="actions" ng-class="{dirty: translation.form.$dirty }">
                                             <div ng-show="translation.form.$dirty" class="pull-left">
-                                                <button type="submit" ng-disabled="translation.form.$invalid" class="btn lighter-hover" ng-click="saveTranslation(translation);$event.stopPropagation()">Save</button>
-                                                <button type="button" class="btn lighter-hover" ng-click="cancel(translation);$event.stopPropagation()">Cancel</button>
+                                                <button type="submit" ng-disabled="translation.form.$invalid" class="btn lighter-hover" ng-click="saveTranslation(translation);$event.stopPropagation()"
+                                                    ng-i18next>Save</button>
+                                                <button type="button" class="btn lighter-hover" ng-click="cancel(translation);$event.stopPropagation()" ng-i18next>Cancel</button>
                                             </div>
+
+                                            <button type="button" class="btn btn-default"
+                                                ng-show="translation.isDefault"
+                                                ng-click="setDefaultTranslation($index, false);$event.stopPropagation()" ng-i18next>UnMarkAsDefault</button>
+
                                             <div class="permanent-actions pull-right">
-                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default" target="_blank">Download xlsx</a>
-                                                
-                                                <button ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
-                                                    <span>Update</span>
+                                                <button type="button" class="btn lighter-hover"
+                                                    ng-show="!translation.isDefault"
+                                                    ng-click="setDefaultTranslation($index, true);$event.stopPropagation()" ng-i18next>MarkAsDefault</button>
+
+                                                <a href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId  + '/xlsx/' + translation.translationId}}" class="btn btn-default"
+                                                    target="_blank" ng-i18next>SideBarTranslationDownloadXlsx</a>
+                                        
+                                                <button ng-hide="translation.form.$dirty" ng-disabled="isReadOnlyForUser" class="btn btn-default" ngf-select="" ngf-max-size="10MB" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                                                    ngf-change="fileSelected(translation, $file);$event.stopPropagation()" type="button">
+                                                    <span ng-i18next>Update</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -362,10 +368,13 @@
                     </form>
                     <div class="button-holder">
                         <p>
-                            Get Template for <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank">Excel (xlsx)</a> 
+                            <span ng-i18next="SideBarTranslationGetTemplate"></span>  
+                            <a class="btn btn-default" href="{{downloadBaseUrl + '/' + questionnaire.questionnaireId + '/template' }}" target="_blank" ng-i18next>
+                                SideBarTranslationGetTemplateLinkTextXlsx
+                            </a> 
                         </p>
                         <p>
-                            <input type="button" value="Upload new translation"
+                            <input type="button" ng-i18next="[value]SideBarTranslationsUploadNew" value="Upload new translation"
                                    class="btn lighter-hover" ngf-select
                                    ngf-change="createAndUploadFile($file);$event.stopPropagation()"
                                    ngf-max-size="10MB"
@@ -381,11 +390,11 @@
 
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
-            <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" title="Sections"></a></li>
-            <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" title="Translations"></a></li>
-            <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" title="Macros"></a></li>
-            <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" title="Lookup tables"></a></li>
-            <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();" title="Attachments"></a></li>
+            <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" ng-i18next="[title]SideBarSectionsTitle"></a></li>
+            <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" ng-i18next="[title]SideBarTranslationsTitle"></a></li>
+            <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" ng-i18next="[title]SideBarMacroTitle"></a></li>
+            <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" ng-i18next="[title]SideBarLookupTitle"></a></li>
+            <li><a class="left-menu-attachments" ng-class="{unfolded: isUnfoldedAttachments }" ng-click="unfoldAttachments();" ng-i18next="[title]SideBarAttachmentsTitle"></a></li>
         </ul>
     </div>
     <div class="questionnaire-tree" ui-view></div>
@@ -394,10 +403,11 @@
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
         <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
-        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}">{{attachment.content.details.width}}&nbsp;&times;&nbsp;{{attachment.content.details.height}}px</span>,&nbsp; format:&nbsp;{{attachment.content.type}},
-        <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}">size:&nbsp;{{formatBytes(attachment.content.size)}}</span>
+        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>,&nbsp; 
+        <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>, 
+        <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}" ng-i18next="({size: formatBytes(attachment.content.size)})SideBarAttachmentDetailsSize"></span>
     </p>
-    <p>uploaded: {{attachment.meta.lastUpdated | amDateFormat:'MMMM DD, YYYY [at] h:mm a'}}</p>
+    <p ng-i18next="({lastUpdate: attachment.meta.lastUpdated})SideBarAttachmentUploaded"></p>
 </script>
 
 <div id="verification-modal" ng-show="verificationStatus.visible" ng-class="verificationStatus.typeOfMessageToBeShown">
@@ -405,7 +415,10 @@
         <div class="modal-header">
             <button type="button" class="close" ng-click="closeVerifications()" aria-hidden="true"> <!--&times;--> </button>
             <h3 class="modal-title">
-                Compilation: <span ng-pluralize count="verificationStatus.messagesToShow.length" when="{'1': '{} {{verificationStatus.typeOfMessageToBeShown}} found', '100': '{}+ errors found', 'other': '{} {{verificationStatus.typeOfMessageToBeShown}}s found'}"></span>
+                <span ng-i18next="CompilationLabel"></span>
+                
+                <span ng-if="verificationStatus.typeOfMessageToBeShown === 'error'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationErrorsCounter"></span>
+                <span ng-if="verificationStatus.typeOfMessageToBeShown === 'warning'" ng-i18next="({count: verificationStatus.messagesToShow.length})CompilationWarningsCounter"></span>
             </h3>
         </div>
         <div class="modal-body">
@@ -426,7 +439,7 @@
                                             <span ng-if="reference.type == 'Attachment'" class="icon icon-attachment icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Variable'" class="icon icon-variable icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Translation'" class="icon icon-translation icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
-                                            <span class="title">{{reference.title}}</span>
+                                            <span class="title">{{reference.title | escape}}</span>
                                             <span class="variable" ng-bind-html="reference.variable || '&nbsp;'">&nbsp;</span>
                                         </a>
                                     </li>
@@ -438,8 +451,8 @@
             </perfect-scrollbar>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-link" ng-click="verify()">RECOMPILE</button>
-            <button class="btn btn-link" data-dismiss="modal" ng-click="closeVerifications()">CLOSE</button>
+            <button class="btn btn-link" ng-click="verify()" ng-i18next>Recompile</button>
+            <button class="btn btn-link" data-dismiss="modal" ng-click="closeVerifications()" ng-i18next>Close</button>
         </div>
     </div>
 </div>
@@ -447,11 +460,11 @@
 <script type="text/ng-template" id="moveToChapterSnippet">
     <div class="btn-group dropup">
         <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-            Move to <span class="caret"></span>
+            <span ng-i18next="MoveTo"></span> <span class="caret"></span>
         </button>
 
         <div role="menu" class="chapter-menu dropdown-menu dropdown-menu-right">
-            <h1>Move to another sub-section:</h1>
+            <h1 ng-i18next="MoveToAnotherSubSection"></h1>
             <ul>
                 <li ng-repeat="chapter in $parent.questionnaire.chapters">
                     <a ng-click="chapter.itemId == currentChapterId || moveToChapter(chapter.itemId)" ng-disabled="chapter.itemId == currentChapterId" unsaved-warning-clear>

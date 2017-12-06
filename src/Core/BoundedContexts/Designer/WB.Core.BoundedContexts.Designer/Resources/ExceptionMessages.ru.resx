@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>Данные в загруженном формате не поддерживаются</value>
+  </data>
+  <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+    <value>Загруженный файл не является изображением</value>
+  </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>Недопустимо перемещение подсекции  {0} в позицию {1}.</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>Комбобокс вопрос с ключом {0} не найден.</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>Один или болеее элементов с ключом {0} уже существуют в опроснике.</value>
+  </data>
+  <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>Таблица поиска с таким ключом уже существует</value>
+  </data>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>Таблица поиска с таким ключом отсутсвует</value>
+  </data>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>Пустой файл не может быть сохранен</value>
+  </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>Значение {0} не может быть прочитано как целое число. Колонка {1}, строка {2}.</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>Заголовки с одинаковым именем запрещены</value>
+  </data>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>Заголовки с пустым или неверным именем запрещены</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>Обязательная колонка rowcode отсутсвует</value>
+  </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>Значения колонки rowcode должны быть уникальны</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>Значение {0} не может быть прочитано как дробное число. Колонка {1}, строка {2}.</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}.</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>Превышена максимальная граница ({0}) колочества строк.</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>Макрос с таким ключом уже существует</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>Макрос с таким ключом отсутствует</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>Один или более вопросов с одинаковым ключом {0} уже существуют:{1}{2}.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>Одна или более секций с одинаковым ключом {0} уже существуют:{1}{2}.</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>У вас недостаточно прав для изменения опросника</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>Вопрос с ключом {0} не найден.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>Вопрос {0} не является комбобоксом.</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>Опросник с ключом {0} не найден.</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>Имя опросника не может быть пустым.</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>Секция не может содержать более {0} дочерних элементов.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>Группа с ключом {0} не может быть найдена.</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>Вложенность подсекций и ростеров не может быть больше чем {0}.</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>Вопрос не может быть перемещен сюда.</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>Нельзя удалить пользователя из списка, поскольку он в нем отсутсвует</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>Неудачная попытка добавить группу {0} в группу {1}. Но группа {1} не существует в опроснике {2}</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>Вы пытаетесь импортировать удаленный опросник.</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>Неверный список элементов</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>Все значения для фиксированного ростера обязательны.</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>Поддерживаются только QuestionnaireDocuments.</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>Опросник {0} версии {1} не найден.</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>Неподдерживаемый тип вопроса: {0}.</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>Ростер не может быть скопирован сюда.</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>Статический текст не может быть скопирован сюда.</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>Элемент неизвестного типа. Вставка невозможна.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>Пользователь {0} уже присуствует в списке.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>Пользователь {0}  является владельцем опросника. Введите другой email, пожалуйста.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>Все значения для фиксированного ростера должны быть числами.</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>Переменная не может быть скопирована сюда.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>Опции каскадного вопроса не могут содержать пустые значения в колонке ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>Опции каскадного вопроса должны содержать только численные значения в колонках Value и ParentValue.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>Найдена как минимум одна одинаковая пара Title + Parent Value. Список опций не должен сожержать дубликаты такого типа.</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>Последняя секция не может быть удалена из опросника</value>
+  </data>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Не найдено вложение с ключом {0}</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Таблица поиска с ключом {0} пустая</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Таблица поиска с ключом {0} не может быть найдена</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>Старый ключ вложения пуст и файл отсутствует для вложения {0} для опросника {1}</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>Значения опций должны содержать только числовые значения</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Найдены ошибки в excel файле</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>Неверное значение ключа {0} по адресу [{1}]</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>Неверное значение индекса {0} по адресу [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>Неверное значение типа {0} по адресу [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Excel файл пуст и не содержит листов с переводами</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Произошла ошибка при попытке разбора загруженного файла с переводами</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Лист с переводами не найден</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>Переменная с ключом {0} не найдена в опроснике {1}</value>
+  </data>
+</root>

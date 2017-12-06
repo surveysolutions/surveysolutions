@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -53,9 +55,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual QuestionnaireLiteViewItem Questionnaire { get; set; }
 
-        /// <summary>
-        /// Will also include deleted interviews
-        /// </summary>
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
         public virtual int InterviewsProvided =>
@@ -76,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual void UpdateQuantity(int? quantity)
         {
-            this.Quantity = quantity;
+            this.Quantity = quantity == -1 ? null : quantity;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
         

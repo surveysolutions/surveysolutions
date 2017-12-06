@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Tests.Abc;
-using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
@@ -34,6 +28,65 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             Assert.AreEqual(statuses[1].Timestamp, currentTime.AddSeconds(2));
             Assert.AreEqual(statuses[2].Status, InterviewExportedAction.InterviewerAssigned);
             Assert.AreEqual(statuses[2].Timestamp, currentTime.AddSeconds(3));
+        }
+
+        [Test]
+        public void when_just_completed_interview_reassigned_to_supervisor_then_status_should_be_completed()
+        {
+            var interviewId = Guid.NewGuid();
+            var interviewSummary = Create.Entity.InterviewSummary(interviewId);
+            var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
+
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+
+            Assert.AreEqual(InterviewExportedAction.Completed,
+                interviewSummary.InterviewCommentedStatuses.LastOrDefault().Status);
+        }
+
+        [Test]
+        public void when_just_completed_interview_reassigned_to_interviewer_then_status_should_be_completed()
+        {
+            var interviewId = Guid.NewGuid();
+            var interviewSummary = Create.Entity.InterviewSummary(interviewId);
+            var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
+
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+
+            Assert.AreEqual(InterviewExportedAction.Completed,
+                interviewSummary.InterviewCommentedStatuses.LastOrDefault().Status);
+        }
+
+        [Test]
+        public void when_just_completed_interview_reassigned_to_supervisor_then_only_1_commented_status_should_be_added()
+        {
+            var interviewId = Guid.NewGuid();
+            var interviewSummary = Create.Entity.InterviewSummary(interviewId);
+            var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
+
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, interviewerId: null));
+
+            Assert.AreEqual(new[]
+            {
+                InterviewExportedAction.Created,
+                InterviewExportedAction.SupervisorAssigned,
+                InterviewExportedAction.InterviewerAssigned,
+                InterviewExportedAction.Completed,
+                InterviewExportedAction.Completed
+
+            }, interviewSummary.InterviewCommentedStatuses.Select(x => x.Status).ToArray());
         }
     }
 }

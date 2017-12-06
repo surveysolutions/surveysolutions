@@ -55,9 +55,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             var chapter = document.Find<IGroup>(chapterPublicKey);
 
             IQuestionnaireItem root = null;
-            var allGroupViews = new Dictionary<Guid, GroupInfoView>();
+            var allGroupViews = new Dictionary<IGroup, GroupInfoView>();
             chapter.ForEachTreeElement<IComposite>(x => x.Children, (parent, child) =>
             {
+
                 IQuestionnaireItem questionnaireItem = null;
 
                 if (child is IQuestion)
@@ -67,7 +68,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 else if (child is IGroup)
                 {
                     var groupItem = ConvertToGroupInfoView((IGroup)child);
-                    allGroupViews.Add(child.PublicKey, groupItem);
+                    allGroupViews.Add((IGroup)child, groupItem);
                     questionnaireItem = groupItem;
                 }
                 else if (child is IStaticText)
@@ -80,7 +81,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
                 }
 
                 if (parent != null)
-                    allGroupViews[parent.PublicKey].Items.Add(questionnaireItem);
+                {
+                    allGroupViews.Last(x => x.Key == parent).Value.Items.Add(questionnaireItem);
+                }
                 else
                     root = questionnaireItem;
             });

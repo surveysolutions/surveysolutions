@@ -83,6 +83,8 @@ namespace Main.Core.Entities.SubEntities
         {
         }
 
+        public string VariableName => null;
+
         public Guid PublicKey { get; set; }
 
         public string Text { get; set; }

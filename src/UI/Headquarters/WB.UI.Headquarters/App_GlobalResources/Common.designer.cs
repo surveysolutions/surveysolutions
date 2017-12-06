@@ -142,6 +142,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archived.
+        /// </summary>
+        internal static string Archived {
+            get {
+                return ResourceManager.GetString("Archived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assign.
         /// </summary>
         internal static string Assign {
@@ -156,6 +165,15 @@ namespace Resources {
         internal static string Assignment {
             get {
                 return ResourceManager.GetString("Assignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Audit log.
+        /// </summary>
+        internal static string AuditLog {
+            get {
+                return ResourceManager.GetString("AuditLog", resourceCulture);
             }
         }
         
@@ -372,6 +390,15 @@ namespace Resources {
         internal static string PrefilledQuestions {
             get {
                 return ResourceManager.GetString("PrefilledQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing....
+        /// </summary>
+        internal static string Processing {
+            get {
+                return ResourceManager.GetString("Processing", resourceCulture);
             }
         }
         

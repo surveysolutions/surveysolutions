@@ -43,6 +43,49 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
         }
 
+        public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
+        {
+            var syncWithNotEmptyStat =
+                (from device in this.dbContext.DeviceSyncInfo
+                where interviewerIds.Contains(device.InterviewerId)
+                      && (device.StatisticsId != null &&
+                          device.Statistics.DownloadedInterviewsCount +
+                          device.Statistics.UploadedInterviewsCount +
+                          device.Statistics.DownloadedQuestionnairesCount +
+                          device.Statistics.RejectedInterviewsOnDeviceCount > 0)
+                group device by device.InterviewerId
+                into grouping
+                select new
+                {
+                    grouping.Key,
+                    DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
+                }).ToList();
+
+            var lastSync = (from device in this.dbContext.DeviceSyncInfo
+                where interviewerIds.Contains(device.InterviewerId)
+                group device by device.InterviewerId
+                into grouping
+                select new
+                {
+                    grouping.Key,
+                    DeviceInfo = grouping.FirstOrDefault(g => g.Id == grouping.Max(d => d.Id))
+                }).ToList();
+
+            foreach (var interviewerId in interviewerIds)
+            {
+                var notEmptyStat = syncWithNotEmptyStat.FirstOrDefault(x => x.Key == interviewerId);
+                if (notEmptyStat != null)
+                {
+                    yield return notEmptyStat.DeviceInfo;
+                    continue;
+                }
+
+                var lastStat = lastSync.FirstOrDefault(x => x.Key == interviewerId);
+                if (lastStat!=null)
+                    yield return lastStat.DeviceInfo;
+            }
+        }
+
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)
                 .Where(d => d.InterviewerId == interviewerId && d.StatisticsId != null)        
@@ -60,14 +103,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             => this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .Count(deviceInfo => deviceInfo.InterviewerId == interviewerId && deviceInfo.StatisticsId == null);
         
-        public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId, string deviceId)
+        public SynchronizationActivity GetSynchronizationActivity(Guid interviewerId)
         {
             var toDay = DateTime.UtcNow;
             var fromDay = toDay.AddDays(-6);
 
             var deviceInfoByPeriod = this.dbContext.DeviceSyncInfo
-                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.DeviceId == deviceId &&
-                                   syncInfo.SyncDate > fromDay)
+                .Where(syncInfo => syncInfo.InterviewerId == interviewerId && syncInfo.SyncDate > fromDay)
                 .Select(syncInfo => new DbDay
                 {
                     Statistics = syncInfo.Statistics == null

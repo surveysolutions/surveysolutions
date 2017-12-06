@@ -151,6 +151,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete map.
+        /// </summary>
+        internal static string DeleteMap {
+            get {
+                return ResourceManager.GetString("DeleteMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete map user.
+        /// </summary>
+        internal static string DeleteMapUser {
+            get {
+                return ResourceManager.GetString("DeleteMapUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete questionnaire.
         /// </summary>
         internal static string DeleteQuestionnaire {
@@ -192,6 +210,15 @@ namespace Resources {
         internal static string LastEntryDate {
             get {
                 return ResourceManager.GetString("LastEntryDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maps.
+        /// </summary>
+        internal static string Maps {
+            get {
+                return ResourceManager.GetString("Maps", resourceCulture);
             }
         }
         

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
@@ -148,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             var storedAttachmentMeta = this.attachmentMetaStorage.GetById(sourceAttachmentId);
             if (storedAttachmentMeta == null)
             {
-                throw new ArgumentException($"Missing attachment with id {sourceAttachmentId}", nameof(sourceAttachmentId));
+                throw new ArgumentException(string.Format(ExceptionMessages.AttachmentIdIsMissing, sourceAttachmentId), nameof(sourceAttachmentId));
             }
 
             var clonedAttachmentMeta = new AttachmentMeta

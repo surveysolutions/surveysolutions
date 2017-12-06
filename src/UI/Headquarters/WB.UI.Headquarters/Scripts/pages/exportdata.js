@@ -1,9 +1,8 @@
-﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $historyUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
-    self.HistoryUrl = $historyUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
     self.UpdateDataUrl = $updateDataUrl;
     self.Templates = templates;
@@ -72,16 +71,6 @@
             }
         });
     }
-
-    self.requestParaDataUpdate = function(format) {
-        return function() {
-            self.sendWebRequest(self.HistoryUrl,
-                [],
-                function (data) {
-                    self.updateDataExportInfo();
-                });
-        }
-    };
 
     self.requestDataUpdate = function(format) {
         var questionnaireId = self.selectedTemplateId();
@@ -225,6 +214,26 @@
         return dataReference.ProgressInPercents();
     }
 
+    self.isInQueue = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+
+        return dataReference.StatusOfLatestExportProcess() === 2;
+    }
+
+    self.isRunning = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+
+        return dataReference.StatusOfLatestExportProcess() === 3;
+    }
+
+    self.isCompessing = function (type, format) {
+        var dataReference = self.getDataReference(type, format);
+        if (dataReference == null) return false;
+
+        return dataReference.StatusOfLatestExportProcess() === 4;
+    }
 
     self.updateDataExportInfo(true);
 };

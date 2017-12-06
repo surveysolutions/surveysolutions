@@ -1,8 +1,6 @@
+using System;
 using System.Collections.Generic;
-using System.Threading;
-using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -13,11 +11,12 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
-    public class WebInterviewAllowService : IWebInterviewAllowService
+    class WebInterviewAllowService : IWebInterviewAllowService
     {
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
+        private readonly IAuthorizedUser authorizedUser;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
@@ -35,39 +34,37 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             ITransactionManagerProvider transactionManagerProvider,
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
-            IWebInterviewConfigProvider webInterviewConfigProvider)
+            IWebInterviewConfigProvider webInterviewConfigProvider, 
+            IAuthorizedUser authorizedUser)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.interviewSummaryStorage = interviewSummaryStorage;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
+            this.authorizedUser = authorizedUser;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
+            Guid interviewGuid = Guid.Parse(interviewId);
             var interview = transactionManagerProvider.GetTransactionManager()
                 .ExecuteInQueryTransaction(
-                    () => interviewSummaryStorage.GetById(interviewId));
+                    () => interviewSummaryStorage.GetById(interviewGuid));
 
             if (interview == null)
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Headquarters.Resources.WebInterview.Error_NotFound);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Headquarters.Resources.WebInterview.Error_NotFound);
 
             if (!AllowedInterviewStatuses.Contains(interview.Status))
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
 
-            var currentPrincipalIdentity = Thread.CurrentPrincipal;
-            var userId = currentPrincipalIdentity?.Identity?.GetUserId();
-            if (!string.IsNullOrEmpty(userId))
+            if (this.authorizedUser.IsInterviewer)
             {
-                if (currentPrincipalIdentity.IsInRole(UserRoles.Interviewer.ToString()))
+                if (interview.ResponsibleId == this.authorizedUser.Id)
+                    return;
+                else
                 {
-                    if(interview.ResponsibleId.ToString() == userId)
-                        return;
-                    else
-                    {
-                        throw new WebInterviewAccessException(InterviewAccessExceptionReason.Forbidden,
-                            Headquarters.Resources.WebInterview.Error_Forbidden);
-                    }
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.Forbidden,
+                        Headquarters.Resources.WebInterview.Error_Forbidden);
                 }
             }
 
@@ -76,18 +73,18 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             WebInterviewConfig webInterviewConfig = plainTransactionManagerProvider
                 .GetPlainTransactionManager()
                     .ExecuteInPlainTransaction(
-                        () => webInterviewConfigProvider.Get(questionnaireIdentity));
+                        () => webInterviewConfigProvider.Get( questionnaireIdentity));
 
             //interview is not public available and responsible is not logged in
             if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned)
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
+                throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
                     Headquarters.Resources.WebInterview.Error_UserNotAuthorised);
             }
 
             if (!webInterviewConfig.Started || !AnonymousUserAllowedStatuses.Contains(interview.Status))
             {
-                throw new WebInterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
                     Headquarters.Resources.WebInterview.Error_InterviewExpired);
             }
         }

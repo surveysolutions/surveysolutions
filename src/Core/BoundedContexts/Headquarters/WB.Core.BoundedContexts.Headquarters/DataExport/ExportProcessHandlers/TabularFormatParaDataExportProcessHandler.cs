@@ -1,178 +1,149 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using Main.DenormalizerStorage;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
-    internal class TabularFormatParaDataExportProcessHandler: IExportProcessHandler<ParaDataExportProcessDetails>
+    internal class TabularFormatParaDataExportProcessHandler: AbstractDataExportHandler
     {
-        private readonly IStreamableEventStore eventStore;
+        private readonly IEventStore eventStore;
         private readonly IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader;
         private readonly IUserViewFactory userReader;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
-        private readonly IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage;
-
-        private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IParaDataAccessor paraDataAccessor;
-
-        private readonly string interviewParaDataEventHandlerName = typeof(InterviewParaDataEventHandler).Name;
 
         private ITransactionManager TransactionManager => this.transactionManagerProvider.GetTransactionManager();
         private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
 
+        private void ExecuteInTransaction(Action action) => this.TransactionManager.ExecuteInQueryTransaction(()
+            => this.PlainTransactionManager.ExecuteInPlainTransaction(action.Invoke));
+
+        private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly ICsvWriter csvWriter;
+        private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly ILogger logger;
 
-        public TabularFormatParaDataExportProcessHandler(IStreamableEventStore eventStore,
+        public TabularFormatParaDataExportProcessHandler(IEventStore eventStore,
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IUserViewFactory userReader,
             InterviewDataExportSettings interviewDataExportSettings,
             ITransactionManagerProvider transactionManagerProvider,
-            IReadSideRepositoryWriter<LastPublishedEventPositionForHandler> lastPublishedEventPositionForHandlerStorage,
-            IDataExportProcessesService dataExportProcessesService, IParaDataAccessor paraDataAccessor, 
+            IDataExportProcessesService dataExportProcessesService, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, 
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
-            ILogger logger)
+            IQuestionnaireStorage questionnaireStorage,
+            IFileSystemAccessor fs,
+            IFilebasedExportedDataAccessor dataAccessor,
+            IDataExportFileAccessor exportFileAccessor,
+            ICsvWriter csvWriter,
+            ITabularFormatExportService tabularFormatExportService,
+            ILogger logger) : base(fs, dataAccessor, interviewDataExportSettings, dataExportProcessesService, exportFileAccessor)
         {
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.interviewDataExportSettings = interviewDataExportSettings;
             this.transactionManagerProvider = transactionManagerProvider;
-            this.lastPublishedEventPositionForHandlerStorage = lastPublishedEventPositionForHandlerStorage;
-            this.dataExportProcessesService = dataExportProcessesService;
-            this.paraDataAccessor = paraDataAccessor;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.questionnaireStorage = questionnaireStorage;
+            this.csvWriter = csvWriter;
+            this.tabularFormatExportService = tabularFormatExportService;
             this.logger = logger;
         }
 
-        public void ExportData(ParaDataExportProcessDetails dataExportProcessDetails)
+        protected override DataExportFormat Format => DataExportFormat.Paradata;
+
+        protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath,
+            IProgress<int> progress, CancellationToken cancellationToken)
         {
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+            var interviewsToExport = this.tabularFormatExportService.GetInterviewIdsToExport(
+                questionnaireIdentity, status, cancellationToken);
 
-            var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
+            var paradataReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
 
-            var interviewParaDataEventHandler =
-                new InterviewParaDataEventHandler(interviewHistoryReader, this.interviewSummaryReader, this.userReader,
-                    this.interviewDataExportSettings, this.questionnaireExportStructureStorage);
+            var interviewParaDataEventHandler = new InterviewParaDataEventHandler(paradataReader,
+                this.interviewSummaryReader, this.userReader, this.interviewDataExportSettings,
+                this.questionnaireExportStructureStorage, this.questionnaireStorage);
 
-            var interviewDenormalizerProgress =
-                this.TransactionManager.ExecuteInQueryTransaction(
-                    () =>
-                        this.lastPublishedEventPositionForHandlerStorage.GetById(this.interviewParaDataEventHandlerName));
+            cancellationToken.ThrowIfCancellationRequested();
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+            var exportFilePath = this.fileSystemAccessor.CombinePath(directoryPath, "paradata.tab");
 
-            EventPosition? eventPosition = null;
-            if (interviewDenormalizerProgress != null)
-                eventPosition = new EventPosition(interviewDenormalizerProgress.CommitPosition,
-                    interviewDenormalizerProgress.PreparePosition,
-                    interviewDenormalizerProgress.EventSourceIdOfLastSuccessfullyHandledEvent,
-                    interviewDenormalizerProgress.EventSequenceOfLastSuccessfullyHandledEvent);
-
-            this.logger.Info($"Starting paradata creation from the begining = {!eventPosition.HasValue} ");
-            Stopwatch watch = Stopwatch.StartNew();
-            if (!eventPosition.HasValue)
+            using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(exportFilePath, true))
+            using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.DataFileSeparator.ToString()))
             {
-                this.paraDataAccessor.ClearParaDataFolder();
-            }
+                writer.WriteField("interview__id");
+                writer.WriteField("#");
+                writer.WriteField("action");
+                writer.WriteField("responsible");
+                writer.WriteField("role");
+                writer.WriteField("timestamp");
+                writer.WriteField("parameters");
+                writer.NextRecord();
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-            var eventSlices = this.eventStore.GetEventsAfterPosition(eventPosition);
-            long eventCount = this.eventStore.GetEventsCountAfterPosition(eventPosition);
-
-            int countOfProcessedEvents = 0;
-            int persistCount = 0;
-            this.logger.Info($"Exporting events count of all: {eventCount}");
-
-            foreach (var eventSlice in eventSlices)
-            {
-                dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-                IEnumerable<CommittedEvent> events = eventSlice;
-                this.logger.Info($"Processing export slice. Sequrce of last event: {eventSlice.Position.SequenceOfLastEvent}, EventSource: ${eventSlice.Position.EventSourceIdOfLastEvent}");
-                this.TransactionManager.ExecuteInQueryTransaction(
-                    () =>
-                    {
-                        this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
-                        {
-                            foreach (var committedEvent in events)
-                            {
-                                interviewParaDataEventHandler.Handle(committedEvent);
-                                countOfProcessedEvents++;
-                            }
-                        });
-                    });
-
-                if (eventSlice.IsEndOfStream || countOfProcessedEvents > 10000 * persistCount)
+                long totalInterviewsProcessed = 0;
+                foreach (var interviewId in interviewsToExport)
                 {
-                    var allInterviewEvents = interviewHistoryReader.Query(_ => _.ToArray());
-                    foreach (var interviewHistoryView in allInterviewEvents)
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var eventsByInterview = this.eventStore.Read(interviewId, 0);
+
+                    try
                     {
-                        this.paraDataAccessor.StoreInterviewParadata(interviewHistoryView);
+                        this.ExecuteInTransaction(() => eventsByInterview.ForEach(interviewParaDataEventHandler.Handle));
+
+                        var paradata = paradataReader.Query(_ => _.FirstOrDefault());
+                        for (int i = 0; i < paradata.Records.Count; i++)
+                        {
+                            var evnt = paradata?.Records[i];
+                            writer.WriteField(interviewId);
+                            writer.WriteField(i + 1);
+                            writer.WriteField(evnt.Action);
+                            writer.WriteField(evnt.OriginatorName);
+                            writer.WriteField(evnt.OriginatorRole);
+                            writer.WriteField(evnt.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
+                            foreach (var value in evnt.Parameters.Values)
+                            {
+                                writer.WriteField(value ?? string.Empty);
+                            }
+                            writer.NextRecord();
+                        }
+
+                        paradataReader.Clear();
+                    }
+                    catch (Exception e)
+                    {
+                        this.logger.Error($"Paradata unhandled exception for interview {interviewId}", e);
                     }
 
-                    interviewHistoryReader.Clear();
-
-                    this.UpdateLastHandledEventPosition(eventSlice.Position);
-
-                    int progressInPercents = ((long) countOfProcessedEvents).PercentOf(eventCount);
-                    this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, progressInPercents);
-                    persistCount++;
+                    totalInterviewsProcessed++;
+                    progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
                 }
-            }
-
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
-
-            this.paraDataAccessor.ArchiveParaDataFolder();
-
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 100);
-            
-            this.logger.Info($"Finished paradata creation. Took: {watch.Elapsed:g} ");
-        }
-
-        private void UpdateLastHandledEventPosition(EventPosition eventPosition)
-        {
-            try
-            {
-                this.TransactionManager.BeginCommandTransaction();
-
-                this.lastPublishedEventPositionForHandlerStorage.Store(
-                    new LastPublishedEventPositionForHandler(this.interviewParaDataEventHandlerName,
-                        eventPosition.EventSourceIdOfLastEvent,
-                        eventPosition.SequenceOfLastEvent, eventPosition.CommitPosition, eventPosition.PreparePosition),
-                    this.interviewParaDataEventHandlerName);
-
-                this.TransactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                this.TransactionManager.RollbackCommandTransaction();
-                throw;
             }
         }
     }

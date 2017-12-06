@@ -20,11 +20,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string caption;
         public string Caption
         {
-            get { return this.caption; }
-            set { this.RaiseAndSetIfChanged(ref this.caption, value); }
+            get => this.caption;
+            set => this.RaiseAndSetIfChanged(ref this.caption, value);
         }
 
-        public ObservableCollection<DynamicTextViewModel> ValidationErrors { get; } = new ObservableCollection<DynamicTextViewModel>();
+        public ObservableCollection<ErrorMessageViewModel> ValidationErrors { get; } = new ObservableCollection<ErrorMessageViewModel>();
         
         public void ChangeValidationErrors(IEnumerable<string> errors)
         {
@@ -33,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (string error in errors)
             {
-                var errorViewModel = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
+                var errorViewModel = this.dynamicTextViewModelFactory.CreateErrorMessage();
                 // default test if error message is empty
                 var errorText = string.IsNullOrWhiteSpace(error)
                     ? UIResources.Error

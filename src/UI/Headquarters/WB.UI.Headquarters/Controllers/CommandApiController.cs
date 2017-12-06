@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
@@ -17,7 +18,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
     [ApiValidationAntiForgeryToken]
     public class CommandApiController : BaseApiController
     {
@@ -68,11 +69,11 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         case SetFlagToAnswerCommand setFlagCommand:
                             this._interviewFactory.SetFlagToQuestion(setFlagCommand.InterviewId,
-                                Identity.Create(setFlagCommand.QuestionId, setFlagCommand.RosterVector));
+                                Identity.Create(setFlagCommand.QuestionId, setFlagCommand.RosterVector), true);
                             break;
                         case RemoveFlagFromAnswerCommand removeFlagCommand:
-                            this._interviewFactory.RemoveFlagFromQuestion(removeFlagCommand.InterviewId,
-                                Identity.Create(removeFlagCommand.QuestionId, removeFlagCommand.RosterVector));
+                            this._interviewFactory.SetFlagToQuestion(removeFlagCommand.InterviewId,
+                                Identity.Create(removeFlagCommand.QuestionId, removeFlagCommand.RosterVector), false);
                             break;
                         case HardDeleteInterview deleteInterview:
                             this.CommandService.Execute(transformedCommand);

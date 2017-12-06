@@ -148,28 +148,28 @@
     <value>В прогрессе</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
-    <value>{0} ответов</value>
+    <value>{{value}} ответов</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
     <value>один ответ</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
-    <value>{0} ошибок</value>
+    <value>{{value}} ошибок</value>
   </data>
   <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
     <value>одна ошибка</value>
   </data>
   <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
-    <value>Секция завершена: {0}</value>
+    <value>Секция завершена: {{value}}</value>
   </data>
   <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
     <value>Секция не начата</value>
   </data>
   <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
-    <value>Секция начата: {0}</value>
+    <value>Секция начата: {{value}}</value>
   </data>
   <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
-    <value>{0} подсекций</value>
+    <value>{{value}} подсекций</value>
   </data>
   <data name="Interview_Group_Subgroups_One" xml:space="preserve">
     <value>одна подсекция</value>
@@ -255,5 +255,44 @@
   </data>
   <data name="PoweredBy" xml:space="preserve">
     <value>Работает на</value>
+  </data>
+  <data name="InterviewReceivedByInterviewer" xml:space="preserve">
+    <value>Нельзя модифицировать интервью полученное интервьюером на устройство</value>
+  </data>
+  <data name="Filters_Title" xml:space="preserve">
+    <value>Фильтр Вопросов</value>
+  </data>
+  <data name="Filters_Flagged" xml:space="preserve">
+    <value>С флагом</value>
+  </data>
+  <data name="Filters_WithComments" xml:space="preserve">
+    <value>С комментариями</value>
+  </data>
+  <data name="Filters_Invalid" xml:space="preserve">
+    <value>С ошибкой</value>
+  </data>
+  <data name="Filters_Valid" xml:space="preserve">
+    <value>Без ошибок</value>
+  </data>
+  <data name="Filters_Answered" xml:space="preserve">
+    <value>Отвеченные</value>
+  </data>
+  <data name="Filters_NotAnswered" xml:space="preserve">
+    <value>Без ответа</value>
+  </data>
+  <data name="Filters_ForSupervisor" xml:space="preserve">
+    <value>Для супервизора</value>
+  </data>
+  <data name="Filters_ForInterviewer" xml:space="preserve">
+    <value>Для интервьюера</value>
+  </data>
+  <data name="Filters_NotFlagged" xml:space="preserve">
+    <value>Без флага</value>
+  </data>
+  <data name="Filters_ClearSelection" xml:space="preserve">
+    <value>Посмотреть всё (сбросить фильтры)</value>
+  </data>
+  <data name="Filters_OldDetailsLink" xml:space="preserve">
+    <value>Деталика интервью (старый дизайн)</value>
   </data>
 </root>

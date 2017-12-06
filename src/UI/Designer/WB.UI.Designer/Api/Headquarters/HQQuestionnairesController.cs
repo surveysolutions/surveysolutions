@@ -84,13 +84,14 @@ namespace WB.UI.Designer.Api.Headquarters
             var questionnaires = new PagedQuestionnaireCommunicationPackage
             {
                 TotalCount = questionnaireListView.TotalCount,
-                Items = questionnaireListView.Items.Select(questionnaireListItem => new QuestionnaireListItem
-                {
-                    Id = questionnaireListItem.PublicId,
-                    Title = questionnaireListItem.Title,
-                    LastModifiedDate = questionnaireListItem.LastEntryDate,
-                    OwnerName = questionnaireListItem.Owner
-                }).ToList()
+                Items = questionnaireListView.Items.Cast<QuestionnaireListViewItem>()
+                    .Select(questionnaireListItem => new QuestionnaireListItem
+                    {
+                        Id = questionnaireListItem.PublicId,
+                        Title = questionnaireListItem.Title,
+                        LastModifiedDate = questionnaireListItem.LastEntryDate,
+                        OwnerName = questionnaireListItem.CreatorName
+                    }).ToList()
             };
 
             var response = this.Request.CreateResponse(questionnaires);

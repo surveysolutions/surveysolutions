@@ -12,14 +12,14 @@ using System.Web.Routing;
 using System.Web.SessionState;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using NConfig;
-using Ninject.Web.Common;
+using Ninject;
 using Ninject.Web.Common.OwinHost;
+using Ninject.Web.Common.WebHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
 using Owin;
@@ -30,8 +30,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
@@ -57,14 +59,14 @@ namespace WB.UI.Headquarters
         {
             app.Use(RemoveServerNameFromHeaders);
 
-            ConfigureNinject(app);
+            var kernel = ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
             UpdateAppVersion();
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
-            ConfigureWebApi(app);
+            ConfigureWebApi(app, kernel);
 
             Settings.Current.GetCustomData += (exception, dictionary) =>
             {
@@ -94,7 +96,7 @@ namespace WB.UI.Headquarters
                 {
                     if (e is Npgsql.PostgresException pe)
                     {
-                        error.AddCommand(new Command("NpgSql", pe.Statement.SQL));
+                        error.AddCommand(new Command(@"NpgSql", pe.Statement.SQL));
                     }
 
                     if (e.InnerException != null)
@@ -103,11 +105,20 @@ namespace WB.UI.Headquarters
                     }
                 }
 
-               AddAllSqlData(exception);
+                AddAllSqlData(exception);
             });
+
+            InitMetrics();
+            
+            MetricsService.Start(kernel, logger);
         }
 
-        private void ConfigureNinject(IAppBuilder app)
+        private static void InitMetrics()
+        {
+            CommonMetrics.StateFullInterviewsCount.Set(0);
+        }
+
+        private IKernel ConfigureNinject(IAppBuilder app)
         {
             var perRequestModule = new OnePerRequestHttpModule();
 
@@ -129,9 +140,10 @@ namespace WB.UI.Headquarters
             var kernel = NinjectConfig.CreateKernel();
             kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
             app.UseNinjectMiddleware(() => kernel);
+            return kernel;
         }
 
-        private void ConfigureWebApi(IAppBuilder app)
+        private void ConfigureWebApi(IAppBuilder app, IKernel kernel)
         {
             var config = new HttpConfiguration();
             config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
@@ -140,9 +152,8 @@ namespace WB.UI.Headquarters
             WebApiConfig.Register(config);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            
-            
-            app.MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
+
+            API.WebInterview.Bootstrap.Configure(app, kernel);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);
@@ -230,6 +241,8 @@ namespace WB.UI.Headquarters
 
         private static void OnShutdown()
         {
+            InitMetrics();
+
             var logger = LogManager.GetCurrentClassLogger();
 
             logger.Info(@"Ending application.");

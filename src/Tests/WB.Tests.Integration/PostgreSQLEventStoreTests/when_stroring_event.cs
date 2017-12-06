@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Moq;
@@ -86,24 +85,6 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
         };
         
         It should_count_stored_events = () => eventStore.CountOfAllEvents(); // it should not fail
-
-        It should_be_able_to_read_all_events = () =>
-        {
-            var committedEvents = eventStore.GetAllEvents().ToList();
-            committedEvents.Count.ShouldEqual(3);
-            committedEvents[0].Payload.ShouldBeOfExactType(typeof(AccountRegistered));
-            committedEvents[1].Payload.ShouldBeOfExactType(typeof(AccountConfirmed));
-            committedEvents[2].Payload.ShouldBeOfExactType(typeof(AccountLocked));
-        };
-
-        It should_be_able_to_count_events_after_position = () => eventStore.GetEventsCountAfterPosition(new EventPosition(0, 0, eventSourceId, 1)).ShouldEqual(2);
-
-        It should_be_able_to_get_events_after_position = () =>
-        {
-            List<CommittedEvent> eventsAfterPosition = eventStore.GetEventsAfterPosition(new EventPosition(0, 0, eventSourceId, 1)).ToList()[0].ToList();
-            eventsAfterPosition[0].Payload.ShouldBeOfExactType(typeof(AccountConfirmed));
-            eventsAfterPosition[1].Payload.ShouldBeOfExactType(typeof(AccountLocked));
-        };
 
         Cleanup c = () => npgsqlConnection?.Dispose();
 

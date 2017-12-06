@@ -48,6 +48,7 @@
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "SurveySetup", @MainMenu.Questionnaires, MenuItem.Questionnaires)
             @Html.MainMenuItem("Index", "Assignments", @MainMenu.Assignments, MenuItem.Assignments)
+            @Html.MainMenuItem("Index", "Maps", @MainMenu.Maps, MenuItem.Maps)
         </ul>
     </li>
     @Html.MainMenuItem("Index", "DataExport", @MainMenu.DataExport, MenuItem.DataExport)
@@ -59,6 +60,7 @@
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Settings", Common.Settings, MenuItem.Settings)
+            @Html.MainMenuItem("Index", "AuditLog", Common.AuditLog, MenuItem.AuditLog)
             @Html.MainMenuItem("Manage", "Account", Strings.SurverManagement_MainMenu_ManageAccount, MenuItem.ManageAccount)
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new {area = string.Empty}, null)</li>
         </ul>

@@ -3,8 +3,7 @@ using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.WriteSide
 {
-    public interface IEventSourcedAggregateRootRepositoryWithCache : IEventSourcedAggregateRootRepository
+    public interface IEventSourcedAggregateRootRepositoryWithCache : IEventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryCacheCleaner
     {
-        void CleanCache();
     }
 }

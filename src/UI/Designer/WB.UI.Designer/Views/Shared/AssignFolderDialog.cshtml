@@ -1,0 +1,69 @@
+﻿@using WB.UI.Designer
+@using WB.UI.Designer.Resources
+
+
+<script type="text/javascript">
+    $(function () {
+        var localization = {
+            CreateSubFolder: "@QuestionnaireController.CreateSubFolder",
+            Edit: '@QuestionnaireController.Rename',
+            Delete: "@QuestionnaireController.Delete",
+            DeleteConfirmation: "@QuestionnaireController.DeleteFolderConfirmation",
+            NewFolderName: "@QuestionnaireController.NewFolder",
+        };
+        var subFoldersUrl   = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetFolders" })';
+        var rootFoldersUrl  = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "GetRootFolders" })';
+        var addNodeUrl      = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "CreateFolder" })';
+        var renameNodeUrl   = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "RenameFolder" })';
+        var removeNodeUrl   = null;
+        var assignFolderUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "PublicFoldersApi", action = "AssignFolderToQuestionnaire" })';
+        var supportRadioButton = true;
+        var selectFolderCallback = function (folderId) {
+            $('#assign-folder-modal-folder-id').val(folderId);
+            $('#assign-folder-button').prop('disabled', folderId == null);
+        };     
+        window.assignFolder = function () {
+            var questionnaireId = $('#assign-folder-modal-questionnaire-id').val();
+            var folderId        = $('#assign-folder-modal-folder-id').val();
+            window.foldersModel.postRequest(
+                assignFolderUrl,
+                {
+                    id: folderId,
+                    questionnaireId: questionnaireId
+                },
+                function() {
+                    location.reload(); 
+                });
+        };
+
+        window.foldersModel = new FoldersModel($("#folderstree"), localization, rootFoldersUrl, subFoldersUrl, addNodeUrl, renameNodeUrl, removeNodeUrl, supportRadioButton, selectFolderCallback);
+    });
+</script>
+
+
+<div class="modal fade" id="mAssignFolder">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="@QuestionnaireController.Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@QuestionnaireController.AssignFolder <small>@QuestionnaireController.Confirmation</small></h4>
+            </div>
+            <div class="modal-body">
+                <p>@Html.Raw(string.Format(QuestionnaireController.AssignFolderText, "<strong id=\"assign-folder-modal-questionnaire-title\"></strong>"))</p>
+                
+                <div id="folderstree" class="folder-tree disableSelection">
+                </div>
+            </div>
+            <div class="modal-footer">
+                @using (Html.BeginForm("AssignFolder", GlobalHelper.CurrentController, FormMethod.Post, new { }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input name="folderId" id="assign-folder-modal-folder-id" type="hidden" />
+                    <input name="id" id="assign-folder-modal-questionnaire-id" type="hidden" />
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">@QuestionnaireController.Cancel</button>
+                    <button id="assign-folder-button" type="submit" class="btn btn-primary" value="@QuestionnaireController.Assign" onclick="this.disabled = true; this.value = '@QuestionnaireController.Assigning'; window.assignFolder();">@QuestionnaireController.Assign</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>

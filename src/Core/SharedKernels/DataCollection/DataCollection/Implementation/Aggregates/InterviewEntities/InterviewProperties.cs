@@ -8,6 +8,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         private Guid? interviewerId;
 
+        public InterviewProperties()
+        {
+            this.IsValid = true;
+        }
+
         public string Id { get; set; }
 
         public Guid? InterviewerId
@@ -19,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewStatus Status { get; set; }
         public bool IsReceivedByInterviewer { get; set; }
         public bool WasCompleted { get; set; }
+        public bool WasRejected { get; set; }
         public bool IsHardDeleted { get; set; }
         public DateTime? StartedDate { get; set; }
         public DateTime? CompletedDate { get; set; }
@@ -32,5 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             get { return this.supervisorId; }
             set { this.supervisorId = value.NullIfEmpty(); }
         }
+
+        public bool IsValid { get; set; }
     }
 }

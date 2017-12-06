@@ -123,6 +123,9 @@
   <data name="InterviewChart" xml:space="preserve">
     <value>Interview Chart</value>
   </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Interviewers</value>
+  </data>
   <data name="DatesRange" xml:space="preserve">
     <value>Dates range</value>
   </data>

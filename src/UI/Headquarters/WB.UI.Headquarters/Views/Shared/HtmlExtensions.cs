@@ -9,6 +9,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Resources;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ASP
 {
@@ -117,8 +119,35 @@ namespace ASP
                 case MenuItem.SurveyAndStatuses: return MainMenu.SurveysAndStatuses;
                 case MenuItem.StatusDuration: return MainMenu.StatusDuration;
                 case MenuItem.DevicesInterviewers: return MainMenu.DevicesInterviewers;
+                case MenuItem.Assignments: return MainMenu.Assignments;
+                case MenuItem.AuditLog: return AuditLog.PageTitle;
+                case MenuItem.Maps: return MainMenu.Maps;
                 default: return String.Empty;
             }
+        }
+
+        private static JsonSerializerSettings asJsonValueSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
+        public static IHtmlString AsJsonValue(this object obj)
+        {
+            return new HtmlString(JsonConvert.SerializeObject(obj, asJsonValueSettings));
+        }
+        
+        public static IHtmlString RenderHqConfig(this HtmlHelper helper, object model, string title = null)
+        {
+            string titleString = title ?? (string) helper.ViewBag.Title?.ToString() ?? null;
+
+            string script = "";
+
+            if (!string.IsNullOrWhiteSpace(titleString))
+            {
+                script += $"window.CONFIG.title='{titleString}'";
+            }
+
+            return new HtmlString($@"<script>{script};window.CONFIG.model={ model.AsJsonValue() }</script>");
         }
     }
 }

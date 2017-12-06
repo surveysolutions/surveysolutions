@@ -1,0 +1,147 @@
+[{
+        "results": [{
+            "id": 0,
+            "sectionId": "72e859af8e925ed46d3e4503f1fe4940",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }],
+            "questions": [{
+                "target": "342c1858a315556f4d9e48201b298cc3",
+                "title": "Select any player"
+            }]
+        }, {
+            "id": 1,
+            "sectionId": "58350f7e0c41c606d04a9d931e3ab3a3_1",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }, {
+                "target": "58350f7e0c41c606d04a9d931e3ab3a3_1",
+                "title": "Mortal Combat - Kenshi"
+            }],
+            "questions": [{
+                "target": "0e74bd7bda3e09336c9005b66f61ac29_1",
+                "title": "Why do you like to play him?"
+            }]
+        }, {
+            "id": 2,
+            "sectionId": "f133fdc78a81dbafbe6507952bf06384_1",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }, {
+                "target": "58350f7e0c41c606d04a9d931e3ab3a3_1",
+                "title": "Mortal Combat - Kenshi"
+            }, {
+                "target": "f133fdc78a81dbafbe6507952bf06384_1",
+                "title": "More info about Kenshi"
+            }],
+            "questions": [{
+                "target": "6a639942539484e7b0caf8bef1d245a4_1",
+                "title": "Specify the best combo"
+            }]
+        }],
+        "totalCount": 10
+    }, {
+        "results": [{
+            "id": 2,
+            "sectionId": "f133fdc78a81dbafbe6507952bf06384_1",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }, {
+                "target": "58350f7e0c41c606d04a9d931e3ab3a3_1",
+                "title": "Mortal Combat - Kenshi"
+            }, {
+                "target": "f133fdc78a81dbafbe6507952bf06384_1",
+                "title": "More info about Kenshi"
+            }],
+            "questions": [{
+                "target": "c2f188f90e379c6a5f228eae6fba9aa8_1",
+                "title": "Numeric with validation"
+            }]
+        }, {
+            "id": 3,
+            "sectionId": "58350f7e0c41c606d04a9d931e3ab3a3_1",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }, {
+                "target": "58350f7e0c41c606d04a9d931e3ab3a3_1",
+                "title": "Mortal Combat - Kenshi"
+            }],
+            "questions": [{
+                "target": "885ca8a2849d27c14faf2eb4f34ec664_1",
+                "title": "Type yes!"
+            }]
+        }, {
+            "id": 4,
+            "sectionId": "58350f7e0c41c606d04a9d931e3ab3a3_2",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }, {
+                "target": "58350f7e0c41c606d04a9d931e3ab3a3_2",
+                "title": "Mortal Combat - Darrius"
+            }],
+            "questions": [{
+                "target": "0e74bd7bda3e09336c9005b66f61ac29_2",
+                "title": "Why do you like to play him?"
+            }]
+        }],
+        "totalCount": 10
+    }, {
+        "results": [{
+            "id": 5,
+            "sectionId": "f133fdc78a81dbafbe6507952bf06384_2",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }, {
+                "target": "58350f7e0c41c606d04a9d931e3ab3a3_2",
+                "title": "Mortal Combat - Darrius"
+            }, {
+                "target": "f133fdc78a81dbafbe6507952bf06384_2",
+                "title": "More info about Darrius"
+            }],
+            "questions": [{
+                "target": "6a639942539484e7b0caf8bef1d245a4_2",
+                "title": "Specify the best combo"
+            }, {
+                "target": "c2f188f90e379c6a5f228eae6fba9aa8_2",
+                "title": "Numeric with validation"
+            }]
+        }, {
+            "id": 6,
+            "sectionId": "58350f7e0c41c606d04a9d931e3ab3a3_2",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }, {
+                "target": "58350f7e0c41c606d04a9d931e3ab3a3_2",
+                "title": "Mortal Combat - Darrius"
+            }],
+            "questions": [{
+                "target": "885ca8a2849d27c14faf2eb4f34ec664_2",
+                "title": "Type yes!"
+            }]
+        }],
+        "totalCount": 10
+    },
+    {
+        "results": [{
+            "id": 7,
+            "sectionId": "72e859af8e925ed46d3e4503f1fe4940",
+            "sections": [{
+                "target": "72e859af8e925ed46d3e4503f1fe4940",
+                "title": "Breadcrumbs"
+            }],
+            "questions": [{
+                "target": "59617b9cff24398721cbdd4ab5a3d90d",
+                "title": "Question after roster"
+            }]
+        }],
+        "totalCount": 10
+    }
+]

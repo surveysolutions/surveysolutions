@@ -13,7 +13,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
             this.Page = data.Page;
             this.PageSize = data.PageSize;
             this.TotalCount = data.TotalCount;
-            this.Items = data.Items.Select(item => new QuestionnaireListViewItemMessage(item)).ToArray();
+            this.Items = data.Items.Select(item => new QuestionnaireListViewItemMessage((QuestionnaireListViewItem)item)).ToArray();
         }
 
         [MessageHeader]

@@ -6,12 +6,79 @@
          url('#{$assetsPath}/fonts/#{$family}.ttf') format('truetype'),
          url('#{$assetsPath}/fonts/#{$family}.svg##{$family}') format('svg');}
 }
+@mixin font($size, $height, $font_family: inherit){
+    font-size: $size;
+    line-height: $height;
+    font-family: $font_family;
+}
+// Sizing shortcuts
+@mixin size($width, $height) {
+    width: $width;
+    height: $height;
+}
+@mixin square($size) {
+    @include size($size, $size);
+}
+// Opacity
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    // IE8 filter
+    $opacity-ie: ($opacity * 100);
+    filter: alpha(opacity=$opacity-ie);
+}
+  // Transformations
+@mixin scale($ratio...) {
+    -webkit-transform: scale($ratio);
+        -ms-transform: scale($ratio); // IE9 only
+         -o-transform: scale($ratio);
+            transform: scale($ratio);
+}
+@mixin rotate($degrees) {
+    -webkit-transform: rotate($degrees);
+        -ms-transform: rotate($degrees); // IE9 only
+         -o-transform: rotate($degrees);
+            transform: rotate($degrees);
+}
+@mixin translate($x, $y) {
+    -webkit-transform: translate($x, $y);
+        -ms-transform: translate($x, $y); // IE9 only
+         -o-transform: translate($x, $y);
+            transform: translate($x, $y);
+}
+// Center-align a block level element
+@mixin center-block() {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 @mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
     position: absolute;
     top: $top;
     right: $right;
     bottom: $bottom;
     left: $left;
+}
+// Animations
+@mixin animation($animation) {
+    -webkit-animation: $animation;
+         -o-animation: $animation;
+            animation: $animation;
+}
+@mixin animation-name($name) {
+    -webkit-animation-name: $name;
+            animation-name: $name;
+}
+@mixin animation-duration($duration) {
+    -webkit-animation-duration: $duration;
+            animation-duration: $duration;
+}
+@mixin animation-timing-function($timing-function) {
+    -webkit-animation-timing-function: $timing-function;
+            animation-timing-function: $timing-function;
+}
+@mixin animation-delay($delay) {
+    -webkit-animation-delay: $delay;
+            animation-delay: $delay;
 }
 @mixin transition($type: all, $time: 0.5s, $kind: linear, $delay: 0s){
 	-webkit-transition: $type $time $kind $delay;
@@ -20,10 +87,11 @@
 		 -o-transition: $type $time $kind $delay;
 			transition: $type $time $kind $delay;
 }
-@mixin font($size, $height, $font_family: inherit){
-    font-size: $size;
-    line-height: $height;
-    font-family: $font_family;
+// Keep images from scaling beyond the width of their parents.
+@mixin img-responsive($display: block) {
+    display: $display;
+    max-width: 100%; // Part 1: Set a maximum relative to the parent
+    height: auto; // Part 2: Scale the height according to the width, otherwise you get stretching
 }
 @mixin image-2x($image, $width, $height) {
     @media (min--moz-device-pixel-ratio: 1.3),
@@ -34,6 +102,38 @@
     /* on retina, use image that's scaled by 2 */
     background-image: url($image);
     background-size: $width $height;
+    }
+}
+// Horizontal gradient, from left to right
+@mixin gradient-horizontal($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+    background-image: -webkit-linear-gradient(left, $start-color $start-percent, $end-color $end-percent); // Safari 5.1-6, Chrome 10+
+    background-image: -o-linear-gradient(left, $start-color $start-percent, $end-color $end-percent); // Opera 12
+    background-image: linear-gradient(to right, $start-color $start-percent, $end-color $end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=1); // IE9 and down
+}
+// Vertical gradient, from top to bottom
+@mixin gradient-vertical($start-color: #555, $end-color: #333, $start-percent: 0%, $end-percent: 100%) {
+    background-image: -webkit-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);  // Safari 5.1-6, Chrome 10+
+    background-image: -o-linear-gradient(top, $start-color $start-percent, $end-color $end-percent);  // Opera 12
+    background-image: linear-gradient(to bottom, $start-color $start-percent, $end-color $end-percent); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($start-color)}', endColorstr='#{ie-hex-str($end-color)}', GradientType=0); // IE9 and down
+}
+// Drop shadows
+@mixin box-shadow($shadow...) {
+    -webkit-box-shadow: $shadow; // iOS <4.3 & Android <4.1
+            box-shadow: $shadow;
+}
+// Clearfix
+@mixin clearfix() {
+    &:before,
+    &:after {
+      content: " "; // 1
+      display: table; // 2
+    }
+    &:after {
+      clear: both;
     }
 }
 @mixin accordion($initial-padding){
@@ -86,7 +186,6 @@
   ::-moz-placeholder          {@content}
   :-ms-input-placeholder      {@content}  
 }
-
 @mixin cancel($width: 14px){
     $height: 2px; 
     background-color: transparent;
@@ -143,8 +242,7 @@
         background-color: lighten($green, $filled);
     }
 }
-@mixin keyframes($animationName)
-{
+@mixin keyframes($animationName){
     @-webkit-keyframes #{$animationName} {
         @content;
     }
@@ -200,12 +298,6 @@
     color: $gray_text;
     margin-bottom: 22px;
 }
-// %tick{
-//     display: inline-block;
-//     @include size(25px, 30px);
-//     background: transparent url("#{$assetsPath}/img/pretty-checkable-sprites.png") no-repeat;
-//     vertical-align: middle;
-// }
 %uppercase-font{
     font: 12px/14px "TrebuchetMSBold";
     text-transform: uppercase;
@@ -222,11 +314,12 @@
     display: none;
 }
 %aside{
-    height: 100%;
+    height: auto;
+    overflow: auto;
     top: 0;
     left: 0;
     bottom: 0;
-    padding-top: 70px;
+    margin-top: 70px;
     padding-bottom: 50px;
     overflow: auto;
     position: fixed;
@@ -296,10 +389,10 @@
 }
 @mixin tight-filters-aside(){
     .filters{
-        padding-top: 90px;
-        .foldback-button{
-            top: $indent-foldback-button;
-        }
+        margin-top: 60px;
+        // .foldback-button{
+        //     top: $indent-foldback-button;
+        // }
     }
 }
 @mixin visible-foldback-button(){
@@ -326,28 +419,6 @@
         box-shadow: none;
     }
 }
-// @mixin focus-for-inputs(){
-//     display: block;
-//     height: 0;
-//     position: absolute;
-//     @include opacity(0);
-//     & + label .tick:before{
-//         @extend %visibility-hidden;
-//         display: block;
-//         content: "";
-//         width: 26px;
-//         height: 26px;
-//         border: 2px solid $gray_form;
-//         position: absolute;
-//         top: -4px;
-//         right: -6px;
-//         border-radius: 5px;
-//         @include transition(all, 0.2s);
-//     }
-//     &:focus + label .tick:before{
-//         @extend %visibility-visible;
-//     }
-// }
 @mixin fullscreen-hidden-filter($block){
     .fullscreen-hidden-filters .#{$block}{
         margin-left: 0;
@@ -440,8 +511,10 @@
         span{
             position: static;
             font: 14px/18px Arial, sans-serif;
+            font-weight: bold;
             letter-spacing: normal;
             text-transform: none;
+            color: $gray_text;
             &.gray-text{
 				color: $gray_light;
 				font-weight: normal;

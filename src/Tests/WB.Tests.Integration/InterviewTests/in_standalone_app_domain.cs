@@ -3,7 +3,7 @@ using Machine.Specifications;
 
 namespace WB.Tests.Integration.InterviewTests
 {
-    internal class in_standalone_app_domain : InterviewTestsContext
+    public class in_standalone_app_domain : InterviewTestsContext
     {
         Establish context = () =>
         {

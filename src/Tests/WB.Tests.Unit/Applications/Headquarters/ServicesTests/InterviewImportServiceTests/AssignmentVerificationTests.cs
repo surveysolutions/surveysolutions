@@ -29,6 +29,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         [SetUp]
         public void SetUp()
         {
+            importService = GetInterviewImportService(new QuestionnaireBrowseItem());
+        }
+
+        private InterviewImportService GetInterviewImportService(QuestionnaireBrowseItem  getQuestionnaireBrowseItem)
+        {
             commandServiceMock = new Mock<ICommandService>();
             interviewImportDataParsingServiceMock = new Mock<IInterviewImportDataParsingService>();
             questionnaireStorageMock = new Mock<IQuestionnaireStorage>();
@@ -47,9 +52,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             preloadedDataVerifierMock = new Mock<IPreloadedDataVerifier>();
             questionnaireBrowseItemStorageMock = new Mock<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
             questionnaireBrowseItemStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
-                .Returns(() => new QuestionnaireBrowseItem());
+                .Returns(getQuestionnaireBrowseItem);
 
-            importService = new InterviewImportService(
+            var importServiceLoc = new InterviewImportService(
                 commandServiceMock.Object,
                 Mock.Of<ILogger>(),
                 Create.Entity.SampleImportSettings(),
@@ -64,6 +69,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 preloadedDataRepositoryMock.Object,
                 preloadedDataVerifierMock.Object,
                 questionnaireBrowseItemStorageMock.Object);
+            return importServiceLoc;
         }
 
         [Test]
@@ -101,6 +107,44 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             Assert.That(importService.Status.TotalCount, Is.EqualTo(1));
             Assert.That(importService.Status.ProcessedCount, Is.EqualTo(1));
             Assert.That(importService.Status.VerificationState.Errors.Count, Is.EqualTo(0));
+        }
+
+
+        [Test]
+        public void when_verifying_assignments_for_deleted_questionnaire()
+        {
+            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"), 1);
+            var importProcessId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").FormatGuid();
+            var responsibleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var supervisorId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            var numericId = Guid.Parse("44444444444444444444444444444444");
+
+            var importServiceLocal = GetInterviewImportService(new QuestionnaireBrowseItem(){IsDeleted = true});
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(numericId)
+            ));
+
+            questionnaireStorageMock.Setup(x => x.GetQuestionnaire(questionnaireIdentity, null)).Returns(questionnaire);
+
+            InterviewAnswer[] answers =
+            {
+                Create.Entity.InterviewAnswer(Create.Identity(numericId, RosterVector.Empty), Create.Entity.NumericIntegerAnswer(1)),
+            };
+
+            var assignments = new[]
+            {
+                Create.Entity.AssignmentImportData(responsibleId, supervisorId, answers)
+            };
+
+            interviewImportDataParsingServiceMock
+                .Setup(x => x.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Panel))
+                .Returns(assignments);
+
+            importServiceLocal.VerifyAssignments(questionnaireIdentity, importProcessId, "hello.tab");
+
+            Assert.That(importServiceLocal.Status.State.Errors.Count, Is.EqualTo(1));
         }
 
         [Test]
@@ -141,7 +185,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         }
 
         private InterviewImportService importService;
-
+        
         private Mock<ICommandService> commandServiceMock;
         private Mock<IInterviewImportDataParsingService> interviewImportDataParsingServiceMock;
         private Mock<IQuestionnaireStorage> questionnaireStorageMock;

@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class MapReport {
@@ -61,47 +61,29 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to details.
+        ///   Looks up a localized string similar to Date.
         /// </summary>
-        internal static string details {
+        internal static string Date {
             get {
-                return ResourceManager.GetString("details", resourceCulture);
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Map Report.
+        ///   Looks up a localized string similar to Name.
         /// </summary>
-        internal static string MapReportTitle {
+        internal static string Name {
             get {
-                return ResourceManager.GetString("MapReportTitle", resourceCulture);
+                return ResourceManager.GetString("Name", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not all markers were loaded for current zoom level. Please zoom in and reload markers..
+        ///   Looks up a localized string similar to Size.
         /// </summary>
-        internal static string NotAllMarkers {
+        internal static string Size {
             get {
-                return ResourceManager.GetString("NotAllMarkers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reload markers.
-        /// </summary>
-        internal static string ReloadMarkers {
-            get {
-                return ResourceManager.GetString("ReloadMarkers", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View interview content.
-        /// </summary>
-        internal static string ViewInterviewContent {
-            get {
-                return ResourceManager.GetString("ViewInterviewContent", resourceCulture);
+                return ResourceManager.GetString("Size", resourceCulture);
             }
         }
     }

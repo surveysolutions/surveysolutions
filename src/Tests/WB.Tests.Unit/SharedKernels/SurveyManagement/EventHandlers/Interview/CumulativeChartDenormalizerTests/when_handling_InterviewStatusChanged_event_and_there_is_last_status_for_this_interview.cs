@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.C
                 status: newStatus);
 
             var interviewReferences = Create.Entity.InterviewSummary(@event.EventSourceId, questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion);
-            var interviewReferencesStorage = new TestInMemoryWriter<InterviewSummary>("1", interviewReferences);
+            var interviewReferencesStorage = new TestInMemoryWriter<InterviewSummary>(@event.EventSourceId.FormatGuid(), interviewReferences);
             var cumulativeReportReader = new TestInMemoryWriter<CumulativeReportStatusChange>(
                 Guid.NewGuid().FormatGuid(), Create.Entity.CumulativeReportStatusChange("id", questionnaireId, questionnaireVersion, new DateTime(2017, 1, 30), lastStatus, 1, Guid.Parse(interviewStringId), 88));
 

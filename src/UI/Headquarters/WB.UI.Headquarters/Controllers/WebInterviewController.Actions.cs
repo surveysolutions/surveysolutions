@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -48,7 +49,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, e.Message);
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;
             }
             return this.Json("ok");
@@ -66,6 +67,9 @@ namespace WB.UI.Headquarters.Controllers
             {
                 return this.Json("fail");
             }
+
+            string filename = null;
+
             try
             {
                 using (var ms = new MemoryStream())
@@ -74,7 +78,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                    var filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
+                    filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}{DateTime.UtcNow.GetHashCode()}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
                     this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
@@ -84,7 +88,10 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (Exception e)
             {
-                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, e.Message);
+                if(filename != null)
+                    this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);
+
+                webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId, WebInterview.GetUiMessageFromException(e));
                 throw;
             }
             return this.Json("ok");

@@ -152,5 +152,10 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static string PrefixEachLine(this string lines, string prefix)
             => prefix + lines.Replace(Environment.NewLine, Environment.NewLine + prefix);
+
+        public static string RemoveControlChars(this string source)
+        {
+            return new string(source.Where(c => !Char.IsControl(c)).ToArray());
+        }
     }
 }

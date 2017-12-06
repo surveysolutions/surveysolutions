@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -50,6 +51,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
         
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
-        Task<byte[]> GetMapContent(string url, CancellationToken cancellationToken);
+        Task GetMapContentAndSave(string url, Stream streamToSave, CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null);
     }
 }

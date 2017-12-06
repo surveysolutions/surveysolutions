@@ -5,6 +5,6 @@
         void BeginTransaction();
         void CommitTransaction();
         void RollbackTransaction();
-        bool IsTransactionStarted { get; }
+        bool TransactionStarted { get; }
     }
 }

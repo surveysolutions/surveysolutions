@@ -91,6 +91,7 @@ namespace WB.UI.Interviewer
                 {typeof(RelinkDeviceViewModel), typeof(RelinkDeviceActivity)},
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
+                {typeof (MapsViewModel), typeof(MapsActivity) },
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif

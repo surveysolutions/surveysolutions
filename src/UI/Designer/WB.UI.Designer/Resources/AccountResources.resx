@@ -117,7 +117,151 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AllRights" xml:space="preserve">
+    <value>All Rights Reserved.</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>A collaborative tool to create questionnaires for the World Bank CAPI/CAWI platform.</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Questionnaire Designer</value>
+  </data>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Back to Log in</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>The World Bank Group</value>
+  </data>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>To complete the registration process look for an email in your inbox that provides further instructions</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Forgot Password?</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
+  </data>
   <data name="InvalidResetPasswordLink" xml:space="preserve">
     <value>Your password reset link invalid or expired. Please try again</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Legal</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Please log in or</value>
+  </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>Login or email</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>You are using an outdated browser</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>Password reset</value>
+  </data>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Enter the login or email and we will send you a link for password reset</value>
+  </data>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>New password (min 10 symbols, numbers AND letters)</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Registration Error</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>There was an error confirming your email. Please try again.</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Repeat password</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+  </data>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>Stay logged in for a day</value>
+  </data>
+  <data name="TesterApp" xml:space="preserve">
+    <value>Install Survey Solutions Questionnaire Tester on an Android tablet to test questionnaires you develop on Designer.</value>
+  </data>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>Get it on Google Play</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Thank you</value>
+  </data>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>Please &lt;a href="http://browsehappy.com/"&gt;upgrade your browser&lt;/a&gt; to use designer application.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome to Survey Solutions</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>User name already exists. Please enter a different user name.</value>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>A user name for that e-mail address already exists. Please enter a different e-mail address.</value>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>The password provided is invalid. Please enter a valid password value.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>The e-mail address provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>The password retrieval answer provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>The password retrieval question provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>The user name provided is invalid. Please check the value and try again.</value>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>The authentication provider returned an error. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>The user creation request has been canceled. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.</value>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Your password has been changed.</value>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>Your password has been set.</value>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>The external login was removed.</value>
   </data>
 </root>

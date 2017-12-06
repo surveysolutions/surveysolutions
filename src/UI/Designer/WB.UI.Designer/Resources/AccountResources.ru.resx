@@ -1,0 +1,276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AllRights" xml:space="preserve">
+    <value>Все права защищены.</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Инструмент для совместного создания опросников для CAPI/CAWI платформы Мирового Банка</value>
+  </data>
+  <data name="AppName" xml:space="preserve">
+    <value>Дизайнер опросников</value>
+  </data>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>Вернуться на страницу входа</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Изменить пароль</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Группа Всемирного банка</value>
+  </data>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>Чтобы завершить процесс регистрации, найдите электронное письмо в своем почтовом ящике, которое содержит дополнительные инструкции</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Подтвердите пароль</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>Текущий пароль</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>Забыли пароль?</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Помощь</value>
+  </data>
+  <data name="InvalidResetPasswordLink" xml:space="preserve">
+    <value>Ссылка на сброс пароля недействительна или истек её срок действия. Пожалуйста, попробуйте еще раз</value>
+  </data>
+  <data name="Legal" xml:space="preserve">
+    <value>Права</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>Вход или</value>
+  </data>
+  <data name="LoginName" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>Имя пользователя или адрес электронной почты</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Выйти</value>
+  </data>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>Вы используете устаревший браузер</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>Сбросить пароль</value>
+  </data>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>Введите имя пользователя или адрес электронной почты, и мы вышлем вам ссылку на сброс пароля</value>
+  </data>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>Новый пароль (минимум 10 символов, цифры и буквы)</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>Ошибка регистрации</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>Ошибка подтверждения Вашей электронной почты. Пожалуйста, попробуйте снова.</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Повторить пароль</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Восстановить</value>
+  </data>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>Оставаться в системе в течении 1 дня</value>
+  </data>
+  <data name="TesterApp" xml:space="preserve">
+    <value>Установите Survey Solutions Questionnaire Tester на андроид планшет, чтобы тестировать опросники которые Вы создаете в дизайнере опросников.</value>
+  </data>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>Скачать в Google Play</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Спасибо</value>
+  </data>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>Пожалуйста &lt;a href="http://browsehappy.com/"&gt;обновите ваш браузер&lt;/a&gt; чтобы использовать дизайнер опросников.</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Добро пожаловать в</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>Пользователь с таким именем уже существует. Введите другое имя пользователя.</value>
+    <comment>Имя пользователя уже занято. Введите другое имя пользователя.</comment>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>Пользователь с таким адресом электронной почты уже существует. Введите другой адрес.</value>
+    <comment>Имя пользователя для этого адреса электронной почты уже существует. Введите другой адрес электронной почты.</comment>
+  </data>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>Пароль недействителен. Введите правильное значение пароля.</value>
+    <comment>Пароль недействителен. Введите правильное значение пароля.</comment>
+  </data>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>Внешнее имя пользователя было удалено.</value>
+    <comment>Внешнее имя пользователя было удалено.</comment>
+  </data>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>Ваш пароль установлен.</value>
+    <comment>Ваш пароль установлен.</comment>
+  </data>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>Ваш пароль был изменен.</value>
+    <comment>Ваш пароль был изменен.</comment>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>Произошла неизвестная ошибка. Пожалуйста, проверьте ваши данные и попробуйте еще раз. Если проблема не устранена, обратитесь к системному администратору.</value>
+    <comment>Произошла неизвестная ошибка. Пожалуйста, проверьте ваши данные и попробуйте еще раз. Если проблема не устранена, обратитесь к системному администратору.</comment>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>Запрос на создание пользователя отменен. Пожалуйста, проверьте ваши данные и попробуйте еще раз. Если проблема не устранена, обратитесь к системному администратору.</value>
+    <comment>Запрос на создание пользователя отменен. Пожалуйста, проверьте ваши данные и попробуйте еще раз. Если проблема не устранена, обратитесь к системному администратору.</comment>
+  </data>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>Провайдер проверки подлинности вернул ошибку. Пожалуйста, проверьте ваши данные и попробуйте еще раз. Если проблема не устранена, обратитесь к системному администратору.</value>
+    <comment>Провайдер проверки подлинности вернул ошибку. Пожалуйста, проверьте ваши данные и попробуйте еще раз. Если проблема не устранена, обратитесь к системному администратору.</comment>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Указанный адрес электронной почты недействителен. Проверьте значение и повторите попытку.</value>
+  </data>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>Предоставленное имя пользователя недействительно. Проверьте значение и повторите попытку.</value>
+  </data>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>Вопрос для восстановления пароля недействителен. Проверьте значение и повторите попытку.</value>
+  </data>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>Ответ на вопрос для восстановления пароля недействителен. Проверьте значение и повторите попытку.</value>
+  </data>
+</root>

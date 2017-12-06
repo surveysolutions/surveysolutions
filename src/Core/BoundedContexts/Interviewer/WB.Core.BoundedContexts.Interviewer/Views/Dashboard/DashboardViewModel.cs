@@ -93,6 +93,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.NavigateToDiagnostics);
 
+        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
+
+        private void NavigateToMaps()
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
+        }
+
         private bool isInProgress;
         public bool IsInProgress
         {

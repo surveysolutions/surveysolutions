@@ -1,11 +1,10 @@
 ﻿angular.module('designerApp')
     .controller('TranslationsCtrl',
-        function ($rootScope, $scope, $state, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
+        function ($rootScope, $scope, $state, $i18next, hotkeys, commandService, utilityService, confirmService, Upload, $uibModal, notificationService, moment) {
             'use strict';
 
             $scope.downloadBaseUrl = '../../translations';
             $scope.isReadOnlyForUser = false;
-
 
             var hideTranslationsPane = 'ctrl+shift+t';
 
@@ -13,7 +12,7 @@
                 hotkeys.del(hideTranslationsPane);
             }
 
-            hotkeys.add(hideTranslationsPane, 'Close translations panel', function (event) {
+            hotkeys.add(hideTranslationsPane, $i18next.t('HotkeysCloseTranslations'), function (event) {
                 event.preventDefault();
                 $scope.foldback();
             });
@@ -24,6 +23,7 @@
                 translation.translationId = translationDto.translationId;
                 translation.name = translationDto.name;
                 translation.file = null;
+                translation.isDefault = translationDto.isDefault;
                 translation.content = {};
                 translation.content.details = {};
 
@@ -70,7 +70,7 @@
                 }
 
                 if ($scope.isReadOnlyForUser) {
-                    notificationService.notice("You don't have permissions for changing this questionnaire");
+                    notificationService.notice($i18next.t('NoPermissions'));
                     return;
                 }
 
@@ -149,7 +149,7 @@
 
             $scope.deleteTranslation = function (index) {
                 var translation = $scope.translations[index];
-                var translationName = translation.name || "translation with no name";
+                var translationName = translation.name || $i18next.t('SideBarTranslationNoName');
                 var modalInstance = confirmService.open(utilityService.createQuestionForDeleteConfirmationPopup(translationName));
 
                 modalInstance.result.then(function (confirmResult) {
@@ -164,6 +164,16 @@
             $scope.getDefaultTemplate = function () {
             };
 
+            $scope.setDefaultTranslation = function (translationIndex, isDefault) {
+                var translation = $scope.translations[translationIndex];
+
+                commandService.setDefaultTranslation($state.params.questionnaireId, isDefault ? translation.translationId : null).then(function () {
+                    _.each($scope.translations, function(translation) {
+                        translation.isDefault = translation.checkpoint.isDefault = false;
+                    });
+                    translation.isDefault = translation.checkpoint.isDefault = isDefault;
+                });
+            };
 
             $scope.foldback = function () {
                 $scope.isFolded = false;
@@ -176,7 +186,6 @@
                     setTimeout(function () { utilityService.focus("focusTranslation" + params.focusOn); }, 500);
                 }
             });
-
 
             $scope.$on('closeTranslationsRequested', function () {
                 $scope.foldback();

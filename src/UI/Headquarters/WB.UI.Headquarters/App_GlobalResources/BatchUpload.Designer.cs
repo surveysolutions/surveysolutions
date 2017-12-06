@@ -745,7 +745,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Importing interviews.
+        ///   Looks up a localized string similar to Importing assignments.
         /// </summary>
         internal static string InterviewsImport_ImportingProgressPageTitle {
             get {
@@ -903,6 +903,15 @@ namespace Resources {
         internal static string Prerequisite_FileOpen {
             get {
                 return ResourceManager.GetString("Prerequisite_FileOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire cannot be used for preloading.
+        /// </summary>
+        internal static string Prerequisite_Questionnaire {
+            get {
+                return ResourceManager.GetString("Prerequisite_Questionnaire", resourceCulture);
             }
         }
         

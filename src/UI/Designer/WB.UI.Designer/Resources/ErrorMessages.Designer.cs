@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class ErrorMessages {
@@ -61,6 +61,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your account is blocked. Contact the administrator to unblock your account..
+        /// </summary>
+        internal static string AccountBlocked {
+            get {
+                return ResourceManager.GetString("AccountBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application update required..
         /// </summary>
         internal static string ApplicationUpdateRequired {
@@ -79,11 +88,56 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, confirm your account first. We&apos;ve sent a confirmation link to {0}. Didn&apos;t get it?.
+        /// </summary>
+        internal static string ConfirmAccount {
+            get {
+                return ResourceManager.GetString("ConfirmAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email is required.
+        /// </summary>
+        internal static string Email_required {
+            get {
+                return ResourceManager.GetString("Email_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected translation file is empty.
         /// </summary>
         internal static string EmptyTranslationFile {
             get {
                 return ResourceManager.GetString("EmptyTranslationFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name or password is empty..
+        /// </summary>
+        internal static string EmptyUserNameOrPassword {
+            get {
+                return ResourceManager.GetString("EmptyUserNameOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login or password is incorrect. Please try again..
+        /// </summary>
+        internal static string IncorrectUserNameOrPassword {
+            get {
+                return ResourceManager.GetString("IncorrectUserNameOrPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not a valid email address.
+        /// </summary>
+        internal static string InvalidEmailAddress {
+            get {
+                return ResourceManager.GetString("InvalidEmailAddress", resourceCulture);
             }
         }
         
@@ -106,6 +160,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire id was not provided to validate permissions.
+        /// </summary>
+        internal static string NoQuestionnaireIdToValidatePremissions {
+            get {
+                return ResourceManager.GetString("NoQuestionnaireIdToValidatePremissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to import questionnaire. Your questionnaire &quot;{0}&quot; has {1} version. Headquarters application supports only up to version {2}..
         /// </summary>
         internal static string NotSupportedQuestionnaireVersion {
@@ -124,7 +187,16 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The {0} must be at least {2} characters long..
+        ///   Looks up a localized string similar to Current password is required.
+        /// </summary>
+        internal static string OldPassword_required {
+            get {
+                return ResourceManager.GetString("OldPassword_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be at least {2} characters long..
         /// </summary>
         internal static string Password_must_be_at_least_characters_long {
             get {
@@ -143,11 +215,47 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password is required.
+        /// </summary>
+        internal static string Password_required {
+            get {
+                return ResourceManager.GetString("Password_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password reset is not allowed.
+        /// </summary>
+        internal static string PasswordResetNotAllowed {
+            get {
+                return ResourceManager.GetString("PasswordResetNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your questionnaire has errors. Please verify the questionnaire on Designer..
         /// </summary>
         internal static string Questionnaire_verification_failed {
             get {
                 return ResourceManager.GetString("Questionnaire_verification_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire title is required.
+        /// </summary>
+        internal static string QuestionnaireTitle_required {
+            get {
+                return ResourceManager.GetString("QuestionnaireTitle_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request another one..
+        /// </summary>
+        internal static string RequestAnotherEmail {
+            get {
+                return ResourceManager.GetString("RequestAnotherEmail", resourceCulture);
             }
         }
         
@@ -265,6 +373,15 @@ namespace WB.UI.Designer.Resources {
         internal static string UserLockedOut {
             get {
                 return ResourceManager.GetString("UserLockedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login is required.
+        /// </summary>
+        internal static string UserName_required {
+            get {
+                return ResourceManager.GetString("UserName_required", resourceCulture);
             }
         }
         

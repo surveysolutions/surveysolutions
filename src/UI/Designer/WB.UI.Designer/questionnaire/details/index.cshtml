@@ -4,7 +4,7 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html class="no-js">
+<html class="no-js" lang="@UICulture">
 <!--<![endif]-->
 <head>
     <base href="~/questionnaire/details/">
@@ -17,13 +17,13 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <!-- libs:css -->
-    <link href="~/questionnaire/vendor/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/angular-hotkeys/build/hotkeys.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/pnotify/dist/pnotify.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/pnotify/dist/pnotify.buttons.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/angular-block-ui/dist/angular-block-ui.css" rel="stylesheet" />
-    <link href="~/questionnaire/vendor/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-hotkeys/build/hotkeys.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/pnotify/dist/pnotify.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/pnotify/dist/pnotify.buttons.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-block-ui/dist/angular-block-ui.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css" rel="stylesheet" />
     <!-- endinject -->
     <!-- endbower -->
     <!-- endbuild -->
@@ -45,16 +45,6 @@
 
 </head>
 <body ng-app="designerApp">
-    <!--[if lt IE 9]>
-        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-
-        <script src="@Url.Content("~/questionnaire/vendor/es5-shim/es5-shim.js")"></script>
-        <script src="@Url.Content("~/questionnaire/vendor/json3/lib/json3.min.js")"></script>
-    <![endif]-->
-    <!--[if lt IE 10]>
-        <script src="@Url.Content("~/questionnaire/vendor/console-shim/console-shim.js")"></script>
-    <![endif]-->
-
     <div id="designer-editor" class="container" ui-view>
     </div>
 
@@ -63,44 +53,55 @@
     <!-- inject:js -->
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="~/questionnaire/vendor/jquery/dist/jquery.js"></script>
-    <script src="~/questionnaire/vendor/js-cookie/src/js.cookie.js"></script>
-    <script src="~/questionnaire/vendor/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/questionnaire/vendor/underscore/underscore.js"></script>
-    <script src="~/questionnaire/vendor/ace-builds/src-noconflict/ace.js"></script>
-    <script src="~/questionnaire/vendor/angular/angular.js"></script>
-    <script src="~/questionnaire/vendor/angular-cookies/angular-cookies.js"></script>
-    <script src="~/questionnaire/vendor/angular-animate/angular-animate.js"></script>
-    <script src="~/questionnaire/vendor/angular-sanitize/angular-sanitize.js"></script>
-    <script src="~/questionnaire/vendor/angular-bootstrap/ui-bootstrap.js"></script>
-    <script src="~/questionnaire/vendor/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-utils/ui-utils.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-tree/dist/angular-ui-tree.js"></script>
-    <script src="~/questionnaire/vendor/angular-hotkeys/build/hotkeys.js"></script>
-    <script src="~/questionnaire/vendor/angular-resource/angular-resource.js"></script>
-    <script src="~/questionnaire/vendor/angular-loading-bar/build/loading-bar.js"></script>
-    <script src="~/questionnaire/vendor/angular-block-ui/dist/angular-block-ui.js"></script>
-    <script src="~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
-    <script src="~/questionnaire/vendor/angular-unsavedChanges/dist/unsavedChanges.js"></script>
-    <script src="~/questionnaire/vendor/pnotify/dist/pnotify.js"></script>
-    <script src="~/questionnaire/vendor/pnotify/dist/pnotify.confirm.js"></script>
-    <script src="~/questionnaire/vendor/pnotify/dist/pnotify.buttons.js"></script>
-    <script src="~/questionnaire/vendor/angular-pnotify/src/angular-pnotify.js"></script>
-    <script src="~/questionnaire/vendor/angular-elastic/elastic.js"></script>
-    <script src="~/questionnaire/vendor/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
-    <script src="~/questionnaire/vendor/jquery.scrollTo/jquery.scrollTo.js"></script>
-    <script src="~/questionnaire/vendor/jquery-mousewheel/jquery.mousewheel.js"></script>
-    <script src="~/questionnaire/vendor/angular-ui-ace/ui-ace.js"></script>
-    <script src="~/questionnaire/vendor/angular-perfect-scrollbar/src/angular-perfect-scrollbar.js"></script>
-    <script src="~/questionnaire/vendor/ng-context-menu/dist/ng-context-menu.js"></script>
-    <script src="~/questionnaire/vendor/ace-builds/src-noconflict/ext-language_tools.js"></script>
-    <script src="~/questionnaire/vendor/ng-file-upload/ng-file-upload-shim.js"></script> <!-- for no html5 browsers support -->
-    <script src="~/questionnaire/vendor/ng-file-upload/ng-file-upload.js"></script>
-    <script src="~/questionnaire/vendor/moment/moment.js"></script>
-    <script src="~/questionnaire/vendor/angular-moment/angular-moment.js"></script>
-    <script src="~/questionnaire/vendor/position-calculator/dist/position-calculator.js"></script>
-    <script src="~/questionnaire/vendor/xss/dist/xss.js"></script>
+    <script src="~/questionnaire/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/questionnaire/node_modules/js-cookie/src/js.cookie.js"></script>
+    <script src="~/questionnaire/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/questionnaire/node_modules/underscore/underscore.js"></script>
+    <script src="~/questionnaire/node_modules/ace-builds/src-noconflict/ace.js"></script>
+    <script src="~/questionnaire/node_modules/angular/angular.js"></script>
+    <script src="~/questionnaire/node_modules/angular-cookies/angular-cookies.js"></script>
+    <script src="~/questionnaire/node_modules/angular-animate/angular-animate.js"></script>
+    <script src="~/questionnaire/node_modules/angular-sanitize/angular-sanitize.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-utils/modules/utils.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/ng-context-menu.js"></script>
+    <script src="~/questionnaire/node_modules/ng-file-upload/dist/ng-file-upload.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/perfect_scrollbar.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-utils/modules/highlight/highlight.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/positionCalculator.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="~/questionnaire/node_modules/angular-hotkeys/build/hotkeys.js"></script>
+    <script src="~/questionnaire/node_modules/angular-resource/angular-resource.js"></script>
+    <script src="~/questionnaire/node_modules/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="~/questionnaire/node_modules/angular-block-ui/dist/angular-block-ui.js"></script>
+    <script src="~/questionnaire/node_modules/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/unsavedChanges.js"></script>
+
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.js"></script>
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.confirm.js"></script>
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/questionnaire/node_modules/angular-pnotify/src/angular-pnotify.js"></script>
+    <script src="~/questionnaire/node_modules/angular-elastic/elastic.js"></script>
+    <script src="~/questionnaire/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js"></script>
+    <script src="~/questionnaire/node_modules/jquery.scrollTo/jquery.scrollTo.js"></script>
+    <script src="~/questionnaire/node_modules/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-ace/src/ui-ace.js"></script>
+
+
+    <script src="~/questionnaire/node_modules/ace-builds/src-noconflict/ext-language_tools.js"></script>
+    <script src="~/questionnaire/node_modules/ng-file-upload/dist/ng-file-upload-shim.js"></script><!-- for no html5 browsers support -->
+    <script src="~/questionnaire/node_modules/moment/moment.js"></script>
+    <script src="~/questionnaire/node_modules/moment/locale/ru.js"></script>
+    <script src="~/questionnaire/node_modules/angular-moment/angular-moment.js"></script>
+  
+    <script src="~/questionnaire/node_modules/xss/dist/xss.js"></script>
+    <script src="~/questionnaire/node_modules/i18next/i18next.js"></script>
+    <script src="~/questionnaire/node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+    <script src="~/questionnaire/node_modules/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+    <script src="~/questionnaire/node_modules/ng-i18next/dist/ng-i18next.js"></script>
+    
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -145,6 +146,7 @@
     <script src="scripts/extensions/ace/theme-github-extended.js"></script>
     <script src="scripts/services/userService.js"></script>
     <script src="scripts/ui-js.js"></script>
+    <script src="~/questionnaire/details/scripts/services/translate.js"></script>
     <!-- endbuild -->
 <!-- endinject -->
 </body>

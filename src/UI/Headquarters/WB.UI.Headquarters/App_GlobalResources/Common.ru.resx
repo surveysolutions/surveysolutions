@@ -259,7 +259,7 @@
     <value>Открыть</value>
   </data>
   <data name="ShowStatusHistory" xml:space="preserve">
-    <value>Показать историю статусов</value>
+    <value>История</value>
   </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Открыть профиль ответственного</value>
@@ -284,5 +284,15 @@
   </data>
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>Все опросники</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Архивирован</value>
+  </data>
+  <data name="AuditLog" xml:space="preserve">
+    <value> Аудит</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Обработка...</value>
+    <comment>Обработка...</comment>
   </data>
 </root>

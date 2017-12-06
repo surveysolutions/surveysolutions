@@ -1,4 +1,5 @@
 ﻿using ddidotnet;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 {
@@ -29,14 +30,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         public DdiVariable AddDdiVariableToFile(DdiDataFile ddiDataFile, string variableName, DdiDataType type, string label, string instruction, string literal, DdiVariableScale? ddiVariableScale)
         {
             var variable = ddiDataFile.AddVariable(type);
-            variable.Name = variableName;
-            variable.Label = label;
+            variable.Name = variableName.RemoveHtmlTags();
+            variable.Label = label.RemoveHtmlTags();
 
             if (!string.IsNullOrEmpty(instruction))
-                variable.IvuInstr = instruction;
+                variable.IvuInstr = instruction.RemoveHtmlTags();
 
             if (!string.IsNullOrEmpty(literal))
-                variable.QstnLit = literal;
+                variable.QstnLit = literal.RemoveHtmlTags();
 
             if(ddiVariableScale.HasValue)
                 variable.VariableScale = ddiVariableScale.Value;

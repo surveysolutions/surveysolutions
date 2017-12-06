@@ -1007,6 +1007,12 @@
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
     <value>Вы уверены в том,что хотите удалить интервью?</value>
   </data>
+  <data name="Map_DiscardConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить карту?</value>
+  </data>
+  <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
+    <value>Вы уверены, что хотите отменить назначение на пользователя?</value>
+  </data>
   <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
     <value>Удалить</value>
   </data>
@@ -1041,8 +1047,8 @@
     <comment>Значения, разделенные запятой (.csv)</comment>
   </data>
   <data name="ExportToTab" xml:space="preserve">
-    <value>Значения, разделенные табуляцией (.tsv)</value>
-    <comment>Значения, разделенные табуляцией (.tsv)</comment>
+    <value>Значения, разделенные табуляцией (.tab)</value>
+    <comment>Значения, разделенные табуляцией (.tab)</comment>
   </data>
   <data name="ExportButton" xml:space="preserve">
     <value>Экспорт</value>
@@ -1086,5 +1092,95 @@
   <data name="Or" xml:space="preserve">
     <value>или</value>
     <comment>или</comment>
+  </data>
+  <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+    <value>Вы хотите удалить карту?</value>
+  </data>
+  <data name="MapDetails_DelinkUser" xml:space="preserve">
+    <value>Отменить назначение на пользователя</value>
+  </data>
+  <data name="MapDetails_InterviewerName" xml:space="preserve">
+    <value>Имя интервьюера</value>
+  </data>
+  <data name="MapDetails_MapDisclaimer" xml:space="preserve">
+    <value>Загруженная карта нанесена на карту мира</value>
+  </data>
+  <data name="MapDetails_MapTitle" xml:space="preserve">
+    <value>Карта</value>
+  </data>
+  <data name="MapDetails_ImportedOn" xml:space="preserve">
+    <value>Карта загружена</value>
+  </data>
+  <data name="MapDetails_Size" xml:space="preserve">
+    <value>Размер(МБ)</value>
+  </data>
+  <data name="MapDetails_MinScale" xml:space="preserve">
+    <value>Минимальный масштаб</value>
+  </data>
+  <data name="MapDetails_MaxScale" xml:space="preserve">
+    <value>Максимальный масштаб</value>
+  </data>
+  <data name="MapList_Title" xml:space="preserve">
+    <value>Карты</value>
+  </data>
+  <data name="MapList_Upload" xml:space="preserve">
+    <value>Загрузить .zip файл</value>
+  </data>
+  <data name="MapList_UploadDescription" xml:space="preserve">
+    <value>Загрузить .zip архив, содержащий карты.</value>
+  </data>
+  <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
+    <value>Файлы с одинаковыми названиями будут перезаписаны.</value>
+  </data>
+  <data name="MapList_UserLinking" xml:space="preserve">
+    <value>Загрузить файл с назначением карт на пользователей</value>
+  </data>
+  <data name="MapList_DeleteMap" xml:space="preserve">
+    <value>Удалить карту</value>
+  </data>
+  <data name="MapList_Name" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="MapList_Size" xml:space="preserve">
+    <value>Размер (MB)</value>
+  </data>
+  <data name="MapList_Updated" xml:space="preserve">
+    <value>Обновлено</value>
+  </data>
+  <data name="MapLinking_DescriptionTitle" xml:space="preserve">
+    <value>Назначение карт на пользователей</value>
+  </data>
+  <data name="MapLinking_Description" xml:space="preserve">
+    <value>Позволяет загрузить файл с назначением карт на пользователей</value>
+  </data>
+  <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
+    <value>Назначить карты на пользователей</value>
+  </data>
+  <data name="MapLinking_UploadDescription" xml:space="preserve">
+    <value>Позволяет назначить пользователями конкретные карты.</value>
+  </data>
+  <data name="MapLinking_DownloadExisting" xml:space="preserve">
+    <value>Скачать существующие назначения</value>
+  </data>
+  <data name="MapLinking_UploadFile" xml:space="preserve">
+    <value>Загрузить .tab файл</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription" xml:space="preserve">
+    <value>Загрузить .tab файл с назначениями</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
+    <value>Неправильные или несуществующие имена пользователей не будут загружены</value>
+  </data>
+  <data name="Map_Status" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Map_Uploaded" xml:space="preserve">
+    <value>Фвйл загружен. Обработка.</value>
+  </data>
+  <data name="Map_Uploading" xml:space="preserve">
+    <value>Загрузка</value>
+  </data>
+  <data name="Map_UploadingError" xml:space="preserve">
+    <value>Произошла ошибка во время загрузки</value>
   </data>
 </root>

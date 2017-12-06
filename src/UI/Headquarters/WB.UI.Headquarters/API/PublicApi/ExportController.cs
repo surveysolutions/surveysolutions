@@ -30,7 +30,6 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
-        private readonly IParaDataAccessor paraDataAccessor;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IDataExportStatusReader dataExportStatusReader;
 
@@ -38,7 +37,6 @@ namespace WB.UI.Headquarters.API.PublicApi
             IDataExportProcessesService dataExportProcessesService,
             IFileSystemAccessor fileSystemAccessor,
             IDdiMetadataAccessor ddiMetadataAccessor,
-            IParaDataAccessor paraDataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IDataExportStatusReader dataExportStatusReader)
         {
@@ -46,7 +44,6 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.dataExportProcessesService = dataExportProcessesService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
-            this.paraDataAccessor = paraDataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
         }
@@ -72,9 +69,6 @@ namespace WB.UI.Headquarters.API.PublicApi
             {
                 case DataExportFormat.DDI:
                     exportedFilePath = this.ddiMetadataAccessor.GetFilePathToDDIMetadata(questionnaireIdentity);
-                    break;
-                case DataExportFormat.Paradata:
-                    exportedFilePath = this.paraDataAccessor.GetPathToParaDataArchiveByQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
                     break;
                 default:
                     exportedFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, exportType);
@@ -103,9 +97,6 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             switch (exportType)
             {
-                case DataExportFormat.Paradata:
-                    this.dataExportProcessesService.AddParaDataExport(DataExportFormat.Tabular);
-                    break;
                 case DataExportFormat.DDI:
                     return this.BadRequest(@"Not supported export type");
                 default:
@@ -144,11 +135,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            var dataExportType = exportType == DataExportFormat.Paradata
-                ? DataExportType.ParaData
-                : DataExportType.Data;
-
-            this.dataExportProcessesService.DeleteProcess(questionnaireIdentity, exportType, dataExportType);
+            this.dataExportProcessesService.DeleteProcess(questionnaireIdentity, exportType);
 
             return this.Ok();
         }
@@ -175,30 +162,16 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            DataExportType dataExportType;
-            if (exportType == DataExportFormat.Paradata)
-            {
-                exportType = DataExportFormat.Tabular;
-                dataExportType = DataExportType.ParaData;
-            }
-            else
-            {
-                dataExportType = DataExportType.Data;
-            }
-
             var allExportStatuses = this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity);
 
             var exportStatusByExportType = allExportStatuses?.DataExports?.FirstOrDefault(x =>
-                x.DataExportFormat == exportType &&
-                x.DataExportType == dataExportType);
+                x.DataExportFormat == exportType);
 
             if (exportStatusByExportType == null)
                 return this.NotFound();
 
             var runningExportStatus = allExportStatuses.RunningDataExportProcesses.FirstOrDefault(x =>
-                (x.QuestionnaireIdentity == null || x.QuestionnaireIdentity.Equals(questionnaireIdentity)) &&
-                x.Format == exportType &&
-                x.Type == dataExportType);
+                x.QuestionnaireIdentity.Equals(questionnaireIdentity) && x.Format == exportType);
 
             return this.Ok(new ExportDetails
             {

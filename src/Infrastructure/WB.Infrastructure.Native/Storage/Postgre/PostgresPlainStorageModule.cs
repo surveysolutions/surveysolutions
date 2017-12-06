@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -76,12 +77,20 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 db.ConnectionString = this.settings.ConnectionString;
                 db.Dialect<PostgreSQL91Dialect>();
-                db.KeywordsAutoImport = Hbm2DDLKeyWords.AutoQuote;
+                db.KeywordsAutoImport = Hbm2DDLKeyWords.Keywords;
             });
 
             cfg.AddDeserializedMapping(this.GetMappings(schemaName), "Plain");
             cfg.SetProperty(NHibernate.Cfg.Environment.DefaultSchema, schemaName);
-            return cfg.BuildSessionFactory();
+            cfg.SessionFactory().GenerateStatistics();
+
+            var sessionFactory = cfg.BuildSessionFactory();
+
+            MetricsRegistry.Instance.RegisterOnDemandCollectors(
+                new NHibernateStatsCollector("plainstore", sessionFactory)
+            );
+
+            return sessionFactory;
         }
 
         private HbmMapping GetMappings(string schemaName)

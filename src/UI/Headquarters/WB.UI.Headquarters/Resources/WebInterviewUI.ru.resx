@@ -324,6 +324,9 @@
   <data name="GPSRecord" xml:space="preserve">
     <value>Записать GPS</value>
   </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Отметить область</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
@@ -368,5 +371,15 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Да</value>
+  </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Отправка...</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Интервью получено интервьюером и не может быть изменено</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Показать на карте</value>
+    <comment>Показать на карте</comment>
   </data>
 </root>

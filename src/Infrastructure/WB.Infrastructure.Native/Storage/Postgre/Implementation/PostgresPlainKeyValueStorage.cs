@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using System.Data.Common;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 
@@ -16,7 +16,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             this.sessionProvider = sessionProvider;
         }
 
-        protected override object ExecuteScalar(IDbCommand command)
+        protected override object ExecuteScalar(DbCommand command)
         {
             var session = this.sessionProvider.GetSession();
             command.Connection = session.Connection; 
@@ -24,7 +24,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return command.ExecuteScalar();
         }
 
-        protected override int ExecuteNonQuery(IDbCommand command)
+        protected override int ExecuteNonQuery(DbCommand command)
         {
             var session = this.sessionProvider.GetSession();
             command.Connection = session.Connection;

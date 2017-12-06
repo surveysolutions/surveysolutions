@@ -15,6 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
                 idMap.Generator(Generators.Assigned);
                 idMap.Column("Id");
             });
+            DynamicUpdate(true);
 
             Property(x => x.ProviderUserKey);
 

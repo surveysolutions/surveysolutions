@@ -1,8 +1,9 @@
 ﻿@model WB.UI.Headquarters.Models.InterviewerHqModel
-
 @{
     ViewBag.Title = Html.ActivePage();
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
-
-<div id="vueApp" configuration="@Model.ToString()"></div>
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>

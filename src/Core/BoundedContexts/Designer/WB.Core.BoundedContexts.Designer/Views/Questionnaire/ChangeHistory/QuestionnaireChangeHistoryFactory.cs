@@ -5,7 +5,6 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 {
@@ -108,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         {
             switch (type)
             {
-                case QuestionnaireItemType.Group:
+                case QuestionnaireItemType.Section:
                 case QuestionnaireItemType.Question:
                 case QuestionnaireItemType.Roster:
                 case QuestionnaireItemType.StaticText:

@@ -12,11 +12,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
         public static QuestionnaireIdentity GetQuestionnaireIdentity(
             this IQueryableReadSideRepositoryReader<InterviewSummary> summaries, string interviewId)
         {
-            var summaryData = summaries.Query(_ => _.Where(x => x.SummaryId == interviewId).Select(x => x.QuestionnaireIdentity).FirstOrDefault());
-            if (summaryData != null)
-            {
-                return QuestionnaireIdentity.Parse(summaryData);
-            }
+            var questionnaireIdentity = summaries.GetById(interviewId)?.QuestionnaireIdentity;
+            if (questionnaireIdentity != null)
+                return QuestionnaireIdentity.Parse(questionnaireIdentity);
 
             return null;
         }

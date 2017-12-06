@@ -4,6 +4,34 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Gulp default",
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
+            "args": [
+                "--production"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Gulp watch",
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
+            "args": [
+                "watch"
+            ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Gulp resx2json",
+            "program": "${workspaceFolder}/node_modules/gulp/bin/gulp.js",
+            "args": [
+                "build"
+            ]
+        },
         {
             "type": "node",
             "request": "launch",
@@ -19,7 +47,9 @@
             "name": "Debug build vendor",
             "program": "${workspaceRoot}/node_modules/webpack/bin/webpack.js",
             "args": [
-                "--color", "--config", "webpack.vendor.config.js"
+                "--color",
+                "--config",
+                "webpack.vendor.config.js"
             ]
         },
         {
@@ -31,6 +61,13 @@
                 "--color",
                 "--watch"
             ]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Webpack Dev Server",
+            "program": "${workspaceRoot}/node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+            "args": []
         }
     ]
 }

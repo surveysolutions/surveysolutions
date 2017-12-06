@@ -95,13 +95,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
         public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview)
         {
-            var interviewDataExportLevelViews = exportStructure.HeaderToLevelMap.Values.Select(
-                exportStructureForLevel =>
-                    new InterviewDataExportLevelView(exportStructureForLevel.LevelScopeVector,
-                        exportStructureForLevel.LevelName,
-                        this.BuildRecordsForHeader(interview, exportStructureForLevel))).ToArray();
+            var interviewDataExportLevelViews = new List<InterviewDataExportLevelView>();
 
-            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews);
+            foreach (var exportStructureForLevel in exportStructure.HeaderToLevelMap.Values)
+            {
+                var interviewDataExportRecords = this.BuildRecordsForHeader(interview, exportStructureForLevel);
+
+                var interviewDataExportLevelView = new InterviewDataExportLevelView(
+                    exportStructureForLevel.LevelScopeVector, 
+                    exportStructureForLevel.LevelName,
+                    interviewDataExportRecords);
+
+                interviewDataExportLevelViews.Add(interviewDataExportLevelView);
+            }
+
+            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray());
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
@@ -121,7 +129,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 string[] systemVariableValues = new string[0];
                 if (vectorLength == 0)
-                    systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables);
+                    systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
 
                 string[] parentRecordIds = new string[dataByLevel.RosterVector.Length];
                 if (parentRecordIds.Length > 0)
@@ -164,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return vector.Length == 0 ? "#" : vector.CreateLeveKeyFromPropagationVector();
         }
 
-        private string[] GetSystemValues(InterviewData interview, ServiceVariable[] variables)
+        private string[] GetSystemValues(InterviewData interview, IEnumerable<ServiceVariable> variables)
         {
             List<string> values = new List<string>();
 
@@ -266,7 +274,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             var headerStructureForLevel = new HeaderStructureForLevel();
             headerStructureForLevel.LevelScopeVector = levelVector;
-            headerStructureForLevel.LevelIdColumnName = ServiceColumns.Id;
+            headerStructureForLevel.LevelIdColumnName = (levelVector == null || levelVector.Length == 0) ? ServiceColumns.InterviewId : string.Format(ServiceColumns.IdSuffixFormat, levelTitle);
 
             headerStructureForLevel.LevelName = levelTitle;
 
@@ -319,11 +327,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
             }
 
-            var dateTimeQuestion = question as DateTimeQuestion;
-            if (dateTimeQuestion != null)
+            if (question is DateTimeQuestion dateTimeQuestion)
             {
                 if (dateTimeQuestion.IsTimestamp)
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.DateTime_Timestamp;
+            }
+
+            if (question is SingleQuestion singleQuestion)
+            {
+                if (singleQuestion.LinkedToQuestionId.HasValue || singleQuestion.LinkedToRosterId.HasValue)
+                    exportedHeaderItem.QuestionSubType = QuestionSubtype.SingleOption_Linked;
             }
 
             exportedHeaderItem.VariableName = question.StataExportCaption;
@@ -357,14 +370,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             this.ThrowIfQuestionIsNotMultiSelectOrTextList(question);
 
             exportedHeaderItem.ColumnNames = new string[columnCount];
-            exportedHeaderItem.ColumnValues = new decimal[columnCount];
+            exportedHeaderItem.ColumnValues = new int[columnCount];
             exportedHeaderItem.Titles = new string[columnCount];
 
             for (int i = 0; i < columnCount; i++)
             {
                 if (!IsQuestionLinked(question) && question is IMultyOptionsQuestion)
                 {
-                    var columnValue = decimal.Parse(question.Answers[i].AnswerValue);
+                    var columnValue = int.Parse(question.Answers[i].AnswerValue);
 
                     exportedHeaderItem.ColumnNames[i] = string.Format(GeneratedTitleExportFormat,
                         question.StataExportCaption, DecimalToHeaderConverter.ToHeader(columnValue));

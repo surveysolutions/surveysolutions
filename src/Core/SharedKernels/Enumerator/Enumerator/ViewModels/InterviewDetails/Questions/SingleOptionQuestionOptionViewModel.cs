@@ -44,6 +44,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; set; }
 
+        public string ItemTag => this.QuestionState.Header.Identity + "_Opt_" + Value;
+
         private void OnBeforeSelected()
         {
             this.BeforeSelected?.Invoke(this, EventArgs.Empty);

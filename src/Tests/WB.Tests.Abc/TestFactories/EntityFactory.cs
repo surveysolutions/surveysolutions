@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
@@ -163,9 +164,9 @@ namespace WB.Tests.Abc.TestFactories
         public CompositeCollection<T> CompositeCollection<T>()
             => new CompositeCollection<T>();
 
-        public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null)
+        public DataExportProcessDetails DataExportProcessDetails(QuestionnaireIdentity questionnaireIdentity = null, DataExportFormat? format = null)
             => new DataExportProcessDetails(
-                DataExportFormat.Tabular,
+                format ?? DataExportFormat.Tabular,
                 questionnaireIdentity ?? new QuestionnaireIdentity(Guid.NewGuid(), 1),
                 "some questionnaire");
 
@@ -243,7 +244,13 @@ namespace WB.Tests.Abc.TestFactories
                         fixedRosterTitles: fixedTitles,
                         fixedTitles: obsoleteFixedTitles?.ToArray() ?? new[] { "Fixed Roster 1", "Fixed Roster 2", "Fixed Roster 3" });
 
-        public FixedRosterTitle FixedTitle(decimal value, string title = null)
+
+        public FixedRosterTitle[] FixedTitles(params int[] codes)
+        {
+            return codes.Select(c => FixedTitle(c)).ToArray();
+        }
+
+        public FixedRosterTitle FixedTitle(int value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
 
         public GeoPosition GeoPosition()
@@ -385,15 +392,18 @@ namespace WB.Tests.Abc.TestFactories
             string[] referenceValues = null,
             string[] parentLevelIds = null,
             string[] systemVariableValues = null,
-            string[] answers = null)
-            => new InterviewDataExportRecord(interviewId.FormatGuid(), 
+            string[] answers = null,
+            string id = null)
+            => new InterviewDataExportRecord(
+               id ?? interviewId.FormatGuid(), 
                referenceValues?? new string[0],
                parentLevelIds ?? new string[0],
                systemVariableValues ?? new string[0])
                { 
                    Answers = answers ?? new string[0],
                    LevelName = levelName,
-                   InterviewId = interviewId
+                   InterviewId = interviewId,
+                   Id = id
                };
 
         public InterviewDataExportView InterviewDataExportView(
@@ -436,6 +446,7 @@ namespace WB.Tests.Abc.TestFactories
             bool receivedByInterviewer = false,
             int? assignmentId = null,
             bool wasCompleted = false,
+            bool hasErrors = false,
             IEnumerable<InterviewCommentedStatus> statuses = null,
             IEnumerable<TimeSpanBetweenStatuses> timeSpans = null)
         {
@@ -459,6 +470,7 @@ namespace WB.Tests.Abc.TestFactories
                 AssignmentId = assignmentId,
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
                 WasCompleted = wasCompleted,
+                HasErrors = hasErrors,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
                 TimeSpansBetweenStatuses = timeSpans?.ToHashSet() ?? new HashSet<TimeSpanBetweenStatuses>()
             };
@@ -713,9 +725,6 @@ namespace WB.Tests.Abc.TestFactories
         {
             return values.Select(value => Create.Entity.Option(value));
         }
-
-        public ParaDataExportProcessDetails ParaDataExportProcess()
-            => new ParaDataExportProcessDetails(DataExportFormat.Tabular);
 
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument questionnaireDocument)
             => Create.Entity.PlainQuestionnaire(document: questionnaireDocument);
@@ -1169,7 +1178,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public HqUser HqUser(Guid? userId = null, Guid? supervisorId = null, bool? isArchived = null,
             string userName = "name", bool isLockedByHQ = false, UserRoles role = UserRoles.Interviewer,
-            string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null, int? interviewerBuild = null)
+            string deviceId = null, string passwordHash = null, string passwordHashSha1 = null, string interviewerVersion = null,
+            int? interviewerBuild = null,
+            bool lockedBySupervisor = false)
         {
             var user = new HqUser
             {
@@ -1177,6 +1188,7 @@ namespace WB.Tests.Abc.TestFactories
                 IsArchived = isArchived ?? false,
                 UserName = userName,
                 IsLockedByHeadquaters = isLockedByHQ,
+                IsLockedBySupervisor = lockedBySupervisor,
                 Profile = new HqUserProfile
                 {
                     SupervisorId = supervisorId,
@@ -1343,20 +1355,7 @@ namespace WB.Tests.Abc.TestFactories
             => new RosterSynchronizationDto(rosterId,
                     outerScopeRosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                     rosterInstanceId ?? 0, sortIndex ?? 0, rosterTitle ?? "roster title");
-
-        public MapReportPoint MapReportPoint(string id, double latitude, double longitude, Guid? interviewId = null, Guid? questionnaireId = null, string variable = "var", long version = 1)
-        {
-            return new MapReportPoint(id)
-            {
-                Latitude = latitude,
-                Longitude = longitude,
-                QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
-                QuestionnaireVersion = version,
-                Variable = variable,
-                InterviewId = interviewId ?? Guid.NewGuid()
-            };
-        }
-
+        
         public PrefilledQuestionView PrefilledQuestionView(Guid? interviewId = null, 
             string answer = null, 
             Guid? questionId = null,
@@ -1440,11 +1439,16 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
             string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
-            Guid? cascadingParentQuestionId = null, bool isYesNo = false, bool isDecimal = false, Guid? linkedSourceId = null, Guid[] questionsUsingForSubstitution = null)
+            Guid? cascadingParentQuestionId = null, 
+            bool isYesNo = false, 
+            bool isDecimal = false, 
+            Guid? linkedSourceId = null, 
+            Guid[] questionsUsingForSubstitution = null,
+            bool? isTimestamp = false)
         {
             var titleWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, title);
             var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
-                cascadingParentQuestionId, isYesNo,  isDecimal, false, false, linkedSourceId);
+                cascadingParentQuestionId, isYesNo,  isDecimal, false, isTimestamp ?? false, linkedSourceId);
 
             if (isDisabled) question.Disable();
             return question;
@@ -1844,6 +1848,45 @@ namespace WB.Tests.Abc.TestFactories
                 fileName: fileName ?? "file-" + randomstring,
                 header: header,
                 content: content);
+        }
+
+        public DeviceSyncInfo DeviceSyncInfo(Guid interviewerId, string deviceId)
+        {
+            return new DeviceSyncInfo
+            {
+                SyncDate = DateTime.UtcNow,
+                InterviewerId = interviewerId,
+                DeviceId = deviceId,
+                LastAppUpdatedDate = DateTime.UtcNow.AddDays(-30),
+                DeviceModel = "DeviceModel",
+                DeviceType = "DeviceType",
+                AndroidVersion = "Android",
+                DeviceLanguage = "DeviceLanguage",
+                DeviceBuildNumber = "DeviceBuildNumber",
+                DeviceSerialNumber = "DeviceSerialNumber",
+                DeviceManufacturer = "DeviceManufacturer",
+                DBSizeInfo = 73 * 1024 * 1024,
+                AndroidSdkVersion = 25,
+                AndroidSdkVersionName = "AndroidSdkVersionName",
+                DeviceDate = DateTime.UtcNow.AddHours(-1),
+                AppVersion = "AppVersion",
+                AppBuildVersion = 1697,
+                MobileSignalStrength = 7,
+                AppOrientation = "AppOrientation",
+                MobileOperator = "MobileOperator",
+                NetworkSubType = "NetworkSubType",
+                NetworkType = "NetworkType",
+                BatteryChargePercent = 88,
+                BatteryPowerSource = "BatteryPowerSource",
+                IsPowerInSaveMode = false,
+                DeviceLocationLat = 14.15,
+                DeviceLocationLong = 16.17,
+                NumberOfStartedInterviews = 10,
+                RAMFreeInBytes = 50 * 1024 * 1024,
+                RAMTotalInBytes = 1024 * 1024 * 1024,
+                StorageFreeInBytes = 5 * 1024 * 1024,
+                StorageTotalInBytes = 2000 * 1024 * 1024
+            };
         }
     }
 }

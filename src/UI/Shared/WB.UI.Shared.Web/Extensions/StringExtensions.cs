@@ -27,9 +27,7 @@ namespace WB.UI.Shared.Web.Extensions
 
         public static bool ToBool(this string value, bool @default)
         {
-            bool result;
-
-            return Boolean.TryParse(value, out result) ? result : @default;
+            return Boolean.TryParse(value, out var result) ? result : @default;
         }
 
         public static string Ellipsis(this string value, int maxLength)

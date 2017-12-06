@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly ITranslationManagementService translationManagementService;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
+        private readonly IAuditLog auditLog;
         private readonly IAuthorizedUser authorizedUser;
         private readonly DesignerUserCredentials designerUserCredentials;
 
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             ITranslationManagementService translationManagementService,
             ICommandService commandService,
             ILogger logger,
+            IAuditLog auditLog,
             IAuthorizedUser authorizedUser,
             DesignerUserCredentials designerUserCredentials)
         {
@@ -55,6 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.translationManagementService = translationManagementService;
             this.commandService = commandService;
             this.logger = logger;
+            this.auditLog = auditLog;
             this.authorizedUser = authorizedUser;
             this.designerUserCredentials = designerUserCredentials;
         }
@@ -105,10 +108,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 }
 
                 var questionnaireVersion = this.questionnaireVersionProvider.GetNextVersion(questionnaire.PublicKey);
+                var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion);
                 if (questionnaire.Translations?.Count > 0)
                 {
-                    var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.PublicKey, questionnaireVersion);
-
                     this.translationManagementService.Delete(questionnaireIdentity);
 
                     var translationContent = await this.restService.GetAsync<List<TranslationDto>>(
@@ -134,7 +136,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireAssembly,
                     questionnaireContentVersion,
                     questionnaireVersion));
-
+                this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
                 return new QuestionnaireImportResult();
             }
             catch (RestException ex)

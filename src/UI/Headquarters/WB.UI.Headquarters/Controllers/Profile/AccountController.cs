@@ -12,10 +12,13 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
@@ -23,13 +26,14 @@ using WB.UI.Shared.Web.Extensions;
 namespace WB.UI.Headquarters.Controllers
 {
     [ValidateInput(false)]
-    [Authorize(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer, Interviewer")] // UserRoles.
+    [AuthorizeOr403(Roles = @"Administrator, Headquarter, Supervisor, ApiUser, Observer, Interviewer")] // UserRoles.
     public class AccountController : TeamController
     {
         private readonly ICaptchaProvider captchaProvider;
         private readonly ICaptchaService captchaService;
         private readonly HqSignInManager signInManager;
         private readonly IAuthenticationManager authenticationManager;
+        private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
 
         public AccountController(
             ICommandService commandService,
@@ -39,13 +43,14 @@ namespace WB.UI.Headquarters.Controllers
             ICaptchaService captchaService,
             HqUserManager userManager,
             HqSignInManager signInManager,
-            IAuthenticationManager authenticationManager)
+            IAuthenticationManager authenticationManager, IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
             : base(commandService, logger, authorizedUser, userManager)
         {
             this.captchaProvider = captchaProvider;
             this.captchaService = captchaService;
             this.signInManager = signInManager;
             this.authenticationManager = authenticationManager;
+            this.appSettingsStorage = appSettingsStorage;
         }
 
         [HttpGet]
@@ -81,6 +86,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
             this.ViewBag.ReturnUrl = returnUrl;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
 
             return this.View(new LogOnModel
             {
@@ -93,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> LogOn(LogOnModel model, string returnUrl)
         {
             this.ViewBag.ActivePage = MenuItem.Logon;
+            this.ViewBag.HasCompanyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey) != null;
             model.RequireCaptcha = this.captchaService.ShouldShowCaptcha(model.UserName);
 
             if (model.RequireCaptcha && !this.captchaProvider.IsCaptchaValid(this))
@@ -135,11 +142,16 @@ namespace WB.UI.Headquarters.Controllers
         {
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
 
             this.ViewBag.IsOwnAccoutEditing = true;
+            var manageAccountModel = GetCurrentUserModel();
+            return View(manageAccountModel);
+        }
 
-            return View(new ManageAccountModel
+        private ManageAccountModel GetCurrentUserModel()
+        {
+            var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var manageAccountModel = new ManageAccountModel
             {
                 Id = currentUser.Id,
                 Email = currentUser.Email,
@@ -149,9 +161,10 @@ namespace WB.UI.Headquarters.Controllers
                 Role = currentUser.Roles.FirstOrDefault().Role.ToUiString(),
                 UpdatePasswordAction = nameof(this.UpdateOwnPassword),
                 EditAction = nameof(Manage)
-            });
+            };
+            return manageAccountModel;
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
@@ -187,6 +200,8 @@ namespace WB.UI.Headquarters.Controllers
         public async Task<ActionResult> UpdateOwnPassword(ManageAccountModel model)
         {
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
+            var resultModel = GetCurrentUserModel();
+
             model.Id = currentUser.Id;
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
@@ -205,7 +220,7 @@ namespace WB.UI.Headquarters.Controllers
 
             model.EditAction = nameof(Manage);
             model.UpdatePasswordAction = nameof(this.UpdateOwnPassword);
-            return View("Manage", model);
+            return View("Manage", resultModel);
         }
 
         private async Task ValidateOldPassword(ManageAccountModel model, HqUser currentUser)
@@ -226,7 +241,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private static readonly UserRoles[] ObservableRoles = {UserRoles.Headquarter, UserRoles.Supervisor};
 
-        [Authorize(Roles = "Administrator, Observer")]
+        [AuthorizeOr403(Roles = "Administrator, Observer")]
         public async Task<ActionResult> ObservePerson(string personName)
         {
             if (string.IsNullOrEmpty(personName))
@@ -252,7 +267,7 @@ namespace WB.UI.Headquarters.Controllers
             UserRoles.Administrator, UserRoles.Observer, UserRoles.Interviewer
         };
 
-        [Authorize(Roles = "Headquarter, Supervisor")]
+        [AuthorizeOr403(Roles = "Headquarter, Supervisor")]
         public async Task<ActionResult> ReturnToObserver()
         {
             if (!this.authorizedUser.IsObserver)

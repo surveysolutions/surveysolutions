@@ -25,6 +25,7 @@ namespace WB.Infrastructure.Native.Storage
             MissingMemberHandling = MissingMemberHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
             FloatParseHandling = FloatParseHandling.Decimal,
+            MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
             Converters = new List<JsonConverter> { new IdentityJsonConverter(), new RosterVectorConverter() },
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };

@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
@@ -35,8 +36,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var linkedOption1Answer = new DateTime(2014, 2, 23);
             var linkedOption2Answer = new DateTime(2014, 3, 8);
             var linkedOption3Answer = new DateTime(2014, 5, 9);
-            linkedOption2TextInvariantCulture = linkedOption2Answer.ToShortDateString();//"03/08/2014";
-
+            linkedOption2TextInvariantCulture = linkedOption2Answer.ToString(DateTimeFormat.DateFormat);//"03/08/2014";
+            
             var triggerQuestionId = Guid.NewGuid();
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
             {

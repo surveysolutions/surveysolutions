@@ -130,7 +130,7 @@
     <value>დამვკირვებელი მომხარებელი &lt;b&gt;{0}&lt;/b&gt; წარმატებით შეიქმნა</value>
   </data>
   <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
-    <value>კითხვარი '{0}' წარმატებით დაიკლონა ახალი სათაურით {1}</value>
+    <value>კითხვარი '{0}' წარმატებით დაიკლონა ახალი სათაურით '{1}'.</value>
   </data>
   <data name="QuestionnaireClonedFormat" xml:space="preserve">
     <value>კითხვარი '{0}' წარმატებით დაიკლონა.</value>

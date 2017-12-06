@@ -189,4 +189,7 @@
   <data name="UploadAssignments" xml:space="preserve">
     <value>Загрузить задания</value>
   </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>Удалить карту</value>
+  </data>
 </root>

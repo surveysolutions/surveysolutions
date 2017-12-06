@@ -20,6 +20,7 @@
     var flatpickr = null;
 
     self.initChart = function () {
+
         var selectedTemplate = Supervisor.Framework.Objects.isEmpty(self.SelectedTemplate())
             ? { templateId: '', version: '' }
             : JSON.parse(self.SelectedTemplate());
@@ -39,6 +40,12 @@
         if (Modernizr.history) {
             window.history.pushState({}, "Charts", self.Url.toString());
         }
+
+        var interviewChart = $('#interviewChart');
+        var ProcessingMessage = $('#ProcessingMessage');
+
+        interviewChart.hide();
+        ProcessingMessage.show();
 
         var params = {
             templateId: selectedTemplate.templateId,
@@ -87,6 +94,7 @@
     self.drawChart = function () {
         var interviewChart = $('#interviewChart');
         var NoResultsFound = $('#NoResultsFound');
+        var ProcessingMessage = $('#ProcessingMessage');
 
         interviewChart.empty();
 
@@ -97,11 +105,13 @@
 
         if (self.Stats.Lines.length === 0 || self.Stats.Lines[0].length === 0) {
             interviewChart.hide();
+            ProcessingMessage.hide();
             NoResultsFound.show();
             return;
         }
 
         interviewChart.show();
+        ProcessingMessage.hide();
         NoResultsFound.hide();
         self.Plot = $.jqplot('interviewChart',
             self.Stats.Lines,

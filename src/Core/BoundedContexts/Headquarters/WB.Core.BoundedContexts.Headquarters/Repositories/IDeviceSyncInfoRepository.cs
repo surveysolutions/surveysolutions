@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
@@ -13,6 +14,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         int GetSuccessSynchronizationsCount(Guid interviewerId);
         int GetFailedSynchronizationsCount(Guid interviewerId);
         double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId);
-        SynchronizationActivity GetSynchronizationActivity(Guid interviewerId, string deviceId);
+        SynchronizationActivity GetSynchronizationActivity(Guid interviewerId);
+
+        IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds);
     }
 }

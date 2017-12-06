@@ -251,13 +251,16 @@
   <data name="GPSRecord" xml:space="preserve">
     <value>Record GPS</value>
   </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Edit area</value>
+  </data>
   <data name="GPSNotAvailable" xml:space="preserve">
     <value>Your browser does not support receiving Geolocation</value>
   </data>
   <data name="GPSPermissionDenied" xml:space="preserve">
     <value>This website does not have permission to use the Geolocation API</value>
   </data>
-  <data name="GPSPositionUnavailable" xml:space="preserve">'
+  <data name="GPSPositionUnavailable" xml:space="preserve">
     <value>The current position could not be determined.</value>
   </data>
   <data name="GPSTimeout" xml:space="preserve">
@@ -377,5 +380,14 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Posting...</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Interview is received by interviewer and cannot be modified</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Show on map</value>
   </data>
 </root>

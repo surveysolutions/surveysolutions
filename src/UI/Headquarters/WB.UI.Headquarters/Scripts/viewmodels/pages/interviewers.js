@@ -46,14 +46,13 @@
 
         setTimeout(function() {
             $('.facet').selectpicker('val', self.Facet());
-        },300);
+        }, 300);
 
         self.SelectedSupervisor.subscribe(self.reloadDataTable);
         self.Archived.subscribe(self.reloadDataTable);
         self.Facet.subscribe(self.reloadDataTable);
         
         self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
-        self.reloadDataTable();
     }
 };
 

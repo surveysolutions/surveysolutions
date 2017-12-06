@@ -85,5 +85,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         public void RemoveChild(Guid child)
         {
         }
+
+        public string VariableName => this.Name;
     }
 }

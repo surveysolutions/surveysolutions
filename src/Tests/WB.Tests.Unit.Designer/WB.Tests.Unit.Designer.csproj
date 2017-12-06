@@ -11,7 +11,17 @@
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DebugType Condition="'$(TargetFramework)' != '' AND '$(TargetFramework)' != 'netcoreapp1.0'">Full</DebugType>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+    <EmbeddedResource Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+    <None Remove="BoundedContexts\Designer\UpdateNumericQuestionHandlerTests\**" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslations.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
@@ -25,9 +35,7 @@
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
-      <Aliases>global,designer</Aliases>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
@@ -39,7 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
-    <PackageReference Include="Castle.Core" Version="4.1.1" />
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
     <PackageReference Include="Common.Logging" Version="3.3.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.3.1" />
     <PackageReference Include="CsQuery" Version="1.3.4" />
@@ -61,13 +69,13 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.3.1" />
     <PackageReference Include="microsoft.csharp" Version="4.3.0" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
-    <PackageReference Include="Moq" Version="4.7.99" />
+    <PackageReference Include="Moq" Version="4.7.142" />
     <PackageReference Include="MultipartDataMediaFormatter" Version="1.1.0.0" />
     <PackageReference Include="MvcMailer" Version="4.5" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="NHibernate" Version="4.1.1.4000" />
+    <PackageReference Include="NHibernate" Version="5.0.0" />
     <PackageReference Include="NSubstitute" Version="2.0.3" />
-    <PackageReference Include="NUnit" Version="3.6.1" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
     <PackageReference Include="Quartz" Version="2.5.0" />
     <PackageReference Include="RhinoMocks" Version="3.6.1" />
     <PackageReference Include="System.AppContext" Version="4.3.0" />

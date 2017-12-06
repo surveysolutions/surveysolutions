@@ -815,6 +815,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string GetVariableLabel(Guid variableId) => this.GetVariable(variableId).Label;
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
+        public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
 
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
@@ -837,6 +838,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
+
+        public IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId)
+        {
+            var result = GetChildEntityIds(groupId)
+                .Where(x => this.IsSubSection(x) && !string.IsNullOrWhiteSpace(this.GetCustomEnablementConditionForGroup(x)));
+
+            return new ReadOnlyCollection<Guid>(result.ToList());
+        }
+
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
             => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
@@ -996,6 +1006,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Translations
                 .Select(translation => translation.Name)
                 .ToReadOnlyCollection();
+
+        public string GetDefaultTransation()
+        {
+            return this.QuestionnaireDocument.Translations.SingleOrDefault(t =>
+                t.Id == this.QuestionnaireDocument.DefaultTranslation)?.Name;
+        }
 
         public bool IsQuestionIsRosterSizeForLongRoster(Guid questionId)
         {

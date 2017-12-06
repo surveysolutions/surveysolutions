@@ -28,10 +28,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasErrors { get; }
         bool IsCompleted { get; }
 
-        [Obsolete("Replaced with HasEditableIdentifyingQuestions")]
-        bool CreatedOnClient { get; }
-
         bool HasEditableIdentifyingQuestions { get; }
+
+        bool ReceivedByInterviewer { get; }
 
         InterviewTreeGroup GetGroup(Identity identity);
         InterviewTreeRoster GetRoster(Identity identity);
@@ -114,28 +113,35 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         IEnumerable<Identity> GetEnabledSubgroups(Identity group);
 
         IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters();
-        IEnumerable<IInterviewTreeNode> GetAllNodes();
+
         IEnumerable<InterviewTreeGroup> GetAllGroupsAndRosters();
+
         InterviewTreeSection FirstSection { get; }
+
         Guid CurrentResponsibleId { get; }
+
         IEnumerable<InterviewTreeSection> GetEnabledSections();
 
         int CountActiveAnsweredQuestionsInInterview();
-
         int CountActiveQuestionsInInterview();
-
         int CountInvalidEntitiesInInterview();
 
+        int CountActiveAnsweredQuestionsInInterviewForSupervisor();
+        int CountActiveQuestionsInInterviewForSupervisor();
+        int CountInvalidEntitiesInInterviewForSupervisor();
+
         int CountAllEnabledQuestions();
-
         int CountAllEnabledAnsweredQuestions();
-
         int CountAllInvalidEntities();
 
+
+        [Obsolete("KP-10173: should be removed with new details")]
         int CountEnabledSupervisorQuestions();
 
+        [Obsolete("KP-10173: should be removed with new details")]
         int CountEnabledHiddenQuestions();
 
+        [Obsolete("KP-10173: should be removed with new details")]
         int CountAllEnabledUnansweredQuestions();
 
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
@@ -149,8 +155,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         CategoricalOption GetOptionForQuestionWithoutFilter(Identity question, int value, int? parentQuestionValue = null);
 
         CategoricalOption GetOptionForQuestionWithFilter(Identity question, string value, int? parentQuestionValue = null);
-
-        int CountCommentedQuestionsVisibledToInterviewer();
 
         IEnumerable<Identity> GetCommentedBySupervisorQuestionsVisibledToInterviewer();
 
@@ -172,12 +176,22 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         
         IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId);
 
+        IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
+        IEnumerable<IInterviewTreeNode> GetAllInterviewNodes();
+
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
+
         bool AcceptsInterviewerAnswers();
+
         IReadOnlyCollection<IInterviewTreeNode> GetAllSections();
+
         InterviewSynchronizationDto GetSynchronizationDto();
+
         bool IsReadOnlyQuestion(Identity identity);
+
         InterviewKey GetInterviewKey();
+
         int? GetAssignmentId();
+        bool IsParentOf(Identity parentIdentity, Identity childIdentity);
     }
 }

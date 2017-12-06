@@ -473,7 +473,7 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
     <comment>{0} - count of created entities; {1} - total number to be created</comment>
   </data>
   <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
-    <value>Importing interviews</value>
+    <value>Importing assignments</value>
   </data>
   <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
     <value>{0} interviews failed to be created</value>
@@ -562,5 +562,8 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
   </data>
   <data name="Import_Verification_Errors" xml:space="preserve">
     <value>{0} errors</value>
+  </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Questionnaire cannot be used for preloading</value>
   </data>
 </root>

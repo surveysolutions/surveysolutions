@@ -7,7 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 {
     [DebuggerDisplay("{Title} | public: {IsPublic}, shared with {SharedPersons.Count} persons")]
-    public class QuestionnaireListViewItem
+    public class QuestionnaireListViewItem : IQuestionnaireListItem
     {
         public virtual DateTime CreationDate { get; set; }
 
@@ -40,5 +40,9 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public virtual ISet<SharedPerson> SharedPersons { get; set; } = new HashSet<SharedPerson>();
 
         public virtual string Owner { get; set; }
+
+        public virtual Guid? FolderId { get; set; }
+
+        public virtual QuestionnaireListViewFolder Folder { get; set; }
     }
 }

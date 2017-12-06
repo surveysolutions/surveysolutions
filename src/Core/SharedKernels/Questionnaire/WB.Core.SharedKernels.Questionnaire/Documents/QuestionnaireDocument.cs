@@ -60,6 +60,8 @@ namespace Main.Core.Documents
 
         public List<Translation> Translations { get; set; }
 
+        public Guid? DefaultTranslation { get; set; }
+
         public DateTime? CloseDate { get; set; }
 
         public string ConditionExpression { get; set; }

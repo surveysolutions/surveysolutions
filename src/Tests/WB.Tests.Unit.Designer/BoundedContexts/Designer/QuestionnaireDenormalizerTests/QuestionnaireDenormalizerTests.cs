@@ -74,9 +74,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             var questionnaireAr = new Questionnaire(
                 Mock.Of<ILogger>(),
                 Mock.Of<IClock>(),
-                expressionProcessor ?? Mock.Of<IExpressionProcessor>(),
-                Create.SubstitutionService(),
-                Create.KeywordsProvider(),
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
