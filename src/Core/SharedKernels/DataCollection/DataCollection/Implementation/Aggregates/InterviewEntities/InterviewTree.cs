@@ -330,7 +330,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var level = isLinkedToRoster
                         ? questionnaire.GetRosterLevelForGroup(sourceForLinkedQuestion.Value) - 1
                         : questionnaire.GetRosterLevelForEntity(targetRoster.Value) + 1;
-                    var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
+                    var commonParentRosterVector = questionIdentity.RosterVector.Take(level);
                     commonParentRosterForLinkedQuestion = new Identity(targetRoster.Value, commonParentRosterVector);
                 }
             }
@@ -470,15 +470,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
         {
-            IEnumerable<IInterviewTreeNode> entities = FindEntity(entityId);
+            foreach (var entity in FindEntity(entityId))
+            {
+                if (entity.Identity.Equals(entityId, questionIdentity.RosterVector, entity.Identity.RosterVector.Length))
+                {
+                    return entity;
+                }
+            }
 
-            if (!entities.Any())
-                return null;
-
-            var shorterRosterVector = questionIdentity.RosterVector.Shrink(entities.First().Identity.RosterVector.Length);
-            var targetIdentity = new Identity(entityId, shorterRosterVector);
-
-            return entities.FirstOrDefault(x => x.Identity.Equals(targetIdentity));
+            return null;
         }
 
         public IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity)
@@ -488,12 +488,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (startingSearchPointIdentity == null)
                 return allEntities;
 
-            var rosterVectorLength = startingSearchPointIdentity.Id == entityIdToSearch
+            int rosterVectorLength = startingSearchPointIdentity.Id == entityIdToSearch
                 ? startingSearchPointIdentity.RosterVector.Length - 1
                 : startingSearchPointIdentity.RosterVector.Length;
 
-            var rosterVector = startingSearchPointIdentity.RosterVector.Take(rosterVectorLength);
-            IEnumerable<Identity> entities = allEntities.Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(rosterVector));
+            IEnumerable<Identity> entities = allEntities.Where(x =>
+                ArrayExtensions.SequenceEqual(x.RosterVector.Array, rosterVectorLength,
+                    startingSearchPointIdentity.RosterVector.Array, rosterVectorLength));
+
             return entities;
         }
 

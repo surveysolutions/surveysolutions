@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -198,6 +199,16 @@ namespace WB.Core.SharedKernels.DataCollection
                 return false;
 
             return this.coordinates.SequenceEqual(other.coordinates);
+        }
+
+        public bool Identical(RosterVector other, int otherLength)
+        {
+            if (other == null) return false;
+
+            if (this.Length == 0 && otherLength == 0 || ReferenceEquals(this, other))
+                return true;
+            
+            return ArrayExtensions.SequenceEqual(this.coordinates, other.coordinates, otherLength);
         }
 
         #endregion

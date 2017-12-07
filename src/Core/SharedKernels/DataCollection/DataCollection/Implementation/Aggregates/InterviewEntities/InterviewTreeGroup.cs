@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             for (int i = this.Identity.RosterVector.Length; i >= 0; i--)
             {
-                var questionIdentity = new Identity(questionId, this.Identity.RosterVector.Take(i).ToArray());
+                var questionIdentity = new Identity(questionId, this.Identity.RosterVector.Take(i));
                 var question = this.Tree.GetQuestion(questionIdentity);
                 if (question != null)
                     return question;

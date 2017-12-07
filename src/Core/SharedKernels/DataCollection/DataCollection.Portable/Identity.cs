@@ -60,6 +60,8 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public bool Equals(Guid id, RosterVector rosterVector) => id == this.Id && this.RosterVector.Identical(rosterVector);
 
+        public bool Equals(Guid id, RosterVector rosterVector, int length) => id == this.Id && this.RosterVector.Identical(rosterVector, length);
+
         public static bool operator ==(Identity a, Identity b)
         {
             if (ReferenceEquals(a, b))

@@ -600,7 +600,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
         {
             var rosterLevel = questionIdentity.RosterVector.Length;
-            return this.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector);
+
+            return questionIdentity.RosterVector.Identical(this.Identity.RosterVector, rosterLevel);
         }
 
         public override IInterviewTreeNode Clone()
