@@ -1,15 +1,14 @@
-using Ninject.Modules;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.Infrastructure.Modularity;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 namespace WB.Core.BoundedContexts.Designer
 {
-    public class QuestionnaireVerificationModule : NinjectModule
+    public class QuestionnaireVerificationModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IQuestionnaireVerifier>().To<QuestionnaireVerifier>();
+            registry.Bind<IQuestionnaireVerifier, QuestionnaireVerifier>();
         }
     }
 }
