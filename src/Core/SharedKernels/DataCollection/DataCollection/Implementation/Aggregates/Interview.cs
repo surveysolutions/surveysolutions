@@ -1250,9 +1250,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public void AnswerGeoLocationQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, double latitude, double longitude,
             double accuracy, double altitude, DateTimeOffset timestamp)
         {
-            GlobalStopwatcher.DumpToDebug();
-            ServiceLocator.Current.GetInstance<ILogger>().Error(GlobalStopwatcher.GetMeasureDetails());
-
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
@@ -1950,37 +1947,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
         {
-            using (GlobalStopwatcher.Scope("IN", "ApplyEvents"))
+            var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
+            var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
+            var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
+
+            var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
+
+            var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
+            var rosterLevels = changedRosters.Select(x => x.Identity.RosterVector).ToHashSet();
+            var intersection = questionsRosterLevels.Intersect(rosterLevels).ToList();
+
+            var aggregatedEventsShouldBeFired = intersection.Count == 0;
+            if (aggregatedEventsShouldBeFired)
             {
-                var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
-                var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
-                var questionsWithChangedAnswer = diffByQuestions.Where(x => x.IsAnswerChanged).ToArray();
-
-                var changedRosters = diff.OfType<InterviewTreeRosterDiff>().ToArray();
-
-                var questionsRosterLevels = questionsWithChangedAnswer.Select(x => x.Identity.RosterVector).ToHashSet();
-                var rosterLevels = changedRosters.Select(x => x.Identity.RosterVector).ToHashSet();
-                var intersection = questionsRosterLevels.Intersect(rosterLevels).ToList();
-
-                var aggregatedEventsShouldBeFired = intersection.Count == 0;
-                if (aggregatedEventsShouldBeFired)
-                {
-                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
-                    this.ApplyRosterEvents(changedRosters);
-                }
-                else
-                {
-                    var maxDepth = Math.Max(questionsRosterLevels.Max(x => x.Length), rosterLevels.Select(x => x.Length).Max());
-                    // events fired by levels (from the questionnaire level down to nested rosters)
-                    for (int i = 0; i <= maxDepth; i++)
-                    {
-                        this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId.Value);
-                        this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
-                    }
-                }
-                this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
-                this.ApplyPassiveEvents(diff); 
+                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
+                this.ApplyRosterEvents(changedRosters);
             }
+            else
+            {
+                var maxDepth = Math.Max(questionsRosterLevels.Max(x => x.Length), rosterLevels.Select(x => x.Length).Max());
+                // events fired by levels (from the questionnaire level down to nested rosters)
+                for (int i = 0; i <= maxDepth; i++)
+                {
+                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId.Value);
+                    this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
+                }
+            }
+            this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
+            this.ApplyPassiveEvents(diff); 
         }
 
         private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
@@ -2326,10 +2320,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
         {
-            using (GlobalStopwatcher.Scope("IN", "FindDifferenceBetweenTrees"))
-            {
-                return sourceInterview.Compare(changedInterview);
-            }
+            return sourceInterview.Compare(changedInterview);
         }
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, bool removeLinkedAnswers = true)
@@ -2359,11 +2350,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
             }
-
-            using (GlobalStopwatcher.Scope("IN", "changedInterviewTree.ReplaceSubstitutions"))
-            {
-                changedInterviewTree.ReplaceSubstitutions();
-            }
+            
+            changedInterviewTree.ReplaceSubstitutions();
         }
 
         private void UpdateTreeWithDependentChangesWithExpressionState(InterviewTree changedInterviewTree,
