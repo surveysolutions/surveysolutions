@@ -61,29 +61,47 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Date.
+        ///   Looks up a localized string similar to details.
         /// </summary>
-        internal static string Date {
+        internal static string details {
             get {
-                return ResourceManager.GetString("Date", resourceCulture);
+                return ResourceManager.GetString("details", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to Map Report.
         /// </summary>
-        internal static string Name {
+        internal static string MapReportTitle {
             get {
-                return ResourceManager.GetString("Name", resourceCulture);
+                return ResourceManager.GetString("MapReportTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size.
+        ///   Looks up a localized string similar to Not all markers were loaded for current zoom level. Please zoom in and reload markers..
         /// </summary>
-        internal static string Size {
+        internal static string NotAllMarkers {
             get {
-                return ResourceManager.GetString("Size", resourceCulture);
+                return ResourceManager.GetString("NotAllMarkers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reload markers.
+        /// </summary>
+        internal static string ReloadMarkers {
+            get {
+                return ResourceManager.GetString("ReloadMarkers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View interview content.
+        /// </summary>
+        internal static string ViewInterviewContent {
+            get {
+                return ResourceManager.GetString("ViewInterviewContent", resourceCulture);
             }
         }
     }

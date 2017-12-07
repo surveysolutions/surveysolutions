@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire with id {0} and version {1} is not found..
+        ///   Looks up a localized string similar to Questionnaire with id {0} and version {1} cannot be found..
         /// </summary>
         internal static string QuestionnaireNotFoundFormat {
             get {

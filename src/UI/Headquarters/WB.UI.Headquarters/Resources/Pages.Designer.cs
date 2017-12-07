@@ -2095,6 +2095,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred during upload.
+        /// </summary>
+        public static string Map_UploadingError {
+            get {
+                return ResourceManager.GetString("Map_UploadingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delink User from map.
         /// </summary>
         public static string MapDetails_DelinkUser {
