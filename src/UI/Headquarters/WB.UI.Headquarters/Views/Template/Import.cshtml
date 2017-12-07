@@ -23,24 +23,37 @@
 
             model.getDataTableColumns = function() {
                 return [
-                        {
-                            data: "title",
-                            name: "Title", // case-sensitive!
-                            render: function (data, type, row) {
-                                return "<a href=" + "@Url.Action("ImportMode", "Template")" + "/" + row.id + ">" + $("<div>").text(data).html() + "</a>";
-                            }
-                        },
-                        {
-                            data: "lastModified",
-                            name: "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
-                            "class": "changed-recently"
-                        },
-                        {
-                            data: "createdBy",
-                            name: "CreatorName",  // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                            "class": "created-by"
+                    {
+                        data: "title",
+                        name: "Title", // case-sensitive!
+                        render: function (data, type, row) {
+                            return "<a href=" + "@Url.Action("ImportMode", "Template")" + "/" + row.id + ">" + $("<div>").text(data).html() + "</a>";
                         }
-                    ];
+                    },
+                    {
+                        data: "lastModified",
+                        name:
+                            "LastEntryDate", // case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
+                        "class": "changed-recently",
+                        render: function(data) {
+                            if (data === null || data === undefined || data === "") return "";
+
+                            var localDate = moment.utc(data).local();
+                            var twoDaysAgoAtNoon = moment().subtract(2, 'd');
+
+                            if (localDate > twoDaysAgoAtNoon)
+                                return moment.duration(localDate.diff(moment())).humanize(true);
+
+                            return localDate.format(window.CONFIG.dateFormat);
+                        }
+                    },
+                    {
+                        data: "createdBy",
+                        name:
+                            "CreatorName", // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
+                        "class": "created-by"
+                    }
+                ];
             };
 
             ko.applyBindings(model);
@@ -75,11 +88,11 @@
         <div class="row">
             <table id="data_holder" class="table table-hover table-ordered import-interview">
                 <thead>
-                <tr>
-                    <th class="column-questionnaire-title with-search">@ImportQuestionnaire.Table_Title</th>
-                    <th>@ImportQuestionnaire.Table_LastModified</th>
-                    <th class="created-by">@ImportQuestionnaire.Table_CreatedBy</th>
-                </tr>
+                    <tr>
+                        <th class="column-questionnaire-title with-search">@ImportQuestionnaire.Table_Title</th>
+                        <th>@ImportQuestionnaire.Table_LastModified</th>
+                        <th class="created-by">@ImportQuestionnaire.Table_CreatedBy</th>
+                    </tr>
                 </thead>
             </table>
         </div>
