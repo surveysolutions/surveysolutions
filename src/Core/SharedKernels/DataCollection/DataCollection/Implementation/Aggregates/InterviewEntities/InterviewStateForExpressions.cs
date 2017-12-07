@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Properties = interviewProperties;
         }
 
+        public int Version => 2;
+
         public T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector)
         {
             return default(T);
