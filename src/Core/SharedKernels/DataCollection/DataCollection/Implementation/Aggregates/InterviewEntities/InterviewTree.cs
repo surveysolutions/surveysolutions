@@ -100,11 +100,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ActualizeTree()
         {
-            using (GlobalStopwatcher.Scope("IN", "ActualizeTree"))
-            {
-                foreach (var treeSection in this.Sections)
-                    treeSection.ActualizeChildren(); 
-            }
+            foreach (var treeSection in this.Sections)
+                treeSection.ActualizeChildren(); 
         }
 
         public void RemoveNode(Identity identity)
@@ -228,19 +225,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTree Clone()
         {
-            using (GlobalStopwatcher.Scope("IN", "Clone()"))
-            {
-                this.DebugHealthCheck();
+            this.DebugHealthCheck();
 
-                var clone = (InterviewTree)this.MemberwiseClone();
-                clone.Sections = new List<InterviewTreeSection>();
-                var sections = this.Sections.Select(s => (InterviewTreeSection)s.Clone()).ToList();
-                clone.SetSections(sections);
+            var clone = (InterviewTree)this.MemberwiseClone();
+            clone.Sections = new List<InterviewTreeSection>();
+            var sections = this.Sections.Select(s => (InterviewTreeSection)s.Clone()).ToList();
+            clone.SetSections(sections);
 
-                clone.DebugHealthCheck();
+            clone.DebugHealthCheck();
 
-                return clone;
-            }
+            return clone;
         }
 
         [Conditional("DEBUG")]
