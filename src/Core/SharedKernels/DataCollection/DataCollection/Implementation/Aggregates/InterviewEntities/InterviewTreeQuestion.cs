@@ -627,10 +627,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void Accept(IInterviewTreeUpdater updater)
         {
-            using (GlobalStopwatcher.Scope("Accept", "Question.UpdateEnablement"))
-            {
-                updater.UpdateEnablement(this);
-            }
+            updater.UpdateEnablement(this);
             if (this.IsSingleFixedOption)
             {
                 updater.UpdateSingleOptionQuestion(this); 
@@ -645,17 +642,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
             else if (this.IsLinked)
             {
-                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateLinkedQuestion"))
-                {
-                    updater.UpdateLinkedQuestion(this);
-                }
+                updater.UpdateLinkedQuestion(this);
             }
             else if (this.IsLinkedToListQuestion)
             {
-                using (GlobalStopwatcher.Scope("Accept", "Question.UpdateLinkedToListQuestion"))
-                {
-                    updater.UpdateLinkedToListQuestion(this);
-                }
+                updater.UpdateLinkedToListQuestion(this);
             }
 
             if (this.IsCascading) // is IsSingleFixedOption too
@@ -664,10 +655,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 updater.UpdateCascadingQuestion(this);
             }
 
-            using (GlobalStopwatcher.Scope("Accept", "Question. UpdateValidations"))
-            {
-                updater.UpdateValidations(this);
-            }
+            updater.UpdateValidations(this);
         }
 
         public void ReplaceSubstitutions()

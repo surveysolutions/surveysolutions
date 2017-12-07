@@ -72,10 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public override void Accept(IInterviewTreeUpdater updater)
         {
-            using (GlobalStopwatcher.Scope("Accept", "Roster.UpdateEnablement"))
-            {
-                updater.UpdateEnablement(this);
-            }
+            updater.UpdateEnablement(this);
             updater.UpdateRoster(this); 
         }
 
