@@ -4,4 +4,11 @@
     {
         T Resolve<T>();
     }
+
+    public interface IConstructorContext
+    {
+        T Inject<T>();
+    }
+
+
 }
