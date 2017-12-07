@@ -38,6 +38,10 @@ function GetPathToJarsigner() {
 }
 
 function GetPathToZipalign() {
+	if (Test-Path 'C:\Android\android-sdk\build-tools\26.0.3\zipalign.exe') {
+		return 'C:\Android\android-sdk\build-tools\26.0.3\zipalign.exe'
+	}
+
 	if (Test-Path 'C:\Android\android-sdk\build-tools\25.0.3\zipalign.exe') {
 		return 'C:\Android\android-sdk\build-tools\25.0.3\zipalign.exe'
 	}
