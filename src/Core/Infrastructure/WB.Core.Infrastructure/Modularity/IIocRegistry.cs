@@ -1,4 +1,5 @@
 using System;
+using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.Infrastructure.Modularity
@@ -14,7 +15,6 @@ namespace WB.Core.Infrastructure.Modularity
         void BindToRegisteredInterface<TInterface, TRegisteredInterface>() where TRegisteredInterface : TInterface;
         void BindToMethod<T>(Func<T> func);
         void BindToConstant<T>(Func<T> func);
-        void BindToConstructor<T>(Func<IConstructorContext, T> func);
         void BindAsSingleton(Type @interface, Type implementation);
         void BindGeneric(Type implementation);
         void RegisterDenormalizer<T>() where T : IEventHandler;
