@@ -78,13 +78,10 @@
                 switch(this.$me.status) {
                     case GroupStatus.NotStarted: 
                         return this.$t("WebInterview.Interview_Group_Status_NotStarted")
-                    case GroupStatus.Started: {
-                        const value = this.getInformationByQuestionsAndAnswers
-                        return this.$t("WebInterview.Interview_Group_Status_StartedIncompleteFormat", {value})
-                    }
+                    case GroupStatus.Started: 
+                        return this.$t("WebInterview.Interview_Group_Status_StartedIncompleteFormat", {value: this.getInformationByQuestionsAndAnswers})
                     case GroupStatus.Completed: 
-                        const value = this.getInformationByQuestionsAndAnswers
-                        return this.$t("WebInterview.Interview_Group_Status_CompletedFormat", {value})
+                        return this.$t("WebInterview.Interview_Group_Status_CompletedFormat", {value: this.getInformationByQuestionsAndAnswers})
                 }
             },
             
