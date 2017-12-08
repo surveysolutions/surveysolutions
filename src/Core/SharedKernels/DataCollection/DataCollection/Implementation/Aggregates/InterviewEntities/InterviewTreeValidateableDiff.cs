@@ -11,10 +11,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var source = sourceNode as IInterviewTreeValidateable;
             var result = changedNode as IInterviewTreeValidateable;
 
-            ChangedNodeBecameValid = source == null || !source.IsValid && result.IsValid;
+            ChangedNodeBecameValid = ChangedNodeBecameValidImp(source, result);
             ChangedNodeBecameInvalid = ChangedNodeBecameInvalidImp(source, result) ;
             AreValidationMessagesChanged = AreValidationMessagesChangedIml(source, result);
             IsFailedValidationIndexChanged = IsFailedValidationIndexChangedIml(source, result);
+        }
+
+        private bool ChangedNodeBecameValidImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
+        {
+            if (this.IsNodeRemoved) return false;
+            return source == null || !source.IsValid && result.IsValid;
         }
 
         private bool ChangedNodeBecameInvalidImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
