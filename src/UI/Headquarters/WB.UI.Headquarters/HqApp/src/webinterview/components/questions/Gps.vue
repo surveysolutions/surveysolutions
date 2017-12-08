@@ -9,14 +9,13 @@
                         </div>
                     </div>
                     <div class="block-with-data"><a v-bind:href="goolgeMapUrl" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">{{$me.answer.latitude}}, {{$me.answer.longitude}}</a></div>
-                     <wb-remove-answer />
                     <button type="submit" v-if="$me.acceptAnswer" class="btn btn-link btn-clear" @click="removeAnswer"><span></span></button>
                 </div>
                 <div class="action-btn-holder gps-question">
                     <button type="button" :disabled="!$me.acceptAnswer" class="btn btn-default btn-lg btn-action-questionnaire" @click="answerGpsQuestion">{{ $t('WebInterviewUI.GPSRecord') }}</button>
                 </div>
                 <wb-lock />
-            </div>            
+            </div>
         </div>
     </wb-question>
 </template>

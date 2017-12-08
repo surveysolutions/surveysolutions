@@ -20,12 +20,18 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         private static string GetScriptToChangeJsonToJsonb(string schema, string tableName, string columnName)
             => $@"DO $$
                 DECLARE 
-                    doesTableExists integer;
+	                doesTableExists integer;
+	                isAlreadyJsonB boolean;
                 BEGIN
-                    SELECT count(tablename) FROM pg_tables WHERE schemaname = '{schema}' AND tablename = '{tableName}' INTO doesTableExists;
-                    IF doesTableExists > 0 THEN
-                        alter table {schema}.{tableName} alter column {columnName} type jsonb using {columnName}::text::jsonb;
-                END IF;
+	                SELECT count(tablename) FROM pg_tables WHERE schemaname = '{schema}' AND tablename = '{tableName}' INTO doesTableExists;
+	
+	                select data_type = 'jsonb' from information_schema.columns
+	                where table_name = '{tableName}' and column_name = '{columnName}'
+	                into isAlreadyJsonB;
+
+	                IF doesTableExists > 0 and isAlreadyJsonB = false THEN
+		                alter table {schema}.{tableName} alter column {columnName} type jsonb using {columnName}::jsonb;
+	                END IF;
                 END
                 $$";
 
