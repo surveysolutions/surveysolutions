@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
     public class when_getting_export_process_details : ExportControllerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var mockOfDataExportStatusReader = new Mock<IDataExportStatusReader>();
             dataExportStatusView = new DataExportStatusView(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version,
                 new[]
@@ -46,14 +45,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
                 .Returns(dataExportStatusView);
 
             controller = CreateExportController(dataExportStatusReader: mockOfDataExportStatusReader.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
+        private void BecauseOf() => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
-        It should_return_http_ok_response = () =>
+        [NUnit.Framework.Test] public void should_return_http_ok_response () =>
             result.ShouldBeOfExactType<OkNegotiatedContentResult<ExportController.ExportDetails>>();
 
-        It should_return_specified_json_object = () =>
+        [NUnit.Framework.Test] public void should_return_specified_json_object ()
         {
             var jsonResult = ((OkNegotiatedContentResult<ExportController.ExportDetails>) result).Content;
 
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
                 dataExportStatusView.RunningDataExportProcesses[0].Progress);
             jsonResult.RunningProcess.StartDate.ShouldEqual(dataExportStatusView.RunningDataExportProcesses[0].BeginDate);
 
-        };
+        }
             
 
         private static ExportController controller;

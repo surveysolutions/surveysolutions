@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
@@ -12,17 +12,17 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
     public class when_starting_export_process_for_ddi_export_type : ExportControllerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateExportController();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = controller.StartProcess(new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString(), DataExportFormat.DDI);
+        private void BecauseOf() => result = controller.StartProcess(new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString(), DataExportFormat.DDI);
 
-        It should_return_http_bad_request_response = () =>
+        [NUnit.Framework.Test] public void should_return_http_bad_request_response () =>
             result.ShouldBeOfExactType<BadRequestErrorMessageResult>();
 
-        It should_response_has_specified_message = () =>
+        [NUnit.Framework.Test] public void should_response_has_specified_message () =>
             ((BadRequestErrorMessageResult)result).Message.ShouldEqual("Not supported export type");
 
         private static ExportController controller;
