@@ -76,6 +76,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.Register(ctx => func());
         }
 
+        public void BindToMethod<T>(Func<IModuleContext, T> func)
+        {
+            throw new NotImplementedException();
+        }
+
         public void BindToConstant<T>(Func<T> func)
         {
             containerBuilder.Register(ctx => func()).SingleInstance();

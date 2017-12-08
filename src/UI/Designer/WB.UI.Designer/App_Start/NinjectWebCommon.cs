@@ -100,7 +100,7 @@ namespace WB.UI.Designer.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(membershipSettings).AsNinject(),
                 new CaptchaModule(),
-                new NLogLoggingModule(),
+                new NLogLoggingModule().AsNinject(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)).AsWebNinject(),

@@ -136,7 +136,7 @@ namespace WB.UI.Headquarters
 
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
-                new NLogLoggingModule(),
+                new NLogLoggingModule().AsNinject(),
                 new ServiceLocationModule(),
                 new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),

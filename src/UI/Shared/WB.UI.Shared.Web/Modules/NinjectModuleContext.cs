@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using System;
+using Ninject;
 using Ninject.Activation;
 using WB.Core.Infrastructure.Modularity;
 
@@ -17,5 +18,7 @@ namespace WB.UI.Shared.Web.Modules
         {
             return context.Kernel.Get<T>();
         }
+
+        public Type MemberDeclaringType => context.Request.Target?.Member.DeclaringType;
     }
 }
