@@ -9,7 +9,6 @@ using Ninject.Web.Mvc.FilterBindingSyntax;
 using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Modularity;
-using FilterScope = System.Web.Mvc.FilterScope;
 
 namespace WB.UI.Shared.Web.Modules
 {
@@ -100,11 +99,6 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<T>().ToMethod(ctx => func()).InSingletonScope();
         }
 
-        public void BindToConstructor<T>(Func<IConstructorContext, T> func)
-        {
-            this.Kernel.Bind<T>().ToConstructor(ctx => func(new NinjectConstructorContext(ctx))).InSingletonScope();
-        }
-
         void IIocRegistry.BindAsSingleton(Type @interface, Type implementation)
         {
             this.Kernel.Bind(@interface).To(implementation).InSingletonScope();
@@ -123,11 +117,6 @@ namespace WB.UI.Shared.Web.Modules
         void IWebIocRegistry.BindMvcFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order)
         {
             this.Kernel.BindFilter<T>(filterScope, order);
-        }
-
-        public void BindMvcFilterInSingletonScope<T>(FilterScope filterScope, int? order)
-        {
-            this.Kernel.BindFilter<T>(filterScope, order).InSingletonScope();
         }
 
         void IWebIocRegistry.BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order)

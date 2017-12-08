@@ -1,4 +1,6 @@
 ﻿using System.Web.Mvc;
+using Ninject.Modules;
+using Ninject.Web.Mvc.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -8,36 +10,42 @@ using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientN
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Shared.Web.Modules;
 
 namespace WB.UI.Designer
 {
     /// <summary>
     /// The main module.
     /// </summary>
-    public class MainModule : IWebModule
+    public class MainModule : NinjectModule
     {
-        public void Load(IWebIocRegistry registry)
+        public override void Load()
         {
-            //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
-            registry.BindMvcFilterInSingletonScope<CustomHandleErrorFilter>(FilterScope.Global, 0);
-            registry.BindMvcFilterInSingletonScope<CustomAuthorizeFilter>(FilterScope.Global, 0);
+            //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
+            this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
+            this.BindFilter<CustomAuthorizeFilter>(FilterScope.Global, 0).InSingletonScope();
 
-            registry.BindToMethod<ISerializer>(() => new NewtonJsonSerializer());
-            registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
+            this.Bind<ISerializer>().ToMethod((ctx) => new NewtonJsonSerializer());
+            this.Bind<IJsonAllTypesSerializer>().ToMethod((ctx) => new JsonAllTypesSerializer());
 
-            registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
-            registry.Bind<IArchiveUtils, ZipArchiveUtils>();
-            registry.BindToConstant<IMembershipHelper>(() => new MembershipHelper());
-            registry.BindToConstructor<IMembershipWebUser>(x => new MembershipWebUser(x.Inject<IMembershipHelper>()));
-            registry.BindToConstructor<IMembershipWebServiceUser>(x => new MembershipWebServiceUser(x.Inject<IMembershipHelper>()));
-            registry.BindToConstructor<IMembershipUserService>(x =>
+            this.Bind<IStringCompressor>().To<JsonCompressor>().InSingletonScope();
+            this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
+            this.Bind<IMembershipHelper>().ToConstant(new MembershipHelper()).InSingletonScope();
+            this.Bind<IMembershipWebUser>()
+                .ToConstructor(x => new MembershipWebUser(x.Inject<IMembershipHelper>()))
+                .InSingletonScope();
+            this.Bind<IMembershipWebServiceUser>()
+                .ToConstructor(x => new MembershipWebServiceUser(x.Inject<IMembershipHelper>()))
+                .InSingletonScope();
+            this.Bind<IMembershipUserService>()
+                .ToConstructor(
+                    x =>
                     new MembershipUserService(
                         x.Inject<IMembershipHelper>(),
                         x.Inject<IMembershipWebUser>(),
-                        x.Inject<IMembershipWebServiceUser>()));
+                        x.Inject<IMembershipWebServiceUser>()))
+                .InSingletonScope();
 
-            registry.Bind<IRecipientNotifier, MailNotifier>();
+            this.Bind<IRecipientNotifier>().To<MailNotifier>();
         }
     }
 }
