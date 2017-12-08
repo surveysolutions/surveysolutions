@@ -16,7 +16,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsValueChangedImp(InterviewTreeVariable sourceNode, InterviewTreeVariable changedNode)
         {
             if (sourceNode?.Value == null)
-                return changedNode.HasValue;
+                return changedNode?.HasValue ?? false;
 
             if (changedNode?.Value == null)
                 return sourceNode.HasValue;
