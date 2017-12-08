@@ -3,7 +3,9 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Portable;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -18,7 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.QRBarcode:
                 case QuestionType.Text:
                 case QuestionType.Area:
-                
                     return "string";
                 case QuestionType.Numeric:
                     return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";
@@ -56,9 +57,30 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                 case QuestionType.Audio:
                     return typeof(AudioAnswerForConditions).Name;
-
                 default:
                     throw new ArgumentException("Unknown question type.");
+            }
+        }
+
+        public string GetQuestionMethodName(string questionModelTypeName, int targetVersion)
+        {
+            if (targetVersion < 22)
+                return $"GetAnswer<{questionModelTypeName}>";
+            switch (questionModelTypeName)
+            {
+                case "AudioAnswerForConditions": return nameof(IInterviewStateForExpressions.GetAudioAnswer);
+                case "DateTime?": return nameof(IInterviewStateForExpressions.GetDateTimeAnswer);
+                case "TextListAnswerRow[]": return nameof(IInterviewStateForExpressions.GetTextListAnswer);
+                case "GeoLocation": return nameof(IInterviewStateForExpressions.GetGeoLocationAnswer);
+                case "RosterVector[]": return nameof(IInterviewStateForExpressions.GetRosterVectorArrayAnswer);
+                case "RosterVector": return nameof(IInterviewStateForExpressions.GetRosterVectorAnswer);
+                case "YesNoAndAnswersMissings": return nameof(IInterviewStateForExpressions.GetYesNoAnswer);
+                case "int[]": return nameof(IInterviewStateForExpressions.GetIntArrayAnswer);
+                case "double?": return nameof(IInterviewStateForExpressions.GetDoubleAnswer);
+                case "int?": return nameof(IInterviewStateForExpressions.GetIntAnswer);
+                case "string": return nameof(IInterviewStateForExpressions.GetStringAnswer);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(questionModelTypeName), questionModelTypeName, $"unknown question type {questionModelTypeName}");
             }
         }
 

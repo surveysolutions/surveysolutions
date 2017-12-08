@@ -600,7 +600,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
         {
             var rosterLevel = questionIdentity.RosterVector.Length;
-            return this.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector);
+
+            return questionIdentity.RosterVector.Identical(this.Identity.RosterVector, rosterLevel);
         }
 
         public override IInterviewTreeNode Clone()
@@ -627,10 +628,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void Accept(IInterviewTreeUpdater updater)
         {
             updater.UpdateEnablement(this);
-
             if (this.IsSingleFixedOption)
             {
-                updater.UpdateSingleOptionQuestion(this);
+                updater.UpdateSingleOptionQuestion(this); 
             }
             else if (this.IsMultiFixedOption)
             {
