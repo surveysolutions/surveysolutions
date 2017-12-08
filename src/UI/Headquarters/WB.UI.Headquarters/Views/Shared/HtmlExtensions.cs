@@ -36,6 +36,11 @@ namespace ASP
             return string.Format(Pages.QuestionnaireNameFormat, name, version);
         }
 
+        public static string QuestionnaireNameVerstionFirst(this HtmlHelper html, string name, long version)
+        {
+            return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
+        }
+
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression)
