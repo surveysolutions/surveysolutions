@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             catch (Exception exception)
             {
                 await this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview);
-                this.logger.Error($"Failed to load interview {this.interviewId}", exception);
+                this.logger.Error($"Failed to load interview {this.interviewId}. {exception.ToString()}", exception);
                 await this.viewModelNavigationService.NavigateToDashboard();
             }
             finally

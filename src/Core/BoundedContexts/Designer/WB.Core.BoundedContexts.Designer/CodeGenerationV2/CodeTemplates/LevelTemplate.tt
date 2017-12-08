@@ -69,9 +69,6 @@
 
 		public Func<bool> GetConditionExpression(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!enablementConditions.ContainsKey(identity.Id))
 				return null;
 			
@@ -80,9 +77,6 @@
 
 		public Func<bool>[] GetValidationExpressions(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!validationConditions.ContainsKey(identity.Id))
 				return null;
 			
@@ -91,9 +85,6 @@
 
 		public Func<object> GetVariableExpression(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!variableExpressions.ContainsKey(identity.Id))
 				return null;
 			
@@ -102,9 +93,6 @@
 
 		public Func<int, bool> GetCategoricalFilter(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!categoricalFilters.ContainsKey(identity.Id))
 				return null;
 			
@@ -147,7 +135,7 @@
 <#
 	foreach (var question in Model.Questions) 
     {
-#>        public <#=question.TypeName#> <#=question.Variable#> => _state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, <#=
+#>        public <#=question.TypeName#> <#=question.Variable#> => _state.<#=question.MethodName#>(IdOf.<#=question.Variable#>, <#=
 			question.RosterScope.Length > 0 ? "RosterVector.Take(" + question.RosterScope.Length + ")" : "RosterVector.Empty" #>);
 <# 
 	}
