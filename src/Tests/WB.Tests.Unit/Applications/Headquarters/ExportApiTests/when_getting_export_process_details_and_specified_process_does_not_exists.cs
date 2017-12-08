@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
@@ -15,18 +15,18 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
     public class when_getting_export_process_details_and_specified_process_does_not_exists : ExportControllerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var mockOfDataExportStatusReader = new Mock<IDataExportStatusReader>();
             mockOfDataExportStatusReader.Setup(x => x.GetDataExportStatusForQuestionnaire(questionnaireIdentity, null))
                 .Returns((DataExportStatusView)null);
 
             controller = CreateExportController(dataExportStatusReader: mockOfDataExportStatusReader.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
+        private void BecauseOf() => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
-        It should_return_http_not_found_response = () =>
+        [NUnit.Framework.Test] public void should_return_http_not_found_response () =>
             result.ShouldBeOfExactType<NotFoundResult>();
 
         private static ExportController controller;
