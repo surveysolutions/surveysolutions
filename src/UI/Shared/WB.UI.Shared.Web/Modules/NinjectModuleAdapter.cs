@@ -94,6 +94,11 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<T>().ToMethod(ctx => func());
         }
 
+        public void BindToMethod<T>(Func<IModuleContext, T> func)
+        {
+            this.Kernel.Bind<T>().ToMethod(ctx => func(new NinjectModuleContext(ctx)));
+        }
+
         void IIocRegistry.BindToConstant<T>(Func<T> func)
         {
             this.Kernel.Bind<T>().ToMethod(ctx => func()).InSingletonScope();
