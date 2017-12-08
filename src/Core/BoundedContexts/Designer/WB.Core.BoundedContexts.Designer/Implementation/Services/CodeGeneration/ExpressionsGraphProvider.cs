@@ -96,7 +96,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             return questionnaire
                 .Find<IGroup>() //GetAllGroups()
-                .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
+                .ToDictionary(
+                    group => @group.PublicKey, 
+                    group => @group.Children.OfType<IVariable>().Select(x => x.PublicKey).Union(@group.Children.Select(x => x.PublicKey)).ToList()
+                );
         }
 
         private Dictionary<Guid, List<Guid>> BuildSubstitutionDependencies(ReadOnlyQuestionnaireDocument questionnaire)
