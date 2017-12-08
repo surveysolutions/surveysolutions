@@ -1,25 +1,19 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.Controllers;
-using WB.UI.Shared.Web.Extensions;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 {
     internal class when_editing_api_user_and_user_does_not_exist : ApiUserControllerTestContext
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context ()
         {
             inputModel = new UserEditModel()
             {
@@ -31,17 +25,15 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             userManagerMock.Setup(x => x.FindByIdAsync(Moq.It.IsAny<Guid>())).Returns(Task.FromResult<HqUser>(null));
 
             controller = CreateApiUserController(userManager: userManagerMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-        {
-            actionResult = controller.Edit(inputModel).Result;
-        };
+        private void BecauseOf() => actionResult = controller.Edit(inputModel).Result;
 
-        It should_return_ViewResult = () =>
+        [NUnit.Framework.Test] public void should_return_ViewResult () =>
             actionResult.ShouldBeOfExactType<ViewResult>();
 
-        It should_execute_CreateUserCommand_onece = () =>
+        [NUnit.Framework.Test] public void should_execute_CreateUserCommand_onece () =>
             controller.ModelState.SelectMany(x=>x.Value.Errors).Select(x=>x.ErrorMessage).ShouldContain("Could not update user information because current user does not exist");
 
 
