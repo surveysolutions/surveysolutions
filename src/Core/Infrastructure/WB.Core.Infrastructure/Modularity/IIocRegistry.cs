@@ -14,6 +14,7 @@ namespace WB.Core.Infrastructure.Modularity
         void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface;
         void BindToRegisteredInterface<TInterface, TRegisteredInterface>() where TRegisteredInterface : TInterface;
         void BindToMethod<T>(Func<T> func);
+        void BindToMethod<T>(Func<IModuleContext, T> func);
         void BindToConstant<T>(Func<T> func);
         void BindAsSingleton(Type @interface, Type implementation);
         void BindGeneric(Type implementation);
