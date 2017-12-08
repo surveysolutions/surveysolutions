@@ -7,7 +7,7 @@
                         :id="$me.id + '_' + option.value" 
                         :name="$me.id" 
                         :value="option.value" 
-                        :disabled="!$me.acceptAnswers"
+                        :disabled="!$me.acceptAnswer"
                         v-model="answer"
                         v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
                         <label :for="$me.id + '_' + option.value">
