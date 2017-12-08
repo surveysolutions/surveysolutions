@@ -15,7 +15,7 @@
                     <p>{{error.recomendation}}</p>
                 </div>
                 <div class="action-buttons">
-					<input name="file" ref="uploader" v-show="false" accept=".tsv, .txt" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
+					<input name="file" ref="uploader" v-show="false" :accept="allowedFileExtensions" type="file" @change="onFileChange" class="btn btn-default btn-lg btn-action-questionnaire" />
                     <button type="button" class="btn btn-success" @click="$refs.uploader.click()">{{$t('UploadUsers.ReUploadTabFile')}}</button>
                     <router-link class="btn btn-link" :to="{ name: 'upload'}">{{$t('UploadUsers.BackToImport')}}</router-link>
 				</div>
@@ -35,6 +35,9 @@ export default {
     },
     fileName() {
       return this.$store.getters.upload.fileName;
+    },
+    allowedFileExtensions(){
+        return this.config.config.allowedUploadFileExtensions.join(', ');
     },
     verificationErrors() {
       return this.$store.getters.upload.verificationErrors;

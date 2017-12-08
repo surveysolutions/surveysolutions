@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
@@ -29,7 +30,11 @@ namespace WB.UI.Headquarters.Controllers
                 ImportUsersCompleteStatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportCompleteStatus" }),
                 ImportUsersCancelUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "CancelToImportUsers" }),
                 SupervisorCreateUrl = Url.Action("Create", "Supervisor"),
-                InterviewerCreateUrl = Url.Action("Create", "Interviewer"),
+                InterviewerCreateUrl = Url.Action("Create", "Interviewer")
+            },
+            Config = new
+            {
+                AllowedUploadFileExtensions = new[] { TextExportFile.Extension, TabExportFile.Extention }
             }
         });
     }
