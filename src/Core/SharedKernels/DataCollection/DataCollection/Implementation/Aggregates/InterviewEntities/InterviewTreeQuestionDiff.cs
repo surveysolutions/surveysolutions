@@ -6,81 +6,92 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 {
     public class InterviewTreeQuestionDiff : InterviewTreeValidateableDiff
     {
+        public InterviewTreeQuestionDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode) 
+            : base(sourceNode, changedNode)
+        {
+            var sourceQuestionNode = sourceNode as InterviewTreeQuestion;
+            var changedQuestionNode = changedNode as InterviewTreeQuestion;
+            IsTitleChanged = IsTitleChangedImpl(sourceQuestionNode, changedQuestionNode);
+
+            IsAnswerRemoved = IsAnswerRemovedImpl(sourceQuestionNode, changedQuestionNode);
+
+            IsAnswerChanged = IsAnswerChangedImpl(sourceQuestionNode, changedQuestionNode);
+            AreLinkedOptionsChanged = AreLinkedOptionsChangedImpl(sourceQuestionNode, changedQuestionNode);
+            AreLinkedToListOptionsChanged = AreLinkedToListOptionsChangedImpl(sourceQuestionNode, changedQuestionNode);
+
+            NodeIsMarkedAsReadonly = NodeIsMarkedAsReadonlyImpl(sourceQuestionNode, changedQuestionNode);
+        }
+
         public new InterviewTreeQuestion SourceNode => base.SourceNode as InterviewTreeQuestion;
         public new InterviewTreeQuestion ChangedNode => base.ChangedNode as InterviewTreeQuestion;
 
-        public InterviewTreeQuestionDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode) : base(sourceNode, changedNode)
+
+        public bool IsTitleChanged { get; }
+
+        public bool IsAnswerRemoved { get; }
+
+        public bool IsAnswerChanged { get; }
+        public bool AreLinkedOptionsChanged { get; }
+        public bool AreLinkedToListOptionsChanged { get; }
+
+        public bool NodeIsMarkedAsReadonly { get; }
+
+        public bool IsTitleChangedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
+            if (IsNodeRemoved) return false;
+            if (IsNodeAdded && !changedNode.Title.HasSubstitutions) return false;
+            return sourceNode?.Title.Text != changedNode.Title.Text;
         }
 
-        public bool IsTitleChanged
+        public bool IsAnswerRemovedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
-            get
-            {
-                if (this.IsNodeRemoved) return false;
-                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
-                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
-            }
+            return sourceNode != null && sourceNode.IsAnswered() &&
+                    (changedNode == null || !changedNode.IsAnswered());
         }
 
-        public bool IsAnswerRemoved => this.SourceNode != null && this.SourceNode.IsAnswered() &&
-            (this.ChangedNode == null || !this.ChangedNode.IsAnswered());
-
-        public bool IsAnswerChanged
+        public bool IsAnswerChangedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
-            get
-            {
-                if (this.ChangedNode == null) return false;
+            if (changedNode == null) return false;
 
-                if (this.SourceNode == null) return this.ChangedNode.IsAnswered();
+            if (sourceNode == null) return changedNode.IsAnswered();
 
-                if ((this.SourceNode.IsAnswered() && !this.ChangedNode.IsAnswered()) ||
-                    (!this.SourceNode.IsAnswered() && this.ChangedNode.IsAnswered())) return true;
+            if ((sourceNode.IsAnswered() && !changedNode.IsAnswered()) ||
+                (!sourceNode.IsAnswered() && changedNode.IsAnswered())) return true;
 
-                return !this.SourceNode.InterviewQuestion.EqualByAnswer(this.ChangedNode.InterviewQuestion);
+            return !sourceNode.InterviewQuestion.EqualByAnswer(changedNode.InterviewQuestion);
                 
-            }
         }
-        public bool AreLinkedOptionsChanged
+        public bool AreLinkedOptionsChangedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
-            get
-            {
-                if (this.ChangedNode == null) return false;
-                if (!this.ChangedNode.IsLinked) return false;
+            if (changedNode == null) return false;
+            if (!changedNode.IsLinked) return false;
 
-                var sourceOptions = this.SourceNode?.AsLinked.Options ?? new List<RosterVector>();
+            var sourceOptions = sourceNode?.AsLinked.Options ?? new List<RosterVector>();
 
-                if (sourceOptions.Count != this.ChangedNode.AsLinked.Options.Count)
-                    return true;
+            if (sourceOptions.Count != changedNode.AsLinked.Options.Count)
+                return true;
 
-                return !sourceOptions.SequenceEqual(this.ChangedNode.AsLinked.Options);
-            }
+            return !sourceOptions.SequenceEqual(changedNode.AsLinked.Options);
         }
 
-        public bool AreLinkedToListOptionsChanged
+        public bool AreLinkedToListOptionsChangedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
-            get
-            {
-                if (this.ChangedNode == null) return false;
-                if (!this.ChangedNode.IsLinkedToListQuestion) return false;
+            if (changedNode == null) return false;
+            if (!changedNode.IsLinkedToListQuestion) return false;
 
-                var sourceOptions = this.SourceNode?.AsLinkedToList.Options ?? EmptyArray<int>.Value;
+            var sourceOptions = sourceNode?.AsLinkedToList.Options ?? EmptyArray<int>.Value;
 
-                if (sourceOptions.Length != this.ChangedNode.AsLinkedToList.Options.Length)
-                    return true;
+            if (sourceOptions.Length != changedNode.AsLinkedToList.Options.Length)
+                return true;
 
-                return !sourceOptions.SequenceEqual(this.ChangedNode.AsLinkedToList.Options);
-            }
+            return !sourceOptions.SequenceEqual(changedNode.AsLinkedToList.Options);
         }
 
-        public bool NodeIsMarkedAsReadonly
+        public bool NodeIsMarkedAsReadonlyImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
-            get
-            {
-                if (this.ChangedNode == null) return false;
-                if (this.IsNodeAdded) return this.ChangedNode.IsReadonly;
-                return !SourceNode.IsReadonly && this.ChangedNode.IsReadonly;
-            }
+            if (changedNode == null) return false;
+            if (IsNodeAdded) return changedNode.IsReadonly;
+            return !sourceNode.IsReadonly && changedNode.IsReadonly;
         }
     }
 }

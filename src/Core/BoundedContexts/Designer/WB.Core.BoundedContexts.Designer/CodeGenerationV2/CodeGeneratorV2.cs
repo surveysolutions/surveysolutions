@@ -31,10 +31,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             this.modelsFactory = modelsFactory;
         }
 
-        public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion)
+        public Dictionary<string, string> Generate(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)
         {
+            var settings = new CodeGeneratorV2Settings(targetVersion);
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
-            ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
+            ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument, settings);
             model.LookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
 
             var transformText = new InterviewExpressionStorageTemplate(model).TransformText();
@@ -48,25 +49,37 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
             foreach (ConditionMethodModel variableMethodModel in model.VariableMethodModel)
             {
-                var methodTemplate = new ConditionMethodTemplate(variableMethodModel);
+                var methodTemplate = new ConditionMethodTemplate(variableMethodModel)
+                {
+                    InSingleFile = inSingleFile
+                };
                 generatedClasses.Add(variableMethodModel.Location.Key, methodTemplate.TransformText());
             }
 
             foreach (ConditionMethodModel expressionMethodModel in model.ExpressionMethodModel)
             {
-                var methodTemplate = new ConditionMethodTemplate(expressionMethodModel);
+                var methodTemplate = new ConditionMethodTemplate(expressionMethodModel)
+                {
+                    InSingleFile = inSingleFile
+                };
                 generatedClasses.Add(expressionMethodModel.Location.Key, methodTemplate.TransformText());
             }
 
             foreach (OptionsFilterMethodModel categoricalOptionsFilterModel in model.CategoricalOptionsFilterModel)
             {
-                var methodTemplate = new OptionsFilterMethodTemplate(categoricalOptionsFilterModel);
+                var methodTemplate = new OptionsFilterMethodTemplate(categoricalOptionsFilterModel)
+                {
+                    InSingleFile = inSingleFile
+                };
                 generatedClasses.Add(categoricalOptionsFilterModel.Location.Key, methodTemplate.TransformText());
             }
 
             foreach (LinkedFilterMethodModel linkedFilterMethodModel in model.LinkedFilterMethodModel)
             {
-                var methodTemplate = new LinkedFilterMethodTemplate(linkedFilterMethodModel);
+                var methodTemplate = new LinkedFilterMethodTemplate(linkedFilterMethodModel)
+                {
+                    InSingleFile = inSingleFile
+                };
                 generatedClasses.Add(linkedFilterMethodModel.Location.Key, methodTemplate.TransformText());
             }
 

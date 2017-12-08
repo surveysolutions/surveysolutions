@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.DataCollection
 {
@@ -133,6 +134,11 @@ namespace WB.Core.SharedKernels.DataCollection
 
             return new RosterVector(value.Split('-').Where(val => !string.IsNullOrEmpty(val)).Select(decimal.Parse));
         }
+        
+        public RosterVector Take(int targetLength)
+        {
+            return this.Shrink(targetLength);
+        }
 
         public RosterVector Shrink(int targetLength)
         {
@@ -145,6 +151,18 @@ namespace WB.Core.SharedKernels.DataCollection
             if (targetLength > this.Length)
                 throw new ArgumentException(
                     $"Cannot shrink roster vector {this} with length {this.Length} to bigger length {targetLength}.");
+
+            switch (targetLength)
+            {
+                case 0:
+                    return new RosterVector(System.Array.Empty<int>());
+                case 1:
+                    return new RosterVector(new[] {this.coordinates[0]});
+                case 2:
+                    return new RosterVector(new[] { this.coordinates[0], this.coordinates[1] });
+                case 3:
+                    return new RosterVector(new[] { this.coordinates[0], this.coordinates[1], this.coordinates[2] });
+            }
 
             return this.coordinates.Take(targetLength).ToArray();
         }
@@ -181,6 +199,16 @@ namespace WB.Core.SharedKernels.DataCollection
                 return false;
 
             return this.coordinates.SequenceEqual(other.coordinates);
+        }
+
+        public bool Identical(RosterVector other, int otherLength)
+        {
+            if (other == null) return false;
+
+            if (this.Length == 0 && otherLength == 0 || ReferenceEquals(this, other))
+                return true;
+            
+            return ArrayExtensions.SequenceEqual(this.coordinates, other.coordinates, otherLength);
         }
 
         #endregion

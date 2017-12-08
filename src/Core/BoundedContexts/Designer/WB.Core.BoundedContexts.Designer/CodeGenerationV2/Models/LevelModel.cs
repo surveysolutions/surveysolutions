@@ -29,11 +29,15 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
         public List<RosterModel> Rosters { get; } = new List<RosterModel>();
         public List<VariableModel> Variables { get; } = new List<VariableModel>();
 
-        public void Init(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames, IQuestionTypeToCSharpTypeMapper questionTypeMapper)
+        public void Init(
+            ReadOnlyQuestionnaireDocument questionnaire, 
+            Dictionary<RosterScope, string> levelClassNames, 
+            IQuestionTypeToCSharpTypeMapper questionTypeMapper, 
+            CodeGeneratorV2Settings settings)
         {
-            this.CreateQuestionsForCurrentAndParentLevels(questionnaire, questionTypeMapper);
+            this.CreateQuestionsForCurrentAndParentLevels(questionnaire, questionTypeMapper, settings);
 
-            this.CreateVariablesForCurrentAndParentLevels(questionnaire, questionTypeMapper);
+            this.CreateVariablesForCurrentAndParentLevels(questionnaire, questionTypeMapper, settings);
 
             this.CreateRostersForCurrentAndParentLevels(questionnaire, levelClassNames);
         }
@@ -60,8 +64,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             }
         }
 
-        private void CreateVariablesForCurrentAndParentLevels(ReadOnlyQuestionnaireDocument questionnaire,
-            IQuestionTypeToCSharpTypeMapper questionTypeMapper)
+        private void CreateVariablesForCurrentAndParentLevels(ReadOnlyQuestionnaireDocument questionnaire, IQuestionTypeToCSharpTypeMapper questionTypeMapper, CodeGeneratorV2Settings settings)
         {
             foreach (var variable in questionnaire.Find<IVariable>())
             {
@@ -78,21 +81,23 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             }
         }
 
-        private void CreateQuestionsForCurrentAndParentLevels(ReadOnlyQuestionnaireDocument questionnaire,
-            IQuestionTypeToCSharpTypeMapper questionTypeMapper)
+        private void CreateQuestionsForCurrentAndParentLevels(ReadOnlyQuestionnaireDocument questionnaire, IQuestionTypeToCSharpTypeMapper questionTypeMapper, CodeGeneratorV2Settings settings)
         {
             foreach (var question in questionnaire.Find<IQuestion>().Where(x => !ExcludedQuestionTypes.Contains(x.QuestionType)))
             {
                 var rosterScope = questionnaire.GetRosterScope(question);
                 if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
 
-                this.Questions.Add(new QuestionModel
+                var questionModel = new QuestionModel
                 {
                     Id = question.PublicKey,
                     Variable = questionnaire.GetVariable(question),
                     TypeName = questionTypeMapper.GetQuestionType(question, questionnaire),
+                  
                     RosterScope = rosterScope
-                });
+                };
+                questionModel.MethodName = questionTypeMapper.GetQuestionMethodName(questionModel.TypeName, settings.TargetVersion);
+                this.Questions.Add(questionModel);
             }
         }
     }
