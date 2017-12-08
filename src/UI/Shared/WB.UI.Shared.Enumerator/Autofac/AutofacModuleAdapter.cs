@@ -81,11 +81,6 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.Register(ctx => func()).SingleInstance();
         }
 
-        public void BindToConstructor<T>(Func<IConstructorContext, T> func)
-        {
-            throw new NotImplementedException();
-        }
-
         public void BindAsSingleton(Type @interface, Type implementation)
         {
             if (@interface.IsGenericType)

@@ -106,9 +106,9 @@ namespace WB.UI.Designer.App_Start
                 new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)).AsWebNinject(),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
-                new QuestionnaireVerificationModule().AsNinject(),
+                new QuestionnaireVerificationModule(),
                 new MembershipModule().AsNinject(),
-                new MainModule().AsWebNinject(),
+                new MainModule(),
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(MvcApplication).Assembly)
                 );
