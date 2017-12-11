@@ -105,12 +105,12 @@ namespace WB.UI.Designer.App_Start
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)).AsWebNinject(),
                 new DesignerCommandDeserializationModule(),
-                new DesignerBoundedContextModule(dynamicCompilerSettings),
+                new DesignerBoundedContextModule(dynamicCompilerSettings).AsNinject(),
                 new QuestionnaireVerificationModule().AsNinject(),
                 new MembershipModule().AsNinject(),
                 new MainModule().AsWebNinject(),
-                new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(MvcApplication).Assembly)
+                new FileInfrastructureModule().AsNinject(),
+                new ProductVersionModule(typeof(MvcApplication).Assembly).AsNinject()
                 );
 
             kernel.Bind<IAggregateRootCacheCleaner>().To<DummyAggregateRootCacheCleaner>().InSingletonScope();

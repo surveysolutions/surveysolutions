@@ -1,14 +1,14 @@
-﻿using Ninject.Modules;
-using WB.Core.Infrastructure.FileSystem;
+﻿using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Infrastructure.Native.Files
 {
-    public class FileInfrastructureModule : NinjectModule
+    public class FileInfrastructureModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IFileSystemAccessor>().To<FileSystemIOAccessor>();
+            registry.Bind<IFileSystemAccessor, FileSystemIOAccessor>();
             //this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
         }
     }
