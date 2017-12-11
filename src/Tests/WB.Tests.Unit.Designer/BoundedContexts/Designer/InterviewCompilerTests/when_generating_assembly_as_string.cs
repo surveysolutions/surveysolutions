@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
         private static string resultAssembly;
         private static EmitResult emitResult;
         private static Dictionary<string, string> generatedClasses = new Dictionary<string, string>();
-        private static PortableExecutableReference[] referencedPortableAssemblies;
+        private static List<MetadataReference> referencedPortableAssemblies;
 
         public static string testClassToCompile =
             @"using System.Collections.Generic;

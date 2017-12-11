@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
         private static string resultAssembly;
         private static EmitResult emitResult;
         private static Dictionary<string, string> generatedClasses;
-        private static PortableExecutableReference[] referencedPortableAssemblies;
+        private static List<MetadataReference> referencedPortableAssemblies;
 
 
         private static string fileName = "validation:11111111111111111111111111111112";
