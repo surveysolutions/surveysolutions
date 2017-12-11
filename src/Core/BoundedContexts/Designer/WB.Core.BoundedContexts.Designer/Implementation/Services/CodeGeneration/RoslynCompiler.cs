@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,
-            MetadataReference[] referencedPortableAssemblies,
+            IEnumerable<MetadataReference> referencedPortableAssemblies,
             out string generatedAssembly)
         {
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
