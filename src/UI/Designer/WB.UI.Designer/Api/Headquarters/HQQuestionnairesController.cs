@@ -115,17 +115,10 @@ namespace WB.UI.Designer.Api.Headquarters
             int versionToCompileAssembly;
 
             if (specifiedCompilationVersion.HasValue)
-            {
                 versionToCompileAssembly = specifiedCompilationVersion.Value;
-            }
-            else if (clientQuestionnaireContentVersion >= 22)
-            {
-                versionToCompileAssembly = 22;
-            }
             else
             {
-                var questionnaireContentVersion =
-                    this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
+                var questionnaireContentVersion = this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source);
 
                 versionToCompileAssembly = clientQuestionnaireContentVersion > 19
                     ? Math.Max(20, questionnaireContentVersion)

@@ -80,27 +80,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             },
-            new QuestionnaireContentVersion
-            {
-                Version = 21, /*When adding new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
-                NewFeatures = new []
-                {
-                    new QuestionnaireFeature
-                    {
-                        HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Audio).Any(),
-                        Description = "Contains Audio Question"
-                    }
-                }
-            },
-            new QuestionnaireContentVersion
+            new QuestionnaireContentVersion()
             {
                 Version = ApiVersion.MaxQuestionnaireVersion, /*When adding new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
                     {
-                        HasQuestionnaire = questionnaire => false,
-                        Description = "Performance impovements"
+                        HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Audio).Any(),
+                        Description = "Contains Audio Question"
                     }
                 }
             }

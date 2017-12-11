@@ -76,7 +76,8 @@ namespace WB.UI.Designer.Api
             //do async
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
             var questionnaire = this.GetQuestionnaire(id).Source;
-            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, supervisorVersion, out var assembly);
+            string assembly;
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire, supervisorVersion, out assembly);
             if (generated.Success)
             {
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -86,12 +87,16 @@ namespace WB.UI.Designer.Api
 
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/x-msdownload");
                 response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment"); 
-                response.Content.Headers.ContentDisposition.FileName = $"expressions-{id}.dll";
+                response.Content.Headers.ContentDisposition.FileName = string.Format("expressions-{0}.dll", id);
                 return response;
             }
+            else
+            {
+                //var errorLocations = generated.Diagnostics.Select(x => x.Location).Distinct().Aggregate("Errors: \r\n", (current, location) => current + (current + "\r\n" + location));
+                var errorLocations = generated.Diagnostics.Select(x => x.Message).Aggregate("Errors: \r\n", (current, message) => current + "\r\n" + message);
 
-            var errorLocations = generated.Diagnostics.Select(x => x.Message).Aggregate("Errors: \r\n", (current, message) => current + "\r\n" + message);
-            return this.Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
+                return this.Request.CreateResponse(HttpStatusCode.PreconditionFailed, errorLocations);
+            }
         }
 
         private QuestionnaireView GetQuestionnaire(Guid id)

@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 {
     public interface ICodeGenerationModelsFactory
     {
-        ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire, CodeGeneratorV2Settings settings);
+        ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire);
         IEnumerable<LinkedFilterMethodModel> CreateLinkedFilterModels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames);
         IEnumerable<OptionsFilterMethodModel> CreateCategoricalOptionsFilterModels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames);
         IEnumerable<ConditionMethodModel> CreateMethodModels(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames);

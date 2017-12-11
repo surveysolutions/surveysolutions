@@ -71,9 +71,9 @@
       <DependentUpon>ConditionMethodTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="CodeGenerationV2\CodeTemplates\InterviewExpressionStorageTemplate.cs">
-      <DependentUpon>InterviewExpressionStorageTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>InterviewExpressionStorageTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="CodeGenerationV2\CodeTemplates\LevelTemplate.cs">
       <DesignTime>True</DesignTime>
