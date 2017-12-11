@@ -4,7 +4,6 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Portable;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
@@ -19,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.QRBarcode:
                 case QuestionType.Text:
                 case QuestionType.Area:
+                
                     return "string";
                 case QuestionType.Numeric:
                     return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";
@@ -56,28 +56,9 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                 case QuestionType.Audio:
                     return typeof(AudioAnswerForConditions).Name;
+
                 default:
                     throw new ArgumentException("Unknown question type.");
-            }
-        }
-
-        public string GetQuestionMethodSuffix(string questionModelTypeName)
-        {
-            switch (questionModelTypeName)
-            {
-                case "AudioAnswerForConditions": return "Audio";
-                case "DateTime?": return "DateTime";
-                case "TextListAnswerRow[]": return "TextList";
-                case "GeoLocation": return "GeoLocation";
-                case "RosterVector[]": return "RosterVectorArray";
-                case "RosterVector": return "RosterVector";
-                case "YesNoAndAnswersMissings": return "YesNo";
-                case "int[]": return "IntArray";
-                case "double?": return "Double";
-                case "int?": return "Int";
-                case "string": return "String";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(questionModelTypeName), questionModelTypeName, $"unknown question type {questionModelTypeName}");
             }
         }
 
