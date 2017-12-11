@@ -30,6 +30,18 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.RegisterType<TImplementation>().As<TInterface>();
         }
 
+        public void Bind(Type @interface, Type implementation)
+        {
+            if (@interface.IsGenericType)
+            {
+                containerBuilder.RegisterGeneric(implementation).As(@interface);
+            }
+            else
+            {
+                containerBuilder.RegisterType(implementation).As(@interface);
+            }
+        }
+
         public void Bind<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface1, TInterface2
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2>();
@@ -51,6 +63,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
         }
 
         public void RegisterDenormalizer<T>() where T : IEventHandler
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unbind<T>()
         {
             throw new NotImplementedException();
         }

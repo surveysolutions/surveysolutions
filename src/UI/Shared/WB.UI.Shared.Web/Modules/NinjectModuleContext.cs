@@ -26,6 +26,11 @@ namespace WB.UI.Shared.Web.Modules
         {
             return context.Kernel.Get<T>();
         }
+
+        public T Get<T>()
+        {
+            return context.Kernel.Get<T>();
+        }
     }
 
     public class NinjectConstructorContext : IConstructorContext

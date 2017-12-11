@@ -144,8 +144,8 @@ namespace WB.UI.Headquarters
                 new WebConfigurationModule().AsNinject(),
                 new CaptchaModule(),
                 new QuestionnaireUpgraderModule(),
-                new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
+                new FileInfrastructureModule().AsNinject(),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly).AsNinject(),
                 new HeadquartersUIModule().AsWebNinject(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
