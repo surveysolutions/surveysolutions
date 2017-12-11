@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
         }
 
         public static RosterInstance CreateFromIdentity(Identity identity)
-            => new RosterInstance(identity.Id, identity.RosterVector.Shrink(identity.RosterVector.Length - 1), identity.RosterVector.Coordinates.Last());
+            => new RosterInstance(identity.Id, identity.RosterVector.Shrink(identity.RosterVector.Length - 1), identity.RosterVector.Last());
 
         private int? hashCode;
 
