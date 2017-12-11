@@ -100,15 +100,15 @@ namespace WB.UI.Designer.App_Start
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule(membershipSettings).AsNinject(),
                 new CaptchaModule(),
-                new NLogLoggingModule(),
+                new NLogLoggingModule().AsNinject(),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)).AsWebNinject(),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
-                new QuestionnaireVerificationModule(),
+                new QuestionnaireVerificationModule().AsNinject(),
                 new MembershipModule().AsNinject(),
-                new MainModule(),
+                new MainModule().AsWebNinject(),
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(MvcApplication).Assembly)
                 );
