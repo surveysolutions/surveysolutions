@@ -10,6 +10,5 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
 
         public string TypeName { get; set; }
         public RosterScope RosterScope { get; set; }
-        public string MethodSuffix { get; set; }
     }
 }
