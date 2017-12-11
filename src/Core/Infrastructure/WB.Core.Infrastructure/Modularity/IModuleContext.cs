@@ -7,5 +7,14 @@ namespace WB.Core.Infrastructure.Modularity
         T Resolve<T>();
 
         Type MemberDeclaringType { get; }
+
+        T Inject<T>();
     }
+
+    public interface IConstructorContext
+    {
+        T Inject<T>();
+    }
+
+
 }
