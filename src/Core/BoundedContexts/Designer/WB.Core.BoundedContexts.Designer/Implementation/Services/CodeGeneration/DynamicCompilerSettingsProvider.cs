@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
@@ -25,11 +24,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             "netstandard.dll"
         };
 
-        public DynamicCompilerSettingsProvider(ICompilerSettings settings, IFileSystemAccessor fileSystemAccessor)
+        public DynamicCompilerSettingsProvider()
         {
         }
 
-        public IEnumerable<MetadataReference> GetAssembliesToReference(int apiVersion)
+        public List<MetadataReference> GetAssembliesToReference(int apiVersion)
         {
             var references = new List<MetadataReference>();
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
