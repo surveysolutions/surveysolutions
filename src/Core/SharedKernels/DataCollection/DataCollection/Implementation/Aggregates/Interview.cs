@@ -2418,7 +2418,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (roster.IsFixed)
                 {
                     string changedRosterTitle = questionnaire.GetFixedRosterTitle(roster.Identity.Id,
-                        roster.Identity.RosterVector.Coordinates.Last());
+                        roster.Identity.RosterVector.Last());
 
                     roster.SetRosterTitle(changedRosterTitle);
                 }
