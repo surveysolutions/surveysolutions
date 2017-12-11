@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Services.CodeGeneration
 {
     public interface IDynamicCompilerSettingsProvider
     {
-        IEnumerable<PortableExecutableReference> GetAssembliesToReference(int apiVersion);
+        IEnumerable<MetadataReference> GetAssembliesToReference(int apiVersion);
     }
 }

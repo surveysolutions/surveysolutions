@@ -15,14 +15,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,
-            PortableExecutableReference[] referencedPortableAssemblies,
+            MetadataReference[] referencedPortableAssemblies,
             out string generatedAssembly)
         {
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
                     generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
                     .ToArray();
 
-            var metadataReferences = new List<PortableExecutableReference>();
+            var metadataReferences = new List<MetadataReference>();
             metadataReferences.AddRange(referencedPortableAssemblies);
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return compileResult;
         }
 
-        static CSharpCompilation CreateCompilation(Guid templateId, IEnumerable<SyntaxTree> syntaxTrees, List<PortableExecutableReference> metadataReferences)
+        static CSharpCompilation CreateCompilation(Guid templateId, IEnumerable<SyntaxTree> syntaxTrees, List<MetadataReference> metadataReferences)
         {
             return CSharpCompilation.Create(
                 String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),
