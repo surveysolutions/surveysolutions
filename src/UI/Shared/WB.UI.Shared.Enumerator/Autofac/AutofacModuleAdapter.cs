@@ -86,6 +86,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.Register(ctx => func()).SingleInstance();
         }
 
+        public void BindToConstructorInSingletonScope<T>(Func<IModuleContext, T> func)
+        {
+            throw new NotImplementedException();
+        }
+
         public void BindAsSingleton(Type @interface, Type implementation)
         {
             if (@interface.IsGenericType)
