@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,7 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             metadataReferences.AddRange(referencedPortableAssemblies);
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
-
+            //ValidateUsedTypes(syntaxTrees, compilation);
             EmitResult compileResult;
             generatedAssembly = string.Empty;
            
@@ -55,6 +56,71 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
                 references: metadataReferences);
+        }
+
+        private static List<string> allowedNamespaces = new List<string>
+        {
+            "System",
+            "System.Collections",
+            "System.Collections.Generic",
+            "System.Linq",
+            "System.Linq.Expressions",
+            "System.Linq.Queryable",
+            "System.Text.RegularExpressions"
+        };
+
+        /// <summary>
+        /// https://stackoverflow.com/a/29178633/72174
+        /// </summary>
+        static void ValidateUsedTypes(IEnumerable<SyntaxTree> trees, CSharpCompilation compilation)
+        {
+            foreach (var syntaxTree in trees)
+            {
+                var root = syntaxTree.GetRoot();
+                var nodes = root.DescendantNodes(n => true);
+
+                var st = root.SyntaxTree;
+                var sm = compilation.GetSemanticModel(st);
+                List<INamedTypeSymbol> namedTypeSymbols = new List<INamedTypeSymbol>();
+
+                if (nodes != null)
+                {
+                    var syntaxNodes = nodes as SyntaxNode[] ?? nodes.ToArray();
+
+                    // IdentifierNameSyntax:
+                    //  - var keyword
+                    //  - identifiers of any kind (including type names)
+                    var namedTypes = syntaxNodes
+                        .OfType<IdentifierNameSyntax>()
+                        .Select(id => sm.GetSymbolInfo(id).Symbol)
+                        .OfType<INamedTypeSymbol>();
+
+
+                    namedTypeSymbols.AddRange(namedTypes);
+
+                    // ExpressionSyntax:
+                    //  - method calls
+                    //  - property uses
+                    //  - field uses
+                    //  - all kinds of composite expressions
+                    var expressionTypes = syntaxNodes
+                        .OfType<ExpressionSyntax>()
+                        .Select(ma => sm.GetTypeInfo(ma).Type)
+                        .OfType<INamedTypeSymbol>();
+
+                    namedTypeSymbols.AddRange(expressionTypes);
+                }
+
+                foreach (var namedTypeSymbol in namedTypeSymbols.Where(x => x.ContainingAssembly.Name != compilation.AssemblyName))
+                {
+                    var containingNamespace = namedTypeSymbol.ContainingNamespace.ToString();
+                    if (!allowedNamespaces.Contains(containingNamespace) &&
+                        !containingNamespace.StartsWith("WB.Core.SharedKernels.DataCollection"))
+                    {
+                        throw new Exception("Invalid Namespace");
+                    }
+                }
+            }
         }
     }
 }
