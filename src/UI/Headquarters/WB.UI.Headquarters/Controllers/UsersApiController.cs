@@ -297,13 +297,11 @@ namespace WB.UI.Headquarters.Controllers
             if (request?.File?.FileBytes == null)
                 throw new UserPreloadingException(BatchUpload.Prerequisite_FileOpen);
 
-            var txtExtension = @".txt";
-            var tsvExtension = @".tsv";
-
             var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
 
-            if (!new []{txtExtension, tsvExtension}.Contains(fileExtension))
-                throw new UserPreloadingException(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, tsvExtension, txtExtension));
+            if (!new[] {TextExportFile.Extension, TabExportFile.Extention}.Contains(fileExtension))
+                throw new UserPreloadingException(string.Format(BatchUpload.UploadUsers_NotAllowedExtension,
+                    TabExportFile.Extention, TextExportFile.Extension));
 
             return this.userImportService
                 .VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
