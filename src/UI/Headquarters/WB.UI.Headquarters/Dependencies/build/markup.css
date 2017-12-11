@@ -9336,20 +9336,6 @@ dl dd:after {
 .warning-message {
   font-family: "RobotoBold"; }
 
-dl dt {
-  font-weight: normal;
-  font-family: "RobotoBold";
-  float: left;
-  margin-right: 5px; }
-
-dl dd:after {
-  display: block;
-  clear: both;
-  content: ""; }
-
-.warning-message {
-  font-family: "RobotoBold"; }
-
 .left-column #log-in {
   text-align: left; }
 
