@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
     {
         string GetQuestionType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire);
         string GetVariableType(VariableType variableType);
-        string GetQuestionMethodName(string questionModelTypeName, int settingsTargetVersion);
+        string GetQuestionMethodSuffix(string questionModelTypeName);
     }
 }

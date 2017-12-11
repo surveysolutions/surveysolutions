@@ -366,14 +366,14 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
             
             #line default
             #line hidden
-            this.Write(" => _state.");
+            this.Write(" => _state.Get");
             
             #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(question.MethodName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(question.MethodSuffix));
             
             #line default
             #line hidden
-            this.Write("(IdOf.");
+            this.Write("Answer(IdOf.");
             
             #line 138 "D:\Projects\SurveySolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\LevelTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(question.Variable));
