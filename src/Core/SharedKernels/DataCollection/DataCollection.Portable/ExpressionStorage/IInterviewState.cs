@@ -6,7 +6,6 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
     public interface IInterviewStateForExpressions
     {
-        int Version { get; }
         T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector);
 
         AudioAnswerForConditions GetAudioAnswer(Guid questionId, IEnumerable<int> rosterVector);

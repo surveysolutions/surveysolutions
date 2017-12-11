@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             this.questionTypeMapper = questionTypeMapper;
         }
 
-        public ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire, CodeGeneratorV2Settings settings)
+        public ExpressionStorageModel CreateModel(ReadOnlyQuestionnaireDocument questionnaire)
         {
             var codeGenerationModel = new ExpressionStorageModel
             {
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             
             foreach (var level in codeGenerationModel.Levels)
             {
-                level.Init(questionnaire, levelClassNames, questionTypeMapper, settings);
+                level.Init(questionnaire, levelClassNames, questionTypeMapper);
             }
 
             codeGenerationModel.ExpressionMethodModel.AddRange(this.CreateMethodModels(questionnaire, levelClassNames));
@@ -128,6 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                         levelClassName);
             }
         }
+
 
         private IEnumerable<ConditionMethodModel> CreateVariableMethodModel(ReadOnlyQuestionnaireDocument questionnaire, Dictionary<RosterScope, string> levelClassNames)
         {

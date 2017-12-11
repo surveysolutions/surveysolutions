@@ -121,7 +121,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             var questionnaireVersionToCompileAssembly =
                 this.questionnaireCompilationVersionService.GetById(questionnaire.PublicKey)?.Version 
-                ?? Math.Max(22, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire));
+                ?? Math.Max(20, this.engineVersionService.GetQuestionnaireContentVersion(questionnaire));
 
             return this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
                 questionnaire, questionnaireVersionToCompileAssembly,
