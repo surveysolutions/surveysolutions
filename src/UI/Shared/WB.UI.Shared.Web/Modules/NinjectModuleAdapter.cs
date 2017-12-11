@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Web.Http.Filters;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
@@ -51,6 +50,11 @@ namespace WB.UI.Shared.Web.Modules
         void IIocRegistry.Bind<TInterface, TImplementation>()
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>();
+        }
+
+        public void Bind(Type @interface, Type implementation)
+        {
+            this.Kernel.Bind(@interface).To(implementation);
         }
 
         void IIocRegistry.Bind<TInterface1, TInterface2, TImplementation>() 
@@ -152,6 +156,12 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.BindHttpFilter<T>(filterScope)
                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(TAttribute)).Any());
         }
+
+        void IIocRegistry.Unbind<TInterface>()
+        {
+            this.Kernel.Unbind<TInterface>();
+        }
+
 
         public void RegisterDenormalizer<T>(IKernel kernel) where T : IEventHandler
         {

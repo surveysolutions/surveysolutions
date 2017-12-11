@@ -9,6 +9,8 @@ namespace WB.Core.Infrastructure.Modularity
         Type MemberDeclaringType { get; }
 
         T Inject<T>();
+
+        T Get<T>();
     }
 
     public interface IConstructorContext
