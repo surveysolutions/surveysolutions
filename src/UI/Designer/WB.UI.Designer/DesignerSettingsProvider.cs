@@ -24,9 +24,6 @@ namespace WB.UI.Designer
             foreach (var settings in  dynamicCompilerSettings.SettingsCollection)
             {
                 yield return new ApplicationSetting($"DynamicCompilerSettings.{settings.Name}.Name", settings.Name);
-                yield return new ApplicationSetting($"DynamicCompilerSettings.{settings.Name}.PortableAssembliesPath", settings.PortableAssembliesPath);
-                yield return new ApplicationSetting($"DynamicCompilerSettings.{settings.Name}.PortableAssemblies", 
-                    string.Join(";",settings.DefaultReferencedPortableAssemblies));
             }
 
             var smtpSection = GetSection<SmtpSection>("system.net/mailSettings/smtp");
