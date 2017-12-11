@@ -24,10 +24,7 @@ namespace WB.UI.Designer
         }
 
         [ConfigurationProperty("settings")]
-        DynamicCompilerSettingsCollection settingsCollection
-        {
-            get { return (DynamicCompilerSettingsCollection)base["settings"]; }
-        }
+        DynamicCompilerSettingsCollection settingsCollection => (DynamicCompilerSettingsCollection)base["settings"];
     }
 
     [ConfigurationCollection(typeof(DynamicCompilerSettings), AddItemName = "dynamicCompilerSettings")]
@@ -46,38 +43,9 @@ namespace WB.UI.Designer
 
     public class DynamicCompilerSettings : ConfigurationElement, IDynamicCompilerSettings
     {
-        public string Name { get { return name; } }
-
-        public string PortableAssembliesPath
-        {
-            get { return portableAssembliesPath; }
-        }
-
-        public IEnumerable<string> DefaultReferencedPortableAssemblies
-        {
-            get
-            {
-                string[] assemblies = this.portableAssemblies.Split(';').Select(s => s.Trim()).ToArray();
-                return assemblies;
-            }
-        }
+        public string Name => name;
 
         [ConfigurationProperty("name", IsRequired = true)]
-        public string name
-        {
-            get { return (string)this["name"]; }
-        }
-
-        [ConfigurationProperty("portableAssembliesPath", IsRequired = true)]
-        public string portableAssembliesPath
-        {
-            get { return (string)this["portableAssembliesPath"]; }
-        }
-
-        [ConfigurationProperty("portableAssemblies")]
-        public string portableAssemblies
-        {
-            get { return (string)base["portableAssemblies"]; }
-        }
+        public string name => (string)this["name"];
     }
 }

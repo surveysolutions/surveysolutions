@@ -12,18 +12,6 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\mscorlib.dll" Link="netStandardRefs\mscorlib.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Collections.dll" Link="netStandardRefs\System.Collections.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Core.dll" Link="netStandardRefs\System.Core.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.dll" Link="netStandardRefs\System.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Linq.dll" Link="netStandardRefs\System.Linq.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Linq.Expressions.dll" Link="netStandardRefs\System.Linq.Expressions.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Linq.Queryable.dll" Link="netStandardRefs\System.Linq.Queryable.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Runtime.dll" Link="netStandardRefs\System.Runtime.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Runtime.Extensions.dll" Link="netStandardRefs\System.Runtime.Extensions.dll" />
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\System.Text.RegularExpressions.dll" Link="netStandardRefs\System.Text.RegularExpressions.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\netstandard.dll" Link="netStandardRefs\netstandard.dll" />
   </ItemGroup>
   <ItemGroup>
