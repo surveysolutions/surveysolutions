@@ -86,16 +86,13 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 var rosterScope = questionnaire.GetRosterScope(question);
                 if (!rosterScope.IsSameOrParentScopeFor(this.RosterScope)) continue;
 
-                var questionModel = new QuestionModel
+                this.Questions.Add(new QuestionModel
                 {
                     Id = question.PublicKey,
                     Variable = questionnaire.GetVariable(question),
                     TypeName = questionTypeMapper.GetQuestionType(question, questionnaire),
-                  
                     RosterScope = rosterScope
-                };
-                questionModel.MethodSuffix = questionTypeMapper.GetQuestionMethodSuffix(questionModel.TypeName);
-                this.Questions.Add(questionModel);
+                });
             }
         }
     }
