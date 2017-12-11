@@ -134,7 +134,12 @@ namespace WB.Core.SharedKernels.DataCollection
 
             return new RosterVector(value.Split('-').Where(val => !string.IsNullOrEmpty(val)).Select(decimal.Parse));
         }
-        
+
+        public int Last()
+        {
+            return this.coordinates[this.Length - 1];
+        }
+
         public RosterVector Take(int targetLength)
         {
             return this.Shrink(targetLength);
