@@ -10,43 +10,38 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 {
     public class DynamicCompilerSettingsProvider : IDynamicCompilerSettingsProvider
     {
-        readonly ICompilerSettings settings;
-        readonly IFileSystemAccessor fileSystemAccessor;
+        private static readonly string[] staticAssembliesRefs =
+        {
+            //"System.dll",
+            //"System.Core.dll",
+            //"System.Runtime.dll",
+            //"System.Collections.dll",
+            //"System.Linq.dll",
+            //"System.Linq.Expressions.dll",
+            //"System.Linq.Queryable.dll",
+            //"mscorlib.dll",
+            //"System.Runtime.Extensions.dll",
+            //"System.Text.RegularExpressions.dll",
+            "netstandard.dll"
+        };
 
         public DynamicCompilerSettingsProvider(ICompilerSettings settings, IFileSystemAccessor fileSystemAccessor)
         {
-            this.settings = settings;
-            this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public IEnumerable<PortableExecutableReference> GetAssembliesToReference(int apiVersion)
+        public IEnumerable<MetadataReference> GetAssembliesToReference(int apiVersion)
         {
-            var references = new List<PortableExecutableReference>();
+            var references = new List<MetadataReference>();
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
-            references.AddRange(this.GetPathToAssemblies("profile111"));
+            var assembly = typeof(DesignerBoundedContextModule).Assembly;
+            foreach (var staticAssembliesRef in staticAssembliesRefs)
+            {
+                var referenceResource = assembly.GetManifestResourceStream("WB.Core.BoundedContexts.Designer.netStandardRefs." + staticAssembliesRef);
+                AssemblyMetadata assemblyMetadata = AssemblyMetadata.CreateFromStream(referenceResource);
+                references.Add(assemblyMetadata.GetReference());
+            }
+
             return references;
-        }
-
-        IEnumerable<PortableExecutableReference> GetPathToAssemblies(string profileName)
-        {
-            var list = this.settings.SettingsCollection.ToList();
-
-            IDynamicCompilerSettings setting = list.Single(i => i.Name == profileName);
-
-            return GetMetadataReferences(setting);
-        }
-
-        IEnumerable<PortableExecutableReference> GetMetadataReferences(IDynamicCompilerSettings settings)
-        {
-            return settings.DefaultReferencedPortableAssemblies.Select(
-                defaultReferencedPortableAssembly =>
-                    AssemblyMetadata.CreateFromFile(
-                        this.fileSystemAccessor.CombinePath(
-                            settings.PortableAssembliesPath,
-                            defaultReferencedPortableAssembly
-                        )
-                ).GetReference()
-            );
         }
     }
 }
