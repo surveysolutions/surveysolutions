@@ -192,7 +192,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsSupervisors { get; private set; }
         public bool IsHidden { get; private set; }
         public bool IsReadonly { get; private set; }
-        public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
+        public bool IsValid
+        {
+            get
+            {
+                if (this.FailedValidations == null) return this.isValidWithoutFailedValidations;
+                
+                return this.FailedValidations.Count == 0; 
+            }
+        }
 
         public void RunImportInvariantsOrThrow(InterviewQuestionInvariants questionInvariants)
         {

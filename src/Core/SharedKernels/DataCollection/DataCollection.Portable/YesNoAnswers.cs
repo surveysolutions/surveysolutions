@@ -59,18 +59,21 @@ namespace WB.Core.SharedKernels.DataCollection
         {
             get
             {
-                if (!this.allOptionCodes.Value.Contains(code))
-                {
-                    throw new IndexOutOfRangeException("Option with code {code} is absent");
-                }
                 if (this.No.Contains(code))
                 {
                     return false;
                 }
+
                 if (this.Yes.Contains(code))
                 {
                     return true;
                 }
+
+                if (!this.allOptionCodes.Value.Contains(code))
+                {
+                    throw new IndexOutOfRangeException("Option with code {code} is absent");
+                }
+
                 return null;
             }
         }

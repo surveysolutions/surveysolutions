@@ -101,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void ActualizeTree()
         {
             foreach (var treeSection in this.Sections)
-                treeSection.ActualizeChildren(); 
+                treeSection.ActualizeChildren();
         }
 
         public void RemoveNode(Identity identity)
@@ -438,7 +438,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.nodesIdCache.Add(node.Identity.Id, new List<IInterviewTreeNode>());
             }
 
-           this.nodesIdCache[node.Identity.Id].Add(node);
+            this.nodesIdCache[node.Identity.Id].Add(node);
         }
 
         public void ProcessRemovedNodeByIdentity(Identity identity)
@@ -464,11 +464,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
         {
-            foreach (var entity in FindEntity(entityId))
+            var foundEntities = FindEntity(entityId);
+
+            bool IsFound(IInterviewTreeNode entity)
             {
-                if (entity.Identity.Equals(entityId, questionIdentity.RosterVector, entity.Identity.RosterVector.Length))
+                return entity.Identity.Equals(entityId, questionIdentity.RosterVector,
+                    entity.Identity.RosterVector.Length);
+            }
+
+            if (foundEntities is List<IInterviewTreeNode> foundList)
+            {
+                for (var index = 0; index < foundList.Count; index++)
                 {
-                    return entity;
+                    var entity = foundList[index];
+
+                    if (IsFound(entity))
+                    {
+                        return entity;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var entity in FindEntity(entityId))
+                {
+                    if (IsFound(entity))
+                    {
+                        return entity;
+                    }
                 }
             }
 

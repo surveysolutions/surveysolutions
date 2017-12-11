@@ -74,7 +74,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private InterviewTreeQuestion GetQuestion(Guid questionId, IEnumerable<int> rosterVector)
         {
-            var question = this.tree.GetQuestion(new Identity(questionId, new RosterVector(rosterVector)));
+            if (!(rosterVector is RosterVector rv))
+            {
+                rv = new RosterVector(rosterVector);
+            }
+
+            var question = this.tree.GetQuestion(new Identity(questionId, rv));
             if ((!question.IsAnswered() || question.IsDisabled()) && !question.IsYesNo) // because of missing field
                 return null;
             return question;
