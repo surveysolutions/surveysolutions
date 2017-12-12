@@ -7,9 +7,10 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using Ninject;
+using NLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Monitoring;
@@ -18,7 +19,7 @@ using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    public class PostgresPlainStorageModule : Ninject.Modules.NinjectModule
+    public class PostgresPlainStorageModule : IModule
     {
         public const string SessionFactoryName = "PlainSessionFactory";
         private readonly PostgresPlainStorageSettings settings;
@@ -29,9 +30,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.settings = settings;
         }
 
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<PostgresPlainStorageSettings>().ToConstant(this.settings);
+            registry.BindToConstant<PostgresPlainStorageSettings>(() => this.settings);
             
             try
             {
@@ -39,33 +40,29 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
             catch (Exception exc)
             {
-                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
+                LogManager.GetLogger("maigration", typeof(PostgresPlainStorageModule)).Fatal(exc, "Error during db initialization.");
                 throw;
             }
 
-            this.Bind<ISessionFactory>().ToMethod(context => this.BuildSessionFactory(settings.SchemaName))
-                                        .InSingletonScope()
-                                        .Named(SessionFactoryName);
+            registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory(settings.SchemaName), SessionFactoryName);
 
-            this.Kernel.Bind<PlainPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
-            this.Kernel.Bind<NoTransactionPlainPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
+            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<PlainPostgresTransactionManager>();
+            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<NoTransactionPlainPostgresTransactionManager>();
 
-            this.Kernel.Bind<Func<PlainPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<PlainPostgresTransactionManager>());
-            this.Kernel.Bind<Func<NoTransactionPlainPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<NoTransactionPlainPostgresTransactionManager>());
+            registry.BindToMethod<Func<PlainPostgresTransactionManager>>(context => () => context.Get<PlainPostgresTransactionManager>());
+            registry.BindToMethod<Func<NoTransactionPlainPostgresTransactionManager>>(context => () => context.Get<NoTransactionPlainPostgresTransactionManager>());
 
-            this.Kernel
-                .Bind<PlainTransactionManagerProvider>()
-                .ToConstructor(constructor => new PlainTransactionManagerProvider(
+            registry
+                .BindToConstructorInSingletonScope<PlainTransactionManagerProvider>(constructor => new PlainTransactionManagerProvider(
                     constructor.Inject<Func<PlainPostgresTransactionManager>>(),
-                    constructor.Inject<Func<NoTransactionPlainPostgresTransactionManager>>()))
-                .InSingletonScope();
+                    constructor.Inject<Func<NoTransactionPlainPostgresTransactionManager>>()));
 
-            this.Kernel.Bind<IPlainSessionProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());
-            this.Kernel.Bind<IPlainTransactionManager>().ToMethod(context => context.Kernel.Get<PlainPostgresTransactionManager>());
+            registry.BindToMethod<IPlainSessionProvider>(context => context.Get<PlainTransactionManagerProvider>());
+            registry.BindToMethod<IPlainTransactionManager>(context => context.Get<PlainPostgresTransactionManager>());
 
-            this.Kernel.Bind<IPlainTransactionManagerProvider>().ToMethod(context => context.Kernel.Get<PlainTransactionManagerProvider>());
+            registry.BindToMethod<IPlainTransactionManagerProvider>(context => context.Get<PlainTransactionManagerProvider>());
 
-            this.Bind(typeof(IPlainStorageAccessor<>)).To(typeof(PostgresPlainStorageRepository<>));
+            registry.Bind(typeof(IPlainStorageAccessor<>), typeof(PostgresPlainStorageRepository<>));
 
             DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
         }

@@ -12,11 +12,9 @@ using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using Ninject;
-using Ninject.Activation;
-using Ninject.Planning.Targets;
+using NLog;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
@@ -24,6 +22,7 @@ using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -51,12 +50,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.mappingAssemblies = mappingAssemblies;
         }
 
-        protected override IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IContext context)
-            => (IReadSideStorage<TEntity>) context.Kernel.GetService(typeof(PostgreReadSideStorage<>).MakeGenericType(typeof(TEntity)));
+        protected override IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IModuleContext context)
+            => (IReadSideStorage<TEntity>) context.GetServiceWithGenericType(typeof(PostgreReadSideStorage<>), typeof(TEntity));
 
-        public override void Load()
+        public override void Load(IIocRegistry registry)
         {
-            base.Load();
+            base.Load(registry);
 
             try
             {
@@ -64,59 +63,56 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
             catch (Exception exc)
             {
-                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
+                LogManager.GetLogger("maigration", typeof(PostgresReadSideModule)).Fatal(exc, "Error during db initialization.");
                 throw new InitializationException(Subsystem.Database, null, exc);
             }
 
-            this.Kernel.Bind<PostgreConnectionSettings>().ToConstant(new PostgreConnectionSettings
+            registry.BindToConstant<PostgreConnectionSettings>(() => new PostgreConnectionSettings
             {
                 ConnectionString = this.connectionString,
                 SchemaName = ReadSideSchemaName
             });
 
-            this.Kernel.Bind<IPostgresReadSideBootstraper>().To<PostgresReadSideBootstraper>()
-                                                            .WithConstructorArgument("dbUpgradeSettings", this.dbUpgradeSettings);
+            registry.BindWithConstructorArgument<IPostgresReadSideBootstraper, PostgresReadSideBootstraper>("dbUpgradeSettings", this.dbUpgradeSettings);
 
-            this.Kernel.Bind(typeof(PostgreReadSideStorage<>), typeof(IQueryableReadSideRepositoryReader<>),
-                typeof(IReadSideRepositoryReader<>), typeof(INativeReadSideStorage<>))
-                .ToSelf()
-                .InSingletonScope()
-                .WithConstructorArgument("entityIdentifierColumnName", GetEntityIdentifierColumnName);
+            registry.BindToSelfInSingletonScopeWithConstructorArgument(
+                new []
+                {
+                    typeof(PostgreReadSideStorage<>),
+                    typeof(IQueryableReadSideRepositoryReader<>),
+                    typeof(IReadSideRepositoryReader<>),
+                    typeof(INativeReadSideStorage<>)
+                },
+                "entityIdentifierColumnName", GetEntityIdentifierColumnName);
 
-            this.Kernel.Bind(typeof(IReadSideRepositoryWriter<>)).ToMethod(this.GetReadSideStorageWrappedWithCache).InSingletonScope(); 
-            
-            this.Kernel.Bind<ISessionFactory>()
-                       .ToMethod(kernel => this.BuildSessionFactory())
-                       .InSingletonScope()
-                       .Named(ReadSideSessionFactoryName);
+            registry.BindToMethodInSingletonScope(typeof(IReadSideRepositoryWriter<>), this.GetReadSideStorageWrappedWithCache);
 
-            this.Kernel.Bind<CqrsPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
-            this.Kernel.Bind<NoTransactionCqrsPostgresTransactionManager>().ToSelf().InIsolatedThreadScopeOrRequestScopeOrThreadScope();
+            registry.BindToMethodInSingletonScope<ISessionFactory>(kernel => this.BuildSessionFactory(), ReadSideSessionFactoryName);
 
-            this.Kernel.Bind<Func<CqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<CqrsPostgresTransactionManager>());
-            this.Kernel.Bind<Func<NoTransactionCqrsPostgresTransactionManager>>().ToMethod(context => () => context.Kernel.Get<NoTransactionCqrsPostgresTransactionManager>());
-            
-            this.Kernel
-                .Bind<TransactionManagerProvider>()
-                .ToConstructor(constructor => new TransactionManagerProvider(
-                    constructor.Inject<Func<CqrsPostgresTransactionManager>>(),
-                    constructor.Inject<Func<NoTransactionCqrsPostgresTransactionManager>>()))
-                .InSingletonScope();
+            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<CqrsPostgresTransactionManager>();
+            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<NoTransactionCqrsPostgresTransactionManager>();
 
-            this.Kernel.Bind<ISessionProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>()).Named(SessionProviderName);
-            this.Kernel.Bind<ITransactionManager>().ToMethod(context => context.Kernel.Get<CqrsPostgresTransactionManager>());
+            registry.BindToMethod<Func<CqrsPostgresTransactionManager>>(context => () => context.Get<CqrsPostgresTransactionManager>());
+            registry.BindToMethod<Func<NoTransactionCqrsPostgresTransactionManager>>(context => () => context.Get<NoTransactionCqrsPostgresTransactionManager>());
 
-            this.Kernel.Bind<ITransactionManagerProvider>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
-            this.Kernel.Bind<ITransactionManagerProviderManager>().ToMethod(context => context.Kernel.Get<TransactionManagerProvider>());
+            registry.BindToConstructorInSingletonScope<TransactionManagerProvider>(c => new TransactionManagerProvider(
+                    c.Inject<Func<CqrsPostgresTransactionManager>>(),
+                    c.Inject<Func<NoTransactionCqrsPostgresTransactionManager>>()));
+
+            registry.BindToMethod<ISessionProvider>(context => context.Get<TransactionManagerProvider>(), SessionProviderName);
+            registry.BindToMethod<ITransactionManager>(context => context.Get<CqrsPostgresTransactionManager>());
+
+            registry.BindToMethod<ITransactionManagerProvider>(context => context.Get<TransactionManagerProvider>());
+            registry.BindToMethod<ITransactionManagerProviderManager>(context => context.Get<TransactionManagerProvider>());
 
             DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
         }
 
-        private object GetEntityIdentifierColumnName(IContext context, ITarget target)
+        private object GetEntityIdentifierColumnName(IModuleContext context)
         {
-            var entityType = context.GenericArguments[0];
+            var entityType = context.GetGenericArgument();
 
-            var sessionFactory = context.Kernel.Get<ISessionFactory>(ReadSideSessionFactoryName);
+            var sessionFactory = context.Get<ISessionFactory>(ReadSideSessionFactoryName);
 
             var persister = sessionFactory.GetClassMetadata(entityType);
 
