@@ -65,7 +65,7 @@
       <HintPath>..\..\..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper, Version=6.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\CsvHelper.6.0.0\lib\net45\CsvHelper.dll</HintPath>
+      <HintPath>..\..\..\..\packages\CsvHelper.6.0.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
