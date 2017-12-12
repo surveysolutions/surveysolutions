@@ -142,17 +142,17 @@ namespace WB.UI.Headquarters
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new WebConfigurationModule().AsNinject(),
-                new CaptchaModule(),
-                new QuestionnaireUpgraderModule(),
+                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")).AsNinject(),
+                new QuestionnaireUpgraderModule().AsNinject(),
                 new FileInfrastructureModule().AsNinject(),
                 new ProductVersionModule(typeof(HeadquartersUIModule).Assembly).AsNinject(),
                 new HeadquartersUIModule().AsWebNinject(),
-                new PostgresKeyValueModule(cacheSettings),
+                new PostgresKeyValueModule(cacheSettings).AsNinject(),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
                     PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
-                    mappingAssemblies)
+                    mappingAssemblies).AsNinject()
             );
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
@@ -212,7 +212,7 @@ namespace WB.UI.Headquarters
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
             kernel.Load(
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
                 eventStoreModule,
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new HeadquartersBoundedContextModule(basePath,
