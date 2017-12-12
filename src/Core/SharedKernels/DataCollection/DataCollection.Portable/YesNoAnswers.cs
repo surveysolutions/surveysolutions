@@ -36,24 +36,27 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         public YesNoAndAnswersMissings(IEnumerable<int> allOptionCodes, IReadOnlyCollection<CheckedYesNoAnswerOption> checkedOptions = null)
         {
-            this.allOptionCodes = new Lazy<int[]>(allOptionCodes.ToArray);
+            this.allOptionCodesEnumerable = allOptionCodes;
             this.checkedOptions = checkedOptions;
             this.selectedYesCodes = null;
             this.selectedNoCodes = null;
             this.missingCodes = null;
+            this.allOptionCodes = null;
         }
-        
-        private readonly Lazy<int[]> allOptionCodes;
+
+        private int[] allOptionCodes;
         private int[] selectedYesCodes;
         private int[] selectedNoCodes;
         private int[] missingCodes;
 
         private readonly IReadOnlyCollection<CheckedYesNoAnswerOption> checkedOptions;
+        private readonly IEnumerable<int> allOptionCodesEnumerable;
 
-        public int[] All => this.allOptionCodes.Value;
+        public int[] All => allOptionCodes ?? (this.allOptionCodes = this.allOptionCodesEnumerable.ToArray());
         public int[] Yes => selectedYesCodes ?? (selectedYesCodes = this.checkedOptions?.Where(c => c.Yes).Select(c => c.Value).ToArray() ?? Array.Empty<int>());
         public int[] No => selectedNoCodes ?? (selectedNoCodes = this.checkedOptions?.Where(c => c.No).Select(c => c.Value).ToArray() ?? Array.Empty<int>());
-        public int[] Missing => missingCodes ?? (missingCodes = this.allOptionCodes.Value.Except(this.checkedOptions.Select(c => c.Value)).ToArray());
+        public int[] Missing => missingCodes 
+            ?? (missingCodes = this.All.Except(this.checkedOptions?.Select(c => c.Value) ?? Array.Empty<int>()).ToArray());
 
         public bool? this[int code]
         {
@@ -69,7 +72,7 @@ namespace WB.Core.SharedKernels.DataCollection
                     return true;
                 }
 
-                if (!this.allOptionCodes.Value.Contains(code))
+                if (!this.All.Contains(code))
                 {
                     throw new IndexOutOfRangeException("Option with code {code} is absent");
                 }
