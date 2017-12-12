@@ -31,7 +31,7 @@
             return new ChildGauge(gauge, labels);
         }
 
-        private class ChildGauge : IGauge
+        private struct ChildGauge : IGauge
         {
             private readonly Prometheus.Gauge gauge;
             private readonly string[] labels;
@@ -64,6 +64,5 @@
             void Dec(double amount = 1);
             void Set(double amount);
         }
-
     }
 }
