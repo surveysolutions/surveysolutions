@@ -28,6 +28,11 @@
             {
                 this.counter = counter;
                 this.labels = labels;
+                
+                for (int i = 0; i < this.labels.Length; i++)
+                {
+                    if (this.labels[i] == null) this.labels[i] = "null";
+                }
             }
 
             public void Inc(double amount = 1)
