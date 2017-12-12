@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters
             };
 
             var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
-                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace)).AsNinject();
 
             var interviewCountLimitString = settingsProvider.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
