@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using NHibernate;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
@@ -28,8 +27,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
             using (var session = sessionFactory.OpenStatelessSession())
             {
-                var packagesCount = session.Query<BrokenInterviewPackage>().Count();
-                CommonMetrics.BrokenPackagesCount.Set(packagesCount);
+                var packagesCount = session.CreateSQLQuery(@"
+                    select exceptiontype, count(exceptiontype) 
+                    from plainstore.brokeninterviewpackages 
+                    group by exceptiontype");
+                
+                foreach (var package in packagesCount.List().Cast<object[]>())
+                {
+                    CommonMetrics.BrokenPackagesCount.Labels((string)package[0]).Set((long)package[1]);
+                }
             }
 
             throttle.Reset();

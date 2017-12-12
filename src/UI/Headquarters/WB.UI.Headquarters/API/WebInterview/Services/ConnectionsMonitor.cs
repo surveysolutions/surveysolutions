@@ -49,9 +49,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         public void StartMonitoring()
         {
             cancellation = new CancellationTokenSource();
-
+            
             Task.Factory.StartNew(async () =>
             {
+                Thread.CurrentThread.Name = "WebInterview Connections monitor thread";
                 while (true)
                 {
                     if (cancellation.Token.IsCancellationRequested) break;
