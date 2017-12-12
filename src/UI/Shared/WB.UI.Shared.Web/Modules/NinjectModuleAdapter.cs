@@ -79,7 +79,7 @@ namespace WB.UI.Shared.Web.Modules
 
         void IIocRegistry.Bind<TImplementation>()
         {
-            this.Kernel.Bind<TImplementation>().To<TImplementation>();
+            this.Kernel.Bind<TImplementation>().ToSelf();
         }
 
         public void BindWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
@@ -96,6 +96,16 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope()
                 .WithConstructorArgument(argumentName, argumentValue);
+        }
+
+        public void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(
+            params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
+        {
+            var syntax = this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
+            foreach (var constructorArgument in constructorArguments)
+            {
+                syntax.WithConstructorArgument(constructorArgument.Name, c => constructorArgument.Value(new NinjectModuleContext(c)));
+            }
         }
 
         void IIocRegistry.BindToRegisteredInterface<TInterface, TRegisteredInterface>()

@@ -1,15 +1,14 @@
-﻿using Ninject;
-using Ninject.Modules;
-using Quartz;
+﻿using Quartz;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
-    public class QuartzNinjectModule : NinjectModule
+    public class QuartzNinjectModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<ISchedulerFactory>().To<NinjectSchedulerFactory>();
-            this.Bind<IScheduler>().ToMethod(ctx => ctx.Kernel.Get<ISchedulerFactory>().GetScheduler()).InSingletonScope();
+            registry.Bind<ISchedulerFactory, NinjectSchedulerFactory>();
+            registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler());
         }
     }
 }
