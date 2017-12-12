@@ -21,6 +21,8 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static T To<T>(this object obj)
         {
+            if (obj is T variable) return variable;
+
             Type t = typeof(T);
             Type u = Nullable.GetUnderlyingType(t);
             Type o = obj?.GetType();
