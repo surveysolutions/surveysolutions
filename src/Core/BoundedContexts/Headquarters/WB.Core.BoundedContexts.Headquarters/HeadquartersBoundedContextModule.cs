@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory());
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewDetailsViewFactory, InterviewDetailsViewFactory>();
-            registry.BindWithConstructorArgument<IInterviewFactory, InterviewFactory>("dbTransaction", null);
+            registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
             registry.Bind<IChartStatisticsViewFactory, ChartStatisticsViewFactory>();
             registry.Bind<IQuestionnaireBrowseViewFactory, QuestionnaireBrowseViewFactory>();
