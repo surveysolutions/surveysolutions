@@ -12,7 +12,7 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.1\build\netstandard2.0\ref\netstandard.dll" Link="netStandardRefs\netstandard.dll" />
+    <EmbeddedResource Include="..\..\..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\ref\netstandard.dll" Link="netStandardRefs\netstandard.dll" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.9" />
