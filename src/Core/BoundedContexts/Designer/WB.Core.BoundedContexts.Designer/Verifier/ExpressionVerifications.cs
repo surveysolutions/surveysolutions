@@ -411,7 +411,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             var dependencies = new Dictionary<string, string[]>();
             var questionsWithConditions = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.ConditionExpression));
-            var questionsWithValidationConditions = questionnaire.Find<IQuestion>(question => question.ValidationConditions.Count > 0);
             var questionsWithOptionsFilter = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression));
             var variables = questionnaire.Find<IVariable>(question => !string.IsNullOrWhiteSpace(question.Expression));
 
@@ -432,22 +431,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 if (question.StataExportCaption != null)
                     AddDependencies(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.ConditionExpression, questionnaire).ToArray());
-            }
-
-            foreach (var question in questionsWithValidationConditions)
-            {
-                if (question.StataExportCaption != null)
-                {
-                    List<string> identifiers = new List<string>();
-
-                    foreach (var questionValidationCondition in question.ValidationConditions)
-                    {
-                        identifiers.AddRange(this.GetIdentifiersUsedInExpression(questionValidationCondition.Expression, questionnaire));
-                    }
-
-                    if (identifiers.Count > 0)
-                        AddDependencies(question.StataExportCaption, identifiers.ToArray());
-                }
             }
 
             foreach (var question in questionsWithOptionsFilter)
