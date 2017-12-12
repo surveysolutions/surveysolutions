@@ -19,13 +19,6 @@ namespace WB.UI.Designer
                 yield return applicationSetting;
             }
 
-            var dynamicCompilerSettings = GetSection<DynamicCompilerSettingsGroup>("dynamicCompilerSettingsGroup");
-            
-            foreach (var settings in  dynamicCompilerSettings.SettingsCollection)
-            {
-                yield return new ApplicationSetting($"DynamicCompilerSettings.{settings.Name}.Name", settings.Name);
-            }
-
             var smtpSection = GetSection<SmtpSection>("system.net/mailSettings/smtp");
             yield return new ApplicationSetting("MailSettings.From", smtpSection.From);
             yield return new ApplicationSetting("MailSettings.DeliveryMethod", smtpSection.DeliveryMethod);
