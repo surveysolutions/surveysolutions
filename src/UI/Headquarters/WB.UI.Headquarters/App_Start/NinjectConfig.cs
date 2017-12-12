@@ -164,7 +164,7 @@ namespace WB.UI.Headquarters
                 SchemaName = "events"
             };
 
-            var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
+            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace)).AsNinject();
 
             var interviewCountLimitString = settingsProvider.AppSettings["Limits.MaxNumberOfInterviews"];
@@ -225,7 +225,7 @@ namespace WB.UI.Headquarters
                     synchronizationSettings,
                     trackingSettings,
                     interviewCountLimit).AsNinject(),
-                new QuartzNinjectModule().AsNinject(),
+                new QuartzModule().AsNinject(),
                 new WebInterviewNinjectModule(),
                 new OwinSecurityModule());
 
