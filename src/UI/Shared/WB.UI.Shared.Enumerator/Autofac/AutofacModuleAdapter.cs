@@ -103,6 +103,17 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
                 .WithParameter(argumentName, argumentValue);
         }
 
+        public void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(
+            params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
+        {
+            throw new NotImplementedException();
+            /*var registrationBuilder = containerBuilder.RegisterType<TImplementation>().As<TInterface>();
+            foreach (var constructorArgument in constructorArguments)
+            {
+                registrationBuilder.WithParameter(constructorArgument.Name, constructorArgument.Value(null));
+            }*/
+        }
+
         void IIocRegistry.BindToRegisteredInterface<TInterface, TRegisteredInterface>()
         {
             containerBuilder.Register<TInterface>(c => c.Resolve<TRegisteredInterface>());

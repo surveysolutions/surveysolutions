@@ -1,8 +1,5 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System;
-using Ninject;
-using Ninject.Modules;
-using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -76,10 +73,11 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
-    public class HeadquartersBoundedContextModule : NinjectModule
+    public class HeadquartersBoundedContextModule : IModule
     {
         private readonly string currentFolderPath;
         private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
@@ -115,22 +113,22 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.trackingSettings = trackingSettings;
         }
 
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IEventTypeResolver>().ToConstant(
+            registry.BindToConstant<IEventTypeResolver>(() =>
                 new EventTypeResolver(
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
-            this.Bind<SyncSettings>().ToConstant(this.syncSettings);
-            this.Bind<TrackingSettings>().ToConstant(this.trackingSettings);
+            registry.BindToConstant<SyncSettings>(() => this.syncSettings);
+            registry.BindToConstant<TrackingSettings>(() => this.trackingSettings);
 
-            this.Bind<InterviewPreconditionsServiceSettings>().ToConstant(new InterviewPreconditionsServiceSettings(this.interviewLimitCount));
+            registry.BindToConstant<InterviewPreconditionsServiceSettings>(() => new InterviewPreconditionsServiceSettings(this.interviewLimitCount));
 
-            this.Bind<Questionnaire>().ToSelf();
-            this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
-            this.Bind<IQuestionnaireExportStructureStorage>().To<QuestionnaireExportStructureStorage>().InSingletonScope();
-            this.Bind<IQuestionOptionsRepository>().To<QuestionnaireQuestionOptionsRepository>();
+            registry.Bind<Questionnaire>();
+            registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
+            registry.BindAsSingleton<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
+            registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
 
             CommandRegistry
                 .Setup<Questionnaire>()
@@ -193,173 +191,174 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             
-            this.Bind<IAndroidPackageReader>().To<AndroidPackageReader>();
+            registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
            
-            this.Bind<IPreloadingTemplateService>().To<AssignmentImportTemplateGenerator>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IPreloadedDataRepository>().To<FilebasedPreloadedDataRepository>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IPreloadedDataVerifier>().To<ImportDataVerifier>();
-            this.Bind<IQuestionDataParser>().To<QuestionDataParser>();
-            this.Bind<IPreloadedDataService>().To<ImportDataParsingService>();
+            registry.BindWithConstructorArgument<IPreloadingTemplateService, AssignmentImportTemplateGenerator>("folderPath", this.currentFolderPath);
+            registry.BindAsSingletonWithConstructorArgument<IPreloadedDataRepository, FilebasedPreloadedDataRepository>("folderPath", this.currentFolderPath);
+            registry.Bind<IPreloadedDataVerifier, ImportDataVerifier>();
+            registry.Bind<IQuestionDataParser, QuestionDataParser>();
+            registry.Bind<IPreloadedDataService, ImportDataParsingService>();
 
-            this.Bind<IExportFileNameService>().To<ExportExportFileNameService>();
+            registry.Bind<IExportFileNameService, ExportExportFileNameService>();
 
-            this.Bind<IMapStorageService>().To<FileSystemMapStorageService>().InSingletonScope().WithConstructorArgument("folderPath", this.currentFolderPath);
+            registry.BindAsSingletonWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
 
             //commented because auto registered somewhere 
-            //this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
-            this.Bind<IRecordsAccessorFactory>().To<CsvRecordsAccessorFactory>();
-            this.Bind<IPreloadedDataServiceFactory>().To<PreloadedDataServiceFactory>();
-            this.Bind<IBrokenInterviewPackagesViewFactory>().To<BrokenInterviewPackagesViewFactory>();
-            this.Bind<ISynchronizationLogViewFactory>().To<SynchronizationLogViewFactory>();
-            this.Bind<IInterviewsToDeleteFactory>().To<InterviewsToDeleteFactory>();
-            this.Bind<Func<IInterviewsToDeleteFactory>>().ToMethod(context => () => context.Kernel.Get<IInterviewsToDeleteFactory>());
-            this.Bind<IInterviewHistoryFactory>().To<InterviewHistoryFactory>();
-            this.Bind<IInterviewInformationFactory>().To<InterviewerInterviewsFactory>();
-            this.Bind<IDdiMetadataFactory>().To<DdiMetadataFactory>();
-            this.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
-            this.Bind<IDatasetWriterFactory>().To<DatasetWriterFactory>();
-            this.Bind<IDataQueryFactory>().To<DataQueryFactory>();
-            this.Bind<IQuestionnaireLabelFactory>().To<QuestionnaireLabelFactory>();
-            this.Bind<IExportViewFactory>().To<ExportViewFactory>();
-            this.Bind<IQuestionnaireVersionProvider>().To<QuestionnaireVersionProvider>();
-            this.Bind<ITranslationManagementService>().To<TranslationManagementService>();
+            //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
+            registry.Bind<IRecordsAccessorFactory, CsvRecordsAccessorFactory>();
+            registry.Bind<IPreloadedDataServiceFactory, PreloadedDataServiceFactory>();
+            registry.Bind<IBrokenInterviewPackagesViewFactory, BrokenInterviewPackagesViewFactory>();
+            registry.Bind<ISynchronizationLogViewFactory, SynchronizationLogViewFactory>();
+            registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
+            registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
+            registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
+            registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
+            registry.Bind<IDdiMetadataFactory, DdiMetadataFactory>();
+            registry.Bind<IMetaDescriptionFactory, MetaDescriptionFactory>();
+            registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
+            registry.Bind<IDataQueryFactory, DataQueryFactory>();
+            registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
+            registry.Bind<IExportViewFactory, ExportViewFactory>();
+            registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
+            registry.Bind<ITranslationManagementService, TranslationManagementService>();
             
-            this.Bind<IAllInterviewsFactory>().To<AllInterviewsFactory>();
-            this.Bind<ITeamInterviewsFactory>().To<TeamInterviewsFactory>();
-            this.Bind<IChangeStatusFactory>().To<ChangeStatusFactory>();
-            this.Bind<IQuantityReportFactory>().To<QuantityReportFactory>();
-            this.Bind<ISpeedReportFactory>().To<SpeedReportFactory>();
-            this.Bind<IDeviceInterviewersReport>().To<DeviceInterviewersReport>();
-            this.Bind<ISampleUploadViewFactory>().To<SampleUploadViewFactory>();
-            this.Bind<IAllUsersAndQuestionnairesFactory>().To<AllUsersAndQuestionnairesFactory>();
-            this.Bind<IQuestionnairePreloadingDataViewFactory>().To<QuestionnairePreloadingDataViewFactory>();
-            this.Bind<ITeamViewFactory>().To<TeamViewFactory>();
-            this.Bind<IUserViewFactory>().ToMethod(context => new UserViewFactory());
-            this.Bind<ITeamUsersAndQuestionnairesFactory>().To<TeamUsersAndQuestionnairesFactory>();
-            this.Bind<IInterviewDetailsViewFactory>().To<InterviewDetailsViewFactory>();
-            this.Bind<IInterviewFactory>().To<InterviewFactory>().WithConstructorArgument("dbTransaction", x => null);
-            this.Bind<IInterviewSummaryViewFactory>().To<InterviewSummaryViewFactory>();
-            this.Bind<IChartStatisticsViewFactory>().To<ChartStatisticsViewFactory>();
-            this.Bind<IQuestionnaireBrowseViewFactory>().To<QuestionnaireBrowseViewFactory>();
-            this.Bind<ISampleWebInterviewService>().To<SampleWebInterviewService>();
-            this.Bind<IMapBrowseViewFactory>().To<MapBrowseViewFactory>();
+            registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
+            registry.Bind<ITeamInterviewsFactory, TeamInterviewsFactory>();
+            registry.Bind<IChangeStatusFactory, ChangeStatusFactory>();
+            registry.Bind<IQuantityReportFactory, QuantityReportFactory>();
+            registry.Bind<ISpeedReportFactory, SpeedReportFactory>();
+            registry.Bind<IDeviceInterviewersReport, DeviceInterviewersReport>();
+            registry.Bind<ISampleUploadViewFactory, SampleUploadViewFactory>();
+            registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
+            registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
+            registry.Bind<ITeamViewFactory, TeamViewFactory>();
+            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory());
+            registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
+            registry.Bind<IInterviewDetailsViewFactory, InterviewDetailsViewFactory>();
+            registry.BindWithConstructorArgument<IInterviewFactory, InterviewFactory>("dbTransaction", null);
+            registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
+            registry.Bind<IChartStatisticsViewFactory, ChartStatisticsViewFactory>();
+            registry.Bind<IQuestionnaireBrowseViewFactory, QuestionnaireBrowseViewFactory>();
+            registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
+            registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             
 
-            this.Bind<IInterviewImportDataParsingService>().To<InterviewImportDataParsingService>();
+            registry.Bind<IInterviewImportDataParsingService, InterviewImportDataParsingService>();
 
-            this.Bind<IOldschoolChartStatisticsDataProvider>().To<OldschoolChartStatisticsDataProvider>();
+            registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
 
-            this.Bind<ITeamsAndStatusesReport>().To<TeamsAndStatusesReport>();
-            this.Bind<ISurveysAndStatusesReport>().To<SurveysAndStatusesReport>();
-            this.Bind<IMapReport>().To<MapReport>();
-            this.Bind<IStatusDurationReport>().To<StatusDurationReport>();
+            registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
+            registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
+            registry.Bind<IMapReport, MapReport>();
+            registry.Bind<IStatusDurationReport, StatusDurationReport>();
 
-            this.Bind<IInterviewUniqueKeyGenerator>().To<InterviewUniqueKeyGenerator>();
-            this.Bind<IRandomValuesSource>().To<RandomValuesSource>().InSingletonScope();
+            registry.Bind<IInterviewUniqueKeyGenerator, InterviewUniqueKeyGenerator>();
+            registry.BindAsSingleton<IRandomValuesSource, RandomValuesSource>();
 
-            this.Unbind<ISupportedVersionProvider>();
-            this.Bind<ISupportedVersionProvider>().To<SupportedVersionProvider>();
+            registry.Unbind<ISupportedVersionProvider>();
+            registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
 
-            this.Bind<ISyncProtocolVersionProvider>().To<SyncProtocolVersionProvider>().InSingletonScope();
+            registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
 
-            this.Bind<SyncPackagesProcessorBackgroundJobSetting>().ToConstant(this.syncPackagesProcessorBackgroundJobSetting);
-            this.Bind<InterviewDetailsBackgroundSchedulerTask>().ToSelf();
+            registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => this.syncPackagesProcessorBackgroundJobSetting);
+            registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
 
-            this.Bind<ITabletInformationService>().To<FileBasedTabletInformationService>().WithConstructorArgument("parentFolder", this.currentFolderPath);
+            registry.BindWithConstructorArgument<ITabletInformationService, FileBasedTabletInformationService>("parentFolder", this.currentFolderPath);
 
-            this.Bind<IPasswordHasher>().To<PasswordHasher>().InSingletonScope(); // external class which cannot be put to self-describing module because ninject is not portable
+            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); // external class which cannot be put to self-describing module because ninject is not portable
 
-            this.Bind<IExportFactory>().To<ExportFactory>();
+            registry.Bind<IExportFactory, ExportFactory>();
 
-            this.Kernel.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
-            //this.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
-            this.Kernel.RegisterDenormalizer<InterviewLifecycleEventHandler>();
-            this.Kernel.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
-            this.Kernel.RegisterDenormalizer<InterviewDenormalizer>();
+            registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
+            //registry.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
+            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
+            registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
+            registry.RegisterDenormalizer<InterviewDenormalizer>();
 
-            this.Kernel.Load(new QuartzNinjectModule());
+            registry.Bind<IInterviewPackagesService, InterviewPackagesService>();
 
-            this.Bind<IInterviewPackagesService>().To<InterviewPackagesService>();
+            registry.BindAsSingleton<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
+            registry.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>, EventStoreHealthChecker>();
+            registry.BindWithConstructorArgument<IAtomicHealthCheck<FolderPermissionCheckResult>, FolderPermissionChecker>("folderPath", this.currentFolderPath);
+            registry.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>, NumberOfUnhandledPackagesChecker>();
+            registry.Bind<IAtomicHealthCheck<ReadSideHealthCheckResult>, ReadSideHealthChecker>();
 
-            this.Bind<IDeleteQuestionnaireService>().To<DeleteQuestionnaireService>().InSingletonScope();
-            this.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>>().To<EventStoreHealthChecker>();
-            this.Bind<IAtomicHealthCheck<FolderPermissionCheckResult>>().To<FolderPermissionChecker>().WithConstructorArgument("folderPath", this.currentFolderPath);
-            this.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>().To<NumberOfUnhandledPackagesChecker>();
-            this.Bind<IAtomicHealthCheck<ReadSideHealthCheckResult>>().To<ReadSideHealthChecker>();
+            registry.Bind<IHealthCheckService, HealthCheckService>();
+            registry.Bind<ISubstitutionService, SubstitutionService>();
+            registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
 
-            this.Bind<IHealthCheckService>().To<HealthCheckService>();
-            this.Bind<ISubstitutionService>().To<SubstitutionService>();
-            this.Bind<ISubstitutionTextFactory>().To<SubstitutionTextFactory>();
-
-            this.Bind<ITranslationStorage>().To<TranslationStorage>();
-            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
-            this.Bind<IQuestionnaireStorage>().To<QuestionnaireStorage>().InSingletonScope(); // has internal cache, so should be singleton
+            registry.Bind<ITranslationStorage, TranslationStorage>();
+            registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>(); // has internal cache, so should be singleton
 
 
-            this.Bind<IAudioFileStorage>().To<AudioFileStorage>();
-            this.Bind<IImageFileStorage>().To<ImageFileStorage>()
-                .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath);
+            registry.Bind<IAudioFileStorage, AudioFileStorage>();
+            registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, ImageFileStorage>("rootDirectoryPath", this.currentFolderPath);
 
-            this.Bind<IInterviewSynchronizationFileStorage>().To<InterviewSynchronizationFileStorage>()
-                .InSingletonScope().WithConstructorArgument("rootDirectoryPath", this.currentFolderPath).WithConstructorArgument("syncDirectoryName", this.syncDirectoryName);
+            registry.BindAsSingletonWithConstructorArgument<IInterviewSynchronizationFileStorage, InterviewSynchronizationFileStorage>(
+                new[]
+                    {
+                        new ConstructorArgument("rootDirectoryPath", _ => this.currentFolderPath),
+                        new ConstructorArgument("syncDirectoryName", _ => this.syncDirectoryName)
+                    });
 
-            this.Bind<IQuestionnaireAssemblyAccessor>().To<QuestionnaireAssemblyAccessor>().InSingletonScope();
+            registry.BindAsSingleton<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
            
-            this.Bind<IInterviewExpressionStatePrototypeProvider>().To<InterviewExpressionStatePrototypeProvider>();
-            this.Bind<IVariableToUIStringService>().To<VariableToUIStringService>();
+            registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
+            registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
             
-            this.Bind<UserPreloadingSettings>().ToConstant(this.userPreloadingSettings);
+            registry.BindToConstant<UserPreloadingSettings>(() => this.userPreloadingSettings);
             
-            this.Bind<IUserImportVerifier>().To<UserImportVerifier>();
+            registry.Bind<IUserImportVerifier, UserImportVerifier>();
 
-            this.Bind<SampleImportSettings>().ToConstant(sampleImportSettings);
+            registry.BindToConstant<SampleImportSettings>(() => sampleImportSettings);
 
-            this.Bind<InterviewDataExportSettings>().ToConstant(this.interviewDataExportSettings);
-            this.Bind<ExportSettings>().ToConstant(this.exportSettings);
-            this.Bind<IFilebasedExportedDataAccessor>().To<FilebasedExportedDataAccessor>();
+            registry.BindToConstant<InterviewDataExportSettings>(() => this.interviewDataExportSettings);
+            registry.BindToConstant<ExportSettings>(() => this.exportSettings);
+            registry.Bind<IFilebasedExportedDataAccessor, FilebasedExportedDataAccessor>();
 
-            this.Bind<IDdiMetadataAccessor>().To<DdiMetadataAccessor>();
-            this.Bind<IDataExportFileAccessor>().To<DataExportFileAccessor>();
+            registry.Bind<IDdiMetadataAccessor, DdiMetadataAccessor>();
+            registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
-            this.Bind<IDataExportProcessesService>().To<DataExportProcessesService>().InSingletonScope();
-            this.Bind<IInterviewErrorsExporter>().To<InterviewErrorsExporter>();
+            registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();
+            registry.Bind<IInterviewErrorsExporter, InterviewErrorsExporter>();
 
-            this.Bind<ITabularDataToExternalStatPackageExportService>().To<TabularDataToExternalStatPackageExportService>();
-            this.Bind<ITabFileReader>().To<TabFileReader>();
+            registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
+            registry.Bind<ITabFileReader, TabFileReader>();
           
 
-            this.Bind<IEnvironmentContentService>().To<StataEnvironmentContentService>();
+            registry.Bind<IEnvironmentContentService, StataEnvironmentContentService>();
 
-            this.Bind<TabularFormatDataExportHandler>().ToSelf();
-            this.Bind<TabularFormatParaDataExportProcessHandler>().ToSelf();
-            this.Bind<StataFormatExportHandler>().ToSelf();
-            this.Bind<SpssFormatExportHandler>().ToSelf();
-            this.Bind<BinaryFormatDataExportHandler>().ToSelf();
+            registry.Bind<TabularFormatDataExportHandler>();
+            registry.Bind<TabularFormatParaDataExportProcessHandler>();
+            registry.Bind<StataFormatExportHandler>();
+            registry.Bind<SpssFormatExportHandler>();
+            registry.Bind<BinaryFormatDataExportHandler>();
 
-            this.Bind<ITabularFormatExportService>().To<ReadSideToTabularFormatExportService>();
-            this.Bind<ICsvWriterService>().To<CsvWriterService>();
-            this.Bind<ICsvWriter>().To<CsvWriter>();
-            this.Bind<ICsvReader>().To<CsvReader>();
-            this.Bind<IDataExportStatusReader>().To<DataExportStatusReader>();
-            this.Bind<IInterviewsExporter>().To<InterviewsExporter>();
+            registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
+            registry.Bind<ICsvWriterService, CsvWriterService>();
+            registry.Bind<ICsvWriter, CsvWriter>();
+            registry.Bind<ICsvReader, CsvReader>();
+            registry.Bind<IDataExportStatusReader, DataExportStatusReader>();
+            registry.Bind<IInterviewsExporter, InterviewsExporter>();
 
-            this.Bind<IExportQuestionService>().To<ExportQuestionService>();
+            registry.Bind<IExportQuestionService, ExportQuestionService>();
 
-            this.Bind<IRosterStructureService>().To<RosterStructureService>();
-            this.Bind<IQuestionnaireImportService>().To<QuestionnaireImportService>();
-            this.Bind<DesignerUserCredentials>().ToSelf();
+            registry.Bind<IRosterStructureService, RosterStructureService>();
+            registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
+            registry.Bind<DesignerUserCredentials>();
 
-            this.Bind<IWebInterviewConfigurator>().To<WebInterviewConfigurator>();
-            this.Bind<IWebInterviewConfigProvider>().To<WebInterviewConfigProvider>();
+            registry.Bind<IWebInterviewConfigurator, WebInterviewConfigurator>();
+            registry.Bind<IWebInterviewConfigProvider, WebInterviewConfigProvider>();
             
-            this.Bind<IDeviceSyncInfoRepository>().To<DeviceSyncInfoRepository>();
-            this.Bind<IAssignmentViewFactory>().To<AssignmentViewFactory>();
-            this.Bind<IAssignmentsService>().To<AssignmentsService>();
-            this.Bind<IAssignmetnsDeletionService>().To<AssignmetnsDeletionService>();
-            this.Bind<IAuditLog>().To<AuditLog>();
-            this.Bind<IAuditLogReader>().To<AuditLogReader>();
+            registry.Bind<IDeviceSyncInfoRepository, DeviceSyncInfoRepository>();
+            registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
+            registry.Bind<IAssignmentsService, AssignmentsService>();
+            registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
+            registry.Bind<IAuditLog, AuditLog>();
+            registry.Bind<IAuditLogReader, AuditLogReader>();
 
-            this.Bind<IPauseResumeQueue>().To<PauseResumeQueue>().InSingletonScope();
+            registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
         }
     }
 }

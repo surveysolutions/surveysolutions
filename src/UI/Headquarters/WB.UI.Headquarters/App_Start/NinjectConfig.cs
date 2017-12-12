@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
@@ -223,7 +224,8 @@ namespace WB.UI.Headquarters
                     sampleImportSettings,
                     synchronizationSettings,
                     trackingSettings,
-                    interviewCountLimit),
+                    interviewCountLimit).AsNinject(),
+                new QuartzNinjectModule().AsNinject(),
                 new WebInterviewNinjectModule(),
                 new OwinSecurityModule());
 
