@@ -3,7 +3,7 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
-    public class QuartzNinjectModule : IModule
+    public class QuartzModule : IModule
     {
         public void Load(IIocRegistry registry)
         {

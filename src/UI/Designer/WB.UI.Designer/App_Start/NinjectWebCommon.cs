@@ -104,7 +104,7 @@ namespace WB.UI.Designer.App_Start
                 new PostgresKeyValueModule(cacheSettings).AsNinject(),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
                 new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)).AsWebNinject(),
-                new DesignerCommandDeserializationModule(),
+                new DesignerCommandDeserializationModule().AsNinject(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings).AsNinject(),
                 new QuestionnaireVerificationModule().AsNinject(),
                 new MembershipModule().AsNinject(),

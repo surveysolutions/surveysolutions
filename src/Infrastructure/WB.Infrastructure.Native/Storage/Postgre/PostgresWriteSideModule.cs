@@ -1,7 +1,6 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
 using NLog;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
