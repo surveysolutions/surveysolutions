@@ -5,9 +5,9 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 {
     public interface IInterviewStateForExpressions
     {
-        T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector) where T: class;
+        T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector);
 
-        T GetVariable<T>(Guid questionId, IEnumerable<int> rosterVector) where T: class;
+        T GetVariable<T>(Guid questionId, IEnumerable<int> rosterVector);
 
         IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity);
 
