@@ -19,7 +19,7 @@
             return new ChildCounter(counter, labels);
         }
 
-        private class ChildCounter : ICounter
+        private struct ChildCounter : ICounter
         {
             private readonly Prometheus.Counter counter;
             private readonly string[] labels;

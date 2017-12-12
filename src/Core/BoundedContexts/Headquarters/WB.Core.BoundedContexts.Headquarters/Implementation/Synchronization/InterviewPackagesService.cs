@@ -110,7 +110,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         this.ProcessPackage(interviewPackage);
                     }
 
-                    CommonMetrics.BrokenPackagesCount.Dec();
+                    CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
+
                     this.brokenInterviewPackageStorage.Remove(brokenInterviewPackage.Id);
                 }
             } while (chunkOfBrokenInterviewPackages.Any());
@@ -144,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     this.ProcessPackage(interviewPackage);
                 }
 
-                CommonMetrics.BrokenPackagesCount.Dec();
+                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
                 this.brokenInterviewPackageStorage.Remove(packageId);
             });
         }
@@ -232,6 +233,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     exception);
                 this.transactionManager.RollbackCommandTransaction();
 
+                var exceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected";
+
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
                     InterviewId = interview.InterviewId,
@@ -244,14 +247,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     Events = interview.Events,
                     PackageSize = interview.Events?.Length ?? 0,
                     ProcessingDate = DateTime.UtcNow,
-                    ExceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected",
+                    ExceptionType = exceptionType,
                     ExceptionMessage = exception.Message,
                     ExceptionStackTrace =
                         string.Join(Environment.NewLine,
                             exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
                 }, null);
 
-                CommonMetrics.BrokenPackagesCount.Inc();
+                CommonMetrics.BrokenPackagesCount.Labels(exceptionType).Inc();
 
                 this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
