@@ -1781,7 +1781,7 @@
     <Compile Include="API\WebInterview\Pipeline\SignalrErrorHandler.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewConnectionsCounter.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewLazyNotificationService.cs" />
-    <Compile Include="API\WebInterview\WebInterviewNinjectModule.cs" />
+    <Compile Include="API\WebInterview\WebInterviewModule.cs" />
     <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
     <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
     <Compile Include="API\WebInterview\WebInterview.cs" />

@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using Main.DenormalizerStorage;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Ninject;
 using Microsoft.Owin.Security;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
@@ -226,7 +227,7 @@ namespace WB.UI.Headquarters
                     trackingSettings,
                     interviewCountLimit).AsNinject(),
                 new QuartzModule().AsNinject(),
-                new WebInterviewNinjectModule(),
+                new WebInterviewModule().AsNinject(),
                 new OwinSecurityModule());
 
             kernel.Bind<ILiteEventRegistry>().To<LiteEventRegistry>();
@@ -294,6 +295,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<IInterviewCreatorFromAssignment>().To<InterviewCreatorFromAssignment>();
 
             kernel.Bind<IMapPropertiesProvider>().To<MapPropertiesProvider>();
+
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
 
             return kernel;
         }
