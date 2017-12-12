@@ -70,11 +70,8 @@ namespace WB.UI.Designer.Api.Headquarters
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired)
                 {
-                    ReasonPhrase =
-                        string.Format(
-                            ErrorMessages
-                                .YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate,
-                            questionnaireView.Title)
+                    ReasonPhrase = string.Format(ErrorMessages.YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate, 
+                        questionnaireView.Title, "Unknown")
                 });
             }
             return resultAssembly;
