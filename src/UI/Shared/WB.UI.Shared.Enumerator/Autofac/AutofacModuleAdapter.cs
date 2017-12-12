@@ -57,6 +57,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.RegisterType<TImplementation>();
         }
 
+        public void BindWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
+        {
+            throw new NotImplementedException();
+        }
+
         public void BindGeneric(Type implemenation)
         {
             containerBuilder.RegisterGeneric(implemenation);
@@ -68,6 +73,21 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
         }
 
         public void Unbind<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool HasBinding<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BindToSelfInSingletonScopeWithConstructorArgument(Type[] types, string argumentName, Func<IModuleContext, object> argumentValue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>()
         {
             throw new NotImplementedException();
         }
@@ -88,6 +108,26 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             containerBuilder.Register<TInterface>(c => c.Resolve<TRegisteredInterface>());
         }
 
+        public void BindToMethod<T>(Func<T> func, string name = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BindToMethod<T>(Func<IModuleContext, T> func, string name = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BindToMethodInSingletonScope<T>(Func<IModuleContext, T> func, string named = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BindToMethodInSingletonScope(Type @interface, Func<IModuleContext, object> func)
+        {
+            throw new NotImplementedException();
+        }
+
         public void BindToMethod<T>(Func<T> func)
         {
             containerBuilder.Register(ctx => func());
@@ -101,6 +141,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
         public void BindToConstant<T>(Func<T> func)
         {
             containerBuilder.Register(ctx => func()).SingleInstance();
+        }
+
+        public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
+        {
+            throw new NotImplementedException();
         }
 
         public void BindToConstructorInSingletonScope<T>(Func<IModuleContext, T> func)

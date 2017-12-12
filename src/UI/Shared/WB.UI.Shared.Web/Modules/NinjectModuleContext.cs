@@ -31,20 +31,35 @@ namespace WB.UI.Shared.Web.Modules
         {
             return context.Kernel.Get<T>();
         }
+
+        public T Get<T>(string name)
+        {
+            return context.Kernel.Get<T>(name);
+        }
+
+        public object GetServiceWithGenericType(Type type, Type genericType)
+        {
+            return context.Kernel.GetService(type.MakeGenericType(genericType));
+        }
+
+        public Type GetGenericArgument()
+        {
+            return context.GenericArguments[0];
+        }
     }
 
     public class NinjectConstructorContext : IConstructorContext
     {
-        private readonly IConstructorArgumentSyntax context;
+        private readonly IContext context;
 
-        public NinjectConstructorContext(IConstructorArgumentSyntax context)
+        public NinjectConstructorContext(IContext context)
         {
             this.context = context;
         }
 
         public T Inject<T>()
         {
-            return context.Inject<T>();
+            return context.Kernel.Get<T>();
         }
     }
 }

@@ -202,6 +202,10 @@
       <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
