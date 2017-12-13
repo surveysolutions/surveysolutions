@@ -94,7 +94,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return rosterMaxPropagationCount;
         }
 
-
         protected bool IsVariableNameValid(string variableName)
         {
             if (string.IsNullOrEmpty(variableName))
