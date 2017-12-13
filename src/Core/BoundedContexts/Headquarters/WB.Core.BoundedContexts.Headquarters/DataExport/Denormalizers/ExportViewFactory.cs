@@ -212,11 +212,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 if (questionToCheck == null)
                     continue;
 
-                var interviewTextListAnswer = questionToCheck.Answer as InterviewTextListAnswers;
-
-                if (interviewTextListAnswer == null)
+                if (!(questionToCheck.Answer is InterviewTextListAnswer[] interviewTextListAnswer))
                     return string.Empty;
-                var item = interviewTextListAnswer.Answers.SingleOrDefault(a => a.Value == itemToSearch);
+
+                var item = interviewTextListAnswer.SingleOrDefault(a => a.Value == itemToSearch);
 
                 return item != null ? item.Answer : string.Empty;
             }
