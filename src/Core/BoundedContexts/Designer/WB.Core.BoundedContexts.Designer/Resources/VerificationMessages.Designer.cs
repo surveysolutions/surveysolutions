@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class VerificationMessages {
@@ -1750,6 +1750,33 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0271_MacroHasEmptyContent {
             get {
                 return ResourceManager.GetString("WB0271_MacroHasEmptyContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabling condition is using forbidden type..
+        /// </summary>
+        public static string WB0272_ConditionUsingForbiddenClasses {
+            get {
+                return ResourceManager.GetString("WB0272_ConditionUsingForbiddenClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation condition is using forbidden type..
+        /// </summary>
+        public static string WB0273_ValidationConditionUsingForbiddenClasses {
+            get {
+                return ResourceManager.GetString("WB0273_ValidationConditionUsingForbiddenClasses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable using forbidden type..
+        /// </summary>
+        public static string WB0274_VariableUsingForbiddenClasses {
+            get {
+                return ResourceManager.GetString("WB0274_VariableUsingForbiddenClasses", resourceCulture);
             }
         }
     }

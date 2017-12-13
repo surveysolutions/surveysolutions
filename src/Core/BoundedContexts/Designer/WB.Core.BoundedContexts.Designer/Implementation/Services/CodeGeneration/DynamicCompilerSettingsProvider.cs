@@ -9,20 +9,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         private static readonly string[] StaticAssembliesRefs =
         {
-            //"System.dll",
-            //"System.Core.dll",
-            //"System.Runtime.dll",
-            //"System.Collections.dll",
-            //"System.Linq.dll",
-            //"System.Linq.Expressions.dll",
-            //"System.Linq.Queryable.dll",
-            //"mscorlib.dll",
-            //"System.Runtime.Extensions.dll",
-            //"System.Text.RegularExpressions.dll",
             "netstandard.dll"
         };
 
-        public List<MetadataReference> GetAssembliesToReference(int apiVersion)
+        public List<MetadataReference> GetAssembliesToReference()
         {
             var references = new List<MetadataReference>();
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());

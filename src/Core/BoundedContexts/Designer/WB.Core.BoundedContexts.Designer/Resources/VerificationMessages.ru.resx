@@ -677,6 +677,14 @@
   </data>
   <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
     <value>Макрос не может быть пустым.</value>
-    <comment>Макрос не может быть пустым.</comment>
+  </data>
+  <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Условие включения использует запрещённый тип.</value>
+  </data>
+  <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>Проверочное условие использует запрещённый тип.</value>
+  </data>
+  <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+    <value>Переменная использует запрещённый тип.</value>
   </data>
 </root>

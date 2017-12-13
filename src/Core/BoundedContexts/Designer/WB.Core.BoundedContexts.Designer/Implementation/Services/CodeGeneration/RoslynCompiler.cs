@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             IEnumerable<MetadataReference> referencedPortableAssemblies,
             out string generatedAssembly)
         {
+            generatedAssembly = string.Empty;
+
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
                     generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
                     .ToArray();
@@ -28,8 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
             EmitResult compileResult;
-            generatedAssembly = string.Empty;
-           
+            
             using (var stream = new MemoryStream())
             {
                 compileResult = compilation.Emit(stream);
