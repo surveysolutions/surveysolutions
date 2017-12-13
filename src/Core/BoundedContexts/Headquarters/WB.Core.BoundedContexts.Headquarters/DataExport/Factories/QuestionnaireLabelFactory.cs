@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 string parentColumnLabel;
                 if (i == 0)
                 {
-                    parentColumnLabel = "InterviewId";
+                    parentColumnLabel = ServiceColumns.InterviewId;
                 }
                 else
                 {
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                         continue;
                     parentColumnLabel = $"Id in \"{structure.HeaderToLevelMap[parentRosterVector].LevelName}\"";
                 }
-                variableLabels.Add(new LabeledVariable($"{ServiceColumns.ParentId}{levelRosterVector.Length - i}", parentColumnLabel));
+                variableLabels.Add(new LabeledVariable($"{ServiceColumns.RosterId}{levelRosterVector.Length - i}", parentColumnLabel));
             }
 
             return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray());

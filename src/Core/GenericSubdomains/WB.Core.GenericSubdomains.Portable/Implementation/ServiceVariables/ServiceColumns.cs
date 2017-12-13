@@ -15,6 +15,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
 
         //prefix to identify parent record
         public const string ParentId = "ParentId";
+        public const string RosterId = "rostervar__id";
 
         public const string ResponsibleColumnName = "_responsible";
         public const string AssignmentsCountColumnName = "_quantity";
