@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 CommonMetrics.BrokenPackagesCount.Set(packagesCount);
             }
 
-            throttle.Reset();
+            throttle.Restart();
         }
     }
 }
