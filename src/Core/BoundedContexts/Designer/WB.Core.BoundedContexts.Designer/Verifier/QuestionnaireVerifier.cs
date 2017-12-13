@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -26,20 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         
 
-        public QuestionnaireVerifier(
-            IExpressionProcessor expressionProcessor,
-            IFileSystemAccessor fileSystemAccessor,
-            ISubstitutionService substitutionService,
-            IKeywordsProvider keywordsProvider,
-            IExpressionProcessorGenerator expressionProcessorGenerator,
-            IDesignerEngineVersionService engineVersionService,
-            IMacrosSubstitutionService macrosSubstitutionService,
-            ILookupTableService lookupTableService,
-            IAttachmentService attachmentService,
-            ITopologicalSorter<string> topologicalSorter, 
-            ITranslationsService translationService, 
-            IQuestionnaireTranslator questionnaireTranslator, 
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
+        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor, ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider, IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerEngineVersionService engineVersionService, IMacrosSubstitutionService macrosSubstitutionService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITopologicalSorter<string> topologicalSorter, ITranslationsService translationService, IQuestionnaireTranslator questionnaireTranslator, IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, IDynamicCompilerSettingsProvider compilerSettings)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
@@ -52,7 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 new QuestionVerifications(),
                 new GroupVerifications(fileSystemAccessor),
                 new AttachmentVerifications(attachmentService), 
-                new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, topologicalSorter), 
+                new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, topologicalSorter, compilerSettings), 
                 new LookupVerifications(lookupTableService, keywordsProvider), 
                 new MacroVerifications(), 
                 new QuestionnaireVerifications(substitutionService, keywordsProvider), 

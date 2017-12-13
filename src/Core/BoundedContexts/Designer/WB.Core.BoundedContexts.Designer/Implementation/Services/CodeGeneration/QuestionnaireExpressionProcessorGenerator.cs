@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, int targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.GenerateProcessorStateClasses(questionnaire, targetVersion);
-            var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference(targetVersion);
+            var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference();
 
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 questionnaire.PublicKey, 

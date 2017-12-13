@@ -5,10 +5,13 @@ using CsQuery.ExtensionMethods;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -22,15 +25,20 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly IExpressionProcessor expressionProcessor;
         private readonly ITopologicalSorter<string> topologicalSorter;
+        private readonly IDynamicCompilerSettingsProvider compilerSettings;
 
-        public ExpressionVerifications(
-            IMacrosSubstitutionService macrosSubstitutionService, 
+        
+        private static string WrapToClass(string expression) => $"class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
+
+        public ExpressionVerifications(IMacrosSubstitutionService macrosSubstitutionService,
             IExpressionProcessor expressionProcessor, 
-            ITopologicalSorter<string> topologicalSorter)
+            ITopologicalSorter<string> topologicalSorter,
+            IDynamicCompilerSettingsProvider compilerSettings)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.expressionProcessor = expressionProcessor;
             this.topologicalSorter = topologicalSorter;
+            this.compilerSettings = compilerSettings;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new []
@@ -66,7 +74,64 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<IQuestion, ValidationCondition>(q => q.ValidationConditions, HasLongValidationCondition, "WB0212", index => string.Format(VerificationMessages.WB0212_LongValidationCondition, index)),
             WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
             WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", string.Format(VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, UnconditionalSingleChoiceQuestionOptionsCount)),
+
+            Critical<IComposite>(this.ConditionUsingForbiddenClasses, "WB0272", VerificationMessages.WB0272_ConditionUsingForbiddenClasses),
+            Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationUsingForbiddenClasses, "WB0273", 
+                index => VerificationMessages.WB0273_ValidationConditionUsingForbiddenClasses, VerificationMessageLevel.Critical),
+            Error<IVariable>(VariableUsingForbiddenClasses, "WB0274", VerificationMessages.WB0274_VariableUsingForbiddenClasses)
         };
+
+        private bool VariableUsingForbiddenClasses(IVariable node, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var expression = node.Expression;
+            if (!string.IsNullOrEmpty(expression))
+            {
+                var foundUsages = FindForbiddenClassesUsage(expression, questionnaire);
+                return foundUsages.Count > 0;
+            }
+
+            return false;
+        }
+
+        private bool ValidationUsingForbiddenClasses(IComposite node, ValidationCondition validationCondition, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var validationConditionExpression = validationCondition.Expression;
+            if (!string.IsNullOrEmpty(validationConditionExpression))
+            {
+                var foundUsages = FindForbiddenClassesUsage(validationConditionExpression, questionnaire);
+                return foundUsages.Count > 0;
+            }
+
+            return false;
+        }
+
+        private bool ConditionUsingForbiddenClasses(IComposite item, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var enablingCondition = item.GetEnablingCondition();
+            if (!string.IsNullOrEmpty(enablingCondition))
+            {
+                var foundUsages = FindForbiddenClassesUsage(enablingCondition, questionnaire);
+                return foundUsages.Count > 0;
+            }
+            return false;
+        }
+
+        private List<string> FindForbiddenClassesUsage(string expression, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var expressionWithInlinedMacroses =
+                this.macrosSubstitutionService.InlineMacros(expression, questionnaire.Macros.Values);
+            string code = WrapToClass(expressionWithInlinedMacroses);
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+
+            var compilation = CSharpCompilation.Create(
+                "rules.dll",
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
+                syntaxTrees: syntaxTree.ToEnumerable(),
+                references: compilerSettings.GetAssembliesToReference());
+
+            var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTree, compilation);
+            return foundUsages;
+        }
 
         private bool GroupEnablementConditionReferenceChildItems(IGroup group, MultiLanguageQuestionnaireDocument questionnaire)
         {
