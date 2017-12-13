@@ -38,12 +38,7 @@ namespace WB.Tests.Integration.InterviewTests
                     Abc.Create.Entity.Variable(variableId, VariableType.LongInteger, "v", "i")
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>
-                {
-                    Abc.Create.Event.NumericIntegerQuestionAnswered(
-                        questionId: questionId, answer: 1
-                    )
-                });
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
 
                 using (var eventContext = new EventContext())
                 {
@@ -56,6 +51,8 @@ namespace WB.Tests.Integration.InterviewTests
                 }
             });
 
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.AnswersDeclaredInvalidEvent, Is.Not.Null);
             Assert.That(results.AnswersDeclaredInvalidEvent.Questions.Single().Id, Is.EqualTo(questionId));
             Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Keys.Single().Id, Is.EqualTo(questionId));
             Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Values.Single().Single().FailedConditionIndex, Is.EqualTo(0));
@@ -121,6 +118,8 @@ namespace WB.Tests.Integration.InterviewTests
                 }
             });
 
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.AnswersDeclaredInvalidEvent, Is.Not.Null);
             Assert.That(results.AnswersDeclaredInvalidEvent.Questions.Single().Id, Is.EqualTo(questionAgeId));
             Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Keys.Single().Id, Is.EqualTo(questionAgeId));
             Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Values.Single().Single().FailedConditionIndex, Is.EqualTo(1));
