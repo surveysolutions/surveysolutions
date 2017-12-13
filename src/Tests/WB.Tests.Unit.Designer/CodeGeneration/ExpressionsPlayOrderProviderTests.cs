@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
-            Assert.That(expressionsPlayOrder, Is.EqualTo(new[] { chapterId, variableId, intQuestionId }));
+            Assert.That(expressionsPlayOrder, Is.EqualTo(new[] { chapterId, intQuestionId, variableId }));
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
 
-            Assert.That(expressionsPlayOrder, Is.EqualTo(new[] { chapterId, variableId, textQuestionId, intQuestionId }));
+            Assert.That(expressionsPlayOrder, Is.EqualTo(new[] { chapterId, intQuestionId, variableId, textQuestionId }));
         }
     }
 }
