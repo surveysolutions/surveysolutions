@@ -84,7 +84,7 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
         {
-            this.Kernel.Bind<TImplementation>().To<TImplementation>().WithConstructorArgument(argumentName, argumentValue);
+            this.Kernel.Bind<TInterface>().To<TImplementation>().WithConstructorArgument(argumentName, argumentValue);
         }
 
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
