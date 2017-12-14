@@ -584,7 +584,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                           new FailedValidationCondition[0]).ToReadOnlyCollection()
         };
 
-        private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsDouble ?? entity.AsInt ??
+        private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ?? 
                                                                  entity.AsDateTime ?? entity.AsLong ??
                                                                  entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
                                                                  entity.AsList ?? entity.AsYesNo ??
