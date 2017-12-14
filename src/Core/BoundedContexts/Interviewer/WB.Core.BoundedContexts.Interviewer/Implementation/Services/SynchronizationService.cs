@@ -239,17 +239,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 url: this.mapsController, token: cancellationToken, credentials: this.restCredentials));
         }
         
-        public Task GetMapContentAndSave(string mapName, Stream streamToSave, CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged)
+        public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken)
         {
-            return this.TryGetRestResponseOrThrowAsync(async () =>
-            {
-                await this.restService.DownloadFileAndSaveAsync(
-                    url: $"{this.mapsController}/details?mapName={WebUtility.UrlEncode(mapName)}",
-                    streamToSave:streamToSave,
-                    token: cancellationToken,
-                    credentials: this.restCredentials,
-                    onDownloadProgressChanged: onDownloadProgressChanged).ConfigureAwait(false);
-            });
+            return this.TryGetRestResponseOrThrowAsync(async () => 
+              await this.restService.GetResponseStreamAsync(
+                url: $"{this.mapsController}/details",
+                queryString: new {id = WebUtility.UrlEncode(mapName)},
+                token: cancellationToken,
+                credentials: this.restCredentials).ConfigureAwait(false));
         }
 
         public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
