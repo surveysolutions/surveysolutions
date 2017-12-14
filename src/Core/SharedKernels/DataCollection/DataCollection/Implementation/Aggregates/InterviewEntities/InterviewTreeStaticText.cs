@@ -68,6 +68,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void Accept(IInterviewTreeUpdater updater)
         {
             updater.UpdateEnablement(this);
+        }
+
+        public void AcceptValidity(IInterviewTreeUpdater updater)
+        {
             updater.UpdateValidations(this); 
         }
 

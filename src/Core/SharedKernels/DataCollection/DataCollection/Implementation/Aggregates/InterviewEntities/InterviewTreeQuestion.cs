@@ -662,7 +662,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 updater.UpdateSingleOptionQuestion(this);
                 updater.UpdateCascadingQuestion(this);
             }
+        }
 
+        public void AcceptValidity(IInterviewTreeUpdater updater)
+        {
             updater.UpdateValidations(this);
         }
 
