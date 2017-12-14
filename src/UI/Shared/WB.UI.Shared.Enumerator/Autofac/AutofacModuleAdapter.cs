@@ -139,6 +139,11 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
             throw new NotImplementedException();
         }
 
+        public void BindToMethodInRequestScope<T>(Func<IModuleContext, T> func)
+        {
+            throw new NotImplementedException();
+        }
+
         public void BindToMethod<T>(Func<T> func)
         {
             containerBuilder.Register(ctx => func());

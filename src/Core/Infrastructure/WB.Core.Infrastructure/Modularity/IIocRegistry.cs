@@ -19,6 +19,7 @@ namespace WB.Core.Infrastructure.Modularity
         void BindToMethod<T>(Func<IModuleContext, T> func, string name = null);
         void BindToMethodInSingletonScope<T>(Func<IModuleContext, T> func, string named = null);
         void BindToMethodInSingletonScope(Type @interface, Func<IModuleContext, object> func);
+        void BindToMethodInRequestScope<T>(Func<IModuleContext, T> func);
         void BindToConstant<T>(Func<T> func);
         void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func);
         void BindAsSingleton(Type @interface, Type implementation);
