@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
@@ -29,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void Accept(IInterviewTreeUpdater updater)
         {
             updater.UpdateEnablement(this);
-            updater.UpdateVariable(this);
+            updater.UpdateVariable(this); 
         }
     }
 }

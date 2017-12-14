@@ -48,10 +48,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}.tab\", tab\r\n", dataFileName));
 
         It should_contain_stata_variable_parent2_on_InterviewId_mapping = () =>
-            stataGeneratedContent.ShouldContain("label variable ParentId2 `\"InterviewId\"'");
+            stataGeneratedContent.ShouldContain("label variable interview__id `\"InterviewId\"'");
 
         It should_contain_stata_variable_parent1_on_parent_roster_mapping = () =>
-            stataGeneratedContent.ShouldContain("label variable ParentId1 `\"Id in \"parent\"\"'");
+            stataGeneratedContent.ShouldContain("label variable parent__id `\"Id in \"parent\"\"'");
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel nestedRosterHeaderStructureForLevel;

@@ -37,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private string interviewId;
         private Guid[] rostersInGroup;
-        private Guid[] subSectionsWithEnablemetConditionsInGroup;
+        private Guid[] subSectionsWithEnablement;
         
         public event EventHandler OnSectionUpdated;
 
@@ -70,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.rostersInGroup = questionnaire.GetAllUnderlyingChildRosters(this.SectionIdentity.Id).ToArray();
-            this.subSectionsWithEnablemetConditionsInGroup = questionnaire.GetSubSectionsWithEnablementCondition(this.SectionIdentity.Id).ToArray();
+            this.subSectionsWithEnablement = questionnaire.GetSubSectionsWithEnablementCondition(this.SectionIdentity.Id).ToArray();
 
             groupStateViewModel.Init(interviewId, sectionIdentity);
 
@@ -113,29 +113,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private bool isSelected;
         public bool IsSelected
         {
-            get { return this.isSelected; }
-            set { this.RaiseAndSetIfChanged(ref this.isSelected, value); }
+            get => this.isSelected;
+            set => this.RaiseAndSetIfChanged(ref this.isSelected, value);
         }
 
         private bool isCurrent;
         public bool IsCurrent
         {
-            get { return this.isCurrent; }
-            set { this.RaiseAndSetIfChanged(ref this.isCurrent, value); }
+            get => this.isCurrent;
+            set => this.RaiseAndSetIfChanged(ref this.isCurrent, value);
         }
 
         private bool hasChildren;
         public bool HasChildren
         {
-            get { return this.hasChildren; }
-            set { this.RaiseAndSetIfChanged(ref this.hasChildren, value); }
+            get => this.hasChildren;
+            set => this.RaiseAndSetIfChanged(ref this.hasChildren, value);
         }
 
         private bool expanded;
         public bool Expanded
         {
-            get { return this.expanded; }
-            set { this.RaiseAndSetIfChanged(ref this.expanded, value); }
+            get => this.expanded;
+            set => this.RaiseAndSetIfChanged(ref this.expanded, value);
         }
 
         public int NodeDepth { get; set; }
@@ -181,45 +181,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.OnSectionUpdated?.Invoke(this, EventArgs.Empty);
         }
 
+        private bool HasRoster(Guid rosterId) 
+            => this.rostersInGroup?.Contains(rosterId) ?? false;
+
+        private bool HasSubSectionWithEnablement(Guid groupId) 
+            => this.subSectionsWithEnablement?.Contains(groupId) ?? false;
+
         public void Handle(RosterInstancesAdded @event)
         {
-            if (@event.Instances.Select(rosterInstance => rosterInstance.GroupId).Any(rosterId => this.rostersInGroup.Contains(rosterId)))
+            var addedRosterInstances = @event.Instances.Select(x => x.GetIdentity()).ToArray();
+
+            if (addedRosterInstances.Any(rosterInstance => this.HasRoster(rosterInstance.Id)))
                 this.UpdateHasChildren();
 
             if (!this.Expanded) return;
-
-            this.UpdateSubGroups(@event.Instances.Select(x => x.GetIdentity()).ToArray());
+            
+            this.UpdateSubGroups(addedRosterInstances);
         }
 
         public void Handle(RosterInstancesRemoved @event)
         {
-            if (@event.Instances.Select(rosterInstance => rosterInstance.GroupId).Any(rosterId => this.rostersInGroup.Contains(rosterId)))
+            if (@event.Instances.Any(rosterInstance => this.HasRoster(rosterInstance.GroupId)))
                 this.UpdateHasChildren();
         }
 
         public void Handle(GroupsEnabled @event)
         {
-            if (!this.HasChildren 
-                && (@event.Groups.Any(g => this.rostersInGroup.Contains(g.Id))
-                    || @event.Groups.Any(g => this.subSectionsWithEnablemetConditionsInGroup.Contains(g.Id)))
-                )
-            {
+            if (!this.HasChildren && @event.Groups.Any(g => this.HasRoster(g.Id) || this.HasSubSectionWithEnablement(g.Id)))
                 this.UpdateHasChildren();
-            }
 
             if (this.Expanded)
-            {
                 this.UpdateSubGroups(@event.Groups);
-            }
         }
 
         public void Handle(GroupsDisabled @event)
         {
-            if (@event.Groups.Select(group => group.Id)
-                .Any(groupId => this.rostersInGroup.Contains(groupId) || this.subSectionsWithEnablemetConditionsInGroup.Contains(groupId)))
-            {
+            if (@event.Groups.Any(g => this.HasRoster(g.Id) || this.HasSubSectionWithEnablement(g.Id)))
                 this.UpdateHasChildren();
-            }
         }
 
         public void Dispose()

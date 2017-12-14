@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.CodeTemplates
         }
 
         protected LinkedFilterMethodModel Model { get; set; }
+        public bool InSingleFile { get; set; }
     }
 }

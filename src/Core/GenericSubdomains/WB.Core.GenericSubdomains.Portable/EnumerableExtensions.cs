@@ -50,6 +50,16 @@ namespace WB.Core.GenericSubdomains.Portable
             }
         }
 
+        public static IEnumerable<T> ConcatSingle<T>(this IEnumerable<T> source, T item)
+        {
+            foreach (var sourceItem in source)
+            {
+                yield return sourceItem;
+            }
+
+            yield return item;
+        }
+
         /// <summary>
         /// Batches the source sequence into sized buckets.
         /// </summary>
