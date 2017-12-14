@@ -1,14 +1,11 @@
-﻿extern alias datacollection;
-
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
-
-using datacollectionalias = datacollection::Main.Core.Events.Questionnaire;
 using System;
 using Newtonsoft.Json;
 using WB.Infrastructure.Native.Storage;
+using Main.Core.Events.Questionnaire;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
 {
@@ -17,7 +14,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
         Establish context = () =>
         {
             eventTypeResolver = new EventTypeResolver();
-            eventTypeResolver.RegisterEventDataType(typeof(datacollectionalias.TemplateImported));
+            eventTypeResolver.RegisterEventDataType(typeof(TemplateImported));
 
             jsonSerializerSettings = new JsonSerializerSettings
             {
