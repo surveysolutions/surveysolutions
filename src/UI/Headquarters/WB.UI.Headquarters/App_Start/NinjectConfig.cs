@@ -213,6 +213,9 @@ namespace WB.UI.Headquarters
 
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
+            var owinSecurityModule = new OwinSecurityModule();
+
+
             kernel.Load(
                 new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
                 eventStoreModule,
@@ -228,7 +231,7 @@ namespace WB.UI.Headquarters
                     interviewCountLimit).AsNinject(),
                 new QuartzModule().AsNinject(),
                 new WebInterviewModule().AsNinject(),
-                new OwinSecurityModule());
+                owinSecurityModule.AsNinject());
 
             kernel.Bind<ILiteEventRegistry>().To<LiteEventRegistry>();
             kernel.Bind<ISettingsProvider>().ToConstant(settingsProvider);
@@ -295,6 +298,8 @@ namespace WB.UI.Headquarters
             kernel.Bind<IInterviewCreatorFromAssignment>().To<InterviewCreatorFromAssignment>();
 
             kernel.Bind<IMapPropertiesProvider>().To<MapPropertiesProvider>();
+
+            owinSecurityModule.Init(ServiceLocator.Current);
 
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
 
