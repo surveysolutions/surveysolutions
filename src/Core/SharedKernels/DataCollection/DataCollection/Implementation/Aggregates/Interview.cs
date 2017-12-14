@@ -4,6 +4,8 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -66,9 +68,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             set => expressionProcessorStatePrototype = value;
         }
 
+
+        private IInterviewExpressionStorage expressionStorageCached = null;
         protected IInterviewExpressionStorage GetExpressionStorage()
         {
-            return this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity);
+            return expressionStorageCached ?? (expressionStorageCached = this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity));
         }
 
         /// <remarks>
@@ -1970,7 +1974,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
-            this.ApplyPassiveEvents(diff);
+            this.ApplyPassiveEvents(diff); 
         }
 
         private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
@@ -2315,7 +2319,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             => this.Tree.FindStaticTexts().Any(staticText => !staticText.IsValid && !staticText.IsDisabled());
 
         protected static IReadOnlyCollection<InterviewTreeNodeDiff> FindDifferenceBetweenTrees(InterviewTree sourceInterview, InterviewTree changedInterview)
-            => sourceInterview.Clone().Compare(changedInterview);
+        {
+            return sourceInterview.Compare(changedInterview);
+        }
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, bool removeLinkedAnswers = true)
         {
@@ -2324,29 +2330,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
-
                 using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
                     var playOrder = questionnaire.GetExpressionsPlayOrder();
 
+                    List<IInterviewTreeNode> nodesInPlayOrder = new List<IInterviewTreeNode>();
                     foreach (var entityId in playOrder)
                     {
                         var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
 
                         foreach (var entity in entityIdentities)
                         {
-                            IInterviewTreeNode changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
-
-                            changedNode?.Accept(updater);
+                            var changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
+                            if (changedNode != null)
+                                nodesInPlayOrder.Add(changedNode);
                         }
                     }
+
+                    nodesInPlayOrder.ForEach(node => node.Accept(updater));
+                    nodesInPlayOrder.OfType<IInterviewTreeValidateable>().ForEach(node => node.AcceptValidity(updater));
                 }
             }
             else
             {
                 this.UpdateTreeWithDependentChangesWithExpressionState(changedInterviewTree, questionnaire);
             }
-
+            
             changedInterviewTree.ReplaceSubstitutions();
         }
 
@@ -2414,7 +2423,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 if (roster.IsFixed)
                 {
                     string changedRosterTitle = questionnaire.GetFixedRosterTitle(roster.Identity.Id,
-                        roster.Identity.RosterVector.Coordinates.Last());
+                        roster.Identity.RosterVector.Last());
 
                     roster.SetRosterTitle(changedRosterTitle);
                 }

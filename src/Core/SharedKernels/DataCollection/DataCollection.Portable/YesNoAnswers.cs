@@ -32,48 +32,56 @@ namespace WB.Core.SharedKernels.DataCollection
     }
 
     // new type with interger arrays for ExpressionStorage
-    public class YesNoAndAnswersMissings
+    public struct YesNoAndAnswersMissings
     {
         public YesNoAndAnswersMissings(IEnumerable<int> allOptionCodes, IReadOnlyCollection<CheckedYesNoAnswerOption> checkedOptions = null)
         {
-            this.allOptionCodes = allOptionCodes.ToArray();
-            this.selectedNoCodes = checkedOptions?.Where(x => x.No).Select(x => x.Value).ToArray() ?? new int[0];
-            this.selectedYesCodes = checkedOptions?.Where(x => x.Yes).Select(x => x.Value).ToArray() ?? new int[0];
+            this.allOptionCodesEnumerable = allOptionCodes;
+            this.checkedOptions = checkedOptions;
+            this.selectedYesCodes = null;
+            this.selectedNoCodes = null;
+            this.missingCodes = null;
+            this.allOptionCodes = null;
         }
 
-        private readonly int[] selectedYesCodes;
-        private readonly int[] selectedNoCodes;
-        private readonly int[] allOptionCodes;
+        private int[] allOptionCodes;
+        private int[] selectedYesCodes;
+        private int[] selectedNoCodes;
+        private int[] missingCodes;
 
+        private readonly IReadOnlyCollection<CheckedYesNoAnswerOption> checkedOptions;
+        private readonly IEnumerable<int> allOptionCodesEnumerable;
 
-        public int[] All => this.allOptionCodes;
-
-        public int[] Yes => this.selectedYesCodes;
-
-        public int[] No => this.selectedNoCodes;
-
-        public int[] Missing => this.allOptionCodes.Except(this.selectedYesCodes).Except(this.selectedNoCodes).ToArray();
+        public int[] All => allOptionCodes ?? (this.allOptionCodes = this.allOptionCodesEnumerable.ToArray());
+        public int[] Yes => selectedYesCodes ?? (selectedYesCodes = this.checkedOptions?.Where(c => c.Yes).Select(c => c.Value).ToArray() ?? Array.Empty<int>());
+        public int[] No => selectedNoCodes ?? (selectedNoCodes = this.checkedOptions?.Where(c => c.No).Select(c => c.Value).ToArray() ?? Array.Empty<int>());
+        public int[] Missing => missingCodes 
+            ?? (missingCodes = this.All.Except(this.checkedOptions?.Select(c => c.Value) ?? Array.Empty<int>()).ToArray());
 
         public bool? this[int code]
         {
             get
             {
-                if (!this.allOptionCodes.Contains(code))
-                {
-                    throw new IndexOutOfRangeException("Option with code {code} is absent");
-                }
-                if (this.selectedNoCodes.Contains(code))
+                if (this.No.Contains(code))
                 {
                     return false;
                 }
-                if (this.selectedYesCodes.Contains(code))
+
+                if (this.Yes.Contains(code))
                 {
                     return true;
                 }
+
+                if (!this.All.Contains(code))
+                {
+                    throw new IndexOutOfRangeException("Option with code {code} is absent");
+                }
+
                 return null;
             }
         }
     }
+
     // old type with decimal arrays for ExpressionState
     [Obsolete("Since v 5.21. July 1 2017")]
     public class YesNoAnswers

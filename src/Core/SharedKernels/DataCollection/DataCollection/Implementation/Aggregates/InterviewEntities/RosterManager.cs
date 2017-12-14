@@ -71,9 +71,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void UpdateRoster(InterviewTreeRoster roster, Identity parentIdentity, Identity rosterIdentity, int sortIndex)
         {
             base.UpdateRoster(roster, parentIdentity, rosterIdentity, sortIndex);
+            
+            var lastRosterVectorValue = rosterIdentity.RosterVector.Last();
 
-            var rosterTitle = this.rosterTitles.Single(x => x.Value == rosterIdentity.RosterVector.Last());
-            roster.SetRosterTitle(rosterTitle.Title);
+            for (var index = 0; index < this.rosterTitles.Length; index++)
+            {
+                var rosterTitleInstance = this.rosterTitles[index];
+                if (rosterTitleInstance.Value != lastRosterVectorValue) continue;
+                
+                roster.SetRosterTitle(rosterTitleInstance.Title);
+                break;
+            }
         }
     }
 
