@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     [Subject(typeof(Interview))]
     [TestOf(typeof(Interview))]
-    internal class InterviewTestsContext
+    public class InterviewTestsContext
     {
         protected static Interview CreateInterview(QuestionnaireDocument questionnaire)
         {

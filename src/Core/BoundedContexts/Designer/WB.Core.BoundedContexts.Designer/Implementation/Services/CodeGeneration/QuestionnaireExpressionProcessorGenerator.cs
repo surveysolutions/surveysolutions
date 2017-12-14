@@ -41,10 +41,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
         }
 
-        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion)
+        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)
         {
             return targetVersion >= 20 
-                ? this.codeGeneratorV2.Generate(questionnaire, targetVersion) 
+                ? this.codeGeneratorV2.Generate(questionnaire, targetVersion, inSingleFile) 
                 : this.codeGenerator.Generate(questionnaire, targetVersion);
         }
     }

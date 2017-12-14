@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Main.Core.Entities.SubEntities;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -88,15 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IEnumerable<IInterviewTreeNode> FindEntity(Guid nodeId)
         {
-            var result = this.nodesIdCache.GetOrNull(nodeId) ?? WarmNodesIdCache(nodeId);
-            return result;
-        }
-
-        private List<IInterviewTreeNode> WarmNodesIdCache(Guid nodeId)
-        {
-            var result = this.nodesCache.Where(x => x.Key.Id == nodeId).Select(x => x.Value).ToList();
-            this.nodesIdCache[nodeId] = result;
-            return result;
+            return this.nodesIdCache.GetOrNull(nodeId) ?? Enumerable.Empty<IInterviewTreeNode>();
         }
 
         public IInterviewTreeNode GetNodeByIdentity(Identity identity)
@@ -332,7 +324,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     var level = isLinkedToRoster
                         ? questionnaire.GetRosterLevelForGroup(sourceForLinkedQuestion.Value) - 1
                         : questionnaire.GetRosterLevelForEntity(targetRoster.Value) + 1;
-                    var commonParentRosterVector = questionIdentity.RosterVector.Take(level).ToArray();
+                    var commonParentRosterVector = questionIdentity.RosterVector.Take(level);
                     commonParentRosterForLinkedQuestion = new Identity(targetRoster.Value, commonParentRosterVector);
                 }
             }
@@ -446,12 +438,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.nodesIdCache.Add(node.Identity.Id, new List<IInterviewTreeNode>());
             }
 
-            if(nodesIdCache[node.Identity.Id] == null)
-            {
-                WarmNodesIdCache(node.Identity.Id);
-                return;
-            }
-
             this.nodesIdCache[node.Identity.Id].Add(node);
         }
 
@@ -461,16 +447,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             var nodesToRemove = treeNode.TreeToEnumerable(node => node.Children);
 
-            foreach (var nodeToRemove in nodesToRemove)
+            foreach (IInterviewTreeNode nodeToRemove in nodesToRemove)
             {
                 this.nodesCache.Remove(nodeToRemove.Identity);
-                this.nodesIdCache[nodeToRemove.Identity.Id] = null;
+                this.nodesIdCache[nodeToRemove.Identity.Id]?.Remove(nodeToRemove);
             }
 
             this.nodesCache.Remove(identity);
-            this.nodesIdCache[identity.Id] = null;
+            this.nodesIdCache[identity.Id]?.Remove(treeNode);
         }
-        
+
         public void ProcessAddedNode(IInterviewTreeNode node)
         {
             this.AddNodeToCache(node);
@@ -478,25 +464,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public IInterviewTreeNode FindEntityInQuestionBranch(Guid entityId, Identity questionIdentity)
         {
-            IEnumerable<IInterviewTreeNode> entities = FindEntity(entityId);
+            var foundEntities = FindEntity(entityId);
 
-            if (!entities.Any())
-                return null;
+            bool IsFound(IInterviewTreeNode entity)
+            {
+                return entity.Identity.Equals(entityId, questionIdentity.RosterVector,
+                    entity.Identity.RosterVector.Length);
+            }
 
-            var shorterRosterVector = questionIdentity.RosterVector.Shrink(entities.First().Identity.RosterVector.Length);
-            var targetIdentity = new Identity(entityId, shorterRosterVector);
+            if (foundEntities is List<IInterviewTreeNode> foundList)
+            {
+                for (var index = 0; index < foundList.Count; index++)
+                {
+                    var entity = foundList[index];
 
-            return entities.FirstOrDefault(x => x.Identity.Equals(targetIdentity));
-            //for (int shorterRosterVectorLength = questionIdentity.RosterVector.Length; shorterRosterVectorLength >= 0; shorterRosterVectorLength--)
-            //{
-            //    var shorterRosterVector = questionIdentity.RosterVector.Shrink(shorterRosterVectorLength);
+                    if (IsFound(entity))
+                    {
+                        return entity;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var entity in FindEntity(entityId))
+                {
+                    if (IsFound(entity))
+                    {
+                        return entity;
+                    }
+                }
+            }
 
-            //    var entity = this.GetNodeByIdentity(new Identity(entityId, shorterRosterVector));
-            //    if (entity != null)
-            //        return entity;
-            //}
-
-            //return null;
+            return null;
         }
 
         public IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity)
@@ -506,12 +505,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (startingSearchPointIdentity == null)
                 return allEntities;
 
-            var rosterVectorLength = startingSearchPointIdentity.Id == entityIdToSearch
+            int rosterVectorLength = startingSearchPointIdentity.Id == entityIdToSearch
                 ? startingSearchPointIdentity.RosterVector.Length - 1
                 : startingSearchPointIdentity.RosterVector.Length;
 
-            var rosterVector = startingSearchPointIdentity.RosterVector.Take(rosterVectorLength);
-            IEnumerable<Identity> entities = allEntities.Where(x => x.RosterVector.Take(rosterVectorLength).SequenceEqual(rosterVector));
+            IEnumerable<Identity> entities = allEntities.Where(x =>
+                ArrayExtensions.SequenceEqual(x.RosterVector.Array, rosterVectorLength,
+                    startingSearchPointIdentity.RosterVector.Array, rosterVectorLength));
+
             return entities;
         }
 
@@ -571,7 +572,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return new RosterVector(address.Reverse<int>());
         }
-
     }
 
     public interface IInterviewTreeNode

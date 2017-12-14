@@ -934,7 +934,7 @@
     <Message Text="Cleaning up questionnaire" />
     <RemoveDir Directories="questionnaire\vendor" ContinueOnError="true" />
   </Target>
-  <Target Name="RestoreNodeModules" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug'">
+  <Target Name="RestoreNodeModules" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And '$(NCrunch)' != '1'" >
     <Message Importance="High" Text="Restoring node_modules" />
     <Exec Command="yarn --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
