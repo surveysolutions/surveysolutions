@@ -5,42 +5,45 @@ using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using Ninject;
-using Ninject.Modules;
-using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
-    public class OwinSecurityModule : NinjectModule
+    public class OwinSecurityModule : IModuleWithInit
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IUserRepository>().To<HqUserStore>();
-            this.Bind<IHashCompatibilityProvider>().To<HashCompatibilityProvider>().InSingletonScope();
-            this.Bind<IPasswordHasher>().To<PasswordHasher>();
-            this.Bind<IIdentityValidator<string>>().To<HqPasswordValidator>();
+            registry.Bind<IUserRepository, HqUserStore>();
+            registry.BindAsSingleton<IHashCompatibilityProvider, HashCompatibilityProvider>();
+            registry.Bind<IPasswordHasher, PasswordHasher>();
+            registry.Bind<IIdentityValidator<string>, HqPasswordValidator>();
 
             //this.Bind<IOwinContext>().ToMethod(context => HttpContext.Current.GetOwinContext());
-            this.Bind<IAuthenticationManager>().ToMethod(context => HttpContext.Current.GetOwinContext().Authentication).InRequestScope();
+            registry.BindToMethodInRequestScope<IAuthenticationManager>(context => HttpContext.Current.GetOwinContext().Authentication);
 
             // no on per request scope required - lifetime managed by their parents controllers/handlers
-            this.Bind<HQIdentityDbContext>().ToSelf();
-            this.Kernel.Get<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
+            registry.Bind<HQIdentityDbContext>();
 
-            this.Bind<HQPlainStorageDbContext>().ToSelf();
-            this.Kernel.Get<HQIdentityDbContext>().Roles.FirstOrDefault();
+            registry.Bind<HQPlainStorageDbContext>();
 
-            this.Bind<IUserStore<HqUser, Guid>>().To<HqUserStore>();
-            this.Bind<HqUserManager>().ToSelf();
-            this.Bind<HqSignInManager>().ToSelf();
+            registry.Bind<IUserStore<HqUser, Guid>, HqUserStore>();
+            registry.Bind<HqUserManager>();
+            registry.Bind<HqSignInManager>();
 
-            this.Bind<IApiTokenProvider<Guid>>().To<ApiAuthTokenProvider<HqUser, Guid>>();
-            this.Bind<IAuthorizedUser>().To<AuthorizedUser>();
+            registry.Bind<IApiTokenProvider<Guid>, ApiAuthTokenProvider<HqUser, Guid>>();
+            registry.Bind<IAuthorizedUser, AuthorizedUser>();
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            serviceLocator.GetInstance<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
+            serviceLocator.GetInstance<HQIdentityDbContext>().Roles.FirstOrDefault();
         }
     }
 }
