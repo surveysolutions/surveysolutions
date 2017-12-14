@@ -1,5 +1,4 @@
-﻿extern alias datacollection;
-using System;
+﻿using System;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
