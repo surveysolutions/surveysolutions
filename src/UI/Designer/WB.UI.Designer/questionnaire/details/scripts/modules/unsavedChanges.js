@@ -9,7 +9,7 @@ angular.module('unsavedChanges', ['resettable'])
     var _this = this;
 
     // defaults
-    var logEnabled = false;
+    var logEnabled = true;
     var useTranslateService = true;
     var routeEvent = ['$locationChangeStart', '$stateChangeStart'];
     var navigateMessage = 'You will lose unsaved changes if you leave this page';
