@@ -69,5 +69,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations);
 
         void MarkValid();
+
+        void AcceptValidity(IInterviewTreeUpdater updater);
     }
 }

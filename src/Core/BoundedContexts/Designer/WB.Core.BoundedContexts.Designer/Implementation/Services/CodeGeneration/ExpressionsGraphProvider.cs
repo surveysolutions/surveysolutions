@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Find<IGroup>() //GetAllGroups()
                 .ToDictionary(
                     group => @group.PublicKey, 
-                    group => @group.Children.OfType<IVariable>().Select(x => x.PublicKey).Union(@group.Children.Select(x => x.PublicKey)).ToList()
+                    group => @group.Children.Select(x => x.PublicKey).ToList()
                 );
         }
 
@@ -135,14 +135,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 if (entity is IConditional conditionalEntity)
                 {
                     FillDependencies(entity.PublicKey, conditionalEntity.ConditionExpression);
-                }
-
-                if (entity is IValidatable validatableEntity)
-                {
-                    foreach (var validationCondition in validatableEntity.ValidationConditions)
-                    {
-                        FillDependencies(entity.PublicKey, validationCondition.Expression);
-                    }
                 }
 
                 if (entity is IQuestion question)
