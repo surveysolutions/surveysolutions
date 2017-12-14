@@ -46,7 +46,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 Status = SynchronizationStatus.Started
             });
 
-
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -77,11 +76,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                 try
                 {
-                    using (var stream = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
+                    long downloded = 0;
+                    using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
+                    using (var contentStreamResult = await this.synchronizationService
+                        .GetMapContentStream(mapDescription.MapName, cancellationToken).ConfigureAwait(false))
                     {
-                        await this.synchronizationService
-                            .GetMapContentAndSave(mapDescription.MapName, stream, cancellationToken, OnDownloadProgressChanged)
-                            .ConfigureAwait(false);
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                        }
+                        
+                        var buffer = new byte[1024];
+                        var downloadProgressChangedEventArgs = new DownloadProgressChangedEventArgs()
+                        {
+                            TotalBytesToReceive = contentStreamResult.ContentLength
+                        };
+
+                        int read;
+                        while ((read = await contentStreamResult.Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)
+                                   .ConfigureAwait(false)) > 0)
+                        {
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                cancellationToken.ThrowIfCancellationRequested();
+                            }
+
+                            downloded += read;
+
+                            streamToSave.Write(buffer, 0, read);
+
+                            if (contentStreamResult.ContentLength != null)
+                                downloadProgressChangedEventArgs.ProgressPercentage =
+                                    Math.Min(Math.Round((decimal)(100 * downloded) / contentStreamResult.ContentLength.Value), 100);
+
+                            downloadProgressChangedEventArgs.BytesReceived = downloded;
+                            OnDownloadProgressChanged(downloadProgressChangedEventArgs);
+                        }
                     }
                     
                     this.mapService.MoveTempMapToPermanent(mapDescription.MapName);
