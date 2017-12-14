@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             IsNodeRemoved = sourceNode != null && changedNode == null;
             Identity = changedNode?.Identity ?? sourceNode?.Identity;
             IsNodeDisabled = IsNodeDisabledImpl(sourceNode, changedNode);
-            IsNodeEnabled = IsNodeEnabledImpl(sourceNode, changedNode);
+            IsNodeEnabled = IsNodeEnabledImpl(sourceNode, changedNode) && ! IsNodeRemoved;
             SourceNode = sourceNode;
             ChangedNode = changedNode;
         }
