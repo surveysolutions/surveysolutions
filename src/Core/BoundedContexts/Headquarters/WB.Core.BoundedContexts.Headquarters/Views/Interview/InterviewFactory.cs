@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dapper;
 using Main.Core.Entities.SubEntities;
@@ -21,7 +22,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -270,44 +270,43 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId);
             if (questionnaire == null) return;
 
-            var removedEntityIds = new List<Identity>();
+            var removedEntityIds = new List<RemoveRosterParams>();
+
             foreach (var instance in rosterIds)
             {
                 var roster = questionnaire.Find<IGroup>(instance.Id);
+                var allChilds = roster.Children.TreeToEnumerable(x => x.Children).ConcatSingle(roster);
 
-                var questionsIds = roster.Children
-                    .TreeToEnumerableDepthFirst(x => x.Children)
-                    .OfType<IQuestion>().Select(x => x.PublicKey).ToArray();
-
-                var groupIds = roster.Children
-                    .TreeToEnumerableDepthFirst(x => x.Children)
-                    .OfType<IGroup>().Select(x => x.PublicKey).Concat(new[] {instance.Id}).ToArray();
-
-                var variablesIds = roster.Children
-                    .TreeToEnumerableDepthFirst(x => x.Children)
-                    .OfType<IVariable>().Select(x => x.PublicKey).ToArray();
-
-                var staticTextsIds = roster.Children
-                    .TreeToEnumerableDepthFirst(x => x.Children)
-                    .OfType<IStaticText>().Select(x => x.PublicKey).ToArray();
-
-                removedEntityIds.AddRange(questionsIds.Union(groupIds).Union(variablesIds).Union(staticTextsIds)
-                    .Select(x => Identity.Create(x, instance.RosterVector)));
+                removedEntityIds.AddRange(allChilds
+                    .Select(x => new RemoveRosterParams(interviewId , x.PublicKey, instance.RosterVector)));
             }
 
-            var sqlParams = removedEntityIds.Select(x => new
-            {
-                InterviewId = interviewId,
-                EntityId = x.Id,
-                RosterVector = x.RosterVector.Array,
-            });
-
             this.sessionProvider.GetSession().Connection.Execute($"DELETE FROM {InterviewsTableName} " +
-                                                                   $"WHERE {InterviewIdColumn} = @InterviewId " +
-                                                                   $"AND {EntityIdColumn} = @EntityId " +
-                                                                   $"AND {RosterVectorColumn} = @RosterVector;",
-                sqlParams);
+                                                                   $"WHERE {InterviewIdColumn} = @{nameof(RemoveRosterParams.InterviewId)} " +
+                                                                   $"AND {EntityIdColumn} = @{nameof(RemoveRosterParams.EntityId)} " +
+                                                                   $"AND {RosterVectorColumn} = @{nameof(RemoveRosterParams.RosterVector)};",
+                removedEntityIds);
+        }
 
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+        [SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+        private struct RemoveRosterParams
+        {
+            public Guid InterviewId { get; }
+            public Guid EntityId { get; }
+            public int[] RosterVector { get; }
+
+            public RemoveRosterParams(Guid interviewId, Guid entityid, RosterVector rosterVector)
+            {
+                InterviewId = interviewId;
+                EntityId = entityid;
+                RosterVector = rosterVector.Array;
+            }
+
+            public override string ToString()
+            {
+                return $"IN: {InterviewId}, En:{EntityId}_{String.Join(",", RosterVector)}";
+            }
         }
 
         public void RemoveAnswers(Guid interviewId, IEnumerable<Identity> entityIds)
