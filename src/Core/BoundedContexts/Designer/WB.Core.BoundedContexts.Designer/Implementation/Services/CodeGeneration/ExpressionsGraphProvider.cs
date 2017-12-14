@@ -96,7 +96,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             return questionnaire
                 .Find<IGroup>() //GetAllGroups()
-                .ToDictionary(group => @group.PublicKey, group => @group.Children.Select(x => x.PublicKey).ToList());
+                .ToDictionary(
+                    group => @group.PublicKey, 
+                    group => @group.Children.Select(x => x.PublicKey).ToList()
+                );
         }
 
         private Dictionary<Guid, List<Guid>> BuildSubstitutionDependencies(ReadOnlyQuestionnaireDocument questionnaire)
@@ -132,14 +135,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 if (entity is IConditional conditionalEntity)
                 {
                     FillDependencies(entity.PublicKey, conditionalEntity.ConditionExpression);
-                }
-
-                if (entity is IValidatable validatableEntity)
-                {
-                    foreach (var validationCondition in validatableEntity.ValidationConditions)
-                    {
-                        FillDependencies(entity.PublicKey, validationCondition.Expression);
-                    }
                 }
 
                 if (entity is IQuestion question)

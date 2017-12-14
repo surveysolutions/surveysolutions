@@ -163,6 +163,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(bool clearExpanded, ToggleSectionEventArgs toggledSection = null)
         {
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            if(interview == null) yield break;
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);

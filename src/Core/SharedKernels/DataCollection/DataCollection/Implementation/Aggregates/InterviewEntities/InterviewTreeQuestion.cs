@@ -192,7 +192,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsSupervisors { get; private set; }
         public bool IsHidden { get; private set; }
         public bool IsReadonly { get; private set; }
-        public bool IsValid => !this.FailedValidations?.Any() ?? this.isValidWithoutFailedValidations;
+        public bool IsValid
+        {
+            get
+            {
+                if (this.FailedValidations == null) return this.isValidWithoutFailedValidations;
+                
+                return this.FailedValidations.Count == 0; 
+            }
+        }
 
         public void RunImportInvariantsOrThrow(InterviewQuestionInvariants questionInvariants)
         {
@@ -600,7 +608,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsOnTheSameOrDeeperLevel(Identity questionIdentity)
         {
             var rosterLevel = questionIdentity.RosterVector.Length;
-            return this.Identity.RosterVector.Take(rosterLevel).SequenceEqual(questionIdentity.RosterVector);
+
+            return questionIdentity.RosterVector.Identical(this.Identity.RosterVector, rosterLevel);
         }
 
         public override IInterviewTreeNode Clone()
@@ -627,10 +636,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void Accept(IInterviewTreeUpdater updater)
         {
             updater.UpdateEnablement(this);
-
             if (this.IsSingleFixedOption)
             {
-                updater.UpdateSingleOptionQuestion(this);
+                updater.UpdateSingleOptionQuestion(this); 
             }
             else if (this.IsMultiFixedOption)
             {
@@ -654,7 +662,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 updater.UpdateSingleOptionQuestion(this);
                 updater.UpdateCascadingQuestion(this);
             }
+        }
 
+        public void AcceptValidity(IInterviewTreeUpdater updater)
+        {
             updater.UpdateValidations(this);
         }
 

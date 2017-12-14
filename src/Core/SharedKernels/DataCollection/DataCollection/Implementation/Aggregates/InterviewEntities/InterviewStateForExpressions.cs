@@ -20,48 +20,72 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector)
+        {  
+            T answer = GetAnswerImpl<T>(questionId, rosterVector is RosterVector rv ? rv : new RosterVector(rosterVector));
+            return answer;
+        }
+
+        public T GetAnswer<T>(Guid questionId, RosterVector rosterVector)
         {
-            var question = this.tree.GetQuestion(questionId, new RosterVector(rosterVector));
+            T answer = GetAnswerImpl<T>(questionId, rosterVector);
+            return answer;
+        }
+
+        private T GetAnswerImpl<T>(Guid questionId, RosterVector rosterVector)
+        {
+            var question = this.tree.GetQuestion(new Identity(questionId, rosterVector));
 
             if ((!question.IsAnswered() || question.IsDisabled()) && !question.IsYesNo) // because of missing field
                 return default(T);
 
-            if (question.IsInteger) return question.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.To<T>(); //"int?"
-            if (question.IsDouble) return question.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value.To<T>(); // double?
-
-            if (question.IsSingleFixedOption) return question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.To<T>();//int?
-            if (question.IsCascading) return question.GetAsInterviewTreeCascadingQuestion().GetAnswer().SelectedValue.To<T>();//int?
-            if (question.IsMultiFixedOption) return question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToInts().ToArray().To<T>();//int[]
-            if (question.IsYesNo)
+            switch (question.InterviewQuestionType)
             {
-                return new YesNoAndAnswersMissings(
-                    this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value), 
-                    question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
+                case InterviewQuestionType.Integer:
+                    return question.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.To<T>(); //"int?"
+                case InterviewQuestionType.Double:
+                    return question.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value.To<T>(); // double?
+                case InterviewQuestionType.SingleFixedOption:
+                    return question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.To<T>();//int?
+                case InterviewQuestionType.Cascading:
+                    return question.GetAsInterviewTreeCascadingQuestion().GetAnswer().SelectedValue.To<T>();//int?
+                case InterviewQuestionType.MultiFixedOption:
+                    return question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToInts().ToArray().To<T>();//int[]
+                case InterviewQuestionType.YesNo:
+                    return new YesNoAndAnswersMissings(
+                        this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value),
+                        question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
+                case InterviewQuestionType.SingleLinkedOption:
+                    return question.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue.To<T>();//RosterVector
+                case InterviewQuestionType.MultiLinkedOption:
+                    return question.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues.ToArray().To<T>();//RosterVector[]
+                case InterviewQuestionType.Gps:
+                    return question.GetAsInterviewTreeGpsQuestion().GetAnswer().ToGeoLocation().To<T>(); //GeoLocation
+                case InterviewQuestionType.TextList:
+                    return question.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.ToArray().To<T>(); // TextListAnswerRow[]
+                case InterviewQuestionType.DateTime:
+                    return question.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value.To<T>(); //DateTime?
+                case InterviewQuestionType.Text:
+                    return question.GetAsInterviewTreeTextQuestion().GetAnswer().Value.To<T>();//string
+                case InterviewQuestionType.SingleLinkedToList:
+                    return question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue.To<T>(); //int?
+                case InterviewQuestionType.MultiLinkedToList:
+                    return question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().ToInts().ToArray().To<T>(); // int[]
+                case InterviewQuestionType.Multimedia:
+                    return question.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName.To<T>();//string
+                case InterviewQuestionType.QRBarcode:
+                    return question.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer().DecodedText.To<T>();//string
+                case InterviewQuestionType.Audio:
+                    return question.GetAsInterviewTreeAudioQuestion().GetAnswer().ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
+                case InterviewQuestionType.Area:
+                    return question.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.To<T>(); //Area
+                default:
+                    return default(T);
             }
-
-            if (question.IsSingleLinkedOption) return question.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue.To<T>();//RosterVector
-            if (question.IsMultiLinkedOption) return question.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues.ToArray().To<T>();//RosterVector[]
-
-            if (question.IsGps) return question.GetAsInterviewTreeGpsQuestion().GetAnswer().ToGeoLocation().To<T>(); //GeoLocation
-            if (question.IsTextList) return question.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.ToArray().To<T>(); // TextListAnswerRow[]
-
-            if (question.IsDateTime) return question.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value.To<T>(); //DateTime?
-            if (question.IsText) return question.GetAsInterviewTreeTextQuestion().GetAnswer().Value.To<T>();//string
-
-            if (question.IsSingleLinkedToList) return question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue.To<T>(); //int?
-            if (question.IsMultiLinkedToList) return question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().ToInts().ToArray().To<T>(); // int[]
-           
-            if (question.IsMultimedia) return question.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName.To<T>();//string
-            if (question.IsQRBarcode) return question.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer().DecodedText.To<T>();//string
-
-            if (question.IsAudio) return question.GetAsInterviewTreeAudioQuestion().GetAnswer().ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
-
-            return default(T);
         }
 
         public T GetVariable<T>(Guid questionId, IEnumerable<int> rosterVector)
         {
-            var variable = this.tree.GetVariable(new Identity(questionId, new RosterVector(rosterVector)));
+            var variable = this.tree.GetVariable(new Identity(questionId, rosterVector is RosterVector rv ? rv : new RosterVector(rosterVector)));
 
             if (variable.IsDisabled())
                 return default(T);

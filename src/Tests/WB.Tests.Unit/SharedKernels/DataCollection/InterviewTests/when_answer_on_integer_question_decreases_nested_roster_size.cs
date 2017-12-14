@@ -63,6 +63,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == rosterGroupId));
 
+        It should_not_raise_GroupsEnabled_event = () =>
+            eventContext.ShouldNotContainEvent<GroupsEnabled>(@event
+                => @event.Groups.Any(g => g == Create.Identity(rosterGroupId, 1)));
+
+        It should_not_raise_QuestionsEnabled_event = () =>
+            eventContext.ShouldNotContainEvent<QuestionsEnabled>(@event
+                => @event.Questions.Any(q => q == Create.Identity(questionWhichIncreasesRosterSizeId, 1)));
+
         private static EventContext eventContext;
         private static Interview interview;
         private static Guid userId;
