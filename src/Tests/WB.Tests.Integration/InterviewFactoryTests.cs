@@ -1026,6 +1026,29 @@ namespace WB.Tests.Integration
             Assert.That(interviewEntities, Is.Empty);
         }
 
+        [Test]
+        public void when_GetInterviewData_and_interview_has_answer_in_int_and_double_columns_by_single_option_question_then_int_answer_should_be_returned()
+        {
+            //arrange
+            var interviewId = Guid.NewGuid();
+            var questionIdentity = Identity.Create(Guid.NewGuid(), RosterVector.Empty);
+
+            var interviewSummaryRepository = GetInMemoryInterviewSummaryRepository(interviewId);
+            var factory = CreateInterviewFactory(interviewSummaryRepository);
+
+            //act
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                factory.UpdateAnswer(interviewId, questionIdentity, 7m);
+                factory.UpdateAnswer(interviewId, questionIdentity, 1);
+            });
+
+            //assert
+            var interview = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetInterviewData(interviewId));
+
+            Assert.That(interview.Levels["#"].QuestionsSearchCache[questionIdentity.Id].Answer, Is.EqualTo(1));
+        }
+
 
         private InterviewFactory CreateInterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null,
