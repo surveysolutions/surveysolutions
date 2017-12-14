@@ -19,7 +19,7 @@
             return new ChildCounter(counter, labels);
         }
 
-        private class ChildCounter : ICounter
+        private struct ChildCounter : ICounter
         {
             private readonly Prometheus.Counter counter;
             private readonly string[] labels;
@@ -28,6 +28,11 @@
             {
                 this.counter = counter;
                 this.labels = labels;
+                
+                for (int i = 0; i < this.labels.Length; i++)
+                {
+                    if (this.labels[i] == null) this.labels[i] = "null";
+                }
             }
 
             public void Inc(double amount = 1)

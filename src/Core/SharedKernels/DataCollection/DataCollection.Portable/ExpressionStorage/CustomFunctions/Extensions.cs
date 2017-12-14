@@ -20,8 +20,18 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
             return true;
         }
 
-        public static bool InList(this int? value, params int?[] valuesList) => 
-            valuesList.Length != 0 && valuesList.Any(v => v == value);
+        public static bool InList(this int? value, params int?[] valuesList)
+        {
+            if (valuesList.Length == 0) return false;
+
+            for (var index = 0; index < valuesList.Length; index++)
+            {
+                var v = valuesList[index];
+                if (v == value) return true;
+            }
+
+            return false;
+        }
 
         public static bool InList(this int value, params int?[] valuesList) =>
             ((int?)value).InList(valuesList);

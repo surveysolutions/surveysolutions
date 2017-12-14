@@ -8,6 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Services
     {
         GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, int targetVersion,
           out string generatedAssembly);
-        Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion);
+        Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false);
     }
 }

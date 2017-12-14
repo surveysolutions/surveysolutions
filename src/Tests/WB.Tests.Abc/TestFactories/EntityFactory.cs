@@ -975,7 +975,8 @@ namespace WB.Tests.Abc.TestFactories
             RosterSizeSourceType? rosterSizeSourceType = null,
             Guid? rosterSizeQuestionId = null,
             Guid? rosterTitleQuestionId = null,
-            FixedRosterTitle[] fixedRosterTitles = null)
+            FixedRosterTitle[] fixedRosterTitles = null,
+            bool hideIfDisabled = false)
         {
             Group group = Create.Entity.Group(
                 groupId: rosterId,
@@ -986,7 +987,7 @@ namespace WB.Tests.Abc.TestFactories
 
             group.IsRoster = true;
             group.RosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
-
+            group.HideIfDisabled = hideIfDisabled;
             if (group.RosterSizeSource == RosterSizeSourceType.FixedTitles)
             {
                 if (fixedRosterTitles == null)

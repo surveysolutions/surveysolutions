@@ -1,5 +1,3 @@
-using System;
-
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
 {
     public class InterviewTreeVariableDiff : InterviewTreeNodeDiff
@@ -7,23 +5,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeVariableDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
             : base(sourceNode, changedNode)
         {
+            IsValueChanged = IsValueChangedImp(sourceNode as InterviewTreeVariable, changedNode as InterviewTreeVariable);
         }
 
         public new InterviewTreeVariable SourceNode => base.SourceNode as InterviewTreeVariable;
         public new InterviewTreeVariable ChangedNode => base.ChangedNode as InterviewTreeVariable;
 
-        public bool IsValueChanged
+
+        public bool IsValueChanged { get; }
+        public bool IsValueChangedImp(InterviewTreeVariable sourceNode, InterviewTreeVariable changedNode)
         {
-            get
-            {
-                if (this.SourceNode?.Value == null)
-                    return this.ChangedNode.HasValue;
+            if (sourceNode?.Value == null)
+                return changedNode?.HasValue ?? false;
 
-                if (this.ChangedNode?.Value == null)
-                    return this.SourceNode.HasValue;
+            if (changedNode?.Value == null)
+                return sourceNode.HasValue;
 
-                return !this.SourceNode.Value.Equals(this.ChangedNode.Value);
-            }
+            return !sourceNode.Value.Equals(changedNode.Value);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace WB.UI.Designer.Api
 
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
 
-            var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion);
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion, inSingleFile: true);
             
             var resultBuilder =new StringBuilder();
             
