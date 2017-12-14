@@ -31,7 +31,7 @@
             return new ChildGauge(gauge, labels);
         }
 
-        private class ChildGauge : IGauge
+        private struct ChildGauge : IGauge
         {
             private readonly Prometheus.Gauge gauge;
             private readonly string[] labels;
@@ -40,6 +40,11 @@
             {
                 this.gauge = gauge;
                 this.labels = labels;
+
+                for (int i = 0; i < this.labels.Length; i++)
+                {
+                    if (this.labels[i] == null) this.labels[i] = "null";
+                }
             }
 
             public void Inc(double amount = 1)
@@ -64,6 +69,5 @@
             void Dec(double amount = 1);
             void Set(double amount);
         }
-
     }
 }

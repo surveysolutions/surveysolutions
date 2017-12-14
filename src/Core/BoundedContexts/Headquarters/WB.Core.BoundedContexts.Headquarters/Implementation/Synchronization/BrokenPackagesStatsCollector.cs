@@ -11,10 +11,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
     {
         private readonly ISessionFactory sessionFactory;
         private readonly Stopwatch throttle = new Stopwatch();
-
+        
         public BrokenPackagesStatsCollector(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
+            throttle.Start();
         }
 
         public void RegisterMetrics()
@@ -24,15 +25,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public void UpdateMetrics()
         {
-            if (throttle.Elapsed <= TimeSpan.FromMinutes(5)) return;
-
-            using (var session = sessionFactory.OpenStatelessSession())
+            lock (throttle)
             {
-                var packagesCount = session.Query<BrokenInterviewPackage>().Count();
-                CommonMetrics.BrokenPackagesCount.Set(packagesCount);
-            }
+                if (throttle.Elapsed <= TimeSpan.FromMinutes(1)) return;
 
-            throttle.Reset();
+                using (var session = sessionFactory.OpenStatelessSession())
+                {
+                    var packages = from bip in session.Query<BrokenInterviewPackage>()
+                        group bip by bip.ExceptionType
+                        into g
+                        select new {Type = g.Key, Count = g.Count()};
+
+                    foreach (var package in packages.ToList())
+                    {
+                        CommonMetrics.BrokenPackagesCount.Labels(package.Type).Set(package.Count);
+                    }
+                }
+
+                throttle.Reset();
+            }
         }
     }
 }
