@@ -121,7 +121,14 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
 
         public void BindToMethod<T>(Func<T> func, string name = null)
         {
-            throw new NotImplementedException();
+            if (name == null)
+            {
+                BindToMethod(func);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public void BindToMethod<T>(Func<IModuleContext, T> func, string name = null)
