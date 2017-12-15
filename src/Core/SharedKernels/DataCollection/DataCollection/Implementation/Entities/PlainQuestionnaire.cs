@@ -807,7 +807,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 ? targetRostersWithSameScope.First()
                 : targetRostersWithSameScope.FirstOrDefault(rosterId => isQuestionLinkedToQuestion 
                     ? IsQuestionChildOfGroup(questionSourceId, rosterId)
-                    : IsRosterChildOfGroup(questionSourceId, rosterId));
+                    : IsRosterChildOfGroupRecursive(questionSourceId, rosterId));
+
+            if (targetRoster == Guid.Empty) return null;
 
             return targetRoster;
         }
@@ -825,11 +827,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetAllUnderlyingQuestions(groupId).Contains(questionId);
         }
 
-        private bool IsRosterChildOfGroup(Guid rosterId, Guid groupId)
+        private bool IsRosterChildOfGroupRecursive(Guid rosterId, Guid groupId)
         {
-            return rosterId == groupId || this.GetAllUnderlyingChildRosters(groupId).Contains(rosterId);
+            if (rosterId == groupId) return true;
+            var group = this.GetGroup(rosterId);
+            return group.UnwrapReferences<IComposite>(x => x.GetParent()).Any(x => x.PublicKey == groupId);
         }
-
 
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
