@@ -233,4 +233,16 @@
     <value>Сжатие</value>
     <comment>Сжатие</comment>
   </data>
+  <data name="DateRange" xml:space="preserve">
+    <value/>
+    <comment>За период</comment>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>С</value>
+    <comment>С</comment>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>По</value>
+    <comment>По</comment>
+  </data>
 </root>

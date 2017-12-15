@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var filebasedExportedDataAccessor = Mock.Of<IFilebasedExportedDataAccessor>(
                 x => x.GetArchiveFilePathForExportedData(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<DataExportFormat>(),
-                    Moq.It.IsAny<InterviewStatus?>()) == "path to export file");
+                    Moq.It.IsAny<InterviewStatus?>(), null, null) == "path to export file");
 
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(x => x.IsFileExists(Moq.It.IsAny<string>()) == true);
 

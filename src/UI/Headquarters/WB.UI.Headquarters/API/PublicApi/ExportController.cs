@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -8,6 +9,7 @@ using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -100,15 +102,14 @@ namespace WB.UI.Headquarters.API.PublicApi
                 case DataExportFormat.DDI:
                     return this.BadRequest(@"Not supported export type");
                 default:
-                    QuestionnaireIdentity questionnaireIdentity;
-                    if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
+                    if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                         return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
                     var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
                     if (questionnaireBrowseItem == null)
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-                    this.dataExportProcessesService.AddDataExport(questionnaireIdentity, exportType);
+                    this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(exportType, questionnaireIdentity, null));
                     break;
             }
 
@@ -127,15 +128,15 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route(@"{exportType}/{id}/cancel")]
         public IHttpActionResult CancelProcess(string id, DataExportFormat exportType)
         {
-            QuestionnaireIdentity questionnaireIdentity;
-            if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            this.dataExportProcessesService.DeleteProcess(questionnaireIdentity, exportType);
+            this.dataExportProcessesService.DeleteDataExport(
+                new DataExportProcessDetails(exportType, questionnaireIdentity, null).NaturalId);
 
             return this.Ok();
         }

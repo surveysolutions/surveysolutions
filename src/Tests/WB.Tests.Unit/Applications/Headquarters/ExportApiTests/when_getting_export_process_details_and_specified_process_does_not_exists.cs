@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var mockOfDataExportStatusReader = new Mock<IDataExportStatusReader>();
-            mockOfDataExportStatusReader.Setup(x => x.GetDataExportStatusForQuestionnaire(questionnaireIdentity, null))
+            mockOfDataExportStatusReader.Setup(x => x.GetDataExportStatusForQuestionnaire(questionnaireIdentity, null, null, null))
                 .Returns((DataExportStatusView)null);
 
             controller = CreateExportController(dataExportStatusReader: mockOfDataExportStatusReader.Object);
