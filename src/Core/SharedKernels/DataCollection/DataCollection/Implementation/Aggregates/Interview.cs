@@ -2334,7 +2334,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     var playOrder = questionnaire.GetExpressionsPlayOrder();
 
-                    List<IInterviewTreeNode> nodesInPlayOrder = new List<IInterviewTreeNode>();
+                    List<IInterviewTreeValidateable> nodesForValidation = new List<IInterviewTreeValidateable>();
                     foreach (var entityId in playOrder)
                     {
                         var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
@@ -2343,12 +2343,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         {
                             var changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
                             if (changedNode != null)
-                                nodesInPlayOrder.Add(changedNode);
+                            {
+                                changedNode.Accept(updater);
+
+                                if (changedNode is IInterviewTreeValidateable validatedNode)
+                                    nodesForValidation.Add(validatedNode);
+                            }
                         }
                     }
 
-                    nodesInPlayOrder.ForEach(node => node.Accept(updater));
-                    nodesInPlayOrder.OfType<IInterviewTreeValidateable>().ForEach(node => node.AcceptValidity(updater));
+                    nodesForValidation.OfType<IInterviewTreeValidateable>().ForEach(node => node.AcceptValidity(updater));
                 }
             }
             else
