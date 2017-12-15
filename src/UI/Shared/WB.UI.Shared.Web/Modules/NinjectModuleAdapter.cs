@@ -32,7 +32,7 @@ namespace WB.UI.Shared.Web.Modules
         }
     }
 
-    public  class NinjectWebModuleAdapter<TModule> : NinjectModuleAdapter
+    public class NinjectWebModuleAdapter<TModule> : NinjectModuleAdapter
         where TModule : IWebModule
     {
         private readonly TModule module;
@@ -47,8 +47,7 @@ namespace WB.UI.Shared.Web.Modules
             this.module.Load(this);
         }
     }
-
-
+    
     public abstract class NinjectModuleAdapter : NinjectModule, IWebIocRegistry
     {
         void IIocRegistry.Bind<TInterface, TImplementation>()
@@ -129,7 +128,7 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindToMethodInSingletonScope<T>(Func<IModuleContext, T> func, string named = null)
         {
-            var syntax = this.Kernel.Bind<T>().ToMethod(c => func(new NinjectModuleContext(c)));
+            var syntax = this.Kernel.Bind<T>().ToMethod(c => func(new NinjectModuleContext(c))).InSingletonScope();
             if (!string.IsNullOrEmpty(named))
                 syntax.Named(named);
         }
