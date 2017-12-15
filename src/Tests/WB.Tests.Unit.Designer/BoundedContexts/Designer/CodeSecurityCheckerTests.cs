@@ -27,28 +27,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(forbiddenClassesUsed, Is.Empty);
         }
 
-        [Test]
-        public void should_not_allo_usage_of_SystemIO()
-        {
-            string code = string.Format(TestClassToCompile, "System.IO.File.ReadAllLines(\"\")");
-            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
-            var codeSecurityChecker = GetCodeSecurityChecker();
-            var compilation = CreateCompilation(syntaxTree.ToEnumerable());
-
-            // Act
-            var forbiddenClassesUsed = codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation);
-
-            Assert.That(forbiddenClassesUsed, Has.Count.EqualTo(1));
-            Assert.That(forbiddenClassesUsed[0], Is.EqualTo("System.IO.File"));
-        }
-
         [TestCase("Activator.CreateInstance(typeof(AccessViolationException))", "System.Activator")]
         [TestCase("AppContext.BaseDirectory", "System.AppContext")]
         [TestCase("AppDomain.GetCurrentThreadId()", "System.AppDomain")]
         [TestCase("Console.WriteLine(1)", "System.Console")]
         [TestCase("Environment.Exit(1)", "System.Environment")]
         [TestCase("GC.Collect()", "System.GC")]
-        public void should_not_allow_usage_of_dangerous_classess_in_system_namespace(string codeToCheck, string expectedClassName)
+        [TestCase("System.IO.File.ReadAllLines(\"\")", "System.IO.File")]
+        [TestCase("new System.Net.Mail.SmtpClient()", "System.Net.Mail.SmtpClient")]
+        public void should_not_allow_usage_of_dangerous_classess(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
             var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
