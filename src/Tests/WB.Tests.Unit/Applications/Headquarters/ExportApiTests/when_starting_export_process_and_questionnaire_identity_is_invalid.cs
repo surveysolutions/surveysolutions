@@ -1,11 +1,9 @@
-using System.Net;
+﻿using System.Net;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
@@ -16,7 +14,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             BecauseOf();
         }
 
-        private void BecauseOf() => result = controller.StartProcess("invalid questionnaire identity", DataExportFormat.Tabular);
+        Because BecauseOf = () => result = controller.StartProcess("invalid questionnaire identity", DataExportFormat.Tabular);
 
         [NUnit.Framework.Test] public void should_return_http_bad_request_response () =>
             ((NegotiatedContentResult<string>)result).StatusCode.ShouldEqual(HttpStatusCode.BadRequest);

@@ -1,14 +1,13 @@
-using System;
+﻿using System;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
 using Moq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
@@ -19,13 +18,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             BecauseOf();
         }
 
-        private void BecauseOf() => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
+        Because BecauseOf = () => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         [NUnit.Framework.Test] public void should_return_http_ok_response () =>
             result.ShouldBeOfExactType<OkResult>();
 
         [NUnit.Framework.Test] public void should_call_add_export_method_in_data_export_processes_service () =>
-            mockOfDataExportProcessesService.Verify(x=>x.AddDataExport(questionnaireIdentity, DataExportFormat.Tabular, null), Times.Once);
+            mockOfDataExportProcessesService.Verify(x=>x.AddDataExport(Moq.It.IsAny<DataExportProcessDetails>()), Times.Once);
 
         private static ExportController controller;
 

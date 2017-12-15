@@ -41,19 +41,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return exportProcess;
         }
 
-        public string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status)
+        public void AddDataExport(DataExportProcessDetails details)
         {
-            var questionnaireBrowseItem = this.questionnaires.GetById(questionnaire.ToString());
+            var questionnaireBrowseItem = this.questionnaires.GetById(details.Questionnaire.ToString());
             if (questionnaireBrowseItem == null)
-                throw new ArgumentException($"Questionnaire {questionnaire} wasn't found");
-
-            var process = new DataExportProcessDetails(exportFormat, questionnaire, questionnaireBrowseItem.Title)
-            {
-                InterviewStatus = status
-            };
-            this.EnqueueProcessIfNotYetInQueue(process);
-
-            return process.NaturalId;
+                throw new ArgumentException($"Questionnaire {details.Questionnaire} wasn't found");
+            
+            this.EnqueueProcessIfNotYetInQueue(details);
         }
 
         private void EnqueueProcessIfNotYetInQueue(DataExportProcessDetails newProcess)
@@ -112,9 +106,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.processes.TryRemove(processId);
         }
 
-        public void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat)
+        public void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat,
+            DateTime? fromDate = null, DateTime? toDate = null)
         {
-            var process = (IDataExportProcessDetails) new DataExportProcessDetails(exportFormat, questionnaire, null);
+            var process = (IDataExportProcessDetails) new DataExportProcessDetails(exportFormat, questionnaire, null)
+            {
+                FromDate = fromDate,
+                ToDate = toDate
+            };
 
             this.DeleteDataExport(process.NaturalId);
         }
