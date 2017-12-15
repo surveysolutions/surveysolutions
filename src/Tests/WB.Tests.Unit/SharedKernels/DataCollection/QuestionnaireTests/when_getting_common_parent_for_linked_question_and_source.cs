@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
     public class when_getting_common_parent_for_linked_question_and_source
     {
         [Test]
-        public void should_return_null_when_there_is_no_common_parent()
+        public void should_return_common_parent_when_linked_question_is_in_child_sub_roster()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
