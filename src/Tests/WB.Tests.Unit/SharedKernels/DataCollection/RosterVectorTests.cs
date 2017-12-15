@@ -29,5 +29,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(rosterVectors, Is.EqualTo(new[] { Create.Entity.RosterVector(2), Create.Entity.RosterVector(5) }));
         }
 
+        [Test]
+        public void Take_when_provided_length_larger_than_own_length_Should_return_self()
+        {
+            var rosterVector = Create.RosterVector(1,2);
+            var shrinkedVector = rosterVector.Take(5);
+
+            Assert.That(shrinkedVector, Is.EqualTo(rosterVector));
+        }
+
     }
 }
