@@ -142,6 +142,11 @@ namespace WB.Core.SharedKernels.DataCollection
 
         public RosterVector Take(int targetLength)
         {
+            if (targetLength > this.coordinates.Length)
+            {
+                return this;
+            }
+
             return this.Shrink(targetLength);
         }
 
