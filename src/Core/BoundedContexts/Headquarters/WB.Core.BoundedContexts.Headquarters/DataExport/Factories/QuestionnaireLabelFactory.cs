@@ -55,20 +55,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
             for (int i = 0; i < levelRosterVector.Length; i++)
             {
-                string parentColumnLabel;
                 if (i == 0)
-                {
-                    parentColumnLabel = ServiceColumns.InterviewId;
-                }
+                    variableLabels.Add(new LabeledVariable(ServiceColumns.InterviewId, "InterviewId"));
                 else
                 {
                     var parentRosterVector = new ValueVector<Guid>(levelRosterVector.Take(i));
 
                     if (!structure.HeaderToLevelMap.ContainsKey(parentRosterVector))
                         continue;
-                    parentColumnLabel = $"Id in \"{structure.HeaderToLevelMap[parentRosterVector].LevelName}\"";
+
+                    var parentRosterName = structure.HeaderToLevelMap[parentRosterVector].LevelName;
+
+                    var parentColumnLabel = $"Id in \"{parentRosterName}\"";
+                    variableLabels.Add(new LabeledVariable(string.Format(ServiceColumns.IdSuffixFormat, parentRosterName), parentColumnLabel));
                 }
-                variableLabels.Add(new LabeledVariable($"{ServiceColumns.RosterId}{levelRosterVector.Length - i}", parentColumnLabel));
             }
 
             return new QuestionnaireLevelLabels(level.LevelName, variableLabels.ToArray());
