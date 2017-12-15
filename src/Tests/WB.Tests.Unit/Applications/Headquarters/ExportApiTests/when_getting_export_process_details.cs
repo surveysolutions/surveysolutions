@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
                         Progress = 98
                     },
                 });
-            mockOfDataExportStatusReader.Setup(x => x.GetDataExportStatusForQuestionnaire(questionnaireIdentity, null))
+            mockOfDataExportStatusReader.Setup(x => x.GetDataExportStatusForQuestionnaire(questionnaireIdentity, null, null, null))
                 .Returns(dataExportStatusView);
 
             controller = CreateExportController(dataExportStatusReader: mockOfDataExportStatusReader.Object);

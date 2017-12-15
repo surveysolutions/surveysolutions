@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             result.ShouldBeOfExactType<OkResult>();
 
         [NUnit.Framework.Test] public void should_call_add_export_method_in_data_export_processes_service () =>
-            mockOfDataExportProcessesService.Verify(x=>x.DeleteProcess(questionnaireIdentity, DataExportFormat.Tabular), Times.Once);
+            mockOfDataExportProcessesService.Verify(x=>x.DeleteDataExport(Moq.It.IsAny<string>()), Times.Once);
 
         private static ExportController controller;
 

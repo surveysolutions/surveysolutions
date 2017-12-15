@@ -13,7 +13,47 @@
     self.exportFromats = $exportFromats;
 
     self.selectedTemplate = ko.observable();
-    self.selectedStatus = ko.observable({status : 'null'});
+    self.selectedStatus = ko.observable({ status: 'null' });
+    
+    self.fromDateSelected = ko.observable();
+    self.toDateSelected = ko.observable();
+
+    function getFromDatePicker() {
+        return $("#from-date").data("daterangepicker");
+    }
+
+    function getToDatePicker() {
+        return $("#to-date").data("daterangepicker");
+    }
+
+    var dateFormat = "YYYY-MM-DD";
+    $("#from-date").daterangepicker({
+            autoUpdateInput: false,
+            showDropdowns: true,
+            singleDatePicker: true,
+            maxDate: new Date()
+        },
+        function (start) {
+            const date = moment(start);
+            getFromDatePicker().setStartDate(date);
+            self.fromDateSelected(date.format(dateFormat));
+            getToDatePicker().minDate = date;
+            self.updateDataExportInfo(false);
+        });
+    $("#to-date").daterangepicker({
+            autoUpdateInput: false,
+            showDropdowns: true,
+            singleDatePicker: true,
+            maxDate: new Date()
+        },
+        function (start) {
+            const date = moment(start);
+            getToDatePicker().setStartDate(date);
+            self.toDateSelected(date.format(dateFormat));
+            getFromDatePicker().maxDate = date;
+            self.updateDataExportInfo(false);
+        });
+    
 
     self.selectedTemplateId = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().id;
@@ -30,6 +70,24 @@
     self.selectedStatus.subscribe(function() {
         self.updateDataExportInfo(false);
     });
+    
+    self.getRequestQuery = function (format) {
+        const requestDateFormat = "YYYYMMDD";
+        const fromDatePicker = getFromDatePicker();
+        const toDatePicker = getToDatePicker();
+
+        const request = {
+            id: self.selectedTemplateId(),
+            version: self.selectedTemplate().version,
+            status: self.selectedStatus().status,
+            from: fromDatePicker && fromDatePicker.startDate ? fromDatePicker.startDate.format(requestDateFormat) : null,
+            to: toDatePicker && toDatePicker.startDate ? toDatePicker.startDate.format(requestDateFormat) : null
+        };
+        if (format)
+            request["format"] = format;
+
+        return $.param(request);
+    };
 
     self.updateDataExportInfo = function (runRecursively) {
         if (self.selectedTemplate() == null) {
@@ -38,11 +96,8 @@
             }, 3000);
             return;
         }
-        var questionnaireId = self.selectedTemplateId();
-        var questionnaireVersion = self.selectedTemplate().version;
-        var status = self.selectedStatus().status;
 
-        self.sendWebRequest(self.Url + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&status=" + status, {}, function (data) {
+        self.sendWebRequest(self.Url + "?" + self.getRequestQuery(), {}, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
             if (runRecursively===true) {
                 _.delay(function () {
@@ -73,14 +128,10 @@
     }
 
     self.requestDataUpdate = function(format) {
-        var questionnaireId = self.selectedTemplateId();
-        var questionnaireVersion = self.selectedTemplate().version;
-        var status = self.selectedStatus().status;
-
         return function() {
-            self.sendWebRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format + "&status=" + status,
+            self.sendWebRequest(self.UpdateDataUrl + "?" + self.getRequestQuery(format),
                 [],
-                function (data) {
+                function(data) {
                     self.updateDataExportInfo();
                 });
         }

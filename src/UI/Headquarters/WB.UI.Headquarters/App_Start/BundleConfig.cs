@@ -274,6 +274,7 @@ namespace WB.UI.Headquarters
 
             bundles.Add(new ScriptBundle("~/js/exportdata").Include(
                 "~/Scripts/bootbox.min.js",
+                "~/Scripts/dateRangePicker/daterangepicker.js",
                 "~/Scripts/viewmodels/pages/interviews.base.js",
                 "~/Scripts/pages/exportdata.js"
                 ));

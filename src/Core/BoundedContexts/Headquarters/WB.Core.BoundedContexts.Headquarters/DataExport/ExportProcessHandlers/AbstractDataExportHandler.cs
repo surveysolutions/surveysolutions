@@ -13,6 +13,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
     abstract class AbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
+        protected class ExportSettings
+        {
+            public QuestionnaireIdentity QuestionnaireId { get; set; }
+            public InterviewStatus? InterviewStatus { get; set; }
+            public DateTime? FromDate { get; set; }
+            public DateTime? ToDate { get; set; }
+            public string ExportDirectory { get; set; }
+        }
         protected readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         protected readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -51,14 +59,23 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             exportProgress.ProgressChanged += (sender, donePercent) =>
                 this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, donePercent);
 
-            this.ExportDataIntoDirectory(dataExportProcessDetails.Questionnaire,
-                dataExportProcessDetails.InterviewStatus, this.exportTempDirectoryPath, exportProgress,
+            var exportSettings = new ExportSettings
+            {
+                QuestionnaireId = dataExportProcessDetails.Questionnaire,
+                InterviewStatus = dataExportProcessDetails.InterviewStatus,
+                FromDate = dataExportProcessDetails.FromDate,
+                ToDate = dataExportProcessDetails.ToDate,
+                ExportDirectory = this.exportTempDirectoryPath
+            };
+
+            this.ExportDataIntoDirectory(exportSettings, exportProgress,
                 dataExportProcessDetails.CancellationToken);
 
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus);
+                dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus,
+                dataExportProcessDetails.FromDate, dataExportProcessDetails.ToDate);
             
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
             this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
@@ -70,8 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         
         protected abstract DataExportFormat Format { get; }
 
-        protected abstract void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity,
-            InterviewStatus? status, string directoryPath, IProgress<int> progress,
+        protected abstract void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken);
 
         private void DeleteExportTempDirectory()
