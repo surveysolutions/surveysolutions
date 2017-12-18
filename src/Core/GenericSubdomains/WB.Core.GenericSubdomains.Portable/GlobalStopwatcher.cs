@@ -21,8 +21,6 @@ namespace WB.Core.GenericSubdomains.Portable
 
     public static class GlobalStopwatcher
     {
-        private const string DebugTag = "WBDEBUG";
-
         public class StopwatchScope : IDisposable
         {
             public string Category { get; }
@@ -31,8 +29,6 @@ namespace WB.Core.GenericSubdomains.Portable
 
             internal StopwatchScope(StopwatchWrapper stopwatch, string category, string name)
             {
-                Debug.WriteLine($"[{(ThreadHelper.IsOnMainThread ? "MT" : "  ")}] Start scope {category} => {name}",
-                    DebugTag);
                 Category = category;
                 Name = name;
                 this.stopwatch = stopwatch;
@@ -42,8 +38,6 @@ namespace WB.Core.GenericSubdomains.Portable
             public void Dispose()
             {
                 this.stopwatch.Stop();
-                Debug.WriteLine($"[{(ThreadHelper.IsOnMainThread ? "MT" : "  ")}] Stop scope {Category} => {Name}",
-                    DebugTag);
             }
         }
 
