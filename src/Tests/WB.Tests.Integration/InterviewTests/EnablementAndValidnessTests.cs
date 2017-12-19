@@ -127,5 +127,54 @@ namespace WB.Tests.Integration.InterviewTests
             appDomainContext.Dispose();
             appDomainContext = null;
         }
+
+        [Test]
+        public void when_answering_integer_question_as_roster_triger_should_execute_condition_for_new_element_inside_roster()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var questionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var rosterId        = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var textQuestionId  = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "i"),
+                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: questionId, children: new []
+                    {
+                        Abc.Create.Entity.TextQuestion(textQuestionId, "i != 5")
+                    })
+                );
+
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, 5);
+
+                    return new
+                    {
+                        DisabledEvent = GetFirstEventByType<QuestionsDisabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.DisabledEvent, Is.Not.Null);
+            Assert.That(results.DisabledEvent.Questions.Length, Is.EqualTo(5));
+            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(), Is.EqualTo(new[] { textQuestionId, textQuestionId , textQuestionId , textQuestionId , textQuestionId }));
+
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+
     }
 }
