@@ -90,7 +90,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
                 {
                     Id = question.PublicKey,
                     Variable = questionnaire.GetVariable(question),
-                    TypeName = questionTypeMapper.GetQuestionType(question, questionnaire),
+                    RawTypeName = questionTypeMapper.GetQuestionType(question, questionnaire),
+                    IsValueType = questionTypeMapper.IsAnswerValueType(question, questionnaire),
                     RosterScope = rosterScope
                 });
             }

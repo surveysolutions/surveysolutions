@@ -3,6 +3,8 @@ using Ninject;
 using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV3;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV3.Impl;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -85,6 +87,11 @@ namespace WB.Core.BoundedContexts.Designer
             this.Bind<ICodeGenerator>().To<CodeGenerator>();
             this.Bind<ICodeGeneratorV2>().To<CodeGeneratorV2>();
             this.Bind<IQuestionTypeToCSharpTypeMapper>().To<QuestionTypeToCSharpTypeMapper>();
+
+            this.Bind<ICodeGeneratorV3>().To<CodeGeneratorV3>();
+            this.Bind<ICodeGenerationModelsFactoryV3>().To<CodeGenerationModelsFactoryV3>();
+            this.Bind<IQuestionTypeToCSharpTypeMapperV3>().To<QuestionTypeToCSharpTypeMapperV3>();
+
             this.Bind<ICodeGenerationModelsFactory>().To<CodeGenerationModelsFactory>();
             this.Bind<ILookupTableService>().To<LookupTableService>();
             this.Bind<IAttachmentService>().To<AttachmentService>();
