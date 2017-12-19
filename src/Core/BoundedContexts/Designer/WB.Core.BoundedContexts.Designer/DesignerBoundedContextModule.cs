@@ -33,9 +33,9 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
-using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer
