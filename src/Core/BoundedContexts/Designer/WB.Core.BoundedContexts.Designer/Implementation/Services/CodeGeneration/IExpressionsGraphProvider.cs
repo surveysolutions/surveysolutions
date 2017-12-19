@@ -7,5 +7,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     {
         Dictionary<Guid, List<Guid>> BuildDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire);
         Dictionary<Guid, List<Guid>> BuildConditionalDependencies(ReadOnlyQuestionnaireDocument questionnaireDocument);
+        Dictionary<Guid, List<Guid>> BuildValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaireDocument);
     }
 }

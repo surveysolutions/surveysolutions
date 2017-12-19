@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -134,12 +135,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             {
                 if (entity is IConditional conditionalEntity)
                 {
-                    FillDependencies(entity.PublicKey, conditionalEntity.ConditionExpression);
+                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, conditionalEntity.ConditionExpression);
                 }
 
                 if (entity is IQuestion question)
                 {
-                    FillDependencies(question.PublicKey, question.Properties.OptionsFilterExpression);
+                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.Properties.OptionsFilterExpression);
 
                     if (question.CascadeFromQuestionId != null)
                     {
@@ -152,42 +153,67 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 if (entity is IVariable variable)
                 {
-                    FillDependencies(entity.PublicKey, variable.Expression);
+                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, variable.Expression);
                 }
             }
 
             return dependencies;
+        }
 
-            void FillDependencies(Guid entityId, string expression)
+        public Dictionary<Guid, List<Guid>> BuildValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaireDocument)
+        {
+            var dependencies = new Dictionary<Guid, List<Guid>>();
+
+            var allMacroses = questionnaireDocument.Macros.Values;
+            var variableNamesByEntitiyIds = GetAllVariableNames(questionnaireDocument);
+
+            foreach (var entity in questionnaireDocument.Find<IComposite>())
             {
-                if (string.IsNullOrWhiteSpace(expression)) return;
-
-                var conditionExpression = this.macrosSubstitutionService.InlineMacros(expression, allMacroses);
-                var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(conditionExpression);
-
-                if (!dependencies.TryGetValue(entityId, out List<Guid> depsList))
+                if (entity is IValidatable validatableEntity)
                 {
-                    depsList = new List<Guid>();
-                }
-
-                depsList = depsList.Union(idsOfEntitesInvolvedInExpression).Distinct().ToList();
-
-                if (!dependencies.ContainsKey(entityId) && depsList.Count > 0)
-                {
-                    dependencies[entityId] = depsList;
+                    foreach (var validationCondition in validatableEntity.ValidationConditions)
+                    {
+                        FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, validationCondition.Expression);
+                    }
                 }
             }
 
-            IEnumerable<Guid> GetIdsOfEntitiesInvolvedInExpression(string conditionExpression)
-            {
-                var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
+            return dependencies;
+        }
 
-                foreach (var variable in identifiersUsedInExpression)
+        void FillDependencies(Dictionary<Guid, List<Guid>> dependencies, 
+            Dictionary<string, Guid> variableNamesByEntitiyIds, 
+            Dictionary<Guid, Macro>.ValueCollection allMacroses, 
+            Guid entityId, 
+            string expression)
+        {
+            if (string.IsNullOrWhiteSpace(expression)) return;
+
+            var conditionExpression = this.macrosSubstitutionService.InlineMacros(expression, allMacroses);
+            var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression);
+
+            if (!dependencies.TryGetValue(entityId, out List<Guid> depsList))
+            {
+                depsList = new List<Guid>();
+            }
+
+            depsList = depsList.Union(idsOfEntitesInvolvedInExpression).Distinct().ToList();
+
+            if (!dependencies.ContainsKey(entityId) && depsList.Count > 0)
+            {
+                dependencies[entityId] = depsList;
+            }
+        }
+
+        IEnumerable<Guid> GetIdsOfEntitiesInvolvedInExpression(Dictionary<string, Guid> variableNamesByEntitiyIds, string conditionExpression)
+        {
+            var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
+
+            foreach (var variable in identifiersUsedInExpression)
+            {
+                if (variableNamesByEntitiyIds.TryGetValue(variable, out var value))
                 {
-                    if (variableNamesByEntitiyIds.TryGetValue(variable, out var value))
-                    {
-                        yield return value;
-                    }
+                    yield return value;
                 }
             }
         }

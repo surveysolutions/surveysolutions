@@ -6,5 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
     public interface IExpressionsPlayOrderProvider
     {
         List<Guid> GetExpressionsPlayOrder(ReadOnlyQuestionnaireDocument questionnaire);
+        Dictionary<Guid, List<Guid>> GetDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire);
+        Dictionary<Guid, List<Guid>> GetValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire);
     }
 }
