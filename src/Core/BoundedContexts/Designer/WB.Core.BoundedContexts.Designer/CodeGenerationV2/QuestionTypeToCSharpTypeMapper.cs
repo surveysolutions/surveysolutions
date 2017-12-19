@@ -10,7 +10,12 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 {
     public class QuestionTypeToCSharpTypeMapper : IQuestionTypeToCSharpTypeMapper
     {
-        public string GetQuestionType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        public virtual bool IsAnswerValueType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            return false;
+        }
+
+        public virtual string GetQuestionType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire)
         {
             switch (question.QuestionType)
             {
@@ -18,13 +23,11 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.QRBarcode:
                 case QuestionType.Text:
                 case QuestionType.Area:
-                
                     return "string";
                 case QuestionType.Numeric:
                     return ((question as NumericQuestion)?.IsInteger ?? false) ? "int?" : "double?";
                 case QuestionType.MultyOption:
-                    var multiOtion = question as MultyOptionsQuestion;
-                    if (multiOtion != null && multiOtion.YesNoView)
+                    if (question is MultyOptionsQuestion multiOtion && multiOtion.YesNoView)
                         return typeof(YesNoAndAnswersMissings).Name;
 
                     if (question.LinkedToQuestionId == null && question.LinkedToRosterId == null)
@@ -60,9 +63,10 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 default:
                     throw new ArgumentException("Unknown question type.");
             }
+
         }
 
-        public string GetVariableType(VariableType variableType)
+        public virtual string GetVariableType(VariableType variableType)
         {
             switch (variableType)
             {

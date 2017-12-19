@@ -135,7 +135,7 @@
 <#
 	foreach (var question in Model.Questions) 
     {
-#>        public <#=question.TypeName#> <#=question.Variable#> => _state.GetAnswer<<#=question.TypeName#>>(IdOf.<#=question.Variable#>, <#=
+#>        public <#=question.TypeName#> <#=question.Variable#> => _state.<#=question.GetGetAnswerMethodName()#><<#=question.RawTypeName#>>(IdOf.<#=question.Variable#>, <#=
 			question.RosterScope.Length > 0 ? "RosterVector.Take(" + question.RosterScope.Length + ")" : "RosterVector.Empty" #>);
 <# 
 	}
