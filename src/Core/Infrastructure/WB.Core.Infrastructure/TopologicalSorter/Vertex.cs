@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace WB.Core.BoundedContexts.Designer.Services.TopologicalSorter
+namespace WB.Core.Infrastructure.TopologicalSorter
 {
     internal class Vertex<T>
     {

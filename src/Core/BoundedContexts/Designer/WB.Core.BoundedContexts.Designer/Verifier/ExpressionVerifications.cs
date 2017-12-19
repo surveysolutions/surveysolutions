@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
