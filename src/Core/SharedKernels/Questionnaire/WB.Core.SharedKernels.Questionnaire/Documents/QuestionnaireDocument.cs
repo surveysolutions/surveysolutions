@@ -129,6 +129,9 @@ namespace Main.Core.Documents
         // fill in before export to HQ or Tester
         public List<Guid> ExpressionsPlayOrder { get; set; }
 
+        public Dictionary<Guid, Guid[]> DependencyGraph { get; set; }
+        public Dictionary<Guid, Guid[]> ValidationDependencyGraph { get; set; }
+
         public void Insert(int index, IComposite c, Guid? parentId)
         {
             if (!parentId.HasValue || this.PublicKey == parentId)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
@@ -990,7 +991,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(TextAnswer.FromString(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1011,7 +1012,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = this.Tree.Clone();
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(DateTimeAnswer.FromDateTime(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1038,7 +1039,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1058,7 +1059,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = this.Tree.Clone();
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(NumericRealAnswer.FromDouble(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1066,6 +1067,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int selectedValue)
         {
+            using (GlobalStopwatcher.Scope("AnswerSingleOptionQuestion"))
+            {
+                
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
@@ -1107,10 +1111,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference, userId);
+                using (GlobalStopwatcher.Scope("ApplyEvents"))
+                this.ApplyEvents(treeDifference, userId);
+            }
+
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedRosterVector)
@@ -1129,7 +1136,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(CategoricalLinkedSingleOptionAnswer.FromRosterVector(selectedRosterVector));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1168,7 +1175,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1192,7 +1199,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             changedInterviewTree.GetQuestion(questionIdentity)
                 .SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(selectedRosterVectors));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1216,7 +1223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, command.UserId);
@@ -1241,7 +1248,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1264,7 +1271,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answer = new GeoPosition(latitude, longitude, accuracy, altitude, timestamp);
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(GpsAnswer.FromGeoPosition(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1285,7 +1292,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var changedInterviewTree = this.Tree.Clone();
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(QRBarcodeAnswer.FromString(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1307,7 +1314,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var answer = new Area(command.Geometry, command.MapName, command.Area, command.Length, command.Coordinates, command.DistanceToEditor);
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(answer));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, command.UserId);
@@ -1330,7 +1337,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(pictureFileName));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1352,7 +1359,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AudioAnswer.FromString(pictureFileName, length));
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1380,7 +1387,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             changedInterviewTree.ActualizeTree();
 
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             this.ApplyEvents(treeDifference, userId);
@@ -1415,7 +1422,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire);
+            this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null);
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
             //apply events
@@ -2323,7 +2330,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return sourceInterview.Compare(changedInterview);
         }
 
-        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, bool removeLinkedAnswers = true)
+        protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, Identity entityIdentity, bool removeLinkedAnswers = true)
         {
             if (questionnaire.IsUsingExpressionStorage())
             {
@@ -2332,23 +2339,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
                 using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
-                    var playOrder = questionnaire.GetExpressionsPlayOrder();
-
-                    List<IInterviewTreeNode> nodesInPlayOrder = new List<IInterviewTreeNode>();
-                    foreach (var entityId in playOrder)
+                    if (questionnaire.IsSupportExpressionsGraph())
                     {
-                        var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
-
-                        foreach (var entity in entityIdentities)
-                        {
-                            var changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
-                            if (changedNode != null)
-                                nodesInPlayOrder.Add(changedNode);
-                        }
+                        var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity?.Id);
+                        PlayActionForEachNodeInOrder(expressionsPlayOrder, node => node.Accept(updater));
+                        var validityExpressionsPlayOrder = questionnaire.GetValidationExpressionsPlayOrder(expressionsPlayOrder);
+                        PlayActionForEachNodeInOrder(validityExpressionsPlayOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
+                    }
+                    else
+                    {
+                        var playOrder = questionnaire.GetExpressionsPlayOrder();
+                        PlayActionForEachNodeInOrder(playOrder, node => node.Accept(updater));
+                        PlayActionForEachNodeInOrder(playOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
                     }
 
-                    nodesInPlayOrder.ForEach(node => node.Accept(updater));
-                    nodesInPlayOrder.OfType<IInterviewTreeValidateable>().ForEach(node => node.AcceptValidity(updater));
+                    void PlayActionForEachNodeInOrder(List<Guid> playOrder, Action<IInterviewTreeNode> action)
+                    {
+                        foreach (var entityId in playOrder)
+                        {
+                            var entityIdentities = changedInterviewTree.FindEntity(entityId).ToList();
+
+                            foreach (var entity in entityIdentities)
+                            {
+                                var changedNode = changedInterviewTree.GetNodeByIdentity(entity.Identity);
+                                if (changedNode != null)
+                                {
+                                    action(changedNode);
+                                }
+                            }
+                        }
+                    }
                 }
             }
             else
