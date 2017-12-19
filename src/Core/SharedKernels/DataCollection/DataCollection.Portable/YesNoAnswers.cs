@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection
     }
 
     // new type with interger arrays for ExpressionStorage
-    public struct YesNoAndAnswersMissings
+    public class YesNoAndAnswersMissings
     {
         public YesNoAndAnswersMissings(IEnumerable<int> allOptionCodes, IReadOnlyCollection<CheckedYesNoAnswerOption> checkedOptions = null)
         {
