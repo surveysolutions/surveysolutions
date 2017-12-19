@@ -41,43 +41,77 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             switch (question.InterviewQuestionType)
             {
                 case InterviewQuestionType.Integer:
-                    return question.GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.To<T>(); //"int?"
+                    var numericIntegerAnswer = question.GetAsInterviewTreeIntegerQuestion().GetAnswer();
+                    if (numericIntegerAnswer == null) return default(T);
+                    return numericIntegerAnswer.Value.To<T>(); //"int?"
                 case InterviewQuestionType.Double:
-                    return question.GetAsInterviewTreeDoubleQuestion().GetAnswer().Value.To<T>(); // double?
+                    var numericRealAnswer = question.GetAsInterviewTreeDoubleQuestion().GetAnswer();
+                    if (numericRealAnswer == null) return default(T);
+                    return numericRealAnswer.Value.To<T>(); // double?
                 case InterviewQuestionType.SingleFixedOption:
-                    return question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.To<T>();//int?
+                    var categoricalFixedSingleOptionAnswer = question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer();
+                    if (categoricalFixedSingleOptionAnswer == null) return default(T);
+                    return categoricalFixedSingleOptionAnswer.SelectedValue.To<T>();//int?
                 case InterviewQuestionType.Cascading:
-                    return question.GetAsInterviewTreeCascadingQuestion().GetAnswer().SelectedValue.To<T>();//int?
+                    var fixedSingleOptionAnswer = question.GetAsInterviewTreeCascadingQuestion().GetAnswer();
+                    if (fixedSingleOptionAnswer == null) return default(T);
+                    return fixedSingleOptionAnswer.SelectedValue.To<T>();//int?
                 case InterviewQuestionType.MultiFixedOption:
-                    return question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer().ToInts().ToArray().To<T>();//int[]
+                    var categoricalFixedMultiOptionAnswer = question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer();
+                    if (categoricalFixedMultiOptionAnswer == null) return default(T);
+                    return categoricalFixedMultiOptionAnswer.ToInts().ToArray().To<T>();//int[]
                 case InterviewQuestionType.YesNo:
                     return new YesNoAndAnswersMissings(
                         this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value),
                         question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
                 case InterviewQuestionType.SingleLinkedOption:
-                    return question.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue.To<T>();//RosterVector
+                    var categoricalLinkedSingleOptionAnswer = question.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer();
+                    if (categoricalLinkedSingleOptionAnswer == null) return default(T);
+                    return categoricalLinkedSingleOptionAnswer.SelectedValue.To<T>();//RosterVector
                 case InterviewQuestionType.MultiLinkedOption:
-                    return question.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues.ToArray().To<T>();//RosterVector[]
+                    var categoricalLinkedMultiOptionAnswer = question.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer();
+                    if (categoricalLinkedMultiOptionAnswer == null) return default(T);
+                    return categoricalLinkedMultiOptionAnswer.CheckedValues.ToArray().To<T>();//RosterVector[]
                 case InterviewQuestionType.Gps:
-                    return question.GetAsInterviewTreeGpsQuestion().GetAnswer().ToGeoLocation().To<T>(); //GeoLocation
+                    var gpsAnswer = question.GetAsInterviewTreeGpsQuestion().GetAnswer();
+                    if (gpsAnswer == null) return default(T);
+                    return gpsAnswer.ToGeoLocation().To<T>(); //GeoLocation
                 case InterviewQuestionType.TextList:
-                    return question.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows.ToArray().To<T>(); // TextListAnswerRow[]
+                    var textListAnswer = question.GetAsInterviewTreeTextListQuestion().GetAnswer();
+                    if (textListAnswer == null) return default(T);
+                    return textListAnswer.Rows.ToArray().To<T>(); // TextListAnswerRow[]
                 case InterviewQuestionType.DateTime:
-                    return question.GetAsInterviewTreeDateTimeQuestion().GetAnswer().Value.To<T>(); //DateTime?
+                    var dateTimeAnswer = question.GetAsInterviewTreeDateTimeQuestion().GetAnswer();
+                    if (dateTimeAnswer == null) return default(T);
+                    return dateTimeAnswer.Value.To<T>(); //DateTime?
                 case InterviewQuestionType.Text:
-                    return question.GetAsInterviewTreeTextQuestion().GetAnswer().Value.To<T>();//string
+                    var textAnswer = question.GetAsInterviewTreeTextQuestion().GetAnswer();
+                    if (textAnswer == null) return default(T);
+                    return textAnswer.Value.To<T>();//string
                 case InterviewQuestionType.SingleLinkedToList:
-                    return question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue.To<T>(); //int?
+                    var singleOptionAnswer = question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer();
+                    if (singleOptionAnswer == null) return default(T);
+                    return singleOptionAnswer.SelectedValue.To<T>(); //int?
                 case InterviewQuestionType.MultiLinkedToList:
-                    return question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().ToInts().ToArray().To<T>(); // int[]
+                    var fixedMultiOptionAnswer = question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer();
+                    if (fixedMultiOptionAnswer == null) return default(T);
+                    return fixedMultiOptionAnswer.ToInts().ToArray().To<T>(); // int[]
                 case InterviewQuestionType.Multimedia:
-                    return question.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName.To<T>();//string
+                    var multimediaAnswer = question.GetAsInterviewTreeMultimediaQuestion().GetAnswer();
+                    if (multimediaAnswer == null) return default(T);
+                    return multimediaAnswer.FileName.To<T>();//string
                 case InterviewQuestionType.QRBarcode:
-                    return question.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer().DecodedText.To<T>();//string
+                    var qrBarcodeAnswer = question.GetAsInterviewTreeQRBarcodeQuestion().GetAnswer();
+                    if (qrBarcodeAnswer == null) return default(T);
+                    return qrBarcodeAnswer.DecodedText.To<T>();//string
                 case InterviewQuestionType.Audio:
-                    return question.GetAsInterviewTreeAudioQuestion().GetAnswer().ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
+                    var audioAnswer = question.GetAsInterviewTreeAudioQuestion().GetAnswer();
+                    if (audioAnswer == null) return default(T);
+                    return audioAnswer.ToAudioAnswerForContions().To<T>(); //AudioAnswerForConditions
                 case InterviewQuestionType.Area:
-                    return question.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.To<T>(); //Area
+                    var areaAnswer = question.GetAsInterviewTreeAreaQuestion().GetAnswer();
+                    if(areaAnswer == null) return default(T);
+                    return areaAnswer.Value.To<T>(); //Area
                 default:
                     return default(T);
             }
