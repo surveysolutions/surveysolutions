@@ -23,16 +23,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return lisOsfOrderedConditions.ToList();
         }
 
-        public Dictionary<Guid, List<Guid>> GetDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
+        public Dictionary<Guid, Guid[]> GetDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
         {
             var graph = this.expressionsGraphProvider.BuildDependencyGraph(questionnaire);
-            return graph;
+            return graph.ToDictionary(x => x.Key, x => x.Value.ToArray());
         }
 
-        public Dictionary<Guid, List<Guid>> GetValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
+        public Dictionary<Guid, Guid[]> GetValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
         {
             var graph = this.expressionsGraphProvider.BuildValidationDependencyGraph(questionnaire);
-            return graph;
+            return graph.ToDictionary(x => x.Key, x => x.Value.ToArray());
         }
     }
 }
