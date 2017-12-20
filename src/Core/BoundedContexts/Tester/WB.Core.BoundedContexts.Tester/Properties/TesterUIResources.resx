@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Answer accepted. Took {0} to process</value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
   <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
     <value>list have not been updated</value>
   </data>
@@ -194,6 +200,12 @@
   </data>
   <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
     <value>Server Response timeout</value>
+  </data>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Show elapsed time per answer</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Measures enablement, validation and roster propagation time. Receving GPS data or picture taking time is not included.</value>
   </data>
   <data name="Prefs_ShowVariables" xml:space="preserve">
     <value>Show variables</value>

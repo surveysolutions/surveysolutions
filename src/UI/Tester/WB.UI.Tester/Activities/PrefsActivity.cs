@@ -59,6 +59,8 @@ namespace WB.UI.Tester.Activities
                     checkBoxPreference.Summary = summary;
                 };
 
+                this.SetBooleanPreferenceTitleAndSummary("ShowAnsweringTime", TesterUIResources.Prefs_ShowAnswerTime, TesterUIResources.Prefs_ShowAnswerTimeSummary, settings.ShowAnswerTime);
+
                 this.SetBooleanPreferenceTitleAndSummary(TesterSettings.ShowLocationOnMapParamName, 
                     UIResources.Prefs_ShowLocationOnMap, 
                     UIResources.Prefs_ShowLocationOnMapSummary,
