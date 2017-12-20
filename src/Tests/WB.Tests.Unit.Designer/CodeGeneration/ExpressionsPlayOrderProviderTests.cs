@@ -48,5 +48,28 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             Assert.That(expressionsPlayOrder, Is.EqualTo(new[] { chapterId, intQuestionId, variableId, textQuestionId }));
         }
+
+
+
+        [Test]
+        public void when_GetExpressionsPlayOrder_for_sections_without_condition_dependencies()
+        {
+            var realNumericQuestion = Guid.NewGuid();
+            var intQuestionId = Guid.NewGuid();
+            var textQuestionId = Guid.NewGuid();
+            var chapterId = Guid.NewGuid();
+
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.NumericIntegerQuestion(intQuestionId, variable: "i"),
+                Create.NumericRealQuestion(realNumericQuestion, variable: "r"),
+                Create.TextQuestion(textQuestionId));
+
+            var expressionProcessor = Create.RoslynExpressionProcessor();
+            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor);
+
+            var expressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+
+            Assert.That(expressionsPlayOrder, Is.EqualTo(new[] { chapterId, textQuestionId, realNumericQuestion, intQuestionId }));
+        }
     }
 }
