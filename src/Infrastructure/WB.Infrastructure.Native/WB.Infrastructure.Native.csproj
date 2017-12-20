@@ -21,7 +21,7 @@
     <PackageReference Include="HtmlSanitizer" Version="4.0.181" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="Iesi.Collections" Version="4.0.2" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="NHibernate" Version="5.0.3" />
