@@ -10,7 +10,6 @@
 
 namespace WB.Core.BoundedContexts.Tester.Properties {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -20,7 +19,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class TesterUIResources {
@@ -40,7 +39,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Tester.Properties.TesterUIResources", typeof(TesterUIResources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Tester.Properties.TesterUIResources", typeof(TesterUIResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -58,6 +57,24 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer accepted. Took {0} to process.
+        /// </summary>
+        public static string AnswerRecordedMsg {
+            get {
+                return ResourceManager.GetString("AnswerRecordedMsg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dismiss.
+        /// </summary>
+        public static string AnswerRecordedMsgDismiss {
+            get {
+                return ResourceManager.GetString("AnswerRecordedMsgDismiss", resourceCulture);
             }
         }
         
@@ -292,6 +309,24 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         public static string Prefs_HttpResponseTimeoutTitle {
             get {
                 return ResourceManager.GetString("Prefs_HttpResponseTimeoutTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show elapsed time per answer.
+        /// </summary>
+        public static string Prefs_ShowAnswerTime {
+            get {
+                return ResourceManager.GetString("Prefs_ShowAnswerTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measures enablement, validation and roster propagation time. Receving GPS data or picture taking time is not included..
+        /// </summary>
+        public static string Prefs_ShowAnswerTimeSummary {
+            get {
+                return ResourceManager.GetString("Prefs_ShowAnswerTimeSummary", resourceCulture);
             }
         }
         
