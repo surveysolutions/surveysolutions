@@ -11,13 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
-    <PackageReference Include="Humanizer.Core.es" Version="2.2.0" />
-    <PackageReference Include="Humanizer.Core.fr" Version="2.2.0" />
-    <PackageReference Include="Humanizer.Core.id" Version="2.2.0" />
     <PackageReference Include="Humanizer.Core.pt" Version="2.2.0" />
-    <PackageReference Include="Humanizer.Core.ru" Version="2.2.0" />
-    <PackageReference Include="Humanizer.Core.vi" Version="2.2.0" />
-    <PackageReference Include="Humanizer.Core.zh-CN" Version="2.2.0" />
     <PackageReference Include="MvvmCross.Core" Version="5.5.2" />
     <PackageReference Include="MvvmCross.Platform" Version="5.5.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.5.2" />
