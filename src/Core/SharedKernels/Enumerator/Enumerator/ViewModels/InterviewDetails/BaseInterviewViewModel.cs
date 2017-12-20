@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         protected readonly IStatefulInterviewRepository interviewRepository;
-        protected readonly NavigationState navigationState;
+        public NavigationState navigationState { get; }
         private readonly AnswerNotifier answerNotifier;
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;

@@ -1,6 +1,9 @@
 using Android.App;
 using Android.Views;
+using Java.Interop;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -47,5 +50,11 @@ namespace WB.UI.Interviewer.Activities
                 InterviewerUIResources.MenuItem_Title_Language_Original
             },
         };
+
+        [Export("NavigateToApi")]
+        public void NavigateToApi(string navigateTo)
+        {
+            base.Navigate(navigateTo);
+        }
     }
 }
