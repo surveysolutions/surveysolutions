@@ -256,7 +256,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public void AddRosters(Guid interviewId, Identity[] rosterIds)
             => this.sessionProvider.GetSession().Connection.Execute(
                 $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}) " +
-                $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType);",
+                $"VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType) " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
+                "DO UPDATE SET " +
+                $"{EntityTypeColumn} = @EntityType;",
                 rosterIds.Select(x => new
                 {
                     InterviewId = interviewId,
