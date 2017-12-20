@@ -20,6 +20,7 @@ namespace WB.UI.Designer
             }
 
             var smtpSection = GetSection<SmtpSection>("system.net/mailSettings/smtp");
+
             yield return new ApplicationSetting("MailSettings.From", smtpSection.From);
             yield return new ApplicationSetting("MailSettings.DeliveryMethod", smtpSection.DeliveryMethod);
             yield return new ApplicationSetting("MailSettings.Network.DefaultCredentials", smtpSection.Network.DefaultCredentials);
