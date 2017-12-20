@@ -160,7 +160,31 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return dependencies;
         }
 
-        public Dictionary<Guid, List<Guid>> BuildValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaireDocument)
+        public Dictionary<Guid, List<Guid>> BuildValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            Dictionary<Guid, List<Guid>> validationDependencies = BuildValidationDependency(questionnaire);
+
+            var mergedDependencies = new Dictionary<Guid, List<Guid>>();
+
+            IEnumerable<Guid> allIdsInvolvedInExpressions = validationDependencies.SelectMany(x => x.Value).Distinct();
+
+            allIdsInvolvedInExpressions.ForEach(x => mergedDependencies.Add(x, new List<Guid>()));
+
+            foreach (var validationDependency in validationDependencies)
+            {
+                foreach (var dependency in validationDependency.Value)
+                {
+                    if (!mergedDependencies[dependency].Contains(validationDependency.Key))
+                    {
+                        mergedDependencies[dependency].Add(validationDependency.Key);
+                    }
+                }
+            }
+
+            return mergedDependencies;
+        }
+
+        public Dictionary<Guid, List<Guid>> BuildValidationDependency(ReadOnlyQuestionnaireDocument questionnaireDocument)
         {
             var dependencies = new Dictionary<Guid, List<Guid>>();
 
