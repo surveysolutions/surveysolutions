@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc.TestFactories;
 
 namespace WB.Tests.Unit.Designer.CodeGeneration
@@ -115,7 +117,6 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
-            Assert.That(expressionsPlayOrder.Count, Is.EqualTo(3));
             Assert.That(expressionsPlayOrder[variableId], Is.EqualTo(new[] { intQuestionId, int2QuestionId }));
             Assert.That(expressionsPlayOrder[int2QuestionId], Is.EqualTo(new[] { int2QuestionId }));
             Assert.That(expressionsPlayOrder[textQuestionId], Is.EqualTo(new[] { textQuestionId }));
@@ -144,9 +145,30 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
-            Assert.That(expressionsPlayOrder.Count, Is.EqualTo(2));
             Assert.That(expressionsPlayOrder[rosterId], Is.EqualTo(new[] { intQuestionId }));
             Assert.That(expressionsPlayOrder[rosterTrigerId], Is.EqualTo(new[] { int2QuestionId }));
+        }
+
+        [Test]
+        public void when_GetValidationDependencyGraph_for_question_with_validation_inside_formila()
+        {
+            var intQuestionId = Guid.NewGuid();
+            var macrosId = Guid.NewGuid();
+            var chapterId = Guid.NewGuid();
+
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(chapterId,
+                Create.NumericIntegerQuestion(intQuestionId, validationConditions: new []{ new ValidationCondition("$valid", "error"), })
+            );
+            questionnaireDocument.Macros = new Dictionary<Guid, Macro> {{macrosId, Create.Macro("valid", "self > 10")}};
+
+
+            var expressionProcessor = Create.RoslynExpressionProcessor();
+            var macrosesService = Create.MacrosSubstitutionService();
+            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
+
+            var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
+
+            Assert.That(expressionsPlayOrder.Count, Is.EqualTo(0));
         }
     }
 }
