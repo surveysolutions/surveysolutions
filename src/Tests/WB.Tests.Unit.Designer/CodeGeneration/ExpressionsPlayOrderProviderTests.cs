@@ -168,7 +168,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
-            Assert.That(expressionsPlayOrder.Count, Is.EqualTo(0));
+            Assert.That(expressionsPlayOrder[intQuestionId], Is.EqualTo(new[] { intQuestionId }));
         }
     }
 }
