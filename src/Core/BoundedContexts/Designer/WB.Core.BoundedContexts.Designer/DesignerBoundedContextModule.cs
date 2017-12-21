@@ -80,17 +80,20 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Unbind<ICompilerSettings>();
             registry.BindToConstant<ICompilerSettings>(() => this.compilerSettings);
             registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
+            registry.Bind<ILookupTableService, LookupTableService>();
+            registry.Bind<IAttachmentService, AttachmentService>();
 
             registry.Bind<IDesignerEngineVersionService, DesignerEngineVersionService>();
             registry.Bind<ICodeGenerator, CodeGenerator>();
             registry.Bind<ICodeGeneratorV2, CodeGeneratorV2>();
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
+            registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
 
-            this.Bind<ICodeGeneratorV3>().To<CodeGeneratorV3>();
-            this.Bind<ICodeGenerationModelsFactoryV3>().To<CodeGenerationModelsFactoryV3>();
-            this.Bind<IQuestionTypeToCSharpTypeMapperV3>().To<QuestionTypeToCSharpTypeMapperV3>();
+            registry.Bind<ICodeGenerationModelsFactoryV3, CodeGenerationModelsFactoryV3>();
+            registry.Bind<ICodeGeneratorV3, CodeGeneratorV3>();
+            registry.Bind<IQuestionTypeToCSharpTypeMapperV3, QuestionTypeToCSharpTypeMapperV3>();
+            registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactoryV3>();
 
-            
             CommandRegistry
                 .Setup<User>()
                 .ResolvesIdFrom<UserCommand>(command => command.UserId)

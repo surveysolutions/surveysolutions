@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
             var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
             ExpressionStorageModel model = this.modelsFactory.CreateModel(readOnlyQuestionnaireDocument);
             model.LookupTables = this.modelsFactory.CreateLookupModels(readOnlyQuestionnaireDocument).ToList();
+            model.TargetVersion = targetVersion;
 
             var transformText = new InterviewExpressionStorageTemplate(model).TransformText();
             var generatedClasses = new Dictionary<string, string>
