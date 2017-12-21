@@ -2330,6 +2330,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return sourceInterview.Compare(changedInterview);
         }
 
+        public static bool TestingConditions = false;
+
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, Identity entityIdentity, bool removeLinkedAnswers = true)
         {
             if (questionnaire.IsUsingExpressionStorage())
@@ -2341,10 +2343,40 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     if (questionnaire.IsSupportExpressionsGraph())
                     {
+                        var interviewTreeCloneForTesting = TestingConditions ? changedInterviewTree.Clone() : null;
                         var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity?.Id);
                         PlayActionForEachNodeInOrder(expressionsPlayOrder, node => node.Accept(updater));
                         var validityExpressionsPlayOrder = questionnaire.GetValidationExpressionsPlayOrder(expressionsPlayOrder);
                         PlayActionForEachNodeInOrder(validityExpressionsPlayOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
+
+                        if (TestingConditions)
+                        {
+                            var playOrderForTesting = questionnaire.GetExpressionsPlayOrder();
+                            PlayActionForEachNodeInOrderForTesting(playOrderForTesting, node => node.Accept(updater));
+                            PlayActionForEachNodeInOrderForTesting(playOrderForTesting, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
+
+                            var treeDifference = FindDifferenceBetweenTrees(interviewTreeCloneForTesting, changedInterviewTree);
+                            if (treeDifference.Count > 0)
+                                throw new ArgumentException($"Found {treeDifference.Count}, first diff is {treeDifference.First().Identity}");
+
+
+                            void PlayActionForEachNodeInOrderForTesting(List<Guid> playOrder, Action<IInterviewTreeNode> action)
+                            {
+                                foreach (var entityId in playOrder)
+                                {
+                                    var entityIdentities = interviewTreeCloneForTesting.FindEntity(entityId).ToList();
+
+                                    foreach (var entity in entityIdentities)
+                                    {
+                                        var changedNode = interviewTreeCloneForTesting.GetNodeByIdentity(entity.Identity);
+                                        if (changedNode != null)
+                                        {
+                                            action(changedNode);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     else
                     {
