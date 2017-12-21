@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV3;
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, int targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.GenerateProcessorStateClasses(questionnaire, targetVersion);
-            var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference();
+            List<PortableExecutableReference> referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference();
 
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 questionnaire.PublicKey, 
