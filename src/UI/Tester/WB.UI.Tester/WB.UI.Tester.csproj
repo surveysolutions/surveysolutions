@@ -340,6 +340,7 @@
     <AndroidResource Include="Resources\menu\prefilled_questions.xml" />
     <LinkDescription Include="linker.xml" />
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
+    <None Include="app.config" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
