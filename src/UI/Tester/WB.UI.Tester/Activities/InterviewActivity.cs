@@ -29,6 +29,7 @@ namespace WB.UI.Tester.Activities
         protected override int LanguagesMenuItemId => Resource.Id.interview_language;
         protected override int MenuId => Resource.Menu.interview;
         private bool showAnswerAcceptedToast = true;
+        private IMvxMessenger Messenger => ServiceLocator.Current.GetInstance<IMvxMessenger>();
 
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
@@ -81,8 +82,7 @@ namespace WB.UI.Tester.Activities
 
             if (settings.ShowAnswerTime && answerAcceptedSubsribtion == null)
             {
-                var mvxMessenger = ServiceLocator.Current.GetInstance<IMvxMessenger>();
-                answerAcceptedSubsribtion = mvxMessenger.Subscribe<AnswerAcceptedMessage>(msg =>
+                answerAcceptedSubsribtion = Messenger.Subscribe<AnswerAcceptedMessage>(msg =>
                 {
                     if (showAnswerAcceptedToast)
                     {
@@ -102,8 +102,13 @@ namespace WB.UI.Tester.Activities
         protected override void OnPause()
         {
             base.OnPause();
-            this.answerAcceptedSubsribtion?.Dispose();
-            this.answerAcceptedSubsribtion = null;
+            if (this.answerAcceptedSubsribtion != null)
+            {
+                Messenger.Unsubscribe<AnswerAcceptedMessage>(this.answerAcceptedSubsribtion);
+                this.answerAcceptedSubsribtion.Dispose();
+                this.answerAcceptedSubsribtion = null;
+
+            }
         }
 
         [Export("NavigateToApi")]
