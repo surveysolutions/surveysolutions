@@ -20,6 +20,10 @@ using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
 
+/*
+	Generated using questionnaire target version <#= Model.TargetVersion #>
+*/
+
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	public class <#=Model.ClassName#> : <#=typeof(IInterviewExpressionStorage).Name#> 
