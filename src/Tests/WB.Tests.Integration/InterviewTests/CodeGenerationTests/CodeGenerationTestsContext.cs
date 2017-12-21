@@ -458,6 +458,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     new RoslynCompiler(),
                     IntegrationCreate.CodeGenerator(),
                     IntegrationCreate.CodeGeneratorV2(),
+                    Abc.Create.Service.CodeGeneratorV3(),
                     new DynamicCompilerSettingsProvider());
         }
 
