@@ -53,7 +53,7 @@
     <WarningLevel>3</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
-    <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;</AndroidLinkSkip>
+    <AndroidLinkSkip>mscorlib;System.Runtime;System.Runtime.Extensions;System.Linq;System.Collections;System.Text.RegularExpressions;netstandard</AndroidLinkSkip>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
