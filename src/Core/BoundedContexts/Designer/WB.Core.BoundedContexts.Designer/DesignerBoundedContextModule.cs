@@ -1,6 +1,8 @@
 ﻿using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV3;
+using WB.Core.BoundedContexts.Designer.CodeGenerationV3.Impl;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -83,10 +85,11 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ICodeGenerator, CodeGenerator>();
             registry.Bind<ICodeGeneratorV2, CodeGeneratorV2>();
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
-            registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();
-            registry.Bind<ILookupTableService, LookupTableService>();
-            registry.Bind<IAttachmentService, AttachmentService>();
-            registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
+
+            this.Bind<ICodeGeneratorV3>().To<CodeGeneratorV3>();
+            this.Bind<ICodeGenerationModelsFactoryV3>().To<CodeGenerationModelsFactoryV3>();
+            this.Bind<IQuestionTypeToCSharpTypeMapperV3>().To<QuestionTypeToCSharpTypeMapperV3>();
+
             
             CommandRegistry
                 .Setup<User>()

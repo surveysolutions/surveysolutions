@@ -268,6 +268,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     new RoslynCompiler(),
                     Create.CodeGenerator(),
                     Create.CodeGeneratorV2(),
+                    Abc.Create.Service.CodeGeneratorV3(),
                     new DynamicCompilerSettingsProvider());
         }
 

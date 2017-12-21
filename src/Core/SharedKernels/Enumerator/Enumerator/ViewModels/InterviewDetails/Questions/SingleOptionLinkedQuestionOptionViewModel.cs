@@ -22,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private bool selected;
+        private string itemTag;
 
         public bool Selected
         {
@@ -48,6 +49,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxCommand RemoveAnswerCommand => new MvxCommand(this.OnAnswerRemoved);
 
         public QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> QuestionState { get; set; }
+
+        public string ItemTag => itemTag ?? (itemTag = this.QuestionState.Header.Identity + "_Opt_" + string.Join(",", this.RosterVector));
 
         private void OnBeforeSelected()
         {
