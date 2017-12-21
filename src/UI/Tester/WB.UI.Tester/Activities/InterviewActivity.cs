@@ -3,12 +3,15 @@ using Android.Support.Design.Widget;
 using Android.Views;
 using Humanizer;
 using Humanizer.Localisation;
+using Java.Interop;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
@@ -101,6 +104,13 @@ namespace WB.UI.Tester.Activities
             base.OnPause();
             this.answerAcceptedSubsribtion?.Dispose();
             this.answerAcceptedSubsribtion = null;
+        }
+
+        [Export("NavigateToApi")]
+        public void NavigateToApi(string navigateTo)
+        {
+            base.Navigate(navigateTo);
+        
         }
     }
 }
