@@ -93,7 +93,7 @@ namespace WB.UI.Tester.Activities
                                 message,
                                 Snackbar.LengthIndefinite)
                             .SetAction(TesterUIResources.AnswerRecordedMsgDismiss, view => { })
-                            .Show(); // Don’t forget to show!
+                            .Show();
                     }
                 });
             }
