@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
@@ -34,14 +34,14 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         }
  
         [Test]
-        public void should_find_Russian_resource_files() => russianResourceFiles.ShouldNotBeEmpty();
+        public void should_find_Russian_resource_files() => russianResourceFiles.Should().NotBeEmpty();
 
         [Test]
-        public void should_find_English_resource_files () => englishResourceFiles.ShouldNotBeEmpty();
+        public void should_find_English_resource_files () => englishResourceFiles.Should().NotBeEmpty();
 
         [Test]
-        public void should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English () =>
-            russianResourceNames.ShouldContainOnly(englishResourceNames);
+        public void should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English() =>
+            Assert.That(russianResourceNames, Is.EqualTo(englishResourceNames));
 
         private IEnumerable<string> russianResourceFiles;
         private IEnumerable<string> englishResourceFiles;
