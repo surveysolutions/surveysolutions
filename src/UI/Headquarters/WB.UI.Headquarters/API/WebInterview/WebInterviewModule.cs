@@ -27,7 +27,11 @@ namespace WB.UI.Headquarters.API.WebInterview
             registry.BindAsSingleton<IHubPipelineModule, WebInterviewStateManager>();
             registry.BindAsSingleton<IHubPipelineModule, WebInterviewConnectionsCounter>();
 
-            registry.BindToMethodInSingletonScope<IHubContext>(_ => GlobalHost.ConnectionManager.GetHubContext<WebInterview>(), @"WebInterview");
+            registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
+            {
+                var hub = GlobalHost.ConnectionManager.GetHubContext<WebInterview>();
+                return new WebInterviewInvoker(hub.Clients);
+            });
         }
 
         internal class SignalRHubMinifier : IJavaScriptMinifier
