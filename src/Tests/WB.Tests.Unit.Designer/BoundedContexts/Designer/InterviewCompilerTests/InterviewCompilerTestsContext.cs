@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.InterviewCompilerTests
         public static List<MetadataReference> CreateReferencesForCompiler()
         {
             var provider = new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>());
-            return provider.GetAssembliesToReference(22);
+            return provider.GetAssembliesToReference();
         }
     }
 }
