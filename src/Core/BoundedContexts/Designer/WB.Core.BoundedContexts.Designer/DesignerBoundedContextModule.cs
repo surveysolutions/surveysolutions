@@ -78,7 +78,6 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Unbind<ICompilerSettings>();
             registry.BindToConstant<ICompilerSettings>(() => this.compilerSettings);
             registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
-            registry.Bind<ILookupTableService, LookupTableService>();
             registry.Bind<IAttachmentService, AttachmentService>();
 
             registry.Bind<IDesignerEngineVersionService, DesignerEngineVersionService>();
@@ -87,7 +86,6 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
             registry.Bind<ILookupTableService, LookupTableService>();
-            registry.Bind<IAttachmentService, AttachmentService>();           
 
             CommandRegistry
                 .Setup<User>()
