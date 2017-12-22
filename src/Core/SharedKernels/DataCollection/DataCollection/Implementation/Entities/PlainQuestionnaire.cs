@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -1618,6 +1619,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public List<Guid> GetExpressionsPlayOrder()
         {
+            return this.QuestionnaireDocument.ExpressionsPlayOrder;
+        }
+
+        public bool SupportsExpressionsGraph()
+        {
+            return this.QuestionnaireDocument.DependencyGraph != null;
+        }
+
+        public List<Guid> GetExpressionsPlayOrder(Guid changedEntity)
+        {
+            var sorter = new TopologicalSorter<Guid>();
+            IEnumerable<Guid> lisOsfOrderedConditions = sorter.Sort(this.QuestionnaireDocument.DependencyGraph, changedEntity);
+            return lisOsfOrderedConditions.ToList();
+        }
+
+        public List<Guid> GetValidationExpressionsPlayOrder(IEnumerable<Guid> entities)
+        {
+            if (IsUsingExpressionStorage())
+            {
+                HashSet<Guid> entityIds = new HashSet<Guid>();
+                foreach (var entity in entities)
+                {
+                    if (this.QuestionnaireDocument.ValidationDependencyGraph.TryGetValue(entity, out Guid[] referancecs))
+                        referancecs.ForEach(id => entityIds.Add(id));
+                }
+
+                return entityIds.ToList();
+            }
+
             return this.QuestionnaireDocument.ExpressionsPlayOrder;
         }
 

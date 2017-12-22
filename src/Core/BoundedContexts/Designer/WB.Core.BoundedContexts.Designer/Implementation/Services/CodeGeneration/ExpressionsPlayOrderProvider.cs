@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
+using WB.Core.Infrastructure.TopologicalSorter;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration
 {
@@ -21,6 +21,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var sorter = new TopologicalSorter<Guid>();
             IEnumerable<Guid> lisOsfOrderedConditions = sorter.Sort(mergedDependencies.ToDictionary(x => x.Key, x => x.Value.ToArray()));
             return lisOsfOrderedConditions.ToList();
+        }
+
+        public Dictionary<Guid, Guid[]> GetDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var graph = this.expressionsGraphProvider.BuildDependencyGraph(questionnaire);
+            return graph.ToDictionary(x => x.Key, x => x.Value.ToArray());
+        }
+
+        public Dictionary<Guid, Guid[]> GetValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
+        {
+            var graph = this.expressionsGraphProvider.BuildValidationDependencyGraph(questionnaire);
+            return graph.ToDictionary(x => x.Key, x => x.Value.ToArray());
         }
     }
 }
