@@ -25,30 +25,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return answer;
         }
 
-        public T? GetAnswerValueType<T>(Guid questionId, RosterVector rosterVector) where T : struct
+        public T GetAnswer<T>(Guid questionId, RosterVector rosterVector)
         {
-            var question = this.tree.GetQuestion(new Identity(questionId, rosterVector));
-
-            if (!question.IsAnswered() || question.IsDisabled())
-                return default(T);
-
-            switch (question.InterviewQuestionType)
-            {
-                case InterviewQuestionType.Integer:
-                    return question.GetAsInterviewTreeIntegerQuestion().GetAnswer()?.Value as T?; //"int?"
-                case InterviewQuestionType.Double:
-                    return question.GetAsInterviewTreeDoubleQuestion().GetAnswer()?.Value as T?; // double?
-                case InterviewQuestionType.SingleFixedOption:
-                    return question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer()?.SelectedValue as T?;//int?
-                case InterviewQuestionType.Cascading:
-                    return question.GetAsInterviewTreeCascadingQuestion().GetAnswer()?.SelectedValue as T?;//int?
-                case InterviewQuestionType.DateTime:
-                    return question.GetAsInterviewTreeDateTimeQuestion().GetAnswer()?.Value as T?; //DateTime?
-                case InterviewQuestionType.SingleLinkedToList:
-                    return question.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer()?.SelectedValue as T?; //int?
-                default:
-                    return default(T);
-            }
+            T answer = GetAnswerImpl<T>(questionId, rosterVector);
+            return answer;
         }
 
         private T GetAnswerImpl<T>(Guid questionId, RosterVector rosterVector)

@@ -7,8 +7,6 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
     {
         T GetAnswer<T>(Guid questionId, IEnumerable<int> rosterVector);
 
-        T? GetAnswerValueType<T>(Guid questionId, RosterVector rosterVector) where T : struct;
-
         T GetVariable<T>(Guid questionId, IEnumerable<int> rosterVector);
 
         IEnumerable<Identity> FindEntitiesFromSameOrDeeperLevel(Guid entityIdToSearch, Identity startingSearchPointIdentity);

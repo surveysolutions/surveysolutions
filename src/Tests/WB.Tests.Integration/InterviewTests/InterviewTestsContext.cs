@@ -266,7 +266,6 @@ namespace WB.Tests.Integration.InterviewTests
                     new RoslynCompiler(),
                     IntegrationCreate.CodeGenerator(),
                     IntegrationCreate.CodeGeneratorV2(),
-                    Create.Service.CodeGeneratorV3(), 
                     new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()));
 
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, engineVersion, out var resultAssembly);
