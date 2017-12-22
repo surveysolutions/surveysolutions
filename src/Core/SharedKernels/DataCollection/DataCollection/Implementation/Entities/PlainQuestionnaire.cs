@@ -1619,17 +1619,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionnaireDocument.ExpressionsPlayOrder;
         }
 
-        public bool IsSupportExpressionsGraph()
+        public bool SupportsExpressionsGraph()
         {
             return this.QuestionnaireDocument.DependencyGraph != null;
         }
 
-        public List<Guid> GetExpressionsPlayOrder(Guid? entity)
+        public List<Guid> GetExpressionsPlayOrder(Guid changedEntity)
         {
             var sorter = new TopologicalSorter<Guid>();
-            IEnumerable<Guid> lisOsfOrderedConditions = entity.HasValue
-                ? sorter.Sort(this.QuestionnaireDocument.DependencyGraph, entity.Value)
-                : sorter.Sort(this.QuestionnaireDocument.DependencyGraph);
+            IEnumerable<Guid> lisOsfOrderedConditions = sorter.Sort(this.QuestionnaireDocument.DependencyGraph, changedEntity);
             return lisOsfOrderedConditions.ToList();
         }
 
