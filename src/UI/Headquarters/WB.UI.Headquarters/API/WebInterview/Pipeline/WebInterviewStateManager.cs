@@ -1,12 +1,11 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -74,8 +73,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             {
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId, 
                     sectionId == null 
-                    ? WebInterview.GetConnectedClientPrefilledSectionKey(interviewId) 
-                    : WebInterview.GetConnectedClientSectionKey(sectionId, interviewId));
+                    ? WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId)) 
+                    : WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
 
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId, interviewId);
             }

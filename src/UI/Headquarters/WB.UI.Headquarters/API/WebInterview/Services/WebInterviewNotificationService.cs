@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.SignalR;
-using Ninject;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -18,16 +16,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
     public class WebInterviewNotificationService : IWebInterviewNotificationService
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IWebInterviewInvoker webInterviewInvoker;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IHubContext webInterviewHubContext;
-
+        
         public WebInterviewNotificationService(IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage,
-            [Named("WebInterview")] IHubContext webInterviewHubContext)
+            IWebInterviewInvoker webInterviewInvoker)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.webInterviewHubContext = webInterviewHubContext;
             this.questionnaireStorage = questionnaireStorage;
+            this.webInterviewInvoker = webInterviewInvoker;
         }
 
         public virtual void RefreshEntities(Guid interviewId, params Identity[] questions)
@@ -45,7 +43,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             {
                 if (this.IsQuestionPrefield(identity, interview))
                 {
-                    entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid()), identity));
+                    entitiesToRefresh.Add((WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id), identity));
                 }
                 
                 var currentEntity = identity;
@@ -55,11 +53,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     var parent = this.GetParentIdentity(currentEntity, interview);
                     if (parent != null)
                     {
-                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent.ToString(), interview.Id.FormatGuid()), currentEntity));
+                        entitiesToRefresh.Add((WebInterview.GetConnectedClientSectionKey(parent, interview.Id), currentEntity));
                     }
                     currentEntity = parent;
                 }
-                
             }
 
             foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.section))
@@ -67,19 +64,16 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 if (questionsGroupedByParent.Key == null)
                     continue;
 
-                var group = this.webInterviewHubContext.Clients.Group(questionsGroupedByParent.Key);
-
-                group.refreshEntities(questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray());
+                this.webInterviewInvoker.RefreshEntities(
+                    questionsGroupedByParent.Key, 
+                    questionsGroupedByParent.Select(p => p.id.ToString()).Distinct().ToArray());
             }
 
-            this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
+            this.webInterviewInvoker.RefreshSection(interviewId);
         }
 
-        public void ReloadInterview(Guid interviewId)
-            => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).reloadInterview();
-
-        public void FinishInterview(Guid interviewId)
-            => this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).finishInterview();
+        public void ReloadInterview(Guid interviewId) => this.webInterviewInvoker.ReloadInterview(interviewId);
+        public void FinishInterview(Guid interviewId) => this.webInterviewInvoker.FinishInterview(interviewId);
 
         public void MarkAnswerAsNotSaved(string interviewId, string questionId, string errorMessage)
         {
@@ -94,8 +88,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             var clientGroupIdentity = this.GetClientGroupIdentity(questionIdentity, interview);
 
-            if(clientGroupIdentity != null)
-                this.webInterviewHubContext.Clients.Group(clientGroupIdentity).markAnswerAsNotSaved(questionId, errorMessage);
+            if (clientGroupIdentity != null)
+                this.webInterviewInvoker.MarkAnswerAsNotSaved(clientGroupIdentity, questionId, errorMessage);
+                
         }
 
         public virtual void RefreshRemovedEntities(Guid interviewId, params Identity[] entities)
@@ -110,7 +105,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var questionnarie = this.questionnaireStorage.GetQuestionnaireDocument(interview.QuestionnaireIdentity);
             if (questionnarie != null)
             {
-                var entitiesToRefresh = new List<Tuple<string, Identity>>();
+                var entitiesToRefresh = new List<(string section, Identity identity)>();
 
                 foreach (var entity in entities)
                 {
@@ -123,27 +118,25 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                         parentVector = parentVector.Shrink(entity.RosterVector.Length - 1);
                         var parentIdentity = new Identity(parent.PublicKey, parentVector);
 
-                        var parentIdentityAsString = WebInterview.GetConnectedClientSectionKey(
-                            parentIdentity.ToString(), interview.Id.FormatGuid());
-                        entitiesToRefresh.Add(new Tuple<string, Identity>(parentIdentityAsString, childIdentity));
+                        var parentIdentityAsString = WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id);
+                        entitiesToRefresh.Add((parentIdentityAsString, childIdentity));
 
                         childIdentity = parentIdentity;
                         parent = questionnarie.GetParentById(parent.PublicKey);
                     }
                 }
 
-                foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.Item1))
+                foreach (var questionsGroupedByParent in entitiesToRefresh.GroupBy(x => x.section))
                 {
                     if (questionsGroupedByParent.Key == null)
                         continue;
 
-                    var clients = this.webInterviewHubContext.Clients;
-                    var group = clients.Group(questionsGroupedByParent.Key);
-
-                    group.refreshEntities(questionsGroupedByParent.Select(p => p.Item2.ToString()).ToArray());
+                    this.webInterviewInvoker.RefreshEntities(
+                        questionsGroupedByParent.Key, 
+                        questionsGroupedByParent.Select(p => p.identity.ToString()).Distinct().ToArray());
                 }
 
-                this.webInterviewHubContext.Clients.Group(interviewId.FormatGuid()).refreshSection();
+                this.webInterviewInvoker.RefreshSection(interviewId);
             }
         }
 
@@ -151,14 +144,14 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         {
             if(this.IsQuestionPrefield(identity, interview))
             {
-                return WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid());
+                return WebInterview.GetConnectedClientPrefilledSectionKey(interview.Id);
             }
 
             var parentIdentity = this.GetParentIdentity(identity, interview);
 
             if (parentIdentity == null) return null;
 
-            return WebInterview.GetConnectedClientSectionKey(parentIdentity.ToString(), interview.Id.FormatGuid());            
+            return WebInterview.GetConnectedClientSectionKey(parentIdentity, interview.Id);
         }
 
         private Identity GetParentIdentity(Identity identity, IStatefulInterview interview)
@@ -251,6 +244,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         }
 
         public void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-            => this.webInterviewHubContext.Clients.Group(questionnaireIdentity.ToString()).reloadInterview();
+            => this.webInterviewInvoker.ReloadInterviews(questionnaireIdentity);
     }
 }

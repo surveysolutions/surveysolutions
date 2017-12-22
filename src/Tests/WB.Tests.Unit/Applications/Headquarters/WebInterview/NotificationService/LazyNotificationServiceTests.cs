@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationServi
             this.statefullRepoMock.Setup(repo => repo.Get(It.IsAny<string>())).Returns((IStatefulInterview)null)
                 .Callback<string>(id => tcs.SetResult(id));
 
-            this.Subj = new WebInterviewLazyNotificationService(statefullRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IHubContext>());
+            this.Subj = new WebInterviewLazyNotificationService(statefullRepoMock.Object, Mock.Of<IQuestionnaireStorage>(), Mock.Of<IWebInterviewInvoker>());
         }
 
         private string GetStatefullInterviewCallResult()

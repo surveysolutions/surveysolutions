@@ -188,6 +188,7 @@ namespace WB.UI.Headquarters
 
             var owinSecurityModule = new OwinSecurityModule();
             var mainModule = new MainModule(settingsProvider, applicationSecuritySection);
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
 
             kernel.Load(
                 new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
@@ -216,9 +217,7 @@ namespace WB.UI.Headquarters
 
             owinSecurityModule.Init(ServiceLocator.Current);
             mainModule.Init(ServiceLocator.Current);
-
-            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
-
+            
             return kernel;
         }
 

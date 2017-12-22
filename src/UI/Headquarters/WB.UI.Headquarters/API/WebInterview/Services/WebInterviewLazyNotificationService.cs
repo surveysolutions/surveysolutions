@@ -24,8 +24,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         public WebInterviewLazyNotificationService(
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage,
-            [Named("WebInterview")] IHubContext webInterviewHubContext)
-            : base(statefulInterviewRepository, questionnaireStorage, webInterviewHubContext)
+            IWebInterviewInvoker webInterviewInvoker)
+            : base(statefulInterviewRepository, questionnaireStorage, webInterviewInvoker)
         {
             // can be safely added more tasks if for some reason we are not notify users in-time
             Task.Factory.StartNew(ProcessActionsInBackground, TaskCreationOptions.LongRunning);

@@ -1635,10 +1635,12 @@
     <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\InterviewQuestionFilter.cs" />
     <Compile Include="API\WebInterview\IWebInterviewInterviewEntityFactory.cs" />
+    <Compile Include="API\WebInterview\IWebInterviewInvoker.cs" />
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewInterviewEntityFactory.cs" />
+    <Compile Include="API\WebInterview\Services\WebInterviewInvoker.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.es.designer.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.es1.designer.cs">
       <AutoGen>True</AutoGen>
