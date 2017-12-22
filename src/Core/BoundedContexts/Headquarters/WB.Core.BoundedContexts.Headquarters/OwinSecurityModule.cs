@@ -15,7 +15,7 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
-    public class OwinSecurityModule : IModuleWithInit
+    public class OwinSecurityModule : IModule, IInitModule
     {
         public void Load(IIocRegistry registry)
         {

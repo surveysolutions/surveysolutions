@@ -2,7 +2,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.Infrastructure.Modularity
 {
-    public interface IModuleWithInit : IModule
+    public interface IInitModule
     {
         void Init(IServiceLocator serviceLocator);
     }

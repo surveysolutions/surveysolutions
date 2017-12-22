@@ -1,20 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Web;
 using System.Web.Configuration;
 using System.Web.Hosting;
-using System.Web.Http.Filters;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Common.WebHost;
-using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
@@ -24,15 +17,13 @@ using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
-using WB.UI.Designer.Implementation.Services;
-using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
+
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
@@ -110,23 +101,9 @@ namespace WB.UI.Designer.App_Start
                 new MembershipModule().AsNinject(),
                 new MainModule().AsWebNinject(),
                 new FileInfrastructureModule().AsNinject(),
-                new ProductVersionModule(typeof(MvcApplication).Assembly).AsNinject()
+                new ProductVersionModule(typeof(MvcApplication).Assembly).AsNinject(),
+                new NinjectWebCommonModule().AsWebNinject()
                 );
-
-            kernel.Bind<IAggregateRootCacheCleaner>().To<DummyAggregateRootCacheCleaner>().InSingletonScope();
-
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
-                .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
-                .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
-
-            kernel.Bind<ISettingsProvider>().To<DesignerSettingsProvider>().InSingletonScope();
-            kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
-            kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
-            kernel.Bind<IAuthenticationService>().To<AuthenticationService>();
-            kernel.Bind<IRecaptchaService>().To<RecaptchaService>();
-            kernel.Bind<QuestionnaireDowngradeService>().ToSelf();
-            kernel.Bind<IQuestionnireHistoryVersionsService>().To<QuestionnireHistoryVersionsService>();
 
             return kernel;
         }

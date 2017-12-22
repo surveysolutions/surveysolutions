@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.Modularity
 {
-    public class ConstructorArgument
+    public struct ConstructorArgument
     {
         public ConstructorArgument(string name, Func<IModuleContext, object> value)
         {
