@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public List<MetadataReference> GetAssembliesToReference(int targetVersion)
+        public List<MetadataReference> GetAssembliesToReference()
         {
             var references = new List<MetadataReference>();
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
