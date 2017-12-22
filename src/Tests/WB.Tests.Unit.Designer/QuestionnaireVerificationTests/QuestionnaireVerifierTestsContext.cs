@@ -270,10 +270,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     new RoslynCompiler(),
                     Create.CodeGenerator(),
                     Create.CodeGeneratorV2(),
-                    new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()));
+                    Create.DynamicCompilerSettingsProvider());
         }
-
-        
 
         public static QuestionnaireVerificationMessage FindWarningForEntityWithId(IEnumerable<QuestionnaireVerificationMessage> errors, string code, Guid entityId)
         {
