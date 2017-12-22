@@ -11,6 +11,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     internal class DesignerEngineVersionService : IDesignerEngineVersionService
     {
         private const int OldestQuestionnaireContentVersion = 16;
+        internal const int NetStandardMigrationVersion = 22;
         private class QuestionnaireContentVersion
         {
             public int Version { get; set; }
@@ -27,12 +28,79 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             new QuestionnaireContentVersion
             {
+                Version = 17, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire =>  questionnaire.Translations.Any(),
+                          Description = "Multilanguage questionnaire"
+                    }
+                }
+            },
+             new QuestionnaireContentVersion
+            {
+                Version = 18, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.LinkedToQuestionId.HasValue && 
+                                questionnaire.FirstOrDefault<AbstractQuestion>(x => x.PublicKey == q.LinkedToQuestionId)?.QuestionType == QuestionType.TextList).Any(),
+                          Description = "Question linked to List question"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = 19,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire => 
+                            questionnaire.Find<IConditional>(q => !string.IsNullOrEmpty(q.ConditionExpression) 
+                                && q.ConditionExpression.Contains("rowindex")).Any()
+                          ||
+                            questionnaire.Find<IValidatable>(q => q.ValidationConditions.Count() == 1 
+                                &&!string.IsNullOrEmpty(q.ValidationConditions.First().Expression) 
+                                && q.ValidationConditions.First().Expression.Contains("rowindex")).Any(),
+                          Description = "Usage of @rowindex in expressions"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = 20,
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                          HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Area).Any(),
+                          Description = "New expression storage or contains Area Question"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = 21, 
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Audio).Any(),
+                        Description = "Contains Audio Question"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
                 Version = ApiVersion.MaxQuestionnaireVersion, /*When adding new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
                     {
-                        HasQuestionnaire = questionnaire => true,
+                        HasQuestionnaire = questionnaire => false,
                         Description = "Performance improvements"
                     }
                 }

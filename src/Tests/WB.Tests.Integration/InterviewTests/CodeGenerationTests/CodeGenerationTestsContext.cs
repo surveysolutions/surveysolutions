@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
@@ -459,7 +460,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     IntegrationCreate.CodeGenerator(),
                     IntegrationCreate.CodeGeneratorV2(),
                     Abc.Create.Service.CodeGeneratorV3(),
-                    new DynamicCompilerSettingsProvider());
+                    new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()));
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndConditionContainingUsageOfSelf(Guid questionId)
