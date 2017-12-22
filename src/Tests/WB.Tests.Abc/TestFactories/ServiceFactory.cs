@@ -11,8 +11,6 @@ using NHibernate;
 using NSubstitute;
 using System.Linq;
 using Quartz;
-using WB.Core.BoundedContexts.Designer.CodeGenerationV3;
-using WB.Core.BoundedContexts.Designer.CodeGenerationV3.Impl;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -98,15 +96,6 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class ServiceFactory
     {
-        public ICodeGeneratorV3 CodeGeneratorV3()
-        {
-            var codeGenerationModelsFactoryV3 = new CodeGenerationModelsFactoryV3(
-                Create.Service.DefaultMacrosSubstitutionService(),
-                ServiceLocator.Current.GetInstance<ILookupTableService>(),
-                new QuestionTypeToCSharpTypeMapperV3());
-            return new CodeGeneratorV3(codeGenerationModelsFactoryV3);
-        }
-
         public CommandService CommandService(
             IEventSourcedAggregateRootRepository repository = null,
             IPlainAggregateRootRepository plainRepository = null,
