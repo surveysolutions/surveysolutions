@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 
@@ -30,9 +31,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var interviewSummary = Create.Entity.InterviewSummary(interviewId, questionnaireId, questionnaireVersion);
             var mockOfSummaryRepo = new Mock<IQueryableReadSideRepositoryReader<InterviewSummary>>();
             mockOfSummaryRepo.Setup(summ => summ.GetById(Id.g2.FormatGuid())).Returns(interviewSummary);
-            var mockOfInterviewFactory = new Mock<IInterviewFactory>();
+            var mockOfQuestionnaireStorage = new Mock<IQuestionnaireStorage>();
 
-            var interviewDenormalizer = CrateInterviewDenormalizer(mockOfInterviewFactory.Object, mockOfSummaryRepo.Object);
+            var interviewDenormalizer = CrateInterviewDenormalizer(summaries: mockOfSummaryRepo.Object,
+                questionnaireStorage: mockOfQuestionnaireStorage.Object);
 
             var state = Create.Entity.EntitiesState<InterviewEntity>();
 
@@ -43,7 +45,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             interviewDenormalizer.Update(state, Create.PublishedEvent.RosterInstancesRemoved(interviewId));
 
             //assert
-            mockOfInterviewFactory.Verify(x => x.Save(It.IsAny<InterviewEntity[]>(), It.IsAny<InterviewEntity[]>()), Times.Once);
+            mockOfQuestionnaireStorage.Verify(x => x.GetQuestionnaireDocument(It.Is<QuestionnaireIdentity>(y =>
+                y.QuestionnaireId == questionnaireId && y.Version == questionnaireVersion)), Times.Once);
 
             mockOfSummaryRepo.Verify(ms => ms.GetById(Id.g2.FormatGuid()), Times.Never);
         }
@@ -51,24 +54,26 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         [Test]
         public void when_remove_rosters_then_questionnaire_identity_should_initialize_from_interview_summary_and_fill_inner_cache()
         {
+            //arrange
             Guid interviewId = Id.g2;
             Guid questionnaireId = Id.g1;
             long questionnaireVersion = 1515L;
             var interviewSummary = Create.Entity.InterviewSummary(interviewId, questionnaireId, questionnaireVersion);
             var mockOfSummaryRepo = new Mock<IQueryableReadSideRepositoryReader<InterviewSummary>>();
             mockOfSummaryRepo.Setup(summ => summ.GetById(Id.g2.FormatGuid())).Returns(interviewSummary);
-            var mockOfInterviewFactory = new Mock<IInterviewFactory>();
+            var mockOfQuestionnaireStorage = new Mock<IQuestionnaireStorage>();
 
-            //arrange
-            var interviewDenormalizer = CrateInterviewDenormalizer(mockOfInterviewFactory.Object, mockOfSummaryRepo.Object);
-
+            var interviewDenormalizer = CrateInterviewDenormalizer(summaries: mockOfSummaryRepo.Object,
+                questionnaireStorage: mockOfQuestionnaireStorage.Object);
+            
             var state = Create.Entity.EntitiesState<InterviewEntity>();
 
             //act
             interviewDenormalizer.Update(state, Create.PublishedEvent.RosterInstancesRemoved(interviewId));
 
             //assert
-            mockOfInterviewFactory.Verify(x => x.Save(It.IsAny<InterviewEntity[]>(), It.IsAny<InterviewEntity[]>()), Times.Once);
+            mockOfQuestionnaireStorage.Verify(x => x.GetQuestionnaireDocument(It.Is<QuestionnaireIdentity>(y =>
+                y.QuestionnaireId == questionnaireId && y.Version == questionnaireVersion)), Times.Once);
             mockOfSummaryRepo.Verify(ms => ms.GetById(Id.g2.FormatGuid()), Times.Once);
         }
 
@@ -93,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             interviewDenormalizer.Update(state, Create.PublishedEvent.RosterInstancesRemoved(interviewId));
 
             //assert
-            mockOfSummaryRepo.Verify(ms => ms.GetById(Id.g2.FormatGuid()), Times.Never);
+            mockOfSummaryRepo.Verify(ms => ms.GetById(Id.g2.FormatGuid()), Times.Once);
         }
     }
 }
