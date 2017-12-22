@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
@@ -63,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     warningLevel: 1,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
-                references: new DynamicCompilerSettingsProvider().GetAssembliesToReference());
+                references: new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()).GetAssembliesToReference());
         }
 
         const string TestClassToCompile =

@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Services.CodeGeneration
         EmitResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,
-            IEnumerable<PortableExecutableReference> referencedPortableAssemblies,
+            IEnumerable<MetadataReference> referencedPortableAssemblies,
             out string generatedAssembly);
     }
 }
