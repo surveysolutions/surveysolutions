@@ -12,6 +12,7 @@ namespace WB.Core.Infrastructure.Modularity
 
         T Get<T>();
         T Get<T>(string name);
+        object Get(Type type);
 
         object GetServiceWithGenericType(Type type, Type genericType);
 

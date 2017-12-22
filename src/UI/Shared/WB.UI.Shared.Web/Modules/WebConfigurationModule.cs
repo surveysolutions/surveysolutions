@@ -19,10 +19,6 @@ namespace WB.UI.Shared.Web.Modules
                 appSettings: WebConfigurationManager.AppSettings,
                 membershipSettings: this.membershipSettings)
             );
-
-            //            Bind(typeof(int)).ToMethod(context =>
-            //                    Convert.ToInt32(WebConfigurationManager.AppSettings["MaxCachedAggregateRoots"]))
-            //                .WhenInjectedInto<IEventSourcedAggregateRootRepository>();
         }
     }
 }

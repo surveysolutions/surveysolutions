@@ -37,6 +37,11 @@ namespace WB.UI.Shared.Web.Modules
             return context.Kernel.Get<T>(name);
         }
 
+        public object Get(Type type)
+        {
+            return context.Kernel.Get(type);
+        }
+
         public object GetServiceWithGenericType(Type type, Type genericType)
         {
             return context.Kernel.GetService(type.MakeGenericType(genericType));

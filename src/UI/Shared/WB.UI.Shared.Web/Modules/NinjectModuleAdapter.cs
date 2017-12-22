@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading;
+using System.Web.Http.Filters;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
@@ -148,6 +149,11 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<T>().ToMethod(ctx => func()).InSingletonScope();
         }
 
+        void IIocRegistry.BindToConstant<T>(Func<IModuleContext, T> func)
+        {
+            this.Kernel.Bind<T>().ToMethod(ctx => func(new NinjectModuleContext(ctx))).InSingletonScope();
+        }
+
         public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
         //public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
         {
@@ -194,6 +200,18 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.Kernel.BindHttpFilter<T>(filterScope)
                 .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(TAttribute)).Any());
+        }
+
+        public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
+        {
+            this.Kernel.BindHttpFilter<T>(filterScope).WhenControllerHas<TAttribute>();
+        }
+
+        public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope,
+            ConstructorArgument constructorArgument) where T : IFilter
+        {
+            this.Kernel.BindHttpFilter<T>(filterScope).WhenControllerHas<TAttribute>()
+                .WithConstructorArgument(constructorArgument.Name, ctx => constructorArgument.Value(new NinjectModuleContext(ctx)));
         }
 
         void IIocRegistry.Unbind<TInterface>()
