@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WB.Core.BoundedContexts.Designer.Services
+namespace WB.Core.Infrastructure.TopologicalSorter
 {
     public interface ITopologicalSorter<T>
     {
