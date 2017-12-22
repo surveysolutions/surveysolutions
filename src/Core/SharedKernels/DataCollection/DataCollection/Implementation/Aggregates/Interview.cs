@@ -1067,9 +1067,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void AnswerSingleOptionQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, int selectedValue)
         {
-            using (GlobalStopwatcher.Scope("AnswerSingleOptionQuestion"))
-            {
-                
             new InterviewPropertiesInvariants(this.properties)
                 .RequireAnswerCanBeChanged();
 
@@ -1114,10 +1111,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-                using (GlobalStopwatcher.Scope("ApplyEvents"))
-                this.ApplyEvents(treeDifference, userId);
-            }
-
+            this.ApplyEvents(treeDifference, userId);
         }
 
         public void AnswerSingleOptionLinkedQuestion(Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, decimal[] selectedRosterVector)
@@ -2341,10 +2335,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
                 using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
-                    if (questionnaire.IsSupportExpressionsGraph())
+                    if (questionnaire.SupportsExpressionsGraph() && entityIdentity != null)
                     {
                         var interviewTreeCloneForTesting = TestingConditions ? changedInterviewTree.Clone() : null;
-                        var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity?.Id);
+                        var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity.Id);
                         PlayActionForEachNodeInOrder(expressionsPlayOrder, node => node.Accept(updater));
                         var validityExpressionsPlayOrder = questionnaire.GetValidationExpressionsPlayOrder(expressionsPlayOrder);
                         PlayActionForEachNodeInOrder(validityExpressionsPlayOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));

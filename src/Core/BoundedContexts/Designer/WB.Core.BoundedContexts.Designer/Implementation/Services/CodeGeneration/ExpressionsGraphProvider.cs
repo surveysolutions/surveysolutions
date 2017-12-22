@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     foreach (var validationCondition in validatableEntity.ValidationConditions)
                     {
-                        FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, validationCondition.Expression, includeReferanceOnSelf: true);
+                        FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, validationCondition.Expression, includeReferenceOnSelf: true);
                     }
                 }
             }
@@ -210,12 +210,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, Macro>.ValueCollection allMacroses, 
             Guid entityId, 
             string expression,
-            bool includeReferanceOnSelf = false)
+            bool includeReferenceOnSelf = false)
         {
             if (string.IsNullOrWhiteSpace(expression)) return;
 
             var conditionExpression = this.macrosSubstitutionService.InlineMacros(expression, allMacroses);
-            var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression, entityId, includeReferanceOnSelf);
+            var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression, entityId, includeReferenceOnSelf);
 
             if (!dependencies.TryGetValue(entityId, out List<Guid> depsList))
             {
@@ -233,11 +233,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         IEnumerable<Guid> GetIdsOfEntitiesInvolvedInExpression(Dictionary<string, Guid> variableNamesByEntitiyIds, 
             string conditionExpression,
             Guid entityId,
-            bool includeReferanceOnSelf = false)
+            bool includeReferenceOnSelf = false)
         {
             var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
 
-            if (includeReferanceOnSelf && identifiersUsedInExpression.Any(i => i == "self"))
+            if (includeReferenceOnSelf && identifiersUsedInExpression.Any(i => i == "self"))
                 yield return entityId;
 
             foreach (var variable in identifiersUsedInExpression)

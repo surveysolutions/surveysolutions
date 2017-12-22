@@ -259,8 +259,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsUsingExpressionStorage();
 
         List<Guid> GetExpressionsPlayOrder();
-        bool IsSupportExpressionsGraph();
-        List<Guid> GetExpressionsPlayOrder(Guid? entity);
+        bool SupportsExpressionsGraph();
+        List<Guid> GetExpressionsPlayOrder(Guid changedEntity);
         List<Guid> GetValidationExpressionsPlayOrder(IEnumerable<Guid> entities);
 
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
