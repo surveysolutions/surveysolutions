@@ -259,6 +259,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsUsingExpressionStorage();
 
         List<Guid> GetExpressionsPlayOrder();
+        bool SupportsExpressionsGraph();
+        List<Guid> GetExpressionsPlayOrder(Guid changedEntity);
+        List<Guid> GetValidationExpressionsPlayOrder(IEnumerable<Guid> entities);
+
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
         string GetRosterVariableName(Guid id);
     }

@@ -88,7 +88,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (this.UsesExpressionStorage)
             {
-                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), removeLinkedAnswers: false);
+                this.UpdateTreeWithDependentChanges(this.Tree, this.GetQuestionnaireOrThrow(), entityIdentity: null, removeLinkedAnswers: false);
             }
             else
             {
@@ -359,7 +359,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
 
-            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire);
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, entityIdentity: null);
         }
 
         #endregion

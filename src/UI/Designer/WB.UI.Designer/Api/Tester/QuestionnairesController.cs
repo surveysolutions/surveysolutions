@@ -91,7 +91,10 @@ namespace WB.UI.Designer.Api.Tester
             }
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireView.Source.AsReadOnly());
+            var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
+            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
+            questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
             questionnaire.Macros = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
 
