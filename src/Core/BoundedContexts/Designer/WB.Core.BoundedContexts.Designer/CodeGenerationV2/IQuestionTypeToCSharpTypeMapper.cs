@@ -8,6 +8,5 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
     {
         string GetQuestionType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire);
         string GetVariableType(VariableType variableType);
-        bool IsAnswerValueType(IQuestion question, ReadOnlyQuestionnaireDocument questionnaire);
     }
 }

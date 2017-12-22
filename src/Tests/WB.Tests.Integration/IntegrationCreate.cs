@@ -15,8 +15,6 @@ using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Tool.hbm2ddl;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
-using WB.Core.BoundedContexts.Designer.CodeGenerationV3;
-using WB.Core.BoundedContexts.Designer.CodeGenerationV3.Impl;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
