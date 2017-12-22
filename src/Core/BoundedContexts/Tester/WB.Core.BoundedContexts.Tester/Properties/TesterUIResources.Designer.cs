@@ -322,7 +322,7 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Measures enablement, validation and roster propagation time. Receving GPS data or picture taking time is not included..
+        ///   Looks up a localized string similar to Measures enablement, validation and roster propagation time. Receiving GPS data or picture taking time is not included..
         /// </summary>
         public static string Prefs_ShowAnswerTimeSummary {
             get {

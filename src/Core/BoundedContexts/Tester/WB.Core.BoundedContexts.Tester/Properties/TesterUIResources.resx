@@ -205,7 +205,7 @@
     <value>Show elapsed time per answer</value>
   </data>
   <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
-    <value>Measures enablement, validation and roster propagation time. Receving GPS data or picture taking time is not included.</value>
+    <value>Measures enablement, validation and roster propagation time. Receiving GPS data or picture taking time is not included.</value>
   </data>
   <data name="Prefs_ShowVariables" xml:space="preserve">
     <value>Show variables</value>
