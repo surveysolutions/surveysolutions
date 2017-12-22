@@ -1736,6 +1736,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Users.es.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
