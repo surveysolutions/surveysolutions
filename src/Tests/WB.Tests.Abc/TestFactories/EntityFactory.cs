@@ -46,6 +46,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
@@ -1889,5 +1890,7 @@ namespace WB.Tests.Abc.TestFactories
                 InvalidValidations = invalidValidations ?? Array.Empty<int>()
             };
         }
+
+        public EntitiesState<T> EntitiesState<T>() => new EntitiesState<T>();
     }
 }

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -14,18 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         Identity[] GetFlaggedQuestionIds(Guid interviewId);
         void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged);
         void RemoveInterview(Guid interviewId);
-
-        void UpdateAnswer(Guid interviewId, Identity questionIdentity, object answer);
-        void MakeEntitiesValid(Guid interviewId, Identity[] entityIds, EntityType entityType);
-        void MakeEntitiesInvalid(Guid interviewId, IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> entityIds, EntityType entityType);
-        void EnableEntities(Guid interviewId, Identity[] entityIds, EntityType entityType, bool isEnabled);
-        void UpdateVariables(Guid interviewId, ChangedVariable[] variables);
-        void MarkQuestionsAsReadOnly(Guid interviewId, Identity[] questionIds);
-        void AddRosters(Guid interviewId, Identity[] rosterIds);
-        void RemoveRosters(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity[] rosterIds);
-        void RemoveAnswers(Guid interviewId, IEnumerable<Identity> entityIds);
-        
-        InterviewData GetInterviewData(Guid interviewId);
 
         InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             Guid[] multimediaQuestionIds);
@@ -41,7 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         List<ExportedError> GetErrors(IEnumerable<Guid> interveiws);
 
-        List<InterviewEntity> GetInterviewEntities(Guid interviewId, QuestionnaireIdentity questionnaireId);
+        List<InterviewEntity> GetInterviewEntities(Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireIdentity questionnaireId, List<InterviewEntity> interviewEntities);
+        void Save(InterviewEntity[] addedOrUpdatedEntities, InterviewEntity[] removedEntities);
     }
 }
