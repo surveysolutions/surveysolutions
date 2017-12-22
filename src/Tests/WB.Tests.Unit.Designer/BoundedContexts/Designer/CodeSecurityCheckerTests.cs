@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
@@ -66,7 +67,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     warningLevel: 1,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
-                references: new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()).GetAssembliesToReference());
+                references: Create.DynamicCompilerSettingsProvider().GetAssembliesToReference());
         }
 
         const string TestClassToCompile =
