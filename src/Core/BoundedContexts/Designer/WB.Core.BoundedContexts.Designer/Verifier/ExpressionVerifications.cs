@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 "rules.dll",
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
                 syntaxTrees: syntaxTree.ToEnumerable(),
-                references: compilerSettings.GetAssembliesToReference(ApiVersion.MaxQuestionnaireVersion));
+                references: compilerSettings.GetAssembliesToReference());
 
             var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTree, compilation);
             return foundUsages;

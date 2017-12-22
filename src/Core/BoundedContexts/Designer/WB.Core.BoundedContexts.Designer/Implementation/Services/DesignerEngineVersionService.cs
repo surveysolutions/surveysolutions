@@ -11,7 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     internal class DesignerEngineVersionService : IDesignerEngineVersionService
     {
         private const int OldestQuestionnaireContentVersion = 16;
-        internal const int NetStandardMigrationVersion = 22;
         private class QuestionnaireContentVersion
         {
             public int Version { get; set; }
