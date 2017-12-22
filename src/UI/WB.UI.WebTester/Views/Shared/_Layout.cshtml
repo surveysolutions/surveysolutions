@@ -1,0 +1,69 @@
+﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.Infrastructure.Versions
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- css_markup:css -->
+    <link rel='stylesheet' href='@Url.Content("~/Dependencies/build/markup.css")'>
+    <!-- endinject -->
+    @*<title>@WebInterview.StartPageTitle</title>*@
+    <script type="text/javascript">
+        function onLogoError(source) {
+            source.parentElement.className += " no-logo";
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="container-fluid">
+            <nav class="navbar navbar-fixed-top" role="navigation">
+                <div class="container-fluid ">
+                    <div class="row flex-row">
+                    </div>
+                </div><!-- /.container-fluid -->
+            </nav>
+        </div>
+    </header>
+    @*@if (!Request.Browser.Cookies)
+    {
+        <div class="no-cookies">@WebInterview.Error_CookiesTurnedOff</div>
+    }*@
+    <main class="start-web-interview">
+        <div class="container-fluid">
+            <div class="row two-columns-form">
+                <div class="col-md-6 col-sm-6 col-xs-12 left-column">
+                    <div class="centered-box-table">
+                        <div class="centered-box-table-cell">
+                            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" onerror="onLogoError(this)" id="placeholder" alt="survey management" />
+                            <div class="default-logo"></div>
+                            <p class="additional-info-block">
+                                @WB.UI.WebTester.Resources.WebTester.PoweredBy 
+                                <a href="http://support.mysurvey.solutions" target="_blank">Survey Solutions</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 right-column">
+                    <div class="centered-box-table">
+                        <div class="centered-box-table-cell">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="text-center">© @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@WB.UI.WebTester.Resources.WebTester.TheWorldBankGroup</a>, @(WB.UI.WebTester.Resources.WebTester.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@WB.UI.WebTester.Resources.WebTester.Legal</a>.</div>
+            <div class="text-center">
+                @*@(ServiceLocator.Current.GetInstance<IProductVersion>())*@
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
