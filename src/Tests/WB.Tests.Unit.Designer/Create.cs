@@ -51,6 +51,7 @@ using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
@@ -1268,6 +1269,27 @@ namespace WB.Tests.Unit.Designer
             return new CustomWebApiAuthorizeFilter();
         }
 
+        public static DynamicCompilerSettingsProvider DynamicCompilerSettingsProvider()
+        {
+
+            var fileSystemAccessor = new FileSystemIOAccessor();
+
+            const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
+            var referencesToAdd = new[] { "System.dll", "System.Core.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll", "System.Linq.Expressions.dll", "System.Linq.Queryable.dll", "mscorlib.dll", "System.Runtime.Extensions.dll", "System.Text.RegularExpressions.dll" };
+
+            var settings = new List<IDynamicCompilerSettings>
+            {
+                Mock.Of<IDynamicCompilerSettings>(_
+                    => _.PortableAssembliesPath == pathToProfile
+                       && _.DefaultReferencedPortableAssemblies == referencesToAdd
+                       && _.Name == "profile111")
+            };
+
+            var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);
+
+            return new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor);
+        }
+
         public static QuestionnaireVerifier QuestionnaireVerifier(
             IExpressionProcessor expressionProcessor = null,
             ISubstitutionService substitutionService = null,
@@ -1310,7 +1332,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ITranslationsService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
-                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()).GetAssembliesToReference()));
+                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()));
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()
