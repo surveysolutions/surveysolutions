@@ -1310,7 +1310,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ITranslationsService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
-                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == new DynamicCompilerSettingsProvider().GetAssembliesToReference()));
+                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()).GetAssembliesToReference()));
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()

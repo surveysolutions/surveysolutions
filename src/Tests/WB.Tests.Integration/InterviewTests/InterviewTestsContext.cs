@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -266,7 +267,7 @@ namespace WB.Tests.Integration.InterviewTests
                     IntegrationCreate.CodeGenerator(),
                     IntegrationCreate.CodeGeneratorV2(),
                     Create.Service.CodeGeneratorV3(), 
-                    new DynamicCompilerSettingsProvider());
+                    new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()));
 
             var emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, engineVersion, out var resultAssembly);
 

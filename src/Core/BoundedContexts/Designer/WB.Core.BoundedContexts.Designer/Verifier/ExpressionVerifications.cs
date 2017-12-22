@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -127,7 +128,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 "rules.dll",
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
                 syntaxTrees: syntaxTree.ToEnumerable(),
-                references: compilerSettings.GetAssembliesToReference());
+                references: compilerSettings.GetAssembliesToReference(ApiVersion.MaxQuestionnaireVersion));
 
             var foundUsages = new CodeSecurityChecker().FindForbiddenClassesUsage(syntaxTree, compilation);
             return foundUsages;
