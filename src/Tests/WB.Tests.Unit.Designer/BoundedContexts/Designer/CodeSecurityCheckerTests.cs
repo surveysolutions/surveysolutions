@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                     warningLevel: 1,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default),
                 syntaxTrees: syntaxTrees,
-                references: new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()).GetAssembliesToReference(22));
+                references: new DynamicCompilerSettingsProvider(Mock.Of<ICompilerSettings>(), Mock.Of<IFileSystemAccessor>()).GetAssembliesToReference());
         }
 
         const string TestClassToCompile =
