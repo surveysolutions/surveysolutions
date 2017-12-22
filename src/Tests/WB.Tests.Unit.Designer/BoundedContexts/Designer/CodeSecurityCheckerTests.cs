@@ -32,13 +32,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [TestCase("Activator.CreateInstance(typeof(AccessViolationException))", "System.Activator")]
-        [TestCase("AppContext.BaseDirectory", "System.AppContext")]
-        [TestCase("AppDomain.GetCurrentThreadId()", "System.AppDomain")]
-        [TestCase("Console.WriteLine(1)", "System.Console")]
         [TestCase("Environment.Exit(1)", "System.Environment")]
         [TestCase("GC.Collect()", "System.GC")]
-        [TestCase("System.IO.File.ReadAllLines(\"\")", "System.IO.File")]
-        [TestCase("new System.Net.Mail.SmtpClient()", "System.Net.Mail.SmtpClient")]
         public void should_not_allow_usage_of_dangerous_classess(string codeToCheck, string expectedClassName)
         {
             string code = string.Format(TestClassToCompile, codeToCheck);
