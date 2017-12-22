@@ -14,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.9" />
+    <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="DotNetZip" Version="1.10.1" />
     <PackageReference Include="FluentMigrator" Version="1.6.2" />
     <PackageReference Include="FluentMigrator.Runner" Version="1.6.2" />
@@ -46,6 +47,9 @@
     <PackageReference Include="WebActivatorEx" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Dapper">
+      <HintPath>..\..\..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
