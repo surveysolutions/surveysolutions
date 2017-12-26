@@ -86,3 +86,4 @@ src/Tools/k6/k6.exe
 src/UI/WB.UI.WebTester/Content/Scripts
 src/UI/WB.UI.WebTester/Content/Styles
 src/UI/WB.UI.WebTester/Content/Dist
+/src/UI/WB.UI.WebTester/Views/shared/partial.webtester.cshtml
