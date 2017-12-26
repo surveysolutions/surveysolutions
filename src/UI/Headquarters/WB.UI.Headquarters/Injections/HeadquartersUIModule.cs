@@ -38,8 +38,6 @@ namespace WB.UI.Headquarters.Injections
     {
         public void Load(IWebIocRegistry registry)
         {
-            registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
-
             registry.Bind<IInterviewImportService, InterviewImportService>();
             registry.Bind<IFormDataConverterLogger, FormDataConverterLogger>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
