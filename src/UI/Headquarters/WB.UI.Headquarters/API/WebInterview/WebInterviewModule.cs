@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Concurrent;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Owin;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
@@ -21,17 +23,44 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
 
-            registry.BindAsSingleton<IHubPipelineModule, SignalrErrorHandler>();
-            registry.BindAsSingleton<IHubPipelineModule, PlainSignalRTransactionManager>();
-            registry.BindAsSingleton<IHubPipelineModule, InterviewAuthorizationModule>();
-            registry.BindAsSingleton<IHubPipelineModule, WebInterviewStateManager>();
-            registry.BindAsSingleton<IHubPipelineModule, WebInterviewConnectionsCounter>();
+            foreach (var type in HubPipelineModules)
+            {
+                registry.BindAsSingleton(typeof(IHubPipelineModule), type);
+            }
 
             registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
             {
-                var hub = GlobalHost.ConnectionManager.GetHubContext<WebInterview>();
-                return new WebInterviewInvoker(hub.Clients);
+                // Ninject calls this method before container innitialization. Just make sure that we can handle this in AutoFac
+                var lazyClients = new Lazy<IHubConnectionContext<dynamic>>(
+                    () => GlobalHost.ConnectionManager.GetHubContext<WebInterview>().Clients);
+
+                return new WebInterviewInvoker(lazyClients);
             });
+        }
+
+        private static readonly Type[] HubPipelineModules =
+        {
+            typeof(SignalrErrorHandler),
+            typeof(PlainSignalRTransactionManager),
+            typeof(InterviewAuthorizationModule),
+            typeof(WebInterviewStateManager),
+            typeof(WebInterviewConnectionsCounter)
+        };
+
+        public static void Configure(IAppBuilder app)
+        {
+            var resolver = GlobalHost.DependencyResolver;
+            var pipeline = resolver.Resolve<IHubPipeline>();
+
+            foreach (var moduleType in HubPipelineModules)
+            {
+                var module = resolver.GetService(moduleType) as IHubPipelineModule;
+                pipeline.AddModule(module);
+            }
+
+            (resolver.GetService(typeof(IConnectionsMonitor)) as IConnectionsMonitor)?.StartMonitoring();
+
+            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
         }
 
         internal class SignalRHubMinifier : IJavaScriptMinifier
