@@ -10,8 +10,6 @@ namespace WB.Infrastructure.Native.Storage
 {
     public class JsonHandler<T> : SqlMapper.TypeHandler<T> where T: class
     {
-        public static readonly JsonHandler<T> Instance = new JsonHandler<T>();
-
         public override T Parse(object value) => value == null || value == DBNull.Value
             ? default(T)
             : ServiceLocator.Current.GetInstance<IEntitySerializer<T>>().Deserialize(value as string);

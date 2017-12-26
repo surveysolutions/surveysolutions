@@ -65,12 +65,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.questionnaireStorage = questionnaireStorage;
             this.sessionProvider = sessionProvider;
 
-            SqlMapper.AddTypeHandler(typeof(int[][]), JsonHandler<int[][]>.Instance);
-            SqlMapper.AddTypeHandler(typeof(GeoPosition), JsonHandler<GeoPosition>.Instance);
-            SqlMapper.AddTypeHandler(typeof(InterviewTextListAnswer[]), JsonHandler<InterviewTextListAnswer[]>.Instance);
-            SqlMapper.AddTypeHandler(typeof(AnsweredYesNoOption[]), JsonHandler<AnsweredYesNoOption[]>.Instance);
-            SqlMapper.AddTypeHandler(typeof(AudioAnswer), JsonHandler<AudioAnswer>.Instance);
-            SqlMapper.AddTypeHandler(typeof(Area), JsonHandler<Area>.Instance);
+            SqlMapper.AddTypeHandler(typeof(int[][]), new JsonHandler<int[][]>());
+            SqlMapper.AddTypeHandler(typeof(GeoPosition), new JsonHandler<GeoPosition>());
+            SqlMapper.AddTypeHandler(typeof(InterviewTextListAnswer[]), new JsonHandler<InterviewTextListAnswer[]>());
+            SqlMapper.AddTypeHandler(typeof(AnsweredYesNoOption[]), new JsonHandler<AnsweredYesNoOption[]>());
+            SqlMapper.AddTypeHandler(typeof(AudioAnswer), new JsonHandler<AudioAnswer>());
+            SqlMapper.AddTypeHandler(typeof(Area), new JsonHandler<Area>());
         }
 
         public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity sectionId)
