@@ -7,15 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     @*@this.GenerateFavicon(Url.Content("~/Content/identity/favicon-hq"))*@
 
-    <!-- css_markup:css -->
-    <link rel='stylesheet' href='@Url.Content("~/Dependencies/build/markup.css")'>
-    <!-- endinject -->
+   
+    @Scripts.Render("~/js")
+    
+    @Styles.Render("~/css")
+
     @*<title>@WebInterview.StartPageTitle</title>*@
-    <script type="text/javascript">
-        function onLogoError(source) {
-            source.parentElement.className += " no-logo";
-        }
-    </script>
 </head>
 <body>
     <header>

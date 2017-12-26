@@ -16,6 +16,7 @@ const gulp = require('gulp'),
     es = require('event-stream'),
     cleanCSS = require('gulp-clean-css'),
     _ = require('lodash');
+var merge = require('merge-stream');
 
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
@@ -262,10 +263,24 @@ gulp.task('inject', ['styles', 'libsJs'],
         return tasks;
     }));
 
+gulp.task('webtester:styles', ['styles'], function() {
+    var webInterview = gulp.src(config.buildDir + "/markup-web-interview.css");
+    var markup = gulp.src(config.buildDir + "/markup.css");
+    return merge(webInterview, markup)
+        .pipe(gulp.dest('../../../WB.UI.WebTester/Content/Styles'));
+});
+
+gulp.task('webtester:js', ['libsJs'], function() {
+    return gulp.src("../HqApp/dist/webinterview.bundle.js")
+        .pipe(gulp.dest('../../../WB.UI.WebTester/Content/Scripts'));
+});
+
+gulp.task('webtester', ['webtester:styles', 'webtester:js'])
+
 gulp.task('clean', function () {
     return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'libsJs', 'inject');
+    gulp.start('move-bootstrap-fonts', 'styles', 'libsJs', 'webtester', 'inject');
 });
