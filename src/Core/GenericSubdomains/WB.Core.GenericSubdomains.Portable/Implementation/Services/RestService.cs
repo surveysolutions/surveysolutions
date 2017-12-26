@@ -276,43 +276,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                         ContentLength = contentLength
                     };
             }
-
-                /*using (var transformedStream = GetStreamToTransform(responseStream, contentCompressionType))
-                {
-                    if (token.IsCancellationRequested)
-                    {
-                        token.ThrowIfCancellationRequested();
-                    }
-
-                    var buffer = new byte[this.restServiceSettings.BufferSize];
-                    var downloadProgressChangedEventArgs = new DownloadProgressChangedEventArgs()
-                    {
-                        TotalBytesToReceive = contentLength
-                    };
-
-                    int read;
-                    while ((read = await transformedStream.ReadAsync(buffer, 0, buffer.Length, token)
-                               .ConfigureAwait(false)) > 0)
-                    {
-                        if (token.IsCancellationRequested)
-                        {
-                            token.ThrowIfCancellationRequested();
-                        }
-
-                        downloded += read;
-
-                        streamToSave.Write(buffer, 0, read);
-
-                        if (onDownloadProgressChanged == null) continue;
-
-                        if (contentLength != null)
-                            downloadProgressChangedEventArgs.ProgressPercentage =
-                                Math.Min(Math.Round((decimal) (100 * downloded) / contentLength.Value), 100);
-
-                        downloadProgressChangedEventArgs.BytesReceived = downloded;
-                        onDownloadProgressChanged(downloadProgressChangedEventArgs);
-                    }
-                }*/
         }
 
         public async Task SendStreamAsync(Stream streamData, string url, RestCredentials credentials,
