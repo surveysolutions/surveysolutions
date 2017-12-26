@@ -1,22 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
-    internal class when_requesting_report_by_team_lead: SurveysAndStatusesReportTestsContext
+    [TestOf(typeof(SurveysAndStatusesReport))]
+    internal class SurveysAndStatusesReportTests
     {
-        Establish context = () =>
+        private static SurveysAndStatusesReport CreateSurveysAndStatusesReport(INativeReadSideStorage<InterviewSummary> summariesRepository = null)
         {
-            userId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            return new SurveysAndStatusesReport(summariesRepository ?? Stub.ReadSideRepository<InterviewSummary>());
+        }
+
+        [Test]
+        public void when_GetReport_and_interviews_by_1_questionnaire_only_then_should_not_throw_NRE()
+        {
+            //arrange
+            var userId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var teamLeadName = "userName";
 
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
@@ -29,17 +37,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             var interviewsReader = Stub.ReadSideRepository<InterviewSummary>();
             interviews.ForEach(summary => interviewsReader.Store(summary, Guid.NewGuid().FormatGuid()));
 
-            reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
-        };
+            var reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
 
-        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { TeamLeadName = teamLeadName });
-
-        It should_count_only_interviews_by_teamlead = () =>
-            report.Items.First().CompletedCount.ShouldEqual(2);
-
-        static Guid userId;
-        static string teamLeadName = "userName";
-        static SurveysAndStatusesReport reportFactory;
-        static SurveysAndStatusesReportView report;     
+            //act && assert
+            Assert.DoesNotThrow(() =>
+            {
+                reportFactory.GetReport(new SurveysAndStatusesReportInputModel
+                {
+                    TeamLeadName = teamLeadName,
+                    Page = 1,
+                    PageSize = 20,
+                    Orders = new[]
+                        {new OrderRequestItem {Field = "QuestionnaireTitle", Direction = OrderDirection.Asc},}
+                });
+            });
+        }
     }
 }
