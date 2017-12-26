@@ -1,18 +1,29 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class CumulativeChartDenormalizer : BaseDenormalizer, 
-        IEventHandler<InterviewStatusChanged>
+    internal class CumulativeState
+    {
+        public List<CumulativeReportStatusChange> Added { get; set; } = new List<CumulativeReportStatusChange>();
+        public InterviewStatus? LastInterviewStatus { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public bool IsDirty => Added.Any();
+    }
+
+    internal class CumulativeChartDenormalizer : IFunctionalEventHandler, IEventHandler
     {
         private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportReader;
         private readonly IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
@@ -28,49 +39,81 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.cumulativeReportReader = cumulativeReportReader;
         }
 
-        public override object[] Readers => new object[] { this.cumulativeReportReader, this.interviewReferencesStorage };
 
-        public override object[] Writers => new object[] { this.cumulativeReportStatusChangeStorage };
-
-        public void Handle(IPublishedEvent<InterviewStatusChanged> @event)
+        public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            InterviewStatus? oldStatus = cumulativeReportReader.Query(_ => _
-                .Where(x => x.InterviewId == @event.EventSourceId && x.ChangeValue > 0)
-                .OrderByDescending(x => x.EventSequence)
-                .FirstOrDefault())?.Status;
+            var lastStatusChangeEvent = publishableEvents.LastOrDefault(x => x.Payload is InterviewStatusChanged);
 
-            InterviewStatus newStatus = @event.Payload.Status;
-            if (newStatus == InterviewStatus.Deleted)
+            if (lastStatusChangeEvent == null)
                 return;
 
-            var questionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(@event.EventSourceId);
+            var state = new CumulativeState
+            {
+                LastInterviewStatus = cumulativeReportReader.Query(_ => _
+                    .Where(x => x.InterviewId == eventSourceId && x.ChangeValue > 0)
+                    .OrderByDescending(x => x.EventSequence)
+                    .FirstOrDefault())?.Status,
+                QuestionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(eventSourceId)
+            };
+
+            this.Update(state, lastStatusChangeEvent.Payload as InterviewStatusChanged, lastStatusChangeEvent);
+
+            if (state.IsDirty)
+                this.SaveState(state);
+        }
+
+        private void Update(CumulativeState state, InterviewStatusChanged statusCanged, IPublishableEvent publishableEvent)
+        {
+            InterviewStatus? oldStatus = state.LastInterviewStatus;
+
+            InterviewStatus newStatus = statusCanged.Status;
+            if (newStatus == InterviewStatus.Deleted)
+                return;
 
             if (oldStatus != null)
             {
                 var minusChange = new CumulativeReportStatusChange(
-                    $"{@event.EventIdentifier.FormatGuid()}-minus",
-                    questionnaireIdentity.QuestionnaireId,
-                    questionnaireIdentity.Version,
-                    @event.EventTimeStamp.Date,
+                    $"{publishableEvent.EventIdentifier.FormatGuid()}-minus",
+                    state.QuestionnaireIdentity.QuestionnaireId,
+                    state.QuestionnaireIdentity.Version,
+                    publishableEvent.EventTimeStamp.Date, // time of synchronization
                     oldStatus.Value,
                     -1,
-                    @event.EventSourceId,
-                    @event.GlobalSequence);
+                    publishableEvent.EventSourceId,
+                    publishableEvent.GlobalSequence);
 
-                this.cumulativeReportStatusChangeStorage.Store(minusChange, minusChange.EntryId);
+                state.Added.Add(minusChange);
             }
 
             var plusChange = new CumulativeReportStatusChange(
-                $"{@event.EventIdentifier.FormatGuid()}-plus",
-                questionnaireIdentity.QuestionnaireId,
-                questionnaireIdentity.Version,
-                @event.EventTimeStamp.Date,
+                $"{publishableEvent.EventIdentifier.FormatGuid()}-plus",
+                state.QuestionnaireIdentity.QuestionnaireId,
+                state.QuestionnaireIdentity.Version,
+                publishableEvent.EventTimeStamp.Date, // time of synchronization
                 newStatus,
                 +1,
-                @event.EventSourceId,
-                @event.GlobalSequence);
+                publishableEvent.EventSourceId,
+                publishableEvent.GlobalSequence);
 
-            this.cumulativeReportStatusChangeStorage.Store(plusChange, plusChange.EntryId);
+            state.Added.Add(plusChange);
         }
+
+        protected void SaveState(CumulativeState state)
+        {
+            if (state.Added.Any())
+            {
+                cumulativeReportStatusChangeStorage.BulkStore(state.Added.Select(x => new Tuple<CumulativeReportStatusChange, string>(x, x.EntryId)).ToList());
+            }
+        }
+
+        public void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
+        {
+            //no need in current implementation
+        }
+
+        public string Name => "Cumulative Chart Functional Denormalizer";
+        public object[] Readers { get; } = new object[0];
+        public object[] Writers { get; } = new object[0];
+        
     }
 }

@@ -270,10 +270,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IExportFactory, ExportFactory>();
 
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
-            //registry.Kernel.RegisterDenormalizer<InterviewEventHandlerFunctional>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<InterviewDenormalizer>();
+            registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, InterviewPackagesService>();
 
