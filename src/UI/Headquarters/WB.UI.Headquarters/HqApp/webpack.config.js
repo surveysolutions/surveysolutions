@@ -12,13 +12,12 @@ const config = {
     },
     webinterview: {
         entry: "./src/webinterview/main.js",
-        locales: ["WebInterviewUI", "WebInterview", "Common"],
-        
+        locales: ["WebInterviewUI", "WebInterview", "Common"]
     },
     webtester: {
         entry: "./src/webinterview/main.js",
         locales: ["WebInterviewUI", "WebInterview", "Common"],
-        assetsPath: '~/Content/',
+        assetsPath: '~/Content/Dist/',
         appRootPath: join("../../", 'WB.UI.WebTester')
     }
 };

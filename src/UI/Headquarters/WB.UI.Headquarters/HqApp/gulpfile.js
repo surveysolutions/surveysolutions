@@ -18,7 +18,13 @@ config.resources = {
     dest: "locale/.resources"
 }
 
-gulp.task("default", ['cleanup', 'resx2json', 'build', 'test'].filter((x) => x));
+gulp.task("webTester", ['build'], function(){
+    return gulp.src(config.dist + "/**/*.*")
+        .pipe(plugins.filter(['**/*.js', '**/*.css']))
+        .pipe(gulp.dest('../../../WB.UI.WebTester/Content/Dist'));
+});
+
+gulp.task("default", ['cleanup', 'resx2json', 'build', 'webTester', 'test'].filter((x) => x));
 
 gulp.task("build", ["resx2json", "vendor"], (done) => {
     const opts = {
