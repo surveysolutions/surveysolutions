@@ -263,9 +263,16 @@ gulp.task('inject', ['styles', 'libsJs'],
         return tasks;
     }));
 
+gulp.task('webtester:fonts', function(){
+    return gulp.src(config.bootstrapFontFiles)
+               .pipe(gulp.debug())
+               .pipe(gulp.dest("../../../WB.UI.WebTester/Content/Fonts"));
+})
+
 gulp.task('webtester:styles', ['styles'], function() {
     var webInterview = gulp.src(config.buildDir + "/markup-web-interview.css");
     var markup = gulp.src(config.buildDir + "/markup.css");
+
     return merge(webInterview, markup)
         .pipe(gulp.dest('../../../WB.UI.WebTester/Content/Styles'));
 });
@@ -275,7 +282,7 @@ gulp.task('webtester:js', ['libsJs'], function() {
         .pipe(gulp.dest('../../../WB.UI.WebTester/Content/Scripts'));
 });
 
-gulp.task('webtester', ['webtester:styles', 'webtester:js'])
+gulp.task('webtester', ['webtester:fonts', 'webtester:styles', 'webtester:js'])
 
 gulp.task('clean', function () {
     return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());

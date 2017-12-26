@@ -52,7 +52,7 @@
         {
             current = "en";
         }
-        var localePath = Url.Content("~/HqApp/dist/" + locales[current]);
+        var localePath = Url.Content("!{options.assetsPath}" + locales[current]);
     }
 |
 |

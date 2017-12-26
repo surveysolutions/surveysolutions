@@ -83,6 +83,6 @@ src/Tools/k6/k6.exe
 /src/UI/Designer/WB.UI.Designer/Content/plugins/*
 /src/UI/Headquarters/WB.UI.Headquarters/HqApp/locale/.resources
 /src/UI/Headquarters/WB.UI.Headquarters/HqApp/.coverage
-/src/UI/WB.UI.WebTester/Content/Scripts/*
-/src/UI/WB.UI.WebTester/Content/Styles/*
-/src/UI/WB.UI.WebTester/Content/Styles/*
+src/UI/WB.UI.WebTester/Content/Scripts
+src/UI/WB.UI.WebTester/Content/Styles
+src/UI/WB.UI.WebTester/Content/Dist
