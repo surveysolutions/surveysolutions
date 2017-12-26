@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
         private Mock<IAuthorizedUser> authorizedUserMock;
         private QuestionnaireDocument document;
-        private IQuestionnaire questionnaire;
+        protected IQuestionnaire questionnaire;
 
         protected WebInterviewInterviewEntityFactory Subject { get; set; }
 
