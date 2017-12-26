@@ -12,15 +12,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            if (!publishableEvents.Any(this.Handles)) return;
-
             var state = new EntitiesState<TEntity>();
 
             foreach (var publishableEvent in publishableEvents)
             {
-                var eventType = typeof(IPublishedEvent<>).MakeGenericType(publishableEvent.Payload.GetType());
                 if (!this.Handles(publishableEvent))
                     continue;
+
+                var eventType = typeof(IPublishedEvent<>).MakeGenericType(publishableEvent.Payload.GetType());
 
                 this.GetType().GetTypeInfo().GetMethod("Update", new[] { typeof(EntitiesState<TEntity>), eventType })
                     .Invoke(this, new object[] { state, this.CreatePublishedEvent(publishableEvent) });
