@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
