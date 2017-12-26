@@ -194,7 +194,7 @@ module.exports = function (appConfig) {
 
 
             _.map(entryNames, (entryName) => {
-                const viewsFolder = appConfig[entryName].appRootPath || hqViewsFolder;
+                const viewsFolder = appConfig[entryName].appRootPath ? (appConfig[entryName].appRootPath + "/Views") : hqViewsFolder;
 
                 // for each entry we produce separate partial cshtml file
                 // this file will contain all required chunks

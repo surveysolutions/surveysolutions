@@ -193,7 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Dist\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -204,6 +206,10 @@
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
