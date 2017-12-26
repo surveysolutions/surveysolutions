@@ -23,10 +23,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAcces
                 {
                     using (var csvReader = new CsvReader(fileReader))
                     {
+                        csvReader.Configuration.Delimiter = this.delimiter;
+
                         csvReader.Read();
                         csvReader.ReadHeader();
-
-                        csvReader.Configuration.Delimiter = this.delimiter;
+                        
                         var isRead = csvReader.Read();
 
                         if (csvReader.Context.HeaderRecord != null && csvReader.Context.HeaderRecord.Length > 0)
