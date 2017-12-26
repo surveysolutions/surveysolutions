@@ -192,12 +192,15 @@ module.exports = function (appConfig) {
             // notify on build
             devMode ? new WebpackNotifierPlugin({ alwaysNotify: true }) : null,
 
+
             _.map(entryNames, (entryName) => {
+                const viewsFolder = appConfig[entryName].appRootPath || hqViewsFolder;
+
                 // for each entry we produce separate partial cshtml file
                 // this file will contain all required chunks
                 return new HtmlWebpackPlugin({
                     inject: false,
-                    filename: path.resolve(hqViewsFolder, "shared", `partial.${entryName}.cshtml`),
+                    filename: path.resolve(viewsFolder, "shared", `partial.${entryName}.cshtml`),
 
                     // we dont need webinterview chunk in hq output and vice versa
                     excludeChunks: entryNames.filter((name) => name !== entryName),
@@ -210,7 +213,7 @@ module.exports = function (appConfig) {
                     // provide path to shared_vendor.dll
                     manifest: "shared_vendor.dll." + vendor_dll_hash + ".js",
 
-                    assetsPath,
+                    assetsPath: appConfig[entryName].assetsPath || assetsPath,
 
                     isHot
                 })
