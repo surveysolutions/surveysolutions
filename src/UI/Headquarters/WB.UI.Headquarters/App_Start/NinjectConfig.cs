@@ -183,7 +183,6 @@ namespace WB.UI.Headquarters
                 AssembliesDirectoryName = "QuestionnaireAssemblies"
             });
 
-
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
             var owinSecurityModule = new OwinSecurityModule();
@@ -207,7 +206,6 @@ namespace WB.UI.Headquarters
                 new WebInterviewModule().AsNinject(),
                 owinSecurityModule.AsNinject(),
                 mainModule.AsWebNinject());
-
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
 
@@ -233,23 +231,12 @@ namespace WB.UI.Headquarters
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var eventBusConfigSection = kernel.Get<ISettingsProvider>().GetSection<EventBusConfigSection>("eventBus");
-
-            var bus = new NcqrCompatibleEventDispatcher(
-                kernel.Get<IEventStore>(),
-                eventBusConfigSection.GetSettings(),
-                kernel.Get<ILogger>());
-
-            kernel.Bind<IEventBus>().ToConstant(bus);
-            kernel.Bind<ILiteEventBus>().ToConstant(bus);
-            kernel.Bind<IEventDispatcher>().ToConstant(bus);
-
-            //Kernel.RegisterDenormalizer<>() - should be used instead
-            var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
-            foreach (object handler in enumerable)
-            {
-                bus.Register((IEventHandler)handler);
-            }
+            kernel.Bind<IEventBus, ILiteEventBus, IEventDispatcher>()
+                .To<NcqrCompatibleEventDispatcher>()
+                .InSingletonScope()
+                .WithConstructorArgument(
+                    "eventBusSettings", 
+                    ctx => ctx.Kernel.Get<ISettingsProvider>().GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
     }
 }

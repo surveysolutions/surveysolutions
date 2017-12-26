@@ -237,11 +237,12 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
-        public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
+        public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null, params IEventHandler[] handlers)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
-                logger: logger ?? Mock.Of<ILogger>());
+                logger: logger ?? Mock.Of<ILogger>(),
+                eventHandlers: handlers);
 
         public ImportDataParsingService PreloadedDataService(QuestionnaireDocument questionnaire)
             => new ImportDataParsingService(
