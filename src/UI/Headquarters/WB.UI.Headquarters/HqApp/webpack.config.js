@@ -1,13 +1,25 @@
+const path = require('path')
+
 var buildFactory = require("./.build/webpack.common")
+
+const baseDir = path.resolve(__dirname, "../");
+const join = path.join.bind(path, baseDir);
 
 const config = {
     hq: {
         entry: "./src/hqapp/main.js",
-        locales: ["Details", "Pages", "WebInterviewUI", "WebInterview", "DataTables", "Common", "Users", "Assignments", "Strings", "Reports", "DevicesInterviewers", "UploadUsers", "MainMenu"]
+        locales: ["Details", "Pages", "WebInterviewUI", "WebInterview", "DataTables", "Common", "Users", "Assignments", "Strings", "Reports", "DevicesInterviewers"]
     },
     webinterview: {
         entry: "./src/webinterview/main.js",
-        locales: ["WebInterviewUI", "WebInterview", "Common"]
+        locales: ["WebInterviewUI", "WebInterview", "Common"],
+        
+    },
+    webtester: {
+        entry: "./src/webinterview/main.js",
+        locales: ["WebInterviewUI", "WebInterview", "Common"],
+        assetsPath: '~/Content/',
+        appRootPath: join("../../", 'WB.UI.WebTester')
     }
 };
 
