@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace WB.UI.WebTester
 {
     public class BundleConfig
     {
-        // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
-          
+            bundles.Add(new ScriptBundle("~/js").Include(
+                "~/Content/Scripts/*.js"
+            ));
+
+            bundles.Add(new StyleBundle("~/css").Include(
+                "~/Content/Styles/markup.css",
+                "~/Content/Styles/markup-web-interview.css"
+            ));
         }
     }
 }
