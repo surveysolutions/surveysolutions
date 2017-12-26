@@ -31,6 +31,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Monitoring;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
@@ -66,7 +67,7 @@ namespace WB.UI.Headquarters
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
-            ConfigureWebApi(app, kernel);
+            ConfigureWebApi(app);
 
             Settings.Current.GetCustomData += (exception, dictionary) =>
             {
@@ -143,7 +144,7 @@ namespace WB.UI.Headquarters
             return kernel;
         }
 
-        private void ConfigureWebApi(IAppBuilder app, IKernel kernel)
+        private void ConfigureWebApi(IAppBuilder app)
         {
             var config = new HttpConfiguration();
             config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
@@ -153,7 +154,7 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            API.WebInterview.Bootstrap.Configure(app, kernel);
+            WebInterviewModule.Configure(app);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);
