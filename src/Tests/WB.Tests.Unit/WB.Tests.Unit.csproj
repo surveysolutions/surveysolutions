@@ -411,6 +411,7 @@
     <Compile Include="Applications\Headquarters\ServicesTests\InterviewImportServiceTests\when_import_interview_with_nonprintable_symbols.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\ConnectionsMonitorTests.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\NotificationService\WebInterviewNotificationServiceTests.cs" />
+    <Compile Include="Applications\Headquarters\WebInterview\Review\Api\when_get_details_for_linked_question.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\GetGroupDetailsTests\when_all_questions_answered_in_group_and_not_answered_in_subgroup.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\InterviewSimpleStatusTests.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Api\GetGroupDetailsTests\Group_state_and_validitiy_depend_on_viewer_for_groups_with_hidden_and_prefilled_questions.cs" />
