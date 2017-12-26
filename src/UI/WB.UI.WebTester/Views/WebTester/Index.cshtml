@@ -36,17 +36,15 @@
                         <div class="centered-box-table-cell">
                             <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" onerror="onLogoError(this)" id="placeholder" alt="survey management" />
                             <div class="default-logo"></div>
-                            <p class="additional-info-block">
-                                @WebInterview.PoweredBy 
-                                <a href="http://support.mysurvey.solutions" target="_blank">Survey Solutions</a>
-                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12 right-column">
                     <div class="centered-box-table">
                         <div class="centered-box-table-cell">
-                            @RenderBody()
+                            
+                            body here
+
                         </div>
                     </div>
                 </div>
@@ -56,11 +54,6 @@
     <footer class="footer">
         <div class="container-fluid">
             <div class="text-center">© @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@Common.Legal</a>.</div>
-            <div class="text-center">
-                @(ServiceLocator.Current.GetInstance<IProductVersion>())
-                <span>|</span>
-                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
-            </div>
         </div>
     </footer>
     <script type="text/javascript">
