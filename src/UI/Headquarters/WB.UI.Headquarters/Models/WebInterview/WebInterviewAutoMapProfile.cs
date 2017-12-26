@@ -69,6 +69,9 @@ namespace WB.UI.Headquarters.Models.WebInterview
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue));
 
+            this.CreateMap<RosterVector, RosterVector>()
+                .ConstructUsing(m => new RosterVector(m));
+
             this.CreateMap<InterviewTreeQuestion, InterviewLinkedMultiQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => x.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues));
