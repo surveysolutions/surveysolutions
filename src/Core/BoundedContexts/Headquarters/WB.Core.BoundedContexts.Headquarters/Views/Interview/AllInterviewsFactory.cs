@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || x.Status == InterviewStatus.SentToCapi) &&
                         !x.ReceivedByInterviewer && !x.WasCompleted,
                     CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
-                    CanReject = x.Status == InterviewStatus.ApprovedBySupervisor,
+                    CanReject = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
                     CanBeReassigned = x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned

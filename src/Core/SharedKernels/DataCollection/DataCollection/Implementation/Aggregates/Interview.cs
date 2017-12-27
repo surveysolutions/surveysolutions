@@ -1838,10 +1838,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
-            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
+            propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
 
-            this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
+            var isCompleted = this.properties.Status == InterviewStatus.Completed;
+            if (isCompleted)
+            {
+                this.ApplyEvent(new InterviewRejected(userId, comment, DateTime.UtcNow));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
+            }
+            else
+            {
+                this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
+            }
         }
 
         public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command)
