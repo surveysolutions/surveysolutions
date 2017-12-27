@@ -132,18 +132,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Questionnaire command handlers
 
-        public void CreateQuestionnaire(Guid publicKey, string title, Guid? createdBy, bool isPublic)
+        public void CreateQuestionnaire(CreateQuestionnaire createQuestionnaire)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(createQuestionnaire.Title);
 
             this.innerDocument = new QuestionnaireDocument
             {
-                IsPublic = isPublic,
-                Title = System.Web.HttpUtility.HtmlDecode(title),
-                PublicKey = publicKey,
+                IsPublic = createQuestionnaire.IsPublic,
+                Title = System.Web.HttpUtility.HtmlDecode(createQuestionnaire.Title),
+                PublicKey = createQuestionnaire.QuestionnaireId,
                 CreationDate = this.clock.UtcNow(),
                 LastEntryDate = this.clock.UtcNow(),
-                CreatedBy = createdBy
+                CreatedBy = createQuestionnaire.ResponsibleId,
+                Metadata = createQuestionnaire.MetaInfo
             };
 
             this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, null, null, null,false), null);

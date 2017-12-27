@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireListViewItem>>(listViewItemsStorage);
 
             Guid questionnaireId = Guid.NewGuid();
-            var command = new CreateQuestionnaire(questionnaireId, "title", Guid.NewGuid(), true);
+            var command = Create.Command.CreateQuestionnaire(questionnaireId, "title", Guid.NewGuid(), true);
 
             var listViewPostProcessor = CreateListViewPostProcessor();
             // act
