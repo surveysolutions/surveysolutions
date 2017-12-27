@@ -1253,29 +1253,6 @@
       <LastGenOutput>UserPreloadingVerificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx" />
-    <EmbeddedResource Include="Resources\WebInterview.ar.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.es.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.fr.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.ka.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.resx">
-      <SubType>Designer</SubType>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.ru.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.zh.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\WebInterviewSetup.ar.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
@@ -1629,20 +1606,21 @@
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
+    <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
     <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
-    <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
-    <Compile Include="API\WebInterview\Services\ConnectionsMonitor.cs" />
-    <Compile Include="API\WebInterview\IConnectionsMonitor.cs" />
-    <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
+    <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
+    <Compile Include="API\WebInterview\LinksExportController.cs" />
+    <Compile Include="API\WebInterview\Pipeline\InterviewAuthorizationModule.cs" />
+    <Compile Include="API\WebInterview\Pipeline\PlainSignalRTransactionManager.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
+    <Compile Include="API\WebInterview\SearchResults.cs" />
+    <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
     <Compile Include="API\WebInterview\Services\InterviewQuestionFilter.cs" />
-    <Compile Include="API\WebInterview\IWebInterviewInterviewEntityFactory.cs" />
-    <Compile Include="API\WebInterview\IWebInterviewInvoker.cs" />
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
-    <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
-    <Compile Include="API\WebInterview\Services\WebInterviewInterviewEntityFactory.cs" />
-    <Compile Include="API\WebInterview\Services\WebInterviewInvoker.cs" />
+    <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
+    <Compile Include="API\WebInterview\WebInterviewHub.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.es.designer.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.es1.designer.cs">
       <AutoGen>True</AutoGen>
@@ -1778,21 +1756,6 @@
     <Compile Include="API\Resources\DataTableTranslationsController.cs" />
     <Compile Include="API\Resources\WebInterviewResourcesController.cs" />
     <Compile Include="API\PublicApi\UsersController.cs" />
-    <Compile Include="API\WebInterview\LinksExportController.cs" />
-    <Compile Include="API\WebInterview\Services\ConnectionLimiter.cs" />
-    <Compile Include="API\WebInterview\IConnectionLimiter.cs" />
-    <Compile Include="API\WebInterview\IErrorDetailsProvider.cs" />
-    <Compile Include="API\WebInterview\Pipeline\PlainSignalRTransactionManager.cs" />
-    <Compile Include="API\WebInterview\Pipeline\SignalrErrorHandler.cs" />
-    <Compile Include="API\WebInterview\Pipeline\WebInterviewConnectionsCounter.cs" />
-    <Compile Include="API\WebInterview\Services\WebInterviewLazyNotificationService.cs" />
-    <Compile Include="API\WebInterview\WebInterviewModule.cs" />
-    <Compile Include="API\WebInterview\WebInterview.CommandService.cs" />
-    <Compile Include="API\WebInterview\WebInterview.StatefullInterview.cs" />
-    <Compile Include="API\WebInterview\WebInterview.cs" />
-    <Compile Include="API\WebInterview\Pipeline\InterviewAuthorizationModule.cs" />
-    <Compile Include="API\WebInterview\Services\WebInterviewNotificationService.cs" />
-    <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.Designer.cs">
       <DependentUpon>BatchUpload.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -1969,7 +1932,6 @@
     <Compile Include="Controllers\WebInterviewController.cs" />
     <Compile Include="Filters\ActivePageAttribute.cs" />
     <Compile Include="Filters\BrowsersRestriction.cs" />
-    <Compile Include="Code\InterviewAccessException.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
@@ -2107,13 +2069,6 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\User\UserBrowseItem.cs" />
-    <Compile Include="Models\WebInterview\InterviewEntityType.cs" />
-    <Compile Include="Models\WebInterview\InterviewEntityWithType.cs" />
-    <Compile Include="Models\WebInterview\StartWebInterview.cs" />
-    <Compile Include="Models\WebInterview\WebInterivewDtos.cs" />
-    <Compile Include="Models\WebInterview\PrefilledPageData.cs" />
-    <Compile Include="Models\WebInterview\SetupModel.cs" />
-    <Compile Include="Models\WebInterview\WebInterviewAutoMapProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>
@@ -2220,11 +2175,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="Resources\WebInterview.Designer.cs">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Resources\WebInterviewSetup.Designer.cs">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -2296,6 +2246,10 @@
     <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj">
+      <Project>{4004D8CD-D2B4-4E81-93FF-9798599B2168}</Project>
+      <Name>WB.Enumerator.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
       <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>

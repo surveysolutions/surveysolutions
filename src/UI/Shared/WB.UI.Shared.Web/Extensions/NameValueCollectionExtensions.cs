@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Shared.Web.Extensions
 {

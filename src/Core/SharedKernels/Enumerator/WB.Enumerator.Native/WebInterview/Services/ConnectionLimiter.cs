@@ -1,21 +1,17 @@
-using System.Web.WebPages;
 using WB.Infrastructure.Native.Monitoring;
-using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     internal class ConnectionLimiter: IConnectionLimiter
     {
-        private readonly IConfigurationManager configurationManager;
-
-        public ConnectionLimiter(IConfigurationManager configurationManager)
+        public ConnectionLimiter(int connectionsLimit)
         {
-            this.configurationManager = configurationManager;
+            this.ConnectionLimit = connectionsLimit;
         }
 
         private int CurrentlyConnectedCount => (int) CommonMetrics.WebInterviewOpenConnections.Value;
 
-        private int ConnectionLimit => this.configurationManager.AppSettings[@"MaxWebInterviewsCount"].AsInt();
+        private int ConnectionLimit { get; }
 
         public bool CanConnect()
         {
