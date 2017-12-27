@@ -17,10 +17,13 @@
                 return !(this.$store.getters.isReviewMode === true) || this.$me.type != ButtonType.Complete
             },
             css() {
+                const status =  this.$me.status
+                const isValid = this.$me.validity.isValid
+
                 return [{
-                    'btn-success': this.$me.status == GroupStatus.Completed,
-                    'btn-danger': this.$me.validity.isValid == false,
-                    'btn-primary': this.$me.status == GroupStatus.NotStarted || this.$me.status == GroupStatus.Started, 
+                    'btn-success': isValid && status == GroupStatus.Completed,
+                    'btn-danger': isValid == false || status == GroupStatus.Invalid,
+                    'btn-primary': isValid && (status == GroupStatus.NotStarted || status == GroupStatus.Started), 
                     'btn-back': this.isParentButton
                 }]
             },
