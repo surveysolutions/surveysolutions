@@ -181,7 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             if(toDate.HasValue)
             {
-                var filteredToDate = fromDate.Value;
+                var filteredToDate = toDate.Value;
                 queryable = queryable.Where(x => x.UpdateDate <= filteredToDate);
             }
 

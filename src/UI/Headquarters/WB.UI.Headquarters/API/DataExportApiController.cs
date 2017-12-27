@@ -69,10 +69,13 @@ namespace WB.UI.Headquarters.API
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
             try
             {
+                DateTime? fromDate = from.TryParseDate();
+                DateTime? toDate = to.TryParseDate();
+
                 this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(format, questionnaireIdentity, null)
                 {
-                    FromDate = from.TryParseDate(),
-                    ToDate = to.TryParseDate(),
+                    FromDate = fromDate.HasValue ? new DateTime(fromDate.Value.Year, fromDate.Value.Month, fromDate.Value.Day, 0, 0, 1).ToUniversalTime() : (DateTime?)null,
+                    ToDate = toDate.HasValue ? new DateTime(toDate.Value.Year, toDate.Value.Month, toDate.Value.Day, 23, 59, 59).ToUniversalTime() : (DateTime?) null,
                     InterviewStatus = status
                 });
             }
