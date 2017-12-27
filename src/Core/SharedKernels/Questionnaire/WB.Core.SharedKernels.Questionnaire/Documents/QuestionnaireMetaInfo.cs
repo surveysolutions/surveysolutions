@@ -1,19 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
-using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.UI.Designer.Resources;
-
-namespace WB.UI.Designer.Models
+﻿namespace WB.Core.SharedKernels.Questionnaire.Documents
 {
-    public class QuestionnaireViewModel
+    public class QuestionnaireMetaInfo
     {
-        [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "QuestionnaireTitle_required")]
-        [AllowHtml]
-        public string Title { get; set; }
-
-        public bool IsPublic { get; set; }
-
-        [AllowHtml]
         public string SubTitle { get; set; }
 
         public StudyType? StudyType { get; set; }

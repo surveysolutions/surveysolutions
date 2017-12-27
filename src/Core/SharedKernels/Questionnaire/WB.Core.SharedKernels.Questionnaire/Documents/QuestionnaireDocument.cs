@@ -6,6 +6,8 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Documents
@@ -100,6 +102,8 @@ namespace Main.Core.Documents
         public string Title { get; set; }
 
         public string Description { get; set; }
+
+        public QuestionnaireMetaInfo Metadata { get; set; }
 
         public string VariableName { get; set; }
 

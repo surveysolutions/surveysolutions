@@ -26,7 +26,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             TestDelegate act = () =>
             {
                 Questionnaire questionnaire = Create.Questionnaire();
-                questionnaire.CreateQuestionnaire(Guid.NewGuid(), emptyTitle, null, false);
+                var command = Create.Command.CreateQuestionnaire(Guid.NewGuid(), emptyTitle, null, false);
+                questionnaire.CreateQuestionnaire(command);
             };
 
             // assert
@@ -42,7 +43,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             Questionnaire questionnaire = Create.Questionnaire();
-            questionnaire.CreateQuestionnaire(publicKey, "title", null, false);
+            var command = Create.Command.CreateQuestionnaire(publicKey, "title", null, false);
+            questionnaire.CreateQuestionnaire(command);
 
             // assert
             Assert.That(questionnaire.QuestionnaireDocument.PublicKey, Is.EqualTo(publicKey));
@@ -56,7 +58,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // act
             Questionnaire questionnaire = Create.Questionnaire();
-            questionnaire.CreateQuestionnaire(Guid.NewGuid(), title, null, false);
+            var command = Create.Command.CreateQuestionnaire(Guid.NewGuid(), title, null, false);
+            questionnaire.CreateQuestionnaire(command);
 
             // assert
             Assert.That(questionnaire.QuestionnaireDocument.Title, Is.EqualTo(title));
