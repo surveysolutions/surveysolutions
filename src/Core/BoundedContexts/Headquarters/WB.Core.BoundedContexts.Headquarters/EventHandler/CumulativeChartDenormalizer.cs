@@ -15,16 +15,16 @@ using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    internal class CumulativeState
-    {
-        public List<CumulativeReportStatusChange> Added { get; set; } = new List<CumulativeReportStatusChange>();
-        public InterviewStatus? LastInterviewStatus { get; set; }
-        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
-        public bool IsDirty => Added.Any();
-    }
-
     internal class CumulativeChartDenormalizer : IFunctionalEventHandler, IEventHandler
     {
+        internal class CumulativeState
+        {
+            public List<CumulativeReportStatusChange> Added { get; set; } = new List<CumulativeReportStatusChange>();
+            public InterviewStatus? LastInterviewStatus { get; set; }
+            public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+            public bool IsDirty => Added.Any();
+        }
+
         private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportReader;
         private readonly IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage;
@@ -47,16 +47,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (lastStatusChangeEvent == null)
                 return;
 
+            var interviewStatusChanged = lastStatusChangeEvent.Payload as InterviewStatusChanged;
+
             var state = new CumulativeState
             {
-                LastInterviewStatus = cumulativeReportReader.Query(_ => _
+                LastInterviewStatus = interviewStatusChanged?.PreviousStatus ?? cumulativeReportReader.Query(_ => _
                     .Where(x => x.InterviewId == eventSourceId && x.ChangeValue > 0)
                     .OrderByDescending(x => x.EventSequence)
                     .FirstOrDefault())?.Status,
                 QuestionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(eventSourceId)
             };
 
-            this.Update(state, lastStatusChangeEvent.Payload as InterviewStatusChanged, lastStatusChangeEvent);
+            this.Update(state, interviewStatusChanged, lastStatusChangeEvent);
 
             if (state.IsDirty)
                 this.SaveState(state);
@@ -100,10 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         protected void SaveState(CumulativeState state)
         {
-            if (state.Added.Any())
-            {
-                cumulativeReportStatusChangeStorage.BulkStore(state.Added.Select(x => new Tuple<CumulativeReportStatusChange, string>(x, x.EntryId)).ToList());
-            }
+            cumulativeReportStatusChangeStorage.BulkStore(state.Added.Select(x => new Tuple<CumulativeReportStatusChange, string>(x, x.EntryId)).ToList());
         }
 
         public void RegisterHandlersInOldFashionNcqrsBus(InProcessEventBus oldEventBus)
