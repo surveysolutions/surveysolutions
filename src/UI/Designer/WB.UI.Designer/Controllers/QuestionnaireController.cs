@@ -23,6 +23,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Extensions;
@@ -146,13 +147,36 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid)
             {
                 var questionnaireId = Guid.NewGuid();
+                var metaInfo = new QuestionnaireMetaInfo()
+                {
+                    Version = model.Version,
+                    KindOfData = model.KindOfData,
+                    VersionNotes = model.VersionNotes,
+                    PrimaryInvestigator = model.PrimaryInvestigator,
+                    AgreeToMakeThisQuestionnairePubic = model.AgreeToMakeThisQuestionnairePubic,
+                    Year = model.Year,
+                    Language = model.Language,
+                    Country = model.Country,
+                    ModeOfDataCollection = model.ModeOfDataCollection,
+                    UnitOfAnalysis = model.UnitOfAnalysis,
+                    Consultant = model.Consultant,
+                    Coverage = model.Coverage,
+                    Funding = model.Funding,
+                    Keywords = model.Keywords,
+                    Notes = model.Notes,
+                    StudyType = model.StudyType,
+                    SubTitle = model.SubTitle,
+                    Universe = model.Universe,
+                };
+
                 try
                 {
                     var command = new CreateQuestionnaire(
                         questionnaireId: questionnaireId,
                         text: model.Title,
                         responsibleId: this.UserHelper.WebUser.UserId,
-                        isPublic: model.IsPublic);
+                        isPublic: model.IsPublic,
+                        metaInfo: metaInfo);
 
                     this.commandService.Execute(command);
 

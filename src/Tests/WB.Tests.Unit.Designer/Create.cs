@@ -1153,6 +1153,11 @@ namespace WB.Tests.Unit.Designer
             {
                 return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
+
+            public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic)
+            {
+                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic, null);
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
