@@ -60,12 +60,24 @@
                     {
                         data: "lastEntryDate",
                         name: "LastEntryDate",// case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
-                        "class": "date"
+                        "class": "date",
+                        render: function (data, type, row) {
+                            if (data === null || data === undefined || data === "") return "";
+
+                            var localDate = moment.utc(data).local();
+                            return localDate.format(window.CONFIG.dateFormat);;
+                        }
                     },
                     {
                         data: "creationDate",
                         name: "CreationDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                        "class": "date"
+                        "class": "date",
+                        render: function (data, type, row) {
+                            if (data === null || data === undefined || data === "") return "";
+
+                            var localDate = moment.utc(data).local();
+                            return localDate.format(window.CONFIG.dateFormat);;
+                        }
                     }
                 ];
             };
