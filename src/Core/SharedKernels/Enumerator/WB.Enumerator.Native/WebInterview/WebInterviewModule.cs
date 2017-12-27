@@ -18,14 +18,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             registry.BindAsSingleton<IConnectionsMonitor, ConnectionsMonitor>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
             registry.Bind<IConnectionLimiter, ConnectionLimiter>();
-            registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
 
             registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
 
-            foreach (var type in HubPipelineModules)
-            {
-                registry.BindAsSingleton(typeof(IHubPipelineModule), type);
-            }
+            //foreach (var type in HubPipelineModules)
+            //{
+            //    registry.BindAsSingleton(typeof(IHubPipelineModule), type);
+            //}
 
             registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
             {
@@ -37,18 +36,18 @@ namespace WB.UI.Headquarters.API.WebInterview
             });
         }
 
-        private static readonly Type[] HubPipelineModules =
-        {
-            typeof(SignalrErrorHandler),
-            typeof(WebInterviewConnectionsCounter)
-        };
+        //private static readonly Type[] HubPipelineModules =
+        //{
+        //    typeof(SignalrErrorHandler),
+        //    typeof(WebInterviewConnectionsCounter)
+        //};
 
-        public static void Configure(IAppBuilder app)
+        public static void Configure(IAppBuilder app, Type[] pipelineModules)
         {
             var resolver = GlobalHost.DependencyResolver;
             var pipeline = resolver.Resolve<IHubPipeline>();
 
-            foreach (var moduleType in HubPipelineModules)
+            foreach (var moduleType in pipelineModules)
             {
                 var module = resolver.GetService(moduleType) as IHubPipelineModule;
                 pipeline.AddModule(module);
