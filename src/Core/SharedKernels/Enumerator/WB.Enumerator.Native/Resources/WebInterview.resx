@@ -298,4 +298,10 @@
   <data name="Filters_OldDetailsLink" xml:space="preserve">
     <value>Old interview details</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
 </root>

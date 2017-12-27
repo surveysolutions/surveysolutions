@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.UI.Headquarters.Resources {
+namespace WB.Enumerator.Native.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace WB.UI.Headquarters.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Headquarters.Resources.WebInterview", typeof(WebInterview).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Enumerator.Native.Resources.WebInterview", typeof(WebInterview).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -84,6 +84,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string DiscardAndStart {
             get {
                 return ResourceManager.GetString("DiscardAndStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string Error {
+            get {
+                return ResourceManager.GetString("Error", resourceCulture);
             }
         }
         
@@ -471,6 +480,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PoweredBy {
             get {
                 return ResourceManager.GetString("PoweredBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} (ver. {1}).
+        /// </summary>
+        public static string QuestionnaireNameFormat {
+            get {
+                return ResourceManager.GetString("QuestionnaireNameFormat", resourceCulture);
             }
         }
         

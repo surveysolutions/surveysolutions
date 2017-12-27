@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
-using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -20,23 +17,15 @@ namespace WB.UI.Headquarters.API.WebInterview
     public partial class WebInterview : Hub, IErrorDetailsProvider
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly ICommandService commandService;
+        protected readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IAuthorizedUser authorizedUser;
-        private readonly IChangeStatusFactory changeStatusFactory;
-        private readonly IInterviewFactory interviewFactory;
-        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
 
         private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
 
-        private bool IsReviewMode => 
-            this.authorizedUser.CanConductInterviewReview() &&
-            this.Context.QueryString[@"review"].ToBool(false);
-
-        private IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
+        protected IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
 
         private IQuestionnaire GetCallerQuestionnaire()
         {
@@ -44,25 +33,21 @@ namespace WB.UI.Headquarters.API.WebInterview
             return this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
         }
 
+        protected virtual bool IsReviewMode => false;
+
+        protected virtual bool IsCurrentUserObserving => false;
+
         public WebInterview(
             IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
             IQuestionnaireStorage questionnaireRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
-            IAuthorizedUser authorizedUser,
-            IChangeStatusFactory changeStatusFactory,
-            IInterviewFactory interviewFactory,
-            IStatefullInterviewSearcher statefullInterviewSearcher,
             IWebInterviewInterviewEntityFactory interviewEntityFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
             this.questionnaireRepository = questionnaireRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
-            this.authorizedUser = authorizedUser;
-            this.changeStatusFactory = changeStatusFactory;
-            this.interviewFactory = interviewFactory;
-            this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.interviewEntityFactory = interviewEntityFactory;
         }
 
@@ -85,15 +70,15 @@ namespace WB.UI.Headquarters.API.WebInterview
                 switch (interviewException.ExceptionType)
                 {
                     case InterviewDomainExceptionType.InterviewLimitReached:
-                        return Headquarters.Resources.WebInterview.ServerUnderLoad;
+                        return Enumerator.Native.Resources.WebInterview.ServerUnderLoad;
                     case InterviewDomainExceptionType.QuestionnaireIsMissing:
                     case InterviewDomainExceptionType.InterviewHardDeleted:
-                        return Headquarters.Resources.WebInterview.Error_InterviewExpired;
+                        return Enumerator.Native.Resources.WebInterview.Error_InterviewExpired;
                     case InterviewDomainExceptionType.OtherUserIsResponsible:
                     case InterviewDomainExceptionType.StatusIsNotOneOfExpected:
-                        return Headquarters.Resources.WebInterview.Error_NoActionsNeeded;
+                        return Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded;
                     case InterviewDomainExceptionType.InterviewRecievedByDevice:
-                        return Headquarters.Resources.WebInterview.InterviewReceivedByInterviewer;
+                        return Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer;
                 }
             }
 

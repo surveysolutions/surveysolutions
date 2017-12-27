@@ -1,15 +1,14 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {

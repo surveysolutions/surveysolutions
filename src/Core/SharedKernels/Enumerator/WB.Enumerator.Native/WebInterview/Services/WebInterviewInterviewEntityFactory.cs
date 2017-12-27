@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using AutoMapper;
-using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -17,13 +17,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
     public class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
     {
         private readonly IMapper autoMapper;
-        private readonly IAuthorizedUser authorizedUser;
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
-        public WebInterviewInterviewEntityFactory(IMapper autoMapper, IAuthorizedUser authorizedUser)
+        public WebInterviewInterviewEntityFactory(IMapper autoMapper)
         {
             this.autoMapper = autoMapper;
-            this.authorizedUser = authorizedUser;
         }
 
         public Sidebar GetSidebarChildSectionsOf(string currentSectionId, IStatefulInterview interview, string[] sectionIds, bool isReviewMode)
@@ -291,7 +289,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Strings.Error)
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Enumerator.Native.Resources.WebInterview.Error)
                 .ToArray();
         }
 
@@ -305,18 +303,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             result.HideIfDisabled = questionnaire.ShouldBeHiddenIfDisabled(identity.Id);
         }
 
-        private void ApplyReviewState(GenericQuestion result, InterviewTreeQuestion question, IStatefulInterview callerInterview, bool isReviewMode)
+        protected virtual void ApplyReviewState(GenericQuestion result, InterviewTreeQuestion question, IStatefulInterview callerInterview, bool isReviewMode)
         {
-            if (!isReviewMode)
-            {
-                result.AcceptAnswer = true;
-                return;
-            }
-
-            result.IsForSupervisor = question.IsSupervisors &&
-                                  callerInterview.Status < InterviewStatus.ApprovedByHeadquarters &&
-                                  (this.authorizedUser.IsSupervisor && !this.authorizedUser.IsObserving);
-            result.AcceptAnswer = result.IsForSupervisor;
+            result.AcceptAnswer = true;
         }
 
         private void PutInstructions(GenericQuestion result, Identity id, IQuestionnaire questionnaire)
@@ -349,13 +338,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             }));
         }
 
-        private Comment[] GetComments(InterviewTreeQuestion question)
+        protected virtual Comment[] GetComments(InterviewTreeQuestion question)
         {
             return question.AnswerComments.Select(
                 ac => new Comment
                 {
                     Text = ac.Comment,
-                    IsOwnComment = ac.UserId == this.authorizedUser.Id,
+                    IsOwnComment = true,
                     UserRole = ac.UserRole,
                     CommentTimeUtc = ac.CommentTime
                 })
