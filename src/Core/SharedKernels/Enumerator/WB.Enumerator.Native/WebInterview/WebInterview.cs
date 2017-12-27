@@ -13,7 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
-    [HubName(@"interview")]
     public partial class WebInterview : Hub, IErrorDetailsProvider
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;

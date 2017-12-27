@@ -10,6 +10,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     {
         public void Load(IIocRegistry registry)
         {
+            registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IStatefullInterviewSearcher, StatefullInterviewSearcher>();
 
             foreach (var type in HubPipelineModules)
@@ -18,11 +19,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
         }
 
-        private static readonly Type[] HubPipelineModules =
+        public static Type[] HubPipelineModules => new[]
         {
+            typeof(SignalrErrorHandler),
             typeof(PlainSignalRTransactionManager),
             typeof(InterviewAuthorizationModule),
             typeof(WebInterviewStateManager),
+            typeof(WebInterviewConnectionsCounter)
         };
     }
 }

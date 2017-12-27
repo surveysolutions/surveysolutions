@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -14,6 +15,7 @@ using WB.Enumerator.Native.WebInterview;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
+    [HubName(@"interview")]
     public class WebInterviewHub : WebInterview
     {
         private readonly IAuthorizedUser authorizedUser;
