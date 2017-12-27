@@ -71,8 +71,8 @@ namespace WB.UI.Headquarters.Controllers
                     Version = x.Version,
                     Title = x.Title,
                     AllowCensusMode = x.AllowCensusMode,
-                    CreationDate = x.CreationDate.FormatDateWithTime(),
-                    LastEntryDate = x.LastEntryDate.FormatDateWithTime(),
+                    CreationDate = x.CreationDate,
+                    LastEntryDate = x.LastEntryDate,
                     ImportDate = x.ImportDate?.FormatDateWithTime(),
                     IsDisabled = x.Disabled
                 })
