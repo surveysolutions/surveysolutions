@@ -1431,12 +1431,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, command.UserId);
 
             this.ApplyEvent(new SupervisorAssigned(command.UserId, command.SupervisorId, command.AnswersTime));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, previousStatus: null, utcTime: DateTime.UtcNow));
 
             if (command.InterviewerId.HasValue)
             {
                 this.ApplyEvent(new InterviewerAssigned(command.UserId, command.InterviewerId.Value, command.AnswersTime));
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null, previousStatus: InterviewStatus.SupervisorAssigned, utcTime: DateTime.UtcNow));
             }
 
             if (command.InterviewKey != null && !command.InterviewKey.Equals(this.interviewKey))
@@ -1522,7 +1522,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void RepeatLastInterviewStatus(RepeatLastInterviewStatus command)
         {
-            this.ApplyEvent(new InterviewStatusChanged(this.properties.Status, command.Comment));
+            this.ApplyEvent(new InterviewStatusChanged(this.properties.Status, command.Comment, this.properties.Status, DateTime.UtcNow));
         }
 
         public void SwitchTranslation(SwitchTranslation command)
@@ -1638,7 +1638,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.properties.Status == InterviewStatus.InterviewerAssigned)
             {
                 //change status of the interview
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.SupervisorAssigned, comment: null, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
             }
         }
 
@@ -1662,7 +1662,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (this.properties.Status == InterviewStatus.RejectedByHeadquarters)
             {
                 this.ApplyEvent(new InterviewRejected(userId, comment: null, rejectTime: assignTime));
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment: null));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment: null, previousStatus: InterviewStatus.RejectedByHeadquarters, utcTime: DateTime.UtcNow));
             }
 
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
@@ -1670,7 +1670,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.properties.Status != InterviewStatus.RejectedBySupervisor &&
                 this.properties.Status != InterviewStatus.Completed)
             {
-                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null));
+                this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
             }
         }
 
@@ -1685,7 +1685,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new InterviewDeleted(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
         }
 
         public void HardDelete(Guid userId)
@@ -1713,7 +1713,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Deleted);
 
             this.ApplyEvent(new InterviewRestored(userId));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restored, comment: null, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
         }
 
         public void Restart(Guid userId, string comment, DateTime restartTime)
@@ -1724,8 +1724,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed);
 
             this.ApplyEvent(new InterviewRestarted(userId, restartTime, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Restarted, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment, previousStatus: InterviewStatus.Restarted, utcTime: DateTime.UtcNow));
         }
 
         public void Approve(Guid userId, string comment, DateTime approveTime)
@@ -1738,7 +1738,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewApproved(userId, comment, approveTime));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
         }
 
         public void Reject(Guid userId, string comment, DateTime rejectTime)
@@ -1751,7 +1751,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewRejected(userId, comment, rejectTime));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
         }
 
         public void RejectToInterviewer(Guid userId, Guid interviewerId, string comment, DateTime rejectTime)
@@ -1764,7 +1764,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewRejected(userId, comment, rejectTime));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedBySupervisor, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
             this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, rejectTime));
         }
 
@@ -1776,7 +1776,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.Completed, InterviewStatus.ApprovedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
             this.ApplyEvent(new InterviewApprovedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedByHeadquarters, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
         }
 
         public void UnapproveByHeadquarters(Guid userId, string comment)
@@ -1791,7 +1791,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? unapproveCommentMessage
                 : string.Format("{0} \r\n {1}", unapproveCommentMessage, comment);
             this.ApplyEvent(new UnapprovedByHeadquarters(userId, unapproveComment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.ApprovedBySupervisor, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
         }
 
         public void RejectInterviewFromHeadquarters(Guid userId,
@@ -1818,9 +1818,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewRestored(userId));
             }
 
-
             this.ApplyEvent(new InterviewRejectedByHQ(userId, interviewDto.Comments));
-            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments));
+            this.ApplyEvent(new InterviewStatusChanged(interviewDto.Status, comment: interviewDto.Comments, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
 
             if (interviewerId.HasValue)
             {
@@ -1842,7 +1841,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.ApprovedBySupervisor, InterviewStatus.Deleted);
 
             this.ApplyEvent(new InterviewRejectedByHQ(userId, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
         }
 
         public void SynchronizeInterviewEvents(SynchronizeInterviewEventsCommand command)
@@ -1913,7 +1912,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 interviewerAssignedDateTime,
                 usesExpressionStorage));
 
-            this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments));
+            this.ApplyEvent(new InterviewStatusChanged(interviewStatus, comments, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
 
             if (valid)
                 this.ApplyEvent(new InterviewDeclaredValid());

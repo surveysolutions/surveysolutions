@@ -117,8 +117,8 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
             => new InterviewReceivedBySupervisor();
 
-        public InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello")
-            => new InterviewStatusChanged(status, comment);
+        public InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello",InterviewStatus? previousStatus= null, DateTime? utcTime= null)
+            => new InterviewStatusChanged(status, comment, previousStatus, utcTime);
 
         public InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             => new InterviewSynchronized(synchronizationDto);
