@@ -52,10 +52,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     () => interviewSummaryStorage.GetById(interviewGuid));
 
             if (interview == null)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Headquarters.Resources.WebInterview.Error_NotFound);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             if (!AllowedInterviewStatuses.Contains(interview.Status))
-                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
 
             if (this.authorizedUser.IsInterviewer)
             {
@@ -64,7 +64,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 else
                 {
                     throw new InterviewAccessException(InterviewAccessExceptionReason.Forbidden,
-                        Headquarters.Resources.WebInterview.Error_Forbidden);
+                        Enumerator.Native.Resources.WebInterview.Error_Forbidden);
                 }
             }
 
@@ -79,13 +79,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
-                    Headquarters.Resources.WebInterview.Error_UserNotAuthorised);
+                    Enumerator.Native.Resources.WebInterview.Error_UserNotAuthorised);
             }
 
             if (!webInterviewConfig.Started || !AnonymousUserAllowedStatuses.Contains(interview.Status))
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
-                    Headquarters.Resources.WebInterview.Error_InterviewExpired);
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
         }
     }

@@ -295,4 +295,10 @@
   <data name="Filters_OldDetailsLink" xml:space="preserve">
     <value>Деталика интервью (старый дизайн)</value>
   </data>
+  <data name="Error" xml:space="preserve">
+    <value>Ошибка</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (вер. {1})</value>
+  </data>
 </root>

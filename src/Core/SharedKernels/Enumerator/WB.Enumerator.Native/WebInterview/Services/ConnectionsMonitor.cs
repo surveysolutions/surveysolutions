@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         }
 
         // based on https://stackoverflow.com/a/21070978/41483
-        internal void Check()
+        public void Check()
         {
             foreach (var connection in transportHeartbeat.GetConnections())
             {

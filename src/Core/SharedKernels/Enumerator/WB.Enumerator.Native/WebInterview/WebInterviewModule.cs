@@ -18,7 +18,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             registry.BindAsSingleton<IConnectionsMonitor, ConnectionsMonitor>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
             registry.Bind<IConnectionLimiter, ConnectionLimiter>();
-            registry.Bind<IStatefullInterviewSearcher, StatefullInterviewSearcher>();
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
 
             registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
@@ -41,9 +40,6 @@ namespace WB.UI.Headquarters.API.WebInterview
         private static readonly Type[] HubPipelineModules =
         {
             typeof(SignalrErrorHandler),
-            typeof(PlainSignalRTransactionManager),
-            typeof(InterviewAuthorizationModule),
-            typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
 

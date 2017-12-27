@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
+    <ProjectReference Include="..\..\..\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -269,5 +270,8 @@
     <EmbeddedResource Update="Resources\UserPreloadingServiceMessages.zh.resx">
       <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\WebInterview\" />
   </ItemGroup>
 </Project>

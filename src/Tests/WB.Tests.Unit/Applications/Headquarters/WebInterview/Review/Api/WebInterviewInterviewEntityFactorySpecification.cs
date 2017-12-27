@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
             authorizedUserMock = new Mock<IAuthorizedUser>();
 
-            Subject = new WebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
+            Subject = new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
                 authorizedUserMock.Object);
         }
 

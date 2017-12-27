@@ -5,8 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Resources;
-using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -15,8 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
@@ -32,7 +28,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public LanguageInfo GetLanguageInfo() => new LanguageInfo
         {
-            OriginalLanguageName = Headquarters.Resources.WebInterview.Original_Language,
+            OriginalLanguageName = Enumerator.Native.Resources.WebInterview.Original_Language,
             Languages = this.GetCallerQuestionnaire().GetTranslationLanguages(),
             CurrentLanguage = this.GetCallerInterview().Language
         };
@@ -45,34 +41,13 @@ namespace WB.UI.Headquarters.API.WebInterview
             return new InterviewInfo
             {
                 QuestionnaireTitle = IsReviewMode 
-                    ? string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) 
+                    ? string.Format(Enumerator.Native.Resources.WebInterview.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) 
                     : questionnaire.Title,
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
-                InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.authorizedUser.IsObserving,
+                InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving,
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer
             };
-        }
-
-        public List<CommentedStatusHistroyView> GetStatusesHistory()
-        {
-            var statefulInterview = this.GetCallerInterview();
-            return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
-        }
-
-        public void SetFlag(string questionId, bool hasFlag)
-        {
-            if (this.authorizedUser.IsObserver)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.Forbidden, Strings.ObserverNotAllowed);
-
-            var statefulInterview = this.GetCallerInterview();
-            this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
-        }
-
-        public IEnumerable<string> GetFlags()
-        {
-            var statefulInterview = this.GetCallerInterview();
-            return this.interviewFactory.GetFlaggedQuestionIds(statefulInterview.Id).Select(x => x.ToString());
         }
 
         public bool IsEnabled(string id)
@@ -227,7 +202,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 return NewButtonState(new ButtonState
                 {
-                    Title = Headquarters.Resources.WebInterview.CompleteInterview,
+                    Title = Enumerator.Native.Resources.WebInterview.CompleteInterview,
                     Type = ButtonType.Complete
                 }, statefulInterview.GetGroup(sectionIdentity));
             }
