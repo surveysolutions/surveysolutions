@@ -292,7 +292,6 @@ gulp.task('webtester', ['webtester:fonts', 'webtester:styles', 'webtester:js'])
 
 gulp.task('clean', function () {
     var buildDir = gulp.src(config.buildDistDir + '/*');
-    var tester1 = gulp.src(config.webTester.targetFolder + config.webTester.fontsFolder);
     var tester2 = gulp.src(config.webTester.targetFolder + config.webTester.scriptsFolder);
     var tester3 = gulp.src(config.webTester.targetFolder + config.webTester.stylesFolder);
 
