@@ -409,10 +409,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
 
             if (state.AddedOrUpdated.Contains(entity))
+            {
                 state.AddedOrUpdated.Remove(entity);
+                state.Removed.Add(entity);
+            }
         }
 
-        private void RemoveAnswerInState(EntitiesState<InterviewEntity> state, Guid interviewId, Identity entityId, EntityType entityType) =>
+        private void RemoveAnswerInState(EntitiesState<InterviewEntity> state, Guid interviewId, Identity entityId, EntityType entityType)
+        {
+            var entity = new InterviewEntity
+            {
+                InterviewId = interviewId,
+                Identity = entityId
+            };
+
+            if (state.Removed.Contains(entity))
+                return;
+
             this.AddOrUpdateEntityInState(state, interviewId, entityId, entityType, x =>
             {
                 x.AsDouble = null;
@@ -429,6 +442,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 x.AsYesNo = null;
                 x.AsString = null;
             });
+        }
 
         private void AddQuestionnaireToDictionary(Guid interviewId, Guid questionnaireId, long questionnaireVersion)
             => this.interviewToQuestionnaire[interviewId] = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
