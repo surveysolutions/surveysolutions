@@ -272,7 +272,6 @@ gulp.task('inject', ['styles', 'libsJs'],
 
 gulp.task('webtester:fonts', function() {
     return gulp.src(config.bootstrapFontFiles)
-            .pipe(debug())
                .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.fontsFolder));
 });
 gulp.task('webtester:styles', ['styles'], function() {
@@ -295,7 +294,7 @@ gulp.task('clean', function () {
     var tester2 = gulp.src(config.webTester.targetFolder + config.webTester.scriptsFolder);
     var tester3 = gulp.src(config.webTester.targetFolder + config.webTester.stylesFolder);
 
-    return merge(buildDir, tester1, tester2, tester3).pipe(plugins.clean({read: false, force: true}));
+    return merge(buildDir, tester2, tester3).pipe(plugins.clean({read: false, force: true}));
 });
 
 gulp.task('default', ['clean'], function () {
