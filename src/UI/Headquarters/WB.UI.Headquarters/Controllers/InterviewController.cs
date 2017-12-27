@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                           (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
                                           authorizedUser.IsSupervisor,
-                HqOrAdminRejectAllowed = interviewSummary.Status == InterviewStatus.ApprovedBySupervisor &&
+                HqOrAdminRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
                                          (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "InterviewersCombobox" })
