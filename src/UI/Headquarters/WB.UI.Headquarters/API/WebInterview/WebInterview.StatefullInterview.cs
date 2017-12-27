@@ -172,11 +172,15 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         public ButtonState GetNavigationButtonState(string id, IQuestionnaire questionnaire = null)
         {
+            var statefulInterview = this.GetCallerInterview();
+            
             ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target)
             {
                 button.Id = id;
                 button.Target = target.Identity.ToString();
-                button.Status = this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode);
+                button.Status = button.Type == ButtonType.Complete
+                    ? this.interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode)
+                    : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode);
 
                 this.interviewEntityFactory.ApplyValidity(button.Validity, target, IsReviewMode);
 
@@ -185,9 +189,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             var sectionId = CallerSectionid;
             var callerQuestionnaire = questionnaire ?? this.GetCallerQuestionnaire();
-
-            var statefulInterview = this.GetCallerInterview();
-
+            
             var sections = callerQuestionnaire.GetAllSections()
                 .Where(sec => statefulInterview.IsEnabled(Identity.Create(sec, RosterVector.Empty)))
                 .ToArray();
