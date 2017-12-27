@@ -172,9 +172,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Scripts\webinterview.bundle.js" />
-    <Content Include="Content\Styles\markup-web-interview.css" />
-    <Content Include="Content\Styles\markup.css" />
+    <Content Include="Content\**\*.*" />
     <Content Include="Global.asax" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\WebTester\Index.cshtml" />
