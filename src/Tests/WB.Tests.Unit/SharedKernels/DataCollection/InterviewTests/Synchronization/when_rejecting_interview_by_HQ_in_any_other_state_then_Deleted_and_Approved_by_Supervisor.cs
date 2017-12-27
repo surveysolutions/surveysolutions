@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -18,7 +11,7 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronization
 {
-    internal class when_rejecting_interview_by_HQ_in_any_other_state_then_Deleted_and_Approved_by_Supervisor : InterviewTestsContext
+    internal class when_rejecting_interview_by_HQ_in_any_other_state_then_Deleted_and_Approved_by_Supervisor_and_Completed : InterviewTestsContext
     {
         Establish context = () =>
         {
@@ -61,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         private static InterviewStatus[] statuses;
         private static int exceptionCount = 0;
         private static InterviewStatus[] statusToExclude = new InterviewStatus[]
-        { InterviewStatus.Deleted, InterviewStatus.ApprovedBySupervisor };
+        { InterviewStatus.Deleted, InterviewStatus.ApprovedBySupervisor, InterviewStatus.Completed };
 
         private static IQuestionnaireStorage questionnaireRepository;
     }
