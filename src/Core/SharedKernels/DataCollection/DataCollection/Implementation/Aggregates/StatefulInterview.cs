@@ -288,7 +288,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
 
             this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
 
             var becomesValid = !(this.HasInvalidAnswers() || this.HasInvalidStaticTexts);
             if (this.properties.IsValid != becomesValid)
