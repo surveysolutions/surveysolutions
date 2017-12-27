@@ -204,6 +204,7 @@ namespace WB.UI.Headquarters
                     interviewCountLimit).AsNinject(),
                 new QuartzModule().AsNinject(),
                 new WebInterviewModule().AsNinject(),
+                new HqWebInterviewModule().AsNinject(),
                 owinSecurityModule.AsNinject(),
                 mainModule.AsWebNinject());
 

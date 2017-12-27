@@ -154,7 +154,7 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            WebInterviewModule.Configure(app);
+            WebInterviewModule.Configure(app, HqWebInterviewModule.HubPipelineModules);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);
