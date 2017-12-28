@@ -18,42 +18,23 @@
     self.fromDateSelected = ko.observable();
     self.toDateSelected = ko.observable();
 
-    function getFromDatePicker() {
-        return $("#from-date").data("daterangepicker");
-    }
+    self.fromDateSelected.subscribe(function(newValue) {
+        if (newValue == null) return;
 
-    function getToDatePicker() {
-        return $("#to-date").data("daterangepicker");
-    }
+        const picker = $("#to-date").data('datetimepickr_inst');
+        picker.config.minDate = newValue;
 
-    var dateFormat = "YYYY-MM-DD";
-    $("#from-date").daterangepicker({
-            autoUpdateInput: false,
-            showDropdowns: true,
-            singleDatePicker: true,
-            maxDate: new Date()
-        },
-        function (start) {
-            const date = moment(start);
-            getFromDatePicker().setStartDate(date);
-            self.fromDateSelected(date.format(dateFormat));
-            getToDatePicker().minDate = date;
-            self.updateDataExportInfo(false);
-        });
-    $("#to-date").daterangepicker({
-            autoUpdateInput: false,
-            showDropdowns: true,
-            singleDatePicker: true,
-            maxDate: new Date()
-        },
-        function (start) {
-            const date = moment(start);
-            getToDatePicker().setStartDate(date);
-            self.toDateSelected(date.format(dateFormat));
-            getFromDatePicker().maxDate = date;
-            self.updateDataExportInfo(false);
-        });
-    
+        self.updateDataExportInfo(false);
+    });
+
+    self.toDateSelected.subscribe(function(newValue) {
+        if (newValue == null) return;
+
+        const picker = $("#from-date").data('datetimepickr_inst');
+        picker.config.maxDate = newValue;
+
+        self.updateDataExportInfo(false);
+    });
 
     self.selectedTemplateId = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().id;
@@ -72,19 +53,19 @@
     });
     
     self.getRequestQuery = function (format) {
-        const requestDateFormat = "YYYYMMDD";
-        const fromDatePicker = getFromDatePicker();
-        const toDatePicker = getToDatePicker();
-
         const request = {
             id: self.selectedTemplateId(),
             version: self.selectedTemplate().version,
-            status: self.selectedStatus().status,
-            from: fromDatePicker && fromDatePicker.startDate ? fromDatePicker.startDate.format(requestDateFormat) : null,
-            to: toDatePicker && toDatePicker.startDate ? toDatePicker.startDate.format(requestDateFormat) : null
+            status: self.selectedStatus().status
         };
         if (format)
             request["format"] = format;
+
+        if (self.fromDateSelected() != undefined)
+            request["from"] = self.fromDateSelected().toJSON();
+
+        if (self.toDateSelected() != undefined)
+            request["to"] = self.toDateSelected().toJSON();
 
         return $.param(request);
     };
