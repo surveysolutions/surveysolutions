@@ -45,8 +45,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             DataExportFormat format, string statusSuffix, DateTime? fromDate = null, DateTime? toDate = null)
         {
             var questionnaireTitle = GetQuestionnaireTitle(identity);
-            var fromDatePrefix = fromDate == null ? "" : $"_{fromDate.Value:yyyyMMdd}";
-            var toDatePrefix = toDate == null ? "" : $"_{toDate.Value:yyyyMMdd}";
+
+            var fromDatePrefix = fromDate == null ? "" : $"_{fromDate.Value:yyyyMMddTHHmm}Z";
+            var toDatePrefix = toDate == null ? "" : $"_{toDate.Value:yyyyMMddTHHmm}Z";
 
             var archiveName = $"{questionnaireTitle}_{identity.Version}_{format}_{statusSuffix}{fromDatePrefix}{toDatePrefix}.zip";
             return this.fileSystemAccessor.CombinePath(pathToExportedData, archiveName);

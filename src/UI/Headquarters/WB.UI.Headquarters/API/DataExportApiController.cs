@@ -5,7 +5,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
@@ -46,15 +45,15 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage Paradata(Guid id, long version, string from = null, string to = null)
+        public HttpResponseMessage Paradata(Guid id, long version, DateTime? from = null, DateTime? to = null)
             => CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                    new QuestionnaireIdentity(id, version), DataExportFormat.Paradata, null, from.TryParseDate(), to.TryParseDate()));
+                    new QuestionnaireIdentity(id, version), DataExportFormat.Paradata, null, from?.ToUniversalTime(), to?.ToUniversalTime()));
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, string from = null, string to = null)
+        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
             => CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                    new QuestionnaireIdentity(id, version), format, status, from.TryParseDate(), to.TryParseDate()));
+                    new QuestionnaireIdentity(id, version), format, status, from?.ToUniversalTime(), to?.ToUniversalTime()));
 
         [HttpGet]
         [ObserverNotAllowedApi]
@@ -64,18 +63,15 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         [ObserverNotAllowedApi]
         public HttpResponseMessage RequestUpdate(Guid id, long version,
-            DataExportFormat format, InterviewStatus? status, string from = null, string to = null)
+            DataExportFormat format, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
             try
             {
-                DateTime? fromDate = from.TryParseDate();
-                DateTime? toDate = to.TryParseDate();
-
                 this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(format, questionnaireIdentity, null)
                 {
-                    FromDate = fromDate.HasValue ? new DateTime(fromDate.Value.Year, fromDate.Value.Month, fromDate.Value.Day, 0, 0, 1).ToUniversalTime() : (DateTime?)null,
-                    ToDate = toDate.HasValue ? new DateTime(toDate.Value.Year, toDate.Value.Month, toDate.Value.Day, 23, 59, 59).ToUniversalTime() : (DateTime?) null,
+                    FromDate = from?.ToUniversalTime(),
+                    ToDate = to?.ToUniversalTime(),
                     InterviewStatus = status
                 });
             }
@@ -105,9 +101,8 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public DataExportStatusView GetExportStatus(Guid id, long version, InterviewStatus? status, string from = null, string to = null)
-            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(new QuestionnaireIdentity(id, version),
-                status, from.TryParseDate(), to.TryParseDate());
+        public DataExportStatusView GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
+            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(new QuestionnaireIdentity(id, version), status, from?.ToUniversalTime(), to?.ToUniversalTime());
 
         private HttpResponseMessage CreateFile(string filePath)
         {
