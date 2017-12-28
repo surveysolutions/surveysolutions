@@ -1,11 +1,11 @@
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -11,7 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewNotificationService : IWebInterviewNotificationService
     {

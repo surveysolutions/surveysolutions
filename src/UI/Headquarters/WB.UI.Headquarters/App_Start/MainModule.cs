@@ -15,6 +15,8 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
@@ -22,7 +24,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
@@ -69,15 +70,16 @@ namespace WB.UI.Headquarters
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
                 cfg.AddProfile(new AssignmentProfile());
                 cfg.AddProfile(new AssignmentsPublicApiMapProfile());
-                cfg.ConstructServicesUsing(t => _.Get(t));
+                cfg.ConstructServicesUsing(_.Get);
             }).CreateMapper());
-            registry.BindToConstant<JsonSerializer>(() => JsonSerializer.Create(new JsonSerializerSettings
+            registry.BindToConstant(() => JsonSerializer.Create(new JsonSerializerSettings
             {
                 ContractResolver = new FilteredCamelCasePropertyNamesContractResolver
                 {
                     AssembliesToInclude =
                     {
                         typeof(WebInterview).Assembly,
+                        typeof(WebInterviewModule).Assembly,
                         typeof(CategoricalOption).Assembly
                     }
                 }

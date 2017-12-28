@@ -30,6 +30,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;

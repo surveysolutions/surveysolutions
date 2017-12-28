@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public partial class WebInterview : Hub, IErrorDetailsProvider
     {

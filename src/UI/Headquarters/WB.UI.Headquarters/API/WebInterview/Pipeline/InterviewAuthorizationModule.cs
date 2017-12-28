@@ -1,9 +1,9 @@
 using System;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR.Hubs;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline

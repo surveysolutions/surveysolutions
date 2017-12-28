@@ -1,6 +1,6 @@
 using WB.Infrastructure.Native.Monitoring;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.Enumerator.Native.WebInterview.Services
 {
     internal class ConnectionLimiter: IConnectionLimiter
     {

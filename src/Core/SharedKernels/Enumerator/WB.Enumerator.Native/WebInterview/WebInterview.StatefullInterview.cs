@@ -10,11 +10,11 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.WebInterview.Models;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public partial class WebInterview
     {

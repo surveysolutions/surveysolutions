@@ -72,8 +72,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             {
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId, 
                     sectionId == null 
-                    ? WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId)) 
-                    : WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
+                    ? Enumerator.Native.WebInterview.WebInterview.GetConnectedClientPrefilledSectionKey(Guid.Parse(interviewId)) 
+                    : Enumerator.Native.WebInterview.WebInterview.GetConnectedClientSectionKey(Identity.Parse(sectionId), Guid.Parse(interviewId)));
 
                 context.Hub.Groups.Add(context.Hub.Context.ConnectionId, interviewId);
             }

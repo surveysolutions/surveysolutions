@@ -7,9 +7,8 @@ using Microsoft.AspNet.SignalR.Hubs;
 using StackExchange.Exceptional;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.WebInterview.Pipeline
+namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
     public class SignalrErrorHandler : HubPipelineModule
     {

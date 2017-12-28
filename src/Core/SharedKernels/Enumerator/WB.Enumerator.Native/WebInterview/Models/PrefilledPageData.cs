@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace WB.UI.Headquarters.Models.WebInterview
+﻿namespace WB.Enumerator.Native.WebInterview.Models
 {
     public class IdentifyingQuestion
     {

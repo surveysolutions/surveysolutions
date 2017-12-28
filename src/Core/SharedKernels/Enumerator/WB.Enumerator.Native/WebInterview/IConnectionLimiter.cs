@@ -1,4 +1,4 @@
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public interface IConnectionLimiter
     {

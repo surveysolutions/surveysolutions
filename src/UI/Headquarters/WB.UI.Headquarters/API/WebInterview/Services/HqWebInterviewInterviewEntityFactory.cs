@@ -4,7 +4,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.Models.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
+using WB.Enumerator.Native.WebInterview.Services;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
