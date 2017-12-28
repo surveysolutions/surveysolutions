@@ -78,7 +78,7 @@ namespace WB.UI.Headquarters
                 {
                     AssembliesToInclude =
                     {
-                        typeof(WebInterview).Assembly,
+                        typeof(Startup).Assembly,
                         typeof(WebInterviewModule).Assembly,
                         typeof(CategoricalOption).Assembly
                     }
