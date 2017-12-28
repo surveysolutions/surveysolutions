@@ -1,4 +1,6 @@
-﻿namespace WB.Core.SharedKernels.Enumerator.Views
+﻿using System;
+
+namespace WB.Core.SharedKernels.Questionnaire.Api
 {
     public class AttachmentContent 
     {
@@ -10,4 +12,11 @@
 
         public byte[] Content { get; set; }
     }
+
+    public class QuestionnaireLiteInfo
+    {
+        public Guid Id { get; set; }
+        public DateTime LastUpdateDate { get; set; }
+    }
+
 }

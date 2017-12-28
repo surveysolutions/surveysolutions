@@ -110,10 +110,10 @@ namespace WB.Tests.Abc.TestFactories
         public Translation Translation(Guid translationId, string translationName)
             => new Translation { Id = translationId, Name = translationName};
 
-        public Core.SharedKernels.Enumerator.Views.AttachmentContent AttachmentContent_Enumerator(string id)
-            => new Core.SharedKernels.Enumerator.Views.AttachmentContent
+        public WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent AttachmentContent_Enumerator(string id)
+            => new WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent
             {
-                Id = id,
+                Id = id
             };
 
         public AttachmentContent AttachmentContent_SurveyManagement(string contentHash = null, string contentType = null, byte[] content = null)
