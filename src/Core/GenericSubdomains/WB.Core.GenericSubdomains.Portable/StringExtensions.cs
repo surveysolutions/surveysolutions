@@ -162,5 +162,10 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             return Boolean.TryParse(value, out var result) ? result : @default;
         }
+
+        public static int ToInt(this string value, int @default)
+        {
+            return Int32.TryParse(value, out var result) ? result : @default;
+        }
     }
 }

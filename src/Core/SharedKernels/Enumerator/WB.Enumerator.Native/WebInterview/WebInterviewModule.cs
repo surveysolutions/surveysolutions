@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Concurrent;
+using System.Configuration;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Owin;
 using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Modularity;
-using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Services;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -17,7 +18,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             registry.BindAsSingleton<IConnectionsMonitor, ConnectionsMonitor>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewLazyNotificationService>();
-            registry.Bind<IConnectionLimiter, ConnectionLimiter>();
+            registry.BindAsSingletonWithConstructorArgument<IConnectionLimiter, ConnectionLimiter>("connectionsLimit",
+                ConfigurationManager.AppSettings["MaxWebInterviewsCount"].ToInt(100));
 
             registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
 
