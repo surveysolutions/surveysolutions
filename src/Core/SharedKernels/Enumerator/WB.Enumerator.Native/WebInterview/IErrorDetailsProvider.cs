@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public interface IErrorDetailsProvider
     {

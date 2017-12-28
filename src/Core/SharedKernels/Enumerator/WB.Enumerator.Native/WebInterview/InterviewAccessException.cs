@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.UI.Headquarters.Code
+namespace WB.Enumerator.Native.WebInterview
 {
     public class InterviewAccessException : Exception
     {

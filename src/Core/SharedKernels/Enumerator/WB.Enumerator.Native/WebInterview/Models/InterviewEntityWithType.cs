@@ -1,6 +1,4 @@
-using WB.Core.SharedKernels.DataCollection;
-
-namespace WB.UI.Headquarters.Models.WebInterview
+namespace WB.Enumerator.Native.WebInterview.Models
 {
     public class InterviewEntityWithType
     {

@@ -5,12 +5,11 @@ using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Owin;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Modularity;
-using WB.UI.Headquarters.API.WebInterview.Services;
+using WB.Enumerator.Native.WebInterview.Services;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public class WebInterviewModule : IModule
     {

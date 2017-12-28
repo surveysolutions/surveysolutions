@@ -2,7 +2,7 @@
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Services.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public interface IWebInterviewNotificationService
     {

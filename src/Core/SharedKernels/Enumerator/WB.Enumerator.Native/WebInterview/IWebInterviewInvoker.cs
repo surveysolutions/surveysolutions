@@ -1,7 +1,7 @@
 using System;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public interface IWebInterviewInvoker
     {

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Microsoft.AspNet.SignalR.Hubs;
 
-namespace WB.UI.Headquarters.API.WebInterview.Pipeline
+namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
     [Localizable(false)]
     public class WebInterviewConnectionsCounter : HubPipelineModule

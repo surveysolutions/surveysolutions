@@ -3,11 +3,10 @@ using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.UI.Headquarters.Models.WebInterview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
-using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public partial class WebInterview
     {
