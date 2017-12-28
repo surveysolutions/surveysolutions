@@ -1,8 +1,8 @@
 ﻿using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.UI.Headquarters.Models.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 
-namespace WB.UI.Headquarters.API.WebInterview
+namespace WB.Enumerator.Native.WebInterview
 {
     public interface IWebInterviewInterviewEntityFactory
     {

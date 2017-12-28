@@ -3,7 +3,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewInvoker : IWebInterviewInvoker
     {

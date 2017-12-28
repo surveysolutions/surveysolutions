@@ -8,7 +8,7 @@ using Microsoft.AspNet.SignalR.Transports;
 using Ncqrs;
 using WB.Infrastructure.Native.Monitoring;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class ConnectionsMonitor : IConnectionsMonitor
     {

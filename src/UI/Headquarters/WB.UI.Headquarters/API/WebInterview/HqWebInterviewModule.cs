@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.Infrastructure.Modularity;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 using WB.UI.Headquarters.API.WebInterview.Services;
 

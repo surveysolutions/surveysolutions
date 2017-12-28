@@ -12,6 +12,7 @@ using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview

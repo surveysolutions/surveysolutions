@@ -4,9 +4,8 @@ using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 
-namespace WB.UI.Headquarters.Models.WebInterview
+namespace WB.Enumerator.Native.WebInterview.Models
 {
     public class WebInterviewAutoMapProfile : Profile
     {

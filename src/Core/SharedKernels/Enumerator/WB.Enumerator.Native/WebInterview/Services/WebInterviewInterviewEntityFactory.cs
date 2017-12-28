@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using AutoMapper;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.UI.Headquarters.Models.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 
-namespace WB.UI.Headquarters.API.WebInterview.Services
+namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
     {

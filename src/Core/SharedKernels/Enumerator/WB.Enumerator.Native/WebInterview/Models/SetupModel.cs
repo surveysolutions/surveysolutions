@@ -1,7 +1,6 @@
-﻿using System;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+﻿using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.UI.Headquarters.Models.WebInterview
+namespace WB.Enumerator.Native.WebInterview.Models
 {
     public class SetupModel
     {
