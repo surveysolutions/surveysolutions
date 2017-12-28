@@ -210,6 +210,7 @@
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
+    <Compile Include="Api\WebTester\WebTesterController.cs" />
     <Compile Include="App_Start\NinjectWebCommonModule.cs" />
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />

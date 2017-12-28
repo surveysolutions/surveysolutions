@@ -99,6 +99,9 @@
     <Reference Include="Owin">
       <HintPath>..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Refit, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Refit.4.0.1\lib\net45\Refit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -186,6 +189,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\IDesignerWebTesterApi.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
@@ -209,12 +213,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Services\Implementation\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\ApiTest\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -236,6 +242,10 @@
     <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
       <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
+      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
@@ -283,7 +293,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\..\..\packages\Refit.4.0.1\build\net45\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\Refit.4.0.1\build\net45\refit.targets'))" />
   </Target>
+  <Import Project="..\..\..\packages\Refit.4.0.1\build\net45\refit.targets" Condition="Exists('..\..\..\packages\Refit.4.0.1\build\net45\refit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

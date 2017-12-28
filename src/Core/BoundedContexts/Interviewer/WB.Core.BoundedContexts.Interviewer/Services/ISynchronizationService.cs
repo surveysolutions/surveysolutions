@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services

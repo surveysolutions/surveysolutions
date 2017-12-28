@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.Http.Formatting;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -80,7 +81,7 @@ namespace WB.UI.Designer
                 routeTemplate: "api/hq/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
+            
             config.Routes.MapHttpRoute(
                 name: "VersionedHQApiWithAction",
                 routeTemplate: "api/hq/v{version:int}/{controller}/{action}/{id}",
@@ -114,6 +115,8 @@ namespace WB.UI.Designer
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            var xml = config.Formatters.SingleOrDefault(f => f is XmlMediaTypeFormatter);
+            if (xml != null) config.Formatters.Remove(xml);
             config.Formatters.Insert(0, new JsonFormatter());
         } 
     }
