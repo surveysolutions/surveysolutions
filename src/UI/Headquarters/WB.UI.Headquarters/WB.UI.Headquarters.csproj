@@ -1621,43 +1621,36 @@
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
-    <Compile Include="App_GlobalResources\BatchUpload.es.designer.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.es1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BatchUpload.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Common.es.designer.cs" />
     <Compile Include="App_GlobalResources\Common.es1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Common.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Dashboard.es.designer.cs" />
     <Compile Include="App_GlobalResources\Dashboard.es1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Dashboard.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\DataExport.es.designer.cs" />
     <Compile Include="App_GlobalResources\DataExport.es1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataExport.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\HQ.es.designer.cs" />
     <Compile Include="App_GlobalResources\HQ.es1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>HQ.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\Import.es.designer.cs" />
     <Compile Include="App_GlobalResources\Import.es1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Import.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_GlobalResources\MainMenu.es.designer.cs" />
     <Compile Include="App_GlobalResources\MainMenu.es1.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
