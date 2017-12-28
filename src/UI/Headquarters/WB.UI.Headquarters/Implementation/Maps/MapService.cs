@@ -8,27 +8,20 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.UI.Headquarters.Implementation.Maps
 {
-    public class MapPropertiesProvider : IMapPropertiesProvider
+    public class MapService : IMapService
     {
-        private static bool? isEngineOperatible = null;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
-        private void CheckEnvironmentInitialized()
+        public MapService(IFileSystemAccessor fileSystemAccessor)
         {
+            this.fileSystemAccessor = fileSystemAccessor;
+
             if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
                 Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.InstallPath = HostingEnvironment.MapPath(@"~/bin");
         }
 
-        private readonly IFileSystemAccessor fileSystemAccessor;
-
-        public MapPropertiesProvider(IFileSystemAccessor fileSystemAccessor)
-        {
-            this.fileSystemAccessor = fileSystemAccessor;
-        }
-
         public async Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToMap)
         {
-            this.CheckEnvironmentInitialized();
-
             var fileExtension = this.fileSystemAccessor.GetFileExtension(pathToMap);
 
             switch (fileExtension)
@@ -88,24 +81,19 @@ namespace WB.UI.Headquarters.Implementation.Maps
             
         }
 
-        public bool IsMapEngineOperational()
+        public bool IsEngineEnabled()
         {
-            if (isEngineOperatible != null)
-                return isEngineOperatible.Value;
-
-            this.CheckEnvironmentInitialized();
-
             try
             {
-                var map = new Map();
-                isEngineOperatible = true;
+                if (!Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized)
+                    Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.Initialize();
+
+                return Esri.ArcGISRuntime.ArcGISRuntimeEnvironment.IsInitialized;
             }
             catch
             {
-                isEngineOperatible = false;
+                return false;
             }
-
-            return isEngineOperatible.Value;
         }
     }
 }

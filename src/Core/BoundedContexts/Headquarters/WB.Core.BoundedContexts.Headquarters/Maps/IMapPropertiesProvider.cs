@@ -2,9 +2,9 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Maps
 {
-    public interface IMapPropertiesProvider
+    public interface IMapService
     {
         Task<MapProperties> GetMapPropertiesFromFileAsync(string pathToFile);
-        bool IsMapEngineOperational();
+        bool IsEngineEnabled();
     }
 }
