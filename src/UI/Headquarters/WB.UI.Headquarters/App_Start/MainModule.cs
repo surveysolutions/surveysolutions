@@ -96,7 +96,7 @@ namespace WB.UI.Headquarters
 
             registry.Bind<IInterviewCreatorFromAssignment, InterviewCreatorFromAssignment>();
 
-            registry.Bind<IMapPropertiesProvider, MapPropertiesProvider>();
+            registry.Bind<IMapService, MapService>();
         }
 
 

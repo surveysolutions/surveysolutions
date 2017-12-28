@@ -10,13 +10,6 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
     public class ZipArchiveUtils : IArchiveUtils, IProtectedArchiveUtils
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
-
-        public ZipArchiveUtils(IFileSystemAccessor fileSystemAccessor)
-        {
-            this.fileSystemAccessor = fileSystemAccessor;
-        }
-
         public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
         {
             using (var zipFile = new ZipFile
@@ -77,7 +70,28 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
-        
+        public IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray)
+        {
+            using (MemoryStream archivestream = new MemoryStream(archivedFileAsArray))
+            using (ZipFile zip = ZipFile.Read(archivestream))
+            {
+                foreach (var zipEntry in zip.Entries)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        zipEntry.Extract(memoryStream);
+
+                        yield return new ExtractedFile
+                        {
+                            Name = zipEntry.FileName,
+                            Size = zipEntry.UncompressedSize,
+                            Bytes = memoryStream.ToArray()
+                        };
+                    }
+                }
+            }
+        }
+
         public void Unzip(byte[] archivedFileAsArray, string extractToFolder)
         {
             using (MemoryStream stream = new MemoryStream(archivedFileAsArray))
@@ -105,6 +119,22 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 foreach (var zip in zips)
                 {
                     if(zip.IsDirectory)
+                        continue;
+                    result.Add(zip.FileName, zip.UncompressedSize);
+                }
+            }
+            return result;
+        }
+
+        public Dictionary<string, long> GetArchivedFileNamesAndSize(byte[] archivedFileAsArray)
+        {
+            var result = new Dictionary<string, long>();
+            using (MemoryStream archivestream = new MemoryStream(archivedFileAsArray))
+            using (ZipFile zips = ZipFile.Read(archivestream))
+            {
+                foreach (var zip in zips)
+                {
+                    if (zip.IsDirectory)
                         continue;
                     result.Add(zip.FileName, zip.UncompressedSize);
                 }

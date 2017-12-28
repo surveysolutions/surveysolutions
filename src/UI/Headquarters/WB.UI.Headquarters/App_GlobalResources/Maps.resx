@@ -159,4 +159,13 @@
   <data name="MappingsLoadingError" xml:space="preserve">
     <value>Error occurred on map links loading.</value>
   </data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>Error occurred. Archive doesn't contain map files</value>
+  </data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>Error occurred. Archive contains not map files </value>
+  </data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>Invalid file {0}</value>
+  </data>
 </root>
