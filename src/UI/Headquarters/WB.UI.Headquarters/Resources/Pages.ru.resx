@@ -1183,4 +1183,7 @@
   <data name="Map_UploadingError" xml:space="preserve">
     <value>Произошла ошибка во время загрузки</value>
   </data>
+  <data name="Map_UploadingSuccess" xml:space="preserve">
+    <value>Карты успешно загружены</value>
+  </data>
 </root>

@@ -35,7 +35,6 @@ namespace WB.Tests.Unit.Infrastructure
                 Catch.Only<BadPasswordException>(() => zipEntry.Extract(unZippedStream)).ShouldNotBeNull();
         }
 
-        private static ZipArchiveUtils CreateZipArchiveUtils(IFileSystemAccessor fileSystemAccessor = null)
-            => new ZipArchiveUtils(fileSystemAccessor ?? Stub<IFileSystemAccessor>.WithNotEmptyValues);
+        private static ZipArchiveUtils CreateZipArchiveUtils() => new ZipArchiveUtils();
     }
 }

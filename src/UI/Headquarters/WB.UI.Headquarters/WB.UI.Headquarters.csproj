@@ -641,6 +641,7 @@
     <Content Include="App_GlobalResources\Maps.ru.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Maps.ru.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\BatchUpload.es.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -669,6 +670,7 @@
     <Content Include="App_GlobalResources\Maps.es.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Maps.es.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\QuestionnaireClonning.es.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
@@ -1873,7 +1875,8 @@
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
-    <Compile Include="Implementation\Maps\MapPropertiesProvider.cs" />
+    <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
+    <Compile Include="Implementation\Maps\MapService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />

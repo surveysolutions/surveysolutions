@@ -159,4 +159,13 @@
   <data name="MapEngineIsNotInitialized" xml:space="preserve">
     <value>Компонент для карт не был инициализирован. Обратитесь к Вашему администратору сервера.</value>
   </data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>Произошла ошибка. Архив не содержит карт</value>
+  </data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>Произошла ошибка. Архив содержит файлы, которые не являются картами</value>
+  </data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>Неверный файл {0}</value>
+  </data>
 </root>

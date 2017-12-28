@@ -2104,6 +2104,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maps were succesfuly uploaded.
+        /// </summary>
+        public static string Map_UploadingSuccess {
+            get {
+                return ResourceManager.GetString("Map_UploadingSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delink User from map.
         /// </summary>
         public static string MapDetails_DelinkUser {
