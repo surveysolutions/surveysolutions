@@ -19,6 +19,7 @@ namespace WB.UI.WebTester
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new CaptchaModule("recaptcha").AsNinject(),
+                new WebTesterModule().AsNinject(),
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new WebInterviewModule().AsNinject()
             );

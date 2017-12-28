@@ -6,6 +6,7 @@ using Microsoft.Owin;
 using Ninject;
 using Ninject.Web.Common.OwinHost;
 using Owin;
+using WB.UI.Shared.Web.Modules;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
 

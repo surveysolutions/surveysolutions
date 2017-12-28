@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Api;
 
 namespace WB.Core.SharedKernels.Enumerator.Repositories
 {
