@@ -2338,6 +2338,48 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (questionnaire.IsUsingExpressionStorage())
             {
+                InterviewTree interviewTreeCloneForTesting = null;
+
+                if (TestingConditions)
+                {
+                    interviewTreeCloneForTesting = changedInterviewTree.Clone();
+
+                    IInterviewExpressionStorage expressionStorageForTesting = this.GetExpressionStorage();
+                    var interviewPropertiesForExpressionsForTesting = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
+                    expressionStorageForTesting.Initialize(new InterviewStateForExpressions(interviewTreeCloneForTesting, questionnaire, interviewPropertiesForExpressionsForTesting));
+                    using (var updaterForTesting = new InterviewTreeUpdater(expressionStorageForTesting, questionnaire, removeLinkedAnswers))
+                    {
+                        //GC.Collect();
+
+                        //using (GlobalStopwatcher.Scope("old condutions run"))
+                        {
+                            var playOrderForTesting = questionnaire.GetExpressionsPlayOrder();
+                            PlayActionForEachNodeInOrderForTesting(playOrderForTesting, node => node.Accept(updaterForTesting));
+                            PlayActionForEachNodeInOrderForTesting(playOrderForTesting, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updaterForTesting));
+                        }
+
+                        void PlayActionForEachNodeInOrderForTesting(List<Guid> playOrder, Action<IInterviewTreeNode> action)
+                        {
+                            foreach (var entityId in playOrder)
+                            {
+                                var entityIdentities = interviewTreeCloneForTesting.FindEntity(entityId).ToList();
+
+                                foreach (var entity in entityIdentities)
+                                {
+                                    var changedNode = interviewTreeCloneForTesting.GetNodeByIdentity(entity.Identity);
+                                    if (changedNode != null)
+                                    {
+                                        action(changedNode);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
@@ -2345,39 +2387,53 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     if (questionnaire.SupportsExpressionsGraph() && entityIdentity != null)
                     {
-                        var interviewTreeCloneForTesting = TestingConditions ? changedInterviewTree.Clone() : null;
-                        var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity.Id);
-                        PlayActionForEachNodeInOrder(expressionsPlayOrder, node => node.Accept(updater));
-                        var validityExpressionsPlayOrder = questionnaire.GetValidationExpressionsPlayOrder(expressionsPlayOrder);
-                        PlayActionForEachNodeInOrder(validityExpressionsPlayOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
+                        //GC.Collect();
+
+                        //using (GlobalStopwatcher.Scope("new condutions run"))
+                        {
+                            var expressionsPlayOrder = questionnaire.GetExpressionsPlayOrder(entityIdentity.Id);
+                            PlayActionForEachNodeInOrder(expressionsPlayOrder, node => node.Accept(updater));
+                            var validityExpressionsPlayOrder = questionnaire.GetValidationExpressionsPlayOrder(expressionsPlayOrder);
+                            PlayActionForEachNodeInOrder(validityExpressionsPlayOrder, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
+                        }
 
                         if (TestingConditions)
                         {
-                            var playOrderForTesting = questionnaire.GetExpressionsPlayOrder();
-                            PlayActionForEachNodeInOrderForTesting(playOrderForTesting, node => node.Accept(updater));
-                            PlayActionForEachNodeInOrderForTesting(playOrderForTesting, node => (node as IInterviewTreeValidateable)?.AcceptValidity(updater));
-
-                            var treeDifference = FindDifferenceBetweenTrees(interviewTreeCloneForTesting, changedInterviewTree);
+                            var treeDifference = FindDifferenceBetweenTrees(changedInterviewTree, interviewTreeCloneForTesting);
                             if (treeDifference.Count > 0)
-                                throw new ArgumentException($"Found {treeDifference.Count}, first diff is {treeDifference.First().Identity}");
-
-
-                            void PlayActionForEachNodeInOrderForTesting(List<Guid> playOrder, Action<IInterviewTreeNode> action)
                             {
-                                foreach (var entityId in playOrder)
-                                {
-                                    var entityIdentities = interviewTreeCloneForTesting.FindEntity(entityId).ToList();
+                                throw new InterviewException($"ERROR!!! - Found {treeDifference.Count} diffs with changes. First ID {treeDifference.First().Identity}");
 
-                                    foreach (var entity in entityIdentities)
-                                    {
-                                        var changedNode = interviewTreeCloneForTesting.GetNodeByIdentity(entity.Identity);
-                                        if (changedNode != null)
-                                        {
-                                            action(changedNode);
-                                        }
-                                    }
-                                }
+                                /*foreach (var diff in treeDifference)
+                                {
+                                    bool isChangesExists = diff.IsNodeAdded 
+                                        || diff.IsNodeDisabled
+                                        || diff.IsNodeEnabled
+                                        || diff.IsNodeRemoved
+                                        || ((diff as InterviewTreeRosterDiff)?.IsRosterTitleChanged ?? false)
+                                        || ((diff as InterviewTreeGroupDiff)?.IsTitleChanged ?? false)
+                                        || ((diff as InterviewTreeQuestionDiff)?.IsTitleChanged ?? false)
+                                        || ((diff as InterviewTreeQuestionDiff)?.AreLinkedOptionsChanged ?? false)
+                                        || ((diff as InterviewTreeQuestionDiff)?.AreLinkedToListOptionsChanged ?? false)
+                                        || ((diff as InterviewTreeQuestionDiff)?.IsAnswerChanged ?? false)
+                                        || ((diff as InterviewTreeQuestionDiff)?.IsAnswerRemoved ?? false)
+                                        || ((diff as InterviewTreeQuestionDiff)?.NodeIsMarkedAsReadonly ?? false)
+                                        || ((diff as InterviewTreeValidateableDiff)?.AreValidationMessagesChanged ?? false)
+                                        || ((diff as InterviewTreeValidateableDiff)?.ChangedNodeBecameInvalid ?? false)
+                                        || ((diff as InterviewTreeValidateableDiff)?.ChangedNodeBecameValid ?? false)
+                                        || ((diff as InterviewTreeValidateableDiff)?.IsFailedValidationIndexChanged ?? false)
+                                        || ((diff as InterviewTreeVariableDiff)?.IsValueChanged ?? false)
+                                        || ((diff as InterviewTreeStaticTextDiff)?.IsTitleChanged ?? false);
+
+                                    if (isChangesExists)
+                                        //Debug.WriteLine($"ERROR!!! - Found {diff.Identity} with changes");
+                                        throw new InterviewException($"ERROR!!! - Found {diff.Identity} with changes");
+                                }*/
+
+
                             }
+
+                            //GlobalStopwatcher.DumpToDebug();
                         }
                     }
                     else

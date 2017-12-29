@@ -97,14 +97,19 @@ namespace WB.Core.Infrastructure.TopologicalSorter
 
         public List<T> Sort(Dictionary<T, T[]> dependencies)
         {
+            if (dependencies == null || dependencies.Values
+                    .SelectMany(dependentItems => dependentItems)
+                    .Any(dependentItem => !dependencies.ContainsKey(dependentItem)))
+            {
+                throw new ArgumentException("dependencies");
+            }
+
             return Sort(dependencies, default(T));
         }
 
         public List<T> Sort(Dictionary<T, T[]> dependencies, T root)
         {
-            if (dependencies == null || dependencies.Values
-                                                    .SelectMany(dependentItems => dependentItems)
-                                                    .Any(dependentItem => !dependencies.ContainsKey(dependentItem)))
+            if (dependencies == null)
             {
                 throw new ArgumentException("dependencies");
             }
