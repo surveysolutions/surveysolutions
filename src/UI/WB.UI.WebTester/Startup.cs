@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
+using Ninject;
+using Ninject.Web.Common.OwinHost;
 using Owin;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
@@ -13,7 +15,16 @@ namespace WB.UI.WebTester
     {
         public void Configuration(IAppBuilder app)
         {
-            app.MapSignalR(new HubConfiguration { EnableDetailedErrors = true });
+            var kernel = ConfigureNinject(app);
+
+            app.MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
+        }
+
+        private IKernel ConfigureNinject(IAppBuilder app)
+        {
+            var kernel = NinjectConfig.CreateKernel();
+            app.UseNinjectMiddleware(() => kernel);
+            return kernel;
         }
     }
 }
