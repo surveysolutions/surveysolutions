@@ -26,7 +26,7 @@
             @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = QuestionnaireController.QuestionnaireTitle })
             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "help-inline" })
         </div>
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.TextBoxFor(x => x.SubTitle, new { @class = "form-control", placeholder = QuestionnaireController.QuestionnaireSubTitle })
             @Html.ValidationMessageFor(x => x.SubTitle, null, new { @class = "help-inline" })
         </div>
@@ -145,7 +145,7 @@
             <label for="is-agree-to-make-public-questionnaire">
                 <span></span>@QuestionnaireController.AgreeToMakeThisQuestionnairePubic
             </label><br />
-        </div>
+        </div>*@
 
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Create" id="inputSubmitQuestionnaire" />
