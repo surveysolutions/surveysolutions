@@ -61,24 +61,6 @@ namespace WB.Core.BoundedContexts.Tester.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer accepted. Took {0} to process.
-        /// </summary>
-        public static string AnswerRecordedMsg {
-            get {
-                return ResourceManager.GetString("AnswerRecordedMsg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dismiss.
-        /// </summary>
-        public static string AnswerRecordedMsgDismiss {
-            get {
-                return ResourceManager.GetString("AnswerRecordedMsgDismiss", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to list have not been updated.
         /// </summary>
         public static string Dashboard_HaveNotBeenUpdated {
