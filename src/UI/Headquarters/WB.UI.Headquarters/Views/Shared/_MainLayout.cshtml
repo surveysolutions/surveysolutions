@@ -24,20 +24,5 @@
 {
     @Scripts.Render("~/js/main-redesigned")
     @RenderSection("scripts", false)
-
-    <script type="text/javascript">
-        $(function() {
-            if (window.moment) {
-                moment.locale('@UICulture');
-
-                $('time').each(function () {
-                    var me = $(this);
-                    var date = me.attr('datetime') || me.attr('time');
-                    var momentDate = moment.utc(date).local().format('MMM DD, YYYY HH:mm');
-                    me.text(momentDate);
-                });
-            }
-        });
-    </script>
 }
 @RenderBody()
