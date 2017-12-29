@@ -36,7 +36,12 @@
         $(function() {
             var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax, $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
                 $deleteQuestionnaireUrl, $webInterviewUrl);
+            model.toLocalDate = function(data) {
+                if (data === null || data === undefined || data === "") return "";
 
+                var localDate = moment.utc(data).local();
+                return localDate.format(window.CONFIG.dateFormat);
+            }
             model.getDataTableColumns = function() {
                 return [
                     {
@@ -57,10 +62,7 @@
                         name: "ImportDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                         "class": "date",
                         render: function (data, type, row) {
-                            if (data === null || data === undefined || data === "") return "";
-
-                            var localDate = moment.utc(data).local();
-                            return localDate.format(window.CONFIG.dateFormat);;
+                            return model.toLocalDate(data);
                         }
                     },
                     {
@@ -68,10 +70,7 @@
                         name: "LastEntryDate",// case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
                         "class": "date",
                         render: function (data, type, row) {
-                            if (data === null || data === undefined || data === "") return "";
-
-                            var localDate = moment.utc(data).local();
-                            return localDate.format(window.CONFIG.dateFormat);;
+                            return model.toLocalDate(data);
                         }
                     },
                     {
@@ -79,10 +78,7 @@
                         name: "CreationDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
                         "class": "date",
                         render: function (data, type, row) {
-                            if (data === null || data === undefined || data === "") return "";
-
-                            var localDate = moment.utc(data).local();
-                            return localDate.format(window.CONFIG.dateFormat);;
+                            return model.toLocalDate(data);
                         }
                     }
                 ];
