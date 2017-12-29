@@ -1,3 +1,5 @@
+@using System.Diagnostics
+@using AngleSharp.Dom.Events
 @using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
 @model WB.UI.Designer.Models.QuestionnaireViewModel
@@ -29,7 +31,33 @@
             @Html.ValidationMessageFor(x => x.SubTitle, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
-            @Html.EnumDropDownListFor(x => x.StudyType, QuestionnaireController.SelectStudyType, new { @class = "form-control selectpicker", placeholder = QuestionnaireController.StudyType })
+            @Html.DropDownListFor(x => x.StudyType, new []
+            {
+                new SelectListItem() { Text = "Administrative Records" },
+                new SelectListItem() { Text = "Agricultural Census" },
+                new SelectListItem() { Text = "Agricultural Survey" },
+                new SelectListItem() { Text = "Child Labor Survey" },
+                new SelectListItem() { Text = "Core Welfare Indicators Questionnaire" },
+                new SelectListItem() { Text = "Demographic and Health Survey" },
+                new SelectListItem() { Text = "Enterprise Survey" },
+                new SelectListItem() { Text = "Enterprise Census" },
+                new SelectListItem() { Text = "Informal Sector Survey" },
+                new SelectListItem() { Text = "Integrated Survey" },
+                new SelectListItem() { Text = "Multiple Indicator Cluster Survey" },
+                new SelectListItem() { Text = "Labor Force Survey" },
+                new SelectListItem() { Text = "Living Standards Measurement Study" },
+                new SelectListItem() { Text = "Household Health Survey" },
+                new SelectListItem() { Text = "Household Survey" },
+                new SelectListItem() { Text = "Price Survey" },
+                new SelectListItem() { Text = "Priority Survey" },
+                new SelectListItem() { Text = "Population and Housing Census" },
+                new SelectListItem() { Text = "Sample Frame" },
+                new SelectListItem() { Text = "Service Provision Assessments" },
+                new SelectListItem() { Text = "Socio Economic / Monitoring Survey" },
+                new SelectListItem() { Text = "Statistical Info and Monitoring Prog." },
+                new SelectListItem() { Text = "World Fertility Survey" },
+                new SelectListItem() { Text = "World Health Survey" },
+            }, QuestionnaireController.SelectStudyType, new { @class = "form-control selectpicker", placeholder = QuestionnaireController.StudyType })
             @Html.ValidationMessageFor(x => x.StudyType, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
@@ -41,7 +69,18 @@
             @Html.ValidationMessageFor(x => x.VersionNotes, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
-            @Html.EnumDropDownListFor(x => x.KindOfData, QuestionnaireController.SelectKindOfData, new { @class = "form-control selectpicker", placeholder = QuestionnaireController.KindOfData })
+            @Html.DropDownListFor(x => x.KindOfData, new []
+            {
+                new SelectListItem() { Text = "Sample survey data [ssd]" },
+                new SelectListItem() { Text = "Census/enumeration data [cen]" },
+                new SelectListItem() { Text = "Administrative records data [adm]" },
+                new SelectListItem() { Text = "Aggregate data [agg]" },
+                new SelectListItem() { Text = "Clinical data [cli]" },
+                new SelectListItem() { Text = "Event/transaction data [evn]" },
+                new SelectListItem() { Text = "Observation data/ratings [obs]" },
+                new SelectListItem() { Text = "Process-produced data [pro]" },
+                new SelectListItem() { Text = "Time budget diaries [tbd]" },
+            }, QuestionnaireController.SelectKindOfData, new { @class = "form-control selectpicker", placeholder = QuestionnaireController.KindOfData })
             @Html.ValidationMessageFor(x => x.KindOfData, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
@@ -81,7 +120,16 @@
             @Html.ValidationMessageFor(x => x.Consultant, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
-            @Html.EnumDropDownListFor(x => x.ModeOfDataCollection, QuestionnaireController.SelectModeOfDataCollection, new { @class = "form-control selectpicker", placeholder = QuestionnaireController.ModeOfDataCollection })
+            @Html.DropDownListFor(x => x.ModeOfDataCollection, new []
+            {
+                new SelectListItem() { Text = "CAPI" },
+                new SelectListItem() { Text = "CATI" },
+                new SelectListItem() { Text = "Face-to-Face" },
+                new SelectListItem() { Text = "Mail" },
+                new SelectListItem() { Text = "Focus Group" },
+                new SelectListItem() { Text = "Internet" },
+                new SelectListItem() { Text = "Other" },
+            }, QuestionnaireController.SelectModeOfDataCollection, new { @class = "form-control selectpicker", placeholder = QuestionnaireController.ModeOfDataCollection })
             @Html.ValidationMessageFor(x => x.ModeOfDataCollection, null, new { @class = "help-inline" })
         </div>
         <div class="form-group">
