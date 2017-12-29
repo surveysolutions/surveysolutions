@@ -21,6 +21,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.Activities;
@@ -128,6 +129,9 @@ namespace WB.UI.Interviewer
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+
+            // need remove in release this line and setting option
+            Interview.TestingConditions = ServiceLocator.Current.GetInstance<IInterviewerSettings>().TestingConditions;
 
             return container;
         }

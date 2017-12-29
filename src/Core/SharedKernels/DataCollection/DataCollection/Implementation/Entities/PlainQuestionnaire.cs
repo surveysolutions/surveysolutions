@@ -1641,6 +1641,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 HashSet<Guid> entityIds = new HashSet<Guid>();
                 foreach (var entity in entities)
                 {
+                    entityIds.Add(entity);
+
                     if (this.QuestionnaireDocument.ValidationDependencyGraph.TryGetValue(entity, out Guid[] referancecs))
                         referancecs.ForEach(id => entityIds.Add(id));
                 }
