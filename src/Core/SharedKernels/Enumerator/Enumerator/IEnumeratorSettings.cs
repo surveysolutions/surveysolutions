@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator
         bool TestingConditions { get; }
         bool ShowVariables { get; }
         bool ShowLocationOnMap { get; }
+        bool ShowAnswerTime { get; }
     }
 }

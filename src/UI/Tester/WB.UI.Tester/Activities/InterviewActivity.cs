@@ -23,13 +23,10 @@ namespace WB.UI.Tester.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class InterviewActivity : BaseInterviewActivity<InterviewViewModel>
     {
-        private MvxSubscriptionToken answerAcceptedSubsribtion;
         protected override int LanguagesMenuGroupId => Resource.Id.interview_languages;
         protected override int OriginalLanguageMenuItemId => Resource.Id.interview_language_original;
         protected override int LanguagesMenuItemId => Resource.Id.interview_language;
         protected override int MenuId => Resource.Menu.interview;
-        private bool showAnswerAcceptedToast = true;
-        private IMvxMessenger Messenger => ServiceLocator.Current.GetInstance<IMvxMessenger>();
 
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {
@@ -71,51 +68,13 @@ namespace WB.UI.Tester.Activities
 
             var shouldShowVariables = ServiceLocator.Current.GetInstance<IEnumeratorSettings>()?.ShowVariables ?? false;
             if (this.ViewModel.IsVariablesShowed != shouldShowVariables)
-                this.ViewModel?.ReloadCommand?.Execute();
-
-            SetupAnswerTimeMeasurement();
-        }
-
-        private void SetupAnswerTimeMeasurement()
-        {
-            var settings = Mvx.Resolve<TesterSettings>();
-
-            if (settings.ShowAnswerTime && answerAcceptedSubsribtion == null)
-            {
-                answerAcceptedSubsribtion = Messenger.Subscribe<AnswerAcceptedMessage>(msg =>
-                {
-                    if (showAnswerAcceptedToast)
-                    {
-                        var message = string.Format(TesterUIResources.AnswerRecordedMsg,
-                            msg.Elapsed.Humanize(maxUnit: TimeUnit.Minute));
-
-                        Snackbar.Make(this.FindViewById(Resource.Id.drawer_layout),
-                                message,
-                                Snackbar.LengthIndefinite)
-                            .SetAction(TesterUIResources.AnswerRecordedMsgDismiss, view => { })
-                            .Show();
-                    }
-                });
-            }
-        }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-            if (this.answerAcceptedSubsribtion != null)
-            {
-                Messenger.Unsubscribe<AnswerAcceptedMessage>(this.answerAcceptedSubsribtion);
-                this.answerAcceptedSubsribtion.Dispose();
-                this.answerAcceptedSubsribtion = null;
-
-            }
+                this.ViewModel?.ReloadCommand?.Execute();  
         }
 
         [Export("NavigateToApi")]
         public void NavigateToApi(string navigateTo)
         {
             base.Navigate(navigateTo);
-        
         }
     }
 }
