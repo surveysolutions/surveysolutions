@@ -576,4 +576,10 @@
     <value>Непредвиденная ошибка во время начала записи</value>
     <comment>Непредвиденная ошибка во время начала записи</comment>
   </data>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Ответ записан. Продолжительность {0}</value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Скрыть</value>
+  </data>
 </root>

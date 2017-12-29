@@ -73,6 +73,7 @@ namespace WB.UI.Interviewer.Settings
         public bool ShowVariables => false;
         public bool TestingConditions => this.CurrentSettings.TestingConditions ?? false;
         public bool ShowLocationOnMap => this.CurrentSettings.ShowLocationOnMap.GetValueOrDefault(true);
+        public bool ShowAnswerTime => false;
         public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
         public int BufferSize => this.CurrentSettings.CommunicationBufferSize;
         public bool AcceptUnsignedSslCertificate => false;

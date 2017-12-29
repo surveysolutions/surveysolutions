@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.rootLayout);
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
