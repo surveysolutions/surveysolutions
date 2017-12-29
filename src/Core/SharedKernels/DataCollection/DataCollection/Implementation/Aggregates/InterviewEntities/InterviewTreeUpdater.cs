@@ -32,6 +32,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.disabledNodes.Contains(entity.Identity))
                 return;
 
+            if (entity.Parent?.IsDisabled() ?? false)
+                return;
+
             var level = this.GetLevel(entity);
             var result = RunConditionExpression(level.GetConditionExpression(entity.Identity));
             if (result)

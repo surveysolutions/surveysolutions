@@ -21,8 +21,8 @@ namespace WB.Tests.Integration.InterviewTests
             var userId = Guid.Parse("11111111111111111111111111111111");
 
             var questionnaireId = Guid.Parse("77778888000000000000000000000000");
-            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var questionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var variableId      = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var appDomainContext = AppDomainContext.Create();
 
@@ -175,6 +175,98 @@ namespace WB.Tests.Integration.InterviewTests
             appDomainContext = null;
         }
 
+        [Test]
+        public void when_answering_integer_question_should_execute_roster_enablement_condition()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var textQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "i"),
+                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: questionId, enablementCondition: "i != 5", children: new[]
+                    {
+                        Abc.Create.Entity.TextQuestion(textQuestionId)
+                    })
+                );
+
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, 5);
+
+                    return new
+                    {
+                        DisabledQuestionEvent = GetFirstEventByType<QuestionsDisabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.DisabledQuestionEvent, Is.Not.Null);
+            Assert.That(results.DisabledQuestionEvent.Questions.Length, Is.EqualTo(5));
+            Assert.That(results.DisabledQuestionEvent.Questions.Select(e => e.Id).ToArray(), Is.EqualTo(new[] { textQuestionId, textQuestionId, textQuestionId, textQuestionId, textQuestionId }));
+
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        [Test]
+        public void when_answering_single_question_should_filter_options_in_other_question()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId  = Guid.Parse("77778888000000000000000000000000");
+            var intQuestionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var singleQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var singleWithFilterQuestionId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var groupId   = Guid.Parse("99999999999999999999999999999999");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.SingleOptionQuestion(singleQuestionId, variable: "sq", answerCodes: new decimal[] {1, 2, 3}),
+                    Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "i"),
+                    Abc.Create.Entity.Group(groupId, enablementCondition: "i == 5", children: new []{
+                        Abc.Create.Entity.SingleOptionQuestion(singleWithFilterQuestionId, variable: "sf", answerCodes: new decimal[] { 1, 2, 3 }, 
+                            optionsFilterExpression: "sq.InList(2, 3) && @optioncode!=1 || !sq.InList(2, 3) && @optioncode >= 1")
+                    })
+                );
+
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerSingleOptionQuestion(userId, singleQuestionId, RosterVector.Empty, DateTime.Now, 2);
+
+                    return new
+                    {
+                        EnabledQuestionEvent = GetFirstEventByType<QuestionsEnabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.EnabledQuestionEvent, Is.Null);
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
 
     }
 }

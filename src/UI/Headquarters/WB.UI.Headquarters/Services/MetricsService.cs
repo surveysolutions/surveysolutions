@@ -36,6 +36,8 @@ namespace WB.UI.Headquarters.Services
 
                 // configuring address for metrics pushgateway
                 var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
+                if (string.IsNullOrEmpty(metricsGateway))
+                    return;
 
                 // initialize push mechanizm
                 new Prometheus.MetricPusher(metricsGateway, job: "hq",
