@@ -1,6 +1,8 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -42,17 +44,20 @@ namespace WB.UI.Tester.Infrastructure
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingleton<IEventStore, InMemoryEventStore>();
-            registry.BindAsSingleton<ISnapshotStore, InMemoryEventStore>();
-            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
+            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
+
+            registry.Bind<LoginViewModel>();
+            registry.Bind<DashboardViewModel>();
+            registry.Bind<QuestionnaireDownloadViewModel>();
+            registry.Bind<PrefilledQuestionsViewModel>();
+            registry.Bind<InterviewViewModel>();
+
             registry.BindToConstant(() => new SqliteSettings
             {
                 PathToDatabaseDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory("data")
             });
 
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>)); // TODO Move to generic module between IN, T
-
-            registry.BindAsSingleton<IPlainStorage<OptionView>, InMemoryPlainStorage<OptionView>>();
 
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
             registry.BindAsSingleton<ILogger, NLogLogger>();
@@ -76,7 +81,6 @@ namespace WB.UI.Tester.Infrastructure
             registry.BindAsSingletonWithConstructorArgument<IAudioFileStorage, TesterAudioFileStorage>("rootDirectoryPath", basePath);
             registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, TesterImageFileStorage>("rootDirectoryPath", basePath);
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
     }
 }

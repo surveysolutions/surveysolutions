@@ -9,12 +9,9 @@ using Humanizer;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
-using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -25,19 +22,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 {
     public class DashboardViewModel : BaseViewModel
     {
-        private readonly ICommandService commandService;
-
         private CancellationTokenSource tokenSource;
         private readonly IDesignerApiService designerApiService;
 
-        private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
         private IReadOnlyCollection<QuestionnaireListItem> localQuestionnaires = new List<QuestionnaireListItem>();
         private readonly IPlainStorage<QuestionnaireListItem> questionnaireListStorage;
         private readonly IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage;
         private readonly ILogger logger;
-        private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IAsyncRunner asyncRunner;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
 
@@ -45,30 +38,24 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public DashboardViewModel(
             IPrincipal principal,
-            IDesignerApiService designerApiService, 
-            ICommandService commandService, 
-            IQuestionnaireImportService questionnaireImportService,
+            IDesignerApiService designerApiService,
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             IPlainStorage<QuestionnaireListItem> questionnaireListStorage, 
             IPlainStorage<DashboardLastUpdate> dashboardLastUpdateStorage,
             ILogger logger,
-            IAttachmentContentStorage attachmentContentStorage,
             IAsyncRunner asyncRunner,
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(principal, viewModelNavigationService)
         {
             this.designerApiService = designerApiService;
-            this.commandService = commandService;
-            this.questionnaireImportService = questionnaireImportService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.friendlyErrorMessageService = friendlyErrorMessageService;
             this.userInteractionService = userInteractionService;
             this.questionnaireListStorage = questionnaireListStorage;
             this.dashboardLastUpdateStorage = dashboardLastUpdateStorage;
             this.logger = logger;
-            this.attachmentContentStorage = attachmentContentStorage;
             this.asyncRunner = asyncRunner;
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
