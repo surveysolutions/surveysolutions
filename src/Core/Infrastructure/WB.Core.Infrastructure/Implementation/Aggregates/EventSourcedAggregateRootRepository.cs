@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.Implementation.Aggregates
@@ -31,9 +29,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
         {
             Snapshot snapshot = this.snapshotStore.GetSnapshot(aggregateId, int.MaxValue);
 
-            int minVersion = snapshot != null
-                ? snapshot.Version + 1
-                : 0;
+            int minVersion = snapshot?.Version + 1 ?? 0;
 
             IEnumerable<CommittedEvent> events = this.eventStore.Read(aggregateId, minVersion, progress, cancellationToken);
 

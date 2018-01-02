@@ -1,4 +1,5 @@
 ﻿using Ninject;
+using WB.Core.BoundedContexts.Tester;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -19,6 +20,7 @@ namespace WB.UI.WebTester
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
                 new CaptchaModule("recaptcha").AsNinject(),
+                new TesterBoundedContextModule().AsNinject(),
                 new WebTesterModule().AsNinject(),
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new WebInterviewModule().AsNinject()

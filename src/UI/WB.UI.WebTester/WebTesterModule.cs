@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Refit;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester
@@ -18,6 +20,7 @@ namespace WB.UI.WebTester
 
         public void Load(IIocRegistry registry)
         {
+            registry.Bind<IEventSourcedAggregateRootRepository, WebTesterAggregateRootRepository>();
             registry.BindToMethod<IDesignerWebTesterApi>(() => RestService.For<IDesignerWebTesterApi>(DesignerAddress(),
                 new RefitSettings
                 {
