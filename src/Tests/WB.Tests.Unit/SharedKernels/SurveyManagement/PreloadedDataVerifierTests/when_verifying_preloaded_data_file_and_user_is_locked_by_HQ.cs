@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -52,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
 
             //act
-            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] {preloadedDataByFile}, status);
+            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedData(preloadedDataByFile), status);
 
             Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
 

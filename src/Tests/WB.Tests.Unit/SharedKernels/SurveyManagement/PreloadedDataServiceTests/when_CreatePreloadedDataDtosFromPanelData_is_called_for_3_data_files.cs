@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
@@ -60,8 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             var  importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
             
             //act
-            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[]
-                        {
+            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(Create.Entity.PreloadedData(
                             CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId, "nq1"}, new[]
                             {
                                 new[] {"top1", "2"},
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                                     new[] {"1", "21", "1", "top2"},
                                     new[] {"2", "31", "2", "top2"}
                                 }, "nestedroster")
-                        });
+                        ));
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.Length, 2);
