@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -19,16 +18,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Providers
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<InterviewExpressionStatePrototypeProvider>();
 
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader;
 
         public InterviewExpressionStatePrototypeProvider(
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 
-            IFileSystemAccessor fileSystemAccessor, 
             IInterviewExpressionStateUpgrader interviewExpressionStateUpgrader)
         {
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
-            this.fileSystemAccessor = fileSystemAccessor;
             this.interviewExpressionStateUpgrader = interviewExpressionStateUpgrader;
         }
 
