@@ -27,10 +27,10 @@
                     {{questionnaire.title}}
                 </div>
                 <div class="questionnarie-title-buttons">
-                    <span class="text-muted" ng-i18next="[i18next]({questionsCount: '{{questionnaire.questionsCount}}', 
+                    <span class="text-muted" ng-i18next="[i18next]({questionsCount: '{{questionnaire.questionsCount}}',
                                                                     groupsCount: '{{questionnaire.groupsCount}}',
                                                                     rostersCount: '{{questionnaire.rostersCount}}' })QuestionnaireSummary">
-                        
+
                     </span>
                     <input id="verification-btn" type="button" class="btn" ng-i18next="[value]Compile" value="COMPILE" ng-click="verify()" />
                     <span ng-show="verificationStatus.warnings!=null && verificationStatus.errors!=null">
@@ -43,8 +43,7 @@
                         <span data-toggle="modal" ng-show="verificationStatus.warnings.length > 0" class="warning-message ng-hide">
                             <a href="javascript:void(0);"
                                ng-click="showVerificationWarnings()"
-                               ng-i18next="[i18next]({count: verificationStatus.warnings.length})WarningsCounter"
-                               >
+                               ng-i18next="[i18next]({count: verificationStatus.warnings.length})WarningsCounter">
                             </a>
                         </span>
                         <span class="text-success" ng-show="(verificationStatus.warnings.length + verificationStatus.errors.length) === 0" ng-i18next>Ok</span>
@@ -52,7 +51,7 @@
                         <span class="text-success"><em ng-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
-
+                    <input id="webtest-btn" type="button" class="btn" ng-i18next="[value]WebTest" value="WebTest" ng-click="webTest()" />
                 </div>
             </div>
         </div>
