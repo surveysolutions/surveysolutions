@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
+        function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, webTesterService, utilityService, hotkeys, $uibModal, notificationService, userService) {
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,
@@ -149,6 +149,13 @@ angular.module('designerApp')
                         }
                     });
                 }, 500);
+            };
+
+            $scope.webTest = function () {
+                webTesterService.run($state.params.questionnaireId)
+                    .then(function (result) {
+                        window.open(result.data);
+                });
             };
 
             $scope.showVerificationErrors = function () {

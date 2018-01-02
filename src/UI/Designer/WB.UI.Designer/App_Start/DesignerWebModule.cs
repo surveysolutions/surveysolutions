@@ -8,6 +8,8 @@ using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientN
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Designer.Implementation.Services;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Modules;
 
 namespace WB.UI.Designer
@@ -15,7 +17,7 @@ namespace WB.UI.Designer
     /// <summary>
     /// The main module.
     /// </summary>
-    public class MainModule : IWebModule
+    public class DesignerWebModule : IWebModule
     {
         public void Load(IWebIocRegistry registry)
         {
@@ -38,6 +40,7 @@ namespace WB.UI.Designer
                         x.Inject<IMembershipWebServiceUser>()));
 
             registry.Bind<IRecipientNotifier, MailNotifier>();
+            registry.BindAsSingleton<IWebTesterService, WebTesterService>();
         }
     }
 }

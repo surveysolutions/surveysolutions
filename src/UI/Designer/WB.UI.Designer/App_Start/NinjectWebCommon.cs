@@ -99,7 +99,7 @@ namespace WB.UI.Designer.App_Start
                 new DesignerBoundedContextModule(dynamicCompilerSettings).AsNinject(),
                 new QuestionnaireVerificationModule().AsNinject(),
                 new MembershipModule().AsNinject(),
-                new MainModule().AsWebNinject(),
+                new DesignerWebModule().AsWebNinject(),
                 new FileInfrastructureModule().AsNinject(),
                 new ProductVersionModule(typeof(MvcApplication).Assembly).AsNinject(),
                 new NinjectWebCommonModule().AsWebNinject()
