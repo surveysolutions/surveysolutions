@@ -3,6 +3,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
@@ -29,10 +30,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             var importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
 
             // Act
-            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[] {
+            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(Create.Entity.PreloadedData(
                 CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] { new[] { "1", "2" } }, questionnaireDocument.Title),
                 CreatePreloadedDataByFile(new[] { $"{rosterVariable}__id", "nq2", ServiceColumns.InterviewId }, new[] { new[] { "1", "2", "1" } }, rosterVariable)
-            });
+            ));
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result, Has.Length.EqualTo(1));

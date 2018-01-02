@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             string rosterTitle = "roster";
 
             Mock<IPreloadedDataService> preloadedDataServiceMock;
-            PreloadedDataByFile[] files;
+            PreloadedData files;
 
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             var rosterId = Guid.NewGuid();
@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(
                 new[] {$"{rosterTitle}__id", ServiceColumns.InterviewId}, new string[][] {new string[] {"0", "1"}},
                 rosterTitle + ".csv");
-            files = new[] {preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel};
+            files = Create.Entity.PreloadedData(preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel);
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);

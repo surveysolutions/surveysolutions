@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Because of =
            () =>
                result =
-                   importDataParsingService.GetParentDataFile(questionnaireDocument.Title, new[] { CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
+                   importDataParsingService.GetParentDataFile(questionnaireDocument.Title, Create.Entity.PreloadedData(CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title)));
 
         It should_result_be_null = () =>
            result.ShouldBeNull();

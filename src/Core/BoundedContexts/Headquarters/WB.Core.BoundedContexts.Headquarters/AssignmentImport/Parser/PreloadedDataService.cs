@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -86,7 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     header => string.Equals(levelNameWithoutExtension, header.LevelName, StringComparison.OrdinalIgnoreCase));
         }
 
-        public PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels)
+        public PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedData allLevels)
         {
             var levelExportStructure = this.FindLevelInPreloadedData(levelFileName);
             if (levelExportStructure == null)
@@ -108,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             return this.GetDataFileByLevelName(allLevels, parentLevel.LevelName);
         }
 
-        public int[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels)
+        public int[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedData allLevels)
         {
             if (parentIdValues == null || parentIdValues.Length == 0)
                 return null;
@@ -228,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             return parentColumnIndexes;
         }
 
-        public PreloadedDataByFile GetTopLevelData(PreloadedDataByFile[] allLevels)
+        public PreloadedDataByFile GetTopLevelData(PreloadedData allLevels)
         {
             var topLevelExportData =
                 this.exportStructure.HeaderToLevelMap.Values.FirstOrDefault(l => l.LevelScopeVector.Length == 0);
@@ -238,7 +237,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             return this.GetDataFileByLevelName(allLevels, topLevelExportData.LevelName);
         }
 
-        public AssignmentPreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels)
+        public AssignmentPreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedData allLevels)
         {
             var topLevelData = this.GetTopLevelData(allLevels);
             
@@ -417,12 +416,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             }
         }
 
-        private PreloadedDataByFile GetDataFileByLevelName(PreloadedDataByFile[] allLevels, string name)
+        private PreloadedDataByFile GetDataFileByLevelName(PreloadedData allLevels, string name)
         {
-            return allLevels.FirstOrDefault(l => string.Equals(Path.GetFileNameWithoutExtension(l.FileName),name, StringComparison.OrdinalIgnoreCase));
+            return allLevels.Levels.FirstOrDefault(l => string.Equals(Path.GetFileNameWithoutExtension(l.FileName),name, StringComparison.OrdinalIgnoreCase));
         }
 
-        private PreloadedLevelDto[] GetHierarchicalAnswersByLevelName(string levelName, string[] parentIds, PreloadedDataByFile[] rosterData)
+        private PreloadedLevelDto[] GetHierarchicalAnswersByLevelName(string levelName, string[] parentIds, PreloadedData rosterData)
         {
             var result = new List<PreloadedLevelDto>();
             var childFiles = this.GetChildDataFiles(levelName, rosterData);
@@ -538,7 +537,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             return this.dataParser.BuildAnswerFromStringArray(headerIndexes.ToArray(), question);
         }
 
-        private PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedDataByFile[] allLevels)
+        private PreloadedDataByFile[] GetChildDataFiles(string levelFileName, PreloadedData allLevels)
         {
             var levelExportStructure = this.FindLevelInPreloadedData(levelFileName);
             if (levelExportStructure == null)
