@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Refit;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Storage;
@@ -21,6 +23,8 @@ namespace WB.UI.WebTester
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IEventSourcedAggregateRootRepository, WebTesterAggregateRootRepository>();
+            registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
+            registry.BindAsSingleton<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
             registry.BindToMethod<IDesignerWebTesterApi>(() => RestService.For<IDesignerWebTesterApi>(DesignerAddress(),
                 new RefitSettings
                 {

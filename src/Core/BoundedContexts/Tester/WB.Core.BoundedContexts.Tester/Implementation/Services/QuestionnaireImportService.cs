@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    internal class QuestionnaireImportService : IQuestionnaireImportService
+    public class QuestionnaireImportService : IQuestionnaireImportService
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
