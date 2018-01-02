@@ -1,14 +1,9 @@
 using System;
 using Autofac;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Modularity;
 
-namespace WB.UI.Shared.Enumerator.Services.Ninject
+namespace WB.Core.Infrastructure.Modularity.Autofac
 {
-
-    /// <summary>
-    ///  TODO: maybe delete
-    /// </summary>
     public class AutofacModuleAdapter : Module, IIocRegistry
     {
         private readonly IModule module;
@@ -138,7 +133,7 @@ namespace WB.UI.Shared.Enumerator.Services.Ninject
 
         public void BindToMethodInSingletonScope<T>(Func<IModuleContext, T> func, string named = null)
         {
-            throw new NotImplementedException();
+            containerBuilder.Register(ctx => func(null)).SingleInstance();
         }
 
         public void BindToMethodInSingletonScope(Type @interface, Func<IModuleContext, object> func)

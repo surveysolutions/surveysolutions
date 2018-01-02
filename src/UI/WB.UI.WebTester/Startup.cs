@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Reflection;
+using System.Web.Mvc;
+using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.SignalR;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
-using Ninject;
-using Ninject.Web.Common.OwinHost;
 using Owin;
-using WB.UI.Shared.Web.Modules;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.WebTester.Hub;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
 
@@ -16,16 +18,18 @@ namespace WB.UI.WebTester
     {
         public void Configuration(IAppBuilder app)
         {
-            var kernel = ConfigureNinject(app);
+            ContainerBuilder builder = AutofacConfig.CreateKernel();
+            
+            var hubConfiguration = new HubConfiguration {EnableDetailedErrors = true};
+            builder.RegisterHubs(Assembly.GetAssembly(typeof(WebInterviewHub)));
+            builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
-            app.MapSignalR(new HubConfiguration {EnableDetailedErrors = true});
-        }
-
-        private IKernel ConfigureNinject(IAppBuilder app)
-        {
-            var kernel = NinjectConfig.CreateKernel();
-            app.UseNinjectMiddleware(() => kernel);
-            return kernel;
+            var container = builder.Build();
+            GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
+            DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
+            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+            app.UseAutofacMiddleware(container);
+            app.MapSignalR(hubConfiguration);
         }
     }
 }
