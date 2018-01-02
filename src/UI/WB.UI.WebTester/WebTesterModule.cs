@@ -9,6 +9,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
@@ -17,6 +18,8 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.WebTester.Infrastructure;
@@ -51,12 +54,16 @@ namespace WB.UI.WebTester
                     }
                 }));
 
+            // TODO: Find a generic place for each of the dependencies below
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.Bind<ITranslationStorage, TranslationsStorage>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+            registry.Bind(typeof(IPlainStorage<>), typeof(InMemoryPlainStorage<>));
+            registry.Bind<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
+            registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
 
             CommandRegistry
                 .Setup<StatefulInterview>()
