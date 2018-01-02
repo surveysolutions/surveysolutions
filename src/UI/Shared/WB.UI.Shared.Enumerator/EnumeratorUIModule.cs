@@ -47,7 +47,6 @@ namespace WB.UI.Shared.Enumerator
             registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(
                 typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                 typeof(EnumeratorSharedKernelModule).Assembly));
-
             
             registry.Bind<IEnumeratorArchiveUtils, ZipArchiveUtils>();
             registry.BindAsSingleton<IFileSystemAccessor, FileSystemService>();
@@ -60,11 +59,9 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IPasswordHasher, DevicePasswordHasher>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
 
-
             registry.BindToMethod<IGeolocator>(() => CrossGeolocator.Current);
             registry.BindToMethod<IMedia>(() => CrossMedia.Current);
             registry.BindToMethod<IPermissions>(() => CrossPermissions.Current);
-            //
 
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
