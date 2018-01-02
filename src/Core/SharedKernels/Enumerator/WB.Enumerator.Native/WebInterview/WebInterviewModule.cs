@@ -31,7 +31,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 // Ninject calls this method before container innitialization. Just make sure that we can handle this in AutoFac
                 var lazyClients = new Lazy<IHubConnectionContext<dynamic>>(
-                    () => GlobalHost.ConnectionManager.GetHubContext<WebInterview>().Clients);
+                    () => GlobalHost.ConnectionManager.GetHubContext("interview").Clients);
 
                 return new WebInterviewInvoker(lazyClients);
             });
