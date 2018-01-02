@@ -18,7 +18,6 @@ namespace WB.UI.WebTester
 
         public void Load(IIocRegistry registry)
         {
-
             registry.BindToMethod<IDesignerWebTesterApi>(() => RestService.For<IDesignerWebTesterApi>(DesignerAddress(),
                 new RefitSettings
                 {

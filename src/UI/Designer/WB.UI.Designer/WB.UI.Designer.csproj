@@ -294,7 +294,7 @@
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\MainModule.cs" />
+    <Compile Include="App_Start\DesignerWebModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\AccountRepositoryFactory.cs" />
@@ -407,8 +407,10 @@
     <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDeskAuthenticationService.cs" />
+    <Compile Include="Services\IWebTesterService.cs" />
     <Compile Include="Services\IRecaptchaService.cs" />
     <Compile Include="Services\QuestionnaireDowngradeService.cs" />
+    <Compile Include="Implementation\Services\WebTesterService.cs" />
     <Compile Include="Utils\FormatHelper.cs" />
     <Compile Include="Utils\Pdf.cs" />
     <Compile Include="WebServices\Questionnaire\QuestionnaireListRequest.cs" />
@@ -456,6 +458,7 @@
     <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
     <Content Include="questionnaire\details\scripts\services\alertService.js" />
     <Content Include="questionnaire\details\scripts\services\translate.js" />
+    <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="RecaptchaNet.Readme.txt" />

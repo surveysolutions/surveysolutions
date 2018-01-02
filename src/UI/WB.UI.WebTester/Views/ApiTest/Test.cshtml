@@ -1,0 +1,14 @@
+﻿@model WB.UI.WebTester.Controllers.ApiTestModel
+
+@{
+    Layout = null;
+}
+<h2>@Model.Title <sup>@Model.Id</sup></h2>
+<h3>@Model.LastUpdated</h3>
+<p>Translations: @Model.NumOfTranslations</p>
+<ul>
+    @foreach (var attach in Model.Attaches)
+    {
+        <li><img src="data:image/png;base64, @attach" /></li>
+    }
+</ul>
