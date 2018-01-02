@@ -184,6 +184,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hub\WebInterviewHub.cs" />
+    <Compile Include="Infrastructure\WebTesterAggregateRootRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Common.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -225,6 +226,10 @@
     <Content Include="Views\ApiTest\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
+      <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
+      <Name>WB.Core.BoundedContexts.Tester</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
