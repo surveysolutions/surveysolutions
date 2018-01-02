@@ -41,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                     },
                     fileName: "nestedRoster"),
                 new ValueVector<Guid> {rosterGroupId, nestedRosterId}, new[] {"1", "1", "1"},
-                new PreloadedDataByFile[0]);
+                Create.Entity.PreloadedData(new PreloadedDataByFile[0]));
 
 
             Assert.IsNotNull(result);

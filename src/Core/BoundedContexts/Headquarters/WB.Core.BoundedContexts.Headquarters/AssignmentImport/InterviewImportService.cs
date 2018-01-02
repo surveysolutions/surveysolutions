@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             try
             {
-                PreloadedDataByFile[] preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
+                PreloadedData preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
 
                 this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
 

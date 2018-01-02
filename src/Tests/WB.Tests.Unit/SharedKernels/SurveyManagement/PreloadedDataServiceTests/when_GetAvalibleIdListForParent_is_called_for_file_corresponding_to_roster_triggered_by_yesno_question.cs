@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             Assert.DoesNotThrow(() => preloadedDataService.GetAvailableIdListForParent(
                 CreatePreloadedDataByFile(new[] {"Id", ynVariable + "__1"}, new[] {new[] {"1", "1"}},
                     questionnaireDocument.Title), new ValueVector<Guid> {ynQuestionId}, new[] {"1"},
-                new PreloadedDataByFile[0]));
+                Create.Entity.PreloadedData()));
         }
     }
 }

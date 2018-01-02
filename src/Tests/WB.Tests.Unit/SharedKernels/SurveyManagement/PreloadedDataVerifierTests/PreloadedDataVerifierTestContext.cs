@@ -42,24 +42,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         {
             status = Create.Entity.AssignmentImportStatus();
 
-            var questionnaire = (questionnaireDocument == null
+            var questionnaire = questionnaireDocument == null
                 ? null
-                : Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
+                : Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
             
 
-            var questionnaireExportStructure = (questionnaireDocument == null
+            var questionnaireExportStructure = questionnaireDocument == null
                 ? null
                 : new ExportViewFactory(Mock.Of<IFileSystemAccessor>(), 
-                                        new ExportQuestionService(),
-                                        Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) && 
-                                                                            x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                                        new RosterStructureService(),
-                                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
-                                       .CreateQuestionnaireExportStructure(new QuestionnaireIdentity()));
+                        new ExportQuestionService(),
+                        Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) && 
+                                                            x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
+                        new RosterStructureService(),
+                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
+                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity());
 
-            var questionnaireRosterStructure = (questionnaireDocument == null
+            var questionnaireRosterStructure = questionnaireDocument == null
                 ? null
-                : new RosterStructureService().GetRosterScopes(questionnaireDocument));
+                : new RosterStructureService().GetRosterScopes(questionnaireDocument);
 
             var preloadedService = new ImportDataParsingService(questionnaireExportStructure, questionnaireRosterStructure,
                 questionnaireDocument, new QuestionDataParser(), Mock.Of<IUserViewFactory>());

@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId);
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId).Levels;
 
         It should_result_has_0_elements = () =>
             result.Length.ShouldEqual(0);
