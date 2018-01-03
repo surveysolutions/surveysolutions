@@ -14,7 +14,7 @@ using WB.Enumerator.Native.WebInterview;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
-    
+    [HubName(@"interview")]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview
     {
         private readonly IAuthorizedUser authorizedUser;
