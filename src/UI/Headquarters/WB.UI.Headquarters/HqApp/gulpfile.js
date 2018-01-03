@@ -3,10 +3,12 @@ const webpack = require("webpack")
 const utils = require('gulp-util')
 const merge = require('webpack-merge');
 const rimraf = require("rimraf");
-const debug = require('gulp-debug');
+//const debug = require('gulp-debug');
 const plugins = require('gulp-load-plugins')();
-const jest = require('jest-cli');
+//const jest = require('jest-cli');
 const fs = require("fs")
+
+const isDevMode = !utils.env.production
 
 const config = {
     dist: 'dist',
@@ -20,7 +22,7 @@ config.resources = {
 
 gulp.task("webTester", ['build'], function(){
     return gulp.src(config.dist + "/**/*.*")
-        .pipe(plugins.filter(['**/*.js', '**/*.css']))
+        .pipe(plugins.filter(['**/*.js', isDevMode ? '**/*.map' : null, '**/*.css'].filter((x) => x)))
         .pipe(gulp.dest('../../../WB.UI.WebTester/Content/Dist'));
 });
 
@@ -31,7 +33,7 @@ gulp.task("build", ["resx2json", "vendor"], (done) => {
         plugins: []
     }
 
-    if (!utils.env.production) {
+    if (isDevMode) {
         opts.plugins.push(new webpack.ProgressPlugin());
     } else {
         process.env.NODE_ENV = 'production';
@@ -86,7 +88,7 @@ gulp.task('resx2json', ["cleanup"], () => {
 });
 
 gulp.task('cleanup', (cb) => {
-    if (utils.env.production || process.env.FORCE_CLEANUP) {
+    if (!isDevMode || process.env.FORCE_CLEANUP) {
         rimraf.sync(config.dist + "/**/*.*")
         rimraf.sync(config.resources.dest + "/**/*.*")
         rimraf.sync(config.hqViews + "/partial.*.cshtml")
@@ -99,7 +101,7 @@ gulp.task("vendor", ["cleanup"], (done) => {
         if (err) {
             utils.log(utils.colors.yellow("Building VENDOR DLL libs"));
 
-            if (utils.env.production) {
+            if (!isDevMode) {
                 process.env.NODE_ENV = 'production';
             }
 
