@@ -31,10 +31,10 @@ namespace WB.UI.WebTester.Controllers
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
         }
 
-        public async Task<ActionResult> Run(string id)
+        public async Task<ActionResult> Run(Guid id)
         {
-            var questionnaire = await webTesterApi.GetQuestionnaireAsync(id);
-            var translations = await webTesterApi.GetTranslationsAsync(id);
+            var questionnaire = await webTesterApi.GetQuestionnaireAsync(id.ToString());
+            var translations = await webTesterApi.GetTranslationsAsync(id.ToString());
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
 
             this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, 
@@ -42,8 +42,9 @@ namespace WB.UI.WebTester.Controllers
                 questionnaire.Assembly,
                 translations);
 
+            var interviewId = Guid.NewGuid();
             this.commandService.Execute(new CreateInterview(
-                interviewId: Guid.NewGuid(),
+                interviewId: interviewId,
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 questionnaireId: questionnaireIdentity, 
                 answers: new List<InterviewAnswer>(), 
@@ -53,6 +54,11 @@ namespace WB.UI.WebTester.Controllers
                 interviewKey: null,
                 assignmentId: null));
 
+            return RedirectToAction("Interview", new {id = interviewId});
+        }
+
+        public ActionResult Interview(Guid id)
+        {
             return View();
         }
     }
