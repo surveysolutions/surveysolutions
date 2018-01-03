@@ -22,8 +22,8 @@ namespace WB.UI.Headquarters.Controllers
         {
             Api = new
             {
-                InterviewsUrl = Url.Action("Interviews", "HQ"),
-                SupervisorsUrl = Url.Action("Index", "Supervisor"),
+                UploadUsersUrl = Url.Action("Index"),
+                QuestionnairesUrl = Url.Action("Index", "SurveySetup"),
                 ImportUsersTemplateUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportUsersTemplate" }),
                 ImportUsersUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportUsers" }),
                 ImportUsersStatusUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "UsersApi", action = "ImportStatus" }),
