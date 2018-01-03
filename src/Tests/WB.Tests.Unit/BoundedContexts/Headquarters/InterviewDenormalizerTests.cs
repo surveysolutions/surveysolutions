@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var interviewDenormalizer = CrateInterviewDenormalizer(summaries: mockOfSummaryRepo.Object,
                 questionnaireStorage: mockOfQuestionnaireStorage.Object);
 
-            var state = Create.Entity.EntitiesState<InterviewEntity>();
+            var state = Create.Entity.InterviewState(interviewId);
 
             interviewDenormalizer.Update(state, Create.PublishedEvent.InterviewCreated(interviewId,
                 questionnaireId: questionnaireId.ToString(), questionnaireVersion: questionnaireVersion));
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var interviewDenormalizer = CrateInterviewDenormalizer(summaries: mockOfSummaryRepo.Object,
                 questionnaireStorage: mockOfQuestionnaireStorage.Object);
             
-            var state = Create.Entity.EntitiesState<InterviewEntity>();
+            var state = Create.Entity.InterviewState(interviewId);
 
             //act
             interviewDenormalizer.Update(state, Create.PublishedEvent.RosterInstancesRemoved(interviewId));
@@ -91,7 +91,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             //arrange
             var interviewDenormalizer = CrateInterviewDenormalizer(mockOfInterviewFactory.Object, mockOfSummaryRepo.Object);
 
-            var state = Create.Entity.EntitiesState<InterviewEntity>();
+            var state = Create.Entity.InterviewState(interviewId);
             interviewDenormalizer.Update(state, Create.PublishedEvent.RosterInstancesRemoved(interviewId));
 
             //act

@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dapper;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -19,6 +22,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -206,88 +210,215 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     })
                 .ToArray();
 
-        public void Save(InterviewEntity[] addedOrUpdatedEntities, InterviewEntity[] removedEntities)
+        public void Save(QuestionnaireIdentity questionnaireId, InterviewState state)
         {
-            if (removedEntities.Any())
+            if (state.Removed.Any())
+                this.RemoveEntities(state.Id, state.Removed.ToArray());
+
+            if (state.ReadOnly.Any())
+                this.MarkQuestionsAsReadOnly(state.Id, state.ReadOnly.ToArray());
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId);
+
+            if (state.Enablement.Any())
+                this.EnableOrDisableEntities(state.Id, state.Enablement, questionnaire);
+
+            if (state.Validity.Any())
+                this.MakeEntitiesValidOrInvalid(state.Id, state.Validity, questionnaire);
+
+            if (state.Answers.Any())
+                this.UpdateAnswers(state.Id, state.Answers, questionnaire);
+        }
+
+        private void RemoveEntities(Guid interviewId, Identity[] entities)
+        {
+            sessionProvider.GetSession().Connection.Execute(
+                $"DELETE FROM {InterviewsTableName} " +
+                $"WHERE {InterviewIdColumn} = @InterviewId " +
+                $"AND {EntityIdColumn} = @EntityId " +
+                $"AND {RosterVectorColumn} = @RosterVector",
+                entities.Select(x => new
+                {
+                    InterviewId = interviewId,
+                    EntityId = x.Id,
+                    RosterVector = x.RosterVector.Array
+                }).ToArray());
+        }
+
+        private void MakeEntitiesValidOrInvalid(Guid interviewId, Dictionary<Identity, int[]> validity, QuestionnaireDocument questionnaire)
+            => this.sessionProvider.GetSession().Connection.Execute(
+                $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {InvalidValidationsColumn}) " +
+                "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @InvalidValidations) " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
+                "DO UPDATE SET " +
+                $"{InvalidValidationsColumn} = @InvalidValidations;",
+                validity.Select(x => new
+                {
+                    InterviewId = interviewId,
+                    EntityId = x.Key.Id,
+                    RosterVector = x.Key.RosterVector.Array,
+                    EntityType = GetEntityType(x.Key.Id, questionnaire),
+                    InvalidValidations = x.Value
+                }));
+
+        private void EnableOrDisableEntities(Guid interviewId, Dictionary<Identity, bool> enablement, QuestionnaireDocument questionnaire)
+            => this.sessionProvider.GetSession().Connection.Execute(
+                $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {EnabledColumn}) " +
+                "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @Enabled) " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
+                "DO UPDATE SET " +
+                $"{EnabledColumn} = @Enabled;",
+                enablement.Select(x => new
+                {
+                    InterviewId = interviewId,
+                    EntityId = x.Key.Id,
+                    RosterVector = x.Key.RosterVector.Array,
+                    EntityType = GetEntityType(x.Key.Id, questionnaire),
+                    Enabled = x.Value
+                }));
+
+        private void MarkQuestionsAsReadOnly(Guid interviewId, Identity[] questionIds)
+            => this.sessionProvider.GetSession().Connection.Execute(
+                $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {ReadOnlyColumn}) " +
+                "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, true) " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
+                "DO UPDATE SET " +
+                $"{ReadOnlyColumn} = true;",
+                questionIds.Select(x => new
+                {
+                    InterviewId = interviewId,
+                    EntityId = x.Id,
+                    RosterVector = x.RosterVector.Array,
+                    EntityType = EntityType.Question
+                }));
+
+        private void UpdateAnswers(Guid interviewId, Dictionary<Identity, object> answers, QuestionnaireDocument questionnaire)
+            => this.sessionProvider.GetSession().Connection.Execute(
+                $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AnswerTypeColumn}, {AsIntColumn}, {AsDoubleColumn}, " +
+                $"{AsLongColumn}, {AsStringColumn}, {AsDateTimeColumn}, {AsBoolColumn}, {AsIntArrayColumn}, {AsListColumn}, {AsYesNoColumn}, {AsIntMatrixColumn}, {AsGpsColumn}, " +
+                $"{AsAudioColumn}, {AsAreaColumn}) " +
+                "VALUES(@InterviewId, @EntityId, @RosterVector, @EntityType, @AnswerType, @AsInt, @AsDouble, @AsLong, @AsString, @AsDateTime, @AsBool, @AsIntArray, " +
+                "@AsList, @AsYesNo, @AsIntMatrix, @AsGps, @AsAudio, @AsArea) " +
+                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
+                "DO UPDATE SET " +
+                $"{EntityTypeColumn} = @EntityType, " +
+                $"{AnswerTypeColumn} = @AnswerType, " +
+                $"{AsIntColumn} = @AsInt, " +
+                $"{AsDoubleColumn} = @AsDouble, " +
+                $"{AsLongColumn} = @AsLong, " +
+                $"{AsStringColumn} = @AsString, " +
+                $"{AsDateTimeColumn} = @AsDateTime, " +
+                $"{AsBoolColumn} = @AsBool, " +
+                $"{AsIntArrayColumn} = @AsIntArray, " +
+                $"{AsListColumn} = @AsList, " +
+                $"{AsYesNoColumn} = @AsYesNo, " +
+                $"{AsIntMatrixColumn} = @AsIntMatrix, " +
+                $"{AsGpsColumn} = @AsGps, " +
+                $"{AsAudioColumn} = @AsAudio, " +
+                $"{AsAreaColumn} = @AsArea;",
+                answers.Select(x => new
+                {
+                    InterviewId = interviewId,
+                    EntityId = x.Key.Id,
+                    RosterVector = x.Key.RosterVector.Array,
+                    EntityType = GetEntityType(x.Key.Id, questionnaire),
+                    AnswerType = GetAnswerType(x.Key.Id, questionnaire),
+                    AsInt = x.Value as int?,
+                    AsDouble = x.Value as double?,
+                    AsLong = x.Value as long?,
+                    AsString = x.Value as string,
+                    AsDateTime = x.Value as DateTime?,
+                    AsBool = x.Value as bool?,
+                    AsIntArray = x.Value as int[],
+                    AsList = x.Value as InterviewTextListAnswer[],
+                    AsYesNo = x.Value as AnsweredYesNoOption[],
+                    AsIntMatrix = x.Value as int[][],
+                    AsGps = x.Value as GeoPosition,
+                    AsAudio = x.Value as AudioAnswer,
+                    AsArea = x.Value as Area
+                }));
+
+        private AnswerType? GetAnswerType(Guid entityId, QuestionnaireDocument questionnaire)
+        {
+            var entity = questionnaire.Find<IComposite>(entityId);
+            var variable = entity as IVariable;
+            var question = entity as IQuestion;
+
+            if (variable != null)
             {
-                sessionProvider.GetSession().Connection.Execute(
-                    $"DELETE FROM {InterviewsTableName} " +
-                    $"WHERE {InterviewIdColumn} = @{nameof(InterviewEntity.InterviewId)} " +
-                    $"AND {EntityIdColumn} = @EntityId " +
-                    $"AND {RosterVectorColumn} = @RosterVector",
-                    removedEntities.Select(x => new
-                    {
-                        x.InterviewId,
-                        EntityId = x.Identity.Id,
-                        RosterVector = x.Identity.RosterVector.Array
-                    }).ToArray());
+                switch (variable.Type)
+                {
+                    case VariableType.Boolean:
+                        return AnswerType.Bool;
+                    case VariableType.DateTime:
+                        return AnswerType.Datetime;
+                    case VariableType.Double:
+                        return AnswerType.Double;
+                    case VariableType.LongInteger:
+                        return AnswerType.Long;
+                    case VariableType.String:
+                        return AnswerType.String;
+                }
             }
 
-            if (addedOrUpdatedEntities.Any())
+            if (question != null)
             {
-                sessionProvider.GetSession().Connection.Execute(
-                    $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {EntityTypeColumn}, {AnswerTypeColumn}, " +
-                    $"{InvalidValidationsColumn}, {ReadOnlyColumn}, " +
-                    $"{AsAreaColumn}, {AsAudioColumn}, {AsBoolColumn}, {AsDateTimeColumn}, " +
-                    $"{AsDoubleColumn}, {AsGpsColumn}, {AsIntArrayColumn}, {AsIntColumn}, " +
-                    $"{AsIntMatrixColumn}, {AsListColumn}, {AsLongColumn}, {AsStringColumn}, " +
-                    $"{AsYesNoColumn}) " +
-                    $"VALUES(@{nameof(InterviewEntity.InterviewId)}, @EntityId, @RosterVector, " +
-                    $"@{nameof(InterviewEntity.EntityType)}, @{nameof(InterviewEntity.AnswerType)}, " +
-                    $"@{nameof(InterviewEntity.InvalidValidations)}, @{nameof(InterviewEntity.IsReadonly)}, " +
-                    $"@{nameof(InterviewEntity.AsArea)}, @{nameof(InterviewEntity.AsAudio)}, " +
-                    $"@{nameof(InterviewEntity.AsBool)}, @{nameof(InterviewEntity.AsDateTime)}, " +
-                    $"@{nameof(InterviewEntity.AsDouble)}, @{nameof(InterviewEntity.AsGps)}, " +
-                    $"@{nameof(InterviewEntity.AsIntArray)}, @{nameof(InterviewEntity.AsInt)}, " +
-                    $"@{nameof(InterviewEntity.AsIntMatrix)}, @{nameof(InterviewEntity.AsList)}, " +
-                    $"@{nameof(InterviewEntity.AsLong)}, @{nameof(InterviewEntity.AsString)}, " +
-                    $"@{AsYesNoColumn}) " +
-                    $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
-                    "DO UPDATE SET " +
-                    $"{AnswerTypeColumn} = @{nameof(InterviewEntity.AnswerType)}, " +
-                    $"{InvalidValidationsColumn} = @{nameof(InterviewEntity.InvalidValidations)}, " +
-                    $"{ReadOnlyColumn} = @{nameof(InterviewEntity.IsReadonly)}, " +
-                    $"{AsAreaColumn} = @{nameof(InterviewEntity.AsArea)}, " +
-                    $"{AsAudioColumn} = @{nameof(InterviewEntity.AsAudio)}, " +
-                    $"{AsBoolColumn} = @{nameof(InterviewEntity.AsBool)}, " +
-                    $"{AsDateTimeColumn} = @{nameof(InterviewEntity.AsDateTime)}, " +
-                    $"{AsDoubleColumn} = @{nameof(InterviewEntity.AsDouble)}, " +
-                    $"{AsGpsColumn} = @{nameof(InterviewEntity.AsGps)}, " +
-                    $"{AsIntArrayColumn} = @{nameof(InterviewEntity.AsIntArray)}, " +
-                    $"{AsIntColumn} = @{nameof(InterviewEntity.AsInt)}, " +
-                    $"{AsIntMatrixColumn} = @{nameof(InterviewEntity.AsIntMatrix)}, " +
-                    $"{AsListColumn} = @{nameof(InterviewEntity.AsList)}, " +
-                    $"{AsLongColumn} = @{nameof(InterviewEntity.AsLong)}, " +
-                    $"{AsStringColumn} = @{nameof(InterviewEntity.AsString)}, " +
-                    $"{AsYesNoColumn} = @{nameof(InterviewEntity.AsYesNo)}",
-                    addedOrUpdatedEntities.Select(x => new
+                switch (question.QuestionType)
+                {
+                    case QuestionType.SingleOption:
+                        if (question.LinkedToRosterId.HasValue ||
+                            (question.LinkedToQuestionId.HasValue && questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value).QuestionType != QuestionType.TextList))
+                            return AnswerType.IntArray;
+                        else return AnswerType.Int;
+                    case QuestionType.MultyOption:
                     {
-                        x.InterviewId,
-                        EntityId = x.Identity.Id,
-                        RosterVector = x.Identity.RosterVector.Array,
-                        x.EntityType,
-                        x.AnswerType,
-                        x.IsEnabled,
-                        x.IsReadonly,
-                        x.HasFlag,
-                        x.InvalidValidations,
-                        x.AsString,
-                        x.AsInt,
-                        x.AsBool,
-                        x.AsDouble,
-                        x.AsDateTime,
-                        x.AsLong,
-                        x.AsIntArray,
-                        x.AsIntMatrix,
-                        x.AsGps,
-                        x.AsList,
-                        x.AsYesNo,
-                        x.AsAudio,
-                        x.AsArea
-                    }).ToList());
+                        if ((question as IMultyOptionsQuestion)?.YesNoView ?? false)
+                            return AnswerType.YesNoList;
+
+                        if (question.LinkedToRosterId.HasValue ||
+                            (question.LinkedToQuestionId.HasValue && questionnaire.Find<IQuestion>(question.LinkedToQuestionId.Value).QuestionType != QuestionType.TextList))
+                            return AnswerType.IntMatrix;
+
+                        return AnswerType.IntArray;
+                    }
+                    case QuestionType.DateTime:
+                        return AnswerType.Datetime;
+                    case QuestionType.GpsCoordinates:
+                        return AnswerType.Gps;
+                    case QuestionType.Multimedia:
+                        return AnswerType.String;
+                    case QuestionType.Numeric:
+                        if ((question as INumericQuestion)?.IsInteger ?? false)
+                            return AnswerType.Int;
+                        else return AnswerType.Double;
+                    case QuestionType.QRBarcode:
+                        return AnswerType.String;
+                    case QuestionType.Area:
+                        return AnswerType.Area;
+                    case QuestionType.Text:
+                        return AnswerType.String;
+                    case QuestionType.TextList:
+                        return AnswerType.TextList;
+                    case QuestionType.Audio:
+                        return AnswerType.Audio;
+                }
             }
+
+            return null;
         }
-        
+
+        private EntityType GetEntityType(Guid entityId, QuestionnaireDocument questionnaire)
+        {
+            var entity = questionnaire.Find<IComposite>(entityId);
+
+            if (entity is IQuestion) return EntityType.Question;
+            if (entity is IVariable) return EntityType.Variable;
+            if (entity is IStaticText) return EntityType.StaticText;
+            if (entity is IGroup) return EntityType.Section;
+
+            throw new NotSupportedException("Unknown entity type");
+        }
+
         #region Obsolete InterviewData
 
         private IEntitySerializer<T> GetSerializer<T>() where T : class =>

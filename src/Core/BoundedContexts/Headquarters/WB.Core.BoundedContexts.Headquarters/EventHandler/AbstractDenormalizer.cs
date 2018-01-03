@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    internal abstract class AbstractDenormalizer<TEntity> : IFunctionalEventHandler where TEntity : class, IReadSideRepositoryEntity
+    internal abstract class AbstractDenormalizer<TEntity> : IFunctionalEventHandler where TEntity : class
     {
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            var state = new EntitiesState<TEntity>();
+            var state = (TEntity) Activator.CreateInstance(typeof(TEntity), new {Id = eventSourceId});
 
             foreach (var publishableEvent in publishableEvents)
             {
@@ -21,17 +19,17 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
                 var eventType = typeof(IPublishedEvent<>).MakeGenericType(publishableEvent.Payload.GetType());
 
-                this.GetType().GetTypeInfo().GetMethod("Update", new[] { typeof(EntitiesState<TEntity>), eventType })
+                this.GetType().GetTypeInfo().GetMethod("Update", new[] { typeof(TEntity), eventType })
                     .Invoke(this, new object[] { state, this.CreatePublishedEvent(publishableEvent) });
 
                 if (state == null) break;
             }
 
-            if (state != null && (state.Removed.Any() || state.AddedOrUpdated.Any()))
+            if (state != null)
                 this.SaveState(state);
         }
 
-        protected abstract void SaveState(EntitiesState<TEntity> state);
+        protected abstract void SaveState(TEntity state);
 
         protected PublishedEvent CreatePublishedEvent(IUncommittedEvent evt)
         {
