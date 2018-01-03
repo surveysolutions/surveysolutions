@@ -1891,6 +1891,6 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public EntitiesState<T> EntitiesState<T>() => new EntitiesState<T>();
+        public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
     }
 }
