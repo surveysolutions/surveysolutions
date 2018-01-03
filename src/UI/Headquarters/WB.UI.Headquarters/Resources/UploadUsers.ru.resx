@@ -165,8 +165,8 @@
   <data name="Line" xml:space="preserve">
     <value>строка</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Интервью</value>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Опросники</value>
   </data>
   <data name="Column" xml:space="preserve">
     <value>столбец</value>
@@ -186,9 +186,6 @@
   <data name="ReUploadTabFile" xml:space="preserve">
     <value>Загрузить .tab файл снова</value>
   </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Супервизоры</value>
-  </data>
   <data name="Uploading" xml:space="preserve">
     <value>Импорт {{importedUsersCount}} из {{totalUsersToImportCount}}</value>
   </data>
@@ -199,7 +196,7 @@
     <value>Пароль должен содержать как минимум одну цифру, одну букву в верхнем регистре и одну букву в нижнем регистре</value>
   </data>
   <data name="CompleteDescription" xml:space="preserve">
-    <value>Вы можете назначить интервью на эти команды на странице 'интервью', интервью также могут быть созданы и назначены в пакетном режиме</value>
+    <value>Вы можете создать новые задания для новых пользователей на странице 'опросники', задания также могут быть созданы в пакетном режиме</value>
   </data>
   <data name="AssignedToDescription" xml:space="preserve">
     <value>обязательно для интревьюеров, содержит имя супервизора, к которому будет назначен новый пользователь</value>

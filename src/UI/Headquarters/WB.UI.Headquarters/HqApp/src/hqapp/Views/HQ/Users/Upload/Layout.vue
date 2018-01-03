@@ -5,7 +5,10 @@
                 <div class="page-header">
                     <ol class="breadcrumb">
                         <li>
-                            <a href="#">{{$t('MainMenu.TeamsAndRoles')}}</a>
+                            <a>{{$t('MainMenu.TeamsAndRoles')}}</a>
+                        </li>
+                        <li>
+                            <a v-bind:href="$config.model.api.uploadUsersUrl">{{$t('MainMenu.UserBatchUpload')}}</a>
                         </li>
                     </ol>
                     <h1>{{$t('UploadUsers.Title')}}</h1>

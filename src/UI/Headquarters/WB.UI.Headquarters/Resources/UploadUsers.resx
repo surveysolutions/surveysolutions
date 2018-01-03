@@ -211,13 +211,10 @@
     <value>{{supervisorsCount}} supervisors and {{interviewersCount}} interviewers</value>
   </data>
   <data name="CompleteDescription" xml:space="preserve">
-    <value>You can assign interviews for these teams from 'interviews' section, interviews can also be created and assigned in batch mode</value>
+    <value>You can make an assignments for these teams from 'questionnaires' section, assignments can also be created in batch mode</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>Interviews</value>
-  </data>
-  <data name="Supervisors" xml:space="preserve">
-    <value>Supervisors</value>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Questionnaires</value>
   </data>
   <data name="UploadInProgress" xml:space="preserve">
     <value>Warning: Another Batch Upload by "{{userName}}" is in progress.</value>
