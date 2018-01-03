@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    [HubName(@"interview")]
+    [HubName(@"baseinterview")]
     public partial class WebInterview : Hub, IErrorDetailsProvider
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
