@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can assign interviews for these teams from &apos;interviews&apos; section, interviews can also be created and assigned in batch mode.
+        ///   Looks up a localized string similar to You can make an assignments for these teams from &apos;questionnaires&apos; section, assignments can also be created in batch mode.
         /// </summary>
         internal static string CompleteDescription {
             get {
@@ -183,15 +183,6 @@ namespace WB.UI.Headquarters.Resources {
         internal static string InterviewersAndSupervisorsCount {
             get {
                 return ResourceManager.GetString("InterviewersAndSupervisorsCount", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Interviews.
-        /// </summary>
-        internal static string Interviews {
-            get {
-                return ResourceManager.GetString("Interviews", resourceCulture);
             }
         }
         
@@ -286,6 +277,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaires.
+        /// </summary>
+        internal static string Questionnaires {
+            get {
+                return ResourceManager.GetString("Questionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data required for creating interviewers and supervisors.
         /// </summary>
         internal static string RequiredData {
@@ -309,15 +309,6 @@ namespace WB.UI.Headquarters.Resources {
         internal static string Role {
             get {
                 return ResourceManager.GetString("Role", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Supervisors.
-        /// </summary>
-        internal static string Supervisors {
-            get {
-                return ResourceManager.GetString("Supervisors", resourceCulture);
             }
         }
         
