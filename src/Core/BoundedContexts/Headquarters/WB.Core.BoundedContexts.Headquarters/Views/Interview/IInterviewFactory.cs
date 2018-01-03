@@ -29,6 +29,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireIdentity questionnaireId, List<InterviewEntity> interviewEntities);
-        void Save(InterviewEntity[] addedOrUpdatedEntities, InterviewEntity[] removedEntities);
+        void Save(QuestionnaireIdentity questionnaireId, InterviewState interviewState);
     }
 }
