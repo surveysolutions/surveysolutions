@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Main.Core.Documents;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
 {
@@ -13,20 +17,35 @@ namespace WB.UI.WebTester.Controllers
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
+        private readonly IQuestionnaireImportService questionnaireImportService;
+        private readonly IDesignerWebTesterApi webTesterApi;
 
         public WebTesterController(IStatefulInterviewRepository statefulInterviewRepository,
-            ICommandService commandService)
+            ICommandService commandService,
+            IQuestionnaireImportService questionnaireImportService,
+            IDesignerWebTesterApi webTesterApi)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
-            this.commandService = commandService;
+            this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+            this.questionnaireImportService = questionnaireImportService ?? throw new ArgumentNullException(nameof(questionnaireImportService));
+            this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Run(string id)
         {
+            var questionnaire = await webTesterApi.GetQuestionnaireAsync(id);
+            var translations = await webTesterApi.GetTranslationsAsync(id);
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
+
+            this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, 
+                questionnaire.Document,
+                questionnaire.Assembly,
+                translations);
+
             this.commandService.Execute(new CreateInterview(
                 interviewId: Guid.NewGuid(),
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                questionnaireId: new QuestionnaireIdentity(), 
+                questionnaireId: questionnaireIdentity, 
                 answers: new List<InterviewAnswer>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
