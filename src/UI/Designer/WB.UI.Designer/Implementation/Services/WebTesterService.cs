@@ -3,48 +3,54 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.WebPages;
 using Ncqrs;
 using WB.UI.Designer.Services;
-using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Designer.Implementation.Services
 {
     class WebTesterService : IWebTesterService
     {
-        private readonly IClock clock; 
+        private readonly IClock clock;
+        private readonly WebTesterSettings settings;
 
-        public WebTesterService(IClock clock, IConfigurationManager configurationManager)
+        public WebTesterService(IClock clock, WebTesterSettings settings)
         {
             this.clock = clock;
+            this.settings = settings;
+        }
 
-            expirationAmount = configurationManager.AppSettings["WebTester.ExpirationAmountMinutes"].AsInt(10);
-
-            Task.Factory.StartNew(async () =>
-            {
+        public void StartBackgroundCleanupJob()
+        {
+            Task.Factory.StartNew(async () => {
                 Thread.CurrentThread.Name = "Questionnaire test cleanup task";
+                
                 while (true)
                 {
-                    var items = questionnaireMap.Keys.ToList();
-
-                    foreach (var item in items)
-                    {
-                        if(questionnaireMap.TryGetValue(item, out var cacheItem))
-                        {
-                            if (cacheItem.IsExpired(clock.UtcNow()))
-                            {
-                                if (questionnaireMap.TryRemove(cacheItem.QuestionnaireId, out var existingItem))
-                                {
-                                    tokenToQuestionnaireMap.TryRemove(existingItem.Token, out _);
-                                }
-                            }
-                        }
-                    }
+                    Cleanup();
 
                     await Task.Delay(TimeSpan.FromSeconds(10));
                 }
 
             }, TaskCreationOptions.LongRunning);
+        }
+
+        public void Cleanup()
+        {
+            var items = questionnaireMap.Keys.ToList();
+
+            foreach (var item in items)
+            {
+                if (questionnaireMap.TryGetValue(item, out var cacheItem))
+                {
+                    if (cacheItem.IsExpired(clock.UtcNow()))
+                    {
+                        if (questionnaireMap.TryRemove(cacheItem.QuestionnaireId, out var existingItem))
+                        {
+                            tokenToQuestionnaireMap.TryRemove(existingItem.Token, out _);
+                        }
+                    }
+                }
+            }
         }
 
         private sealed class CacheItem
@@ -58,7 +64,6 @@ namespace WB.UI.Designer.Implementation.Services
 
         private readonly ConcurrentDictionary<Guid, CacheItem> questionnaireMap = new ConcurrentDictionary<Guid, CacheItem>();
         private readonly ConcurrentDictionary<string, CacheItem> tokenToQuestionnaireMap = new ConcurrentDictionary<string, CacheItem>();
-        private readonly int expirationAmount;
 
         public Guid? GetQuestionnaire(string token)
         {
@@ -76,7 +81,7 @@ namespace WB.UI.Designer.Implementation.Services
             return null;
         }
 
-        private DateTime GetExpirationTime() => clock.UtcNow().AddMinutes(expirationAmount);
+        private DateTime GetExpirationTime() => clock.UtcNow().AddMinutes(settings.ExpirationAmountMinutes);
 
         public string CreateTestQuestionnaire(Guid questionnaireId)
         {

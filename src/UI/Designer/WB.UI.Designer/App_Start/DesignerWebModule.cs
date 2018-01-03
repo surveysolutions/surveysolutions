@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using System.Web.WebPages;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -40,6 +41,17 @@ namespace WB.UI.Designer
                         x.Inject<IMembershipWebServiceUser>()));
 
             registry.Bind<IRecipientNotifier, MailNotifier>();
+
+            registry.BindToMethod<WebTesterSettings>(() =>
+            {
+                var appSettings = System.Configuration.ConfigurationManager.AppSettings;
+                return new WebTesterSettings
+                {
+                    ExpirationAmountMinutes = appSettings["WebTester.ExpirationAmountMinutes"].AsInt(),
+                    BaseUri = appSettings["WebTester.BaseUri"]
+                };
+            });
+
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
         }
     }

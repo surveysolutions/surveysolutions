@@ -17,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInf
 using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 
 namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
@@ -40,6 +41,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 verificationErrorsMapper ?? Mock.Of<IVerificationErrorsMapper>(),
                 questionnaireInfoFactory ?? Mock.Of<IQuestionnaireInfoFactory>(),
                 userHelper ?? Mock.Of < IMembershipUserService>(),
+                Mock.Of<WebTesterSettings>(),
                 webTesterService ?? Mock.Of<IWebTesterService>());
 
             return questionnaireController;

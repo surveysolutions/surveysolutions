@@ -6,5 +6,6 @@ namespace WB.UI.Designer.Services
     {
         Guid? GetQuestionnaire(string token);
         string CreateTestQuestionnaire(Guid questionnaireId);
+        void StartBackgroundCleanupJob();
     }
 }
