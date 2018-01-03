@@ -18,7 +18,7 @@ const wrap = (jqueryPromise) => {
 const scriptIncludedPromise = new Promise(resolve =>
     $script(config.signalrPath, () => {
         // $.connection.hub.logging = true
-        const interviewProxy = $.connection.interview || $.connection.webtester
+        const interviewProxy = $.connection[config.hubName]
 
         interviewProxy.client.reloadInterview = () => {
             store.dispatch("reloadInterview")
@@ -149,7 +149,7 @@ function hubStarter(options) {
                 store.dispatch("disconnected")
             })
 
-            resolve(jQuery.signalR.interview)
+            resolve(jQuery.signalR[config.hubName])
         })
     }));
 }
@@ -207,7 +207,7 @@ export function install(Vue, options) {
         stop: apiStop,
         callAndFetch: apiCallerAndFetch,
         setState: (callback) => {
-            callback(jQuery.signalR.interview.state);
+            callback(jQuery.signalR[config.hubName].state);
         }
     };
 

@@ -3,6 +3,9 @@ const config = global.CONFIG;
 /*  the Plugin */
 export default Object.assign(global.CONFIG || {}, {
     install(Vue) {
+
+        config.hubName = config.hubName || "interview"
+
         // /*  expose a global API method  */
         Object.defineProperty(Vue, '$config', {
             get() {
