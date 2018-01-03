@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
+using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
@@ -31,6 +32,7 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
 
         private readonly IMembershipUserService userHelper;
+        private readonly WebTesterSettings webTesterSettings;
 
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
@@ -45,7 +47,9 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IMembershipUserService userHelper, IWebTesterService webTesterService)
+            IMembershipUserService userHelper, 
+            WebTesterSettings webTesterSettings,
+            IWebTesterService webTesterService)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -55,6 +59,7 @@ namespace WB.UI.Designer.Api
             this.questionnaireInfoFactory = questionnaireInfoFactory;
 
             this.userHelper = userHelper;
+            this.webTesterSettings = webTesterSettings;
             this.webTesterService = webTesterService;
         }
 
@@ -207,7 +212,7 @@ namespace WB.UI.Designer.Api
         public string WebTest(Guid id)
         {
             var token = this.webTesterService.CreateTestQuestionnaire(id);
-            var uri = $"{ConfigurationManager.AppSettings["WebTester.BaseUri"]}/{token}";
+            var uri = $"{webTesterSettings.BaseUri}/{token}";
             return uri;
         }
 
