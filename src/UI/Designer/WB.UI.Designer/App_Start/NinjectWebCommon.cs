@@ -7,6 +7,7 @@ using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Common.WebHost;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
@@ -17,6 +18,7 @@ using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Modules;
@@ -25,7 +27,7 @@ using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 
 
-[assembly: WebActivatorEx.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
+[assembly: PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
 
 namespace WB.UI.Designer.App_Start
@@ -39,11 +41,17 @@ namespace WB.UI.Designer.App_Start
             DynamicModuleUtility.RegisterModule(typeof (OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof (NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
+            StartBackgroundJobs();
         }
 
         public static void Stop()
         {
             bootstrapper.ShutDown();
+        }
+
+        private static void StartBackgroundJobs()
+        {
+            ServiceLocator.Current.GetInstance<IWebTesterService>().StartBackgroundCleanupJob();
         }
 
         private static IKernel CreateKernel()

@@ -244,6 +244,7 @@
     <Compile Include="Implementation\Services\AuthenticationService.cs" />
     <Compile Include="Implementation\Services\DeskAuthenticationService.cs" />
     <Compile Include="Implementation\Services\RecaptchaService.cs" />
+    <Compile Include="Implementation\Services\WebTesterSettings.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
