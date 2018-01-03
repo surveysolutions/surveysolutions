@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -23,7 +22,6 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IOptionsRepository optionsRepository;
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
-
 
         public QuestionnaireImportService(IQuestionnaireStorage questionnaireRepository, 
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 

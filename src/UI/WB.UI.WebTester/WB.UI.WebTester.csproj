@@ -205,7 +205,7 @@
     <Content Include="Content\**\*.*" />
     <Content Include="Global.asax" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\WebTester\Index.cshtml" />
+    <Content Include="Views\WebTester\Run.cshtml" />
     <Content Include="Views\Web.config">
       <SubType>Designer</SubType>
     </Content>

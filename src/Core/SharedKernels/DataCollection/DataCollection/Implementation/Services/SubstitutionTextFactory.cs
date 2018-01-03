@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -11,14 +12,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IVariableToUIStringService variableToUiStringService;
-        public SubstitutionTextFactory() { }
 
         public SubstitutionTextFactory(
             ISubstitutionService substitutionService, 
             IVariableToUIStringService variableToUiStringService)
         {
-            this.substitutionService = substitutionService;
-            this.variableToUiStringService = variableToUiStringService;
+            this.substitutionService = substitutionService ?? throw new ArgumentNullException(nameof(substitutionService));
+            this.variableToUiStringService = variableToUiStringService ?? throw new ArgumentNullException(nameof(variableToUiStringService));
         }
 
         public SubstitutionText CreateText(Identity identity, string text, IQuestionnaire questionnaire)

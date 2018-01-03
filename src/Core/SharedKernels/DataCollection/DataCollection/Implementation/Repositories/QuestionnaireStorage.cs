@@ -76,7 +76,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!this.questionnaireDocumentsCache.ContainsKey(repositoryId))
             {
                 var questionnaire = this.repository.GetById(repositoryId);
-                this.questionnaireDocumentsCache[repositoryId] = questionnaire;
+
+                this.questionnaireDocumentsCache[repositoryId] = questionnaire ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
             }
 
             return this.questionnaireDocumentsCache[repositoryId];
