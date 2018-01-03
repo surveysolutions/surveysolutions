@@ -71,6 +71,7 @@ gulp.task("test", (done) => {
 gulp.task('resx2json', ["cleanup"], () => {
     return gulp.src([
         "../**/*.resx",
+        "../../../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
         "../../../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
     ])
         // .pipe(debug())
