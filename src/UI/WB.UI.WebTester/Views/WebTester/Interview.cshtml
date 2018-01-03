@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Web interview</title>
     
-    @Scripts.Render("~/js")
+    @*@Scripts.Render("~/js")*@
 
     @Styles.Render("~/css")
 
 </head>
 <body class="gray-background">
     <script>
-    global: CONFIG = {
+    window.CONFIG = {
         virtualPath: '@Url.Content("~/")',
         imageUploadUri: '@Url.Content("~/ImageAnwering")',
         audioUploadUri: '@Url.Content("~/ImageAnwering")',
