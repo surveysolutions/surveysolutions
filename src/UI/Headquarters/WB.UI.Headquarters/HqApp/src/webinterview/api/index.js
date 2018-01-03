@@ -18,7 +18,7 @@ const wrap = (jqueryPromise) => {
 const scriptIncludedPromise = new Promise(resolve =>
     $script(config.signalrPath, () => {
         // $.connection.hub.logging = true
-        const interviewProxy = $.connection.interview
+        const interviewProxy = $.connection.interview || $.connection.webtester
 
         interviewProxy.client.reloadInterview = () => {
             store.dispatch("reloadInterview")
