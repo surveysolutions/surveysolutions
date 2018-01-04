@@ -93,6 +93,24 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [ActivePage(MenuItem.Maps)]
+        public ActionResult UserMaps()
+        {
+            this.ViewBag.ActivePage = MenuItem.Maps;
+            var model = new UserMapModel()
+            {
+                DataUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new
+                    {
+                        httproute = "",
+                        controller = "MapsApi",
+                        action = "UserMaps"
+                    }),
+            };
+            return View(model);
+        }
+
+        [HttpGet]
+        [ActivePage(MenuItem.Maps)]
         public ActionResult Details(string mapName)
         {
             if (mapName == null)

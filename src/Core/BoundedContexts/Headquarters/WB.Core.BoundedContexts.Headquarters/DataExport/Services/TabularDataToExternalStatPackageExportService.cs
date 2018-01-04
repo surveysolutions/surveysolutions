@@ -145,6 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             foreach (var datasetVariable in meta.Variables)
             {
+                //datasetVariable.Storage = VariableStorage.StringStorage;
                 if (!questionnaireLevelLabels.ContainsVariable(datasetVariable.VarName))
                     continue;
 
