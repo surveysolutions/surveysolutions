@@ -191,6 +191,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Hub\DesignerTokenRenewalPipeline.cs" />
     <Compile Include="Hub\WebInterviewHub.cs" />
     <Compile Include="Infrastructure\WebTesterAggregateRootRepository.cs" />
     <Compile Include="Infrastructure\WebTesterQuestionnaireAssemblyAccessor.cs" />
