@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            var state = (TEntity) Activator.CreateInstance(typeof(TEntity), new {Id = eventSourceId});
+            var state = (TEntity) Activator.CreateInstance(typeof(TEntity), eventSourceId);
 
             foreach (var publishableEvent in publishableEvents)
             {
