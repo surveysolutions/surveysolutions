@@ -427,6 +427,7 @@
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\GetSubSectionsWithEnablementConditionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_getting_common_parent_for_linked_question_and_source.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_with_invalid_static_text.cs" />
+    <Compile Include="SharedKernels\SurveyManagement\EventHandlers\Interview\CumulativeChartDenormalizerTests\when_handling_InterviewStatusChanged_event_and_there_is_last_status_for_this_interview_and_even_has_previous_status.cs" />
     <Compile Include="SharedKernels\SurveyManagement\SurveysAndStatusesReportTests.cs" />
     <Compile Include="SignalrResolverMock.cs" />
     <Compile Include="Applications\Shared\Web\Captcha\WebCachedCaptchaServiceTests.cs" />

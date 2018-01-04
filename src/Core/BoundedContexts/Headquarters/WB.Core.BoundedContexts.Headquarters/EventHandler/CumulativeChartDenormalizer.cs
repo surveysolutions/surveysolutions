@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             public List<CumulativeReportStatusChange> Added { get; set; } = new List<CumulativeReportStatusChange>();
             public InterviewStatus? LastInterviewStatus { get; set; }
             public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
-            public bool IsDirty => Added.Any();
+            public bool IsDirty => Added.Count > 0;
         }
 
         private readonly INativeReadSideStorage<CumulativeReportStatusChange> cumulativeReportReader;
