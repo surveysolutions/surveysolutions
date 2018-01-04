@@ -42,10 +42,9 @@ namespace WB.UI.WebTester.Controllers
                 questionnaire.Document,
                 questionnaire.Assembly,
                 translations);
-
-            var interviewId = Guid.NewGuid();
+            
             this.commandService.Execute(new CreateInterview(
-                interviewId: interviewId,
+                interviewId: id,
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 questionnaireId: questionnaireIdentity, 
                 answers: new List<InterviewAnswer>(), 
@@ -55,11 +54,13 @@ namespace WB.UI.WebTester.Controllers
                 interviewKey: new InterviewKey(00_00_00), 
                 assignmentId: null));
 
-            return Redirect($"~/WebTester/Interview/{interviewId.FormatGuid()}/Cover");
+            return Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
-        public ActionResult Interview(string id)
+        public async Task<ActionResult> Interview(string id)
         {
+            await this.webTesterApi.GetQuestionnaireInfoAsync(Guid.Parse(id).ToString());
+            var interview = statefulInterviewRepository.Get(id);
             return View();
         }
     }
