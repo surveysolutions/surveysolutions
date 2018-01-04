@@ -119,7 +119,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
 
                             interviewIntegerQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
-                            var isRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
+                            var isRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                             interviewIntegerQuestion.IsRosterSize = isRosterSize;
 
                             if (isRosterSize)
@@ -151,7 +151,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
                             typedResult.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                            typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
+                            typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                         }
                         break;
                     case InterviewQuestionType.MultiLinkedToList:
@@ -170,7 +170,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var typedResult = (InterviewTextListQuestion)result;
                             var callerQuestionnaire = questionnaire;
                             typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id) ?? 200;
-                            typedResult.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
+                            typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                         }
                         break;
                     case InterviewQuestionType.YesNo:
@@ -181,7 +181,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
                             interviewYesNoQuestion.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             interviewYesNoQuestion.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                            interviewYesNoQuestion.IsRosterSize = callerQuestionnaire.ShouldQuestionSpecifyRosterSize(identity.Id);
+                            interviewYesNoQuestion.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
 
                             result = interviewYesNoQuestion;
                         }

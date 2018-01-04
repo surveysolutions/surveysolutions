@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -96,9 +95,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             try
             {
-                PreloadedData preloadedPanelData = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
+                var preloadedPanelDataParser = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
 
-                this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelData, this.Status);
+                this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelDataParser, this.Status);
 
                 void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
                 {

@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 
             var importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
 
-            Assert.DoesNotThrow(() => importDataParsingService.CreatePreloadedDataDtosFromPanelData(Create.Entity.PreloadedData(
+            Assert.DoesNotThrow(() => importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[] {
                 CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] {new[] {"1", null}}, questionnaireDocument.Title),
                 CreatePreloadedDataByFile(new[] { "rostergroup__id", "nq2", ServiceColumns.InterviewId}, new[] {new[] {"1", null, "1"}}, "rostergroup")
-            )));
+            }));
         }
     }
 }

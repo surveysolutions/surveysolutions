@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaireDocument.Title = "title";
 
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaireDocument);
-            var assignmentData = Create.Entity.PreloadedData(
+            var assignmentData = Create.Entity.PreloadedDataByFile(
                 Create.Entity.PreloadedDataByFile(fileName: "roster1"),
                 Create.Entity.PreloadedDataByFile(fileName: "roster2")
             );

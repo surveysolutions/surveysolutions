@@ -175,14 +175,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             return null;
         }
 
-        public PreloadedData GetPreloadedDataOfPanel(string id)
+        public PreloadedDataByFile[] GetPreloadedDataOfPanel(string id)
         {
             var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
             if (!this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
-                return new PreloadedData(new PreloadedDataByFile[0]);
+                return new PreloadedDataByFile[0];
 
             var filesInDirectory = this.fileSystemAccessor.GetFilesInDirectory(currentFolderPath);
-            return new PreloadedData(this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath));
+            return this.TryToGetPreloadedDataFromZipArchive(filesInDirectory, id, currentFolderPath);
         }
 
         public void DeletePreloadedData(string id)

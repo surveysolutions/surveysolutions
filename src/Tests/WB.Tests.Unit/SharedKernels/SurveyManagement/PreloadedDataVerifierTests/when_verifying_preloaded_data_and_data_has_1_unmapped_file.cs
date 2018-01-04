@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             importDataVerifier.VerifyPanelFiles(questionnaireId,
                     1,
-                    Create.Entity.PreloadedData(CreatePreloadedDataByFile(fileName: questionnaire.Title + ".csv")),
+                    Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(fileName: questionnaire.Title + ".csv")),
                     status);
 
             Assert.AreEqual(status.VerificationState.Errors.Count(), 1);

@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var errors = new List<PanelImportVerificationError>();
 
-            PreloadedData datas = new PreloadedData(new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) });
+            var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
 
             errors.AddRange(
                 this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 errors.AddRange(this.Verifier(this.ColumnDuplications)(datas, preloadedDataService));
 
             status.Errors = errors.Count > 100 ? errors.Take(100).ToList() : errors;
-            status.EntitiesCount = datas.Levels.FirstOrDefault()?.Content.Length ?? 0;
+            status.EntitiesCount = datas.FirstOrDefault()?.Content.Length ?? 0;
             if (!status.Errors.Any())
             {
                 CountResposiblesInDataFile(datas, preloadedDataService, status);
@@ -115,11 +115,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return status;
         }
 
-        private void CountResposiblesInDataFile(PreloadedData allLevels, IPreloadedDataService preloadedDataService, ImportDataVerificationState status)
+        private void CountResposiblesInDataFile(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService, ImportDataVerificationState status)
         {
             var responsibleCache = new Dictionary<string, UserToVerify>();
 
-            foreach (var levelData in allLevels.Levels)
+            foreach (var levelData in allLevels)
             {
                 var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.ResponsibleColumnName);
 
@@ -153,9 +153,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return errors.Count < 100;
         }
 
-        public void VerifyPanelFiles(Guid questionnaireId, long version, PreloadedData data, AssignmentImportStatus status)
+        public void VerifyPanelFiles(Guid questionnaireId, long version, PreloadedDataByFile[] data, AssignmentImportStatus status)
         {
-            if (data == null || !data.Levels.Any())
+            if (data == null || !data.Any())
             {
                 status.VerificationState.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0024", PreloadingVerificationMessages.PL0024_DataWasNotFound) };
                 return;
@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId, version);
 
-            var isExistsTopLevelData = data.Levels.Any(d => Path.GetFileNameWithoutExtension(d.FileName) == questionnaire.Title);
+            var isExistsTopLevelData = data.Any(d => Path.GetFileNameWithoutExtension(d.FileName) == questionnaire.Title);
             if (!isExistsTopLevelData)
             {
                 status.VerificationState.Errors = new List<PanelImportVerificationError> { new PanelImportVerificationError("PL0040", PreloadingVerificationMessages.PL0040_QuestionnaireDataIsNotFound) };
@@ -191,7 +191,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             status.VerificationState.EntitiesCount = topLevel?.Content?.Length ?? 0;
             if (!status.VerificationState.Errors.Any() && topLevel!=null)
             {
-                CountResposiblesInDataFile(new PreloadedData(topLevel.ToEnumerable().ToArray()), preloadedDataService, status.VerificationState);
+                CountResposiblesInDataFile(topLevel.ToEnumerable().ToArray(), preloadedDataService, status.VerificationState);
             }
 
             var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(topLevel, ServiceColumns.ResponsibleColumnName);
@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 questionnaireRosterStructure, questionnaire);
         }
 
-        private IEnumerable<Func<PreloadedData, IPreloadedDataService, IEnumerable<PanelImportVerificationError>>> AtomicVerifiers => new[]
+        private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>>> AtomicVerifiers => new[]
         {
             this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003", PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
             this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004", PreloadingVerificationMessages.PL0004_FileWasntMappedRoster, PreloadedDataVerificationReferenceType.File),
@@ -327,7 +327,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             
         }
 
-        private IEnumerable<PreloadedDataVerificationReference> OrphanRosters(PreloadedDataByFile levelData, PreloadedData allLevels,
+        private IEnumerable<PreloadedDataVerificationReference> OrphanRosters(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
             var parentDataFile = preloadedDataService.GetParentDataFile(levelData.FileName, allLevels);
@@ -372,7 +372,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         }
 
         private IEnumerable<PreloadedDataVerificationReference> RosterIdIsInconsistencyWithRosterSizeQuestion(PreloadedDataByFile levelData,
-            PreloadedData allLevels, IPreloadedDataService preloadedDataService)
+            PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
         {
             var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
             if (levelExportStructure == null)
@@ -416,7 +416,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return parentIdColumnIndexes.Select(parentIdColumnIndex => content[parentIdColumnIndex]).ToArray();
         }
 
-        private IEnumerable<PreloadedDataVerificationReference> IdDuplication(PreloadedDataByFile levelData, PreloadedData allLevels,
+        private IEnumerable<PreloadedDataVerificationReference> IdDuplication(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
             var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
@@ -601,10 +601,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 return null;
             }
         }
-        private IEnumerable<PanelImportVerificationError> ErrorsByQuestionsWasntParsed(PreloadedData allLevels,
+        private IEnumerable<PanelImportVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
-            foreach (var levelData in allLevels.Levels)
+            foreach (var levelData in allLevels)
             {
                 var exportedLevel = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
                 if(exportedLevel==null)
@@ -785,24 +785,24 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private Func<PreloadedData, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
             Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> fileValidator)
         {
-            return (data, preloadedDataService) => data.Levels.SelectMany(level => fileValidator(level, preloadedDataService));
+            return (data, preloadedDataService) => data.SelectMany(level => fileValidator(level, preloadedDataService));
         }
 
-        private Func<PreloadedData, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
             Func<PreloadedDataByFile, IPreloadedDataService, IEnumerable<string>> getErrors, 
             string code, 
             string message,
             PreloadedDataVerificationReferenceType type)
         {
-            return (data, rosterDataService) => data.Levels
+            return (data, rosterDataService) => data
                 .SelectMany(level => getErrors(level, rosterDataService)
                 .Select(entity => new PanelImportVerificationError(code, message, new PreloadedDataVerificationReference(type, entity, level.FileName))));
         }
 
-        private Func<PreloadedData, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
             Func<HeaderStructureForLevel,ExportedQuestionHeaderItem, PreloadedDataByFile, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> exportedQuestionVerifier,
             QuestionType questionType)
         {
@@ -810,7 +810,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             {
                 var result = new List<PanelImportVerificationError>();
 
-                foreach (var levelData in datas.Levels)
+                foreach (var levelData in datas)
                 {
                     var levelExportStructure = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
                     if (levelExportStructure == null)
@@ -829,14 +829,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             };
         }
 
-        private Func<PreloadedData, IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
-            Func<PreloadedDataByFile, PreloadedData, IPreloadedDataService, IEnumerable<PreloadedDataVerificationReference>>
+        private Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>> Verifier(
+            Func<PreloadedDataByFile, PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PreloadedDataVerificationReference>>
                 getErrors, string code, string message)
         {
             return (data, rosterDataService) =>
             {
                 return data
-                    .Levels
                     .SelectMany(level => getErrors(level, data, rosterDataService)
                     .Select(entity => new PanelImportVerificationError(code, message, entity)));
             };
@@ -859,9 +858,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 levelData.FileName);
         }
 
-        private IEnumerable<PanelImportVerificationError> ErrorsByQuantityColumn(PreloadedData allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PanelImportVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
         {
-            foreach (var levelData in allLevels.Levels)
+            foreach (var levelData in allLevels)
             {
                 var quantityColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.AssignmentsCountColumnName);
 
@@ -906,9 +905,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private IEnumerable<PanelImportVerificationError> ErrorsByResposibleName( PreloadedData allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PanelImportVerificationError> ErrorsByResposibleName( PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
         {
-            foreach (var levelData in allLevels.Levels)
+            foreach (var levelData in allLevels)
             {
                 var responsibleNameIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.ResponsibleColumnName);
 

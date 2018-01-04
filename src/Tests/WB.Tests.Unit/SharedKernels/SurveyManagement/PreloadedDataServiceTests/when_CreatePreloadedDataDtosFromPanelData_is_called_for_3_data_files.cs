@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             var  importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
             
             //act
-            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(Create.Entity.PreloadedData(
+            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(Create.Entity.PreloadedDataByFile(
                             CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId, "nq1"}, new[]
                             {
                                 new[] {"top1", "2"},

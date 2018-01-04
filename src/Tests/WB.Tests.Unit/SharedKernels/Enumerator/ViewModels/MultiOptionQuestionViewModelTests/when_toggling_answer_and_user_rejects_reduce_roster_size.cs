@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true
                 && _.GetMaxSelectedAnswerOptions(questionId.Id) == 1
-                && _.ShouldQuestionSpecifyRosterSize(questionId.Id) == true
+                && _.IsRosterSizeQuestion(questionId.Id) == true
             );
 
             var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>

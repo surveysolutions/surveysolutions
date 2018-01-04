@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+﻿using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -21,10 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of =
-            () =>
-                result =
-                    importDataParsingService.GetParentIdColumnIndexes(
+        Because of = () => result = importDataParsingService.GetParentIdColumnIndexes(
                         CreatePreloadedDataByFile(new string[] { "Id" }, new string[][] { new string[] { "1" } },
                             "random file name"));
 

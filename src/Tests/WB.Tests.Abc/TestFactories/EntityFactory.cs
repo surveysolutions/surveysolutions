@@ -1893,9 +1893,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewState InterviewState(Guid interviewId) => new InterviewState(interviewId);
 
-        public PreloadedData PreloadedData(params PreloadedDataByFile[] preloadedDataByFiles)
+        public PreloadedDataByFile[] PreloadedDataByFile(params PreloadedDataByFile[] preloadedDataByFiles)
         {
-            return new PreloadedData(preloadedDataByFiles);
+            return preloadedDataByFiles.ToArray();
         }
     }
 }
