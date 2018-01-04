@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
@@ -16,10 +17,12 @@ namespace WB.UI.Designer.Api.Tester
     public class TranslationController : ApiController
     {
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
-        public TranslationController(IPlainStorageAccessor<TranslationInstance> translations)
+        public TranslationController(IPlainStorageAccessor<TranslationInstance> translations, IQuestionnaireViewFactory questionnaireViewFactory)
         {
             this.translations = translations;
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
         [HttpGet]
@@ -29,7 +32,12 @@ namespace WB.UI.Designer.Api.Tester
             if (version < ApiVersion.CurrentTesterProtocolVersion)
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.UpgradeRequired));
 
-            return this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id).ToList()).Select(x => new TranslationDto()
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(id));
+            var translationsIds = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
+
+
+            return this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id && translationsIds.Contains(x.Id)).ToList())
+                .Select(x => new TranslationDto()
             {
                 Value = x.Value,
                 Type = x.Type,
