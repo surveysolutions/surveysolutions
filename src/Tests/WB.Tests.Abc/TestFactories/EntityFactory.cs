@@ -76,10 +76,10 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using CompanyLogo = WB.UI.Headquarters.Models.CompanyLogo.CompanyLogo;
-using TranslationInstance = WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.TranslationInstance;
+
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -1287,14 +1287,14 @@ namespace WB.Tests.Abc.TestFactories
             return yesNo;
         }
 
-        public TranslationInstance TranslationInstance(string value = null,
+        public Enumerator.Native.Questionnaire.TranslationInstance TranslationInstance(string value = null,
             Guid? translationId = null, 
             QuestionnaireIdentity questionnaireId = null,
             Guid? entityId = null, 
             string translationIndex = null, 
             TranslationType? type = null)
         {
-            return new TranslationInstance
+            return new Enumerator.Native.Questionnaire.TranslationInstance
             {
                 Value = value,
                 TranslationId = translationId ?? Guid.NewGuid(),

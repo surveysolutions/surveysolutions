@@ -5,11 +5,10 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Enumerator.Native.WebInterview;
 
-namespace WB.Core.BoundedContexts.Headquarters.EventHandler
+namespace WB.Enumerator.Native.WebInterview
 {
-    internal class InterviewLifecycleEventHandler :
+    public class InterviewLifecycleEventHandler :
         BaseDenormalizer,
         IEventHandler<AnswersDeclaredInvalid>,
         IEventHandler<AnswersDeclaredValid>,

@@ -1,9 +1,75 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac;
+using Autofac.Core;
 using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
+
+    public class AutofacModuleContext : IModuleContext
+    {
+        const string TargetTypeParameterName = "Autofac.AutowiringPropertyInjector.InstanceType";
+
+        private readonly IComponentContext ctx;
+        private readonly IEnumerable<Parameter> parameters;
+
+        public AutofacModuleContext(IComponentContext ctx, IEnumerable<Parameter> parameters)
+        {
+            this.ctx = ctx;
+            this.parameters = parameters;
+        }
+
+        public T Resolve<T>()
+        {
+            return ctx.Resolve<T>();
+        }
+
+        public Type MemberDeclaringType
+        {
+            get
+            {
+                var targetType = parameters.OfType<NamedParameter>()
+                    .FirstOrDefault(np => np.Name == TargetTypeParameterName && np.Value is Type);
+
+                return (Type) targetType?.Value;
+            }
+        }
+
+        public T Inject<T>()
+        {
+            return Resolve<T>();
+        }
+
+        public T Get<T>()
+        {
+            return Resolve<T>();
+        }
+
+        public T Get<T>(string name)
+        {
+            return Resolve<T>();
+        }
+
+        public object Get(Type type)
+        {
+            return this.ctx.Resolve(type);
+        }
+
+        public object GetServiceWithGenericType(Type type, Type genericType)
+        {
+            return ctx.Resolve(type.MakeGenericType(genericType));
+        }
+
+        public Type GetGenericArgument()
+        {
+            var targetType = parameters.OfType<NamedParameter>()
+                .FirstOrDefault(np => np.Value is Type);
+
+            return (Type) targetType?.Value;
+        }
+    }
     public class AutofacModuleAdapter : Module, IIocRegistry
     {
         private readonly IModule module;
@@ -27,14 +93,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void Bind(Type @interface, Type implementation)
         {
-            if (@interface.IsGenericType)
-            {
-                containerBuilder.RegisterGeneric(implementation).As(@interface);
-            }
-            else
-            {
-                containerBuilder.RegisterType(implementation).As(@interface);
-            }
+            containerBuilder.RegisterType(implementation).As(@interface);
         }
 
         public void Bind<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface1, TInterface2
@@ -62,14 +121,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             containerBuilder.RegisterGeneric(implemenation);
         }
 
-        public void RegisterDenormalizer<T>() where T : IEventHandler
-        {
-            throw new NotImplementedException();
-        }
-
         public void Unbind<T>()
         {
-            throw new NotImplementedException();
         }
 
         public bool HasBinding<T>()
@@ -128,12 +181,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void BindToMethod<T>(Func<IModuleContext, T> func, string name = null)
         {
-            throw new NotImplementedException();
+            containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p)));
         }
 
         public void BindToMethodInSingletonScope<T>(Func<IModuleContext, T> func, string named = null)
         {
-            containerBuilder.Register(ctx => func(null)).SingleInstance();
+            containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p))).SingleInstance();
         }
 
         public void BindToMethodInSingletonScope(Type @interface, Func<IModuleContext, object> func)

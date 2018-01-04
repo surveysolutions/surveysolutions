@@ -81,7 +81,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonConversion\FilteredCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Questionnaire\ITranslationManagementService.cs" />
+    <Compile Include="Questionnaire\TranslationInstance.cs" />
+    <Compile Include="Questionnaire\Impl\TranslationManagementService.cs" />
     <Compile Include="WebInterview\InterviewAccessException.cs" />
     <Compile Include="Resources\WebInterview.Designer.cs">
       <DependentUpon>WebInterview.resx</DependentUpon>
@@ -91,6 +95,7 @@
     <Compile Include="WebInterview\IConnectionLimiter.cs" />
     <Compile Include="WebInterview\IConnectionsMonitor.cs" />
     <Compile Include="WebInterview\IErrorDetailsProvider.cs" />
+    <Compile Include="WebInterview\InterviewLifecycleEventHandler.cs" />
     <Compile Include="WebInterview\IWebInterviewInterviewEntityFactory.cs" />
     <Compile Include="WebInterview\IWebInterviewInvoker.cs" />
     <Compile Include="WebInterview\IWebInterviewNotificationService.cs" />
@@ -104,6 +109,7 @@
     <Compile Include="WebInterview\ObserverNotAllowedAttribute.cs" />
     <Compile Include="WebInterview\Pipeline\SignalrErrorHandler.cs" />
     <Compile Include="WebInterview\Pipeline\WebInterviewConnectionsCounter.cs" />
+    <Compile Include="WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="WebInterview\Services\ConnectionLimiter.cs" />
     <Compile Include="WebInterview\Services\ConnectionsMonitor.cs" />
     <Compile Include="WebInterview\Services\WebInterviewInterviewEntityFactory.cs" />
