@@ -1586,6 +1586,7 @@
     <Content Include="Views\Maps\Index.cshtml" />
     <Content Include="Views\Users\index.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
+    <Content Include="Views\Maps\UserMaps.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1912,6 +1913,7 @@
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Maps\MapsModel.cs" />
+    <Compile Include="Models\Maps\UserMapModel.cs" />
     <Compile Include="Models\Maps\UserMapLinkModel.cs" />
     <Compile Include="Models\Maps\MapDetailsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />

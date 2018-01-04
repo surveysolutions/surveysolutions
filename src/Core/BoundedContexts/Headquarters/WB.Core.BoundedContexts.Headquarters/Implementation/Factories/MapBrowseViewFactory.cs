@@ -72,5 +72,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                 return new MapUsersView() { Page = input.Page, PageSize = input.PageSize, TotalCount = queryResult.Count(), Items = pagedResults.Select(x => x.UserName).ToList() };
             });
         }
+
+        public UserMapsView Load(UserMapsInputModel input)
+        {
+            int totalCount = 0;
+
+            var users= this.userMapReader.Query(queryable =>
+            {
+                IQueryable<UserMap> query = queryable;
+
+                if (!string.IsNullOrEmpty(input.SearchBy))
+                {
+                    query = query.Where(x => x.UserName.Contains(input.SearchBy));
+                }
+                
+                var queryResult = query.OrderUsingSortExpression(input.Order);
+
+                var result = queryResult.Select(x => x.UserName).Distinct();
+                totalCount = result.Count();
+
+                if (input.PageSize > 0)
+                {
+                    result = result.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+                }
+                
+                return result.ToList();
+            });
+            
+            return new UserMapsView()
+            {
+                Page = input.Page,
+                PageSize = input.PageSize,
+                TotalCount = totalCount,
+                Items = users.Select(x => new UserMapsItem()
+                {
+                    UserName = x,
+                    Maps = this.userMapReader.Query(_ => _.Where(y => y.UserName == x).Select(z => z.Map).ToList())
+                }).ToList()
+            };
+        }
     }
 }
