@@ -13,6 +13,13 @@ namespace WB.UI.WebTester
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapRoute("WebTester.All", "WebTester/Interview/{id}/{*url}", new
+            {
+                controller = "WebTester",
+                action = "Interview"
+            });
+
+
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

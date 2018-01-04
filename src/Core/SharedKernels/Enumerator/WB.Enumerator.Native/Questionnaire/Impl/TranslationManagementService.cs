@@ -4,9 +4,9 @@ using System.Linq;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl
+namespace WB.Enumerator.Native.Questionnaire.Impl
 {
-    internal class TranslationManagementService : ITranslationManagementService
+    public class TranslationManagementService : ITranslationManagementService
     {
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
 
@@ -15,7 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl
             this.translations = translations;
         }
 
-        public IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId, Guid translationId)
+        public List<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId, Guid translationId)
         {
             var translationInstances =
                 this.translations.Query(_ =>
@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.Impl
             return translationInstances;
         }
 
-        public IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId)
+        public List<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId)
         {
             var translationInstances =
                 this.translations.Query(_ =>

@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
     {
         private readonly Dictionary<Guid, List<TranslationDto>> translations = new Dictionary<Guid, List<TranslationDto>>();
 
-        public QuestionnaireTranslation(List<TranslationDto> translationInstances)
+        public QuestionnaireTranslation(IEnumerable<TranslationDto> translationInstances)
         {
             if (this.translations == null) throw new ArgumentNullException(nameof(this.translations));
 

@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
+namespace WB.Enumerator.Native.Questionnaire
 {
     public interface ITranslationManagementService
     {
-        IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId, Guid translationId);
-        IList<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId);
+        List<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId, Guid translationId);
+        List<TranslationInstance> GetAll(QuestionnaireIdentity questionnaireId);
         void Delete(QuestionnaireIdentity questionnaireId);
         void Store(IEnumerable<TranslationInstance> translationInstances);
     }

@@ -61,6 +61,9 @@
     <Reference Include="Autofac.Integration.SignalR, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\Autofac.SignalR.3.0.2\lib\net40\Autofac.Integration.SignalR.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core">
       <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -198,6 +201,8 @@
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IDesignerWebTesterApi.cs" />
+    <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
+    <Compile Include="Services\Implementation\TranslationStorage.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
@@ -221,7 +226,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Services\Implementation\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
@@ -232,10 +236,6 @@
     <Content Include="Views\ApiTest\Test.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
-      <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
-      <Name>WB.Core.BoundedContexts.Tester</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
@@ -251,10 +251,6 @@
     <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
       <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
       <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
-      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
-      <Name>WB.Core.SharedKernels.Enumerator</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj">
       <Project>{4004d8cd-d2b4-4e81-93ff-9798599b2168}</Project>

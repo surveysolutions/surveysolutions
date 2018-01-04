@@ -1,5 +1,4 @@
 using System;
-using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Core.Infrastructure.Modularity
 {
@@ -25,7 +24,6 @@ namespace WB.Core.Infrastructure.Modularity
         void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func);
         void BindAsSingleton(Type @interface, Type implementation);
         void BindGeneric(Type implementation);
-        void RegisterDenormalizer<T>() where T : IEventHandler;
         void Unbind<T>();
         bool HasBinding<T>();
         void BindToSelfInSingletonScopeWithConstructorArgument(Type[] types, string argumentName, Func<IModuleContext, object> argumentValue);
