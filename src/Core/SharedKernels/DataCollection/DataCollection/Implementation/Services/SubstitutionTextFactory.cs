@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 if (questionnaire.HasRoster(variable)) substitutionVariables.Add(new SubstitutionVariable
                 {
                     Name = variable,
-                    Id = questionnaire.GetGroupIdByVariableName(variable)
+                    Id = questionnaire.GetRosterIdByVariableName(variable).Value
                 });
             }
 

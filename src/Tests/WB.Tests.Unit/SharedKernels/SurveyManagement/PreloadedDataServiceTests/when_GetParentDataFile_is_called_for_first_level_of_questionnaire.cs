@@ -11,17 +11,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
     {
         Establish context = () =>
         {
-            questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "Roster Group", variable: "roster",
-                        obsoleteFixedTitles: new[] { "1" }));
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "Roster Group", variable: "roster", obsoleteFixedTitles: new[] { "1" })
+            );
 
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of =
-           () =>
-               result =
-                   importDataParsingService.GetParentDataFile("roster",  Create.Entity.PreloadedData(
+        Because of = () => 
+            result = importDataParsingService.GetParentDataFile("roster",  Create.Entity.PreloadedDataByFile(
                            CreatePreloadedDataByFile(null, null, "roster"), 
                            CreatePreloadedDataByFile(null, null, questionnaireDocument.Title)));
 

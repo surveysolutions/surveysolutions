@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -37,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 result =
                     importDataParsingService.GetAvailableIdListForParent(
                         CreatePreloadedDataByFile(new string[] { ServiceColumns.InterviewId, rosterSizeQuestionVariableName+"_0" }, new string[][] { new string[] { "1", "3" } },
-                            questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new []{"1"}, Create.Entity.PreloadedData());
+                            questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new []{"1"}, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]));
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

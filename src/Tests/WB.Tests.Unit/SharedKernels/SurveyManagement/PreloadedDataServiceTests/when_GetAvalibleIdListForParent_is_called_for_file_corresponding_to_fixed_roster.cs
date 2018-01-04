@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                 result =
                     importDataParsingService.GetAvailableIdListForParent(
                         CreatePreloadedDataByFile(new string[] { ServiceColumns.InterviewId }, new string[][] { new string[] { "1" } },
-                            questionnaireDocument.Title), new ValueVector<Guid> { rosterGroupId }, new []{"1"}, Create.Entity.PreloadedData(new PreloadedDataByFile[0]));
+                            questionnaireDocument.Title), new ValueVector<Guid> { rosterGroupId }, new []{"1"}, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]));
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

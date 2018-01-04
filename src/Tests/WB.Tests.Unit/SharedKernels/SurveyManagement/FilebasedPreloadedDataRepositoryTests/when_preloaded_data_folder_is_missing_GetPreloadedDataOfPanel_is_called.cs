@@ -25,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(Guid.NewGuid().FormatGuid());
 
         It should_result_has_0_elements = () =>
-            result.Levels.Length.ShouldEqual(0);
+            result.Length.ShouldEqual(0);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;
-        private static PreloadedData result;
+        private static PreloadedDataByFile[] result;
     }
 }

@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
         protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithNumericQuestion(bool isRosterSize = true)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.ShouldQuestionSpecifyRosterSize(questionIdentity.Id) == isRosterSize
+                => _.IsRosterSizeQuestion(questionIdentity.Id) == isRosterSize
             );
             return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }

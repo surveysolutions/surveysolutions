@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         CreatePreloadedDataByFile(
                             new string[] { ServiceColumns.InterviewId, rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" },
                             new string[][] { new string[] { "1", "3", "" } },
-                            questionnaireDocument.Title),new ValueVector<Guid> { rosterSizeQuestionId}, new []{"1"}, Create.Entity.PreloadedData());
+                            questionnaireDocument.Title),new ValueVector<Guid> { rosterSizeQuestionId}, new []{"1"}, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]));
 
         private It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

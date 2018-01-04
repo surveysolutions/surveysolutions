@@ -224,7 +224,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Translation Translation => this.translation;
 
-        public IQuestion GetQuestionByStataCaption(string stataCaption) => GetQuestionByStataCaption(this.QuestionCache, stataCaption);
+        public IQuestion GetQuestionByVariable(string variable)
+        {
+            var questionId = this.GetQuestionIdByVariable(variable);
+            return !questionId.HasValue ? null : this.GetQuestion(questionId.Value);
+        }
 
         public bool HasQuestion(Guid questionId) => this.GetQuestion(questionId) != null;
 
@@ -308,9 +312,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.VariablesCache.Values.Single(x => x.Name == variableName).PublicKey;
         }
-        public Guid GetGroupIdByVariableName(string variableName)
+        public Guid? GetRosterIdByVariableName(string variableName, bool ignoreCase = false)
         {
-            return this.GroupCache.Values.Single(x => x.VariableName == variableName).PublicKey;
+            return this.GroupCache.Values.SingleOrDefault(x => string.Equals(x.VariableName, variableName, ignoreCase? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))?.PublicKey;
         }
 
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
@@ -526,7 +530,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return group.ConditionExpression;
         }
 
-        public bool ShouldQuestionSpecifyRosterSize(Guid questionId)
+        public bool IsRosterSizeQuestion(Guid questionId)
         {
             return this.DoesQuestionSupportRoster(questionId)
                 && this.GetRosterGroupsByRosterSizeQuestion(questionId).Any();
@@ -819,7 +823,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
-
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
 
@@ -850,7 +853,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
-
+         
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
             => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
@@ -1593,11 +1596,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private static IComposite GetEntity(Dictionary<Guid, IComposite> entities, Guid entityId) => entities.GetOrNull(entityId);
 
         private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId) => groups.GetOrNull(groupId);
-
-        private static IQuestion GetQuestionByStataCaption(Dictionary<Guid, IQuestion> questions, string identifier)
-        {
-            return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
-        }
 
         public Guid GetFirstSectionId()
         {

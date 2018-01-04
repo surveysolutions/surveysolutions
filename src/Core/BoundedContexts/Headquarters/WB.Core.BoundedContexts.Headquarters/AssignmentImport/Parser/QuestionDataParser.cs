@@ -97,15 +97,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     }
 
                 case QuestionType.Numeric:
-                    var numericQuestion = question as INumericQuestion;
-                    if (numericQuestion == null)
+                    if (!(question is INumericQuestion numericQuestion))
                         return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
                     // please don't trust R# warning below. if you simplify expression with '?' then answer would be saved as decimal even for integer question
                     if (numericQuestion.IsInteger)
                     {
-                        int intNumericValue;
-                        if (!int.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out intNumericValue))
+                        if (!int.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var intNumericValue))
                             return ParseFailed(ValueParsingResult.AnswerAsIntWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                         parsedValue = intNumericValue;
@@ -114,8 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     }
                     else
                     {
-                        decimal decimalNumericValue;
-                        if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out decimalNumericValue))
+                        if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var decimalNumericValue))
                             return ParseFailed(ValueParsingResult.AnswerAsDecimalWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                         parsedValue = decimalNumericValue;
@@ -126,8 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                 case QuestionType.DateTime:
                     DateTime date;
 
-                    var dateTimeQuestion = question as DateTimeQuestion;
-                    if (dateTimeQuestion == null)
+                    if (!(question is DateTimeQuestion dateTimeQuestion))
                         return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
                     if (!DateTime.TryParse(answer, out date))
@@ -138,12 +134,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     return ValueParsingResult.OK;
 
                 case QuestionType.SingleOption:
-                    var singleOption = question as SingleQuestion;
-                    if (singleOption == null)
+                    if (!(question is SingleQuestion singleOption))
                         return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
-                    decimal decimalAnswerValue;
-                    if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out decimalAnswerValue))
+                    if (!decimal.TryParse(answer, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var decimalAnswerValue))
                         return ParseFailed(ValueParsingResult.AnswerAsDecimalWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                     if (!this.GetAnswerOptionsAsValues(question).Contains(decimalAnswerValue))
@@ -154,8 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     return ValueParsingResult.OK;
 
                 case QuestionType.MultyOption:
-                    var multyOption = question as MultyOptionsQuestion;
-                    if (multyOption == null)
+                    if (!(question is MultyOptionsQuestion multyOption))
                         return ParseFailed(ValueParsingResult.QuestionTypeIsIncorrect, out parsedValue, out parsedSingleColumnAnswer);
 
                     string columnEncodedValue = this.ExtractValueFromColumnName(columnName);
@@ -167,8 +160,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     if (!this.GetAnswerOptionsAsValues(question).Contains(columnValue.Value))
                         return ParseFailed(ValueParsingResult.ParsedValueIsNotAllowed, out parsedValue, out parsedSingleColumnAnswer);
 
-                    int answerChecked;
-                    if (!int.TryParse(answer, out answerChecked))
+                    if (!int.TryParse(answer, out var answerChecked))
                         return ParseFailed(ValueParsingResult.AnswerAsIntWasNotParsed, out parsedValue, out parsedSingleColumnAnswer);
 
                     if (answerChecked > 0)

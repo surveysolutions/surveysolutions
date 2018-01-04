@@ -11,9 +11,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
     {
         HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName);
 
-        PreloadedDataByFile GetTopLevelData(PreloadedData allLevels);
+        PreloadedDataByFile GetTopLevelData(PreloadedDataByFile[] allLevels);
 
-        PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedData allLevels);
+        PreloadedDataByFile GetParentDataFile(string levelFileName, PreloadedDataByFile[] allLevels);
         
         int GetColumnIndexByHeaderName(PreloadedDataByFile dataFile, string columnName);
 
@@ -21,11 +21,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 
         int[] GetParentIdColumnIndexes(PreloadedDataByFile dataFile);
 
-        int[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedData allLevels);
+        int[] GetAvailableIdListForParent(PreloadedDataByFile parentDataFile, ValueVector<Guid> levelScopeVector, string[] parentIdValues, PreloadedDataByFile[] allLevels);
 
         ValueParsingResult ParseQuestionInLevel(string answer, string columnName, HeaderStructureForLevel level, out object parsedValue);
 
-        AssignmentPreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedData allLevels);
+        AssignmentPreloadedDataRecord[] CreatePreloadedDataDtosFromPanelData(PreloadedDataByFile[] allLevels);
 
         AssignmentPreloadedDataRecord[] CreatePreloadedDataDtoFromAssignmentData(PreloadedDataByFile sampleDataFile);
 

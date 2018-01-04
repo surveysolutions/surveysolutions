@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true
                 && _.GetMaxSelectedAnswerOptions(questionId.Id) == null
-                && _.ShouldQuestionSpecifyRosterSize(questionId.Id) == false
+                && _.IsRosterSizeQuestion(questionId.Id) == false
             );
 
             var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
