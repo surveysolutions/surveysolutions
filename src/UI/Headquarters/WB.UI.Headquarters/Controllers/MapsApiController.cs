@@ -132,6 +132,12 @@ namespace WB.UI.Headquarters.Controllers
         {
             var response = new JsonMapResponse();
 
+            if (file == null)
+            {
+                response.Errors.Add(Maps.MapsLoadingError);
+                return response;
+            }
+
             if (".zip" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
             {
                 response.Errors.Add(Maps.MapLoadingNotZipError);
@@ -187,6 +193,11 @@ namespace WB.UI.Headquarters.Controllers
                         invalidMaps.Add(map.Name);
                     }
                 }
+
+                if (invalidMaps.Count > 0)
+                    response.Errors.AddRange(invalidMaps.Select(x => String.Format(Maps.MapLoadingInvalidFile, x)).ToList());
+                else
+                    response.IsSuccess = true;
             }
             catch (Exception e)
             {
@@ -194,11 +205,6 @@ namespace WB.UI.Headquarters.Controllers
                 response.Errors.Add(Maps.MapsLoadingError);
                 return response;
             }
-
-            if(invalidMaps.Count > 0)
-                response.Errors.AddRange(invalidMaps.Select(x => String.Format(Maps.MapLoadingInvalidFile, x)).ToList());
-            else
-                response.IsSuccess = true;
 
             return response;
         }
