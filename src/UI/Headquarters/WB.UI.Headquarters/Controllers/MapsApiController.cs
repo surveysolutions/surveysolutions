@@ -91,6 +91,35 @@ namespace WB.UI.Headquarters.Controllers
             return Ok(table);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public IHttpActionResult UserMaps([FromUri] DataTableRequest request)
+        {
+            var input = new UserMapsInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                SearchBy = request.Search.Value,
+            };
+
+            var items = this.mapBrowseViewFactory.Load(input);
+
+            var table = new DataTableResponse<UserMapsViewItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = items.TotalCount,
+                RecordsFiltered = items.TotalCount,
+                Data = items.Items.ToList().Select(x => new UserMapsViewItem
+                {
+                    UserName = x.UserName,
+                    Maps = x.Maps.ToList()
+                })
+            };
+
+            return Ok(table);
+        }
+
         public class MapUsersTableRequest : DataTableRequest
         {
             public string MapName { get; set; }
