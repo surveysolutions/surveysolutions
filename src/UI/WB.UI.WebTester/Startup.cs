@@ -7,6 +7,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Owin;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Hub;
 
@@ -20,7 +21,6 @@ namespace WB.UI.WebTester
         {
             ContainerBuilder builder = AutofacConfig.CreateKernel();
             
-            var hubConfiguration = new HubConfiguration {EnableDetailedErrors = true};
             builder.RegisterHubs(Assembly.GetAssembly(typeof(WebInterviewHub)));
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
@@ -28,8 +28,8 @@ namespace WB.UI.WebTester
             GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+            WebInterviewModule.Configure(app, WebTesterModule.HubPipelineModules);
             app.UseAutofacMiddleware(container);
-            app.MapSignalR(hubConfiguration);
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -11,8 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Enumerator.Native.WebInterview
 {
-    [HubName(@"baseinterview")]
-    public partial class WebInterview : Hub, IErrorDetailsProvider
+    public abstract partial class WebInterview : Hub, IErrorDetailsProvider
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         protected readonly ICommandService commandService;

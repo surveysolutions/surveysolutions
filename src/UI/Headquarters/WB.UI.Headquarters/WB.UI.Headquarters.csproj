@@ -1959,7 +1959,6 @@
     <Compile Include="Filters\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="Filters\WebInterviewFeatureEnabledAttribute.cs" />
     <Compile Include="Controllers\WebInterviewSetupController.cs" />
-    <Compile Include="FilteredCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Filters\ErrorLoggerFilter.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\HttpStatusException.cs" />

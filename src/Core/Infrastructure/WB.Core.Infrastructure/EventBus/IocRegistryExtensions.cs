@@ -1,30 +1,28 @@
 ﻿using System;
 using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ninject;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.ReadSide;
+using WB.Core.Infrastructure.Modularity;
 
-namespace WB.Core.BoundedContexts.Headquarters
+namespace WB.Core.Infrastructure.EventBus
 {
-    public static class DispatcherRegistryHelper
+    public static class IocRegistryExtensions
     {
-        public static void RegisterDenormalizer<T>(this IKernel kernel) where T : IEventHandler
+        public static void RegisterDenormalizer<T>(this IIocRegistry kernel) where T : IEventHandler
         {
-            Type[] eventHandlerTypes = { typeof (IEventHandler), typeof (IEventHandler<>) };
-            var denormalizerType = typeof (T);
+            Type[] eventHandlerTypes = { typeof(IEventHandler), typeof(IEventHandler<>) };
+            var denormalizerType = typeof(T);
+
+            kernel.Bind(typeof(IEventHandler), denormalizerType);
 
             foreach (var interfaceType in eventHandlerTypes)
             {
-                kernel.Bind(interfaceType).To(denormalizerType);
-
                 if (!interfaceType.IsGenericType) continue;
 
-                GetValue(kernel, denormalizerType, interfaceType);
+                RegisterEachHandledEventImplementation(kernel, denormalizerType, interfaceType);
             }
         }
 
-        private static void GetValue(IKernel kernel, Type factoryType, Type interfaceType)
+        private static void RegisterEachHandledEventImplementation(IIocRegistry kernel, Type factoryType, Type interfaceType)
         {
             var interfaceImplementations = factoryType.GetInterfaces()
                 .Where(t => t.IsGenericType)
@@ -36,7 +34,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             foreach (var genericInterfaceType in genericInterfaceTypes)
             {
-                kernel.Bind(genericInterfaceType).To(factoryType);
+                kernel.Bind(genericInterfaceType, factoryType);
             }
         }
     }

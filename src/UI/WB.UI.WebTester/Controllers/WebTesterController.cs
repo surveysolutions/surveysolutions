@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Main.Core.Documents;
-using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.WebTester.Services;
+using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester.Controllers
 {
@@ -51,13 +52,13 @@ namespace WB.UI.WebTester.Controllers
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: null,
+                interviewKey: new InterviewKey(00_00_00), 
                 assignmentId: null));
 
-            return RedirectToAction("Interview", new {id = interviewId});
+            return Redirect($"~/WebTester/Interview/{interviewId.FormatGuid()}/Cover");
         }
 
-        public ActionResult Interview(Guid id)
+        public ActionResult Interview(string id)
         {
             return View();
         }

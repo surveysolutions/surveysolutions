@@ -1,8 +1,9 @@
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Enumerator.Native.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations
+namespace WB.Core.BoundedContexts.Headquarters.Questionnaires
 {
     [PlainStorage]
     public class TranslationInstanceMap : ClassMapping<TranslationInstance>

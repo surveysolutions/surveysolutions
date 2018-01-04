@@ -22,11 +22,6 @@ namespace WB.Enumerator.Native.WebInterview
 
             registry.BindToConstant<IJavaScriptMinifier>(() => new SignalRHubMinifier());
 
-            //foreach (var type in HubPipelineModules)
-            //{
-            //    registry.BindAsSingleton(typeof(IHubPipelineModule), type);
-            //}
-
             registry.BindToMethodInSingletonScope<IWebInterviewInvoker>(_ =>
             {
                 // Ninject calls this method before container innitialization. Just make sure that we can handle this in AutoFac
@@ -37,20 +32,15 @@ namespace WB.Enumerator.Native.WebInterview
             });
         }
 
-        //private static readonly Type[] HubPipelineModules =
-        //{
-        //    typeof(SignalrErrorHandler),
-        //    typeof(WebInterviewConnectionsCounter)
-        //};
-
         public static void Configure(IAppBuilder app, Type[] pipelineModules)
         {
             var resolver = GlobalHost.DependencyResolver;
-            var pipeline = resolver.Resolve<IHubPipeline>();
+            var pipeline = resolver.Resolve<IHubPipeline>() ?? throw new ArgumentNullException("resolver.Resolve<IHubPipeline>()");
 
             foreach (var moduleType in pipelineModules)
             {
                 var module = resolver.GetService(moduleType) as IHubPipelineModule;
+                if (module == null) throw new ArgumentNullException(nameof(module), $"Tried to resolve type {moduleType}");
                 pipeline.AddModule(module);
             }
 

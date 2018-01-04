@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.UI.Headquarters
+namespace WB.Enumerator.Native.JsonConversion
 {
     public class FilteredCamelCasePropertyNamesContractResolver : DefaultContractResolver
     {
