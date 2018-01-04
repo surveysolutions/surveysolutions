@@ -196,6 +196,7 @@ namespace WB.UI.WebTester
         {
             typeof(SignalrErrorHandler),
             typeof(WebInterviewStateManager),
+            typeof(DesignerTokenRenewalPipeline),
             typeof(WebInterviewConnectionsCounter)
         };
     }

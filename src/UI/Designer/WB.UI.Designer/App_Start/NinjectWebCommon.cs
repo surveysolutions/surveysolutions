@@ -41,17 +41,11 @@ namespace WB.UI.Designer.App_Start
             DynamicModuleUtility.RegisterModule(typeof (OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof (NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
-            StartBackgroundJobs();
         }
 
         public static void Stop()
         {
             bootstrapper.ShutDown();
-        }
-
-        private static void StartBackgroundJobs()
-        {
-            ServiceLocator.Current.GetInstance<IWebTesterService>().StartBackgroundCleanupJob();
         }
 
         private static IKernel CreateKernel()
