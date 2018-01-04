@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             var importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
 
             // Act
-            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(Create.Entity.PreloadedData(
+            var result = importDataParsingService.CreatePreloadedDataDtosFromPanelData(Create.Entity.PreloadedDataByFile(
                 CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] { new[] { "1", "2" } }, questionnaireDocument.Title),
                 CreatePreloadedDataByFile(new[] { $"{rosterVariable}__id", "nq2", ServiceColumns.InterviewId }, new[] { new[] { "1", "2", "1" } }, rosterVariable)
             ));

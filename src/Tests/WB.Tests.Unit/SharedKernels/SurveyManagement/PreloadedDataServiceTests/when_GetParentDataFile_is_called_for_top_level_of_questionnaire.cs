@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Tests.Abc;
 
@@ -26,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         Because of =
            () =>
                result =
-                   importDataParsingService.GetParentDataFile(questionnaireDocument.Title, Create.Entity.PreloadedData(CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title)));
+                   importDataParsingService.GetParentDataFile(questionnaireDocument.Title, Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title)));
 
         It should_result_be_null = () =>
            result.ShouldBeNull();

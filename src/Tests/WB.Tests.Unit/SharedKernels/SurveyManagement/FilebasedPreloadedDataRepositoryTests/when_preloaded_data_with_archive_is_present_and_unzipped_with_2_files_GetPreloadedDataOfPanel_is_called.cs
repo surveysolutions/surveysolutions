@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -36,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId).Levels;
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId);
 
         It should_result_has_2_elements = () =>
             result.Length.ShouldEqual(2);

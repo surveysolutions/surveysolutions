@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataByFileNestedRosterLevel = CreatePreloadedDataByFile(new[] { nestedRosterTitle + "__id", "ParentId1", "ParentId2" }, new string[][] { new string[] { "10", "5", "1" } },
                 nestedRosterTitle + ".csv");
 
-            files = Create.Entity.PreloadedData(preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel, preloadedDataByFileNestedRosterLevel);
+            files = Create.Entity.PreloadedDataByFile(preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel, preloadedDataByFileNestedRosterLevel);
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);
             preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFileRosterLevel)).Returns(new[] { 1 });
@@ -88,6 +88,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private static string nestedRosterTitle = "nestedRoster";
 
         private static Mock<IPreloadedDataService> preloadedDataServiceMock;
-        private static PreloadedData files;
+        private static PreloadedDataByFile[] files;
     }
 }

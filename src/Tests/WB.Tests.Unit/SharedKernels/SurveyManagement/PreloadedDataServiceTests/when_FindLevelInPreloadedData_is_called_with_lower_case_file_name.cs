@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Tests.Abc;
@@ -25,10 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of =
-           () =>
-               result =
-                   importDataParsingService.FindLevelInPreloadedData("roster");
+        Because of = () => result = importDataParsingService.FindLevelInPreloadedData("roster");
 
         It should_return_not_null_result = () =>
            result.ShouldNotBeNull();
