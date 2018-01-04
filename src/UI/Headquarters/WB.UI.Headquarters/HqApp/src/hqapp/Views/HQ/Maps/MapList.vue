@@ -92,7 +92,7 @@ export default {
                     reloader();                    
                 },
                 error : function(error){
-                    statusupdater(uploadingErrorMessage, error);
+                    statusupdater(uploadingErrorMessage);
                 }
             });  
         this.$refs.uploader.value = '';            
