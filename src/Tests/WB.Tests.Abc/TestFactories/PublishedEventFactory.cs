@@ -70,8 +70,8 @@ namespace WB.Tests.Abc.TestFactories
                 .ToPublishedEvent(origin: origin, eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
-            Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null)
-            => Create.Event.InterviewStatusChanged(status, comment)
+            Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null, InterviewStatus? previousStatus = null)
+            => Create.Event.InterviewStatusChanged(status, comment, previousStatus: previousStatus)
                 .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
 
         public IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
