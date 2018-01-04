@@ -23,7 +23,8 @@ namespace WB.UI.Designer.Implementation.Services
         {
             if(localCache.TryGetValue(token, out var questionnaireId))
             {
-                return questionnaireId;
+                if(Cache.Get(questionnaireKey(questionnaireId)) as string == token)
+                    return questionnaireId;
             }
 
             return null;
