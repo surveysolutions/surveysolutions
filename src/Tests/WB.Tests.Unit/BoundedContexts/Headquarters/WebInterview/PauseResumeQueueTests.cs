@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         {
             var firstCommandDate = new DateTime(2007, 10, 17, 10, 0, 0);
 
-            var now = firstCommandDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(1);
+            var now = firstCommandDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(10);
             var clock = Mock.Of<IClock>(x => x.UtcNow() == now);
             IPauseResumeQueue queue = CreateQueue(clock);
 
@@ -80,7 +80,31 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             Assert.That(queue.DeQueueForPublish(), Is.Empty, "Should be empty after dequeue");
         }
 
-        private IPauseResumeQueue CreateQueue(IClock clock)
+        [Test]
+        public void when_pause_and_resume_are_in_same_scope_but_are_on_distant_time_to_be_published()
+        {
+            var interviewId = Id.gA;
+
+            var startDate = new DateTime(2010, 1, 2);
+            var secondCommandDate = startDate.Add(trackingSettings.PauseResumeGracePeriod).AddSeconds(1);
+
+            var pauseCommand = Create.Command.PauseInterview(interviewId, startDate);
+            var resumeCommand = Create.Command.ResumeInterview(interviewId, secondCommandDate);
+
+            var clock = Mock.Of<IClock>(x => x.UtcNow() == startDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(30));
+
+            var pauseResumeQueue = CreateQueue(clock);
+
+            // Act
+            pauseResumeQueue.EnqueuePause(pauseCommand);
+            pauseResumeQueue.EnqueueResume(resumeCommand);
+            var commandsToPublish = pauseResumeQueue.DeQueueForPublish();
+            
+            // Assert
+            Assert.That(commandsToPublish, Has.Count.EqualTo(2));
+        }
+        
+        private IPauseResumeQueue CreateQueue(IClock clock = null)
         {
             return new PauseResumeQueue(trackingSettings, clock);
         }

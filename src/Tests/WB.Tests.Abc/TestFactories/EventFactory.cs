@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -383,6 +384,11 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewKeyAssigned InterviewKeyAssigned(InterviewKey existingInterviewKey = null)
         {
             return new InterviewKeyAssigned(existingInterviewKey ?? new InterviewKey(111));
+        }
+
+        public InterviewOpenedBySupervisor InterviewOpenedBySupervisor()
+        {
+            return new InterviewOpenedBySupervisor(Guid.NewGuid(), DateTime.Now);
         }
     }
 }

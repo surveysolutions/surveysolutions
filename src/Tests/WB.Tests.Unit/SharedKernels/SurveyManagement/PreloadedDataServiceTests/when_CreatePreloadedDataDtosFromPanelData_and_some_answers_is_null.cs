@@ -1,5 +1,6 @@
 ﻿using Main.Core.Entities.Composite;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
@@ -25,10 +26,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 
             var importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
 
-            Assert.DoesNotThrow(() => importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[] {
+            AssignmentPreloadedDataRecord[] data = importDataParsingService.CreatePreloadedDataDtosFromPanelData(new[] {
                 CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "nq1" }, new[] {new[] {"1", null}}, questionnaireDocument.Title),
                 CreatePreloadedDataByFile(new[] { "rostergroup__id", "nq2", ServiceColumns.InterviewId}, new[] {new[] {"1", null, "1"}}, "rostergroup")
-            }));
+            });
+
+            Assert.That(data, Has.Length.EqualTo(1));
+            Assert.That(data[0].PreloadedDataDto.Answers, Has.Count.EqualTo(0));
         }
     }
 }
