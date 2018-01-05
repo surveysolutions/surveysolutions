@@ -20,8 +20,6 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    
-
     internal class InterviewDenormalizer : AbstractDenormalizer<InterviewState>,
         IEventHandler,
         IUpdateOrRemoveHandler<InterviewState, GroupPropagated>,

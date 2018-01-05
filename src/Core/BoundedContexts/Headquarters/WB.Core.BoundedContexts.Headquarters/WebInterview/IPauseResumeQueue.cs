@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 {
@@ -15,6 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 
         void EnqueueCloseBySupervisor(CloseInterviewBySupervisorCommand command);
 
-        List<InterviewCommand> DeQueueForPublish();
+        List<TimestampedInterviewCommand> DeQueueForPublish();
     }
 }
