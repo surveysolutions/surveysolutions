@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Api.Tester
             var translationsIds = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
 
 
-            return this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id && translationsIds.Contains(x.Id)).ToList())
+            return this.translations.Query(_ => _.Where(x => x.QuestionnaireId == id && translationsIds.Contains(x.TranslationId)).ToList())
                 .Select(x => new TranslationDto()
             {
                 Value = x.Value,
