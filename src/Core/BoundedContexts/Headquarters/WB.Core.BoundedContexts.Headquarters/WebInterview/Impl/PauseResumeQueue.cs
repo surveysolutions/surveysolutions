@@ -58,12 +58,6 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
         {
             List<TimestampedInterviewCommand> result = new List<TimestampedInterviewCommand>();
 
-            var durations = commands.Select(x => new
-            {
-                type = x.Value.GetType(),
-                dur = (clock.UtcNow() - x.Value.UtcTime).Duration()
-            }).ToList();
-
             var commandToBePublished = commands.Where(x => (clock.UtcNow() - x.Value.UtcTime).Duration() > trackingSettings.DelayBeforeCommandPublish).ToList();
 
             foreach (var commandToBeAdded in commandToBePublished)
