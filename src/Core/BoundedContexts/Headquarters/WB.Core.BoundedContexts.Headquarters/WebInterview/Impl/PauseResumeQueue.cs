@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Ncqrs;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 {
@@ -31,25 +30,25 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
         public void EnqueuePause(PauseInterviewCommand command)
         {
-            DequeuePreviousAndAddNew(command, typeof(ResumeInterviewCommand));
+            DequeuePreviousAndAddNew(command);
         }
 
         public void EnqueueCloseBySupervisor(CloseInterviewBySupervisorCommand command)
         {
-            DequeuePreviousAndAddNew(command, typeof(OpenInterviewBySupervisorCommand));
+            DequeuePreviousAndAddNew(command);
         }
 
         public void EnqueueResume(ResumeInterviewCommand command)
         {
-            DequeuePreviousAndAddNew(command, typeof(PauseInterviewCommand));
+            DequeuePreviousAndAddNew(command);
         }
 
         public void EnqueueOpenBySupervisor(OpenInterviewBySupervisorCommand command)
         {
-            DequeuePreviousAndAddNew(command, typeof(CloseInterviewBySupervisorCommand));
+            DequeuePreviousAndAddNew(command);
         }
 
-        private void DequeuePreviousAndAddNew(TimestampedInterviewCommand command, Type counterCommand)
+        private void DequeuePreviousAndAddNew(TimestampedInterviewCommand command)
         {
             commands[Guid.NewGuid()] = command;
         }
