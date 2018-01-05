@@ -157,12 +157,14 @@ namespace WB.UI.Designer.Api.WebTester
             var questionnaireId = this.webTesterService.GetQuestionnaire(token)
                                   ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
 
-            if (this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId)) == null)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-            }
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId)) 
+                ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
 
-            return Task.FromResult(this.translations.Query(_ => _.Where(x => x.QuestionnaireId == Guid.Parse(token)).ToList()).Select(x => new TranslationDto()
+            var actualTranslations = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
+            
+            return Task.FromResult(this.translations.Query(_ => 
+                _.Where(x => x.QuestionnaireId == Guid.Parse(token) && actualTranslations.Contains(x.TranslationId))
+                    .ToList()).Select(x => new TranslationDto
             {
                 Value = x.Value,
                 Type = x.Type,

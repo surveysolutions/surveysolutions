@@ -1207,6 +1207,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new TranslationInstance
             {
+                Id = Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireEntityId = questionnaireEntityId ?? Guid.NewGuid(),
                 Type = type,
