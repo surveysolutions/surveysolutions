@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using Ncqrs;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
@@ -11,8 +12,16 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
     {
         private readonly TrackingSettings trackingSettings;
         private readonly IClock clock;
-        private readonly Dictionary<Guid, List<TimestampedInterviewCommand>> commands = new Dictionary<Guid, List<TimestampedInterviewCommand>>();
-        private readonly NamedLocker locker = new NamedLocker();
+        private readonly ConcurrentDictionary<Guid, TimestampedInterviewCommand> commands = new ConcurrentDictionary<Guid, TimestampedInterviewCommand>();
+
+        private readonly Dictionary<Type, Type> counterCommands = new Dictionary<Type, Type>
+        {
+            {typeof(ResumeInterviewCommand), typeof(PauseInterviewCommand)},
+            {typeof(PauseInterviewCommand), typeof(ResumeInterviewCommand)},
+            {typeof(OpenInterviewBySupervisorCommand), typeof(CloseInterviewBySupervisorCommand)},
+            {typeof(CloseInterviewBySupervisorCommand), typeof(OpenInterviewBySupervisorCommand)},
+        };
+
 
         public PauseResumeQueue(TrackingSettings trackingSettings, IClock clock)
         {
@@ -42,51 +51,45 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
         private void DequeuePreviousAndAddNew(TimestampedInterviewCommand command, Type counterCommand)
         {
-            locker.RunWithLock(command.InterviewId + "pauseResume",
-            () => {
-                var interviewCommands = commands.GetOrAdd(command.InterviewId, () => new List<TimestampedInterviewCommand>());
-                bool counteredExistingCommand = false;
-
-                for (int i = interviewCommands.Count - 1; i >= 0; i--)
-                {
-                    var commandToCancel = interviewCommands[i];
-                    var commandIsNewEnoughToBeCancelled = (commandToCancel.UtcTime - command.UtcTime).Duration() < trackingSettings.PauseResumeGracePeriod;
-                    if (commandToCancel.GetType() == counterCommand && commandIsNewEnoughToBeCancelled)
-                    {
-                        interviewCommands.Remove(commandToCancel);
-                        counteredExistingCommand = true;
-                        break;
-                    }
-                }
-                if (!counteredExistingCommand)
-                {
-                    interviewCommands.Add(command);
-                }
-            });
+            commands[Guid.NewGuid()] = command;
         }
 
-        public List<InterviewCommand> DeQueueForPublish()
+        public List<TimestampedInterviewCommand> DeQueueForPublish()
         {
-            DateTime utcCompareTo = clock.UtcNow();
-            var delayBeforePublish = trackingSettings.DelayBeforeCommandPublish;
-            List<InterviewCommand> result = new List<InterviewCommand>();
-            foreach (var key in commands.Keys)
+            List<TimestampedInterviewCommand> result = new List<TimestampedInterviewCommand>();
+
+            var durations = commands.Select(x => new
             {
-                locker.RunWithLock(key + "pauseResume", 
-                () => {
-                        var commandsList = commands[key];
-                        for (int i = commandsList.Count - 1; i >= 0; i--)
-                        {
-                            var processedCommand = commandsList[i];
-                            if ((utcCompareTo - processedCommand.UtcTime).Duration() > delayBeforePublish)
-                            {
-                                commandsList.Remove(processedCommand);
-                                result.Add(processedCommand);
-                            }
-                        }
-                    });
+                type = x.Value.GetType(),
+                dur = (clock.UtcNow() - x.Value.UtcTime).Duration()
+            }).ToList();
+
+            var commandToBePublished = commands.Where(x => (clock.UtcNow() - x.Value.UtcTime).Duration() > trackingSettings.DelayBeforeCommandPublish).ToList();
+
+            foreach (var commandToBeAdded in commandToBePublished)
+            {
+                var counterCommand = FindCounterCommand(result, commandToBeAdded);
+                if (counterCommand != null)
+                {
+                    result.Remove(counterCommand);
+                }
+                else
+                {
+                    result.Add(commandToBeAdded.Value);
+                }
+
+                commands.TryRemove(commandToBeAdded.Key, out _);
             }
+
             return result;
+        }
+
+        private TimestampedInterviewCommand FindCounterCommand(List<TimestampedInterviewCommand> result, KeyValuePair<Guid, TimestampedInterviewCommand> commandToBeAdded)
+        {
+            return result.FirstOrDefault(x =>
+                x.InterviewId == commandToBeAdded.Value.InterviewId &&
+                (x.UtcTime - commandToBeAdded.Value.UtcTime).Duration() < this.trackingSettings.PauseResumeGracePeriod &&
+                counterCommands[commandToBeAdded.Value.GetType()] == x.GetType());
         }
     }
 }

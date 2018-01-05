@@ -422,6 +422,9 @@
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\StatefullInterviewSearchTests.cs" />
     <Compile Include="Applications\Headquarters\WebInterview\Review\Filtering\when_interview_has_prefilled_readonly_question.cs" />
     <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
+    <Compile Include="BoundedContexts\Headquarters\EventHandler\AbstractDenormalizerTests.cs" />
+    <Compile Include="BoundedContexts\Headquarters\EventHandler\TestableAbstractDenormalizer.cs" />
+    <Compile Include="BoundedContexts\Headquarters\EventHandler\TestState.cs" />
     <Compile Include="DataExportTests\InterviewsExporterTests\When_exporting_data_for_one_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqreject_competed_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\GetSubSectionsWithEnablementConditionTests.cs" />

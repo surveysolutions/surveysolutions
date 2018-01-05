@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventHandlers;
@@ -10,23 +11,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
     {
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            var state = (TEntity) Activator.CreateInstance(typeof(TEntity), eventSourceId);
-
-            foreach (var publishableEvent in publishableEvents)
+            if (publishableEvents.Any(this.Handles))
             {
-                if (!this.Handles(publishableEvent))
-                    continue;
+                var state = (TEntity) Activator.CreateInstance(typeof(TEntity), eventSourceId);
 
-                var eventType = typeof(IPublishedEvent<>).MakeGenericType(publishableEvent.Payload.GetType());
+                foreach (var publishableEvent in publishableEvents)
+                {
+                    if (!this.Handles(publishableEvent))
+                        continue;
 
-                this.GetType().GetTypeInfo().GetMethod("Update", new[] { typeof(TEntity), eventType })
-                    .Invoke(this, new object[] { state, this.CreatePublishedEvent(publishableEvent) });
+                    var eventType = typeof(IPublishedEvent<>).MakeGenericType(publishableEvent.Payload.GetType());
 
-                if (state == null) break;
-            }
+                    this.GetType().GetTypeInfo().GetMethod("Update", new[] {typeof(TEntity), eventType})
+                        .Invoke(this, new object[] {state, this.CreatePublishedEvent(publishableEvent)});
+                }
 
-            if (state != null)
                 this.SaveState(state);
+            }
         }
 
         protected abstract void SaveState(TEntity state);
