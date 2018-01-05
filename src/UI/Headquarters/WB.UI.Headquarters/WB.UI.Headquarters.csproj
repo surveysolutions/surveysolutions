@@ -1614,7 +1614,7 @@
     <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
-    <Compile Include="API\WebInterview\Pipeline\InterviewAuthorizationModule.cs" />
+    <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="API\WebInterview\Pipeline\PlainSignalRTransactionManager.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />

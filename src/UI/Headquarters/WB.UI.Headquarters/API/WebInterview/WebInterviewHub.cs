@@ -11,10 +11,12 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.UI.Headquarters.API.WebInterview.Pipeline;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
     [HubName(@"interview")]
+    [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview
     {
         private readonly IAuthorizedUser authorizedUser;
