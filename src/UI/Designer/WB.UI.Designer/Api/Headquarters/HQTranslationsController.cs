@@ -36,7 +36,8 @@ namespace WB.UI.Designer.Api.Headquarters
 
             //Cast<TranslationDto> preserves TranslationInstance type that used during serialization
             //consumer has no idea about that type
-            var translationInstances = this.translations.Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && translationsIds.Contains(x.Id)).ToList())
+            var translationInstances = this.translations.Query(_ 
+                    => _.Where(x => x.QuestionnaireId == questionnaireId && translationsIds.Contains(x.TranslationId)).ToList())
                 .Select(x => new TranslationDto()
                 {
                     Value = x.Value,
