@@ -576,8 +576,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
             innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
 
-            if(command.OldTranslationId.HasValue)
+            if (command.OldTranslationId.HasValue)
+            {
                 innerDocument.Translations.RemoveAll(x => x.Id == command.OldTranslationId.Value);
+
+                if (innerDocument.DefaultTranslation.HasValue &&
+                    innerDocument.DefaultTranslation == command.OldTranslationId)
+                    innerDocument.DefaultTranslation = command.TranslationId;
+            }
 
             innerDocument.Translations.Add(translation);
         }
