@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var recordsByLevel = new List<string>();
                 foreach (var interviewDataExportRecord in interviewDataExportLevelView.Records)
                 {
-                    var parametersToConcatenate = new List<string> { interviewDataExportView.InterviewId.FormatGuid() };
+                    var parametersToConcatenate = new List<string> { interviewDataExportRecord.RecordId };
 
                     parametersToConcatenate.AddRange(interviewDataExportRecord.ReferenceValues);
 
