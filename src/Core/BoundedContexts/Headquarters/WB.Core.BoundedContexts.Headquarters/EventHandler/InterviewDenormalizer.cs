@@ -181,7 +181,10 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Update(InterviewState state, IPublishedEvent<AnswersRemoved> evnt)
         {
             foreach (var question in evnt.Payload.Questions)
-                this.SetAnswerInState(state, question, null);
+            {
+                if(!state.Removed.Contains(question))
+                    this.SetAnswerInState(state, question, null);
+            }
         }
 
         public void Update(InterviewState state, IPublishedEvent<GroupsDisabled> evnt)
