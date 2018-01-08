@@ -257,11 +257,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return result.ToArray();
         }
 
-        private IEnumerable<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)
+        private List<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)
         {
             if (!levelVector.Any())
-                return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>()));
-            return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector));
+            {
+                var levels = interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>())).ToList();
+                return levels.Any() ? levels : new List<InterviewLevel> {new  InterviewLevel() {RosterVector = new decimal[0]}} ;
+            }
+            return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector)).ToList();
         }
 
         protected HeaderStructureForLevel CreateHeaderStructureForLevel(
