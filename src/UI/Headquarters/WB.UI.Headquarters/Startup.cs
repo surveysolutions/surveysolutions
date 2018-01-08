@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters
             InitializeMVC();
             ConfigureWebApi(app);
 
-            Settings.Current.GetCustomData += (exception, dictionary) =>
+            Exceptional.Settings.GetCustomData += (exception, dictionary) =>
             {
                 void AddAllSqlData(Exception e)
                 {
@@ -92,7 +92,7 @@ namespace WB.UI.Headquarters
                 //AddAllSqlData(exception);
             };
 
-            Settings.Current.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
+            Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
                 void AddAllSqlData(Exception e)
                 {

@@ -138,10 +138,10 @@
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha-129\lib\net451\StackExchange.Exceptional.dll</HintPath>
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-alpha-129\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
+      <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -150,12 +150,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
