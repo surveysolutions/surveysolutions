@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.Ajax.Utilities;
@@ -71,7 +72,8 @@ namespace WB.UI.WebTester.Controllers
 
             return View(new InterviewPageModel
             {
-                Title = $"{questionnaire.Title} | Web Tester"
+                Title = $"{questionnaire.Title} | Web Tester",
+                GoogleMapsKey = ConfigurationManager.AppSettings["Google.Map.ApiKey"]
             });
         }
     }
@@ -79,6 +81,7 @@ namespace WB.UI.WebTester.Controllers
     public class InterviewPageModel
     {
         public string Title { get; set; }
+        public string GoogleMapsKey { get; set; }
     }
 
     public class ApiTestModel
