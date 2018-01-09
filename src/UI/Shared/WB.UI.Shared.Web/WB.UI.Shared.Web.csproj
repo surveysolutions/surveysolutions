@@ -169,6 +169,7 @@
     <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />
     <Compile Include="Captcha\CaptchaModule.cs" />
+    <Compile Include="Modules\ApiControllerExtensions.cs" />
     <Compile Include="Modules\IWebIocRegistry.cs" />
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />

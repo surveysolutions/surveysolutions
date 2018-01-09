@@ -39,6 +39,7 @@ using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Pipeline;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
@@ -69,6 +70,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
 
             registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
+            registry.Bind<IImageProcessingService, ImageProcessingService>();
             
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
             registry.BindAsSingleton<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
