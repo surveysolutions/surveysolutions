@@ -65,7 +65,7 @@
             request["from"] = self.fromDateSelected().toJSON();
 
         if (self.toDateSelected() != undefined)
-            request["to"] = self.toDateSelected().toJSON();
+            request["to"] = moment(self.toDateSelected()).add(1, 'days').utc().toISOString();
 
         return $.param(request);
     };
