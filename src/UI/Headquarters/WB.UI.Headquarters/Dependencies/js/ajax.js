@@ -26,6 +26,28 @@
         new PNotify({ title: title, text: message });
     };
 
+    self.modal = function (title, message) {
+        var modal = new PNotify({
+            title: title,
+            text: message,
+            hide: false,
+            type: "info",
+            tag: "modal",
+            insert_brs: false,
+            addclass: "centered-modal",
+            history: {
+                history: false
+            },
+            buttons: {
+                closer: false,
+                sticker: false
+            },
+            stack: stack_modal
+        });
+        modal.get();
+        return modal;
+    };
+
     self.confirm = function (title, message, confirmCallback, cancelCallback) {
         return (new PNotify({
             title: title,
@@ -119,7 +141,7 @@ var Ajax = function (notifier) {
     self.sendRequest = function (requestUrl, method, args, skipInProgressCheck, onSuccess, onDone, onError) {
         if (!skipInProgressCheck && !self.isAjaxComplete()) {
             self.checkForRequestComplete();
-            return;
+            return null;
         }
 
         self.isAjaxComplete(false);
@@ -130,7 +152,7 @@ var Ajax = function (notifier) {
         var requestHeaders = {};
         requestHeaders[input.settings.acsrf.tokenName] = input.settings.acsrf.token;
 
-        $.ajax({
+        return $.ajax({
             url: requestUrl,
             type: method,
             data: args,

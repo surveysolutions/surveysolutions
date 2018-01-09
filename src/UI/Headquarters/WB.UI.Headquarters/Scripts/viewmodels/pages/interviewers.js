@@ -1,4 +1,4 @@
-﻿Supervisor.VM.Interviewers = function (listViewUrl, archiveUsersUrl, ajax, interviewersPageUrl, supervisorsUrl) {
+﻿Supervisor.VM.Interviewers = function (listViewUrl, archiveUsersUrl, ajax, interviewersPageUrl, supervisorsUrl, $moveUserToAnotherTeamUrl) {
     Supervisor.VM.Interviewers.superclass.constructor.apply(this, [listViewUrl, archiveUsersUrl, ajax]);
 
     var self = this;
@@ -73,12 +73,87 @@
         self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
     }
 
+    var showMoveInterviewersProgress = function (interviewers, supervisor, whatToDoWithAssignments) {
+        var messageTemplateId = "#move-interviewer-progress-template";
+
+        var model = {
+            Interviewers: ko.observableArray(interviewers),
+            Supervisor: ko.observable(supervisor)
+        };
+
+        ko.utils.arrayForEach(model.Interviewers(),
+            function (interviewer) {
+                interviewer.inProgress = ko.observable(false);
+                interviewer.errors = ko.observableArray([]);
+            });
+
+        model.MoveInterviewers = function (modal) {
+            var createRequest = function (index) {
+                if (index >= interviewers.length) {
+                    modal.update({
+                        buttons: {
+                            closer: true
+                        }
+                    });
+                    return;
+                }
+
+                var interviewer = model.Interviewers()[index];
+                interviewer.inProgress(true);
+
+                var request = {
+                    InterviewerId: interviewer.userId,
+                    OldSupervisorId: interviewer.supervisorId,
+                    NewSupervisorId: supervisor.UserId,
+                    Mode: whatToDoWithAssignments
+                };
+
+                ajax.sendRequest($moveUserToAnotherTeamUrl,
+                    "post",
+                    request,
+                    false,
+                    // onSuccess
+                    function (data) {
+                        interviewer.inProgress(false);
+                        if (!data.IsSuccess) {
+                            interviewer.errors([data.DomainException]);
+                        } else {
+                            interviewer.errors.removeAll();
+                        }
+                    },
+                    //onDone
+                    function () {
+                        setTimeout(function () {
+                            createRequest(index + 1);
+                        }, 500);
+                    }
+                );
+            }
+
+            createRequest(0);
+        }
+
+        var messageTemplate = $("<div/>").html($(messageTemplateId).html())[0];
+        var messageHtml = $(messageTemplate).html();
+
+        var modal = notifier.modal("Progress", messageHtml);
+
+        modal.get().attr("id", "move-interviewer-progress");
+
+        ko.applyBindings(model, modal.get()[0]);
+
+        model.MoveInterviewers(modal);
+    };
+
     self.MoveToAnotherTeam = function () {
-        var commandName = "MoveInterviewerToAnotherTeamCommand";
         var messageTemplateId = "#move-interviewer-to-another-team-template";
 
-        var selectedInterviewers = ko.utils.arrayFilter(self.Datatable.data(), function(i) {
+        var selectedUsers = ko.utils.arrayFilter(self.Datatable.data(), function(i) {
             return self.SelectedItems().indexOf(i.userId) > -1;
+        });
+
+        var selectedInterviewers = ko.utils.arrayMap(selectedUsers, function(interviewer) {
+            return ko.toJS(interviewer);
         });
 
         var countInterviewersToMove = ko.observable(0);
@@ -132,28 +207,19 @@
         var title = self.moveInterviewerPopupTitle.format(formatNames(selectedInterviewers));
 
         var confirm = notifier.confirm(title, messageHtml, function (result) {
+            // add error message
             if (_.isUndefined(model.Users.AssignTo()))
+                return;
+
+            if (_.isEmpty(model.WhatToDoWithAssignments()))
                 return;
 
             if (result) {
                 if (model.InterviewersToMove().length > 0) {
-                    var getParamsToAssignToAnotherTeam = function (interview) {
-                        return {
-                            OriginalSupervisorId: interview.supervisorId,
-                            NewSupervisorId: model.Users.AssignTo().SupervisorId,
-                            InterviewId: interview.InterviewId
-                        }
-                    };
-
-                    var onSuccessCommandExecuting = function () {
-                        model.Users.AssignTo(undefined);
-                    };
-
-                    self.sendCommand(commandName, getParamsToAssignToAnotherTeam, model.InterviewersToMove(), onSuccessCommandExecuting);
+                    showMoveInterviewersProgress(model.InterviewersToMove(),
+                        model.Users.AssignTo(),
+                        model.WhatToDoWithAssignments());
                 }
-            }
-            else {
-                model.Users.AssignTo(undefined);
             }
         });
 

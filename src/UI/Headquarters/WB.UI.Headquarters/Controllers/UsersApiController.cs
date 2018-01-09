@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
@@ -12,6 +13,7 @@ using Resources;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -27,6 +29,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
@@ -44,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewerProfileFactory interviewerProfileFactory;
         private readonly IUserImportService userImportService;
+        private readonly IMoveUserToAnotherTeamService moveUserToAnotherTeamService;
 
         public UsersApiController(
             ICommandService commandService,
@@ -55,7 +59,8 @@ namespace WB.UI.Headquarters.Controllers
             IExportFactory exportFactory, 
             IInterviewerProfileFactory interviewerProfileFactory,
             IFileSystemAccessor fileSystemAccessor,
-            IUserImportService userImportService)
+            IUserImportService userImportService, 
+            IMoveUserToAnotherTeamService moveUserToAnotherTeamService)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -66,6 +71,7 @@ namespace WB.UI.Headquarters.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewerProfileFactory = interviewerProfileFactory;
             this.userImportService = userImportService;
+            this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
         }
 
         [HttpPost]
@@ -261,6 +267,25 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public async Task<JsonCommandResponse> MoveUserToAnotherTeam(MoveUserToAnotherTeamRequest moveRequest)
+        {
+            var result = await this.moveUserToAnotherTeamService.Move(
+                moveRequest.InterviewerId,
+                moveRequest.NewSupervisorId, 
+                moveRequest.OldSupervisorId, 
+                moveRequest.Mode);
+
+            Thread.Sleep(5000);
+
+            return new JsonCommandResponse
+            {
+                IsSuccess = result.Errors.Count == 0,
+                DomainException = string.Join(@"; ", result.Errors)
+            };
+        }
+
+        [HttpPost]
         [Authorize(Roles = "Administrator")]
         public async Task<JsonBundleCommandResponse> ArchiveUsers(ArchiveUsersRequest request)
         {
@@ -380,6 +405,14 @@ namespace WB.UI.Headquarters.Controllers
     {
         public Guid[] UserIds { get; set; }
         public bool Archive { get; set; }
+    }
+
+    public class MoveUserToAnotherTeamRequest
+    {
+        public Guid InterviewerId { get; set; }
+        public Guid OldSupervisorId { get; set; }
+        public Guid NewSupervisorId { get; set; }
+        public MoveUserToAnotherTeamMode Mode { get; set; }
     }
 
     public class DeleteSupervisorCommandRequest
