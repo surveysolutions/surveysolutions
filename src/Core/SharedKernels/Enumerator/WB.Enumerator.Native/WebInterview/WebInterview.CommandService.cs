@@ -130,11 +130,7 @@ namespace WB.Enumerator.Native.WebInterview
         }
 
         [ObserverNotAllowed]
-        public void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
-        {
-            var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, completeInterviewRequest.Comment, DateTime.UtcNow);
-            this.commandService.Execute(command);
-        }
+        public abstract void CompleteInterview(CompleteInterviewRequest completeInterviewRequest);
 
         [ObserverNotAllowed]
         public void SendNewComment(string questionIdentity, string comment)

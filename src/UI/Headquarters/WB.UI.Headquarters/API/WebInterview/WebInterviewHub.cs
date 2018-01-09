@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
 
 namespace WB.UI.Headquarters.API.WebInterview
@@ -49,6 +50,13 @@ namespace WB.UI.Headquarters.API.WebInterview
 
                 return statefulInterview.CurrentResponsibleId;
             }
+        }
+
+        [ObserverNotAllowed]
+        public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
+        {
+            var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, completeInterviewRequest.Comment, DateTime.UtcNow);
+            this.commandService.Execute(command);
         }
 
         protected override bool IsCurrentUserObserving => this.authorizedUser.IsObserving;
