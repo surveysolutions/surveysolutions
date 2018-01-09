@@ -23,7 +23,7 @@
         verboseLogging: false,
         supportedTransports: ["webSockets", "longPolling"],
         appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
-        googleApiKey: '',
+        googleApiKey: '@Model.GoogleMapsKey',
         hqLink: "null",
         hubName: "interview"
     }
