@@ -1891,7 +1891,7 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewState InterviewState(Guid interviewId) => new InterviewState(interviewId);
+        public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
         public PreloadedDataByFile[] PreloadedDataByFile(params PreloadedDataByFile[] preloadedDataByFiles)
         {
