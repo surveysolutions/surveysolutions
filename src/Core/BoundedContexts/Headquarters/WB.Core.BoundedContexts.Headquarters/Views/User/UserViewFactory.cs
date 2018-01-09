@@ -174,6 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     IsLockedBySupervisor = x.IsLockedBySupervisor,
                     IsLockedByHQ = x.IsLockedByHeadquaters,
                     UserName = x.UserName,
+                    SupervisorId = x.Profile.SupervisorId,
                     SupervisorName = allUsers.FirstOrDefault(pr => pr.Id == x.Profile.SupervisorId).UserName,
                     DeviceId = x.Profile.DeviceId,
                     IsArchived = x.IsArchived,
