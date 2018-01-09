@@ -68,6 +68,8 @@ namespace WB.UI.WebTester
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
 
+            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
+            
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
             registry.BindAsSingleton<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
             registry.BindToMethod<IDesignerWebTesterApi>(() => Refit.RestService.For<IDesignerWebTesterApi>(DesignerAddress(),
@@ -122,7 +124,6 @@ namespace WB.UI.WebTester
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
-            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
 
             registry.BindAsSingleton<IEventStore, InMemoryEventStore>();
