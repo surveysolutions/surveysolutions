@@ -11,6 +11,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Questionnaire.Api;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
@@ -41,12 +43,25 @@ namespace WB.UI.WebTester.Controllers
         {
             var questionnaire = await webTesterApi.GetQuestionnaireAsync(id.ToString());
             var translations = await webTesterApi.GetTranslationsAsync(id.ToString());
+            var attachments = new List<QuestionnaireAttachment>();
+            foreach (Attachment documentAttachment in questionnaire.Document.Attachments)
+            {
+                var content = await webTesterApi.GetAttachmentContentAsync(id.ToString(), documentAttachment.ContentId);
+                attachments.Add(new QuestionnaireAttachment
+                {
+                    Id = documentAttachment.AttachmentId,
+                    Content = content
+                });
+
+            }
+
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
 
             this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, 
                 questionnaire.Document,
                 questionnaire.Assembly,
-                translations);
+                translations,
+                attachments);
             
             this.commandService.Execute(new CreateInterview(
                 interviewId: id,
@@ -76,6 +91,12 @@ namespace WB.UI.WebTester.Controllers
                 GoogleMapsKey = ConfigurationManager.AppSettings["Google.Map.ApiKey"]
             });
         }
+    }
+
+    public class QuestionnaireAttachment
+    {
+        public Guid Id { get; set; }
+        public AttachmentContent Content { get; set; }
     }
 
     public class InterviewPageModel
