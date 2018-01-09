@@ -30,6 +30,8 @@
         var $interviewersPageUrl = '@Html.Raw(@Url.Action("Index", "Interviewers", new {}, Request.Url.Scheme))';
         var $supervisorsUrl =
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Supervisors"})';
+        var $moveUserToAnotherTeamUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "UsersApi", action = "MoveUserToAnotherTeam"})';
 
         var notifier = new Notifier();
         var ajax = new Ajax(notifier);
@@ -39,7 +41,8 @@
                 $archiveUsersUrl,
                 ajax,
                 $interviewersPageUrl,
-                $supervisorsUrl);
+                $supervisorsUrl,
+                $moveUserToAnotherTeamUrl);
             model.moveInterviewerPopupTitle = "@Pages.Interviewers_MoveInterviewerPopupTitle";
             model.namesFormatMoreThanLimit = "@Pages.Interviewers_NamesFormatMoreThanLimit";
             model.namesFormatLessThanLimit = "@Pages.Interviewers_NamesFormatLessThanLimit";
@@ -332,6 +335,16 @@
                 <span class="tick"></span>
                 @Html.Raw(string.Format(@Pages.Interviewers_MoveAllToNewTeam, "<b data-bind='text: SelectedSupervisor'></b>"))
             </label>
+        </div>
+    </script>
+
+    <script type="text/html" id="move-interviewer-progress-template">
+        <div>
+            <ul data-bind="foreach: Interviewers">
+                <li>
+                    <span data-bind="text: userName, css: { 'text-danger' : inProgress }"></span>
+                </li>
+            </ul>   
         </div>
     </script>
 </main>

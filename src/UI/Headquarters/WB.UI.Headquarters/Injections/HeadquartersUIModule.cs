@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAccessors;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -45,6 +46,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IUserImportService, UserImportService>();
+            registry.Bind<IMoveUserToAnotherTeamService, MoveUserToAnotherTeamService>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
             registry.Bind<IDataExportProcessDetails, DataExportProcessDetails>();
