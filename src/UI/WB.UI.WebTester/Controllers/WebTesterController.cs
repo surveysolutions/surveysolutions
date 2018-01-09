@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -19,16 +20,19 @@ namespace WB.UI.WebTester.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
         private readonly IQuestionnaireImportService questionnaireImportService;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IDesignerWebTesterApi webTesterApi;
 
         public WebTesterController(IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
             IQuestionnaireImportService questionnaireImportService,
+            IQuestionnaireStorage questionnaireStorage,
             IDesignerWebTesterApi webTesterApi)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
             this.questionnaireImportService = questionnaireImportService ?? throw new ArgumentNullException(nameof(questionnaireImportService));
+            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
         }
 
@@ -61,8 +65,20 @@ namespace WB.UI.WebTester.Controllers
         {
             await this.webTesterApi.GetQuestionnaireInfoAsync(Guid.Parse(id).ToString());
             var interview = statefulInterviewRepository.Get(id);
-            return View();
+
+            var questionnaire =
+                this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            return View(new InterviewPageModel
+            {
+                Title = $"{questionnaire.Title} | Web Tester"
+            });
         }
+    }
+
+    public class InterviewPageModel
+    {
+        public string Title { get; set; }
     }
 
     public class ApiTestModel
