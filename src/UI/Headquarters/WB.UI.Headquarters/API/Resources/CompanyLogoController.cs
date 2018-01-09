@@ -9,6 +9,7 @@ using System.Web.Http;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.API.Resources
 {

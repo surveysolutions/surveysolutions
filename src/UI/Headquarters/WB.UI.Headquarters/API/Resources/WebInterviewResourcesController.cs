@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.API.Resources
 {

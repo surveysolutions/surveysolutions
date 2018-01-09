@@ -31,6 +31,7 @@ using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Injections
 {
