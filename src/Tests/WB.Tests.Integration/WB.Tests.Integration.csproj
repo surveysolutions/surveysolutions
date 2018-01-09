@@ -300,6 +300,7 @@
     <Compile Include="Execute.cs" />
     <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
     <Compile Include="InterviewFactoryTests.cs" />
+    <Compile Include="InterviewTests\AnsweringLinkedQuestionTests.cs" />
     <Compile Include="InterviewTests\EnablementAndValidnessTests.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_makes_interview_invalid.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_cascading_question_used_in_conditions.cs" />
