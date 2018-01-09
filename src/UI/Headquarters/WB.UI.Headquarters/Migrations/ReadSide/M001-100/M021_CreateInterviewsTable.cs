@@ -110,7 +110,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                             writer.Write(entity.Identity.Id, NpgsqlDbType.Uuid);
                             writer.Write(entity.Identity.RosterVector.ToArray(), NpgsqlDbType.Array | NpgsqlDbType.Integer);
                             writer.Write(entity.EntityType, NpgsqlDbType.Integer);
-                            if (entity.AnswerType == null) writer.WriteNull(); else writer.Write(entity.AnswerType, NpgsqlDbType.Integer);
+                            writer.WriteNull();
                             writer.Write(entity.IsEnabled, NpgsqlDbType.Boolean);
                             writer.Write(entity.IsReadonly, NpgsqlDbType.Boolean);
                             if(entity.InvalidValidations == null) writer.WriteNull(); else writer.Write(entity.InvalidValidations, NpgsqlDbType.Array | NpgsqlDbType.Integer);
@@ -159,7 +159,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     IsEnabled = !question.Value.IsDisabled(),
                     IsReadonly = question.Value.IsReadonly(),
                     HasFlag = question.Value.IsFlagged(),
-                    AnswerType = InterviewEntity.GetAnswerType(question.Value.Answer),
                     InvalidValidations = question.Value.FailedValidationConditions?.Select(x => x.FailedConditionIndex)?.ToArray() ?? new int[] { },
 
                     AsIntArray = question.Value.Answer as int[] ??
@@ -205,7 +204,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 yield return new InterviewEntity
                 {
                     EntityType = EntityType.Variable,
-                    AnswerType = InterviewEntity.GetAnswerType(variable.Value),
                     InterviewId = interviewId,
                     Identity = Identity.Create(variable.Key, lvl.RosterVector),
                     IsEnabled = !lvl.DisabledVariables.Contains(variable.Key),

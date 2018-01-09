@@ -783,6 +783,7 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -1908,6 +1909,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201709251028_AddWasCompletedFlagToSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201711061216_RemovelastpublishedeventpositionforhandlersTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709291355_ChangeJsonToJsonB.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
