@@ -2,7 +2,7 @@
 using System.IO;
 using ImageResizer;
 
-namespace WB.UI.Headquarters.Services
+namespace WB.UI.Shared.Web.Services
 {
     public class ImageProcessingService : IImageProcessingService
     {

@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Headquarters.Services
+﻿namespace WB.UI.Shared.Web.Services
 {
     public interface IImageProcessingService
     {
