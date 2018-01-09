@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.EventHandlers;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    internal abstract class AbstractDenormalizer<TEntity> : IFunctionalEventHandler where TEntity : class
+    internal abstract class AbstractDenormalizer<TEntity> : IFunctionalEventHandler where TEntity : StateBase, new()
     {
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
             if (publishableEvents.Any(this.Handles))
             {
-                var state = (TEntity) Activator.CreateInstance(typeof(TEntity), eventSourceId);
+                var state = new TEntity {Id = eventSourceId};
 
                 foreach (var publishableEvent in publishableEvents)
                 {
