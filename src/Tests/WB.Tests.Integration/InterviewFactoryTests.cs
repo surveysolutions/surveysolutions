@@ -154,12 +154,11 @@ namespace WB.Tests.Integration
         {
             //arrange
             var interviewId = Guid.NewGuid();
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 111);
 
-            var sectionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1));
-            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
-            var staticTextId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2, 3));
-            var variableId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2, 3, 4));
+            var sectionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1));
+            var questionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+            var staticTextId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1, 2, 3));
+            var variableId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1, 2, 3, 4));
 
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
@@ -178,7 +177,7 @@ namespace WB.Tests.Integration
 
 
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.Enablement = new Dictionary<Identity, bool>()
+            interviewState.Enablement = new Dictionary<InterviewStateIdentity, bool>()
             {
                 {sectionId, true},
                 {questionId, true},
@@ -188,7 +187,7 @@ namespace WB.Tests.Integration
 
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //act
@@ -205,7 +204,6 @@ namespace WB.Tests.Integration
         {
             //arrange
             var interviewId = Guid.NewGuid();
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 222);
 
             var readOnlyQuestions = new[]
             {
@@ -221,12 +219,12 @@ namespace WB.Tests.Integration
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.ReadOnly = readOnlyQuestions.ToList();
+            interviewState.ReadOnly = readOnlyQuestions.Select(InterviewStateIdentity.Create).ToList();
 
             //act
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
@@ -241,7 +239,6 @@ namespace WB.Tests.Integration
         {
             //arrange
             var interviewId = Guid.NewGuid();
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 222);
 
             var sectionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1));
             var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
@@ -265,25 +262,25 @@ namespace WB.Tests.Integration
 
 
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.Enablement = new Dictionary<Identity, bool>()
+            interviewState.Enablement = new Dictionary<InterviewStateIdentity, bool>()
             {
-                {sectionId, true},
-                {questionId, true},
-                {staticTextId, true},
-                {variableId, true}
+                {InterviewStateIdentity.Create(sectionId), true},
+                {InterviewStateIdentity.Create(questionId), true},
+                {InterviewStateIdentity.Create(staticTextId), true},
+                {InterviewStateIdentity.Create(variableId), true}
             };
 
             //act
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId);
 
             Assert.That(interviewEntities.Length, Is.EqualTo(4));
-            Assert.That(interviewState.Enablement.Keys, Is.EquivalentTo(interviewEntities.Select(x => x.Identity)));
+            Assert.That(new[] {sectionId, questionId, staticTextId, variableId}, Is.EquivalentTo(interviewEntities.Select(x => x.Identity)));
         }
 
        [Test]
@@ -291,7 +288,6 @@ namespace WB.Tests.Integration
         {
             //arrange
             var interviewId = Guid.NewGuid();
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 222);
             
             var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
             var staticTextId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2, 3));
@@ -313,24 +309,33 @@ namespace WB.Tests.Integration
 
 
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.Validity = new Dictionary<Identity, int[]>
+            interviewState.Validity = new Dictionary<InterviewStateIdentity, InterviewStateValidation>
             {
-                {questionId, null},
-                {staticTextId, null},
-                {variableId, null}
+                {
+                    InterviewStateIdentity.Create(questionId),
+                    new InterviewStateValidation {Id = questionId.Id, RosterVector = questionId.RosterVector}
+                },
+                {
+                    InterviewStateIdentity.Create(staticTextId),
+                    new InterviewStateValidation {Id = staticTextId.Id, RosterVector = staticTextId.RosterVector}
+                },
+                {
+                    InterviewStateIdentity.Create(variableId),
+                    new InterviewStateValidation {Id = variableId.Id, RosterVector = variableId.RosterVector}
+                }
             };
 
             //act
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId);
 
             Assert.That(interviewEntities.Length, Is.EqualTo(3));
-            Assert.That(interviewState.Validity.Keys, Is.EquivalentTo(interviewEntities.Select(x => x.Identity)));
+            Assert.That(new[] {questionId, staticTextId, variableId}, Is.EquivalentTo(interviewEntities.Select(x => x.Identity)));
         }
         
         [Test]
@@ -338,7 +343,6 @@ namespace WB.Tests.Integration
         {
             //arrange
             var interviewId = Guid.NewGuid();
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 222);
 
             var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
             var staticTextId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2, 3));
@@ -358,24 +362,40 @@ namespace WB.Tests.Integration
 
 
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.Validity = new Dictionary<Identity, int[]>
+            interviewState.Validity = new Dictionary<InterviewStateIdentity, InterviewStateValidation>
             {
-                {questionId, new[] {1, 2, 3}},
-                {staticTextId, new[] {1}}
+                {
+                    InterviewStateIdentity.Create(questionId),
+                    new InterviewStateValidation
+                    {
+                        Id = questionId.Id,
+                        RosterVector = questionId.RosterVector,
+                        Validations = new[] {1, 2, 3}
+                    }
+                },
+                {
+                    InterviewStateIdentity.Create(staticTextId),
+                    new InterviewStateValidation
+                    {
+                        Id = staticTextId.Id,
+                        RosterVector = staticTextId.RosterVector,
+                        Validations = new[] {1}
+                    }
+                }
             };
 
             //act
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId);
 
             Assert.That(interviewEntities.Length, Is.EqualTo(2));
-            Assert.That(interviewState.Validity.Keys, Is.EquivalentTo(interviewEntities.Select(x => x.Identity)));
-            Assert.That(interviewState.Validity.Values, Is.EquivalentTo(interviewEntities.Select(x => x.InvalidValidations)));
+            Assert.That(new[] {questionId, staticTextId}, Is.EquivalentTo(interviewEntities.Select(x => x.Identity)));
+            Assert.That(interviewState.Validity.Values.Select(x => x.Validations), Is.EquivalentTo(interviewEntities.Select(x => x.InvalidValidations)));
         }
 
         [Test]
@@ -383,7 +403,6 @@ namespace WB.Tests.Integration
         {
             //arrange
             var interviewId = Guid.NewGuid();
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 222);
 
             var addedRosterIdentities = new[]
             {
@@ -404,9 +423,9 @@ namespace WB.Tests.Integration
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 var interviewState = Create.Entity.InterviewState(interviewId);
-                interviewState.Enablement = addedRosterIdentities.ToDictionary(x => x, x => true);
+                interviewState.Enablement = addedRosterIdentities.ToDictionary(InterviewStateIdentity.Create, x => true);
 
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
@@ -424,22 +443,22 @@ namespace WB.Tests.Integration
 
             var questions = new[]
             {
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Int, AsInt = 1},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.String, AsString = "string"},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Double, AsDouble = 111.11},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.IntMatrix, AsIntMatrix = new[] { new[]{1,2,3}, new[]{1,2}} },
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.TextList, AsList = new []{ new InterviewTextListAnswer(1, "list 1") }},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.YesNoList, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Gps, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Audio, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Area, AsArea = new Area("geometry", "map", 1, 1, "1:1", 1)},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Datetime, AsDateTime = new DateTime(2012,12,12)},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.IntArray, AsIntArray = new[]{1,2,3}},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Long, AsLong = 2222L},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Bool, AsBool = true},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.String, AsString = "string variable"},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Datetime, AsDateTime = new DateTime(2017,12,12)},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Double, AsDouble = 222.22}
+                new InterviewEntity{EntityType = EntityType.Question, AsInt = 1},
+                new InterviewEntity{EntityType = EntityType.Question, AsString = "string"},
+                new InterviewEntity{EntityType = EntityType.Question, AsDouble = 111.11},
+                new InterviewEntity{EntityType = EntityType.Question, AsIntMatrix = new[] { new[]{1,2,3}, new[]{1,2}} },
+                new InterviewEntity{EntityType = EntityType.Question, AsList = new []{ new InterviewTextListAnswer(1, "list 1") }},
+                new InterviewEntity{EntityType = EntityType.Question, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
+                new InterviewEntity{EntityType = EntityType.Question, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
+                new InterviewEntity{EntityType = EntityType.Question, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
+                new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 1, 1, "1:1", 1)},
+                new InterviewEntity{EntityType = EntityType.Question, AsDateTime = new DateTime(2012,12,12)},
+                new InterviewEntity{EntityType = EntityType.Question, AsIntArray = new[]{1,2,3}},
+                new InterviewEntity{EntityType = EntityType.Variable, AsLong = 2222L},
+                new InterviewEntity{EntityType = EntityType.Variable, AsBool = true},
+                new InterviewEntity{EntityType = EntityType.Variable, AsString = "string variable"},
+                new InterviewEntity{EntityType = EntityType.Variable, AsDateTime = new DateTime(2017,12,12)},
+                new InterviewEntity{EntityType = EntityType.Variable, AsDouble = 222.22}
             };
             foreach (var question in questions)
             {
@@ -448,22 +467,39 @@ namespace WB.Tests.Integration
             }
 
             var interviewSummaryRepository = GetInMemoryInterviewSummaryRepository(interviewId);
-
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 222);
+            
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questions.Select(ToQuestionnaireEntity).ToArray());
 
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
+            var entitySerializer = new EntitySerializer<object>();
+
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.Answers = questions.ToDictionary(x => x.Identity,
-                x => x.AsArea ?? x.AsAudio ?? x.AsBool ?? x.AsDateTime ?? x.AsDouble ?? x.AsGps ??
-                     x.AsInt ?? x.AsIntArray ?? x.AsIntMatrix ?? x.AsString ?? x.AsList ?? x.AsLong ?? (object) x.AsYesNo);
+            interviewState.Answers = questions.ToDictionary(x => InterviewStateIdentity.Create(x.Identity),
+                x => new InterviewStateAnswer
+                {
+                    Id = x.Identity.Id,
+                    RosterVector = x.Identity.RosterVector,
+                    AsString = x.AsString,
+                    AsDouble = x.AsDouble,
+                    AsBool = x.AsBool,
+                    AsLong = x.AsLong,
+                    AsInt = x.AsInt,
+                    AsDatetime = x.AsDateTime,
+                    AsIntArray = x.AsIntArray,
+                    AsAudio = x.AsAudio == null ? null : entitySerializer.Serialize(x.AsAudio),
+                    AsGps = x.AsGps == null ? null : entitySerializer.Serialize(x.AsGps),
+                    AsArea = x.AsArea == null ? null : entitySerializer.Serialize(x.AsArea),
+                    AsList = x.AsList == null ? null : entitySerializer.Serialize(x.AsList),
+                    AsIntMatrix = x.AsIntMatrix == null ? null : entitySerializer.Serialize(x.AsIntMatrix),
+                    AsYesNo = x.AsYesNo == null ? null : entitySerializer.Serialize(x.AsYesNo)
+                });
 
             //act
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
@@ -477,7 +513,6 @@ namespace WB.Tests.Integration
                     x.InterviewId == expectedQuestion.InterviewId && x.Identity == expectedQuestion.Identity);
 
                 Assert.That(actualQuestion.EntityType, Is.EqualTo(expectedQuestion.EntityType));
-                Assert.That(actualQuestion.AnswerType, Is.EqualTo(expectedQuestion.AnswerType));
                 Assert.That(actualQuestion.AsArea, Is.EqualTo(expectedQuestion.AsArea));
                 Assert.That(actualQuestion.AsString, Is.EqualTo(expectedQuestion.AsString));
                 Assert.That(actualQuestion.AsBool, Is.EqualTo(expectedQuestion.AsBool));
@@ -502,22 +537,22 @@ namespace WB.Tests.Integration
 
             var questions = new[]
             {
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Int, AsInt = 1},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.String, AsString = "string"},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Double, AsDouble = 111.11},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.IntMatrix, AsIntMatrix = new[] { new[]{1,2,3}, new[]{1,2}} },
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.TextList, AsList = new []{ new InterviewTextListAnswer(1, "list 1") }},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.YesNoList, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Gps, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Audio, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Area, AsArea = new Area("geometry", "map", 1, 1, "1:1", 1)},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.Datetime, AsDateTime = new DateTime(2012,12,12)},
-                new InterviewEntity{EntityType = EntityType.Question, AnswerType = AnswerType.IntArray, AsIntArray = new[]{1,2,3}},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Long, AsLong = 2222L},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Bool, AsBool = true},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.String, AsString = "string variable"},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Datetime, AsDateTime = new DateTime(2017,12,12)},
-                new InterviewEntity{EntityType = EntityType.Variable, AnswerType = AnswerType.Double, AsDouble = 222.22}
+                new InterviewEntity{EntityType = EntityType.Question, AsInt = 1},
+                new InterviewEntity{EntityType = EntityType.Question, AsString = "string"},
+                new InterviewEntity{EntityType = EntityType.Question, AsDouble = 111.11},
+                new InterviewEntity{EntityType = EntityType.Question, AsIntMatrix = new[] { new[]{1,2,3}, new[]{1,2}} },
+                new InterviewEntity{EntityType = EntityType.Question, AsList = new []{ new InterviewTextListAnswer(1, "list 1") }},
+                new InterviewEntity{EntityType = EntityType.Question, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
+                new InterviewEntity{EntityType = EntityType.Question, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
+                new InterviewEntity{EntityType = EntityType.Question, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
+                new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 1, 1, "1:1", 1)},
+                new InterviewEntity{EntityType = EntityType.Question, AsDateTime = new DateTime(2012,12,12)},
+                new InterviewEntity{EntityType = EntityType.Question, AsIntArray = new[]{1,2,3}},
+                new InterviewEntity{EntityType = EntityType.Variable, AsLong = 2222L},
+                new InterviewEntity{EntityType = EntityType.Variable, AsBool = true},
+                new InterviewEntity{EntityType = EntityType.Variable, AsString = "string variable"},
+                new InterviewEntity{EntityType = EntityType.Variable, AsDateTime = new DateTime(2017,12,12)},
+                new InterviewEntity{EntityType = EntityType.Variable, AsDouble = 222.22}
             };
             foreach (var question in questions)
             {
@@ -526,29 +561,47 @@ namespace WB.Tests.Integration
             }
 
             var interviewSummaryRepository = GetInMemoryInterviewSummaryRepository(interviewId);
-
-            var questionnaireId = Create.Entity.QuestionnaireIdentity(Guid.NewGuid(), 222);
+            
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questions.Select(ToQuestionnaireEntity).ToArray());
 
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
+            var entitySerializer = new EntitySerializer<object>();
+
             var interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.Answers = questions.ToDictionary(x => x.Identity,
-                x => x.AsArea ?? x.AsAudio ?? x.AsBool ?? x.AsDateTime ?? x.AsDouble ?? x.AsGps ??
-                     x.AsInt ?? x.AsIntArray ?? x.AsIntMatrix ?? x.AsString ?? x.AsList ?? x.AsLong ?? (object)x.AsYesNo);
-            
+            interviewState.Answers = questions.ToDictionary(x => InterviewStateIdentity.Create(x.Identity),
+                x => new InterviewStateAnswer
+                {
+                    Id = x.Identity.Id,
+                    RosterVector = x.Identity.RosterVector,
+                    AsString = x.AsString,
+                    AsDouble = x.AsDouble,
+                    AsBool = x.AsBool,
+                    AsLong = x.AsLong,
+                    AsInt = x.AsInt,
+                    AsDatetime = x.AsDateTime,
+                    AsIntArray = x.AsIntArray,
+                    AsAudio = entitySerializer.Serialize(x.AsAudio),
+                    AsGps = entitySerializer.Serialize(x.AsGps),
+                    AsArea = entitySerializer.Serialize(x.AsArea),
+                    AsList = entitySerializer.Serialize(x.AsList),
+                    AsIntMatrix = entitySerializer.Serialize(x.AsIntMatrix),
+                    AsYesNo = entitySerializer.Serialize(x.AsYesNo)
+                });
+
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             interviewState = Create.Entity.InterviewState(interviewId);
-            interviewState.Answers = questions.ToDictionary(x => x.Identity, x => (object)null);
+            interviewState.Answers = questions.ToDictionary(x => InterviewStateIdentity.Create(x.Identity),
+                x => new InterviewStateAnswer {Id = x.Identity.Id, RosterVector = x.Identity.RosterVector});
             //act
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
@@ -585,28 +638,28 @@ namespace WB.Tests.Integration
             {
                 new
                 {
-                    QuestionId = Identity.Create(multimediaQuestionId, Create.RosterVector()),
+                    QuestionId = InterviewStateIdentity.Create(multimediaQuestionId, Create.RosterVector()),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 1", InterviewId = interviewId},
                     Enabled = true,
                     QuestionnaireId = questionnaireId
                 },
                 new
                 {
-                    QuestionId = Identity.Create(multimediaQuestionId, Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(multimediaQuestionId, Create.RosterVector(1)),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 2", InterviewId = interviewId},
                     Enabled = true,
                     QuestionnaireId = questionnaireId
                 },
                 new
                 {
-                    QuestionId = Identity.Create(multimediaQuestionId, Create.RosterVector(1,2)),
+                    QuestionId = InterviewStateIdentity.Create(multimediaQuestionId, Create.RosterVector(1,2)),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 3", InterviewId = Guid.NewGuid()},
                     Enabled = false,
                     QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777)
                 },
                 new
                 {
-                    QuestionId = Identity.Create(multimediaQuestionId, Create.RosterVector(1,2,3)),
+                    QuestionId = InterviewStateIdentity.Create(multimediaQuestionId, Create.RosterVector(1,2,3)),
                     Answer = new InterviewStringAnswer {Answer = "path to photo 4", InterviewId = Guid.NewGuid()},
                     Enabled = true,
                     QuestionnaireId = questionnaireId
@@ -636,10 +689,16 @@ namespace WB.Tests.Integration
                 foreach (var groupedInterviews in expectedMultimediaAnswers.GroupBy(x=>x.Answer.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => (object)x.Answer.Answer);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId,
+                        x => new InterviewStateAnswer
+                        {
+                            Id = x.QuestionId.Id,
+                            RosterVector = x.QuestionId.RosterVector,
+                            AsString = x.Answer.Answer
+                        });
                     interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.Enabled);
 
-                    factory.Save(questionnaireId, interviewState);
+                    factory.Save(interviewState);
                 }
             });
 
@@ -664,28 +723,28 @@ namespace WB.Tests.Integration
             {
                 new
                 {
-                    QuestionId = Identity.Create(audioQuestionId, Create.RosterVector()),
+                    QuestionId = InterviewStateIdentity.Create(audioQuestionId, Create.RosterVector()),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 1", InterviewId = interviewId},
                     Enabled = true,
                     QuestionnaireId = questionnaireId
                 },
                 new
                 {
-                    QuestionId = Identity.Create(audioQuestionId, Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(audioQuestionId, Create.RosterVector(1)),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 2", InterviewId = interviewId},
                     Enabled = true,
                     QuestionnaireId = questionnaireId
                 },
                 new
                 {
-                    QuestionId = Identity.Create(audioQuestionId, Create.RosterVector(1,2)),
+                    QuestionId = InterviewStateIdentity.Create(audioQuestionId, Create.RosterVector(1,2)),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 3", InterviewId = Guid.NewGuid()},
                     Enabled = false,
                     QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777)
                 },
                 new
                 {
-                    QuestionId = Identity.Create(audioQuestionId, Create.RosterVector(1,2,3)),
+                    QuestionId = InterviewStateIdentity.Create(audioQuestionId, Create.RosterVector(1,2,3)),
                     Answer = new InterviewStringAnswer {Answer = "path to audio 4", InterviewId = Guid.NewGuid()},
                     Enabled = true,
                     QuestionnaireId = questionnaireId
@@ -697,6 +756,8 @@ namespace WB.Tests.Integration
 
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
+
+            var entitySerializer = new EntitySerializer<object>();
 
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
@@ -716,10 +777,16 @@ namespace WB.Tests.Integration
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
                     interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId,
-                        x => (object)AudioAnswer.FromString(x.Answer.Answer, TimeSpan.FromMinutes(2)));
+                        x => new InterviewStateAnswer
+                        {
+                            Id = x.QuestionId.Id,
+                            RosterVector = x.QuestionId.RosterVector,
+                            AsAudio = entitySerializer.Serialize(AudioAnswer.FromString(x.Answer.Answer,
+                                TimeSpan.FromMinutes(2)))
+                        });
                     interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.Enabled);
 
-                    factory.Save(questionnaireId, interviewState);
+                    factory.Save(interviewState);
                 }
             });
 
@@ -745,19 +812,19 @@ namespace WB.Tests.Integration
                 new
                 {
                     InterviewId = interviewId,
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
                 },
                 new
                 {
                     InterviewId = interviewId,
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(2)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(2)),
                     Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
                 },
                 new
                 {
                     InterviewId = Guid.NewGuid(),
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
                 }
             };
@@ -784,14 +851,21 @@ namespace WB.Tests.Integration
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
+            var entitySerializer = new EntitySerializer<object>();
+
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 foreach (var groupedInterviews in expectedGpsAnswers.GroupBy(x => x.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => (object)x.Answer);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsGps = entitySerializer.Serialize(x.Answer)
+                    });
 
-                    factory.Save(questionnaireId, interviewState);
+                    factory.Save(interviewState);
                 }
             });
 
@@ -815,21 +889,21 @@ namespace WB.Tests.Integration
                 {
                     InterviewId = Guid.NewGuid(),
                     QuestionnaireId = questionnaireId,
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector()),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector()),
                     Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
                 },
                 new
                 {
                     InterviewId = Guid.NewGuid(),
                     QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
                 },
                 new
                 {
                     InterviewId = Guid.NewGuid(),
                     QuestionnaireId = questionnaireId,
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1,2)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1,2)),
                     Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
                 }
             };
@@ -856,6 +930,8 @@ namespace WB.Tests.Integration
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
+            var entitySerializer = new EntitySerializer<object>();
+
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 this.plainTransactionManager.GetSession().Connection.Execute($"DELETE FROM {InterviewsTableName}");
@@ -863,9 +939,14 @@ namespace WB.Tests.Integration
                 foreach (var groupedInterviews in expectedGpsAnswers.GroupBy(x => x.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => (object)x.Answer);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsGps = entitySerializer.Serialize(x.Answer)
+                    });
 
-                    factory.Save(questionnaireId, interviewState);
+                    factory.Save(interviewState);
                 }
             });
 
@@ -882,7 +963,7 @@ namespace WB.Tests.Integration
         {
             //arrange
             var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
-            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+            var questionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
 
             var allGpsAnswers = new[]
             {
@@ -897,7 +978,7 @@ namespace WB.Tests.Integration
                 {
                     InterviewId = Guid.NewGuid(),
                     QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
                 },
                 new
@@ -931,14 +1012,21 @@ namespace WB.Tests.Integration
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
+            var entitySerializer = new EntitySerializer<object>();
+
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 foreach (var groupedInterviews in allGpsAnswers.GroupBy(x => x.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => (object)x.Answer);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsGps = entitySerializer.Serialize(x.Answer)
+                    });
 
-                    factory.Save(questionnaireId, interviewState);
+                    factory.Save(interviewState);
                 }
             });
 
@@ -963,7 +1051,7 @@ namespace WB.Tests.Integration
         {
             //arrange
             var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
-            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+            var questionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
 
             var allGpsAnswers = new[]
             {
@@ -978,7 +1066,7 @@ namespace WB.Tests.Integration
                 {
                     InterviewId = Guid.NewGuid(),
                     QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
                 },
                 new
@@ -1012,14 +1100,21 @@ namespace WB.Tests.Integration
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
+            var entitySerializer = new EntitySerializer<object>();
+
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 foreach (var groupedInterviews in allGpsAnswers.GroupBy(x => x.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => (object)x.Answer);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsGps = entitySerializer.Serialize(x.Answer)
+                    });
 
-                    factory.Save(questionnaireId, interviewState);
+                    factory.Save(interviewState);
                 }
             });
 
@@ -1043,7 +1138,7 @@ namespace WB.Tests.Integration
         {
             //arrange
             var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
-            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+            var questionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
 
             var allGpsAnswers = new[]
             {
@@ -1058,7 +1153,7 @@ namespace WB.Tests.Integration
                 {
                     InterviewId = Guid.NewGuid(),
                     QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
-                    QuestionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
                     Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
                 },
                 new
@@ -1092,14 +1187,22 @@ namespace WB.Tests.Integration
             var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
                 questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
 
+            var entitySerializer = new EntitySerializer<object>();
+
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 foreach (var groupedInterviews in allGpsAnswers.GroupBy(x => x.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => (object)x.Answer);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId,
+                        x => new InterviewStateAnswer
+                        {
+                            Id = x.QuestionId.Id,
+                            RosterVector = x.QuestionId.RosterVector,
+                            AsGps = entitySerializer.Serialize(x.Answer)
+                        });
 
-                    factory.Save(questionnaireId, interviewState);
+                    factory.Save(interviewState);
                 }
             });
 
@@ -1116,7 +1219,6 @@ namespace WB.Tests.Integration
         {
             //arrange
             var interviewId = Guid.NewGuid();
-            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777);
             var rosterVector = Create.RosterVector(1, 2, 3);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -1147,7 +1249,7 @@ namespace WB.Tests.Integration
                     new
                     {
                         InterviewId = interviewId,
-                        Identity = Identity.Create(x.PublicKey, rosterVector),
+                        Identity = InterviewStateIdentity.Create(x.PublicKey, rosterVector),
                         EntityType = x is Group
                             ? EntityType.Section
                             : (x is StaticText
@@ -1158,70 +1260,37 @@ namespace WB.Tests.Integration
                 var interviewState = Create.Entity.InterviewState(interviewId);
                 interviewState.Enablement = entities.ToDictionary(x => x.Identity, x => true);
 
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
-            var removedEntities = questionnaire.Children[0].Children.Select(x => new InterviewEntity
+            var removedEntities = questionnaire.Children[0].Children.Select(x => new InterviewStateIdentity
             {
-                InterviewId = interviewId,
-                Identity = Identity.Create(x.PublicKey, rosterVector)
+                Id = x.PublicKey,
+                RosterVector = rosterVector
             }).ToArray();
 
             //act
             this.plainTransactionManager.ExecuteInPlainTransaction(() =>
             {
                 var interviewState = Create.Entity.InterviewState(interviewId);
-                interviewState.Removed = removedEntities.Select(x => x.Identity).ToList();
+                interviewState.Removed = removedEntities.ToList();
 
-                factory.Save(questionnaireId, interviewState);
+                factory.Save(interviewState);
             });
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId);
 
-            Assert.That(interviewEntities.Where(x => removedEntities.Contains(x)), Is.Empty);
+            Assert.That(interviewEntities.Select(x => InterviewStateIdentity.Create(x.Identity))
+                .Where(x => removedEntities.Contains(x)), Is.Empty);
         }
 
         private IComposite ToQuestionnaireEntity(InterviewEntity entity)
         {
-            switch (entity.AnswerType)
-            {
-                case AnswerType.Area:
-                    return Create.Entity.Question(entity.Identity.Id, questionType: QuestionType.Area);
-                case AnswerType.Audio:
-                    return Create.Entity.AudioQuestion(entity.Identity.Id, "audio");
-                case AnswerType.Bool:
-                    return Create.Entity.Variable(entity.Identity.Id, VariableType.Boolean);
-                case AnswerType.Datetime:
-                    if (entity.EntityType == EntityType.Variable)
-                        return Create.Entity.Variable(entity.Identity.Id, VariableType.DateTime);
-                    else
-                        return Create.Entity.DateTimeQuestion(entity.Identity.Id);
-                case AnswerType.Double:
-                    if (entity.EntityType == EntityType.Variable)
-                        return Create.Entity.Variable(entity.Identity.Id, VariableType.Double);
-                    else
-                        return Create.Entity.NumericRealQuestion(entity.Identity.Id);
-                case AnswerType.Gps:
-                    return Create.Entity.GpsCoordinateQuestion(entity.Identity.Id);
-                case AnswerType.Int:
-                    return Create.Entity.NumericIntegerQuestion(entity.Identity.Id);
-                case AnswerType.Long:
-                    return Create.Entity.Variable(entity.Identity.Id, VariableType.LongInteger);
-                case AnswerType.String:
-                    if (entity.EntityType == EntityType.Variable)
-                        return Create.Entity.Variable(entity.Identity.Id, VariableType.String);
-                    else
-                        return Create.Entity.TextQuestion(entity.Identity.Id);
-                case AnswerType.IntArray:
-                    return Create.Entity.MultyOptionsQuestion(entity.Identity.Id);
-                case AnswerType.IntMatrix:
-                    return Create.Entity.MultyOptionsQuestion(entity.Identity.Id, linkedToRosterId: Guid.NewGuid());
-                case AnswerType.YesNoList:
-                    return Create.Entity.YesNoQuestion(entity.Identity.Id);
-                case AnswerType.TextList:
-                    return Create.Entity.TextListQuestion(entity.Identity.Id);
-            }
+            if (entity.EntityType == EntityType.Question)
+                return Create.Entity.TextQuestion(entity.Identity.Id);
+            if (entity.EntityType == EntityType.Variable)
+                return Create.Entity.Variable(entity.Identity.Id);
 
             return null;
         }
@@ -1252,7 +1321,8 @@ namespace WB.Tests.Integration
         private PostgreReadSideStorage<InterviewSummary> GetPostgresInterviewSummaryRepository() 
             => new PostgreReadSideStorage<InterviewSummary>(this.plainTransactionManager, Mock.Of<ILogger>(), "summaryid");
 
-        private InterviewEntity[] GetInterviewEntities(InterviewFactory factory, Guid interviewId) => 
-            this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetInterviewEntities(interviewId).ToArray());
+        private InterviewEntity[] GetInterviewEntities(InterviewFactory factory, Guid interviewId) =>
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                factory.GetInterviewEntities(new QuestionnaireIdentity(Guid.NewGuid(), 1), interviewId).ToArray());
     }
 }
