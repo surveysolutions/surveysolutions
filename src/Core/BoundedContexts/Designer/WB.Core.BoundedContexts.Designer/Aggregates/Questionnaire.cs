@@ -592,6 +592,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
+
+            if (innerDocument.DefaultTranslation.HasValue && innerDocument.DefaultTranslation == command.TranslationId)
+                innerDocument.DefaultTranslation = null;
         }
 
         public void SetDefaultTranslation(SetDefaultTranslation command)
