@@ -1798,6 +1798,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer(s) {0} will be moved to another team of supervisor {1}..
+        /// </summary>
+        public static string Interviewers_InterviewersToMove {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewersToMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer(s) {0} are in the team of supervisor {1} and no actions will be performed..
+        /// </summary>
+        public static string Interviewers_InterviewersToStay {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewersToStay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App version.
         /// </summary>
         public static string Interviewers_InterviewerVersion {
@@ -1812,6 +1830,51 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_InterviewerVersionTooltip {
             get {
                 return ResourceManager.GetString("Interviewers_InterviewerVersionTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the new team of supervisor {0}..
+        /// </summary>
+        public static string Interviewers_MoveAllToNewTeam {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveAllToNewTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a team to move {0}.
+        /// </summary>
+        public static string Interviewers_MoveInterviewerPopupTitle {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveInterviewerPopupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to another team.
+        /// </summary>
+        public static string Interviewers_MoveToAnotherTeam {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveToAnotherTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} and {1}.
+        /// </summary>
+        public static string Interviewers_NamesFormatLessThanLimit {
+            get {
+                return ResourceManager.GetString("Interviewers_NamesFormatLessThanLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} and {1} more.
+        /// </summary>
+        public static string Interviewers_NamesFormatMoreThanLimit {
+            get {
+                return ResourceManager.GetString("Interviewers_NamesFormatMoreThanLimit", resourceCulture);
             }
         }
         
@@ -1839,6 +1902,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_OutdatedOption {
             get {
                 return ResourceManager.GetString("Interviewers_OutdatedOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make original supervisor responsible for the assignments and interviews of the moved interviewer(s)..
+        /// </summary>
+        public static string Interviewers_ReassigntToOriginalSupervisor {
+            get {
+                return ResourceManager.GetString("Interviewers_ReassigntToOriginalSupervisor", resourceCulture);
             }
         }
         
