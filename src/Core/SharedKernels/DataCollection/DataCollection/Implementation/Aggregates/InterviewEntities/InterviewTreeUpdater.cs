@@ -29,10 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateEnablement(IInterviewTreeNode entity)
         {
-            if (this.disabledNodes.Contains(entity.Identity))
-                return;
-
-            if (entity.Parent?.IsDisabled() ?? false)
+            if (this.IsDisabledParent(entity))
                 return;
 
             var level = this.GetLevel(entity);
@@ -78,7 +75,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateEnablement(InterviewTreeGroup group)
         {
-            if (this.disabledNodes.Contains(group.Identity))
+            if (this.IsDisabledParent(group))
                 return;
 
             var level = this.GetLevel(group);
@@ -96,7 +93,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateSingleOptionQuestion(InterviewTreeQuestion question)
         {
-            if (this.disabledNodes.Contains(question.Identity))
+            if (this.IsDisabledParent(question))
                 return;
 
             if (!(question.IsAnswered() && this.questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
@@ -112,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateMultiOptionQuestion(InterviewTreeQuestion question)
         {
-            if (this.disabledNodes.Contains(question.Identity))
+            if (this.IsDisabledParent(question))
                 return;
 
             if (!(question.IsAnswered() && this.questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
@@ -135,7 +132,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateYesNoQuestion(InterviewTreeQuestion question)
         {
-            if (this.disabledNodes.Contains(question.Identity))
+            if (this.IsDisabledParent(question))
                 return;
 
             if (!(question.IsAnswered() && this.questionnaire.IsSupportFilteringForOptions(question.Identity.Id)))
@@ -157,7 +154,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateCascadingQuestion(InterviewTreeQuestion question)
         {
-            if (this.disabledNodes.Contains(question.Identity))
+            if (this.IsDisabledParent(question))
                 return;
 
             //move to cascading
@@ -185,7 +182,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateLinkedQuestion(InterviewTreeQuestion question)
         {
-            if (this.disabledNodes.Contains(question.Identity))
+            if (this.IsDisabledParent(question))
                 return;
 
             var level = this.GetLevel(question);
@@ -210,7 +207,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateLinkedToListQuestion(InterviewTreeQuestion question)
         {
-            if (this.disabledNodes.Contains(question.Identity))
+            if (this.IsDisabledParent(question))
                 return;
 
             question.CalculateLinkedToListOptions(this.removeLinkedAnswers);
@@ -218,7 +215,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateRoster(InterviewTreeRoster roster)
         {
-            if (this.disabledNodes.Contains(roster.Identity))
+            if (this.IsDisabledParent(roster))
                 return;
 
             roster.UpdateRosterTitle((questionId, answerOptionValue) => this.questionnaire
@@ -227,7 +224,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateVariable(InterviewTreeVariable variable)
         {
-            if (this.disabledNodes.Contains(variable.Identity))
+            if (this.IsDisabledParent(variable))
                 return;
 
             var level = this.GetLevel(variable);
@@ -296,6 +293,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (!foundInCache) return null;
 
             return cachedLevel;
+        }
+
+        private bool IsDisabledParent(IInterviewTreeNode node)
+        {
+            if (this.disabledNodes.Contains(node.Identity))
+                return true;
+            return node.Parent?.IsDisabled() ?? false;
         }
 
         private static object GetVariableValue(Func<object> expression)
