@@ -8,8 +8,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -68,25 +68,28 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IInterviewFactory repository;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IEntitySerializer<object> entitySerializer;
 
         public InterviewDenormalizer(IInterviewFactory interviewFactory,
-            IQueryableReadSideRepositoryReader<InterviewSummary> summaries, IQuestionnaireStorage questionnaireStorage)
+            IQueryableReadSideRepositoryReader<InterviewSummary> summaries, IQuestionnaireStorage questionnaireStorage,
+            IEntitySerializer<object> entitySerializer)
         {
             this.repository = interviewFactory;
             this.summaries = summaries;
             this.questionnaireStorage = questionnaireStorage;
+            this.entitySerializer = entitySerializer;
         }
 
         private readonly Dictionary<Guid, QuestionnaireIdentity> interviewToQuestionnaire =
             new Dictionary<Guid, QuestionnaireIdentity>();
 
         public void Update(InterviewState state, IPublishedEvent<GroupPropagated> evnt) =>
-            this.SetEnablementInState(state, Identity.Create(evnt.Payload.GroupId, evnt.Payload.OuterScopeRosterVector), true);
+            this.SetEnablementInState(state, InterviewStateIdentity.Create(evnt.Payload.GroupId, evnt.Payload.OuterScopeRosterVector), true);
 
         public void Update(InterviewState state, IPublishedEvent<RosterInstancesAdded> evnt)
         {
             foreach (var rosterInstance in evnt.Payload.Instances)
-                this.SetEnablementInState(state, rosterInstance.GetIdentity(), true);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(rosterInstance.GetIdentity()), true);
         }
 
         public void Update(InterviewState state, IPublishedEvent<RosterInstancesRemoved> evnt)
@@ -100,16 +103,16 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
             if (questionnaire == null) return;
 
-            var removeEntities = new List<Identity>();
+            var removeEntities = new List<InterviewStateIdentity>();
             
             foreach (var instance in evnt.Payload.Instances.Select(x => x.GetIdentity()).ToArray())
             {
-                removeEntities.Add(instance);
+                removeEntities.Add(InterviewStateIdentity.Create(instance));
 
                 var roster = questionnaire.Find<IGroup>(instance.Id);
                 
                 removeEntities.AddRange(roster.Children.TreeToEnumerable(x => x.Children)
-                    .Select(entity => Identity.Create(entity.PublicKey, instance.RosterVector)));
+                    .Select(entity => InterviewStateIdentity.Create(entity.PublicKey, instance.RosterVector)));
             }
 
             foreach (var removedEntity in removeEntities)
@@ -125,156 +128,260 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         }
 
         public void Update(InterviewState state, IPublishedEvent<MultipleOptionsQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
-                evnt.Payload.SelectedValues.Select(Convert.ToInt32).ToArray());
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsIntArray = evnt.Payload.SelectedValues.Select(Convert.ToInt32).ToArray(),
+                });
 
         public void Update(InterviewState state, IPublishedEvent<NumericRealQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), Convert.ToDouble(evnt.Payload.Answer));
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsDouble = Convert.ToDouble(evnt.Payload.Answer)
+                });
 
         public void Update(InterviewState state, IPublishedEvent<NumericIntegerQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsInt = evnt.Payload.Answer
+                });
 
         public void Update(InterviewState state, IPublishedEvent<TextQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsString = evnt.Payload.Answer
+                });
 
         public void Update(InterviewState state, IPublishedEvent<TextListQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
-                evnt.Payload.Answers.Select(_ => new InterviewTextListAnswer(_.Item1, _.Item2)).ToArray());
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsList = this.entitySerializer.Serialize(evnt.Payload.Answers.Select(_ => new InterviewTextListAnswer(_.Item1, _.Item2)).ToArray())
+                });
 
         public void Update(InterviewState state, IPublishedEvent<SingleOptionQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), Convert.ToInt32(evnt.Payload.SelectedValue));
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), new InterviewStateAnswer
+            {
+                Id = evnt.Payload.QuestionId,
+                RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                AsInt = Convert.ToInt32(evnt.Payload.SelectedValue)
+            });
 
         public void Update(InterviewState state, IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
-                evnt.Payload.SelectedRosterVector.Select(Convert.ToInt32).ToArray());
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsIntArray = evnt.Payload.SelectedRosterVector.Select(Convert.ToInt32).ToArray()
+                });
 
         public void Update(InterviewState state, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
-                evnt.Payload.SelectedRosterVectors.Select(_ => _.Select(Convert.ToInt32).ToArray()).ToArray());
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsIntMatrix = this.entitySerializer.Serialize(evnt.Payload.SelectedRosterVectors.Select(_ => _.Select(Convert.ToInt32).ToArray()).ToArray())
+                });
 
         public void Update(InterviewState state, IPublishedEvent<DateTimeQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsDatetime = evnt.Payload.Answer
+                });
 
         public void Update(InterviewState state, IPublishedEvent<GeoLocationQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
-                new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy,
-                    evnt.Payload.Altitude, evnt.Payload.Timestamp));
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsGps = this.entitySerializer.Serialize(new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy,
+                        evnt.Payload.Altitude, evnt.Payload.Timestamp))
+                });
 
         public void Update(InterviewState state, IPublishedEvent<QRBarcodeQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.Answer);
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsString = evnt.Payload.Answer
+                });
 
         public void Update(InterviewState state, IPublishedEvent<PictureQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.PictureFileName);
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsString = evnt.Payload.PictureFileName
+                });
 
         public void Update(InterviewState state, IPublishedEvent<YesNoQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), evnt.Payload.AnsweredOptions);
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsYesNo = this.entitySerializer.Serialize(evnt.Payload.AnsweredOptions)
+                });
 
         public void Update(InterviewState state, IPublishedEvent<AreaQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), new Area(
-                evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.AreaSize,
-                evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor));
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsArea = this.entitySerializer.Serialize(new Area(
+                        evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.AreaSize,
+                        evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor))
+                });
 
         public void Update(InterviewState state, IPublishedEvent<AudioQuestionAnswered> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
-                AudioAnswer.FromString(evnt.Payload.FileName, evnt.Payload.Length));
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray(),
+                    AsAudio = this.entitySerializer.Serialize(AudioAnswer.FromString(evnt.Payload.FileName, evnt.Payload.Length))
+                });
 
         public void Update(InterviewState state, IPublishedEvent<AnswersRemoved> evnt)
         {
             foreach (var question in evnt.Payload.Questions)
             {
-                if(!state.Removed.Contains(question))
-                    this.SetAnswerInState(state, question, null);
+                var identity = InterviewStateIdentity.Create(question);
+                if (!state.Removed.Contains(identity))
+                {
+                    this.SetAnswerInState(state, identity, new InterviewStateAnswer
+                    {
+                        Id = question.Id,
+                        RosterVector = question.RosterVector
+                    });
+                }
             }
         }
 
         public void Update(InterviewState state, IPublishedEvent<GroupsDisabled> evnt)
         {
             foreach (var section in evnt.Payload.Groups)
-                this.SetEnablementInState(state, section, false);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(section), false);
         }
 
         public void Update(InterviewState state, IPublishedEvent<GroupsEnabled> evnt)
         {
             foreach (var section in evnt.Payload.Groups)
-                this.SetEnablementInState(state, section, true);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(section), true);
         }
 
         public void Update(InterviewState state, IPublishedEvent<StaticTextsEnabled> evnt)
         {
             foreach (var staticText in evnt.Payload.StaticTexts)
-                this.SetEnablementInState(state, staticText, true);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(staticText), true);
         }
 
         public void Update(InterviewState state, IPublishedEvent<StaticTextsDisabled> evnt)
         {
             foreach (var staticText in evnt.Payload.StaticTexts)
-                this.SetEnablementInState(state, staticText, false);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(staticText), false);
         }
 
         public void Update(InterviewState state, IPublishedEvent<StaticTextsDeclaredInvalid> evnt)
         {
             foreach (var staticText in evnt.Payload.FailedValidationConditions)
-                this.SetValidityInState(state, staticText.Key, staticText.Value?.Select(y => y.FailedConditionIndex)?.ToArray());
+                this.SetValidityInState(state, InterviewStateIdentity.Create(staticText.Key), staticText.Value?.Select(y => y.FailedConditionIndex)?.ToArray());
         }
 
         public void Update(InterviewState state, IPublishedEvent<StaticTextsDeclaredValid> evnt)
         {
             foreach (var staticText in evnt.Payload.StaticTexts)
-                this.SetValidityInState(state, staticText, null);
+                this.SetValidityInState(state, InterviewStateIdentity.Create(staticText), null);
         }
 
         public void Update(InterviewState state, IPublishedEvent<QuestionsDisabled> evnt)
         {
             foreach (var question in evnt.Payload.Questions)
-                this.SetEnablementInState(state, question, false);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(question), false);
         }
 
         public void Update(InterviewState state, IPublishedEvent<QuestionsEnabled> evnt)
         {
             foreach (var question in evnt.Payload.Questions)
-                this.SetEnablementInState(state, question, true);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(question), true);
         }
 
         public void Update(InterviewState state, IPublishedEvent<AnswersDeclaredInvalid> evnt)
         {
             foreach (var question in evnt.Payload.FailedValidationConditions)
-                this.SetValidityInState(state, question.Key, question.Value?.Select(y => y.FailedConditionIndex)?.ToArray());
+                this.SetValidityInState(state, InterviewStateIdentity.Create(question.Key), question.Value?.Select(y => y.FailedConditionIndex)?.ToArray());
         }
 
         public void Update(InterviewState state, IPublishedEvent<AnswersDeclaredValid> evnt)
         {
             foreach (var question in evnt.Payload.Questions)
-                this.SetValidityInState(state, question, null);
+                this.SetValidityInState(state, InterviewStateIdentity.Create(question), null);
         }
 
         public void Update(InterviewState state, IPublishedEvent<InterviewHardDeleted> evnt) =>
             this.repository.RemoveInterview(evnt.EventSourceId);
 
         public void Update(InterviewState state, IPublishedEvent<AnswerRemoved> evnt) =>
-            this.SetAnswerInState(state, Identity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector), null);
+            this.SetAnswerInState(state, InterviewStateIdentity.Create(evnt.Payload.QuestionId, evnt.Payload.RosterVector),
+                new InterviewStateAnswer
+                {
+                    Id = evnt.Payload.QuestionId,
+                    RosterVector = evnt.Payload.RosterVector.ToIntArray()
+                });
 
         public void Update(InterviewState state, IPublishedEvent<QuestionsMarkedAsReadonly> evnt)
         {
             foreach (var readOnlyQuestion in evnt.Payload.Questions)
-                this.SetReadOnlyInState(state, readOnlyQuestion);
+                this.SetReadOnlyInState(state, InterviewStateIdentity.Create(readOnlyQuestion));
         }
 
         public void Update(InterviewState state, IPublishedEvent<VariablesChanged> evnt)
         {
             foreach (var variable in evnt.Payload.ChangedVariables)
-                this.SetAnswerInState(state, variable.Identity, variable.NewValue);
+                this.SetAnswerInState(state, InterviewStateIdentity.Create(variable.Identity), new InterviewStateAnswer
+                {
+                    Id = variable.Identity.Id,
+                    RosterVector = variable.Identity.RosterVector,
+                    AsString = variable.NewValue as string,
+                    AsDouble = variable.NewValue as double?,
+                    AsDatetime = variable.NewValue as DateTime?,
+                    AsLong = variable.NewValue as long?,
+                    AsBool = variable.NewValue as bool?
+                });
         }
 
         public void Update(InterviewState state, IPublishedEvent<VariablesDisabled> evnt)
         {
             foreach (var variable in evnt.Payload.Variables)
-                this.SetEnablementInState(state, variable, false);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(variable), false);
         }
 
         public void Update(InterviewState state, IPublishedEvent<VariablesEnabled> evnt)
         {
             foreach (var variable in evnt.Payload.Variables)
-                this.SetEnablementInState(state, variable, true);
+                this.SetEnablementInState(state, InterviewStateIdentity.Create(variable), true);
         }
 
         public void Update(InterviewState state, IPublishedEvent<InterviewCreated> evnt) => 
@@ -286,7 +393,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public void Update(InterviewState state, IPublishedEvent<InterviewOnClientCreated> evnt) =>
             this.AddQuestionnaireToDictionary(evnt.EventSourceId, evnt.Payload.QuestionnaireId, evnt.Payload.QuestionnaireVersion);
 
-        private void SetEnablementInState(InterviewState state, Identity entityId, bool isEnabled)
+        private void SetEnablementInState(InterviewState state, InterviewStateIdentity entityId, bool isEnabled)
         {
             if (state.Removed.Contains(entityId))
                 state.Removed.Remove(entityId);
@@ -294,15 +401,20 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             state.Enablement[entityId] = isEnabled;
         }
 
-        private void SetValidityInState(InterviewState state, Identity entityId, int[] invalidValidations)
+        private void SetValidityInState(InterviewState state, InterviewStateIdentity entityId, int[] invalidValidations)
         {
             if (state.Removed.Contains(entityId))
                 state.Removed.Remove(entityId);
 
-            state.Validity[entityId] = invalidValidations;
+            state.Validity[entityId] = new InterviewStateValidation
+            {
+                Id = entityId.Id,
+                RosterVector = entityId.RosterVector,
+                Validations = invalidValidations
+            };
         }
 
-        private void SetAnswerInState(InterviewState state, Identity entityId, object answer)
+        private void SetAnswerInState(InterviewState state, InterviewStateIdentity entityId, InterviewStateAnswer answer)
         {
             if (state.Removed.Contains(entityId))
                 state.Removed.Remove(entityId);
@@ -310,7 +422,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             state.Answers[entityId] = answer;
         }
 
-        private void SetReadOnlyInState(InterviewState state, Identity entityId)
+        private void SetReadOnlyInState(InterviewState state, InterviewStateIdentity entityId)
         {
             if (state.Removed.Contains(entityId))
                 state.Removed.Remove(entityId);
@@ -323,6 +435,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             => this.interviewToQuestionnaire[interviewId] = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
         protected override void SaveState(InterviewState state) =>
-            this.repository.Save(this.interviewToQuestionnaire[state.Id], state);
+            this.repository.Save(state);
     }
 }

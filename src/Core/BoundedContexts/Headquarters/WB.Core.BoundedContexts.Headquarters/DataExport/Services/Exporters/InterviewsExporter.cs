@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport, QuestionnaireExportStructure exportStructure, string basePath)
         {
             getDbDataStopwatch.Start();
-            var interview =  this.TransactionManager.ExecuteInQueryTransaction(() => interviewFactory.GetInterviewEntities(interviewToExport.Id));
+            var interview =  this.TransactionManager.ExecuteInQueryTransaction(() => interviewFactory.GetInterviewEntities(exportStructure.Identity, interviewToExport.Id));
             getDbDataStopwatch.Stop();
 
             exportProcessingStopwatch.Start();

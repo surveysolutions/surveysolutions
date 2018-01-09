@@ -25,10 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         string[] GetQuestionnairesWithAnsweredGpsQuestions();
 
-        List<ExportedError> GetErrors(IEnumerable<Guid> interveiws);
-
-        List<InterviewEntity> GetInterviewEntities(Guid interviewId);
+        List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireIdentity questionnaireId, List<InterviewEntity> interviewEntities);
-        void Save(QuestionnaireIdentity questionnaireId, InterviewState interviewState);
+        void Save(InterviewState interviewState);
     }
 }
