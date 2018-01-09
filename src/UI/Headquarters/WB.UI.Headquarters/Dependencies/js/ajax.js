@@ -27,10 +27,11 @@
     };
 
     self.confirm = function (title, message, confirmCallback, cancelCallback) {
-        (new PNotify({
+        return (new PNotify({
             title: title,
             text: message,
             hide: false,
+            type: "notice",
             insert_brs: false,
             addclass: "centered-modal",
             confirm: {
