@@ -371,7 +371,6 @@ namespace WB.Enumerator.Native.WebInterview
                 AnsweredCount = answeredQuestionsCount,
                 ErrorsCount = invalidAnswersCount,
                 UnansweredCount = questionsCount - answeredQuestionsCount,
-
                 EntitiesWithError = invalidEntities
             };
             return completeInfo;

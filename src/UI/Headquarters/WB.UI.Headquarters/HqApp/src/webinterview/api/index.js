@@ -31,6 +31,10 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("stop")
         }
 
+        interviewProxy.client.shutDown = () => {
+            window.close();
+        }
+        
         interviewProxy.client.finishInterview = () => {
             store.dispatch("finishInterview")
         }
