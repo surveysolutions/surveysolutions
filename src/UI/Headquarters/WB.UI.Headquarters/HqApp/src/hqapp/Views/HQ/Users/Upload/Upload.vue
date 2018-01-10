@@ -124,7 +124,7 @@ export default {
           }
         })
         .catch(e => {
-          toastr.error(e.response.data.ExceptionMessage);
+          toastr.error(e.response.data.message);
         });
     },
     updateStatus() {
