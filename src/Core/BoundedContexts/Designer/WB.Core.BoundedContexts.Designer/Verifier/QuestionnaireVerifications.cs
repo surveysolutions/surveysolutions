@@ -86,6 +86,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     : DefaultVariableLengthLimit;
             }
 
+            if (entity is IGroup group && group.IsRoster)
+            {
+                variableLengthLimit = RosterVariableNameLimit;
+            }
+
             return (entity.VariableName?.Length ?? 0) > variableLengthLimit;
         }
 
