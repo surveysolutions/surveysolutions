@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -12,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void UserCreated(UserRoles role, string userName);
         void AssignmentSizeChanged(int id, int? quantity);
         void ExportEncriptionChanged(bool enabled);
+        void UserMovedToAnotherTeam(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId);
     }
 }

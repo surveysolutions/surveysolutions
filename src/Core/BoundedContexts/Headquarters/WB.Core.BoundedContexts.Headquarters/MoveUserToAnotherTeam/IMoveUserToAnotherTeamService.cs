@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
     }
     public interface IMoveUserToAnotherTeamService
     {
-        Task<MoveResult> Move(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
+        Task<MoveResult> Move(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
             MoveUserToAnotherTeamMode moveRequestMode);
     }
 }

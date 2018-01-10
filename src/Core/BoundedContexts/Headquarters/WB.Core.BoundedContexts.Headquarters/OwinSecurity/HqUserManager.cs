@@ -178,6 +178,18 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             this.UpdateUser(currentUser, null);
         }
 
+        public virtual async Task<IdentityResult> MoveUserToAnotherTeamAsync(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
+        {
+            var interviewer = await this.FindByIdAsync(interviewerId);
+            
+            interviewer.Profile.SupervisorId = newSupervisorId;
+
+            this.auditLog.UserMovedToAnotherTeam(interviewerId, newSupervisorId, previousSupervisorId);
+
+            return await this.UpdateUserAsync(interviewer, null);
+        }
+
+
         public virtual async Task<IdentityResult[]> ArchiveUsersAsync(Guid[] userIds)
         {
             var archiveUserResults = new List<IdentityResult>();
