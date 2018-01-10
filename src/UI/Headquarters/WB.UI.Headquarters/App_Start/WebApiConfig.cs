@@ -93,6 +93,7 @@ namespace WB.UI.Headquarters
                 c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/users/login", c => c.Action<UsersApiV2Controller>(x => x.Login(Param.Any<LogonInfo>())));
             config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
+            config.TypedRoute("api/interviewer/v2/users/supervisor", c => c.Action<UsersApiV2Controller>(x => x.Supervisor()));
             config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
             config.TypedRoute("api/interviewer/v2/translations/{id}",
                 c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
