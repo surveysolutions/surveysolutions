@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All {{total}} accounts was successfully created:.
+        ///   Looks up a localized string similar to All {{total}} accounts were successfully created:.
         /// </summary>
         internal static string AllAccountsCreated {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No user accounts was created.
+        ///   Looks up a localized string similar to No user accounts were created.
         /// </summary>
         internal static string NoCreatedUsers {
             get {

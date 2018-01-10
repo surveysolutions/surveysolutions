@@ -214,7 +214,7 @@
     <value>Тех. руководитель</value>
   </data>
   <data name="VerificationFailed" xml:space="preserve">
-    <value>Проверка провалена</value>
+    <value>Проверка не выполнена</value>
   </data>
   <data name="UploadInProgress" xml:space="preserve">
     <value>Предупреждение: Пользователь "{{userName}}" уже запустил процесс импорта.</value>
