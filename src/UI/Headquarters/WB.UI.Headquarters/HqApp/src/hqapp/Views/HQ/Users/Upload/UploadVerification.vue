@@ -69,7 +69,7 @@ export default {
           else self.$router.push({ name: "uploadprogress" });
         })
         .catch(e => {
-          toastr.error(e.response.data.ExceptionMessage);
+          toastr.error(e.response.data.message);
         });
     }
   }
