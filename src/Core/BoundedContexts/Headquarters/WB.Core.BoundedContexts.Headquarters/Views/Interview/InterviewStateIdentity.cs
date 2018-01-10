@@ -19,7 +19,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             if (!this.hashCode.HasValue)
             {
-                this.hashCode = this.Id.GetHashCode() ^ this.RosterVector.GetHashCode();
+                var rosterVectorHashCode = this.RosterVector.Length;
+
+                foreach (var t in this.RosterVector)
+                {
+                    var itemHashCode = t.GetHashCode();
+                    rosterVectorHashCode = unchecked(rosterVectorHashCode * 13 + itemHashCode);
+                }
+                this.hashCode = this.Id.GetHashCode() ^ rosterVectorHashCode;
             }
 
             return this.hashCode.Value;
