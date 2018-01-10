@@ -18,7 +18,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             var questionnaireVerificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-            questionnaireVerificationMessages.ShouldContainError("WB0121");
+
+            var error = questionnaireVerificationMessages.GetError("WB0121");
+            Assert.That(error, Is.Not.Null);
+            Assert.That(error.Message, Does.Contain("longer than 28 characters"));
         }
     }
 }

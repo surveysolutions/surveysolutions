@@ -688,6 +688,6 @@
     <value>Validation condition is using forbidden type.</value>
   </data>
   <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
-    <value>Variable using forbidden type.</value>
+    <value>Variable is using forbidden type.</value>
   </data>
 </root>
