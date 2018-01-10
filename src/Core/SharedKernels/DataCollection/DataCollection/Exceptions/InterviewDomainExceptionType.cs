@@ -9,6 +9,7 @@
         OtherUserIsResponsible,
         StatusIsNotOneOfExpected,
         AnswerNotAccepted,
-        InterviewRecievedByDevice
+        InterviewRecievedByDevice,
+        CantMoveToUndefinedTeam
     }
 }
