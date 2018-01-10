@@ -31,6 +31,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                 var columnIndex = questionMeta.Indexes[i];
                 var columnHeader = questionMeta.Headers[i];
 
+                if (columnIndex < 0)
+                    continue;
+
                 if (!string.IsNullOrEmpty(Data[columnIndex]))
                     answersWithColumnName.Add(new Tuple<string, string>(columnHeader, Data[columnIndex]));
             }
@@ -205,7 +208,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         {
             foreach (IExportedHeaderItem headerItem in exportStructureHeaderToLevel.HeaderItems.Values)
             {
-                ExportedQuestionHeaderItem questionHeaderItem = (ExportedQuestionHeaderItem) headerItem;
+                ExportedQuestionHeaderItem questionHeaderItem = headerItem as ExportedQuestionHeaderItem;
 
                 if (questionHeaderItem == null)
                     continue;
