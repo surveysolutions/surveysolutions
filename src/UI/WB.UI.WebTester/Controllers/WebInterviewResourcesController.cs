@@ -7,8 +7,11 @@ using System.Security.Cryptography;
 using System.Web;
 using System.Web.Http;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
+using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
 {
@@ -17,12 +20,18 @@ namespace WB.UI.WebTester.Controllers
     {
         private readonly IPlainStorageAccessor<QuestionnaireAttachment> attachmentStorage;
         private readonly IImageProcessingService imageProcessingService;
+        private readonly IMediaStorage mediaStorage;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
         public WebInterviewResourcesController(IPlainStorageAccessor<QuestionnaireAttachment> attachmentStorage,
-            IImageProcessingService imageProcessingService)
+            IImageProcessingService imageProcessingService, 
+            IMediaStorage mediaStorage, 
+            IStatefulInterviewRepository statefulInterviewRepository)
         {
             this.attachmentStorage = attachmentStorage ?? throw new ArgumentNullException(nameof(attachmentStorage));
             this.imageProcessingService = imageProcessingService ?? throw new ArgumentNullException(nameof(imageProcessingService));
+            this.mediaStorage = mediaStorage;
+            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         [HttpGet]
@@ -42,6 +51,26 @@ namespace WB.UI.WebTester.Controllers
 
             return this.BinaryResponseMessageWithEtag(resultFile);
         }
+
+        [HttpGet]
+        public HttpResponseMessage Image([FromUri] string interviewId, [FromUri] string questionId,
+            [FromUri] string filename)
+        {
+            var interview = this.statefulInterviewRepository.Get(interviewId);
+            
+            var file = this.mediaStorage.Get(interview.Id, filename);
+
+            if ((file?.Data?.Length ?? 0) == 0)
+                return this.Request.CreateResponse(HttpStatusCode.NoContent);
+
+            var fullSize = GetQueryStringValue("fullSize") != null;
+            var resultFile = fullSize
+                ? file.Data
+                : this.imageProcessingService.ResizeImage(file.Data, 200, 1920);
+
+            return this.BinaryResponseMessageWithEtag(resultFile);
+        }
+
 
         private string GetQueryStringValue(string key)
         {

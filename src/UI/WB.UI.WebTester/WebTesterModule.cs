@@ -18,7 +18,6 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -132,6 +131,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ISnapshotStore, InMemoryEventStore>();
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
+            registry.BindAsSingleton<IMediaStorage, MediaStorage>();
 
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
