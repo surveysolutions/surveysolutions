@@ -1772,7 +1772,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable using forbidden type..
+        ///   Looks up a localized string similar to Variable is using forbidden type..
         /// </summary>
         public static string WB0274_VariableUsingForbiddenClasses {
             get {
