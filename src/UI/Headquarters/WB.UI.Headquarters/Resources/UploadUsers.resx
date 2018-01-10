@@ -181,7 +181,7 @@
     <value>Verification failed</value>
   </data>
   <data name="NoCreatedUsers" xml:space="preserve">
-    <value>No user accounts was created</value>
+    <value>No user accounts were created</value>
   </data>
   <data name="ImportingUserInfo" xml:space="preserve">
     <value>Importing user information from</value>
@@ -205,7 +205,7 @@
     <value>line</value>
   </data>
   <data name="AllAccountsCreated" xml:space="preserve">
-    <value>All {{total}} accounts was successfully created:</value>
+    <value>All {{total}} accounts were successfully created:</value>
   </data>
   <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
     <value>{{supervisorsCount}} supervisors and {{interviewersCount}} interviewers</value>
