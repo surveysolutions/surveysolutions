@@ -15,11 +15,9 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
     foreach (var table in LookupTables) 
     {
 #>
-        private static readonly Dictionary<int, <#= table.TypeName#>> <#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable();
-        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> 
-        {
-            get { return <#= table.TableNameField #>; }
-        }
+        private static Dictionary<int, <#= table.TypeName#>> <#= table.TableNameField #>;
+        public static Dictionary<int, <#= table.TypeName#>> <#= table.TableName #> => <#= table.TableNameField #> ?? (<#= table.TableNameField #> = <#= table.TypeName#>_Generator.GetTable());  
+        
 <# 
     }
 #>
