@@ -2,10 +2,12 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
@@ -319,22 +321,25 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
         [ApiNoCache]
-        public ImportUserError[] ImportUsers(ImportUsersRequest request)
+        public IHttpActionResult ImportUsers(ImportUsersRequest request)
         {
             if (request?.File?.FileBytes == null)
-                throw new UserPreloadingException(BatchUpload.Prerequisite_FileOpen);
+                this.BadRequest(BatchUpload.Prerequisite_FileOpen);
 
             var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
 
             if (!new[] {TextExportFile.Extension, TabExportFile.Extention}.Contains(fileExtension))
-                throw new UserPreloadingException(string.Format(BatchUpload.UploadUsers_NotAllowedExtension,
-                    TabExportFile.Extention, TextExportFile.Extension));
+                this.BadRequest(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, TabExportFile.Extention, TextExportFile.Extension));
 
-            return this.userImportService
-                .VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
-                .Take(8)
-                .Select(ToImportError)
-                .ToArray();
+            try
+            {
+                return this.Ok(this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
+                    .Take(8).Select(ToImportError).ToArray());
+            }
+            catch (UserPreloadingException e)
+            {
+                return this.BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
