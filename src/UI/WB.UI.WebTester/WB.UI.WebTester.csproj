@@ -192,7 +192,9 @@
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ApiTestController.cs" />
+    <Compile Include="Controllers\MultimediaController.cs" />
+    <Compile Include="Services\IMediaStorage.cs" />
+    <Compile Include="Services\MultimediaFile.cs" />
     <Compile Include="Controllers\WebInterviewResourcesController.cs" />
     <Compile Include="Controllers\WebTesterController.cs" />
     <Compile Include="Global.asax.cs">
@@ -209,9 +211,11 @@
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IDesignerWebTesterApi.cs" />
+    <Compile Include="Services\Implementation\MediaStorage.cs" />
     <Compile Include="Services\Implementation\IQuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\TranslationStorage.cs" />
+    <Compile Include="Services\SoundInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
