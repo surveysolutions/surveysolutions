@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Events;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -32,17 +34,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly SyncSettings syncSettings;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
         private readonly ITransactionManager transactionManager;
+        private readonly IUserRepository userRepository;
 
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
-            ILogger logger, 
+            ILogger logger,
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
             IInterviewUniqueKeyGenerator uniqueKeyGenerator,
             SyncSettings syncSettings,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            ITransactionManager transactionManager)
+            ITransactionManager transactionManager,
+            IUserRepository userRepository)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
@@ -53,10 +57,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.syncSettings = syncSettings;
             this.interviews = interviews;
             this.transactionManager = transactionManager;
+            this.userRepository = userRepository;
         }
 
         [Obsolete("Since v 5.8")]
-        public virtual void StoreOrProcessPackage(string item) { }
+        public virtual void StoreOrProcessPackage(string item)
+        {
+        }
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
         {
@@ -199,7 +206,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     .Select(e => e.Payload)
                     .ToArray();
 
-                this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug(
+                    $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
                 bool startedOwnTransaction = false;
@@ -209,7 +217,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     transactionManager.BeginCommandTransaction();
                 }
 
-                bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
+                bool shouldChangeInterviewKey =
+                    CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
+                bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(interview.ResponsibleId,
+                    serializedEvents, out Guid? newSupervisorId);
+
+                if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
+                    throw new InterviewException("Can't move interview to a new team, because supervisor id is empty",
+                        exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
 
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
                     interviewId: interview.InterviewId,
@@ -219,7 +234,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     interviewStatus: interview.InterviewStatus,
                     createdOnClient: interview.IsCensusInterview,
                     interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
-                    synchronizedEvents: serializedEvents), this.syncSettings.Origin);
+                    synchronizedEvents: serializedEvents,
+                    newSupervisorId: newSupervisorId
+                ), this.syncSettings.Origin);
 
                 if (startedOwnTransaction)
                 {
@@ -256,10 +273,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 CommonMetrics.BrokenPackagesCount.Labels(exceptionType).Inc();
 
-                this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug(
+                    $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
+
             innerwatch.Stop();
+        }
+
+        private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid interviewerId,
+            IEvent[] interviewEvents, out Guid? newSupervisorId)
+        {
+            newSupervisorId = null;
+            SupervisorAssigned supervisorAssigned = interviewEvents.OfType<SupervisorAssigned>().LastOrDefault();
+            if (supervisorAssigned == null)
+                return false;
+            var interviewer = userRepository.FindByIdAsync(interviewerId).Result;
+            newSupervisorId = interviewer.Profile.SupervisorId;
+            return newSupervisorId != supervisorAssigned.SupervisorId;
         }
 
         private bool CheckIfInterviewKeyNeedsToBeChanged(Guid interviewId, IEvent[] interviewEvents)
@@ -279,6 +310,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 return false;
             }
+
             var interview = this.interviews.Query(_ => _.Where(x => x.SummaryId == interviewId.FormatGuid())
                 .Select(x => x.Key).FirstOrDefault());
             return interview == null;

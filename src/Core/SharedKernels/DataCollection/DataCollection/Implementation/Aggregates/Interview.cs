@@ -1901,6 +1901,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
             }
 
+            if (command.NewSupervisorId.HasValue)
+            {
+                this.ApplyEvent(new SupervisorAssigned(command.UserId, command.NewSupervisorId.Value, DateTime.UtcNow));
+                this.ApplyEvent(new InterviewerAssigned(command.UserId, command.UserId, DateTime.UtcNow));
+            }
+
             this.ApplyEvent(new InterviewReceivedBySupervisor());
         }
 

@@ -191,8 +191,8 @@ namespace WB.Tests.Abc.TestFactories
             IEvent[] synchronizedEvents = null,
             InterviewStatus interviewStatus = InterviewStatus.Completed,
             bool createdOnClient = true,
-            InterviewKey interviewKey = null
-            )
+            InterviewKey interviewKey = null,
+            Guid? newSupervisorId = null)
         {
             return new SynchronizeInterviewEventsCommand(interviewId ?? Guid.NewGuid(), 
                 userId ?? Guid.NewGuid(), 
@@ -201,7 +201,8 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizedEvents ?? new IEvent[0], 
                 interviewStatus, 
                 createdOnClient,
-                interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()));
+                interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()),
+                newSupervisorId);
         }
 
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)

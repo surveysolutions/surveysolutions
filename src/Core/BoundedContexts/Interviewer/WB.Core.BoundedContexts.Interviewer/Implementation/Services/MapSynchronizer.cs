@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IMapService mapService;
 
         public MapSyncProvider(IMapService mapService, ISynchronizationService synchronizationService, ILogger logger,
-            IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IPrincipal principal,
+            IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IInterviewerPrincipal principal,
             IPasswordHasher passwordHasher, IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,

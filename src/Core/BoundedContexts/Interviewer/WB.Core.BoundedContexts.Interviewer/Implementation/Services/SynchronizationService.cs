@@ -96,6 +96,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.usersController, "/current"),
                 credentials: credentials ?? this.restCredentials, token: token));
         }
+
+
+
+        public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<Guid>(url: string.Concat(this.usersController, "/supervisor"),
+                    credentials: credentials ?? this.restCredentials, token: token));
+        }
+
+
         #endregion
 
         #region AssignmentsApi
