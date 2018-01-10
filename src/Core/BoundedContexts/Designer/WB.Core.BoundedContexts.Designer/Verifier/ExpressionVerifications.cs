@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly IDynamicCompilerSettingsProvider compilerSettings;
 
         
-        private static string WrapToClass(string expression) => $"class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
+        private static string WrapToClass(string expression) => $"using System; class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
 
         public ExpressionVerifications(IMacrosSubstitutionService macrosSubstitutionService,
             IExpressionProcessor expressionProcessor, 
