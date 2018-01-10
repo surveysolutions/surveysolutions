@@ -39,8 +39,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             else
             {
                 entity.Disable();
-                var question = entity as InterviewTreeQuestion;
-                if (question == null)
+                if (!(entity is InterviewTreeQuestion question))
                     return;
 
                 if (!IsRosterSizeQuestionType(question))
@@ -287,9 +286,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         private IInterviewLevel GetFromCache(Identity nearestRoster)
         {
-            IInterviewLevel cachedLevel;
-
-            bool foundInCache = this.memoryCache.TryGetValue(nearestRoster, out cachedLevel);
+            bool foundInCache = this.memoryCache.TryGetValue(nearestRoster, out var cachedLevel);
             if (!foundInCache) return null;
 
             return cachedLevel;
