@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
+using System.Web;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -98,7 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
 
                 substitutionResult = shouldAddBrowserTags && shouldEncode 
-                    ? WebUtility.HtmlEncode(substitutionResult) 
+                    ? HttpUtility.HtmlEncode(substitutionResult) 
                     : substitutionResult;
 
                 substitutionResult = string.IsNullOrEmpty(substitutionResult)
