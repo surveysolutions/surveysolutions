@@ -114,6 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                     UserId = x.UserId,
                     UserName = x.UserName,
                     CreationDate = x.CreationDate.FormatDateWithTime(),
+                    SupervisorId = x.SupervisorId,
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
                     DeviceId = x.DeviceId,
@@ -166,6 +167,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual bool IsArchived { get; set; }
             public virtual string EnumeratorVersion { get; set; }
             public bool IsUpToDate { get; set; }
+            public virtual Guid? SupervisorId { get; set; }
         }
 
         [HttpPost]
@@ -270,13 +272,13 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         public async Task<JsonCommandResponse> MoveUserToAnotherTeam(MoveUserToAnotherTeamRequest moveRequest)
         {
+            var userId = this.authorizedUser.Id;
             var result = await this.moveUserToAnotherTeamService.Move(
+                userId,
                 moveRequest.InterviewerId,
                 moveRequest.NewSupervisorId, 
                 moveRequest.OldSupervisorId, 
                 moveRequest.Mode);
-
-            Thread.Sleep(5000);
 
             return new JsonCommandResponse
             {

@@ -32,6 +32,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             .ToList());
         }
 
+        public List<int> GetAllAssignmentIds(Guid responsibleId)
+        {
+            return this.assignmentsAccessor.Query(x =>
+                x.Where(assigment => assigment.ResponsibleId == responsibleId)
+                .Select(assigment => assigment.Id)
+                .ToList());
+        }
+
         public Assignment GetAssignment(int id)
         {
             return this.assignmentsAccessor.GetById(id);
@@ -99,6 +107,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             }
 
             return assignmentApiView;
+        }
+
+        public void Reassign(int assignmentId, Guid responsibleId)
+        {
+            var assignment = this.assignmentsAccessor.GetById(assignmentId);
+            assignment.Reassign(responsibleId);
+            assignmentsAccessor.Store(assignment, assignmentId);
         }
     }
 }
