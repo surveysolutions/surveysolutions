@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
@@ -157,7 +158,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
                 .ForMember(x => x.RosterTitle, opts =>
                 {
                     opts.Condition(x => x is InterviewTreeRoster);
-                    opts.MapFrom(x => (x as InterviewTreeRoster).RosterTitle);
+                    opts.MapFrom(x => HttpUtility.HtmlEncode((x as InterviewTreeRoster).RosterTitle));
                 })
                 .ForMember(x => x.IsRoster, opts => opts.MapFrom(x => x is InterviewTreeRoster)); 
 
