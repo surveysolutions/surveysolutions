@@ -1614,6 +1614,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             //AssignResponsible(command.UserId, interviewerId, supervisorId, command.AssignTime);
         }
 
+        public void MoveInterviewToTeam(Guid userId, Guid supervisorId, Guid? interviewerId, DateTime assignTime)
+        {
+            this.ApplyEvent(new SupervisorAssigned(userId, supervisorId, assignTime));
+            if (interviewerId.HasValue)
+            {
+                this.ApplyEvent(new InterviewerAssigned(userId, interviewerId, assignTime));
+            }
+            else
+            {
+                this.ApplyEvent(new InterviewerAssigned(userId, null, null));
+            }
+        }
+
         public void AssignSupervisor(Guid userId, Guid supervisorId, DateTime? assignTime = null)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
