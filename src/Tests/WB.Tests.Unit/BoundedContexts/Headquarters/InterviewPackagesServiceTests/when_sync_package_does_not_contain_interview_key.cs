@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
         public void should_generate_interview_key_from_generator()
         {
             Mock<ICommandService> commandService = new Mock<ICommandService>();
-            var service = CreateInterviewPackagesService(commandService: commandService.Object);
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage());

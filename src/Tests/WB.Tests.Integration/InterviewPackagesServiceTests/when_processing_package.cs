@@ -50,7 +50,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             transactionManager = new Mock<ITransactionManager>();
-            interviewPackagesService = new InterviewPackagesService(
+            interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer, 
@@ -59,8 +59,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
                 interviews: new TestInMemoryWriter<InterviewSummary>(),
-                transactionManager: transactionManager.Object,
-                userRepository: Mock.Of<IUserRepository>());
+                transactionManager: transactionManager.Object);
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),

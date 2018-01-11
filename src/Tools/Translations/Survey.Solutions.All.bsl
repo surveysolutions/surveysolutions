@@ -2604,8 +2604,14 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0274_VariableUsingForbiddenClasses" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Variable using forbidden type." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Переменная использует запрещённый тип." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Variable is using forbidden type." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Переменная использует запрещённый тип." ts="Changed" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0275_FilterExpressionIsUsingForbiddenClasses" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="FIlter expression is using forbidden type." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Фильтр использует запрещённый тип." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx" nm="AllRights" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4672,7 +4678,7 @@
             <li lc="km" tx="ចំលើយ" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Respondeu" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Answered" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Отвеченных" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Отвеченных" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอบแล้ว" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Мають відповдь" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Đã trả lời" ts="Translated" qs="ToReview" />
@@ -4903,7 +4909,7 @@
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_One" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="una respuesta" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="une seule réponse" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="une seule réponse" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="satu jawaban" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយមួយ" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="uma resposta" ts="Translated" qs="ToReview" />
@@ -4933,7 +4939,7 @@
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_One" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="un error" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="une seule erreur" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="une seule erreur" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="satu kesalahan" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ខុសមួយ" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="um erro" ts="Translated" qs="ToReview" />
@@ -4963,12 +4969,12 @@
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Status_NotStarted" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="Sección no iniciada" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Section non encore entamée" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Section non encore entamée" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian belum dimulai" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ផ្នែកនេះមិនទាន់ចាប់ផ្តើម" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Seção não começada" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Section not started" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Секция не содержит ни одного ответа" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Секция не содержит ни одного ответа" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอนที่ยังไม่เริ่ม" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Розділ не розпочато" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Số mục chưa phỏng vấn" ts="Translated" qs="ToReview" />
@@ -5007,13 +5013,13 @@
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Subgroups_One" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="una subsección" er="" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="una subsección" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="une sous-section" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="satu sub-bagian" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ផ្នែកតូចបន្ទាប់មួយ" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="uma sub-seção" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="one sub-section" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="одна вложенная секция" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="одна вложенная секция" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="1 ตอนย่อย" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="один підрозділ" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="một mục con" ts="Translated" qs="ToReview" />
@@ -5022,13 +5028,13 @@
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Subgroups_Zero" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="sin subsecciones" er="" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="sin subsecciones" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="aucune sous-section" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="tidak ada sub-bagian" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មិនមានផ្នែកតូចបន្ទាប់ទេ" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="nenhuma sub-seção" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="no sub-sections" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="вложенных секций нет" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="вложенных секций нет" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ไม่มีตอนย่อย" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="немає підрозділів" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Không có mục con" ts="Translated" qs="ToReview" />
@@ -5998,7 +6004,7 @@
             <li lc="nn-nn" tx="Please fill in the captcha field" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="请填写验证码" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Favor ingrese el capacha " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="S'il vous plaît remplir le champ captcha" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="S'il vous plaît remplir le champ captcha" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages.resx" nm="Questionnaire_verification_failed" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6910,7 +6916,7 @@
             <li lc="nn-nn" tx="Interviews" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Entrevistas" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Entretiens" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Entretiens" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Strings.resx" nm="InterviewStatus_ApprovedByHeadquarters" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7724,13 +7730,13 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_NotStarted" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="No se inició" er="" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Pas encore commencé" er="" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No se inició" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Pas encore commencé" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Belum dimulai" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មិនទាន់ចាប់ផ្តើម" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Não iniciado" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Not started" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Не начатое" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Не начатое" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ยังไม่เริ่มต้น" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Не розпочато" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Chưa bắt đầu" ts="Translated" qs="ToReview" />
@@ -8458,7 +8464,7 @@
             <li lc="nn-nn" tx="Original" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Исходный" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="es" tx="Original" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Version originale" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Version originale" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Login" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9913,7 +9919,7 @@
             <li lc="nn-nn" tx="Original" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Исходный" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="es" tx="Original" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Version originale" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Version originale" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\Properties\TesterUIResources.resx" nm="MenuItem_Title_Reload" rc="" dnt="false" nms="Translations.Tester" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -15201,6 +15207,7 @@
             <li lc="ka" tx="{1}-დან {0}" ts="Translated" qs="ToReview" />
             <li lc="es" tx="{0} de {1}" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="{0} sur {1}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="{0} из {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportSample" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -16194,7 +16201,7 @@
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="Interviews" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Entretiens" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Entretiens" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Entrevistas" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviews" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью" ts="Translated" qs="ToReview" />
@@ -17512,7 +17519,7 @@
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="Interviewers" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Enquêteurs" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Enquêteurs" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюеры" ts="Translated" qs="ToReview" />
@@ -17523,7 +17530,7 @@
         </it>
         <it rn="App_GlobalResources\MainMenu.resx" nm="Interviews" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Entretiens" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Entretiens" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Entrevistas" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviews" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью" ts="Translated" qs="ToReview" />
@@ -19141,7 +19148,7 @@
         </it>
         <it rn="App_GlobalResources\Users.resx" nm="Interviewers" rc="" dnt="false" nms="Resources" cln="Users" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Enquêteurs" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Enquêteurs" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюеры" ts="Translated" qs="ToReview" />
@@ -19446,7 +19453,7 @@
         </it>
         <it rn="Resources\Archived.resx" nm="Interviewers" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Archived" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Enquêteurs" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Enquêteurs" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюеры" ts="Translated" qs="ToReview" />
@@ -20019,7 +20026,7 @@
           <lis>
             <li lc="nn-nn" tx="Flagged" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="С флагом" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Marcado" er="" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Marcado" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="FlagTitleUnflagged" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -20039,7 +20046,7 @@
         <it rn="Resources\Details.resx" nm="NoAnswer" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Not answered" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Не отвечен" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Не отвечен" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="NoSearchResults" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -20859,7 +20866,7 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="AssignConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez affecter des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt;, &lt;i&gt; {2} (seulement à un autre enuêteur de la même équipe) &lt;/i&gt; et &lt;i&gt; {3} &lt;/i&gt;." er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez affecter des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt;, &lt;i&gt; {2} (seulement à un autre enuêteur de la même équipe) &lt;/i&gt; et &lt;i&gt; {3} &lt;/i&gt;." ts="Changed" qs="ToReview" />
             <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) selecionado para reatribuir.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode atribuir a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (somente em outro entrevistador)&lt;/i&gt; e &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другого интервьюера)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
@@ -20895,7 +20902,7 @@
             <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;只有状态未处于&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;状态的问卷可以被重新分配。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) ენიჭება. &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; მხოლოდ ის ინტერვიუები რომელიც არ არის სტატუსში &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt; შეიძლება მიენიჭოს. " ts="Translated" qs="ToReview" />
             <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt; podrían reasignarse." ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront assignés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Note! &lt;/b&gt; Seuls les entretiens qui ne sont pas dans l'état &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt; peuvent être réaffectés.&#xD;&#xA;" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront assignés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Note! &lt;/b&gt; Seuls les entretiens qui ne sont pas dans l'état &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt; peuvent être réaffectés.&#xD;&#xA;" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ChooseResponsible" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -20969,7 +20976,7 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="RejectConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.&#xD;&#xA;" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.&#xD;&#xA;" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) serão rejeitadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode rejeitar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
@@ -20980,7 +20987,7 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="RejectConfirmMessageHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.&#xD;&#xA;" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.&#xD;&#xA;" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) serão rejeitadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode rejeitar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут откачены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
@@ -21095,7 +21102,7 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="UnapproveConfirmMessageHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) ne seront pas approuvés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez désapprouver que les entretiens qui ont l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.&#xD;&#xA;" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) ne seront pas approuvés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez désapprouver que les entretiens qui ont l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.&#xD;&#xA;" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser não aprovadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode reprovar entrevistas com somente o seguinte status: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будет отклонены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете откатить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
@@ -21736,7 +21743,7 @@
             <li lc="fr" tx="Interdit" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Proibido" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Forbidden" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Запрещено" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Запрещено" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="禁止" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="აკრძალული" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Prohibido" ts="Translated" qs="ToReview" />
@@ -22480,9 +22487,9 @@
         <it rn="Resources\Pages.resx" nm="InterviewerHq_RestartInterview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Restart" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Переоткрыть" er="" ts="Translated" qs="ToReview" />
-            <li lc="ka" tx="გადატვირთვა" er="" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Reiniciar" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Переоткрыть" ts="Translated" qs="ToReview" />
+            <li lc="ka" tx="გადატვირთვა" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Reiniciar" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Redémarrer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -22811,7 +22818,7 @@
             <li lc="zh" tx="调查员" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ინტერვიუერები" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Entrevistadores" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Enquêteurs" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Enquêteurs" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerProfile_InterviewerUpdatedDate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -23209,7 +23216,7 @@
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_Header" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Enquêteurs" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Enquêteurs" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюеры" ts="Translated" qs="ToReview" />
@@ -23276,6 +23283,16 @@
           <lis>
             <li lc="nn-nn" tx="Move to another team" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Перенести в другую команду" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="Interviewers_MovingCompleted" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Moving users completed" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="Interviewers_MovingIsInProgress" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Moving is in progress" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_NamesFormatLessThanLimit" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -23361,7 +23378,7 @@
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_Title" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Enquêteurs" er="" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Enquêteurs" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Entrevistadores" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviewers" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервьюеры" ts="Translated" qs="ToReview" />
@@ -24025,7 +24042,7 @@
             <li lc="zh" tx="调查员" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ინტერვიუერები" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Entrevistadores" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Enquêteurs" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Enquêteurs" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Profile_ObserverCreate" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -24322,7 +24339,7 @@
         </it>
         <it rn="Resources\Pages.resx" nm="Survey_Header" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Entretiens" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Entretiens" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Entrevistas" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Interviews" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Интервью" ts="Translated" qs="ToReview" />
@@ -25983,8 +26000,8 @@
         </it>
         <it rn="Resources\UploadUsers.resx" nm="AllAccountsCreated" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="All {{total}} accounts was successfully created:" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Всего {{total}} учетных записей было успешно создано:" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="All {{total}} accounts were successfully created:" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Всего {{total}} учетных записей было успешно создано:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UploadUsers.resx" nm="AssignedTo" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26085,8 +26102,8 @@
         </it>
         <it rn="Resources\UploadUsers.resx" nm="NoCreatedUsers" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="No user accounts was created" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Учетные записи пользователей не были созданы" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="No user accounts were created" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Учетные записи пользователей не были созданы" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UploadUsers.resx" nm="OptionalInformation" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26200,7 +26217,7 @@
         <it rn="Resources\UploadUsers.resx" nm="VerificationFailed" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Verification failed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Проверка провалена" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Проверка не выполнена" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0001" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26311,8 +26328,8 @@
             <li lc="fr" tx="Le mot de passe doit contenir au moins un chiffre, un caractère majuscule et un caractère minuscule. La longueur doit être comprise entre 10 et 100 caractères." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="pt" tx=" Senha deve conter pelo menos um número, uma letra maiúscula e um minúsculas caracteres. Comprimento deve ser entre 10 e 100 caracteres." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="nn-nn" tx="Wrong password format" ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Неправильный формат пароля" er="" ts="Changed" qs="ToReview" />
-            <li lc="zh" tx="密码必须至少包含一个数字、一个大写字母、一个小写字母。" er="" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Неправильный формат пароля" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="密码必须至少包含一个数字、一个大写字母、一个小写字母。" ts="Changed" qs="ToReview" />
             <li lc="ka" tx=" პაროლი უნდა შეიცავდეს მინიმუმ ერთი რიცხვს, ერთ დიდ სიმბოლოს და ერთ ქვედა სიმბოლოს. სიგრძე უნდა იყოს 10-დან და 100 სიმბოლოს შორის." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="es" tx="La palabra clave debe contener al menos un número, una letra en mayúscula y una letra en minúscula. Su longitud debe estar entre 10 y 100 caracteres." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
           </lis>
@@ -26399,8 +26416,8 @@
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0010Description" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Supervisor '{0}' not found" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Супервизор '{0}' не найден" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Supervisor '{0}' is not found" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Супервизор '{0}' не найден" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0011" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26906,7 +26923,7 @@
             <li lc="es" tx="Contestada" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx="Renseignées" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Answered" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Отвеченных" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Отвеченных" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="უპასუხა" ts="Translated" qs="ToReview" />
           </lis>
         </it>

@@ -1193,4 +1193,10 @@
   <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
     <value>Make original supervisor responsible for the assignments and interviews of the moved interviewer(s).</value>
   </data>
+  <data name="Interviewers_MovingCompleted" xml:space="preserve">
+    <value>Moving users completed</value>
+  </data>
+  <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+    <value>Moving is in progress</value>
+  </data>
 </root>
