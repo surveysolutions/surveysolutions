@@ -477,4 +477,10 @@
     <value>Импорт заданий</value>
     <comment>Импорт заданий</comment>
   </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>Импорт интервью для {0}</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+    <value>{0} из {1}</value>
+  </data>
 </root>
