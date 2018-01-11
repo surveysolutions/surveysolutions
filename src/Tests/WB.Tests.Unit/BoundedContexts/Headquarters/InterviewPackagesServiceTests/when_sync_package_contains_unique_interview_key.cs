@@ -13,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
         public void should_not_generate_new_interview_key()
         {
             Mock<ICommandService> commandService = new Mock<ICommandService>();
-            var service = CreateInterviewPackagesService(commandService: commandService.Object);
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
             InterviewKeyAssigned keyAssignedEvent = Create.Event.InterviewKeyAssigned();
             var aggregateRootEvent = Create.Event.AggregateRootEvent(keyAssignedEvent);

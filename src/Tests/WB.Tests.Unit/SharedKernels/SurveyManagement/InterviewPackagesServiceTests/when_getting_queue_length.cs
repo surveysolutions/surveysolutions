@@ -1,16 +1,19 @@
 using System;
 using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
 {
-    internal class when_getting_queue_length : InterviewPackagesServiceTestsContext
+    [TestFixture]
+    public class when_getting_queue_length
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Setup()
         {
             packagesStorage = new TestPlainStorage<InterviewPackage>();
             brokenPackagesStorage = new TestPlainStorage<BrokenInterviewPackage>();
@@ -18,12 +21,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             for (int i = 0; i < 100; i++)
                 packagesStorage.Store(new InterviewPackage {InterviewId = Guid.NewGuid()}, null);
 
-            interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: packagesStorage, brokenInterviewPackageStorage: brokenPackagesStorage);
-        };
+            interviewPackagesService = Create.Service.InterviewPackagesService(interviewPackageStorage: packagesStorage, brokenInterviewPackageStorage: brokenPackagesStorage);
+            packagesLength = interviewPackagesService.QueueLength;
+        }
 
-        Because of = () => packagesLength = interviewPackagesService.QueueLength;
-
-        It should_be_specified_packages_length = () => packagesLength.ShouldEqual(100);
+        [Test]
+        public void should_be_specified_packages_length() => packagesLength.ShouldEqual(100);
 
         private static int packagesLength;
         private static InterviewPackagesService interviewPackagesService;

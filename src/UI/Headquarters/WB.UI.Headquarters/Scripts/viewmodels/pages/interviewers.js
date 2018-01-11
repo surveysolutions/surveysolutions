@@ -84,6 +84,7 @@
         ko.utils.arrayForEach(model.Interviewers(),
             function (interviewer) {
                 interviewer.inProgress = ko.observable(false);
+                interviewer.processed = ko.observable(false);
                 interviewer.errors = ko.observableArray([]);
             });
 
@@ -91,6 +92,7 @@
             var createRequest = function (index) {
                 if (index >= interviewers.length) {
                     modal.update({
+                        title: self.movingCompleted,
                         buttons: {
                             closer: true
                         }
@@ -115,6 +117,7 @@
                     // onSuccess
                     function (data) {
                         interviewer.inProgress(false);
+                        interviewer.processed(true);
                         if (!data.IsSuccess) {
                             interviewer.errors([data.DomainException]);
                         } else {
@@ -136,7 +139,7 @@
         var messageTemplate = $("<div/>").html($(messageTemplateId).html())[0];
         var messageHtml = $(messageTemplate).html();
 
-        var modal = notifier.modal("Progress", messageHtml);
+        var modal = notifier.modal(self.movingIsInProgress, messageHtml);
 
         modal.get().attr("id", "move-interviewer-progress");
 

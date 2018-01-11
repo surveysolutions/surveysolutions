@@ -45,46 +45,55 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
 
         private async Task<MoveResult> MoveUserAndAssignDataToOriginalSupervisor(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            var errors = new List<string>();
+            var result = new MoveResult();
             
             var interviewIds = GetInterviewIds(interviewerId);
             foreach (var interviewId in interviewIds)
             {
                 var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, previousSupervisorId, null, DateTime.UtcNow);
-                ExecuteMoveInterviewToTeam(moveInterviewToTeam, errors, interviewId);
+                ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
             }
 
             var assignmentIds = assignmentsService.GetAllAssignmentIds(interviewerId);
             foreach (var assignmentId in assignmentIds)
             {
-                assignmentsService.Reassign(assignmentId, previousSupervisorId);
+                try
+                {
+                    result.AssignmentsProcessed++;
+                    assignmentsService.Reassign(assignmentId, previousSupervisorId);
+                }
+                catch (Exception exception)
+                {
+                    result.AssignmentsProcessedWithErrors++;
+                    result.Errors.Add("Error");
+                }
             }
 
             var moveUserResult = await userManager.MoveUserToAnotherTeamAsync(interviewerId, newSupervisorId, previousSupervisorId);
             if (!moveUserResult.Succeeded)
-                errors.AddRange(moveUserResult.Errors);
+                result.Errors.AddRange(moveUserResult.Errors);
 
-            return new MoveResult(errors);
+            return result;
         }
 
         private async Task<MoveResult> MoveUserWithAllDataToANewTeam(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            var errors = new List<string>();
+            var result = new MoveResult();
 
             var interviewIds = GetInterviewIds(interviewerId);
             foreach (var interviewId in interviewIds)
             {
                 var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, newSupervisorId, interviewerId, DateTime.UtcNow);
-                ExecuteMoveInterviewToTeam(moveInterviewToTeam, errors, interviewId);
+                ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
             }
 
             // there is no information about supervisor in assignment. no need to update anything
 
             var moveUserResult = await userManager.MoveUserToAnotherTeamAsync(interviewerId, newSupervisorId, previousSupervisorId);
             if (!moveUserResult.Succeeded)
-                errors.AddRange(moveUserResult.Errors);
+                result.Errors.AddRange(moveUserResult.Errors);
 
-            return new MoveResult(errors);
+            return result;
         }
 
         private List<Guid> GetInterviewIds(Guid interviewerId)
@@ -92,29 +101,40 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
             return interviewsReader.Query(_ => _.Where(x => x.ResponsibleId == interviewerId).Select(x => x.InterviewId).ToList());
         }
 
-        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, List<string> errors, Guid interviewId)
+        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, MoveResult errors, Guid interviewId)
         {
             try
             {
+                errors.InterviewsProcessed++;
                 commandService.Execute(moveInterviewToTeam);
             }
             catch (InterviewException exception)
             {
-                errors.Add($"Error during re-assigning interview {interviewId}. " + exception.Message);
+                errors.InterviewsProcessedWithErrors++;
+                errors.Errors.Add($"Error during re-assign of interview {interviewId}. " + exception.Message);
             }
             catch (Exception exception)
             {
-                errors.Add($"Error during re-assigning interview {interviewId}. " + exception.Message);
+                errors.InterviewsProcessedWithErrors++;
+                errors.Errors.Add($"Error during re-assign of interview {interviewId}. " + exception.Message);
             }
         }
     }
 
     public class MoveResult
     {
-        public MoveResult(List<string> errors)
+        public MoveResult()
         {
-            Errors = errors;
+            Errors = new List<string>();
         }
+
+        public int InterviewsProcessed { get; set; } = 0;
+
+        public int InterviewsProcessedWithErrors { get; set; } = 0;
+
+        public int AssignmentsProcessed { get; set; } = 0;
+
+        public int AssignmentsProcessedWithErrors { get; set; } = 0;
 
         public List<string> Errors { get; }
     }
