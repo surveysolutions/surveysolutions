@@ -1569,13 +1569,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewPackage InterviewPackage(Guid? interviewId = null, AggregateRootEvent[] events = null)
+        public InterviewPackage InterviewPackage(Guid? interviewId = null, params IEvent[] events)
         {
             var serializer = new JsonAllTypesSerializer();
+            var aggregateRootEvents = events?.Select(x =>  Create.Event.AggregateRootEvent(x)).ToArray() ?? new AggregateRootEvent[0];
             return new InterviewPackage
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
-                Events = events != null ? serializer.Serialize(events) : serializer.Serialize(new AggregateRootEvent[0])
+                Events = serializer.Serialize(aggregateRootEvents)
             };
         }
 

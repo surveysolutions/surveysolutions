@@ -236,7 +236,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     createdOnClient: interview.IsCensusInterview,
                     interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
                     synchronizedEvents: serializedEvents,
-                    newSupervisorId: newSupervisorId
+                    newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
                 ), this.syncSettings.Origin);
 
                 if (startedOwnTransaction)

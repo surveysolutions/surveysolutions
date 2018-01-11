@@ -28,12 +28,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             interviews.Store(existingSummary, "id");
 
             InterviewKeyAssigned keyAssignedEvent = Create.Event.InterviewKeyAssigned(existingInterviewKey);
-            var aggregateRootEvent = Create.Event.AggregateRootEvent(keyAssignedEvent);
 
             var service = Create.Service.InterviewPackagesService(interviews: interviews, commandService: commandService.Object);
 
             // Act
-            service.ProcessPackage(Create.Entity.InterviewPackage(events: new[] { aggregateRootEvent }));
+            service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, keyAssignedEvent));
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);
