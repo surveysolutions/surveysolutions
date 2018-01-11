@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
                 catch (Exception exception)
                 {
                     result.AssignmentsProcessedWithErrors++;
-                    result.Errors.Add("Error");
+                    result.Errors.Add($"Error during re-assign of assignment {assignmentId}. " + exception.Message);
                 }
             }
 
