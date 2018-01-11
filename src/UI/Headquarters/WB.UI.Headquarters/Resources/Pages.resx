@@ -1199,4 +1199,7 @@
   <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
     <value>Moving is in progress</value>
   </data>
+  <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+    <value>Finished with errors. Please repeat the action later. Write to support if problems will repeat in future.</value>
+  </data>
 </root>

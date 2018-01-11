@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
             this.interviewsReader = interviewsReader;
         }
 
-        public async Task<MoveResult> Move(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
+        public async Task<MoveInterviewerToAnotherTeamResult> Move(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId,
             MoveUserToAnotherTeamMode moveRequestMode)
         {
             if (moveRequestMode == MoveUserToAnotherTeamMode.MoveAllToNewTeam)
@@ -43,9 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
             return await MoveUserAndAssignDataToOriginalSupervisor(userId, interviewerId, newSupervisorId, previousSupervisorId);
         }
 
-        private async Task<MoveResult> MoveUserAndAssignDataToOriginalSupervisor(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
+        private async Task<MoveInterviewerToAnotherTeamResult> MoveUserAndAssignDataToOriginalSupervisor(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            var result = new MoveResult();
+            var result = new MoveInterviewerToAnotherTeamResult();
             
             var interviewIds = GetInterviewIds(interviewerId);
             foreach (var interviewId in interviewIds)
@@ -76,9 +76,9 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
             return result;
         }
 
-        private async Task<MoveResult> MoveUserWithAllDataToANewTeam(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
+        private async Task<MoveInterviewerToAnotherTeamResult> MoveUserWithAllDataToANewTeam(Guid userId, Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
-            var result = new MoveResult();
+            var result = new MoveInterviewerToAnotherTeamResult();
 
             var interviewIds = GetInterviewIds(interviewerId);
             foreach (var interviewId in interviewIds)
@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
             return interviewsReader.Query(_ => _.Where(x => x.ResponsibleId == interviewerId).Select(x => x.InterviewId).ToList());
         }
 
-        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, MoveResult errors, Guid interviewId)
+        private void ExecuteMoveInterviewToTeam(MoveInterviewToTeam moveInterviewToTeam, MoveInterviewerToAnotherTeamResult errors, Guid interviewId)
         {
             try
             {
@@ -121,9 +121,9 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
         }
     }
 
-    public class MoveResult
+    public class MoveInterviewerToAnotherTeamResult
     {
-        public MoveResult()
+        public MoveInterviewerToAnotherTeamResult()
         {
             Errors = new List<string>();
         }
