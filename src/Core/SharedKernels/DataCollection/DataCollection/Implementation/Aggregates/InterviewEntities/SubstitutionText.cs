@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         string answerString = question.GetAnswerAsString(CultureInfo.CurrentCulture);
                         shouldEncode = false;
 
-                        substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString) : answerString;
+                        substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
 
                         if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
                         {
