@@ -1216,4 +1216,10 @@
   <data name="OperationFailedTitle" xml:space="preserve">
     <value>Операция не выполнена</value>
   </data>
+  <data name="Interviewers_MovingCompleted" xml:space="preserve">
+    <value>Перемещение пользователей завершено</value>
+  </data>
+  <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+    <value>Перемещение пользователей в прогрессе</value>
+  </data>
 </root>

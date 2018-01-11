@@ -168,7 +168,4 @@
   <data name="ZeroRecords" xml:space="preserve">
     <value>Записи отсутствуют</value>
   </data>
-  <data name="InfoPostFix" xml:space="preserve">
-    <value />
-  </data>
 </root>

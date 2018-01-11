@@ -15198,6 +15198,7 @@
             <li lc="ka" tx="{0}-სთვის ინტერვიუების იმპორტი" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Importando entrevistas para {0}" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Importation d'entretiens pour {0}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Импорт интервью для {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="ImportProgressFormat" ns="{0} - count of created entities; {1} - total number to be created" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -23288,11 +23289,13 @@
         <it rn="Resources\Pages.resx" nm="Interviewers_MovingCompleted" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Moving users completed" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Перемещение пользователей завершено" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_MovingIsInProgress" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Moving is in progress" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Перемещение пользователей в прогрессе" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Interviewers_NamesFormatLessThanLimit" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
