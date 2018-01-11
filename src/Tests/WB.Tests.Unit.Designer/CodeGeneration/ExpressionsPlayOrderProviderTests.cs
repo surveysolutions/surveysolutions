@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc.TestFactories;
@@ -150,7 +153,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
         }
 
         [Test]
-        public void when_GetValidationDependencyGraph_for_question_with_validation_inside_formila()
+        public void when_GetValidationDependencyGraph_for_question_with_validation_inside_formula()
         {
             var intQuestionId = Guid.NewGuid();
             var macrosId = Guid.NewGuid();
@@ -169,6 +172,42 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
             Assert.That(expressionsPlayOrder[intQuestionId], Is.EqualTo(new[] { intQuestionId }));
+        }
+
+        [Test]
+        public void when_GetDependencyGraph_for_linked_question_with_filter()
+        {
+            Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
+            Guid rosterId = Guid.Parse("88888888888888888888888888888888");
+            Guid roster1Id = Guid.Parse("77777777777777777777777777777777");
+            Guid q2Id = Guid.Parse("22222222222222222222222222222222");
+            Guid q3Id = Guid.Parse("33333333333333333333333333333333");
+            Guid q4Id = Guid.Parse("44444444444444444444444444444444");
+            Guid q5Id = Guid.Parse("55555555555555555555555555555555");
+
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+            {
+                Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "q2"),
+                Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                {
+                    Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "age")
+                }),
+                Abc.Create.Entity.Roster(roster1Id, variable:"r1", fixedTitles: new[] { "1", "2"}, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new IComposite[]
+                {
+                    Abc.Create.Entity.NumericIntegerQuestion(q5Id, variable: "ageFilter"),
+                    Abc.Create.Entity.SingleQuestion(q4Id, variable: "q4", linkedToQuestionId: q3Id, linkedFilter: "age > current.ageFilter")
+                })
+            });
+
+
+            var expressionProcessor = Create.RoslynExpressionProcessor();
+            var macrosesService = Create.MacrosSubstitutionService();
+            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
+
+            var expressionsPlayOrder = expressionsPlayOrderProvider.GetDependencyGraph(questionnaireDocument.AsReadOnly());
+            var dependensies = new TopologicalSorter<Guid>().Sort(expressionsPlayOrder, q5Id);
+
+            Assert.That(dependensies, Is.EqualTo(new[] { q5Id, q4Id }));
         }
     }
 }

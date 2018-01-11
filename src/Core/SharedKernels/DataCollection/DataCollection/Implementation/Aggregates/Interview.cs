@@ -2421,7 +2421,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             var treeDifference = FindDifferenceBetweenTrees(changedInterviewTree, interviewTreeCloneForTesting);
                             if (treeDifference.Count > 0)
                             {
-                                throw new InterviewException($"ERROR!!! - Found {treeDifference.Count} diffs with changes. First ID {treeDifference.First().Identity}");
+                                throw new InterviewException($"ERROR!!! - Found {treeDifference.Count} diffs with changes. First ID {treeDifference.First().Identity}, type: {treeDifference.First().GetType().Name}");
 
                                 /*foreach (var diff in treeDifference)
                                 {
