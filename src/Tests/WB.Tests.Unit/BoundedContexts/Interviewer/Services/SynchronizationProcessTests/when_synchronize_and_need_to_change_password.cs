@@ -5,6 +5,7 @@ using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -78,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         static SynchronizationProcess viewModel;
         static Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
         static Mock<IUserInteractionService> userInteractionServiceMock=new Mock<IUserInteractionService>();
-        static Mock<IPrincipal> principalMock = new Mock<IPrincipal>();
+        static Mock<IInterviewerPrincipal> principalMock = new Mock<IInterviewerPrincipal>();
         static Mock<ISynchronizationService>  synchronizationServiceMock =new Mock<ISynchronizationService>();
         static Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
     }

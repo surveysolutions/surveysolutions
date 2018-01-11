@@ -97,6 +97,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
             localInterviewer.SupervisorId = supervisorId;
             this.interviewersPlainStorage.Store(localInterviewer);
+            this.principal.SignInWithHash(localInterviewer.Name, localInterviewer.PasswordHash, true);
         }
 
 
