@@ -2,6 +2,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -34,7 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
                 interviews: new TestInMemoryWriter<InterviewSummary>(),
-                transactionManager: Mock.Of<ITransactionManager>());
+                transactionManager: Mock.Of<ITransactionManager>(),
+                userRepository: Mock.Of<IUserRepository>());
         }
     }
 }

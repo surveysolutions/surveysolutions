@@ -397,7 +397,7 @@ namespace WB.Tests.Abc.TestFactories
             ILogger logger = null,
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
-            IPrincipal principal = null,
+            IInterviewerPrincipal principal = null,
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
             IHttpStatistician httpStatistician = null)
@@ -407,7 +407,7 @@ namespace WB.Tests.Abc.TestFactories
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
-                principal ?? Mock.Of<IPrincipal>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
