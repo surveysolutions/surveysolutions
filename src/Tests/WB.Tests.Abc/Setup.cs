@@ -183,8 +183,11 @@ namespace WB.Tests.Abc
         {
             questionnaireDocument.IsUsingExpressionStorage = true;
             var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
-            var questionnaireDocumentExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
-            questionnaireDocument.ExpressionsPlayOrder = questionnaireDocumentExpressionsPlayOrder;
+
+            var expressionsPlayOrderProvider = Create.Service.ExpressionsPlayOrderProvider();
+            questionnaireDocument.ExpressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument); 
+            questionnaireDocument.DependencyGraph = expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument); 
+            questionnaireDocument.ValidationDependencyGraph = expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument); 
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 

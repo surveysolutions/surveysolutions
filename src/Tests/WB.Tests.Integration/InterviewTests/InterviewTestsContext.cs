@@ -140,7 +140,11 @@ namespace WB.Tests.Integration.InterviewTests
         {
             questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
             questionnaireDocument.IsUsingExpressionStorage = true;
-            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+            var playOrderProvider = IntegrationCreate.ExpressionsPlayOrderProvider();
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            questionnaireDocument.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 

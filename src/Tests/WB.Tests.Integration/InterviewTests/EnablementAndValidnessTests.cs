@@ -97,15 +97,9 @@ namespace WB.Tests.Integration.InterviewTests
                     Abc.Create.Entity.Variable(variableMsgYoungOldId, VariableType.String, "msgYoung", "s_name + name + \" is too young\"")
                 );
 
-                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>
-                {
-                    Abc.Create.Event.TextQuestionAnswered(
-                        questionId: questionFirstId, answer: "John"
-                    ),
-                    Abc.Create.Event.TextQuestionAnswered(
-                        questionId: questionSecondId, answer: "Smith"
-                    )
-                });
+                var interview = SetupStatefullInterviewWithExpressionStorage(questionnaireDocument);
+                interview.AnswerTextQuestion(userId, questionFirstId, RosterVector.Empty, DateTime.UtcNow, "John");
+                interview.AnswerTextQuestion(userId, questionSecondId, RosterVector.Empty, DateTime.UtcNow, "Smith");
 
                 using (var eventContext = new EventContext())
                 {
@@ -113,7 +107,8 @@ namespace WB.Tests.Integration.InterviewTests
 
                     return new
                     {
-                        AnswersDeclaredInvalidEvent = GetFirstEventByType<AnswersDeclaredInvalid>(eventContext.Events)
+                        AnswersDeclaredInvalidEvent = GetFirstEventByType<AnswersDeclaredInvalid>(eventContext.Events),
+                        ValidationErrorMessage = interview.GetFailedValidationMessages(Abc.Create.Identity(questionAgeId), null)
                     };
                 }
             });
@@ -123,6 +118,8 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results.AnswersDeclaredInvalidEvent.Questions.Single().Id, Is.EqualTo(questionAgeId));
             Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Keys.Single().Id, Is.EqualTo(questionAgeId));
             Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Values.Single().Single().FailedConditionIndex, Is.EqualTo(1));
+
+            Assert.That(results.ValidationErrorMessage.Single(), Is.EqualTo("SmithJohn is too old [2]"));
 
             appDomainContext.Dispose();
             appDomainContext = null;
