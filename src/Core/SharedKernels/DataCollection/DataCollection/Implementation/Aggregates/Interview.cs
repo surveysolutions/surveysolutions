@@ -2351,7 +2351,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return sourceInterview.Compare(changedInterview);
         }
 
-        public static bool TestingConditions = false;
+        public static bool TestingConditions = true;
 
         protected void UpdateTreeWithDependentChanges(InterviewTree changedInterviewTree, IQuestionnaire questionnaire, Identity entityIdentity, bool removeLinkedAnswers = true)
         {
