@@ -21,9 +21,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
             InterviewKeyAssigned keyAssignedEvent = Create.Event.InterviewKeyAssigned();
-            var aggregateRootEvent = Create.Event.AggregateRootEvent(keyAssignedEvent);
 
-            var interviewPackage = Create.Entity.InterviewPackage(events: new[]{aggregateRootEvent});
+            var interviewPackage = Create.Entity.InterviewPackage(Id.g1, keyAssignedEvent);
             // Act
             service.ProcessPackage(interviewPackage);
 
