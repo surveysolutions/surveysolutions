@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -39,7 +40,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 uniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(x => x.Get() == GeneratedInterviewKey),
                 syncSettings ?? new SyncSettings(),
                 interviews ?? new TestInMemoryWriter<InterviewSummary>(),
-                Mock.Of<ITransactionManager>());
+                Mock.Of<ITransactionManager>(),
+                userRepository: Mock.Of<IUserRepository>());
         }
     }
 }
