@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             var aggregateRootEventZero = Create.Event.AggregateRootEvent(keyAssignedEventZero);
             var aggregateRootEvent = Create.Event.AggregateRootEvent(keyAssignedEvent);
 
-            var service = CreateInterviewPackagesService(interviews: interviews, commandService: commandService.Object);
+            var service = Create.Service.InterviewPackagesService(interviews: interviews, commandService: commandService.Object);
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage(interviewId, events: new[] { aggregateRootEventZero, aggregateRootEvent }));

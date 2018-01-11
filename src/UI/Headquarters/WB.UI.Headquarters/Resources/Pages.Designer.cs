@@ -1861,6 +1861,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Moving users completed.
+        /// </summary>
+        public static string Interviewers_MovingCompleted {
+            get {
+                return ResourceManager.GetString("Interviewers_MovingCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving is in progress.
+        /// </summary>
+        public static string Interviewers_MovingIsInProgress {
+            get {
+                return ResourceManager.GetString("Interviewers_MovingIsInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} and {1}.
         /// </summary>
         public static string Interviewers_NamesFormatLessThanLimit {

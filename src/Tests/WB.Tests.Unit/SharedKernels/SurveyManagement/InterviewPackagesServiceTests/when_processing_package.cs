@@ -1,7 +1,7 @@
 using System;
-using Machine.Specifications;
 using Main.Core.Events;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -11,18 +11,20 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
 {
-    internal class when_processing_package : InterviewPackagesServiceTestsContext
+    [TestFixture]
+    public class when_processing_package
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Setup()
         {
             var serializer =
-                Mock.Of<IJsonAllTypesSerializer>(x => x.Deserialize<SyncItem>(Moq.It.IsAny<string>()) == new SyncItem() &&
-                                          x.Deserialize<InterviewMetaInfo>(Moq.It.IsAny<string>()) == new InterviewMetaInfo { Status = 0 } &&
+                Mock.Of<IJsonAllTypesSerializer>(x => x.Deserialize<SyncItem>(It.IsAny<string>()) == new SyncItem() &&
+                                          x.Deserialize<InterviewMetaInfo>(It.IsAny<string>()) == new InterviewMetaInfo { Status = 0 } &&
                                           x.Deserialize<AggregateRootEvent[]>(decompressedEvents) == new AggregateRootEvent[0]);
             var syncSettings = Mock.Of<SyncSettings>(x => x.UseBackgroundJobForProcessingPackages == true);
 
@@ -31,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             
             mockOfCommandService = new Mock<ICommandService>();
 
-            interviewPackagesService = CreateInterviewPackagesService(
+            interviewPackagesService = Create.Service.InterviewPackagesService(
                 serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
                 interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
                 syncSettings: syncSettings);
@@ -47,12 +49,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 IsCensusInterview = false,
                 Events = "compressed serialized events"
             });
-        };
 
-        Because of = () => interviewPackagesService.ProcessPackage("1");
-
-        It should_execute_SynchronizeInterviewEventsCommand_command =
-            () => mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()), Times.Once);
+            interviewPackagesService.ProcessPackage("1");
+        }
+        
+        [Test]
+        public void should_execute_SynchronizeInterviewEventsCommand_command() => 
+            mockOfCommandService.Verify(x => x.Execute(It.IsAny<SynchronizeInterviewEventsCommand>(), It.IsAny<string>()), Times.Once);
 
         private static Mock<ICommandService> mockOfCommandService;
         private static string decompressedEvents = "decompressed events";

@@ -694,7 +694,6 @@
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_completing_interview_with_substitutions_changed.cs" />
     <Compile Include="SharedKernels\Enumerator\StatefulInterviewTests\when_getting_invalid_interview_entities_recursively.cs" />
     <Compile Include="SharedKernels\SurveyManagement\Factories\ExportViewFactoryTests\when_creating_interview_export_view_by_interview_with_1_answered_timestamp_question.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\InterviewPackagesServiceTests.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_CreatePreloadedDataDtosFromPanelData_and_some_answers_is_null.cs" />
     <Compile Include="SharedKernels\SurveyManagement\PreloadedDataServiceTests\when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_yesno_question.cs" />
@@ -1023,7 +1022,6 @@
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_loading_interviewers_for_supervisor.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_supervisor_filtering.cs" />
     <Compile Include="SharedKernels\SurveyManagement\UserViewFactoryTests\when_hq_sorting_by_deviceId.cs" />
-    <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\InterviewPackagesServiceTestsContext.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_pending_packages_by_interview_exists.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_reprocessing_all_broken_packages.cs" />
     <Compile Include="SharedKernels\SurveyManagement\InterviewPackagesServiceTests\when_storing_package.cs" />
