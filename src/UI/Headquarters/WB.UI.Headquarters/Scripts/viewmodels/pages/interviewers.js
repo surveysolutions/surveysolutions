@@ -85,6 +85,10 @@
             function (interviewer) {
                 interviewer.inProgress = ko.observable(false);
                 interviewer.processed = ko.observable(false);
+                interviewer.interviewsProcessed = ko.observable("-");
+                interviewer.interviewsProcessedWithErrors = ko.observable("-");
+                interviewer.assignmentsProcessed = ko.observable("-");
+                interviewer.assignmentsProcessedWithErrors = ko.observable("-");
                 interviewer.errors = ko.observableArray([]);
             });
 
@@ -97,6 +101,7 @@
                             closer: true
                         }
                     });
+                    self.reloadDataTable();
                     return;
                 }
 
@@ -118,11 +123,11 @@
                     function (data) {
                         interviewer.inProgress(false);
                         interviewer.processed(true);
-                        if (!data.IsSuccess) {
-                            interviewer.errors([data.DomainException]);
-                        } else {
-                            interviewer.errors.removeAll();
-                        }
+                        interviewer.interviewsProcessed(data.InterviewsProcessed);
+                        interviewer.interviewsProcessedWithErrors(data.InterviewsProcessedWithErrors);
+                        interviewer.assignmentsProcessed(data.AssignmentsProcessed);
+                        interviewer.assignmentsProcessedWithErrors(data.AssignmentsProcessedWithErrors);
+                        interviewer.errors(data.Errors);
                     },
                     //onDone
                     function () {
@@ -227,8 +232,6 @@
         });
 
         confirm.attr("id", "move-interviewer-confirmation");
-
-        confirm.find(".alert.alert-warning").removeClass(".alert").removeClass(".alert-warning");
 
         ko.applyBindings(model, confirm[0]);
     };

@@ -271,7 +271,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Administrator, Headquarter")]
-        public async Task<JsonCommandResponse> MoveUserToAnotherTeam(MoveUserToAnotherTeamRequest moveRequest)
+        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam(MoveUserToAnotherTeamRequest moveRequest)
         {
             var userId = this.authorizedUser.Id;
             var result = await this.moveUserToAnotherTeamService.Move(
@@ -281,11 +281,7 @@ namespace WB.UI.Headquarters.Controllers
                 moveRequest.OldSupervisorId, 
                 moveRequest.Mode);
 
-            return new JsonCommandResponse
-            {
-                IsSuccess = result.Errors.Count == 0,
-                DomainException = string.Join(@"; ", result.Errors)
-            };
+            return result;
         }
 
         [HttpPost]

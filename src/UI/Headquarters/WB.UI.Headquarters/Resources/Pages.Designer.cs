@@ -1780,6 +1780,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished with errors. Please repeat the action later. Write to support if problems will repeat in future..
+        /// </summary>
+        public static string Interviewers_FinishedWithErrors {
+            get {
+                return ResourceManager.GetString("Interviewers_FinishedWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewers.
         /// </summary>
         public static string Interviewers_Header {
