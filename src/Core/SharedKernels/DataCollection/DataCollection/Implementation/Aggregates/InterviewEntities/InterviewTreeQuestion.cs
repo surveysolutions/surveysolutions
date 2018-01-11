@@ -481,7 +481,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetAnswerAsString(CultureInfo cultureInfo = null)
         {
-            if (!this.IsAnswered()) return String.Empty;
+            if (!this.IsAnswered()) return null;
 
             if (this.IsText) return ((InterviewTreeTextQuestion)this.InterviewQuestion).GetAnswer()?.Value;
             if (this.IsMultimedia) return ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).GetAnswer()?.FileName;
