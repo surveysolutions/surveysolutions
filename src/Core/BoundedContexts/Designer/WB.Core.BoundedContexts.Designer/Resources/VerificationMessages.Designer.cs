@@ -1779,5 +1779,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0274_VariableUsingForbiddenClasses", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FIlter expression is using forbidden type..
+        /// </summary>
+        public static string WB0275_FilterExpressionIsUsingForbiddenClasses {
+            get {
+                return ResourceManager.GetString("WB0275_FilterExpressionIsUsingForbiddenClasses", resourceCulture);
+            }
+        }
     }
 }

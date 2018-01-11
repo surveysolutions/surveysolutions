@@ -77,11 +77,24 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             WarningForCollection(ConsecutiveQuestionsWithIdenticalEnablementConditions, "WB0218", VerificationMessages.WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions),
             WarningForCollection(ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, "WB0219", string.Format(VerificationMessages.WB0219_ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options, UnconditionalSingleChoiceQuestionOptionsCount)),
 
-            Critical<IComposite>(this.ConditionUsingForbiddenClasses, "WB0272", VerificationMessages.WB0272_ConditionUsingForbiddenClasses),
+            Error<IComposite>(this.ConditionUsingForbiddenClasses, "WB0272", VerificationMessages.WB0272_ConditionUsingForbiddenClasses),
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationUsingForbiddenClasses, "WB0273", 
                 index => VerificationMessages.WB0273_ValidationConditionUsingForbiddenClasses, VerificationMessageLevel.Critical),
-            Error<IVariable>(VariableUsingForbiddenClasses, "WB0274", VerificationMessages.WB0274_VariableUsingForbiddenClasses)
+            Error<IVariable>(VariableUsingForbiddenClasses, "WB0274", VerificationMessages.WB0274_VariableUsingForbiddenClasses),
+            Error<IQuestion>(FilterExpressionUsingForbiddenClasses, "WB0275", VerificationMessages.WB0275_FilterExpressionIsUsingForbiddenClasses)
         };
+
+        private bool FilterExpressionUsingForbiddenClasses(IQuestion node, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var expression = string.IsNullOrEmpty(node.LinkedFilterExpression) ? node.Properties.OptionsFilterExpression : node.LinkedFilterExpression;
+            if (!string.IsNullOrEmpty(expression))
+            {
+                var foundUsages = FindForbiddenClassesUsage(expression, questionnaire);
+                return foundUsages.Count > 0;
+            }
+
+            return false;
+        }
 
         private bool VariableUsingForbiddenClasses(IVariable node, MultiLanguageQuestionnaireDocument questionnaire)
         {
