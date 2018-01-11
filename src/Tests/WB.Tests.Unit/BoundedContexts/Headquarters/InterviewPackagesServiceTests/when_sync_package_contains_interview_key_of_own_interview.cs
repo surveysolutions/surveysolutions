@@ -12,7 +12,7 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTests
 {
-    class when_sync_package_contains_interview_key_of_own_interview: InterviewPackagesServiceTestsContext
+    class when_sync_package_contains_interview_key_of_own_interview
     {
         [Test]
         public void should__NOT__generate_new_interview_key()

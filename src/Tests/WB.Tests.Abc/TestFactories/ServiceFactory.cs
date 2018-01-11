@@ -77,6 +77,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -655,6 +656,8 @@ namespace WB.Tests.Abc.TestFactories
             ITransactionManager transactionManager = null,
             IUserRepository userRepository = null)
         {
+            InterviewKey generatedInterviewKey = new InterviewKey(5533);
+
             var userRepositoryMock = new Mock<IUserRepository>();
 
             var hqUserProfile = Mock.Of<HqUserProfile>(_ => _.SupervisorId == Id.gB);
@@ -668,12 +671,12 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewPackagesService(
                 syncSettings: syncSettings ?? Mock.Of<SyncSettings>(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                serializer: serializer ?? Mock.Of<IJsonAllTypesSerializer>(),
+                serializer: serializer ?? new JsonAllTypesSerializer(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ??
                                                Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
-                uniqueKeyGenerator: uniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(),
+                uniqueKeyGenerator: uniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(x => x.Get() == generatedInterviewKey),
                 interviews: interviews ?? new TestInMemoryWriter<InterviewSummary>(),
                 transactionManager: transactionManager ?? Mock.Of<ITransactionManager>(),
                 userRepository: userRepository ?? userRepositoryMock.Object);
