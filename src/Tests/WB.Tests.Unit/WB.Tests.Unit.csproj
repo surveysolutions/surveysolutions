@@ -426,6 +426,7 @@
     <Compile Include="BoundedContexts\Headquarters\EventHandler\TestableAbstractDenormalizer.cs" />
     <Compile Include="BoundedContexts\Headquarters\EventHandler\TestState.cs" />
     <Compile Include="BoundedContexts\Headquarters\InterviewPackagesServiceTests\when_sync_package_with_new_interview.cs" />
+    <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_need_to_change_supervisor.cs" />
     <Compile Include="DataExportTests\InterviewsExporterTests\When_exporting_data_for_one_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqreject_competed_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\GetSubSectionsWithEnablementConditionTests.cs" />
