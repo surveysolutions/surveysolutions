@@ -3,8 +3,9 @@
 
     var self = this;
 
-    self.DeleteInterview = function () {
+    self.DeleteInterview = function (selectedRowAsArray) {
         self.sendCommandAfterFilterAndConfirm(
+            selectedRowAsArray,
             "DeleteInterviewCommand",
             function (item) { return { InterviewId: item.InterviewId } },
             function(item) { return item.CanDelete(); },
@@ -60,8 +61,9 @@
         });
     };
 
-    self.ApproveInterview = function () {
+    self.ApproveInterview = function (selectedRowAsArray) {
         self.sendCommandAfterFilterAndConfirm(
+            selectedRowAsArray,
             "HqApproveInterviewCommand",
             function (item) { return { InterviewId: item.InterviewId } },
             function (item) { return item.CanApprove(); },
@@ -70,8 +72,9 @@
         );
     };
 
-    self.RejectInterview = function () {
+    self.RejectInterview = function (selectedRowAsArray) {
         self.sendCommandAfterFilterAndConfirm(
+            selectedRowAsArray,
             "HqRejectInterviewCommand",
             function (item) { return { InterviewId: item.InterviewId } },
             function (item) { return item.CanReject(); },
@@ -80,8 +83,9 @@
         );
     };
 
-    self.UnapproveInterview = function () {
+    self.UnapproveInterview = function (selectedRowAsArray) {
         self.sendCommandAfterFilterAndConfirm(
+            selectedRowAsArray,
             "UnapproveByHeadquarterCommand",
             function (item) { return { InterviewId: item.InterviewId } },
             function (item) { return item.CanUnapprove(); },
@@ -90,12 +94,12 @@
         );
     };
 
-    self.AssignInterview = function () {
+    self.AssignInterview = function (selectedRowAsArray) {
         var commandName = "AssignResponsibleCommand";
         var messageTemplateId = "#assign-interview-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
 
-        var eligibleSelectedItems = self.GetSelectedItemsAfterFilter(function (item) {
+        var eligibleSelectedItems = self.GetSelectedItemsAfterFilter(selectedRowAsArray, function (item) {
             return item.CanBeReassigned();
         });
 

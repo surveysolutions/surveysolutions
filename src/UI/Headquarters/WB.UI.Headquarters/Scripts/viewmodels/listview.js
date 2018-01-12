@@ -129,8 +129,8 @@
         });
     });
 
-    self.GetSelectedItemsAfterFilter = function (filterFunc) {
-        var allItems = self.SelectedItems();
+    self.GetSelectedItemsAfterFilter = function (selectedRowAsArray, filterFunc) {
+        var allItems = selectedRowAsArray || self.SelectedItems();
         var filteredItems = ko.utils.arrayFilter(allItems, filterFunc);
         return filteredItems;
     }
