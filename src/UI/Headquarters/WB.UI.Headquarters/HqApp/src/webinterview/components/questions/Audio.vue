@@ -14,12 +14,10 @@
                     <wb-remove-answer />
                 </div>
                 <div v-if="$me.isAnswered" class="action-btn-holder time-question">
-                    <div v-if="$store.getters.isReviewMode">
-                        <audio controls preload="auto" 
-                            style="width:300px" 
-                            :src="audioRecordPath">
-                        </audio>
-                    </div>
+                    <audio controls preload="auto" 
+                        style="width:300px" 
+                        :src="audioRecordPath">
+                    </audio>
                     <button v-if="!isRecording" 
                         v-on:click="startRecording" 
                         :disabled="!$me.acceptAnswer" 

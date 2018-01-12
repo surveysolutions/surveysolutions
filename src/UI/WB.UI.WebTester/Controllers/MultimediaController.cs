@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -40,7 +39,26 @@ namespace WB.UI.WebTester.Controllers
             this.mediaStorage = mediaStorage;
             this.imageProcessingService = imageProcessingService;
         }
-        
+
+        public ActionResult AudioRecord(string interviewId, string fileName)
+        {
+            if (!Guid.TryParse(interviewId, out var id))
+            {
+                return HttpNotFound();
+            }
+
+            MultimediaFile file = null;
+            if (fileName != null)
+            {
+                file = this.mediaStorage.Get(id, fileName);
+            }
+
+            if (file == null || file.Data.Length == 0)
+                return HttpNotFound();
+
+            return this.File(file.Data, file.MimeType, fileName);
+        }
+
         [HttpPost]
         public async Task<ActionResult> Audio(string interviewId, string questionId, HttpPostedFileBase file)
         {
