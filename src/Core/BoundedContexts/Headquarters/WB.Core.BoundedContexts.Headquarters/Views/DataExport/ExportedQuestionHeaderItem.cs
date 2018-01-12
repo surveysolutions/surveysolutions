@@ -9,9 +9,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public Guid PublicKey { get; set; }
         public QuestionType QuestionType { get; set; }
         public QuestionSubtype? QuestionSubType { get; set; }
-        public string[] ColumnNames { get; set; }
-        public string[] Titles { get; set; }
+        //public string[] ColumnNames { get; set; }
+        //public string[] Titles { get; set; }
         public string VariableName { get; set; }
+        public List<HeaderColumn> ColumnHeaders { get; set; }
         public int? LengthOfRosterVectorWhichNeedToBeExported { get; set; }
         public Dictionary<Guid, LabelItem> Labels { get; set; }
         public int[] ColumnValues { get; set; }

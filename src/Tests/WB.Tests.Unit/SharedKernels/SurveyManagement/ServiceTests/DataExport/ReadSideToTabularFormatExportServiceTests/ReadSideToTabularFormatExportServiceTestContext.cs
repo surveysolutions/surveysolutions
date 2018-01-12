@@ -152,8 +152,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             => new ExportedQuestionHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
-                ColumnNames = columnNames ?? new[] { "1" },
-                Titles = columnNames ?? new[] { "1" },
+                ColumnHeaders = new List<HeaderColumn>(){new HeaderColumn(){Name = "1", Title = "1"}},
                 QuestionType = type,
                 VariableName = variableName,
             };
@@ -163,8 +162,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             => new ExportedVariableHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
-                ColumnNames = columnNames ?? new[] { "var__1" },
-                Titles = columnNames ?? new[] { "var__1" },
+                ColumnHeaders = new List<HeaderColumn>() { new HeaderColumn() { Name = "var__1", Title = "var__1" } },
                 VariableType = type,
                 VariableName = variableName,
             };

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Machine.Specifications;
+using NHibernate.Cfg;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -55,8 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 PublicKey = Guid.NewGuid(),
                 VariableName = variableName,
                 QuestionType = QuestionType.Numeric,
-                ColumnNames = new[] { variableName },
-                Titles = new[] { title },
+                ColumnHeaders = new List<HeaderColumn>(){new HeaderColumn(){Name = variableName,Title = title}},
                 Labels = (labels ?? new LabelItem[0]).ToDictionary((l)=>l.PublicKey,(l)=>l)
             };
         }

@@ -218,13 +218,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
                 var indexes = new List<int>();
 
-                foreach (var columnName in headerItem.ColumnNames)
+                foreach (var column in headerItem.ColumnHeaders)
                 {
-                    indexes.Add(header.IndexOf(columnName.ToLowerInvariant()));
+                    indexes.Add(header.IndexOf(column.Name.ToLowerInvariant()));
                 }
 
                 yield return new PreloadedQuestionMeta(headerItem.VariableName, indexes.ToArray(),
-                    headerItem.ColumnNames);
+                    headerItem.ColumnHeaders.Select(x => x.Name).ToArray());
             }
         }
 

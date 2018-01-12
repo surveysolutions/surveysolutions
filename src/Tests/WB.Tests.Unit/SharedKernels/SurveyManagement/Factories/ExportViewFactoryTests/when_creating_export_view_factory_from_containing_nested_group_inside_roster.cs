@@ -67,17 +67,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1));
 
         It should_create_header_with_1_column_for_question_inside_nested_group = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnNames.Length.ShouldEqual(1);
-
-        It should_create_header_with_1_title_for_question_inside_nested_group = () =>
-           questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].Titles.Length.ShouldEqual(1);
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnHeaders.Count.ShouldEqual(1);
 
         It should_create_header_with_1_column_for_question_inside_nested_group_with_name_equal_to_questions_variable_name = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnNames[0]
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnHeaders[0].Name
                 .ShouldEqual(questionInsideNestedGroupVariableName);
 
         It should_create_header_with_1_column_for_question_inside_nested_group_with_title_equal_to_questions_title = () =>
-           questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].Titles[0]
+           questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnHeaders[0].Title
                .ShouldEqual(questionInsideNestedGroupTitle);
 
 

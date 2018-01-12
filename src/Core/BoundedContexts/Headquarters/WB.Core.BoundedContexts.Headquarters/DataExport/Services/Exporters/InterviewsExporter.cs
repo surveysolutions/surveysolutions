@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 foreach (IExportedHeaderItem question in level.HeaderItems.Values)
                 {
-                    interviewLevelHeader.AddRange(question.ColumnNames);
+                    interviewLevelHeader.AddRange(question.ColumnHeaders.Select(x=>x.Name).ToArray());
                 }
 
                 if (level.LevelScopeVector.Length == 0)
