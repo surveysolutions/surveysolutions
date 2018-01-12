@@ -1,16 +1,13 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using AppDomainToolkit;
 using Autofac;
 using Main.Core.Documents;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-    using WB.Core.GenericSubdomains.Portable;
-    using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -21,8 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
-using WB.UI.WebTester.Infrastructure;
-    using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
+using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
@@ -31,80 +27,70 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly string binFolderPath;
         private const int QuestionnaireVersion = 1;
 
-        private readonly Dictionary<Guid, AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver>> appDomains = 
-            new Dictionary<Guid, AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver>>();
+        class InterviewContainer
+        {
+            public AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> Context { get; set; }
+            public string AssemblyFilePath { get; set; }
+        }
+
+        private readonly Dictionary<Guid, InterviewContainer> appDomains =
+            new Dictionary<Guid, InterviewContainer>();
 
         public AppdomainsPerInterviewManager(string binFolderPath)
         {
             this.binFolderPath = binFolderPath;
         }
 
-        public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument, 
+        public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument,
             string supportingAssembly)
         {
             if (appDomains.ContainsKey(interviewId))
             {
-                appDomains[interviewId].Dispose();
-                appDomains.Remove(interviewId);
+                this.Dispose(interviewId);
             }
 
             var tempFileName = Path.GetTempFileName();
-            try
-            {
-                File.WriteAllBytes(tempFileName, Convert.FromBase64String(supportingAssembly));
+            File.WriteAllBytes(tempFileName, Convert.FromBase64String(supportingAssembly));
 
-                var setupInfo = new AppDomainSetup()
+            var setupInfo = new AppDomainSetup
+            {
+                ApplicationName = interviewId.FormatGuid(),
+                ApplicationBase = binFolderPath,
+                PrivateBinPath = binFolderPath
+            };
+
+            var domainContext = AppDomainContext.Create(setupInfo);
+            appDomains[interviewId] = new InterviewContainer
+            {
+                Context = domainContext,
+                AssemblyFilePath = tempFileName
+            };
+
+            string documentString = JsonConvert.SerializeObject(questionnaireDocument, Formatting.None,
+                new JsonSerializerSettings
                 {
-                    ApplicationName = interviewId.FormatGuid(),
-                    ApplicationBase = binFolderPath,
-                    PrivateBinPath = binFolderPath 
-                };
+                    TypeNameHandling = TypeNameHandling.Objects,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    FloatParseHandling = FloatParseHandling.Decimal,
+                    Formatting = Formatting.None,
+                });
+            RemoteAction.Invoke(domainContext.Domain,
+                documentString, supportingAssembly,
+                (questionnaire, assembly) =>
+                {
+                    SetupAppDomainsSeviceLocator();
 
-                var domainContext = AppDomainContext.Create(setupInfo);
-                appDomains[interviewId] = domainContext;
-                
-
-                
-                //domainContext.AssemblyImporter.AddProbePath(binFolderPath);
-                //foreach (var directory in Directory.GetDirectories(binFolderPath))
-                //{
-                //    foreach (var subDirectory in Directory.GetDirectories(directory))
-                //    {
-                //        domainContext.AssemblyImporter.AddProbePath(subDirectory);
-                //    }
-                //}
-                domainContext.LoadAssembly(LoadMethod.LoadFile, tempFileName);
-
-                string documentString = JsonConvert.SerializeObject(questionnaireDocument, Formatting.None,
-                    new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        NullValueHandling = NullValueHandling.Ignore,
-                        FloatParseHandling = FloatParseHandling.Decimal,
-                        Formatting = Formatting.None,
-                    });
-                RemoteAction.Invoke(domainContext.Domain,
-                    documentString, supportingAssembly,
-                    (questionnaire, assembly) =>
-                    {
-                        SetupAppDomainsSeviceLocator();
-
-                        QuestionnaireDocument document1 = JsonConvert.DeserializeObject<QuestionnaireDocument>(
-                            questionnaire, new JsonSerializerSettings
-                            {
-                                TypeNameHandling = TypeNameHandling.Objects,
-                                NullValueHandling = NullValueHandling.Ignore,
-                                FloatParseHandling = FloatParseHandling.Decimal,
-                                Formatting = Formatting.None,
-                            });
-                        ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>().StoreAssembly(document1.PublicKey, QuestionnaireVersion, assembly);
-                        ServiceLocator.Current.GetInstance<IQuestionnaireStorage>().StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
-                    });
-            }
-            finally
-            {
-                //File.Delete(tempFileName);
-            }
+                    QuestionnaireDocument document1 = JsonConvert.DeserializeObject<QuestionnaireDocument>(
+                        questionnaire, new JsonSerializerSettings
+                        {
+                            TypeNameHandling = TypeNameHandling.Objects,
+                            NullValueHandling = NullValueHandling.Ignore,
+                            FloatParseHandling = FloatParseHandling.Decimal,
+                            Formatting = Formatting.None,
+                        });
+                    ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>().StoreAssembly(document1.PublicKey, QuestionnaireVersion, assembly);
+                    ServiceLocator.Current.GetInstance<IQuestionnaireStorage>().StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
+                });
         }
 
         private static void SetupAppDomainsSeviceLocator()
@@ -119,7 +105,17 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public void Dispose(Guid interviewId)
         {
-            throw new NotImplementedException();
+            if (this.appDomains.ContainsKey(interviewId))
+            {
+                var interviewContainer = this.appDomains[interviewId];
+                interviewContainer.Context.Dispose();
+                if (File.Exists(interviewContainer.AssemblyFilePath))
+                {
+                    File.Delete(interviewContainer.AssemblyFilePath);
+                }
+
+                this.appDomains.Remove(interviewId);
+            }
         }
 
         public List<CommittedEvent> Execute(ICommand command)
@@ -129,9 +125,9 @@ namespace WB.UI.WebTester.Services.Implementation
 
             var commandString = JsonConvert.SerializeObject(command, Formatting.None, CommandsSerializerSettings);
 
-            string eventsFromCommand = RemoteFunc.Invoke(appDomain.Domain, commandString, cmd =>
+            string eventsFromCommand = RemoteFunc.Invoke(appDomain.Context.Domain, commandString, cmd =>
             {
-                ICommand deserializedCommand = (ICommand) JsonConvert.DeserializeObject(cmd, CommandsSerializerSettings);
+                ICommand deserializedCommand = (ICommand)JsonConvert.DeserializeObject(cmd, CommandsSerializerSettings);
                 StatefulInterview interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
 
                 Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(deserializedCommand);

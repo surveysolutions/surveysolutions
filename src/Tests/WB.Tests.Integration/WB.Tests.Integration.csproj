@@ -543,6 +543,7 @@
     <Compile Include="UtilsTest\GuidExtensionsTests.cs" />
     <Compile Include="UtilsTest\UtilTests.cs" />
     <Compile Include="Versions\when_request_questionnaire_content_versions_of_designer_and_interviewer.cs" />
+    <Compile Include="WebTester\Services\AppdomainsPerInterviewManagerTests.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -603,6 +604,10 @@
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj">
+      <Project>{4BF37870-0CEF-455E-ABF5-682F979D8D8B}</Project>
+      <Name>WB.UI.WebTester</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj">
       <Project>{e8409caf-af6f-489d-8ff6-fa1e03a80f7f}</Project>
