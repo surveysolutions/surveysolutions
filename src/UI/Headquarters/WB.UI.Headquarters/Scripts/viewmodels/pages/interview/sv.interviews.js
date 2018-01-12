@@ -8,7 +8,7 @@
         return !(self.IsNothingSelected && _.isUndefined(self.Users.AssignTo()));
     });
 
-    self.AssignInterview = function () {
+    self.AssignInterview = function (selectedRowAsArray) {
 
         var commandName = "AssignInterviewerCommand";
 
@@ -21,7 +21,7 @@
             self.Users.AssignTo(undefined);
         };
 
-        var filteredItems = self.GetSelectedItemsAfterFilter(function(item) { return item.CanBeReassigned(); });
+        var filteredItems = self.GetSelectedItemsAfterFilter(selectedRowAsArray, function(item) { return item.CanBeReassigned(); });
         var receivedByInterviewerItemsCount = _.filter(filteredItems, function (item) { return item.ReceivedByInterviewer() === true }).length;
         var countInterviewsToAssign = ko.observable(0);
 
@@ -93,8 +93,9 @@
         ko.applyBindings(model, $(".assign-interviewer")[0]);
     };
 
-    self.ApproveInterview = function () {
+    self.ApproveInterview = function (selectedRowAsArray) {
         self.sendCommandAfterFilterAndConfirm(
+            selectedRowAsArray, 
             "ApproveInterviewCommand",
             function (item) { return { InterviewId: item.InterviewId } },
             function (item) { return item.CanApprove(); },
@@ -103,13 +104,13 @@
         );
     };
 
-    self.RejectInterview = function () {
+    self.RejectInterview = function (selectedRowAsArray) {
         var rejectToInterviewerCommandName = "RejectInterviewToInterviewerCommand";
         var rejectCommandName = "RejectInterviewCommand";
         var messageTemplateId = "#confirm-reject-template";
         var continueMessageTemplateId = "#confirm-continue-message-template";
 
-        var filteredItems = self.GetSelectedItemsAfterFilter(function (item) { return item.CanReject(); });
+        var filteredItems = self.GetSelectedItemsAfterFilter(selectedRowAsArray, function (item) { return item.CanReject(); });
         var isNeedShowAssignInterviewers = filteredItems.some(function (item) { return item.IsNeedInterviewerAssign(); });
         var countReadyToReject = 0;
         for (var i = 0; i < filteredItems.length; i++) {
