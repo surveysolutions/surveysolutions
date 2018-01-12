@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -24,7 +26,8 @@ namespace WB.Tests.Integration.WebTester.Services
             questionnaire.IsUsingExpressionStorage = true;
             questionnaire.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(new ReadOnlyQuestionnaireDocument(questionnaire));
 
-            manager.SetupForInterview(Id.gA, questionnaire, IntegrationCreate.CompileAssembly(questionnaire));
+            var supportingAssembly = IntegrationCreate.CompileAssembly(questionnaire);
+            manager.SetupForInterview(Id.gA, questionnaire, supportingAssembly);
 
             var events = manager.Execute(new CreateInterview(Id.gA, Id.g1,
                 Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
@@ -36,6 +39,14 @@ namespace WB.Tests.Integration.WebTester.Services
                 null));
 
             Assert.That(events, Is.Not.Empty);
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Assert.That(assembly.FullName, Does.Not.Contain($"rules-{questionnaire.PublicKey:N}"), "Hosting app domain should not load rules assembly");
+            }
+
+            var rules = Assembly.Load(Convert.FromBase64String(supportingAssembly));
+            Assert.That(rules.FullName, Does.StartWith($"rules-{questionnaire.PublicKey:N}"), "Recheck previous assert because naming rules for assebmly has changed and it might not catch that assembly was loaded when it shouldn't");
         }
 
         AppdomainsPerInterviewManager CreateManager()
