@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
             {
                 QuestionType = questionType,
                 QuestionSubType = questionSubType,
-                ColumnNames = columnNames,
+                ColumnHeaders = columnNames.Select(x=> new HeaderColumn(){Name = x}).ToList(),
                 ColumnValues = columnValues,
             };
             return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem);

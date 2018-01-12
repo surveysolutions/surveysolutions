@@ -45,7 +45,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     HeaderItems =
                         new Dictionary<Guid, IExportedHeaderItem>
                         {
-                            { Guid.NewGuid(), new ExportedQuestionHeaderItem() { VariableName = "q1", ColumnNames = new[] { "q1" } } }
+                            { Guid.NewGuid(),
+                                new ExportedQuestionHeaderItem()
+                                {
+                                    VariableName = "q1",
+                                    ColumnHeaders = new List<HeaderColumn>(){new HeaderColumn(){Name = "q1"}}
+                                } }
                         }
                 });
 

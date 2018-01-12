@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             parsedValue = null;
             var exportedQuestion =
                 level.HeaderItems.Values.FirstOrDefault(
-                    h => h.ColumnNames.Any(x => x.Equals(columnName.Trim(), StringComparison.InvariantCulture)));
+                    h => h.ColumnHeaders.Any(x => x.Name.Equals(columnName.Trim(), StringComparison.InvariantCulture)));
             if (exportedQuestion == null)
                 return ValueParsingResult.OK;
 
@@ -574,7 +574,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
             for (int i = 0; i < header.Length; i++)
             {
-                if (exportedHeaderItem.ColumnNames.Contains(header[i]) && !string.IsNullOrEmpty(row[i]))
+                if (exportedHeaderItem.ColumnHeaders.Any(x=> x.Name.Equals(header[i].Trim(), StringComparison.InvariantCulture)) && !string.IsNullOrEmpty(row[i]))
                     headerIndexes.Add(new Tuple<string, string>(header[i], row[i]));
             }
 

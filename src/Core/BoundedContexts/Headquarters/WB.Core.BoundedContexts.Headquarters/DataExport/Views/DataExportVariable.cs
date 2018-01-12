@@ -1,22 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
-    internal class LabeledVariable
+    internal class DataExportVariable
     {
         private readonly Dictionary<string, VariableValueLabel> variableValueLabels;
 
-        public LabeledVariable(string variableName, string label, Guid? entityId, VariableValueLabel[] variableValueLabels)
+        public DataExportVariable(string variableName, string label, Guid? entityId, VariableValueLabel[] variableValueLabels, ExportValueType valueType)
         {
             this.VariableName = variableName;
             this.Label = label;
             this.EntityId = entityId;
             this.variableValueLabels = variableValueLabels.ToDictionary(x => x.Value, x => x);
+            this.ValueType = valueType;
         }
 
-        public LabeledVariable(string variableName, string label):this(variableName,label,null, new VariableValueLabel[0])
+        public DataExportVariable(string variableName, string label):this(variableName,label,null, new VariableValueLabel[0], ExportValueType.Unknown)
         {
         }
 
@@ -24,5 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
         public string Label { get; private set; }
         public Guid? EntityId { get; private set; }
         public VariableValueLabel[] VariableValueLabels => this.variableValueLabels.Values.ToArray();
+        public ExportValueType ValueType { set; get; }
     }
 }
