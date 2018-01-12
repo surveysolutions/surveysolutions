@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 
@@ -6,39 +7,40 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
 {
     public class UsersImportTask
     {
-        private const string GroupName = "Import users";
+        const string GroupName = "Import users";
 
-        public static JobKey JobKey = new JobKey("import users job", GroupName);
-        public static TriggerKey TriggerKey = new TriggerKey("import users trigger", GroupName);
+        readonly JobKey jobKey = new JobKey("import users job", GroupName);
+        readonly TriggerKey triggerKey = new TriggerKey("import users trigger", GroupName);
 
         readonly IScheduler scheduler;
 
-        private readonly UserPreloadingSettings userPreloadingSettings;
-
-        public UsersImportTask(IScheduler scheduler, UserPreloadingSettings userPreloadingSettings)
+        public UsersImportTask(IScheduler scheduler)
         {
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            this.userPreloadingSettings = userPreloadingSettings;
         }
 
-        public void Configure()
+        public void Run()
         {
-            IJobDetail job = JobBuilder.Create<UsersImportJob>()
-                .WithIdentity(JobKey)
-                .StoreDurably(true)
-                .Build();
+            if (!this.scheduler.CheckExists(jobKey))
+            {
+                IJobDetail job = JobBuilder.Create<UsersImportJob>()
+                    .WithIdentity(jobKey)
+                    .StoreDurably()
+                    .Build();
 
+                this.scheduler.AddJob(job, true);
+            }
+            
             ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity(TriggerKey)
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(userPreloadingSettings.ExecutionIntervalInSeconds)
-                    .RepeatForever())
+                .WithIdentity(triggerKey)
+                .ForJob(jobKey)
+                .StartAt(DateBuilder.FutureDate(1, IntervalUnit.Second))
                 .Build();
 
-            this.scheduler.ScheduleJob(job, trigger);
-
-            this.scheduler.AddJob(job, true);
+            this.scheduler.ScheduleJob(trigger);
         }
+
+        public virtual bool IsJobRunning() =>
+            this.scheduler.GetCurrentlyExecutingJobs().FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
     }
 }

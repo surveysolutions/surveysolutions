@@ -7,7 +7,6 @@ using Dapper;
 using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
-using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -34,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private readonly IUserImportVerifier userImportVerifier;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ISessionProvider sessionProvider;
-        private readonly IScheduler scheduler;
+        private readonly UsersImportTask usersImportTask;
 
         private readonly Guid supervisorRoleId = UserRoles.Supervisor.ToUserId();
         private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
@@ -48,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             IUserImportVerifier userImportVerifier,
             IAuthorizedUser authorizedUser,
             ISessionProvider sessionProvider,
-            IScheduler scheduler)
+            UsersImportTask usersImportTask)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.csvReader = csvReader;
@@ -58,12 +57,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             this.userImportVerifier = userImportVerifier;
             this.authorizedUser = authorizedUser;
             this.sessionProvider = sessionProvider;
-            this.scheduler = scheduler;
+            this.usersImportTask = usersImportTask;
         }
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
         {
-            if (this.GetImportStatus().IsInProgress)
+            if (this.usersImportTask.IsJobRunning())
                 throw new UserPreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
 
             var csvDelimiter = ExportFileSettings.DataFileSeparator.ToString();
@@ -127,8 +126,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             if (!hasErrors) this.Save(fileName, usersToImport);
-
-            this.scheduler.ResumeJob(UsersImportTask.JobKey);
+            
+            usersImportTask.Run();
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();

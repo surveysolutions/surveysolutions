@@ -124,7 +124,9 @@ export default {
           }
         })
         .catch(e => {
-          toastr.error(e.response.data.message);
+          if (e.response.data.message) toastr.error(e.response.data.message);
+          else if(e.response.data.ExceptionMessage) toastr.error(e.response.data.ExceptionMessage);
+          else toastr.error(window.input.settings.messages.unhandledExceptionMessage);
         });
     },
     updateStatus() {

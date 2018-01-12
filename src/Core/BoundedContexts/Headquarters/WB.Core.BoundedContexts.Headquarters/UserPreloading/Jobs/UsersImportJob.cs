@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,11 +26,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private IUserImportService importUsersService => ServiceLocator.Current
             .GetInstance<IUserImportService>();
 
-        private IScheduler scheduler => ServiceLocator.Current
-            .GetInstance<IScheduler>();
-
         public void Execute(IJobExecutionContext context)
         {
+            this.logger.Info("User import job: Started");
+
+            var sw = new Stopwatch();
+            sw.Start();
+
             try
             {
                 UserToImport userToImport = null;
@@ -47,13 +49,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         () => this.importUsersService.RemoveImportedUser(userToImport));
 
                 } while (userToImport != null);
-
-                this.scheduler.PauseJob(UsersImportTask.JobKey);
             }
             catch (Exception ex)
             {
                 this.logger.Error($"User import job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            sw.Stop();
+            this.logger.Info($"User import job: Finished. Elapsed time: {sw.Elapsed}");
         }
 
         private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)

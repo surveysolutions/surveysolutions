@@ -34,6 +34,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -604,8 +605,11 @@ namespace WB.Tests.Abc.TestFactories
             IUserImportVerifier userImportVerifier = null,
             IAuthorizedUser authorizedUser = null,
             ISessionProvider sessionProvider = null,
-            IScheduler scheduler = null)
+            UsersImportTask usersImportTask = null)
         {
+            usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
+                                  x.GetCurrentlyExecutingJobs() == Array.Empty<IJobExecutionContext>()));
+
             userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
             return new UserImportService(
                 userPreloadingSettings,
@@ -616,7 +620,7 @@ namespace WB.Tests.Abc.TestFactories
                 userImportVerifier ?? new UserImportVerifier(userPreloadingSettings),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
                 sessionProvider ?? Stub<ISessionProvider>.WithNotEmptyValues,
-                scheduler ?? Stub<IScheduler>.WithNotEmptyValues);
+                usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues);
         }
 
         public ICsvReader CsvReader<T>(string[] headers, params T[] rows)

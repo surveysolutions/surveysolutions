@@ -3,7 +3,6 @@
     public class UserPreloadingSettings
     {
         public UserPreloadingSettings(
-            int executionIntervalInSeconds, 
             int maxAllowedRecordNumber, 
             string loginFormatRegex, 
             string emailFormatRegex, 
@@ -13,7 +12,6 @@
             int phoneNumberMaxLength, 
             string personNameFormatRegex)
         {
-            this.ExecutionIntervalInSeconds = executionIntervalInSeconds;
             this.MaxAllowedRecordNumber = maxAllowedRecordNumber;
             this.LoginFormatRegex = loginFormatRegex;
             this.EmailFormatRegex = emailFormatRegex;
@@ -24,7 +22,6 @@
             this.PersonNameFormatRegex = personNameFormatRegex;
         }
         
-        public int ExecutionIntervalInSeconds { get; private set; }
         public int MaxAllowedRecordNumber { get; private set; }
 
         public string LoginFormatRegex { get; private set; }

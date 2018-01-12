@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters
         public void Init(IServiceLocator serviceLocator)
         {
             serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            serviceLocator.GetInstance<UsersImportTask>().Configure();
+            serviceLocator.GetInstance<UsersImportTask>().Run();
             serviceLocator.GetInstance<ExportJobScheduler>().Configure();
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
 

@@ -6,9 +6,6 @@ namespace WB.UI.Headquarters
     [Localizable(false)]
     public class UserPreloadingConfigurationSection : ConfigurationSection
     {
-        [ConfigurationProperty("executionIntervalInSeconds", DefaultValue = 5)]
-        public int ExecutionIntervalInSeconds => (int) this["executionIntervalInSeconds"];
-        
         [ConfigurationProperty("maxAllowedRecordNumber", DefaultValue = 10000)]
         public int MaxAllowedRecordNumber => (int) this["maxAllowedRecordNumber"];
 
