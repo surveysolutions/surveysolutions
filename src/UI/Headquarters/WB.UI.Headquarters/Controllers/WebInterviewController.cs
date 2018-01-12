@@ -126,6 +126,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
+            LogResume(interview);
             return this.View("Index");
         }
 
@@ -202,13 +203,19 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
-            var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
-            if (lastCreatedInterview != id)
-            {
-                this.pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(Guid.Parse(id), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
-            }
+            LogResume(interview);
 
             return View("Index");
+        }
+
+        private void LogResume(IStatefulInterview statefulInterview)
+        {
+            var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
+            if (lastCreatedInterview != statefulInterview.Id.FormatGuid())
+            {
+                this.pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(statefulInterview.Id,
+                    statefulInterview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+            }
         }
 
         public ActionResult Finish(string id)
