@@ -12,36 +12,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
     [TestOf(typeof(Interview))]
     internal class when_hqreject_competed_interview : InterviewTestsContext
     {
-        [SetUp]
-        public void SetUp()
+        [Test]
+        public void should_raise_InterviewApprovedByHQ_event()
         {
+            // arrange
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter());
             interview.AssignSupervisor(hqId, supervisorId, DateTime.Now);
             interview.AssignInterviewer(supervisorId, interId, DateTime.Now);
             interview.Complete(interId, null, DateTime.Now);
 
             eventContext = new EventContext();
-
+            //act
             interview.HqReject(hqId, string.Empty);
-        }
 
-        [Test]
-        public void should_raise_InterviewApprovedByHQ_event()
-        {
+            //assert
             eventContext.ShouldContainEvent<InterviewRejected>(@event => @event.UserId == hqId);
-        }
-
-        [Test]
-        public void should_raise_InterviewStatusChanged_event()
-        {
             eventContext.ShouldContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.RejectedBySupervisor);
-        }
-
-        [TearDown]
-        public void Stuff()
-        {
-            eventContext.Dispose();
-            eventContext = null;
         }
 
         private static Guid interId = Id.g1;
