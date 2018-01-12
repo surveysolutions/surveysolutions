@@ -67,8 +67,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
         {
             return new ExportedQuestionHeaderItem()
             {
-                ColumnNames = columnNames ?? new[] {"1"},
-                Titles = columnNames ?? new[] {"1"},
+                ColumnHeaders = columnNames?.Select(x => new HeaderColumn(){Name = x, Title = x}).ToList() 
+                                ?? new List<HeaderColumn>() { new HeaderColumn() { Name = "1", Title = "1"} },
                 QuestionType = type,
                 VariableName = Guid.NewGuid().ToString(),
                 PublicKey = questionId ?? Guid.NewGuid(),

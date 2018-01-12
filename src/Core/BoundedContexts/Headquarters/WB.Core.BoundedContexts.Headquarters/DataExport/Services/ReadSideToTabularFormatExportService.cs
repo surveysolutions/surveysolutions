@@ -222,7 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
                 {
-                    interviewLevelHeader.AddRange(headerItem.ColumnNames);
+                    interviewLevelHeader.AddRange(headerItem.ColumnHeaders.Select(x=> x.Name));
                 }
 
                 if (level.LevelScopeVector.Length == 0)

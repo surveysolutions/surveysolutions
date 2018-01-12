@@ -47,8 +47,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
             ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[multyOptionLinkedQuestionId] as ExportedQuestionHeaderItem;
 
-            exportedQuestionHeaderItem.ColumnNames.Length.ShouldEqual(2);
-            exportedQuestionHeaderItem.ColumnNames.SequenceEqual(new[] { "mult__0", "mult__1" }).ShouldBeTrue();
+            exportedQuestionHeaderItem.ColumnHeaders.Count.ShouldEqual(2);
+            exportedQuestionHeaderItem.ColumnHeaders.Select(x=>x.Name).SequenceEqual(new[] { "mult__0", "mult__1" }).ShouldBeTrue();
             exportedQuestionHeaderItem.QuestionSubType.ShouldEqual(QuestionSubtype.MultyOption_Linked);
             exportedQuestionHeaderItem.QuestionType.ShouldEqual(QuestionType.MultyOption);
         };

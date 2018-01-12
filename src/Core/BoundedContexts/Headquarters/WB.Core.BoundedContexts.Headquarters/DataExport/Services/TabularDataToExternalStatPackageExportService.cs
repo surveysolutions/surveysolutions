@@ -10,10 +10,10 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -81,10 +81,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
+                var questionnaire = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+
                 var questionnaireExportStructure =
                     this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
-                            new QuestionnaireIdentity(questionnaireId, questionnaireVersion)));
+                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaire));
 
                 if (questionnaireExportStructure == null)
                     return new string[0];
@@ -116,6 +117,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     if (questionnaireLevelLabels != null)
                         UpdateMetaWithLabels(meta, questionnaireLevelLabels);
 
+                    meta.ExtendedMissings.Add(ExportFormatSettings.MissingNumericQuestionValue, "missing");
+                    meta.ExtendedStrMissings.Add(ExportFormatSettings.MissingStringQuestionValue, "missing");
+
                     using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
                     {
                         writer.WriteToFile(dataFilePath, meta, tabStreamDataQuery);
@@ -143,15 +147,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)
         {
-            foreach (var datasetVariable in meta.Variables)
+            for (int index = 0; index < meta.Variables.Length; index++)
             {
-                //datasetVariable.Storage = VariableStorage.StringStorage;
-                if (!questionnaireLevelLabels.ContainsVariable(datasetVariable.VarName))
+                if (!questionnaireLevelLabels.ContainsVariable(meta.Variables[index].VarName))
                     continue;
 
-                var variableLabels = questionnaireLevelLabels[datasetVariable.VarName];
+                var variableLabels = questionnaireLevelLabels[meta.Variables[index].VarName];
 
-                datasetVariable.VarLabel = variableLabels.Label;
+                meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
+                {
+                    Storage = GetGtorageType(variableLabels.ValueType)
+                };
+
+                meta.Variables[index].VarLabel = variableLabels.Label;
 
                 var valueSet = new ValueSet();
 
@@ -162,7 +170,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                         valueSet.Add(value, variableValueLabel.Label);
                 }
 
-                meta.AssociateValueSet(datasetVariable.VarName, valueSet);
+                meta.AssociateValueSet(meta.Variables[index].VarName, valueSet);
+            }
+        }
+
+        private static VariableStorage GetGtorageType(ExportValueType variableLabelsValueType)
+        {
+            switch (variableLabelsValueType)
+            {
+                case ExportValueType.String:
+                    return VariableStorage.StringStorage;
+                case ExportValueType.NumericInt:
+                    return VariableStorage.NumericIntegerStorage;
+                case ExportValueType.Numeric:
+                    return VariableStorage.NumericStorage;
+                case ExportValueType.Date:
+                    return VariableStorage.DateStorage;
+                case ExportValueType.DateTime:
+                    return VariableStorage.DateTimeStorage;
+                case ExportValueType.Boolean:
+                    return VariableStorage.NumericIntegerStorage;
+
+                case ExportValueType.Unknown:
+                default:
+                    return VariableStorage.UnknownStorage;
             }
         }
     }

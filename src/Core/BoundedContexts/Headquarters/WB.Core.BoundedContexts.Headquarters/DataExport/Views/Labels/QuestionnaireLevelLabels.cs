@@ -5,9 +5,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
 {
     internal class QuestionnaireLevelLabels
     {
-        private readonly Dictionary<string, LabeledVariable> variableLabels;
+        private readonly Dictionary<string, DataExportVariable> variableLabels;
 
-        public QuestionnaireLevelLabels(string levelName, LabeledVariable[] labeledVariable)
+        public QuestionnaireLevelLabels(string levelName, DataExportVariable[] labeledVariable)
         {
             this.LevelName = levelName;
             this.variableLabels = labeledVariable.ToDictionary(x => x.VariableName, x => x);
@@ -15,9 +15,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
 
         public string LevelName { get; private set; }
 
-        public LabeledVariable[] LabeledVariable => this.variableLabels.Values.ToArray();
+        public DataExportVariable[] LabeledVariable => this.variableLabels.Values.ToArray();
 
-        public LabeledVariable this[string variableName] => this.variableLabels[variableName];
+        public DataExportVariable this[string variableName] => this.variableLabels[variableName];
 
         public bool ContainsVariable(string variableName)
         {
