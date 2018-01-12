@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         public override bool AuthorizeHubConnection(HubDescriptor hubDescriptor, IRequest request)
         {
             CheckPermissions(request);
-            return base.AuthorizeHubConnection(hubDescriptor, request);
+            return true;
         }
 
         public override bool AuthorizeHubMethodInvocation(IHubIncomingInvokerContext hubIncomingInvokerContext, 
@@ -56,6 +56,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                 }
 
                 CheckPermissions(hubIncomingInvokerContext.Hub.Context.Request);
+
+                return true;
             }
             catch (InterviewAccessException)
             {
@@ -66,7 +68,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                 }
             }
 
-            return base.AuthorizeHubMethodInvocation(hubIncomingInvokerContext, appliesToMethod);
+            var authorizeHubMethodInvocation = base.AuthorizeHubMethodInvocation(hubIncomingInvokerContext, appliesToMethod);
+            return authorizeHubMethodInvocation;
         }
 
         private void CheckPermissions(IRequest hub)
