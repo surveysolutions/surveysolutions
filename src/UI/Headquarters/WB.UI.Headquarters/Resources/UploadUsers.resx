@@ -118,10 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AssignedTo" xml:space="preserve">
-    <value>Assigned to</value>
+    <value>Supervisor</value>
   </data>
   <data name="AssignedToDescription" xml:space="preserve">
-    <value>required for interviewers, contains username of supervisor to whom this person wil be assigned</value>
+    <value>required for interviewers, contains user name of supervisor to whom this person wil be assigned</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Create set of users by uploading file with all necessary information. Set can contain both supervisors and interviewers, alternatively, you can create</value>
@@ -157,7 +157,7 @@
     <value>password must contain at least one number, one upper case character and one lower case character</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Contact phone</value>
+    <value>Phone number</value>
   </data>
   <data name="RequiredData" xml:space="preserve">
     <value>Data required for creating interviewers and supervisors</value>
@@ -172,10 +172,10 @@
     <value>Upload .tab file</value>
   </data>
   <data name="UserName" xml:space="preserve">
-    <value>User name</value>
+    <value>Login</value>
   </data>
   <data name="UserNameDescription" xml:space="preserve">
-    <value>used as login, should be between 3 and 15 characters and contain only letters , digits and underscore symbol</value>
+    <value>user name, should be between 3 and 15 characters and contain only letters, digits and underscore symbol</value>
   </data>
   <data name="VerificationFailed" xml:space="preserve">
     <value>Verification failed</value>

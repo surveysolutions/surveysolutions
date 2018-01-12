@@ -7,9 +7,6 @@
                         <li>
                             <a>{{$t('MainMenu.TeamsAndRoles')}}</a>
                         </li>
-                        <li>
-                            <a v-bind:href="$config.model.api.uploadUsersUrl">{{$t('MainMenu.UserBatchUpload')}}</a>
-                        </li>
                     </ol>
                     <h1>{{$t('UploadUsers.Title')}}</h1>
                 </div>
