@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned to.
+        ///   Looks up a localized string similar to Supervisor.
         /// </summary>
         internal static string AssignedTo {
             get {
@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to required for interviewers, contains username of supervisor to whom this person wil be assigned.
+        ///   Looks up a localized string similar to required for interviewers, contains user name of supervisor to whom this person wil be assigned.
         /// </summary>
         internal static string AssignedToDescription {
             get {
@@ -259,7 +259,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contact phone.
+        ///   Looks up a localized string similar to Phone number.
         /// </summary>
         internal static string Phone {
             get {
@@ -367,7 +367,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User name.
+        ///   Looks up a localized string similar to Login.
         /// </summary>
         internal static string UserName {
             get {
@@ -376,7 +376,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to used as login, should be between 3 and 15 characters and contain only letters , digits and underscore symbol.
+        ///   Looks up a localized string similar to user name, should be between 3 and 15 characters and contain only letters, digits and underscore symbol.
         /// </summary>
         internal static string UserNameDescription {
             get {
