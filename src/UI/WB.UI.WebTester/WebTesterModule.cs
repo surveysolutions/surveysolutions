@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Web;
 using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.AspNet.SignalR.Hubs;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Refit;
@@ -57,7 +59,6 @@ namespace WB.UI.WebTester
 
         public void Load(IIocRegistry registry)
         {
-            // TODO remove it when possible
             registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", new EventBusSettings
             {
                 DisabledEventHandlerTypes = Array.Empty<Type>(),
@@ -68,9 +69,12 @@ namespace WB.UI.WebTester
 
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
+            registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
+            registry.BindAsSingleton<IEventBus, InProcessEventBus>();
 
             registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
 
+            //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
             var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");
             registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);
             registry.Bind<IImageProcessingService, ImageProcessingService>();
