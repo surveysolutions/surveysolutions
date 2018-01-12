@@ -209,5 +209,42 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             Assert.That(dependensies, Is.EqualTo(new[] { q5Id, q4Id }));
         }
+
+        [Test]
+        public void when_GetDependencyGraph_for_linked_question_with_filter_2()
+        {
+            Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
+            Guid rosterId = Guid.Parse("88888888888888888888888888888888");
+            Guid groupId = Guid.Parse("77777777777777777777777777777777");
+            Guid q2Id = Guid.Parse("22222222222222222222222222222222");
+            Guid q3Id = Guid.Parse("33333333333333333333333333333333");
+            Guid q4Id = Guid.Parse("44444444444444444444444444444444");
+            Guid q5Id = Guid.Parse("55555555555555555555555555555555");
+
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+            {
+                Abc.Create.Entity.MultyOptionsQuestion(q2Id, variable: "mo_start"),
+                Abc.Create.Entity.NumericIntegerQuestion(q5Id, "ie"),
+                Abc.Create.Entity.Roster(rosterId, variable:"r", rosterSizeQuestionId: q2Id, rosterSizeSourceType: RosterSizeSourceType.Question, children: new IComposite[]
+                {
+                    Abc.Create.Entity.NumericIntegerQuestion(q3Id, variable: "ii")
+                }),
+                Abc.Create.Entity.Group(groupId, variable:"gr", children: new IComposite[]
+                {
+                    Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "mo", linkedToRosterId: rosterId, 
+                        linkedFilter: "ii > 10", enablementCondition: "ie == 1")
+                })
+            });
+
+
+            var expressionProcessor = Create.RoslynExpressionProcessor();
+            var macrosesService = Create.MacrosSubstitutionService();
+            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
+
+            var expressionsPlayOrder = expressionsPlayOrderProvider.GetDependencyGraph(questionnaireDocument.AsReadOnly());
+            var dependensies = new TopologicalSorter<Guid>().Sort(expressionsPlayOrder, q3Id);
+
+            Assert.That(dependensies, Is.EqualTo(new[] { q3Id, q4Id }));
+        }
     }
 }

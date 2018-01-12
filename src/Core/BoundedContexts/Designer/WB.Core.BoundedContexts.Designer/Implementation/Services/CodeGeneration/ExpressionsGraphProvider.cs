@@ -225,7 +225,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             depsList = depsList.Union(idsOfEntitesInvolvedInExpression).Distinct().ToList();
 
-            if (!dependencies.ContainsKey(entityId) && depsList.Count > 0)
+            if (depsList.Count > 0)
             {
                 dependencies[entityId] = depsList;
             }
