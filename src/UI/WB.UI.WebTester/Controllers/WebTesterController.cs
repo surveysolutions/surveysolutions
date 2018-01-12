@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Ajax.Utilities;
+using AppDomainToolkit;
+using Main.Core.Documents;
+using Microsoft.Owin.Security.DataHandler.Encoder;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
@@ -25,6 +30,8 @@ namespace WB.UI.WebTester.Controllers
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IDesignerWebTesterApi webTesterApi;
+
+        public static readonly Dictionary<Guid, QuestionnaireIdentity> Questionnaires = new Dictionary<Guid, QuestionnaireIdentity>();
 
         public WebTesterController(IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
@@ -54,7 +61,7 @@ namespace WB.UI.WebTester.Controllers
                 });
 
             }
-
+            
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
 
             this.questionnaireImportService.ImportQuestionnaire(questionnaireIdentity, 
@@ -63,16 +70,16 @@ namespace WB.UI.WebTester.Controllers
                 translations,
                 attachments);
             
-            this.commandService.Execute(new CreateInterview(
-                interviewId: id,
-                userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                questionnaireId: questionnaireIdentity, 
-                answers: new List<InterviewAnswer>(), 
-                answersTime: DateTime.UtcNow,
-                supervisorId: Guid.NewGuid(),
-                interviewerId: Guid.NewGuid(),
-                interviewKey: new InterviewKey(00_00_00), 
-                assignmentId: null));
+            //this.commandService.Execute(new CreateInterview(
+            //    interviewId: id,
+            //    userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
+            //    questionnaireId: questionnaireIdentity, 
+            //    answers: new List<InterviewAnswer>(), 
+            //    answersTime: DateTime.UtcNow,
+            //    supervisorId: Guid.NewGuid(),
+            //    interviewerId: Guid.NewGuid(),
+            //    interviewKey: new InterviewKey(00_00_00), 
+            //    assignmentId: null));
 
             return Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
