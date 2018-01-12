@@ -254,7 +254,7 @@ namespace WB.Core.Infrastructure.CommandBus
         internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
             => GetHandlerDescriptor(command).IdResolver;
 
-        internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
+        public static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
             => GetHandlerDescriptor(command).Handler;
 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)
