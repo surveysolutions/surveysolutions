@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 using WB.Core.Infrastructure.CommandBus;
 
 namespace Ncqrs.Commanding
@@ -10,7 +8,6 @@ namespace Ncqrs.Commanding
     /// information and intend that is needed to execute an corresponding
     /// action.
     /// </summary>
-    [DataContract]
     public abstract class CommandBase : ICommand
     {
         /// <summary>

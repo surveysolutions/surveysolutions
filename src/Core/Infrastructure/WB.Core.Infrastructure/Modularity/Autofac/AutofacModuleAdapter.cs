@@ -148,7 +148,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()
-                .WithParameter(argumentName, argumentValue);
+                .WithParameter(argumentName, argumentValue).SingleInstance();
         }
 
         public void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(
