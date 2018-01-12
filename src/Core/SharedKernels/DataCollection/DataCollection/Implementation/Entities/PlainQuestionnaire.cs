@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    internal class PlainQuestionnaire : IQuestionnaire
+    public class PlainQuestionnaire : IQuestionnaire
     {
         public ISubstitutionService SubstitutionService
         {
@@ -77,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
 
 
-        internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
+        public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
         public Guid? ResponsibleId => null;
 

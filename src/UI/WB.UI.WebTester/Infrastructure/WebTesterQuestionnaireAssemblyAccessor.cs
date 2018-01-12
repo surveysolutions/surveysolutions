@@ -9,60 +9,52 @@ namespace WB.UI.WebTester.Infrastructure
 {
     public class WebTesterQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
-        private static readonly Dictionary<string, string> Assemblies = new Dictionary<string, string>();
+        public string assmeblyAsBase64StringProp;
 
         public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            var identity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            var assembly = Assemblies[identity.ToString()];
-            var bytes = Convert.FromBase64String(assembly);
+            var bytes = Convert.FromBase64String(assmeblyAsBase64StringProp);
 
             return Assembly.Load(bytes);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64)
         {
-            var identity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            Assemblies[identity.ToString()] = assemblyAsBase64;
+            assmeblyAsBase64StringProp = assemblyAsBase64;
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
         {
-            throw new NotImplementedException();
         }
 
         public Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            var identity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            Assemblies.Remove(identity.ToString());
+            assmeblyAsBase64StringProp = null;
         }
 
         public void RemoveAssembly(QuestionnaireIdentity questionnaireIdentity)
         {
-            Assemblies.Remove(questionnaireIdentity.ToString());
+            assmeblyAsBase64StringProp = null;
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
-            var identity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            return Assemblies[identity.ToString()];
+            return assmeblyAsBase64StringProp;
         }
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            var identity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            return Convert.FromBase64String(Assemblies[identity.ToString()]);
+            return Convert.FromBase64String(assmeblyAsBase64StringProp);
         }
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
-            var identity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            return Assemblies.ContainsKey(identity.ToString());
+            return assmeblyAsBase64StringProp != null;
         }
     }
 }
