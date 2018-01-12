@@ -8,10 +8,10 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
     public class ResourceController : BaseController
     {
         private readonly IImageFileStorage imageFileRepository;
@@ -26,6 +26,7 @@ namespace WB.UI.Headquarters.Controllers
             this.audioFileStorage = audioFileStorage;
         }
 
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult InterviewFile(Guid interviewId, string fileName)
         {
             byte[] file = null; 
@@ -41,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.File(file, "image/jpeg", fileName);
         }
 
+        [WebInterviewAuthorize(InterviewIdQueryString = "interviewId")]
         public ActionResult AudioRecord(string interviewId, string fileName)
         {
             if (!Guid.TryParse(interviewId, out var id))

@@ -19,14 +19,15 @@
         imageUploadUri: '@Url.Content("~/multimedia/image")',
         audioUploadUri: '@Url.Content("~/multimedia/audio")',
         imageGetBase:   '@Url.Content("~/api/WebInterviewResources")',
-
+        audioGet: '@Url.Content("~/Multimedia/AudioRecord")',
         signalrPath: '@Url.Content("~/signalr/hubs")',
         verboseLogging: false,
         supportedTransports: ["webSockets", "longPolling"],
         appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
         googleApiKey: '@Model.GoogleMapsKey',
         hqLink: "null",
-        hubName: "interview"
+        hubName: "interview",
+        
     }
     </script>
     <div id="app"></div>
