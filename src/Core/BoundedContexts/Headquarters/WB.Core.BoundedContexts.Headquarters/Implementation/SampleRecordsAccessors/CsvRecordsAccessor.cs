@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using CsvHelper;
 
@@ -28,18 +29,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAcces
                         csvReader.Read();
                         csvReader.ReadHeader();
                         
-                        var isRead = csvReader.Read();
-
                         if (csvReader.Context.HeaderRecord != null && csvReader.Context.HeaderRecord.Length > 0)
                         {
                             yield return csvReader.Context.HeaderRecord;
                         }
 
-                        while (isRead)
-                        {
-                            yield return csvReader.Context.Record;
-                            isRead = csvReader.Read();
-                        }
+                        while (csvReader.Read())
+                            yield return csvReader.Context.HeaderRecord.Select((x, index) =>
+                                index < csvReader.Context.Record.Length ? csvReader.GetField(x) : null).ToArray();
                     }
                 }
             }
