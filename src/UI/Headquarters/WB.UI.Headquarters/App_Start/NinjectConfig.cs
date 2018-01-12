@@ -153,7 +153,6 @@ namespace WB.UI.Headquarters
 
             var userPreloadingSettings =
                 new UserPreloadingSettings(
-                    userPreloadingConfigurationSection.ExecutionIntervalInSeconds,
                     userPreloadingConfigurationSection.MaxAllowedRecordNumber,
                     loginFormatRegex: UserModel.UserNameRegularExpression,
                     emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,

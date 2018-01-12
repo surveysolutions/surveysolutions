@@ -4,10 +4,12 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
+using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -53,13 +55,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         }
 
         [Test]
-        public void When_previous_import_not_completed_Then_UserPreloadingException_should_be_thrown()
+        public void When_job_by_previous_import_is_not_completed_Then_UserPreloadingException_should_be_thrown()
         {
             //arrange
-            var importUsersRepository = Mock.Of<IPlainStorageAccessor<UserToImport>>(
-                    x => x.Query(Moq.It.IsAny<Func<IQueryable<UserToImport>, int>>()) == 1);
+            var scheduler = Mock.Of<IScheduler>(x =>
+                x.GetCurrentlyExecutingJobs() == new[]
+                {
+                    Mock.Of<IJobExecutionContext>(y =>
+                        y.JobDetail ==
+                        Mock.Of<IJobDetail>(z => z.Key == new JobKey("import users job", "Import users")))
+                });
 
-            var userImportService = Create.Service.UserImportService(importUsersRepository: importUsersRepository);
+            var usersImportTask = new UsersImportTask(scheduler);
+
+            var userImportService = CreateUserImportServiceWithRepositories(usersImportTask: usersImportTask);
 
             //act
             var exception = Assert.Catch<UserPreloadingException>(() => userImportService
@@ -405,7 +414,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         private UserImportService CreateUserImportServiceWithRepositories(
             IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository = null,
             IPlainStorageAccessor<UserToImport> importUsersRepository = null, IAuthorizedUser authorizedUser = null,
-            ISessionProvider sessionProvider = null, HqUser[] dbUsers = null, params UserToImport[] usersToImport)
+            ISessionProvider sessionProvider = null, HqUser[] dbUsers = null, UsersImportTask usersImportTask = null, params UserToImport[] usersToImport)
         {
             var csvReader = Create.Service.CsvReader(new[]
             {
@@ -417,7 +426,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             var userStorage = Create.Storage.UserRepository(dbUsers ?? new HqUser[0]);
 
-            return Create.Service.UserImportService(csvReader: csvReader, userStorage: userStorage);
+            return Create.Service.UserImportService(csvReader: csvReader, userStorage: userStorage, usersImportTask: usersImportTask);
         }
     }
 }
