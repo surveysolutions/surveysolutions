@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -9,18 +8,22 @@ namespace WB.UI.WebTester.Infrastructure
 {
     public class WebTesterQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
-        public string assmeblyAsBase64StringProp;
+        public string AssmeblyAsBase64StringProp;
+        private Assembly assembly;
 
         public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            var bytes = Convert.FromBase64String(assmeblyAsBase64StringProp);
+            if (assembly == null)
+            {
+                assembly = AppDomain.CurrentDomain.Load(Convert.FromBase64String(AssmeblyAsBase64StringProp));
+            }
 
-            return Assembly.Load(bytes);
+            return assembly;
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64)
         {
-            assmeblyAsBase64StringProp = assemblyAsBase64;
+            AssmeblyAsBase64StringProp = assemblyAsBase64;
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, byte[] assembly)
@@ -34,27 +37,27 @@ namespace WB.UI.WebTester.Infrastructure
 
         public void RemoveAssembly(Guid questionnaireId, long questionnaireVersion)
         {
-            assmeblyAsBase64StringProp = null;
+            AssmeblyAsBase64StringProp = null;
         }
 
         public void RemoveAssembly(QuestionnaireIdentity questionnaireIdentity)
         {
-            assmeblyAsBase64StringProp = null;
+            AssmeblyAsBase64StringProp = null;
         }
 
         public string GetAssemblyAsBase64String(Guid questionnaireId, long questionnaireVersion)
         {
-            return assmeblyAsBase64StringProp;
+            return AssmeblyAsBase64StringProp;
         }
 
         public byte[] GetAssemblyAsByteArray(Guid questionnaireId, long questionnaireVersion)
         {
-            return Convert.FromBase64String(assmeblyAsBase64StringProp);
+            return Convert.FromBase64String(AssmeblyAsBase64StringProp);
         }
 
         public bool IsQuestionnaireAssemblyExists(Guid questionnaireId, long questionnaireVersion)
         {
-            return assmeblyAsBase64StringProp != null;
+            return AssmeblyAsBase64StringProp != null;
         }
     }
 }
