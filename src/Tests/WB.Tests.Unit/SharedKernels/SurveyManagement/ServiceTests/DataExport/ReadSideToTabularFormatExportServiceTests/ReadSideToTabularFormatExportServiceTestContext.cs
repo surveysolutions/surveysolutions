@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             => new ExportedQuestionHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
-                ColumnHeaders = columnNames != null ? columnNames.Select(x => new HeaderColumn() { Name = x, Title = x}).ToList() : new List<HeaderColumn>(){new HeaderColumn(){Name = "1", Title = "1"}},
+                ColumnHeaders = columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x}).ToList() ?? new List<HeaderColumn>(){new HeaderColumn(){Name = "1", Title = "1"}},
                 QuestionType = type,
                 VariableName = variableName,
             };
@@ -162,7 +162,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             => new ExportedVariableHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
-                ColumnHeaders = new List<HeaderColumn>() { new HeaderColumn() { Name = "var__1", Title = "var__1" } },
+                ColumnHeaders = columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>() { new HeaderColumn() { Name = "var__1", Title = "var__1" } },
                 VariableType = type,
                 VariableName = variableName,
             };
