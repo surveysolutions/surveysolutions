@@ -324,6 +324,9 @@
   <data name="SelectModeOfDataCollection" xml:space="preserve">
     <value>Select a Mode of Data Collection</value>
   </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Select country</value>
+  </data>
   <data name="Notes" xml:space="preserve">
     <value>Notes</value>
   </data>

@@ -317,4 +317,8 @@
     <value>Подзаголовок опросника</value>
     <comment>Дополнительное описание опросника</comment>
   </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Выберите страну</value>
+    <comment>Выберите страну</comment>
+  </data>
 </root>
