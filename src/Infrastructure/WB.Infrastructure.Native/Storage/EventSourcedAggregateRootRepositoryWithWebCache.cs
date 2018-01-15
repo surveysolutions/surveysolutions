@@ -12,7 +12,7 @@ using WB.Infrastructure.Native.Monitoring;
 namespace WB.Infrastructure.Native.Storage
 {
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository,
-        IAggregateRootCacheCleaner
+        IAggregateRootCacheCleaner, IAggregateRootCacheFiller
     {
         private readonly IAggregateLock aggregateLock;
 
@@ -100,6 +100,11 @@ namespace WB.Infrastructure.Native.Storage
                 CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
                 Cache.Remove(key);
             });
+        }
+
+        public void Store(IEventSourcedAggregateRoot aggregateRoot)
+        {
+            PutToCache(aggregateRoot);
         }
     }
 }
