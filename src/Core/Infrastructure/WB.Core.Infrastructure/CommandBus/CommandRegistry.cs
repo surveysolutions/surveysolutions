@@ -239,19 +239,19 @@ namespace WB.Core.Infrastructure.CommandBus
         private static HandlerDescriptor GetHandlerDescriptor(ICommand command)
             => Handlers[command.GetType().Name];
 
-        internal static Type GetAggregateRootType(ICommand command)
+        public static Type GetAggregateRootType(ICommand command)
             => GetHandlerDescriptor(command).AggregateType;
 
         internal static AggregateKind GetAggregateRootKind(ICommand command)
             => GetHandlerDescriptor(command).AggregateKind;
 
-        internal static bool IsInitializer(ICommand command)
+        public static bool IsInitializer(ICommand command)
             => GetHandlerDescriptor(command).IsInitializer;
 
         internal static bool IsStateless(ICommand command)
             => GetHandlerDescriptor(command).IsStateless;
 
-        internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
+        public static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
             => GetHandlerDescriptor(command).IdResolver;
 
         public static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
