@@ -1,17 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
-using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Infrastructure
@@ -19,24 +13,24 @@ namespace WB.UI.WebTester.Infrastructure
     public class WebTesterCommandService : ICommandService
     {
         private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
+        private readonly IAggregateRootCacheFiller cacheFiller;
         private readonly IAppdomainsPerInterviewManager interviews;
         private readonly ILiteEventBus eventBus;
-        private readonly IEventStore eventStore;
         private readonly IAggregateLock aggregateLock;
         private readonly IServiceLocator serviceLocator;
 
         public WebTesterCommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
+            IAggregateRootCacheFiller cacheFiller,
             IAppdomainsPerInterviewManager interviews,
             ILiteEventBus eventBus,
-            IEventStore eventStore,
             IAggregateLock aggregateLock,
             IServiceLocator serviceLocator)
         {
             this.eventSourcedRepository = eventSourcedRepository;
+            this.cacheFiller = cacheFiller;
             this.interviews = interviews;
             this.eventBus = eventBus;
-            this.eventStore = eventStore;
             this.aggregateLock = aggregateLock;
             this.serviceLocator = serviceLocator;
         }
@@ -57,23 +51,13 @@ namespace WB.UI.WebTester.Infrastructure
 
                     aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);
                     aggregate.SetId(aggregateId);
+
+                    this.cacheFiller.Store(aggregate);
                 }
 
                 var events = this.interviews.Execute(command);
                 
                 aggregate.InitializeFromHistory(aggregateId, events);
-
-                var uncommitedStream = new UncommittedEventStream(origin, events.Select(ce =>
-                    new UncommittedEvent(
-                        ce.EventIdentifier,
-                        ce.EventSourceId,
-                        ce.EventSequence,
-                        aggregate.InitialVersion,
-                        ce.EventTimeStamp,
-                        ce.Payload
-                    )));
-
-                this.eventStore.Store(uncommitedStream);
 
                 eventBus.PublishCommittedEvents(events);
             });
