@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-using WB.Tests.Integration.InterviewTests;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services
 {
-    [TestOf(typeof(AppdomainsPerInterviewManager))]
-    public class AppdomainsPerInterviewManagerTests : InterviewTestsContext
+    public class when_configured : AppdomainsPerInterviewManagerTestsBase
     {
         private AppdomainsPerInterviewManager manager;
         private Guid interviewId;
@@ -31,7 +26,6 @@ namespace WB.Tests.Integration.WebTester.Services
         [Test]
         public void should_be_able_to_execute_simple_command_in_app_domain()
         {
-
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion());
             questionnaire.IsUsingExpressionStorage = true;
@@ -59,18 +53,6 @@ namespace WB.Tests.Integration.WebTester.Services
 
             var rules = Assembly.Load(Convert.FromBase64String(supportingAssembly));
             Assert.That(rules.FullName, Does.StartWith($"rules-{questionnaire.PublicKey:N}"), "Recheck previous assert because naming rules for assebmly has changed and it might not catch that assembly was loaded when it shouldn't");
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            manager.TearDown(interviewId);
-        }
-
-        AppdomainsPerInterviewManager CreateManager()
-        {
-            var bin = Path.GetDirectoryName(typeof(AppdomainsPerInterviewManagerTests).Assembly.Location);
-            return new AppdomainsPerInterviewManager(bin, Mock.Of<ILogger>());
         }
     }
 }

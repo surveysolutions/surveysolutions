@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ASP;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
@@ -121,11 +122,14 @@ namespace WB.Tests.Abc.TestFactories
                 answerTime: DateTime.UtcNow,
                 answers: answer);
 
-        public AnswerTextQuestionCommand AnswerTextQuestionCommand(Guid interviewId, Guid userId, string answer = "")
+        public AnswerTextQuestionCommand AnswerTextQuestionCommand(Guid interviewId, 
+            Guid userId, 
+            Guid? questionId = null,
+            string answer = "")
             => new AnswerTextQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
-                questionId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
                 answerTime: DateTime.UtcNow,
                 answer: answer);
