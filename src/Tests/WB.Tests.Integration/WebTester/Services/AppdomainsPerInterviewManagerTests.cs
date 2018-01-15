@@ -16,10 +16,19 @@ namespace WB.Tests.Integration.WebTester.Services
     [TestOf(typeof(AppdomainsPerInterviewManager))]
     public class AppdomainsPerInterviewManagerTests : InterviewTestsContext
     {
+        private AppdomainsPerInterviewManager manager;
+        private Guid interviewId;
+
+        [SetUp]
+        public void Setup()
+        {
+            manager = CreateManager();
+            interviewId = Id.gA;
+        }
+
         [Test]
         public void should_be_able_to_execute_simple_command_in_app_domain()
         {
-            var manager = CreateManager();
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion());
@@ -27,9 +36,10 @@ namespace WB.Tests.Integration.WebTester.Services
             questionnaire.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(new ReadOnlyQuestionnaireDocument(questionnaire));
 
             var supportingAssembly = IntegrationCreate.CompileAssembly(questionnaire);
-            manager.SetupForInterview(Id.gA, questionnaire, supportingAssembly);
 
-            var events = manager.Execute(new CreateInterview(Id.gA, Id.g1,
+            // act
+            manager.SetupForInterview(interviewId, questionnaire, supportingAssembly);
+            var events = manager.Execute(new CreateInterview(interviewId, Id.g1,
                 Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 new List<InterviewAnswer>(),
                 DateTime.UtcNow,
@@ -38,8 +48,8 @@ namespace WB.Tests.Integration.WebTester.Services
                 Create.Entity.InterviewKey(),
                 null));
 
+            // assert
             Assert.That(events, Is.Not.Empty);
-
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 Assert.That(assembly.FullName, Does.Not.Contain($"rules-{questionnaire.PublicKey:N}"), "Hosting app domain should not load rules assembly");
@@ -47,6 +57,12 @@ namespace WB.Tests.Integration.WebTester.Services
 
             var rules = Assembly.Load(Convert.FromBase64String(supportingAssembly));
             Assert.That(rules.FullName, Does.StartWith($"rules-{questionnaire.PublicKey:N}"), "Recheck previous assert because naming rules for assebmly has changed and it might not catch that assembly was loaded when it shouldn't");
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            manager.TearDown(interviewId);
         }
 
         AppdomainsPerInterviewManager CreateManager()

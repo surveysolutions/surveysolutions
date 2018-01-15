@@ -21,7 +21,7 @@ namespace WB.UI.WebTester.Hub
 
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
-            appdomainsPerInterviewManager.Dispose(GetCallerInterview().Id);
+            appdomainsPerInterviewManager.TearDown(GetCallerInterview().Id);
             Clients.All.shutDown();
         }
     }
