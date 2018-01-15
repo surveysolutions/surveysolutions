@@ -12,12 +12,6 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Resources\countries_codes_and_coordinates.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\countries_codes_and_coordinates.csv" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="AngleSharp" Version="0.9.9" />
     <PackageReference Include="CsQuery" Version="1.3.4" />
     <PackageReference Include="CsvHelper" Version="6.1.0" />
@@ -107,15 +101,35 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\Country.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Country.resx</DependentUpon>
+    </Compile>
      <Compile Update="Resources\ExceptionMessages.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ExceptionMessages.resx</DependentUpon>
     </Compile>
+     <Compile Update="Resources\KindOfData.Designer.cs">
+       <DesignTime>True</DesignTime>
+       <AutoGen>True</AutoGen>
+       <DependentUpon>KindOfData.resx</DependentUpon>
+     </Compile>
+     <Compile Update="Resources\ModeOfDataCollection.Designer.cs">
+       <DesignTime>True</DesignTime>
+       <AutoGen>True</AutoGen>
+       <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
+     </Compile>
     <Compile Update="Resources\PdfStrings.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>PdfStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\StudyType.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>StudyType.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\VerificationMessages.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -141,6 +155,18 @@
 	<EmbeddedResource Update="Resources\Common.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>Common.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\Country.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>Country.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\KindOfData.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>KindOfData.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>ModeOfDataCollection.Designer.cs</LastGenOutput>
 	</EmbeddedResource>
 	<EmbeddedResource Update="Resources\Roster.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -174,6 +200,10 @@
     <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
       <Generator></Generator>
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StudyType.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StudyType.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\VerificationMessages.ru.resx">
       <Generator></Generator>
