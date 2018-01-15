@@ -50,7 +50,7 @@ namespace WB.UI.WebTester
     {
         private static string DesignerAddress()
         {
-            var baseAddress = System.Configuration.ConfigurationManager.AppSettings["DesignerAddress"];
+            var baseAddress = ConfigurationSource.Configuration["DesignerAddress"];
             return $"{baseAddress.TrimEnd('/')}";
         }
 
