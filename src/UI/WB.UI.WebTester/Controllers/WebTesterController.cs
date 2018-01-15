@@ -56,11 +56,10 @@ namespace WB.UI.WebTester.Controllers
 
             }
 
-            Guid interviewId = Guid.NewGuid();
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
 
             this.questionnaireImportService.ImportQuestionnaire(
-                interviewId,
+                id,
                 questionnaireIdentity, 
                 questionnaire.Document,
                 questionnaire.Assembly,
@@ -68,7 +67,7 @@ namespace WB.UI.WebTester.Controllers
                 attachments);
 
             this.commandService.Execute(new CreateInterview(
-                interviewId: interviewId,
+                interviewId: id,
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 questionnaireId: questionnaireIdentity,
                 answers: new List<InterviewAnswer>(),

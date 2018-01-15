@@ -138,11 +138,15 @@ namespace WB.UI.WebTester.Services.Implementation
             var appDomain = appDomains[interviewCommand.InterviewId];
 
             var commandString = JsonConvert.SerializeObject(command, Formatting.None, CommandsSerializerSettings);
-
+            
             string eventsFromCommand = RemoteFunc.Invoke(appDomain.Context.Domain, commandString, cmd =>
             {
                 ICommand deserializedCommand = (ICommand)JsonConvert.DeserializeObject(cmd, CommandsSerializerSettings);
+                var aggregateid = CommandRegistry.GetAggregateRootIdResolver(deserializedCommand).Invoke(deserializedCommand);
+
                 StatefulInterview interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
+
+                interview.SetId(aggregateid);
 
                 Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(deserializedCommand);
                 commandHandler.Invoke(deserializedCommand, interview);
