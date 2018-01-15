@@ -46,7 +46,7 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             if (appDomains.ContainsKey(interviewId))
             {
-                this.Dispose(interviewId);
+                this.TearDown(interviewId);
             }
 
             var tempFileName = Path.GetTempFileName();
@@ -103,7 +103,7 @@ namespace WB.UI.WebTester.Services.Implementation
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
         }
 
-        public void Dispose(Guid interviewId)
+        public void TearDown(Guid interviewId)
         {
             if (this.appDomains.ContainsKey(interviewId))
             {
