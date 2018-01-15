@@ -21,6 +21,8 @@ namespace WB.UI.WebTester
     {
         public void Configuration(IAppBuilder app)
         {
+            ConfigurationSource.Init();
+
             ContainerBuilder builder = AutofacConfig.CreateKernel();
             var config = new HttpConfiguration();
 
