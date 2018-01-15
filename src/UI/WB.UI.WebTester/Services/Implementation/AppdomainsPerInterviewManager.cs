@@ -6,6 +6,7 @@ using Autofac;
 using Main.Core.Documents;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
@@ -183,7 +185,8 @@ namespace WB.UI.WebTester.Services.Implementation
         private static JsonSerializerSettings CommandsSerializerSettings => new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Objects,
-            ContractResolver = new PrivateSetterContractResolver()
+            ContractResolver = new PrivateSetterContractResolver(),
+            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() },
         };
     }
 }
