@@ -8,6 +8,7 @@ using Ncqrs.Eventing;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -25,20 +26,23 @@ namespace WB.UI.WebTester.Services.Implementation
     public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager
     {
         private readonly string binFolderPath;
+        private readonly ILogger logger;
         private const int QuestionnaireVersion = 1;
 
         class InterviewContainer
         {
             public AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> Context { get; set; }
-            public string AssemblyFilePath { get; set; }
+            public string CachePath { get; set; }
         }
 
         private readonly Dictionary<Guid, InterviewContainer> appDomains =
             new Dictionary<Guid, InterviewContainer>();
 
-        public AppdomainsPerInterviewManager(string binFolderPath)
+        public AppdomainsPerInterviewManager(string binFolderPath,
+            ILogger logger)
         {
-            this.binFolderPath = binFolderPath;
+            this.binFolderPath = binFolderPath ?? throw new ArgumentNullException(nameof(binFolderPath));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument,
@@ -49,21 +53,24 @@ namespace WB.UI.WebTester.Services.Implementation
                 this.TearDown(interviewId);
             }
 
-            var tempFileName = Path.GetTempFileName();
-            File.WriteAllBytes(tempFileName, Convert.FromBase64String(supportingAssembly));
+            var cachePath = Path.Combine(Path.GetTempPath(), interviewId.FormatGuid());
+            Directory.CreateDirectory(cachePath);
+            var rulesAssemblyPath = Path.Combine(cachePath, "rules.dll");
+            File.WriteAllBytes(rulesAssemblyPath, Convert.FromBase64String(supportingAssembly));
 
             var setupInfo = new AppDomainSetup
             {
                 ApplicationName = interviewId.FormatGuid(),
                 ApplicationBase = binFolderPath,
-                PrivateBinPath = binFolderPath
+                CachePath = cachePath,
+                ShadowCopyFiles = "true"
             };
 
             var domainContext = AppDomainContext.Create(setupInfo);
             appDomains[interviewId] = new InterviewContainer
             {
                 Context = domainContext,
-                AssemblyFilePath = tempFileName
+                CachePath = cachePath
             };
 
             string documentString = JsonConvert.SerializeObject(questionnaireDocument, Formatting.None,
@@ -109,9 +116,16 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 var interviewContainer = this.appDomains[interviewId];
                 interviewContainer.Context.Dispose();
-                if (File.Exists(interviewContainer.AssemblyFilePath))
+                if (Directory.Exists(interviewContainer.CachePath))
                 {
-                    File.Delete(interviewContainer.AssemblyFilePath);
+                    try
+                    {
+                        Directory.Delete(interviewContainer.CachePath, true);
+                    }
+                    catch (UnauthorizedAccessException exception)
+                    {
+                        this.logger.Error($"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}", exception);
+                    }
                 }
 
                 this.appDomains.Remove(interviewId);
