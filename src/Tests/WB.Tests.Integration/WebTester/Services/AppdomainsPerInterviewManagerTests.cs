@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
@@ -68,7 +70,7 @@ namespace WB.Tests.Integration.WebTester.Services
         AppdomainsPerInterviewManager CreateManager()
         {
             var bin = Path.GetDirectoryName(typeof(AppdomainsPerInterviewManagerTests).Assembly.Location);
-            return new AppdomainsPerInterviewManager(bin);
+            return new AppdomainsPerInterviewManager(bin, Mock.Of<ILogger>());
         }
     }
 }
