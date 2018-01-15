@@ -91,7 +91,7 @@ namespace WB.UI.WebTester.Controllers
             return View(new InterviewPageModel
             {
                 Title = $"{questionnaire.Title} | Web Tester",
-                GoogleMapsKey = ConfigurationManager.AppSettings["Google.Map.ApiKey"]
+                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"]
             });
         }
     }
