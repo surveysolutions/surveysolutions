@@ -131,6 +131,7 @@ namespace WB.UI.WebTester
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.Bind<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
+            registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
 

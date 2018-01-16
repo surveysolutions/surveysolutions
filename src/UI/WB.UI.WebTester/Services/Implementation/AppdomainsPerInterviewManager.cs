@@ -194,8 +194,8 @@ namespace WB.UI.WebTester.Services.Implementation
                 var interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
 
                 var result = interview.FilteredCategoricalOptions(
-                    filter.QuestionIdentity, 
-                    filter.ItemsCount, 
+                    filter.QuestionIdentity,
+                    filter.ItemsCount,
                     filter.UnfilteredOptionsForQuestion);
 
                 return JsonConvert.SerializeObject(result, CommandsSerializerSettings);

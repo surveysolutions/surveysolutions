@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
+namespace WB.Enumerator.Native.Questionnaire.Impl
 {
     public class QuestionnaireQuestionOptionsRepository : IQuestionOptionsRepository
     {

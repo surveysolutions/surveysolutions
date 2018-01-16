@@ -112,6 +112,7 @@
     <Compile Include="WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="WebInterview\Services\ConnectionLimiter.cs" />
     <Compile Include="WebInterview\Services\ConnectionsMonitor.cs" />
+    <Compile Include="Questionnaire\Impl\QuestionnaireQuestionOptionsRepository.cs" />
     <Compile Include="WebInterview\Services\WebInterviewInterviewEntityFactory.cs" />
     <Compile Include="WebInterview\Services\WebInterviewInvoker.cs" />
     <Compile Include="WebInterview\Services\WebInterviewLazyNotificationService.cs" />
