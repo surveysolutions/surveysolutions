@@ -13,20 +13,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private int? hashCode;
 
-        private bool Equals(InterviewStateIdentity other) => this.Id == other.Id && this.RosterVector.SequenceEqual(other.RosterVector);
+        private bool Equals(InterviewStateIdentity other) => 
+            this.Id == other.Id && this.RosterVector.SequenceEqual(other.RosterVector);
 
         public override int GetHashCode()
         {
-            if (!this.hashCode.HasValue)
-            {
-                var rosterVectorHashCode = this.RosterVector.Length;
+            if (this.hashCode.HasValue)
+                return this.hashCode.Value;
 
-                foreach (var t in this.RosterVector)
+            var rosterVectorHashCode = RosterVector.Length;
+
+            unchecked
+            {
+                for (var index = 0; index < RosterVector.Length; index++)
                 {
-                    var itemHashCode = t.GetHashCode();
-                    rosterVectorHashCode = unchecked(rosterVectorHashCode * 13 + itemHashCode);
+                    rosterVectorHashCode = rosterVectorHashCode * 13 + RosterVector[index];
                 }
-                this.hashCode = this.Id.GetHashCode() ^ rosterVectorHashCode;
+
+                hashCode = (Id.GetHashCode() * 397) ^ rosterVectorHashCode;
             }
 
             return this.hashCode.Value;
@@ -40,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return this.Equals((InterviewStateIdentity)obj);
         }
 
-        public static bool operator ==(InterviewStateIdentity a, InterviewStateIdentity b)
+        public static bool operator == (InterviewStateIdentity a, InterviewStateIdentity b)
         {
             if (ReferenceEquals(a, b))
                 return true;
@@ -51,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return a.Equals(b);
         }
 
-        public static bool operator !=(InterviewStateIdentity a, InterviewStateIdentity b) => !(a == b);
+        public static bool operator != (InterviewStateIdentity a, InterviewStateIdentity b) => !(a == b);
 
         public override string ToString() => $"{this.Id}{(this.RosterVector.Length > 0 ? "_" + string.Join("-", this.RosterVector) : string.Empty)}";
 
