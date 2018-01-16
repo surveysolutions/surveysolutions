@@ -32,9 +32,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.serviceLocator = serviceLocator;
         }
 
-        public void Init(AssignmentDocument assignmentDocument, int interviewsCount)
+        public void Init(AssignmentDocument assignmentDocument)
         {
-            interviewsByAssignmentCount = interviewsCount;
+            interviewsByAssignmentCount = assignmentDocument.CreatedInterviewesCount ?? 0;
             assignment = assignmentDocument;
             questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
             Status = DashboardInterviewStatus.Assignment;

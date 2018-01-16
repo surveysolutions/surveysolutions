@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -14,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 {
@@ -25,13 +27,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAnswerToStringConverter answerToStringConverter;
         private readonly IInterviewAnswerSerializer answerSerializer;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
         public AssignmentsSynchronizer(IAssignmentSynchronizationApi synchronizationService,
             IAssignmentDocumentsStorage assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
             IQuestionnaireStorage questionnaireStorage,
             IAnswerToStringConverter answerToStringConverter,
-            IInterviewAnswerSerializer answerSerializer)
+            IInterviewAnswerSerializer answerSerializer, 
+            IPlainStorage<InterviewView> interviewViewRepository)
         {
             this.synchronizationService = synchronizationService;
             this.assignmentsRepository = assignmentsRepository;
@@ -39,13 +43,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             this.questionnaireStorage = questionnaireStorage;
             this.answerToStringConverter = answerToStringConverter;
             this.answerSerializer = answerSerializer;
+            this.interviewViewRepository = interviewViewRepository;
         }
 
         public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
-            var remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
+            List<AssignmentApiView> remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
 
-            var localAssignments = this.assignmentsRepository.LoadAll();
+            IReadOnlyCollection<AssignmentDocument> localAssignments = this.assignmentsRepository.LoadAll();
 
             progress.Report(new SyncProgressInfo
             {
@@ -65,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 this.assignmentsRepository.Remove(assignment.Id);
             }
 
-            // adding new, updating capacity for existing
+            // adding new, updating quantity for existing
             var localAssignmentsLookup = this.assignmentsRepository.LoadAll().ToLookup(la => la.Id);
             var processedAssignmentsCount = 0;
 
@@ -88,6 +93,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         QuestionnaireId = remote.QuestionnaireId.ToString(),
                         Title = questionnaire.Title,
                         Quantity = remote.Quantity,
+                        CreatedInterviewesCount = 0,
                         LocationQuestionId = remote.LocationQuestionId,
                         LocationLatitude = remote.LocationLatitude,
                         LocationLongitude = remote.LocationLongitude,
@@ -107,10 +113,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 
                     this.assignmentsRepository.Store(local);
                 }
-                else if (LocalAssignmentRequireUpdate(local, remoteItem))
+                else
                 {
                     local.Quantity = remoteItem.Quantity;
-
+                    var interviewsCount = this.interviewViewRepository.Count(x => x.CanBeDeleted && x.Assignment == local.Id);
+                    local.CreatedInterviewesCount = interviewsCount;
                     this.assignmentsRepository.Store(local);
                 }
             }
@@ -121,11 +128,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 Statistics = statistics,
                 Status = SynchronizationStatus.Download
             });
-        }
-
-        private static bool LocalAssignmentRequireUpdate(AssignmentDocument local, AssignmentApiView remoteItem)
-        {
-            return local.Quantity != remoteItem.Quantity;
         }
 
         private void FillAnswers(AssignmentApiDocument remote, IQuestionnaire questionnaire, AssignmentDocument local)
