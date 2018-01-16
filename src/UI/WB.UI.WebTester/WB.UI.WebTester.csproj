@@ -277,7 +277,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\config.json" />
@@ -287,6 +286,7 @@
     </None>
     <Content Include="Views\ApiTest\Index.cshtml" />
     <Content Include="Views\ApiTest\Test.cshtml" />
+    <Content Include="Views\Shared\partial.webtester.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
