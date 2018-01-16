@@ -1,10 +1,9 @@
 <template>
     <ModalFrame ref="modal" id="statusesHistoryModal">
         <div slot="title">
-            <h3>{{$t("Pages.HistoryOfStatuses_Interview")}}</h3>
+            <h3>{{$t("Pages.HistoryOfStatuses_Interview")}} {{$config.model.key}}</h3>
             <p>
-                {{$config.model.key}} by
-                <span v-bind:class="[this.$config.model.responsibleRole.toLowerCase()]">{{this.$config.model.responsible}}</span>
+                {{this.$t('Details.Responsible')}}: <span v-bind:class="[this.$config.model.responsibleRole.toLowerCase()]">{{this.$config.model.responsible}}</span>
             </p>
         </div>
         <h3>{{$t("Pages.HistoryOfStatuses_Title")}}</h3>
