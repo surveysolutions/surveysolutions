@@ -23,8 +23,8 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 function GetPathToJarsigner() {
-	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_152\bin\jarsigner.exe'){
-		return 'C:\Program Files\Java\jdk1.8.0_152\bin\jarsigner.exe'
+	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_151\bin\jarsigner.exe'){
+		return 'C:\Program Files\Java\jdk1.8.0_151\bin\jarsigner.exe'
 	}
 
 
