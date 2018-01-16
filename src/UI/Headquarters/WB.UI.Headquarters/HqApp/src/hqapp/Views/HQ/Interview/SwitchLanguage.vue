@@ -1,11 +1,8 @@
 <template>
-    <div class="filters-container">
-        <h4>{{$t("Pages.InterviewDetails_TranslationLabel")}}</h4>
         <select ref="select" v-model="currentLanguage">
             <option :value="null">{{$store.state.webinterview.originalLanguageName}}</option>
             <option :key="language.OriginalLanguageName" v-for="language in $store.state.webinterview.languages">{{ language }}</option>
         </select>
-    </div>
 </template>
 <script>
 export default {
