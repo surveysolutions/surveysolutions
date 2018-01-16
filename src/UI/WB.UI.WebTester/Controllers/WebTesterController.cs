@@ -85,8 +85,7 @@ namespace WB.UI.WebTester.Controllers
             await this.webTesterApi.GetQuestionnaireInfoAsync(Guid.Parse(id).ToString());
             var interview = statefulInterviewRepository.Get(id);
 
-            var questionnaire =
-                this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             return View(new InterviewPageModel
             {

@@ -13,6 +13,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Modularity.Autofac;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -83,6 +84,7 @@ namespace WB.UI.WebTester.Services.Implementation
                     FloatParseHandling = FloatParseHandling.Decimal,
                     Formatting = Formatting.None,
                 });
+
             RemoteAction.Invoke(domainContext.Domain,
                 documentString, supportingAssembly,
                 (questionnaire, assembly) =>
@@ -179,6 +181,29 @@ namespace WB.UI.WebTester.Services.Implementation
             return resultResult;
         }
 
+        public List<CategoricalOption> FilteredCategoricalOptions(Guid interviewId, CategoricalOptionsFilter categoricalOptionsFilter)
+        {
+            var appDomain = appDomains[interviewId];
+
+            var sArg = JsonConvert.SerializeObject(categoricalOptionsFilter, CommandsSerializerSettings);
+
+            var invokeResult = RemoteFunc.Invoke(appDomain.Context.Domain, sArg, jsonArg =>
+            {
+                var filter = JsonConvert.DeserializeObject<CategoricalOptionsFilter>(jsonArg, CommandsSerializerSettings);
+
+                var interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
+
+                var result = interview.FilteredCategoricalOptions(
+                    filter.QuestionIdentity, 
+                    filter.ItemsCount, 
+                    filter.UnfilteredOptionsForQuestion);
+
+                return JsonConvert.SerializeObject(result, CommandsSerializerSettings);
+            });
+
+            return JsonConvert.DeserializeObject<List<CategoricalOption>>(invokeResult, CommandsSerializerSettings);
+        }
+
         private static JsonSerializerSettings EventsSerializerSettings =>
             EventSerializerSettings.BackwardCompatibleJsonSerializerSettings;
 
@@ -186,7 +211,7 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             TypeNameHandling = TypeNameHandling.Objects,
             ContractResolver = new PrivateSetterContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() },
+            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() }
         };
     }
 }
