@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities
@@ -10,12 +9,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewStateForExpressions : IInterviewStateForExpressions
     {
         private readonly InterviewTree tree;
-        private readonly IQuestionnaire questionnaire;
 
-        public InterviewStateForExpressions(InterviewTree tree, IQuestionnaire questionnaire, IInterviewPropertiesForExpressions interviewProperties)
+        public InterviewStateForExpressions(InterviewTree tree, 
+            IInterviewPropertiesForExpressions interviewProperties)
         {
             this.tree = tree;
-            this.questionnaire = questionnaire;
             this.Properties = interviewProperties;
         }
 
@@ -62,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     return categoricalFixedMultiOptionAnswer.ToInts().ToArray().To<T>();//int[]
                 case InterviewQuestionType.YesNo:
                     return new YesNoAndAnswersMissings(
-                        this.questionnaire.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value),
+                        this.tree.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value),
                         question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
                 case InterviewQuestionType.SingleLinkedOption:
                     var categoricalLinkedSingleOptionAnswer = question.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer();
