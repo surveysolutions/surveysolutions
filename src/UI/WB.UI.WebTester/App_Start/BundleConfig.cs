@@ -6,7 +6,7 @@ namespace WB.UI.WebTester
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new StyleBundle("~/css").Include(
+            bundles.Add(new StyleBundle("~/Content/Styles").Include(
                 "~/Content/Styles/markup.css",
                 "~/Content/Styles/markup-web-interview.css"
             ));
