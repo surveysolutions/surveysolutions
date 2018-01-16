@@ -528,6 +528,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return this.questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
         }
+        
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
+        {
+            return this.questionnaire.GetOptionsForQuestion(questionId, parentQuestionValue, filter);
+        }
 
         public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() =>
             this.Sections.Cast<IInterviewTreeNode>().TreeToEnumerableDepthFirst(node => node.Children);
