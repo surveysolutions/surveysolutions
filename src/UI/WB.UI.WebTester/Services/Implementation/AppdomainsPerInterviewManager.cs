@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reactive.Subjects;
 using AppDomainToolkit;
 using Autofac;
 using Main.Core.Documents;
@@ -23,12 +24,14 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
+using IDisposable = System.IDisposable;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager
+    public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager, IDisposable
     {
         private readonly string binFolderPath;
+        private readonly IDisposable evictNotification;
         private readonly ILogger logger;
         private const int QuestionnaireVersion = 1;
 
@@ -42,14 +45,16 @@ namespace WB.UI.WebTester.Services.Implementation
             new Dictionary<Guid, InterviewContainer>();
 
         public AppdomainsPerInterviewManager(string binFolderPath,
+            IObservable<Guid> evictNotification,
             ILogger logger)
         {
             this.binFolderPath = binFolderPath ?? throw new ArgumentNullException(nameof(binFolderPath));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            this.evictNotification = evictNotification?.Subscribe(TearDown);
         }
 
-        public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument,
-            string supportingAssembly)
+        public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument, string supportingAssembly)
         {
             if (appDomains.ContainsKey(interviewId))
             {
@@ -213,5 +218,30 @@ namespace WB.UI.WebTester.Services.Implementation
             ContractResolver = new PrivateSetterContractResolver(),
             Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() }
         };
+
+        #region IDisposable Support
+        private bool disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    this.evictNotification.Dispose();
+
+                }
+                
+                disposedValue = true;
+            }
+        }
+        
+        // This code added to correctly implement the disposable pattern.
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
+        }
+        #endregion
     }
 }

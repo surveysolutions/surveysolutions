@@ -13,7 +13,7 @@ namespace WB.Tests.Integration.WebTester.Services
         protected AppdomainsPerInterviewManager CreateManager()
         {
             var bin = Path.GetDirectoryName(typeof(when_configured).Assembly.Location);
-            return new AppdomainsPerInterviewManager(bin, Mock.Of<ILogger>());
+            return new AppdomainsPerInterviewManager(bin, null, Mock.Of<ILogger>());
         }
     }
 }

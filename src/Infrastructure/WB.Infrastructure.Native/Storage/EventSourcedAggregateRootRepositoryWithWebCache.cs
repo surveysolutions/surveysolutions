@@ -75,7 +75,7 @@ namespace WB.Infrastructure.Native.Storage
                 TimeSpan.FromMinutes(5), OnUpdateCallback);
         }
 
-        private string Key(Guid id) => $"aggregateRoot_" + id.ToString();
+        protected virtual string Key(Guid id) => $"aggregateRoot_" + id.ToString();
 
         private void OnUpdateCallback(string key, CacheItemUpdateReason reason,
             out object expensiveObject,
@@ -87,6 +87,11 @@ namespace WB.Infrastructure.Native.Storage
             dependency = null;
             absoluteExpiration = Cache.NoAbsoluteExpiration;
             slidingExpiration = Cache.NoSlidingExpiration;
+            CacheItemRemoved(key);
+        }
+
+        protected virtual void CacheItemRemoved(string key)
+        {
             CacheCountTracker.TryRemove(key, out _);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
         }
@@ -96,8 +101,7 @@ namespace WB.Infrastructure.Native.Storage
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
                 var key = Key(aggregateId);
-                CacheCountTracker.TryRemove(key, out _);
-                CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
+                CacheItemRemoved(key);
                 Cache.Remove(key);
             });
         }
