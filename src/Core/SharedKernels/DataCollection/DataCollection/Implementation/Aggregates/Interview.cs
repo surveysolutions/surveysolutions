@@ -678,7 +678,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var unfilteredOptionsForQuestion = questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter);
 
-                return this.FiltereCategoricalOptions(questionIdentity, itemsCount, questionnaire, unfilteredOptionsForQuestion);
+                return this.FilteredCategoricalOptions(questionIdentity, itemsCount, unfilteredOptionsForQuestion);
             }
 
             return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(questionIdentity,
@@ -690,8 +690,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             // too much
             IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
-            var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-            expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, questionnaire, interviewPropertiesForExpressions));
+
+            var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(
+                new InterviewProperties(this.EventSourceId), this.properties);
+            expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, interviewPropertiesForExpressions));
             var question = this.tree.GetQuestion(questionIdentity);
             var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ??
                                 new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
@@ -734,7 +736,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 if (this.UsesExpressionStorage)
                 {
-                    return FiltereCategoricalOptions(question, 1, questionnaire, filteredOption.ToEnumerable()).SingleOrDefault();
+                    return FilteredCategoricalOptions(question, 1, filteredOption.ToEnumerable()).SingleOrDefault();
                 }
                 return this.ExpressionProcessorStatePrototype.FilterOptionsForQuestion(question, Enumerable.Repeat(filteredOption, 1)).SingleOrDefault();
             }
@@ -2365,7 +2367,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     IInterviewExpressionStorage expressionStorageForTesting = this.GetExpressionStorage();
                     var interviewPropertiesForExpressionsForTesting = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-                    expressionStorageForTesting.Initialize(new InterviewStateForExpressions(interviewTreeCloneForTesting, questionnaire, interviewPropertiesForExpressionsForTesting));
+                    expressionStorageForTesting.Initialize(new InterviewStateForExpressions(interviewTreeCloneForTesting, interviewPropertiesForExpressionsForTesting));
                     using (var updaterForTesting = new InterviewTreeUpdater(expressionStorageForTesting, questionnaire, removeLinkedAnswers))
                     {
                         //GC.Collect();
@@ -2401,7 +2403,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
-                expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, questionnaire, interviewPropertiesForExpressions));
+                expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
                 using (var updater = new InterviewTreeUpdater(expressionStorage, questionnaire, removeLinkedAnswers))
                 {
                     if (questionnaire.SupportsExpressionsGraph() && entityIdentity != null)
