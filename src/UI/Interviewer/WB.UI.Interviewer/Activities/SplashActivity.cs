@@ -6,6 +6,8 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using System.Diagnostics;
+using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -30,7 +32,27 @@ namespace WB.UI.Interviewer.Activities
         [Conditional("RELEASE")]
         private void BackwardCompatibility()
         {
+            this.UpdateAssignmentsWithInterviewsCount();
             this.AddTitleToOptionViewForSearching();
+        }
+
+        private void UpdateAssignmentsWithInterviewsCount()
+        {
+            var assignmentStorage = Mvx.Resolve<IAssignmentDocumentsStorage>();
+
+            var hasEmptyInterviewsCounts = assignmentStorage.Count(x => x.CreatedInterviewesCount == null) > 0;
+            
+            if (!hasEmptyInterviewsCounts) return;
+
+            var interviewStorage = Mvx.Resolve<IPlainStorage<InterviewView>>();
+            
+            var assignments = assignmentStorage.LoadAll();
+
+            foreach (var assignment in assignments)
+            {
+                assignment.CreatedInterviewesCount = interviewStorage.Count(x => x.CanBeDeleted && x.Assignment == assignment.Id);
+                assignmentStorage.Store(assignment);
+            }
         }
 
         private void AddTitleToOptionViewForSearching()
