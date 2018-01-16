@@ -64,6 +64,8 @@ namespace WB.UI.WebTester
             });
 
 
+            registry.Bind<WebTesterStatefulInterview>();
+
             registry.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();

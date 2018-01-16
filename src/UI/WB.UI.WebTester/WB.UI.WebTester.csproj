@@ -228,9 +228,11 @@
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterAppDomainModule.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireStorage.cs" />
     <Compile Include="Infrastructure\WebTesterCommandService.cs" />
+    <Compile Include="Infrastructure\WebTesterStatefulInterview.cs" />
     <Compile Include="Services\Implementation\AppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\IAppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\IMediaStorage.cs" />
+    <Compile Include="Services\CategoricalOptionsFilter.cs" />
     <Compile Include="Services\MultimediaFile.cs" />
     <Compile Include="Controllers\WebInterviewResourcesController.cs" />
     <Compile Include="Controllers\WebTesterController.cs" />

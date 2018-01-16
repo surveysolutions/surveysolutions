@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.UI.WebTester.Services
 {
@@ -11,5 +12,7 @@ namespace WB.UI.WebTester.Services
         void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument, string supportingAssembly);
         void TearDown(Guid interviewId);
         List<CommittedEvent> Execute(ICommand command);
+
+        List<CategoricalOption> FilteredCategoricalOptions(Guid interviewId, CategoricalOptionsFilter categoricalOptionsFilter);
     }
 }
