@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -63,10 +64,11 @@ namespace WB.UI.WebTester
                 IgnoredAggregateRoots = new HashSet<string>()
             });
 
-
             registry.Bind<WebTesterStatefulInterview>();
 
-            registry.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry.BindAsSingleton<IObservable<Guid>, IObserver<Guid>, Subject<Guid>>();
+
+            registry.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.BindAsSingleton<IEventBus, InProcessEventBus>();
