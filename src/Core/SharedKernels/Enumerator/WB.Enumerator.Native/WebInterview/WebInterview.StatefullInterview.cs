@@ -329,7 +329,7 @@ namespace WB.Enumerator.Native.WebInterview
             return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, parentIds, IsReviewMode);
         }
 
-        public DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
+        public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
         {
             var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview();

@@ -6,6 +6,8 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Infrastructure
@@ -37,8 +39,9 @@ namespace WB.UI.WebTester.Infrastructure
 
         public void Execute(ICommand command, string origin = null)
         {
-            var aggregateId = CommandRegistry.GetAggregateRootIdResolver(command).Invoke(command);
-            var aggregateType = CommandRegistry.GetAggregateRootType(command);
+            var interviewCommand = command as InterviewCommand;
+            var aggregateId = interviewCommand.InterviewId;
+            var aggregateType = typeof(WebTesterStatefulInterview);
 
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
@@ -46,7 +49,7 @@ namespace WB.UI.WebTester.Infrastructure
 
                 if (aggregate == null)
                 {
-                    if (!CommandRegistry.IsInitializer(command))
+                    if (!(command is CreateInterview))/*!CommandRegistry.IsInitializer(command)*/
                         throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
 
                     aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);

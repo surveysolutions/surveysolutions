@@ -35,7 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         private InterviewTree tree;
-        protected InterviewTree Tree => this.tree ?? (this.tree = this.treeBuilder.BuildInterviewTree(this.EventSourceId, this.GetQuestionnaireOrThrow()));
+        protected InterviewTree Tree => this.tree 
+                                        ?? (this.tree = this.treeBuilder.BuildInterviewTree(this.EventSourceId, this.GetQuestionnaireOrThrow()));
 
         protected readonly InterviewEntities.InterviewProperties properties = new InterviewEntities.InterviewProperties();
 
@@ -666,9 +667,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         /// Filter for regular categorical questions, such as YesNo, Single and Multi.
-        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount = 200)
+        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, 
+            int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             if (!questionnaire.IsSupportFilteringForOptions(questionIdentity.Id))
@@ -685,18 +686,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
 
-        private List<CategoricalOption> FiltereCategoricalOptions(Identity questionIdentity, int itemsCount, IQuestionnaire questionnaire,
+        public virtual List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
             IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
         {
             // too much
             IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
 
-            var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(
-                new InterviewProperties(this.EventSourceId), this.properties);
+            var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
+
             expressionStorage.Initialize(new InterviewStateForExpressions(this.tree, interviewPropertiesForExpressions));
+
             var question = this.tree.GetQuestion(questionIdentity);
+
             var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ??
                                 new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
+
             var level = expressionStorage.GetLevel(nearestRoster);
             var categoricalFilter = level.GetCategoricalFilter(questionIdentity);
 
