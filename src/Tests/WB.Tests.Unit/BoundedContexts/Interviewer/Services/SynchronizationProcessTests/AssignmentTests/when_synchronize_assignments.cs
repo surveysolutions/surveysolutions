@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -22,14 +23,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 {
     public class when_synchronize_assignments
     {
-        private List<AssignmentDocument> LocalAssignments;
-        private List<AssignmentApiDocument> RemoteAssignments;
+        private List<AssignmentDocument> localAssignments;
+        private List<AssignmentApiDocument> remoteAssignments;
+        private List<InterviewView> interviews;
         private IAssignmentDocumentsStorage localAssignmentsRepo;
         private Mock<IProgress<SyncProgressInfo>> progressInfo;
 
         private void Context()
         {
-            this.LocalAssignments = new List<AssignmentDocument>
+            localAssignments = new List<AssignmentDocument>
             {
                 Create.Entity
                     .AssignmentDocument(1, 10, 0, Create.Entity.QuestionnaireIdentity(Id.gA).ToString())
@@ -43,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     .Build()
             };
 
-            this.RemoteAssignments = new List<AssignmentApiDocument>
+            remoteAssignments = new List<AssignmentApiDocument>
             {
                 Create.Entity
                     .AssignmentApiDocument(1, 20, Create.Entity.QuestionnaireIdentity(Id.gA))
@@ -55,13 +57,21 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "gpsnonIdent")
                     .Build(),
                 Create.Entity
-                    .AssignmentApiDocument(3, 20, Create.Entity.QuestionnaireIdentity(Id.gC))
+                    .AssignmentApiDocument(3, 25, Create.Entity.QuestionnaireIdentity(Id.gC))
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "1")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "2")
                     .WithAnswer(Create.Entity.Identity(Guid.NewGuid()), "3")
                     .WithAnswer(Create.Entity.Identity(Id.gA), "gpsQuestion_1", latitude: 10.0, longtitude: 20.0)
                     .WithAnswer(Create.Entity.Identity(Id.gB), "gpsQuestion2_3")
                     .Build()
+            };
+
+            interviews = new List<InterviewView>
+            {
+                Create.Entity.InterviewView(status: InterviewStatus.InterviewerAssigned, assignmentId: 1, canBeDeleted: false),
+                Create.Entity.InterviewView(status: InterviewStatus.InterviewerAssigned, assignmentId: 1, canBeDeleted: true),
+                Create.Entity.InterviewView(status: InterviewStatus.Completed, assignmentId: 1, canBeDeleted: true),
+                Create.Entity.InterviewView(status: InterviewStatus.RejectedBySupervisor, assignmentId: 1, canBeDeleted: false)
             };
         }
 
@@ -93,41 +103,42 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [OneTimeSetUp]
         public async Task OneTimeSetup()
         {
-            this.Context();
+            Context();
 
-            this.localAssignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
-            this.localAssignmentsRepo.Store(this.LocalAssignments);
+            localAssignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            localAssignmentsRepo.Store(localAssignments);
 
             var assignmentSyncService = new Mock<IAssignmentSynchronizationApi>();
-            assignmentSyncService.Setup(s => s.GetAssignmentsAsync(Moq.It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(this.RemoteAssignments.Select(FromView).ToList()));
+            assignmentSyncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(remoteAssignments.Select(FromView).ToList()));
 
-            assignmentSyncService.Setup(s => s.GetAssignmentAsync(It.IsAny<int>(), Moq.It.IsAny<CancellationToken>()))
+            assignmentSyncService.Setup(s => s.GetAssignmentAsync(It.IsAny<int>(), It.IsAny<CancellationToken>()))
                 .Returns(new Func<int, CancellationToken, Task<AssignmentApiDocument>>((id, token) =>
                 {
-                    var result = this.RemoteAssignments.FirstOrDefault(i => i.Id == id);
+                    var result = remoteAssignments.FirstOrDefault(i => i.Id == id);
 
                     return Task.FromResult(result);
                 }));
 
             var interviewViewRepository = new SqliteInmemoryStorage<InterviewView>();
-            interviewViewRepository.Store(new List<InterviewView>());
+            interviewViewRepository.Store(interviews);
 
             var questionarrieStorage = new Mock<IQuestionnaireStorage>();
             questionarrieStorage
                 .Setup(qs => qs.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()))
                 .Returns(new Func<QuestionnaireIdentity, string, IQuestionnaire>((identity, version) =>
                 {
-                    return CreatePlain(this.RemoteAssignments.FirstOrDefault(a => a.QuestionnaireId == identity));
+                    return CreatePlain(remoteAssignments.FirstOrDefault(a => a.QuestionnaireId == identity));
                 }));
 
             var viewModel = Create.Service.AssignmentsSynchronizer(
                 synchronizationService: assignmentSyncService.Object,
-                assignmentsRepository: this.localAssignmentsRepo,
-                questionnaireStorage: questionarrieStorage.Object
+                assignmentsRepository: localAssignmentsRepo,
+                questionnaireStorage: questionarrieStorage.Object,
+                interviewViewRepository: interviewViewRepository
             );
 
-            this.progressInfo = new Mock<IProgress<SyncProgressInfo>>();
+            progressInfo = new Mock<IProgress<SyncProgressInfo>>();
 
             await viewModel.SynchronizeAssignmentsAsync(progressInfo.Object, new SynchronizationStatistics(), CancellationToken.None);
         }
@@ -135,41 +146,46 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public void should_add_new_assignment()
         {
-            var newRemoteAssign = this.localAssignmentsRepo.LoadAll();
+            var newRemoteAssign = localAssignmentsRepo.LoadAll();
             newRemoteAssign.Should().Contain(ad => ad.Id == 3);
         }
 
         [Test]
-        public void should_fill_identifying_answers_without_gps()
+        public void should_fill_identifying_answers_without_gps_and_set_quantity()
         {
-            var assignment = this.localAssignmentsRepo.LoadAll().First(ass => ass.Id == 3);
+            var assignment = localAssignmentsRepo.LoadAll().First(ass => ass.Id == 3);
 
             assignment.IdentifyingAnswers.Should().HaveCount(1);
             assignment.IdentifyingAnswers.Should().NotContain(ia => ia.Identity.Id == Id.gA);
+
+            Assert.That(assignment.Quantity, Is.EqualTo(remoteAssignments[1].Quantity));
+            Assert.That(assignment.CreatedInterviewesCount, Is.EqualTo(0));
         }
 
         [Test]
         public void should_remove_removed_assignment()
         {
-            var newRemoteAssign = this.localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 2);
+            var newRemoteAssign = localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 2);
             newRemoteAssign.Should().BeNull();
         }
 
         [Test]
         public void should_update_existing_assignment_quantity()
         {
-            var existingAssignment = this.localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 1);
-            Assert.That(existingAssignment.Quantity, Is.EqualTo(this.RemoteAssignments[0].Quantity));
+            var existingAssignment = localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 1);
+            Assert.That(existingAssignment.Quantity, Is.EqualTo(remoteAssignments[0].Quantity));
+            Assert.That(existingAssignment.CreatedInterviewesCount, Is.EqualTo(1 /*InterviewerAssigned that can be deleted*/ 
+                                                                               + 1 /* Completed that can be deleted too*/));
         }
 
         [Test]
         public void should_make_local_assignments_equal_to_remote()
         {
-            var assignments = this.localAssignmentsRepo.LoadAll();
+            var assignments = localAssignmentsRepo.LoadAll();
 
-            Assert.That(assignments, Has.Count.EqualTo(this.RemoteAssignments.Count));
+            Assert.That(assignments, Has.Count.EqualTo(remoteAssignments.Count));
 
-            var remoteLookup = this.RemoteAssignments.ToDictionary(x => x.Id);
+            var remoteLookup = remoteAssignments.ToDictionary(x => x.Id);
             foreach (var local in assignments)
             {
                 var remote = remoteLookup[local.Id];
@@ -182,13 +198,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         [Test]
         public void should_count_new_assignments()
         {
-            this.progressInfo.Verify(s => s.Report(It.Is<SyncProgressInfo>(p => p.Statistics.NewAssignmentsCount == 1)));
+            progressInfo.Verify(s => s.Report(It.Is<SyncProgressInfo>(p => p.Statistics.NewAssignmentsCount == 1)));
         }
 
         [Test]
         public void should_count_removed_assignments()
         {
-            this.progressInfo.Verify(s => s.Report(It.Is<SyncProgressInfo>(p => p.Statistics.RemovedAssignmentsCount == 1)));
+            progressInfo.Verify(s => s.Report(It.Is<SyncProgressInfo>(p => p.Statistics.RemovedAssignmentsCount == 1)));
         }
     }
 }
