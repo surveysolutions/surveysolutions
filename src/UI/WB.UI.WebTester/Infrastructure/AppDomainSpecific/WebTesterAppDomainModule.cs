@@ -1,7 +1,9 @@
 ﻿using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -13,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.Questionnaire.Impl;
+using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
 {
@@ -21,7 +24,9 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
-            registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
+            registry.BindAsSingleton<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();

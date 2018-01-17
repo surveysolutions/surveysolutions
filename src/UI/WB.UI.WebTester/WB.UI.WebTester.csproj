@@ -274,8 +274,6 @@
     </Compile>
     <Compile Include="Services\IDesignerWebTesterApi.cs" />
     <Compile Include="Services\Implementation\MediaStorage.cs" />
-    <Compile Include="Services\Implementation\IQuestionnaireImportService.cs" />
-    <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\TranslationStorage.cs" />
     <Compile Include="Services\SoundInfo.cs" />
     <Compile Include="Startup.cs" />
