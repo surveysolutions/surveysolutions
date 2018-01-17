@@ -93,7 +93,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         QuestionnaireId = remote.QuestionnaireId.ToString(),
                         Title = questionnaire.Title,
                         Quantity = remote.Quantity,
-                        CreatedInterviewesCount = 0,
+                        CreatedInterviewsCount = 0,
                         LocationQuestionId = remote.LocationQuestionId,
                         LocationLatitude = remote.LocationLatitude,
                         LocationLongitude = remote.LocationLongitude,
@@ -117,7 +117,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 {
                     local.Quantity = remoteItem.Quantity;
                     var interviewsCount = this.interviewViewRepository.Count(x => x.CanBeDeleted && x.Assignment == local.Id);
-                    local.CreatedInterviewesCount = interviewsCount;
+                    local.CreatedInterviewsCount = interviewsCount;
                     this.assignmentsRepository.Store(local);
                 }
             }

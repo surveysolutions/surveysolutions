@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 );
 
                 await this.commandService.ExecuteAsync(createInterviewCommand);
-                assignment.CreatedInterviewesCount = (assignment.CreatedInterviewesCount ?? 0) + 1;
+                assignment.CreatedInterviewsCount = (assignment.CreatedInterviewsCount ?? 0) + 1;
                 assignmentsRepository.Store(assignment);
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);

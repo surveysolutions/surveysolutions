@@ -40,7 +40,7 @@ namespace WB.UI.Interviewer.Activities
         {
             var assignmentStorage = Mvx.Resolve<IAssignmentDocumentsStorage>();
 
-            var hasEmptyInterviewsCounts = assignmentStorage.Count(x => x.CreatedInterviewesCount == null) > 0;
+            var hasEmptyInterviewsCounts = assignmentStorage.Count(x => x.CreatedInterviewsCount == null) > 0;
             
             if (!hasEmptyInterviewsCounts) return;
 
@@ -50,7 +50,7 @@ namespace WB.UI.Interviewer.Activities
 
             foreach (var assignment in assignments)
             {
-                assignment.CreatedInterviewesCount = interviewStorage.Count(x => x.CanBeDeleted && x.Assignment == assignment.Id);
+                assignment.CreatedInterviewsCount = interviewStorage.Count(x => x.CanBeDeleted && x.Assignment == assignment.Id);
                 assignmentStorage.Store(assignment);
             }
         }

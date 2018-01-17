@@ -102,12 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             else
             {
-                // apdate db assignment
-                var dbAssignment = assignmentsRepository.GetById(assignmentId.Value);
-                dbAssignment.CreatedInterviewesCount = Math.Max(0, (dbAssignment.CreatedInterviewesCount ?? 0) - 1);
-                assignmentsRepository.Store(dbAssignment);
-
-                // apdate UI assignment
+                // update UI assignment
                 var assignment = this.UiItems.OfType<AssignmentDashboardItemViewModel>()
                     .FirstOrDefault(x => x.AssignmentId == assignmentId.Value);
 

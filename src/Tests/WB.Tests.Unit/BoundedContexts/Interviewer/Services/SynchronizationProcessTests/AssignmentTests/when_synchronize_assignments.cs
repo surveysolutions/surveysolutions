@@ -159,7 +159,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             assignment.IdentifyingAnswers.Should().NotContain(ia => ia.Identity.Id == Id.gA);
 
             Assert.That(assignment.Quantity, Is.EqualTo(remoteAssignments[1].Quantity));
-            Assert.That(assignment.CreatedInterviewesCount, Is.EqualTo(0));
+            Assert.That(assignment.CreatedInterviewsCount, Is.EqualTo(0));
         }
 
         [Test]
@@ -174,7 +174,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var existingAssignment = localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 1);
             Assert.That(existingAssignment.Quantity, Is.EqualTo(remoteAssignments[0].Quantity));
-            Assert.That(existingAssignment.CreatedInterviewesCount, Is.EqualTo(1 /*InterviewerAssigned that can be deleted*/ 
+            Assert.That(existingAssignment.CreatedInterviewsCount, Is.EqualTo(1 /*InterviewerAssigned that can be deleted*/ 
                                                                                + 1 /* Completed that can be deleted too*/));
         }
 
