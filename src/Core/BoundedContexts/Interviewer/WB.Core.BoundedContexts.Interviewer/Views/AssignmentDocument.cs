@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public DateTime ReceivedDateUtc { get; set; }
 
-        public int? CreatedInterviewesCount { get; set; }
+        public int? CreatedInterviewsCount { get; set; }
 
         [Ignore]
         public List<AssignmentAnswer> Answers { get; set; }
