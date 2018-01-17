@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -34,10 +35,15 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
             {
                 QuestionType = questionType,
                 QuestionSubType = questionSubType,
-                ColumnHeaders = columnNames.Select(x=> new HeaderColumn(){Name = x}).ToList(),
+                ColumnHeaders = GetColumnHeaders(columnNames),
                 ColumnValues = columnValues,
             };
             return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem);
+        }
+
+        private static List<HeaderColumn> GetColumnHeaders(string[] columnNames)
+        {
+            return columnNames?.Select(x => new HeaderColumn() {Name = x, Title = x}).ToList() ?? new List<HeaderColumn>();
         }
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,
