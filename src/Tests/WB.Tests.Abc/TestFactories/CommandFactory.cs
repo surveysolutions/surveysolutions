@@ -104,11 +104,11 @@ namespace WB.Tests.Abc.TestFactories
                 answerTime: DateTime.UtcNow,
                 selectedRosterVector: answer);
 
-        public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, int answer = 0)
+        public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, int answer = 0, Guid? questionId = null)
             => new AnswerSingleOptionQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
-                questionId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
                 answerTime: DateTime.UtcNow,
                 selectedValue: answer);
