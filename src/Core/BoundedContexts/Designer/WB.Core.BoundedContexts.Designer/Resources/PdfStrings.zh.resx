@@ -117,106 +117,190 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CanSynchronize" xml:space="preserve">
-    <value>开始同步</value>
+  <data name="Appendix_Conditions" xml:space="preserve">
+    <value>附录{0}{1}的启用条件</value>
   </data>
-  <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+  <data name="Appendix_Instructions" xml:space="preserve">
+    <value>附录{0}{1}的说明</value>
   </data>
-  <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;删除访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="Appendix_OptionFilters" xml:space="preserve">
+    <value>附录{0}{1}的选项筛选器</value>
   </data>
-  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>可以把设备分配给调查员</value>
+  <data name="Appendix_Options" xml:space="preserve">
+    <value>附录{0}{1}的选项</value>
   </data>
-  <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;需要重新关联&lt;/font&gt;</value>
+  <data name="Appendix_Validations" xml:space="preserve">
+    <value>附录{0}{1}的验证性条件和信息</value>
   </data>
-  <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;需要更新。调查员引擎版本 - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="Appendix_Variables" xml:space="preserve">
+    <value>附录{0}{1}的变量</value>
   </data>
-  <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[空设备]&lt;/b&gt;</value>
+  <data name="AppendixLink" xml:space="preserve">
+    <value>还有{0}的其它符号{1}</value>
   </data>
-  <data name="GetAttachmentContent" xml:space="preserve">
-    <value>下载附件内容：{0}</value>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>问卷由{0}创建</value>
   </data>
-  <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>下载普查问卷列表：&lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="EnablementCondition" xml:space="preserve">
+    <value>启用的条件：</value>
   </data>
-  <data name="GetInterview" xml:space="preserve">
-    <value>下载访谈：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>该PDF文件由{0}生成</value>
   </data>
-  <data name="GetInterviewer" xml:space="preserve">
-    <value>下载调查员信息。&lt;br/&gt;督导员：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="LastEdited" xml:space="preserve">
+    <value>{0}最后编辑了{1}</value>
   </data>
-  <data name="GetInterviewPackage" xml:space="preserve">
-    <value>下载访谈包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="LastModifiedBy" xml:space="preserve">
+    <value>由{0}最后修改</value>
   </data>
-  <data name="GetInterviewPackages" xml:space="preserve">
-    <value>下载访谈包列表。&lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;最近一次同步包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="Legend" xml:space="preserve">
+    <value>图例</value>
   </data>
-  <data name="GetInterviews" xml:space="preserve">
-    <value>下载访谈列表。&lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="NeverEdited" xml:space="preserve">
+    <value>{0}（从未被编辑）</value>
   </data>
-  <data name="GetQuestionnaire" xml:space="preserve">
-    <value>下载问卷：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="NotShared" xml:space="preserve">
+    <value>从未被分享</value>
   </data>
-  <data name="GetQuestionnaireAssembly" xml:space="preserve">
-    <value>下载问卷集合：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="Options" xml:space="preserve">
+    <value>选项：</value>
   </data>
-  <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>下载问卷附件：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="PdfLegend" xml:space="preserve">
+    <value>图例和结构信息在本文件中</value>
   </data>
-  <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>调查员已经有了设备</value>
+  <data name="QuestionScope_Hidden" xml:space="preserve">
+    <value>隐藏</value>
   </data>
-  <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈包&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="QuestionScope_Identifying" xml:space="preserve">
+    <value>识别型</value>
   </data>
-  <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="QuestionScope_Supervisor" xml:space="preserve">
+    <value>监督员</value>
   </data>
-  <data name="LinkToDevice" xml:space="preserve">
-    <value>将调查员与设备关联</value>
+  <data name="QuestionType_Area" xml:space="preserve">
+    <value>范围</value>
   </data>
-  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>没有新的访谈包需要下载</value>
+  <data name="QuestionType_Audio" xml:space="preserve">
+    <value>录音</value>
   </data>
-  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷集合&lt;b&gt;{0}&lt;/b&gt; [{1}]/font&gt;</value>
+  <data name="QuestionType_Barcode" xml:space="preserve">
+    <value>条形码</value>
   </data>
-  <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/font&gt;</value>
+  <data name="QuestionType_Cascading" xml:space="preserve">
+    <value>级联中</value>
   </data>
-  <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;更新访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="QuestionType_Combobox" xml:space="preserve">
+    <value>复选框</value>
   </data>
-  <data name="PostPackage" xml:space="preserve">
-    <value>上传访谈：{0}</value>
+  <data name="QuestionType_CurrentTime" xml:space="preserve">
+    <value>时间：实时时间</value>
   </data>
-  <data name="GetTranslations" xml:space="preserve">
-    <value>下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译</value>
+  <data name="QuestionType_Date" xml:space="preserve">
+    <value>日期</value>
   </data>
-  <data name="InterviewerFailedToLogin" xml:space="preserve">
-    <value>调查员登录失败</value>
+  <data name="QuestionType_Decimal" xml:space="preserve">
+    <value>十进制</value>
   </data>
-  <data name="InterviewerLoggedIn" xml:space="preserve">
-    <value>调查员已登录并获得了认证令牌</value>
+  <data name="QuestionType_GPS" xml:space="preserve">
+    <value>GPS</value>
   </data>
-  <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>下载任务 ({0})&lt;/br&gt;</value>
+  <data name="QuestionType_Integer" xml:space="preserve">
+    <value>整数</value>
   </data>
-  <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>下载任务列表 ({0}). &lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;</value>
+  <data name="QuestionType_Linked" xml:space="preserve">
+    <value>逻辑连接</value>
   </data>
-  <data name="GetMap" xml:space="preserve">
-    <value>下载地图：{0}</value>
+  <data name="QuestionType_List" xml:space="preserve">
+    <value>列表型</value>
   </data>
-  <data name="GetMaps" xml:space="preserve">
-    <value>下载地图列表： &lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="QuestionType_MultiSelect" xml:space="preserve">
+    <value>多选型</value>
   </data>
-  <data name="NoMapsForUser" xml:space="preserve">
-    <value>没有可以下载的地图</value>
+  <data name="QuestionType_Numeric" xml:space="preserve">
+    <value>数值型：</value>
+  </data>
+  <data name="QuestionType_Ordered" xml:space="preserve">
+    <value>顺序型</value>
+  </data>
+  <data name="QuestionType_Picture" xml:space="preserve">
+    <value>图片型</value>
+  </data>
+  <data name="QuestionType_SingleSelect" xml:space="preserve">
+    <value>单选型</value>
+  </data>
+  <data name="QuestionType_Text" xml:space="preserve">
+    <value>文本型</value>
+  </data>
+  <data name="QuestionType_YesNo" xml:space="preserve">
+    <value>是/否型</value>
+  </data>
+  <data name="Roster" xml:space="preserve">
+    <value>二维表：</value>
+  </data>
+  <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+    <value>由固定的列表生产</value>
+  </data>
+  <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+    <value>由{0}的问题{1}生成</value>
+  </data>
+  <data name="RosterType_List" xml:space="preserve">
+    <value>列表型</value>
+  </data>
+  <data name="RosterType_Multi" xml:space="preserve">
+    <value>多选型</value>
+  </data>
+  <data name="RosterType_Numeric" xml:space="preserve">
+    <value>数值型</value>
+  </data>
+  <data name="Scope" xml:space="preserve">
+    <value>范围：{0}</value>
+  </data>
+  <data name="SharedWith" xml:space="preserve">
+    <value>分享给：</value>
+  </data>
+  <data name="Stat_NoQuestions" xml:space="preserve">
+    <value>无问题</value>
+  </data>
+  <data name="Stat_NoRosters" xml:space="preserve">
+    <value>无二维表</value>
+  </data>
+  <data name="Stat_NoSubsections" xml:space="preserve">
+    <value>无子模块</value>
+  </data>
+  <data name="Stat_Questions" xml:space="preserve">
+    <value>问题：{0}</value>
+  </data>
+  <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+    <value>问题带有启用条件：{0}</value>
+  </data>
+  <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+    <value>问题带有验证条件：{0}</value>
+  </data>
+  <data name="Stat_Rosters" xml:space="preserve">
+    <value>二维表：{0}</value>
+  </data>
+  <data name="Stat_Sections" xml:space="preserve">
+    <value>问卷模块：{0}</value>
+  </data>
+  <data name="Stat_StaticTexts" xml:space="preserve">
+    <value>静态文本:{0}</value>
+  </data>
+  <data name="Stat_Subsections" xml:space="preserve">
+    <value>问卷子模块：{0}</value>
+  </data>
+  <data name="Stat_Variables" xml:space="preserve">
+    <value>变量：{0}</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>静态文本</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>验证条件：</value>
+  </data>
+  <data name="ValidationMessage" xml:space="preserve">
+    <value>验证信息：</value>
+  </data>
+  <data name="Variable" xml:space="preserve">
+    <value>变量</value>
   </data>
 </root>

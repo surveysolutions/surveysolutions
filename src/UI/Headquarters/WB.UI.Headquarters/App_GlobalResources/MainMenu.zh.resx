@@ -186,4 +186,31 @@
   <data name="Troubleshooting" xml:space="preserve">
     <value>故障排除</value>
   </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>新建</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>设备/调查员</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>问卷模板</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>已驳回</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>已开始</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>状态持续间期</value>
+  </data>
 </root>

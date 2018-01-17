@@ -708,6 +708,14 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>Maps.fr.designer.cs</LastGenOutput>
     </Content>
+    <Content Include="App_GlobalResources\Maps.zh.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Maps.zh.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\TakeNewInterview.fr.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>TakeNewInterview.fr.designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -878,6 +886,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <EmbeddedResource Include="Resources\WebInterviewUI.zh.resx" />
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -947,6 +956,7 @@
     <EmbeddedResource Include="Resources\AuditLog.ru.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AuditLog.zh.resx" />
     <EmbeddedResource Include="Resources\DataTables.es.resx" />
     <EmbeddedResource Include="Resources\DataTables.fr.resx" />
     <EmbeddedResource Include="Resources\DataTables.ka.resx">
@@ -991,6 +1001,7 @@
     <EmbeddedResource Include="Resources\DevicesInterviewers.ru.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DevicesInterviewers.zh.resx" />
     <EmbeddedResource Include="Resources\EnumNames.es.resx" />
     <EmbeddedResource Include="Resources\EnumNames.fr.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
@@ -1183,6 +1194,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ReviewInterview.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ReviewInterview.zh.resx" />
     <EmbeddedResource Include="Resources\SyncLogMessages.es.resx" />
     <EmbeddedResource Include="Resources\SyncLogMessages.fr.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
@@ -1256,6 +1268,7 @@
       <LastGenOutput>UserPreloadingVerificationMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx" />
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.zh.resx" />
     <EmbeddedResource Include="Resources\WebInterviewSetup.ar.resx">
       <DependentUpon>WebInterviewSetup.resx</DependentUpon>
     </EmbeddedResource>
@@ -1685,6 +1698,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.ru.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\Maps.zh.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.zh.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\QuestionnaireClonning.es.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1709,6 +1727,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>TakeNewInterview.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\TakeNewInterview.fr.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TakeNewInterview.fr.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\Users.es.designer.cs">
       <AutoGen>True</AutoGen>

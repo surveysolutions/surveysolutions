@@ -117,106 +117,181 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CanSynchronize" xml:space="preserve">
-    <value>开始同步</value>
+  <data name="Action" xml:space="preserve">
+    <value>操作</value>
   </data>
-  <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+  <data name="Assign" xml:space="preserve">
+    <value>分配</value>
   </data>
-  <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;删除访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="AssignFolder" xml:space="preserve">
+    <value>分配文件夹</value>
   </data>
-  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>可以把设备分配给调查员</value>
+  <data name="AssignFolderText" xml:space="preserve">
+    <value>请为“{0}”问卷模板分配文件夹</value>
   </data>
-  <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;需要重新关联&lt;/font&gt;</value>
+  <data name="Assigning" xml:space="preserve">
+    <value>正在分配</value>
   </data>
-  <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;需要更新。调查员引擎版本 - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="BackToList" xml:space="preserve">
+    <value>返回列表</value>
   </data>
-  <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[空设备]&lt;/b&gt;</value>
+  <data name="Backup" xml:space="preserve">
+    <value>备份</value>
   </data>
-  <data name="GetAttachmentContent" xml:space="preserve">
-    <value>下载附件内容：{0}</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
   </data>
-  <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>下载普查问卷列表：&lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="CancelSearch" xml:space="preserve">
+    <value>取消搜索</value>
   </data>
-  <data name="GetInterview" xml:space="preserve">
-    <value>下载访谈：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>选择语言</value>
   </data>
-  <data name="GetInterviewer" xml:space="preserve">
-    <value>下载调查员信息。&lt;br/&gt;督导员：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>请选择渲染PDF问卷模板的语言</value>
   </data>
-  <data name="GetInterviewPackage" xml:space="preserve">
-    <value>下载访谈包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="Close" xml:space="preserve">
+    <value>关闭</value>
   </data>
-  <data name="GetInterviewPackages" xml:space="preserve">
-    <value>下载访谈包列表。&lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;最近一次同步包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="Confirmation" xml:space="preserve">
+    <value>确认</value>
   </data>
-  <data name="GetInterviews" xml:space="preserve">
-    <value>下载访谈列表。&lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="Copy" xml:space="preserve">
+    <value>粘贴</value>
   </data>
-  <data name="GetQuestionnaire" xml:space="preserve">
-    <value>下载问卷：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="CopyQuestionnaire" xml:space="preserve">
+    <value>粘贴问卷</value>
   </data>
-  <data name="GetQuestionnaireAssembly" xml:space="preserve">
-    <value>下载问卷集合：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="Create" xml:space="preserve">
+    <value>创建</value>
   </data>
-  <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>下载问卷附件：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>创建人</value>
   </data>
-  <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>调查员已经有了设备</value>
+  <data name="CreatedDate" xml:space="preserve">
+    <value>创建于</value>
   </data>
-  <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈包&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="CreateNew" xml:space="preserve">
+    <value>新建</value>
   </data>
-  <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="CreateNewQuestionnaire" xml:space="preserve">
+    <value>创建新问卷</value>
   </data>
-  <data name="LinkToDevice" xml:space="preserve">
-    <value>将调查员与设备关联</value>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>创建子文件夹</value>
   </data>
-  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>没有新的访谈包需要下载</value>
+  <data name="Delete" xml:space="preserve">
+    <value>删除</value>
   </data>
-  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷集合&lt;b&gt;{0}&lt;/b&gt; [{1}]/font&gt;</value>
+  <data name="DeleteConfirmationText" xml:space="preserve">
+    <value>您确认删除“{0}”问卷吗？</value>
   </data>
-  <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/font&gt;</value>
+  <data name="DeleteFolderConfirmation" xml:space="preserve">
+    <value>您确认删除文件夹{0}吗？</value>
   </data>
-  <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;更新访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="Deleting" xml:space="preserve">
+    <value>正在删除……</value>
   </data>
-  <data name="PostPackage" xml:space="preserve">
-    <value>上传访谈：{0}</value>
+  <data name="Designer" xml:space="preserve">
+    <value>问卷设计系统</value>
   </data>
-  <data name="GetTranslations" xml:space="preserve">
-    <value>下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译</value>
+  <data name="DownloadPdf" xml:space="preserve">
+    <value>下载PDF版本</value>
   </data>
-  <data name="InterviewerFailedToLogin" xml:space="preserve">
-    <value>调查员登录失败</value>
+  <data name="EmptyList" xml:space="preserve">
+    <value>本列表不包含任何记录</value>
   </data>
-  <data name="InterviewerLoggedIn" xml:space="preserve">
-    <value>调查员已登录并获得了认证令牌</value>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
   </data>
-  <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>下载任务 ({0})&lt;/br&gt;</value>
+  <data name="ErrorDescription" xml:space="preserve">
+    <value>处理您的请求时出现错误</value>
   </data>
-  <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>下载任务列表 ({0}). &lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;</value>
+  <data name="ExportAsPDF" xml:space="preserve">
+    <value>导出PDF版本</value>
   </data>
-  <data name="GetMap" xml:space="preserve">
-    <value>下载地图：{0}</value>
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>您可以设置公共问卷页的文件夹结构。请右击文件夹并选择以下某个操作：
+&lt;br/&gt;- ""新建文件夹"" 用来新建子文件夹 
+&lt;br/&gt;- ""编辑"" 用来重命名文件夹
+&lt;br/&gt;- ""删除"" 用来删除带子文件夹的文件夹</value>
   </data>
-  <data name="GetMaps" xml:space="preserve">
-    <value>下载地图列表： &lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="FoldersManagement" xml:space="preserve">
+    <value>文件夹管理</value>
   </data>
-  <data name="NoMapsForUser" xml:space="preserve">
-    <value>没有可以下载的地图</value>
+  <data name="Forbidden" xml:space="preserve">
+    <value>您没有权限编辑这个问卷模板</value>
+  </data>
+  <data name="ForbiddenDelete" xml:space="preserve">
+    <value>您没有权限删除这个问卷模板</value>
+  </data>
+  <data name="ForbiddenRevert" xml:space="preserve">
+    <value>您没有权限对这个问卷模板执行恢复操作</value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>生成PDF文件</value>
+  </data>
+  <data name="GeneratingPdf" xml:space="preserve">
+    <value>正在为“{0}”生成PDF文件</value>
+  </data>
+  <data name="Hello" xml:space="preserve">
+    <value>您好，{0}</value>
+  </data>
+  <data name="Initializing" xml:space="preserve">
+    <value>初始化</value>
+  </data>
+  <data name="LastModified" xml:space="preserve">
+    <value>修改于</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>位置：</value>
+  </data>
+  <data name="ManageUsers" xml:space="preserve">
+    <value>管理用户</value>
+  </data>
+  <data name="MyQuestionnaires" xml:space="preserve">
+    <value>我的问卷</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>新文件夹</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="PublicQuestionnaires" xml:space="preserve">
+    <value>公开问卷</value>
+  </data>
+  <data name="QuestionnaireTitle" xml:space="preserve">
+    <value>问卷标题</value>
+  </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>文件夹</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>重命名</value>
+  </data>
+  <data name="RestoreQuestionnaire" xml:space="preserve">
+    <value>恢复问卷模板</value>
+  </data>
+  <data name="RetryExportPDF" xml:space="preserve">
+    <value>重新导出为PDF</value>
+  </data>
+  <data name="SelectTabFile" xml:space="preserve">
+    <value>请选择.tab文件上传</value>
+  </data>
+  <data name="SuccessDeleteMessage" xml:space="preserve">
+    <value>成功删除问卷“{0}”</value>
+  </data>
+  <data name="TabFilesOnly" xml:space="preserve">
+    <value>仅接受.tab文件</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>未命名</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>您</value>
   </data>
 </root>

@@ -225,4 +225,16 @@
   <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
     <value>一个已经完成的访谈数量。驳回后完成的访谈另计。</value>
   </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>访谈行动</value>
+  </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>从此开始</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>完成最后一个</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>时期单位</value>
+  </data>
 </root>

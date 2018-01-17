@@ -157,7 +157,7 @@
     <value>我的问卷列表</value>
   </data>
   <data name="QuestionnaireExists" xml:space="preserve">
-    <value>你已经导入了这份问卷</value>
+    <value>您已经导入了这份问卷</value>
   </data>
   <data name="Questions" xml:space="preserve">
     <value>问题</value>
@@ -170,5 +170,11 @@
   </data>
   <data name="Rosters" xml:space="preserve">
     <value>登记表</value>
+  </data>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>问卷设计系统：我的问卷模板</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>导入</value>
   </data>
 </root>

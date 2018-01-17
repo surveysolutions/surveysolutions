@@ -117,106 +117,151 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CanSynchronize" xml:space="preserve">
-    <value>开始同步</value>
+  <data name="AllRights" xml:space="preserve">
+    <value>版权所有。</value>
   </data>
-  <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+  <data name="AppDescription" xml:space="preserve">
+    <value>这是一个为世界银行计算机辅助个人访谈（CAPI）系统设计调查问卷的工具，具备协作和导出PDF问卷功能。</value>
   </data>
-  <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;删除访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="AppName" xml:space="preserve">
+    <value>问卷设计系统</value>
   </data>
-  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>可以把设备分配给调查员</value>
+  <data name="BackToLogin" xml:space="preserve">
+    <value>返回登录界面</value>
   </data>
-  <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;需要重新关联&lt;/font&gt;</value>
+  <data name="Change" xml:space="preserve">
+    <value>更改</value>
   </data>
-  <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;需要更新。调查员引擎版本 - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>更改密码</value>
   </data>
-  <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[空设备]&lt;/b&gt;</value>
+  <data name="CompanyName" xml:space="preserve">
+    <value>世界银行集团</value>
   </data>
-  <data name="GetAttachmentContent" xml:space="preserve">
-    <value>下载附件内容：{0}</value>
+  <data name="CompleteRegistrationInstruction" xml:space="preserve">
+    <value>要完成注册过程，请在您的收件箱中查找邮件获得进一步指导</value>
   </data>
-  <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>下载普查问卷列表：&lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>确认密码</value>
   </data>
-  <data name="GetInterview" xml:space="preserve">
-    <value>下载访谈：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>当前密码</value>
   </data>
-  <data name="GetInterviewer" xml:space="preserve">
-    <value>下载调查员信息。&lt;br/&gt;督导员：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="Email" xml:space="preserve">
+    <value>电子邮箱</value>
   </data>
-  <data name="GetInterviewPackage" xml:space="preserve">
-    <value>下载访谈包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="ExternalLoginRemoved" xml:space="preserve">
+    <value>外部登录被删除。</value>
   </data>
-  <data name="GetInterviewPackages" xml:space="preserve">
-    <value>下载访谈包列表。&lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;最近一次同步包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>忘记密码？</value>
   </data>
-  <data name="GetInterviews" xml:space="preserve">
-    <value>下载访谈列表。&lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="Help" xml:space="preserve">
+    <value>帮助</value>
   </data>
-  <data name="GetQuestionnaire" xml:space="preserve">
-    <value>下载问卷：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>提供的电子邮箱 无效。请检查并重试。</value>
   </data>
-  <data name="GetQuestionnaireAssembly" xml:space="preserve">
-    <value>下载问卷集合：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="InvalidPassword" xml:space="preserve">
+    <value>提供的密码无效。请输入有效的密码。</value>
   </data>
-  <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>下载问卷附件：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="InvalidResetPasswordLink" xml:space="preserve">
+    <value>您的密码重置关联无效或过期。请重试。</value>
   </data>
-  <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>调查员已经有了设备</value>
+  <data name="InvalidRetrievalAnswer" xml:space="preserve">
+    <value>提供的密码提示问题答案无效。请检查并重试。</value>
   </data>
-  <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈包&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="InvalidRetrievalQuestion" xml:space="preserve">
+    <value>提供的密码提示问题无效。请检查并重试。</value>
   </data>
-  <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="InvalidUserName" xml:space="preserve">
+    <value>提供的用户名无效。请检查并重试。</value>
   </data>
-  <data name="LinkToDevice" xml:space="preserve">
-    <value>将调查员与设备关联</value>
+  <data name="Legal" xml:space="preserve">
+    <value>法律</value>
   </data>
-  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>没有新的访谈包需要下载</value>
+  <data name="Login" xml:space="preserve">
+    <value>登录</value>
   </data>
-  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷集合&lt;b&gt;{0}&lt;/b&gt; [{1}]/font&gt;</value>
+  <data name="LoginMessage" xml:space="preserve">
+    <value>请登录或</value>
   </data>
-  <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/font&gt;</value>
+  <data name="LoginName" xml:space="preserve">
+    <value>用户名</value>
   </data>
-  <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;更新访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="LoginOrEmail" xml:space="preserve">
+    <value>用户名或电子邮箱</value>
   </data>
-  <data name="PostPackage" xml:space="preserve">
-    <value>上传访谈：{0}</value>
+  <data name="Logout" xml:space="preserve">
+    <value>注销</value>
   </data>
-  <data name="GetTranslations" xml:space="preserve">
-    <value>下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译</value>
+  <data name="MembershipProviderError" xml:space="preserve">
+    <value>身份验证出现错误。请确认您的输入，然后重试。如果问题仍然存在，请联系您的系统管理员。</value>
   </data>
-  <data name="InterviewerFailedToLogin" xml:space="preserve">
-    <value>调查员登录失败</value>
+  <data name="OutdatedBrowserMessage" xml:space="preserve">
+    <value>您正在使用过时的浏览器</value>
   </data>
-  <data name="InterviewerLoggedIn" xml:space="preserve">
-    <value>调查员已登录并获得了认证令牌</value>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
   </data>
-  <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>下载任务 ({0})&lt;/br&gt;</value>
+  <data name="PasswordChanged" xml:space="preserve">
+    <value>密码已被更改</value>
   </data>
-  <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>下载任务列表 ({0}). &lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;</value>
+  <data name="PasswordReset" xml:space="preserve">
+    <value>密码被重置</value>
   </data>
-  <data name="GetMap" xml:space="preserve">
-    <value>下载地图：{0}</value>
+  <data name="PasswordResetDescription" xml:space="preserve">
+    <value>请输入用户名或电子邮箱。我们将把密码重置关联发给您。</value>
   </data>
-  <data name="GetMaps" xml:space="preserve">
-    <value>下载地图列表： &lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="PasswordSet" xml:space="preserve">
+    <value>您的密码已被设置。</value>
   </data>
-  <data name="NoMapsForUser" xml:space="preserve">
-    <value>没有可以下载的地图</value>
+  <data name="PasswordWatermark" xml:space="preserve">
+    <value>新密码（最少10个字符，包含数字和字母）</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>注册</value>
+  </data>
+  <data name="RegistrationError" xml:space="preserve">
+    <value>注册错误</value>
+  </data>
+  <data name="RegistrationErrorDescription" xml:space="preserve">
+    <value>确认您的电子邮箱出错。请重试。</value>
+  </data>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>重复密码</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="StaySignedIn" xml:space="preserve">
+    <value>保持登录状态一天</value>
+  </data>
+  <data name="TesterApp" xml:space="preserve">
+    <value>在安卓平板电脑中安装Survey Solutions Questionnaire Tester对您在问卷设计系统中设计的问卷进行测试。</value>
+  </data>
+  <data name="TesterAppImageDescription" xml:space="preserve">
+    <value>在Google Play中下载</value>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>谢谢</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>发生了未知错误。请确认您的输入并重试。如果问题仍然存在，请联系系统管理员。</value>
+  </data>
+  <data name="UpgradeYourBrowser" xml:space="preserve">
+    <value>要使用问卷设计系统，请&lt;a href="http://browsehappy.com/"&gt;更新您的浏览器&lt;/a&gt;。</value>
+  </data>
+  <data name="UserCreationRequestCanceled" xml:space="preserve">
+    <value>用户创建请求被取消。请确认您的输入并重试。如果问题仍然存在，请联系系统管理员。</value>
+  </data>
+  <data name="UserNameExists" xml:space="preserve">
+    <value>用户名已存在。请输入一个不同的用户名。</value>
+  </data>
+  <data name="UserNameForEmailExists" xml:space="preserve">
+    <value>该电子邮件已经与另外一个用户名关联。请输入一个不同的电子邮件地址。</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>欢迎来到Survey Solutions</value>
   </data>
 </root>

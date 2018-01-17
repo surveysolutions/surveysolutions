@@ -229,7 +229,7 @@
     <value>文件没有包含预填问题要求的列：&lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="Processing" xml:space="preserve">
-    <value>处理中</value>
+    <value>正在处理……</value>
   </data>
   <data name="ReadyForUserCreation" xml:space="preserve">
     <value>已准备好创建用户</value>
@@ -405,7 +405,6 @@
   <data name="InterviewsAreNotCreated" xml:space="preserve">
     <value>没有创建访谈</value>
   </data>
-
   <data name="ManualModeLinkTitle" xml:space="preserve">
     <value>手动模式</value>
   </data>
@@ -465,5 +464,92 @@
   </data>
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>查看必填的识别数据列表</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>没有已创建任务</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>创建任务</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>正在创建多个任务</value>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>找到{0}个任务的数据</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>找个1个任务的数据</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>下载无效的任务</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>如果没有给定用户名，您在后面的步骤中需要为全部任务指定一个督导员。</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>成功验证了1个任务</value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1个错误</value>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>成功验证了{0}个任务</value>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{0}个错误</value>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>任务数据验证</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>问卷模板{0}的任务验证</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>数据文件验证</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>{1}个步骤中的第{0}步</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>成功验证了数据文件</value>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>使用批量上传创建多个分配</value>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>正在为{1}从 {0} 中导入信息</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>选择负责人</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>正在导入访谈</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>您可以通过在{0}中输入全部必填数据创建单个任务</value>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{0}个任务新建失败</value>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>新建了{0}个任务</value>
+  </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>问卷模板不能用于预加载</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>选择负责人</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>上传包含必要识别数据的tab分隔文件。可以在_responsible一列指定督导员或调查员的用户名，可以在_quantity一列指定该任务可以填写的问卷总数。</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>新建了1个任务</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1个任务新建失败</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>上传包含识别数据的文件以创建新任务。给定督导员或调查员的用户名可以设置批量任务。</value>
   </data>
 </root>
