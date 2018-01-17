@@ -63,81 +63,81 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Administrative records data [adm].
         /// </summary>
-        internal static string AdministrativeRecordsData {
+        internal static string adm {
             get {
-                return ResourceManager.GetString("AdministrativeRecordsData", resourceCulture);
+                return ResourceManager.GetString("adm", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Aggregate data [agg].
         /// </summary>
-        internal static string AggregateData {
+        internal static string agg {
             get {
-                return ResourceManager.GetString("AggregateData", resourceCulture);
+                return ResourceManager.GetString("agg", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Census/enumeration data [cen].
         /// </summary>
-        internal static string CensusEnumerationData {
+        internal static string cen {
             get {
-                return ResourceManager.GetString("CensusEnumerationData", resourceCulture);
+                return ResourceManager.GetString("cen", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Clinical data [cli].
         /// </summary>
-        internal static string ClinicalData {
+        internal static string cli {
             get {
-                return ResourceManager.GetString("ClinicalData", resourceCulture);
+                return ResourceManager.GetString("cli", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Event/transaction data [evn].
         /// </summary>
-        internal static string EventTransactionData {
+        internal static string evn {
             get {
-                return ResourceManager.GetString("EventTransactionData", resourceCulture);
+                return ResourceManager.GetString("evn", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Observation data/ratings [obs].
         /// </summary>
-        internal static string ObservationDataRatings {
+        internal static string obs {
             get {
-                return ResourceManager.GetString("ObservationDataRatings", resourceCulture);
+                return ResourceManager.GetString("obs", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Process-produced data [pro].
         /// </summary>
-        internal static string ProcessProducedData {
+        internal static string pro {
             get {
-                return ResourceManager.GetString("ProcessProducedData", resourceCulture);
+                return ResourceManager.GetString("pro", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Sample survey data [ssd].
         /// </summary>
-        internal static string SampleSurveyData {
+        internal static string ssd {
             get {
-                return ResourceManager.GetString("SampleSurveyData", resourceCulture);
+                return ResourceManager.GetString("ssd", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Time budget diaries [tbd].
         /// </summary>
-        internal static string TimeBudgetDiaries {
+        internal static string tbd {
             get {
-                return ResourceManager.GetString("TimeBudgetDiaries", resourceCulture);
+                return ResourceManager.GetString("tbd", resourceCulture);
             }
         }
     }

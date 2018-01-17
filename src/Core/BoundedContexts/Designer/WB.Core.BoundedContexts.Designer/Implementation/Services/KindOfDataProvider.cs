@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     public class KindOfDataItem
     {
-        public KindOfData Code { get; set; }
+        public string Code { get; set; }
         public string Title { get; set; }
     }
 
@@ -22,24 +22,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }).ToList();
         }
 
-        public static string GetKindOfDataTitleByCode(KindOfData code)
+        public static string GetKindOfDataTitleByCode(string code)
         {
-            return Resources.KindOfData.ResourceManager.GetString(code.ToString());
+            return Resources.KindOfData.ResourceManager.GetString(code);
         }
 
-        public static List<KindOfData> GetKindOfDataCodes()
+        public static List<string> GetKindOfDataCodes()
         {
-            return new List<KindOfData>()
+            return new List<string>()
             {
-                KindOfData.SampleSurveyData,
-                KindOfData.CensusEnumerationData,
-                KindOfData.AdministrativeRecordsData,
-                KindOfData.AggregateData,
-                KindOfData.ClinicalData,
-                KindOfData.EventTransactionData,
-                KindOfData.ObservationDataRatings,
-                KindOfData.ProcessProducedData,
-                KindOfData.TimeBudgetDiaries
+                "adm",
+                "agg",
+                "cen",
+                "cli",
+                "evn",
+                "obs",
+                "pro",
+                "ssd",
+                "tbd",
             };
         }
     }
