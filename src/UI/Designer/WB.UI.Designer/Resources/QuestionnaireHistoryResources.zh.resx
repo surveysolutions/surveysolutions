@@ -232,7 +232,7 @@
     <value>二维表{0}已移至问卷子模块{1}</value>
   </data>
   <data name="Roster_RosterBecameAGroup" xml:space="preserve">
-    <value>二维表{0}已变成 问卷模块 {0}</value>
+    <value>二维表{0}已变成 问卷模块</value>
   </data>
   <data name="Roster_Update" xml:space="preserve">
     <value>二维表{0}已更新</value>
@@ -247,7 +247,7 @@
     <value>问卷模块{0}已删除</value>
   </data>
   <data name="Section_GroupBecameARoster" xml:space="preserve">
-    <value>问卷子模块 {0} 已变成二维表{0}</value>
+    <value>问卷子模块 {0} 已变成二维表</value>
   </data>
   <data name="Section_Move_To_Roster" xml:space="preserve">
     <value>问卷模块{0}已移至二维表{1}</value>

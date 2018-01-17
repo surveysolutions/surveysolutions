@@ -517,7 +517,7 @@
     <value>使用批量上传创建多个分配</value>
   </data>
   <data name="ImportAssignmentsFor" xml:space="preserve">
-    <value>正在为{1}从 {0} 中导入信息</value>
+    <value>正在为{0}中导入信息</value>
   </data>
   <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
     <value>选择负责人</value>
