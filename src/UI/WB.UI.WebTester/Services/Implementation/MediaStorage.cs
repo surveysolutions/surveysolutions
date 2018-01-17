@@ -19,7 +19,7 @@ namespace WB.UI.WebTester.Services.Implementation
             });
         }
         
-        public void Store(MultimediaFile file, Guid interviewId)
+        public void Store(Guid interviewId, MultimediaFile file)
         {
             memoryCache.AddOrUpdate(interviewId, (key) => new Dictionary<string, MultimediaFile>
             {
