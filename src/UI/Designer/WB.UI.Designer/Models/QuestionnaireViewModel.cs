@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Models
 
         public string VersionNotes { get; set; }
 
-        public KindOfData? KindOfData { get; set; }
+        public string KindOfData { get; set; }
 
         public string Country { get; set; }
 
