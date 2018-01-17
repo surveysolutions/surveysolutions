@@ -136,7 +136,7 @@
     <value>任务</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{{count}个任务被选中</value>
+    <value>{{count}}个任务被选中</value>
   </data>
   <data name="AssignmentsSelected_plural" xml:space="preserve">
     <value>{{count}}个任务被选中</value>

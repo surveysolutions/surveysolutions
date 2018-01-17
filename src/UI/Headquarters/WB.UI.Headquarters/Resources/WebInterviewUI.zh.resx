@@ -310,7 +310,7 @@
     <value>答案 '{{answer}}' 出错，因为此答案被当成二维表的大小且该答案被驳回</value>
   </data>
   <data name="NumberRosterRemoveConfirm" xml:space="preserve">
-    <value>您确定想从相关的二维表要移除{{amountOfRostersToRemove}行吗？</value>
+    <value>您确定想从相关的二维表要移除{{amountOfRostersToRemove}}行吗？</value>
   </data>
   <data name="NumberRosterUpperBound" xml:space="preserve">
     <value>答案 '{{answer}}' 出错，因为此答案大于二维表的上界{{answerMaxValue}}。</value>
