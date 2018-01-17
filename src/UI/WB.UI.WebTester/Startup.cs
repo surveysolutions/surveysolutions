@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
@@ -7,6 +8,7 @@ using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
+using NLog;
 using Owin;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Enumerator.Native.WebInterview;
@@ -21,6 +23,7 @@ namespace WB.UI.WebTester
     {
         public void Configuration(IAppBuilder app)
         {
+            LogManager.GetCurrentClassLogger().Info($"Application started {FileVersionInfo.GetVersionInfo(typeof(Startup).Assembly.Location).ProductVersion}");
             ConfigurationSource.Init();
 
             ContainerBuilder builder = AutofacConfig.CreateKernel();
