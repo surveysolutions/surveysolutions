@@ -73,8 +73,6 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.BindAsSingleton<IEventBus, InProcessEventBus>();
 
-            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
-
             //var binPath = Path.GetFullPath(Path.Combine(HttpRuntime.CodegenDir, ".." + Path.DirectorySeparatorChar + ".."));
             var binPath = System.Web.Hosting.HostingEnvironment.MapPath("~/bin");
             registry.BindAsSingletonWithConstructorArgument<IAppdomainsPerInterviewManager, AppdomainsPerInterviewManager>("binFolderPath", binPath);

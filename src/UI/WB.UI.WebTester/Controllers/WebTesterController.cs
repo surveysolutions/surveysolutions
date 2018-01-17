@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
@@ -12,8 +13,8 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.Questionnaire;
 using WB.UI.WebTester.Services;
-using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester.Controllers
 {
@@ -21,29 +22,38 @@ namespace WB.UI.WebTester.Controllers
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
-        private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IDesignerWebTesterApi webTesterApi;
+        private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
+        private readonly ITranslationManagementService translationManagementService;
 
         public static readonly Dictionary<Guid, QuestionnaireIdentity> Questionnaires = new Dictionary<Guid, QuestionnaireIdentity>();
 
         public WebTesterController(IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
-            IQuestionnaireImportService questionnaireImportService,
             IQuestionnaireStorage questionnaireStorage,
-            IDesignerWebTesterApi webTesterApi)
+            IDesignerWebTesterApi webTesterApi,
+            IAppdomainsPerInterviewManager appdomainsPerInterviewManager, 
+            ITranslationManagementService translationManagementService)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-            this.questionnaireImportService = questionnaireImportService ?? throw new ArgumentNullException(nameof(questionnaireImportService));
+            this.appdomainsPerInterviewManager = appdomainsPerInterviewManager ?? throw new ArgumentNullException(nameof(appdomainsPerInterviewManager));
+            this.translationManagementService = translationManagementService;
+            this.translationManagementService = translationManagementService ?? throw new ArgumentNullException(nameof(translationManagementService));
             this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
+            this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
         }
 
         public async Task<ActionResult> Run(Guid id)
         {
             var questionnaire = await webTesterApi.GetQuestionnaireAsync(id.ToString());
+
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
+
             var translations = await webTesterApi.GetTranslationsAsync(id.ToString());
+
             var attachments = new List<QuestionnaireAttachment>();
             foreach (Attachment documentAttachment in questionnaire.Document.Attachments)
             {
@@ -56,15 +66,19 @@ namespace WB.UI.WebTester.Controllers
 
             }
 
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
-
-            this.questionnaireImportService.ImportQuestionnaire(
-                id,
-                questionnaireIdentity, 
-                questionnaire.Document,
-                questionnaire.Assembly,
-                translations,
-                attachments);
+            this.appdomainsPerInterviewManager.SetupForInterview(id, questionnaire.Document, questionnaire.Assembly);
+            this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaire.Document);
+            
+            this.translationManagementService.Delete(questionnaireIdentity);
+            this.translationManagementService.Store(translations.Select(x => new TranslationInstance
+            {
+                QuestionnaireId = questionnaireIdentity,
+                Value = x.Value,
+                QuestionnaireEntityId = x.QuestionnaireEntityId,
+                Type = x.Type,
+                TranslationIndex = x.TranslationIndex,
+                TranslationId = x.TranslationId
+            }));
 
             this.commandService.Execute(new CreateInterview(
                 interviewId: id,
