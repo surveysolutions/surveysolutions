@@ -1,23 +1,45 @@
 ﻿using System;
-using System.Web;
-using System.Web.Caching;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class MediaStorage : IMediaStorage
+    public class MediaStorage : IMediaStorage, IDisposable
     {
-        private Cache Cache => HttpRuntime.Cache;
+        private readonly IDisposable evictionNotification;
 
+        private readonly ConcurrentDictionary<Guid, Dictionary<string, MultimediaFile>> memoryCache =
+            new ConcurrentDictionary<Guid, Dictionary<string, MultimediaFile>>();
+        
+        public MediaStorage(IObservable<Guid> evictionNotification)
+        {
+            this.evictionNotification = evictionNotification.Subscribe(key =>
+            {
+                memoryCache.TryRemove(key, out _);
+            });
+        }
+        
         public void Store(MultimediaFile file, Guid interviewId)
         {
-            Cache.Insert(key(interviewId, file.Filename), file, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(5));
+            memoryCache.AddOrUpdate(interviewId, (key) => new Dictionary<string, MultimediaFile>
+            {
+                {file.Filename, file}
+            }, (k, d) =>
+            {
+                d[file.Filename] = file; return d;
+            });
         }
-
+        
         public MultimediaFile Get(Guid interviewId, string filename)
         {
-            return Cache.Get(key(interviewId, filename)) as MultimediaFile;
+            if (!memoryCache.TryGetValue(interviewId, out var cache)) return null;
+
+            return cache.TryGetValue(filename, out var file) ? file : null;
         }
 
-        string key(Guid interviewId, string filename) => $"{interviewId.ToString()}:{filename}";
+        public void Dispose()
+        {
+            evictionNotification.Dispose();
+        }
     }
 }
