@@ -331,7 +331,7 @@
     <value>Error occurred during questionnaire compilation.</value>
   </data>
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
-    <value>Questionnaire title contains characters that are not allowed. Only non Unicode letters, numbers, space and _ are allowed.</value>
+    <value>Only the following characters may be used in the questionnaire title: A..Z a..z 0..9 ( ) \ / _ - and space.</value>
   </data>
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
     <value>Size of questionnaire is approximately {0:0.##}MB and is too big to work correctly with Survey Solutions. Try to reduce amount of data until it will be at least less than {1}MB.</value>
