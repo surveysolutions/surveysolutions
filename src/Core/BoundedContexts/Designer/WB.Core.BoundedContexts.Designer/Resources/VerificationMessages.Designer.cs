@@ -917,7 +917,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire title contains characters that are not allowed. Only non Unicode letters, numbers, space and _ are allowed..
+        ///   Looks up a localized string similar to Only the following characters may be used in the questionnaire title: A..Z a..z 0..9 ( ) \ / _ - and space..
         /// </summary>
         public static string WB0097_QuestionnaireTitleHasInvalidCharacters {
             get {

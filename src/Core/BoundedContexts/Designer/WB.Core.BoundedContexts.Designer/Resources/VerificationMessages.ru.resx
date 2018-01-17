@@ -400,7 +400,7 @@
     <value>Ошибка при компиляции опросника.</value>
   </data>
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
-    <value>Имя опросника содержит символы, которые не разрешены. Разрешены только буквы, цифры, пробелы и _ .  Unicode символы не разрешены.</value>
+    <value>Имя опросника может содержать только следующие символы:  A..Z a..z 0..9 ( ) \ / _ - и пробел.</value>
   </data>
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
     <value>Размер опросника примерно равен {0:0.##} МБ и слишком велик для правильной работы с Survey Solutions. Попытайтесь уменьшить количество данных, пока оно не будет меньше, чем {1} МБ.</value>

@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
-        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
+        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w, \-\(\)\\/]*$");
 
         public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
         {
