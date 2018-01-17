@@ -84,13 +84,13 @@ namespace WB.UI.WebTester.Controllers
 
                     var duration = SoundInfo.GetSoundLength(bytes);
 
-                    mediaStorage.Store(new MultimediaFile
+                    mediaStorage.Store(interview.Id, new MultimediaFile
                     {
                         Filename = fileName,
                         Data = bytes,
                         Duration = duration,
                         MimeType = "audio/wav"
-                    }, interview.Id);
+                    });
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
                         interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
@@ -137,12 +137,12 @@ namespace WB.UI.WebTester.Controllers
                         }{DateTime.UtcNow.GetHashCode()}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
-                    this.mediaStorage.Store(new MultimediaFile
+                    this.mediaStorage.Store(interview.Id, new MultimediaFile
                     {
                         Filename = filename,
                         Data = ms.ToArray(),
                         MimeType = "image/jpg"
-                    }, interview.Id);
+                    });
 
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                         responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
