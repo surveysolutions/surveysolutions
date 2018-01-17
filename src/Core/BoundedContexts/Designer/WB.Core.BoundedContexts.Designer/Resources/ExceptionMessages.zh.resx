@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>找不到id为{0}的附件</value>
+  </data>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>所上传的内容不被支持</value>
+  </data>
+  <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+    <value>所上传的文件不是图片</value>
+  </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>您不可以移动子模块{0}因为位置{1}不接受。</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>问题不能粘贴到这里。</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>最后一个存在的模块不能从此问卷移除</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>无法移除该用户，因为她/他不在分享列表中</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>级联问题的选项不允许有空的上级待选值列。</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>级联问题的选项不允许有数值型的上级待选值列。</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>至少有一个重复的标题 + 上级值配对。选项列表不应该包含任何此类重复。</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>无法找到带有公共键{0}的复选框型问题</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>尝试添加组{0}进组{1}失败。但组{1}在文件{2}中不存在。</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>尝试导入已经被删除的问卷模版</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>无效的名称列表</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>固定系列项目的二维表值是必须的</value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>有相同ID{0}的一个或多个问卷已存在</value>
+  </data>
+  <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>此id的查询表已存在</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>ID为{0}的查询表已存在</value>
+  </data>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>此id的查询表不存在</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>id为{0}的查询表缺失</value>
+  </data>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>没有数据的文件无法被导入</value>
+  </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>值{0}无法被判别为十进制数字。列{1}，行{2}。</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>不允许表头有相同的名字</value>
+  </data>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>不允许空的或无效的表头</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>行编码列缺失</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>值{0}无法被判别为整形数字。列{1}，行{2}。</value>
+  </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>行编码值必须唯一</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>上传文件的列数过多。最多{0}列</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>已超过最大的行数（{0}行）限制</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>此宏（Macro）已存在。</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>此宏（Macro）不存在。</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>有一个多个相同ID{0}的问题已经存在：{1}{2}。</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>有一个多个相同ID{0}的问卷模块已经存在：{1}{2}。</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>您无权修改此问卷</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>旧附件 id 是空且附件{0}的文件缺失（问卷{1}）</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>目前仅支持问卷文件</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>选项值只能是数字</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>带公共键{0}的问题无法被找到。</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>问题{0}不是复选框型</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>无法找到id为{0}的问卷。</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>无法找到问卷{0}的版本{1}</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>问卷标题不能为空或者只包含空格键。</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>问卷类型不被支持：{0}</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>二维表无法粘贴到此。</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>该问卷模块不能有超过{0}个子项目</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>静态文本无法粘贴到此。</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>无法找到带公共键{0}的子问卷模块。</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>子问卷模块或二维表的深度不能大于{0}。</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>在Excel文件中发现错误</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0}在 [{1}] 有无效的id</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0}在 [{1}] 有无效的索引</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0}有无效的类型 [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Excel文件为空 - 不包含任何sheet</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>从上传的文件中解压出翻译失败</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>无法找到翻译的worksheet</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>未知项目类型。粘贴失败。</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>用户{0}已在分享列表。</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>用户{0}是本问卷的所有者。请输入另外一个email。</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>固定系列项目的二维表值只能为数字字符。</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>变量无法粘贴到此。</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>id为{0}的变量无法在问卷{1}中找到</value>
+  </data>
+</root>

@@ -153,4 +153,7 @@
   <data name="WebInterviewStarted" xml:space="preserve">
     <value>{0}的网络访谈已经开始</value>
   </data>
+  <data name="ExportAssignmentsTitle" xml:space="preserve">
+    <value>您可以下载已创建的、分配给调查员用以传递web关联给受访者的任务列表</value>
+  </data>
 </root>

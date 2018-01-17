@@ -120,4 +120,34 @@
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>访谈没有负责人。请选择调查员</value>
   </data>
+  <data name="Area_ShowCoordinates" xml:space="preserve">
+    <value>显示经纬度坐标</value>
+  </data>
+  <data name="FlagTitleFlagged" xml:space="preserve">
+    <value>已标记</value>
+  </data>
+  <data name="FlagTitleUnflagged" xml:space="preserve">
+    <value>未标记</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>更新于</value>
+  </data>
+  <data name="NoAnswer" xml:space="preserve">
+    <value>未回答</value>
+  </data>
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>找不到项目</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>负责人</value>
+  </data>
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>已找到{{ count }}项目：</value>
+  </data>
+  <data name="SearchResult_Count_plural" xml:space="preserve">
+    <value>已找到{{ count }}项目：</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>状态：{{ name }}</value>
+  </data>
 </root>

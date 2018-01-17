@@ -183,4 +183,19 @@
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>网络访谈设置</value>
   </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>删除地图</value>
+  </data>
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>删除地图用户</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>地图</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>新任务</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>上传任务</value>
+  </data>
 </root>

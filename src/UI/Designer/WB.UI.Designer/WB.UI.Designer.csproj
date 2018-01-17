@@ -476,44 +476,53 @@
     <EmbeddedResource Include="Resources\AccountResources.ru.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AccountResources.zh.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.es.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
     <EmbeddedResource Include="Resources\FindReplaceResources.es.resx" />
     <EmbeddedResource Include="Resources\FindReplaceResources.fr.resx" />
     <EmbeddedResource Include="Resources\FindReplaceResources.ru.resx">
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FindReplaceResources.zh.resx" />
     <EmbeddedResource Include="Resources\NotificationResources.es.resx" />
     <EmbeddedResource Include="Resources\NotificationResources.fr.resx" />
     <EmbeddedResource Include="Resources\NotificationResources.ru.resx">
       <DependentUpon>NotificationResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.zh.resx" />
     <EmbeddedResource Include="Resources\Paging.es.resx" />
     <EmbeddedResource Include="Resources\Paging.fr.resx" />
     <EmbeddedResource Include="Resources\Paging.ru.resx">
       <DependentUpon>Paging.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Paging.zh.resx" />
     <EmbeddedResource Include="Resources\PdfMessages.es.resx" />
     <EmbeddedResource Include="Resources\PdfMessages.fr.resx" />
     <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
       <DependentUpon>PdfMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.zh.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireController.es.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireController.fr.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireController.ru.resx">
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireController.zh.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireEditor.es.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireEditor.fr.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.zh.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.es.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.fr.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ru.resx">
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.zh.resx" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

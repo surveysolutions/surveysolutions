@@ -117,106 +117,100 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CanSynchronize" xml:space="preserve">
-    <value>开始同步</value>
+  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
+    <value>列表未更新</value>
   </data>
-  <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>列表更新于{0}</value>
   </data>
-  <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;删除访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>正在连接到服务器</value>
   </data>
-  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>可以把设备分配给调查员</value>
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>正在创建问卷</value>
   </data>
-  <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;需要重新关联&lt;/font&gt;</value>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>正在下载问卷模板 -{0}%</value>
   </data>
-  <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;需要更新。调查员引擎版本 - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
+    <value>未能打开问卷模板“{0}”。您的问卷设计系统账号未获授权。请检查您的用户名或密码</value>
   </data>
-  <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[空设备]&lt;/b&gt;</value>
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
+    <value>未能打开问卷模板“{0}”。未找到问卷模板。请刷新问卷模板列表。</value>
   </data>
-  <data name="GetAttachmentContent" xml:space="preserve">
-    <value>下载附件内容：{0}</value>
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
+    <value>未能打开问卷模板“{0}”。问卷模板有错误。请在问卷设计系统中修订。</value>
   </data>
-  <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>下载普查问卷列表：&lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>正在保存问卷模板到本地存储器</value>
   </data>
-  <data name="GetInterview" xml:space="preserve">
-    <value>下载访谈：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>正在下载问卷模板附件 -{0}%</value>
   </data>
-  <data name="GetInterviewer" xml:space="preserve">
-    <value>下载调查员信息。&lt;br/&gt;督导员：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>问卷设计系统网站目前无法访问。检查连接设置或稍后再试</value>
   </data>
-  <data name="GetInterviewPackage" xml:space="preserve">
-    <value>下载访谈包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>问卷模板</value>
   </data>
-  <data name="GetInterviewPackages" xml:space="preserve">
-    <value>下载访谈包列表。&lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;最近一次同步包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>语言</value>
   </data>
-  <data name="GetInterviews" xml:space="preserve">
-    <value>下载访谈列表。&lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>初始</value>
   </data>
-  <data name="GetQuestionnaire" xml:space="preserve">
-    <value>下载问卷：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>重新加载问卷模板</value>
   </data>
-  <data name="GetQuestionnaireAssembly" xml:space="preserve">
-    <value>下载问卷集合：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>设置</value>
   </data>
-  <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>下载问卷附件：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>注销</value>
   </data>
-  <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>调查员已经有了设备</value>
+  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
+    <value>禁用SSL证书验证</value>
   </data>
-  <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈包&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
+    <value>接受所有SSL证书</value>
   </data>
-  <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>连接设置</value>
   </data>
-  <data name="LinkToDevice" xml:space="preserve">
-    <value>将调查员与设备关联</value>
+  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
+    <value>与问卷设计系统进行通讯的网址</value>
   </data>
-  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>没有新的访谈包需要下载</value>
+  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
+    <value>问卷设计系统网址</value>
   </data>
-  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷集合&lt;b&gt;{0}&lt;/b&gt; [{1}]/font&gt;</value>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>等待坐标的时间（秒）</value>
   </data>
-  <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/font&gt;</value>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>GPS接收超时</value>
   </data>
-  <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;更新访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>等待服务器响应的时间（秒）</value>
   </data>
-  <data name="PostPackage" xml:space="preserve">
-    <value>上传访谈：{0}</value>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>服务器响应超时</value>
   </data>
-  <data name="GetTranslations" xml:space="preserve">
-    <value>下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译</value>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>显示变量</value>
   </data>
-  <data name="InterviewerFailedToLogin" xml:space="preserve">
-    <value>调查员登录失败</value>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>在问卷中变量将显示为值和描述</value>
   </data>
-  <data name="InterviewerLoggedIn" xml:space="preserve">
-    <value>调查员已登录并获得了认证令牌</value>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>变量被隐藏</value>
   </data>
-  <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>下载任务 ({0})&lt;/br&gt;</value>
+  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
+    <value>版本：{0}</value>
   </data>
-  <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>下载任务列表 ({0}). &lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;</value>
+  <data name="Prefs_VersionTitle" xml:space="preserve">
+    <value>应用程序版本：</value>
   </data>
-  <data name="GetMap" xml:space="preserve">
-    <value>下载地图：{0}</value>
-  </data>
-  <data name="GetMaps" xml:space="preserve">
-    <value>下载地图列表： &lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
-  </data>
-  <data name="NoMapsForUser" xml:space="preserve">
-    <value>没有可以下载的地图</value>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>问卷数据不能应用于新版本的问卷模板。我们将打开一份空问卷</value>
   </data>
 </root>
