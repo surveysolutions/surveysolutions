@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Machine.Specifications;
-using NHibernate.Cfg;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
@@ -56,7 +52,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 PublicKey = Guid.NewGuid(),
                 VariableName = variableName,
                 QuestionType = QuestionType.Numeric,
-                ColumnHeaders = new List<HeaderColumn>(){new HeaderColumn(){Name = variableName,Title = title}},
+                ColumnHeaders = GetHeaderColumns(variableName,title),
                 Labels = (labels ?? new LabelItem[0]).ToDictionary((l)=>l.PublicKey,(l)=>l)
             };
         }
@@ -64,6 +60,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         protected static LabelItem CreateLabelItem(string caption="caption", string title="title")
         {
             return new LabelItem() { PublicKey = Guid.NewGuid(), Caption = caption, Title = title };
+        }
+
+        protected static List<HeaderColumn> GetHeaderColumns(string variableName, string title)
+        {
+            return new List<HeaderColumn>() {new HeaderColumn() {Name = variableName, Title = title}};
         }
     }
 }
