@@ -117,106 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CanSynchronize" xml:space="preserve">
-    <value>开始同步</value>
+  <data name="CompleteRegistration" xml:space="preserve">
+    <value>完成注册</value>
   </data>
-  <data name="CensusQuestionnaire" xml:space="preserve">
-    <value>&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;</value>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>{0}您好，请点击此关联完成注册过程：</value>
   </data>
-  <data name="DeleteInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;删除访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
+  <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
+    <value>查看</value>
   </data>
-  <data name="DeviceCanBeAssignedToInterviewer" xml:space="preserve">
-    <value>可以把设备分配给调查员</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_edit" xml:space="preserve">
+    <value>编辑</value>
   </data>
-  <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;需要重新关联&lt;/font&gt;</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
+    <value>联机</value>
   </data>
-  <data name="DeviceUpdateRequired" xml:space="preserve">
-    <value>&lt;font color="red"&gt;需要更新。调查员引擎版本 - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
+    <value>用户</value>
   </data>
-  <data name="EmptyDevice" xml:space="preserve">
-    <value>&lt;b&gt;[空设备]&lt;/b&gt;</value>
+  <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+    <value>{0}您好，&lt;br&gt; {1}已邀请{2}{3}您的问卷：</value>
   </data>
-  <data name="GetAttachmentContent" xml:space="preserve">
-    <value>下载附件内容：{0}</value>
+  <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+    <value>{0}您好, &lt;br&gt; {1}正在撤销您{2}问卷{3}的权限。</value>
   </data>
-  <data name="GetCensusQuestionnaires" xml:space="preserve">
-    <value>下载普查问卷列表：&lt;br/&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>重置密码</value>
   </data>
-  <data name="GetInterview" xml:space="preserve">
-    <value>下载访谈：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="ResetPasswordEmail" xml:space="preserve">
+    <value>{0}您好，要完成密码重置过程，请点击以下关联：</value>
   </data>
-  <data name="GetInterviewer" xml:space="preserve">
-    <value>下载调查员信息。&lt;br/&gt;督导员：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+    <value>密码重置过程</value>
   </data>
-  <data name="GetInterviewPackage" xml:space="preserve">
-    <value>下载访谈包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+    <value>您的问卷模板分享通知</value>
   </data>
-  <data name="GetInterviewPackages" xml:space="preserve">
-    <value>下载访谈包列表。&lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;最近一次同步包：&lt;b&gt;{0}&lt;/b&gt;</value>
+  <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>您的问卷模板停止分享通知</value>
   </data>
-  <data name="GetInterviews" xml:space="preserve">
-    <value>下载访谈列表。&lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+    <value>问卷模板分享通知</value>
   </data>
-  <data name="GetQuestionnaire" xml:space="preserve">
-    <value>下载问卷：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>问卷模板停止分享通知</value>
   </data>
-  <data name="GetQuestionnaireAssembly" xml:space="preserve">
-    <value>下载问卷集合：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+    <value>完成密码重置</value>
   </data>
-  <data name="GetQuestionnaireAttachments" xml:space="preserve">
-    <value>下载问卷附件：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
+  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>{0}您好，&lt;br&gt;{1}已邀请您{2}以下问卷模板：</value>
   </data>
-  <data name="InterviewerHasDevice" xml:space="preserve">
-    <value>调查员已经有了设备</value>
-  </data>
-  <data name="InterviewPackageProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈包&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
-  </data>
-  <data name="InterviewProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
-  </data>
-  <data name="LinkToDevice" xml:space="preserve">
-    <value>将调查员与设备关联</value>
-  </data>
-  <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>没有新的访谈包需要下载</value>
-  </data>
-  <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷集合&lt;b&gt;{0}&lt;/b&gt; [{1}]/font&gt;</value>
-  </data>
-  <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green"'&gt;成功处理了问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/font&gt;</value>
-  </data>
-  <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;更新访谈：&lt;a href="{3}"&gt;{0}&lt;/a&gt;，包：{1}，索引排序：{2}&lt;/li&gt;</value>
-  </data>
-  <data name="PostPackage" xml:space="preserve">
-    <value>上传访谈：{0}</value>
-  </data>
-  <data name="GetTranslations" xml:space="preserve">
-    <value>下载问卷&lt;b&gt;{0}&lt;/b&gt; [{1}]的翻译</value>
-  </data>
-  <data name="InterviewerFailedToLogin" xml:space="preserve">
-    <value>调查员登录失败</value>
-  </data>
-  <data name="InterviewerLoggedIn" xml:space="preserve">
-    <value>调查员已登录并获得了认证令牌</value>
-  </data>
-  <data name="GetAssignmentFormat" xml:space="preserve">
-    <value>下载任务 ({0})&lt;/br&gt;</value>
-  </data>
-  <data name="GetAssignmentsFormat" xml:space="preserve">
-    <value>下载任务列表 ({0}). &lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;</value>
-  </data>
-  <data name="GetMap" xml:space="preserve">
-    <value>下载地图：{0}</value>
-  </data>
-  <data name="GetMaps" xml:space="preserve">
-    <value>下载地图列表： &lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
-  </data>
-  <data name="NoMapsForUser" xml:space="preserve">
-    <value>没有可以下载的地图</value>
+  <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>{0}您好，&lt;br&gt;{1}已经停止与您分享问卷模板：{2}</value>
   </data>
 </root>
