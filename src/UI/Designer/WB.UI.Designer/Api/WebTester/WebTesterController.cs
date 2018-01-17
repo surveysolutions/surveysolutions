@@ -35,10 +35,10 @@ namespace WB.UI.Designer.Api.WebTester
         public WebTesterController(IExpressionProcessorGenerator expressionProcessorGenerator,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
-            IDesignerEngineVersionService engineVersionService, 
+            IDesignerEngineVersionService engineVersionService,
             IAttachmentService attachmentService,
             IPlainStorageAccessor<TranslationInstance> translations,
-            IWebTesterService webTesterService, 
+            IWebTesterService webTesterService,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, IQuestionnaireVerifier questionnaireVerifier)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
@@ -72,30 +72,25 @@ namespace WB.UI.Designer.Api.WebTester
         [HttpGet]
         public Task<Questionnaire> QuestionnaireAsync(string token)
         {
-            var questionnaireId = this.webTesterService.GetQuestionnaire(token) 
+            var questionnaireId = this.webTesterService.GetQuestionnaire(token)
                                   ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-            
+
             var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId))
                                   ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
 
-    
+
             if (this.questionnaireVerifier.CheckForErrors(questionnaireView).Any())
             {
                 throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
 
-            var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(questionnaireId)?.Version;
-
-            var versionToCompileAssembly = specifiedCompilationVersion ?? Math.Max(20,
-                this.engineVersionService.GetQuestionnaireContentVersion(questionnaireView.Source));
-
             string resultAssembly;
+
             try
             {
                 GenerationResult generationResult = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(
-                    questionnaireView.Source,
-                    versionToCompileAssembly,
-                    out resultAssembly);
+                    questionnaireView.Source, ApiVersion.MaxQuestionnaireVersion, out resultAssembly);
+
                 if (!generationResult.Success)
                     throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.PreconditionFailed));
             }
@@ -116,7 +111,7 @@ namespace WB.UI.Designer.Api.WebTester
                 .ToDictionary(x => x.Key, x => x.Value.ToArray());
 
             questionnaire.Macros = null;
-            questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
+            questionnaire.IsUsingExpressionStorage = ApiVersion.MaxQuestionnaireVersion > 19;
 
             return Task.FromResult(new Questionnaire
             {
@@ -138,7 +133,7 @@ namespace WB.UI.Designer.Api.WebTester
             }
 
             var attachmentContent = this.attachmentService.GetContent(attachmentContentId);
-            
+
             if (attachmentContent == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 
             return Task.FromResult(new AttachmentContent
@@ -157,21 +152,21 @@ namespace WB.UI.Designer.Api.WebTester
             var questionnaireId = this.webTesterService.GetQuestionnaire(token)
                                   ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
 
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId)) 
+            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId))
                 ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
 
             var actualTranslations = questionnaireView.Source.Translations.Select(x => x.Id).ToList();
-            
-            return Task.FromResult(this.translations.Query(_ => 
+
+            return Task.FromResult(this.translations.Query(_ =>
                 _.Where(x => x.QuestionnaireId == Guid.Parse(token) && actualTranslations.Contains(x.TranslationId))
                     .ToList()).Select(x => new TranslationDto
-            {
-                Value = x.Value,
-                Type = x.Type,
-                TranslationId = x.TranslationId,
-                QuestionnaireEntityId = x.QuestionnaireEntityId,
-                TranslationIndex = x.TranslationIndex
-            }).ToArray());
+                    {
+                        Value = x.Value,
+                        Type = x.Type,
+                        TranslationId = x.TranslationId,
+                        QuestionnaireEntityId = x.QuestionnaireEntityId,
+                        TranslationIndex = x.TranslationIndex
+                    }).ToArray());
         }
     }
 }
