@@ -3,9 +3,8 @@
     <div class="panel panel-details">
         <div class="panel-body clearfix">
             <div class="about-questionnaire clearfix">
-                <h2>#{{$config.model.key}}</h2>
                 <div class="about-questionnaire-details">
-                    <h3>{{this.$store.state.webinterview.questionnaireTitle}}</h3>
+                    <h3><span>#{{$config.model.key}}</span> {{this.$store.state.webinterview.questionnaireTitle}}</h3>
                     <p>
                         {{this.$t('Details.Status', {name: this.$config.model.statusName })}}, {{this.$t('Details.Responsible')}}:
                         <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">
