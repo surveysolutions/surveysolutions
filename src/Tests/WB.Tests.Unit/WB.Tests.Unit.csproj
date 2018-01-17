@@ -454,6 +454,7 @@
     <Compile Include="BoundedContexts\Interviewer\Services\SynchronizationProcessTests\when_synchronize_and_need_to_change_supervisor.cs" />
     <Compile Include="DataExportTests\InterviewsExporterTests\When_exporting_data_for_one_interview.cs" />
     <Compile Include="Infrastructure\CommandSerializer.cs" />
+    <Compile Include="SharedKernels\DataCollection\AnswerUtilsTests.cs" />
     <Compile Include="SharedKernels\DataCollection\InterviewTests\when_hqreject_competed_interview.cs" />
     <Compile Include="SharedKernels\DataCollection\PlainQuestionnaireTests\GetSubSectionsWithEnablementConditionTests.cs" />
     <Compile Include="SharedKernels\DataCollection\QuestionnaireTests\when_getting_common_parent_for_linked_question_and_source.cs" />
