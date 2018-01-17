@@ -217,7 +217,7 @@
     }
 }
 @mixin clear($width: 18px){
-    &:active, &:active:focus{
+    &:active, &:active:focus, &:focus{
         span:before, span:after{
             background-color: #000;
             @include opacity(1);
@@ -338,7 +338,7 @@
         @include square(18px);
         background: transparent url("#{$assetsPath}/img/questionnaire-sprite.png") no-repeat;
         vertical-align: middle;
-        background-size: 629px 18px;
+        background-size: 793px 18px;
         background-position: 4px 2px;
         margin-right: 12px;
         @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 629px, 18px);
