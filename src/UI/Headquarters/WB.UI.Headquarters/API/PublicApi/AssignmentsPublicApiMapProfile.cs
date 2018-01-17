@@ -15,6 +15,16 @@ namespace WB.UI.Headquarters.API.PublicApi
     {
         public AssignmentsPublicApiMapProfile()
         {
+            this.CreateMap<Assignment, FullAssignmentDetails>()
+                .BeforeMap((assignment, details, ctx) => this.PrepareQuestionnaire(ctx, assignment.QuestionnaireId))
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id))
+                .ForMember(x => x.Quantity, opts => opts.MapFrom(x => x.Quantity))
+                .ForMember(x => x.QuestionnaireId, opts => opts.MapFrom(x => x.QuestionnaireId.ToString()))
+                .ForMember(x => x.IdentifyingData, opts => opts.MapFrom(x => x.IdentifyingData))
+                .ForMember(x => x.InterviewsCount, opts => opts.MapFrom(x => x.InterviewSummaries.Count))
+                .ForMember(x => x.ResponsibleName, opts => opts.MapFrom(x => x.Responsible.Name))
+                .ForMember(x => x.Answers, opts => opts.MapFrom(x => x.Answers));
+
             this.CreateMap<Assignment, AssignmentDetails>()
                 .BeforeMap((assignment, details, ctx) => this.PrepareQuestionnaire(ctx, assignment.QuestionnaireId))
                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Id))
