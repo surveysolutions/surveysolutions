@@ -720,11 +720,12 @@ namespace WB.Tests.Abc.TestFactories
                 ParentValue = parentValue
             };
 
-        public Answer Option(int value, string text = null)
+        public Answer Option(int value, string text = null, string parentValue = null)
             => new Answer
             {
                 AnswerText = text ?? $"Option {value}",
                 AnswerCode = value,
+                ParentValue = parentValue
             };
 
         public IEnumerable<Answer> Options(params int[] values)
