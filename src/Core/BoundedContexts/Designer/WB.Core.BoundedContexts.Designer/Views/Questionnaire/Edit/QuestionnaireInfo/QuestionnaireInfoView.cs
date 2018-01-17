@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public string QuestionnaireId { get; set; }
         public string Title { get; set; }
         public bool IsPublic { get; set; }
+        public bool WebTestAvailable { get; set; }
         public List<ChapterInfoView> Chapters { get; set; }
         public List<MacroView> Macros { get; set; }
         public List<LookupTableView> LookupTables { get; set; }

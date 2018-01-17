@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -16,6 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires;
+        private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
         private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly IAttachmentService attachmentService;
         private readonly IMembershipUserService membershipUserService;
@@ -23,12 +25,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires,
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
             IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IAttachmentService attachmentService,
             IMembershipUserService membershipUserService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.questionnaires = questionnaires;
+            this.questionnaireCompilationVersion = questionnaireCompilationVersion;
             this.accountsStorage = accountsStorage;
             this.attachmentService = attachmentService;
             this.membershipUserService = membershipUserService;
@@ -107,6 +111,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.SharedPersons = sharedPersons;
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
             questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
+            questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
 
             questionnaireInfoView.Macros = questionnaireDocument
                 .Macros
