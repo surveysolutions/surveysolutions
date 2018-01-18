@@ -212,6 +212,10 @@
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
       <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj">
+      <Project>{4BF37870-0CEF-455E-ABF5-682F979D8D8B}</Project>
+      <Name>WB.UI.WebTester</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

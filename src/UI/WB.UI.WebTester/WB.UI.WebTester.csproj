@@ -288,7 +288,7 @@
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IDesignerWebTesterApi.cs" />
-    <Compile Include="Services\Implementation\MediaStorage.cs" />
+    <Compile Include="Services\Implementation\InMemoryMediaStorage.cs" />
     <Compile Include="Services\Implementation\TranslationStorage.cs" />
     <Compile Include="Services\SoundInfo.cs" />
     <Compile Include="Startup.cs" />
