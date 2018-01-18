@@ -32,34 +32,6 @@ window.ajustDetailsPanelHeight = function () {
 $(function () {
     var globalSettings = window.input.settings;
 
-    $("#hide-filters").click(function () {
-        $(document.body).trigger("sticky_kit:recalc");
-        if (getScreenSize() == 'large') {
-            $('main').toggleClass("fullscreen-hidden-filters");
-        }
-        else {
-            $('main').removeClass("fullscreen-hidden-filters");
-            $('main').removeClass("show-content");
-            $('main').toggleClass("show-filters");
-        }
-    });
-    $("#hide-content").click(function () {
-        $(document.body).trigger("sticky_kit:recalc");
-        if (getScreenSize() == 'large') {
-            $('main').toggleClass("fullscreen-hidden-content");
-        }
-        else {
-            $('main').removeClass("fullscreen-hidden-content");
-            $('main').removeClass("show-filters");
-            $('main').toggleClass("show-content");
-        }
-    });
-    var getScreenSize = function () {
-        var witdth = $(window).outerWidth();
-        if (witdth > 1210)
-            return 'large';
-        return 'small';
-    };
     $("main").removeClass("hold-transition");
     $("footer").removeClass("hold-transition");
 
