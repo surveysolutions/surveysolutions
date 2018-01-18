@@ -240,18 +240,6 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value>გამორიცხეთ ESRI- ის რუკის მხარდაჭერა</value>
   </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>ექსპორტი</value>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>მძიმით გამოყოფილი მნიშვნელობები (.csv)</value>
-  </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Excel (.xlsx)</value>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Tab გამოყოფილი მნიშვნელობები (.tv)</value>
-  </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>დავალება</value>
   </data>
