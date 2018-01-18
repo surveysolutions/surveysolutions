@@ -129,14 +129,14 @@ angular.module('designerApp')
             var ERROR = "error";
             var WARNING = "warning";
 
-            $scope.verify = function(callbackIfNoErrors) {
+            $scope.verify = function() {
                 $scope.verificationStatus.errors = null;
                 $scope.verificationStatus.warnings = null;
                 $rootScope.$broadcast("verifing", {});
 
                 setTimeout(function() {
-                    verificationService.verify($state.params.questionnaireId).then(function (result) {
-                        const data = result.data;
+                    verificationService.verify($state.params.questionnaireId).then(function(result) {
+                        var data = result.data;
                         $scope.verificationStatus.errors = data.errors;
                         $scope.verificationStatus.warnings = data.warnings;
                         $scope.verificationStatus.time = new Date();
@@ -145,22 +145,19 @@ angular.module('designerApp')
                         if ($scope.verificationStatus.errors.length > 0)
                             $scope.showVerificationErrors();
                         else {
-                            if (callbackIfNoErrors) callbackIfNoErrors();
-                            else $scope.closeVerifications();
+                            $scope.closeVerifications();
                         }
                     });
                 }, 500);
             };
 
             $scope.webTest = function () {
-                $scope.verify(function() {
-                    var webTesterWindow = window.open("about:blank", '_blank');
+                var webTesterWindow = window.open("about:blank", '_blank');
 
-                    webTesterService.run($state.params.questionnaireId)
-                        .then(function(result) {
-                            webTesterWindow.location.href = result.data;
-                        });
-                });
+                webTesterService.run($state.params.questionnaireId)
+                    .then(function (result) {
+                        webTesterWindow.location.href = result.data;
+                    });
             };
 
             $scope.showVerificationErrors = function () {
