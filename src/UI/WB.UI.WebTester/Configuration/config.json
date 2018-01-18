@@ -1,5 +1,6 @@
 ﻿{
-  "InstanceName":  "WebTester-local", 
+  "InstanceName": "WebTester-local",
   "DesignerAddress": "http://localhost/designer",
-  "GoogleMapApiKey": "AIzaSyCyTAmfif14kOpCwrI1wKWEkUaOccGKL5w"
+  "GoogleMapApiKey": "AIzaSyCyTAmfif14kOpCwrI1wKWEkUaOccGKL5w",
+  "Metrics.Gateway":  "http://localhost:9091/metrics" 
 }
