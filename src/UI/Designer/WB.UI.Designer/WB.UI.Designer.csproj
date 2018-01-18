@@ -449,10 +449,14 @@
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="questionnaire\content\i\chekboxes.png" />
+    <Content Include="questionnaire\content\i\chekboxes2k.png" />
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
+    <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
+    <Content Include="questionnaire\details\scripts\controllers\metadata.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
     <Content Include="questionnaire\details\scripts\modules\ng-context-menu.js" />
@@ -528,7 +532,7 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Content\pdf.less" />
-    <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
+    <Content Include="questionnaire\content\designer-editor\wb-metadata.less" />
     <Content Include="Configuration\vgl.Designer.Web.config" />
     <Content Include="questionnaire\details\scripts\controllers\attachments.js" />
     <Content Include="questionnaire\details\scripts\controllers\variable.js" />
@@ -792,6 +796,7 @@
     <Content Include="Views\Questionnaire\PublicFolders.cshtml" />
     <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
+    <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -919,6 +924,7 @@
     <EmbeddedResource Include="Resources\QuestionnaireEditor.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionnaireEditor.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireEditor.ru.resx">
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>

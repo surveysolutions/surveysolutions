@@ -361,6 +361,9 @@
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Attachments</value>
   </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Metadata</value>
+  </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
     <value>uploaded: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
   </data>
@@ -798,6 +801,9 @@
   </data>
   <data name="HotkeysCloseMacros" xml:space="preserve">
     <value>Close macros panel</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>Close metadata panel</value>
   </data>
   <data name="HotkeysCloseTranslations" xml:space="preserve">
     <value>Close translations panel</value>
