@@ -2383,5 +2383,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
             this.innerDocument = questionnire;
         }
+
+        public void UpdateMetaInfo(UpdateMetadata command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+
+            this.innerDocument.Title = command.Title;
+            this.innerDocument.Metadata = command.Metadata;
+        }
     }
 }

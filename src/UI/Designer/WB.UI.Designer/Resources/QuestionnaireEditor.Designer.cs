@@ -808,6 +808,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close metadata panel.
+        /// </summary>
+        public static string HotkeysCloseMetadata {
+            get {
+                return ResourceManager.GetString("HotkeysCloseMetadata", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close translations panel.
         /// </summary>
         public static string HotkeysCloseTranslations {
@@ -2145,6 +2154,15 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarMacroTitle {
             get {
                 return ResourceManager.GetString("SideBarMacroTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metadata.
+        /// </summary>
+        public static string SideBarMetadataTitle {
+            get {
+                return ResourceManager.GetString("SideBarMetadataTitle", resourceCulture);
             }
         }
         

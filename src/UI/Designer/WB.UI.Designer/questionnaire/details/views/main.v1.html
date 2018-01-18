@@ -385,11 +385,216 @@
                 </perfect-scrollbar>
             </div>
         </div>
+    </div>   
+
+    <div class="left-side-panel metadata" ng-class="{unfolded: isFolded }" ng-controller="MetadataCtrl">
+        <div class="foldback-region" ng-click="foldback();$event.stopPropagation()"></div>
+        <div class="left-side-panel-content metadata-panel">
+            <div class="foldback-button-region" ng-click="foldback();$event.stopPropagation()">
+                <div class="foldback-button"></div>
+            </div>
+
+            <div class="metadata">
+                <perfect-scrollbar class="scroller">
+                    <h3>Questionnaire description and survey info</h3>
+                            
+                    <form role="form" name="metadataForm" novalidate>
+                        <ng-form name="metadata.form">
+
+                            <ul class="list-unstyled metadata-blocks">
+                                <li>
+                                    <h4>Basic information</h4>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Title (affects name on questionnaire list):</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea" name="title" ng-model="metadata.title"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Subtitle:</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea" name="subTitle" ng-model="metadata.subTitle"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Version identificator:</span>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="version" ng-model="metadata.version">
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Version notes:</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea" name="versionNotes" ng-model="metadata.versionNotes"></textarea>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h4>Survey data information</h4>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Study types:</span>
+                                        <div class="form-group">
+                                            <div class="btn-group dropdown">
+                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    {{metadata.studyType}}
+                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
+                                                </button>
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                    <li ng-repeat="studyType in questionnaire.studyTypes">
+                                                        <a ng-click="metadata.studyType = studyType.code" value="{{studyType.code}}" href="#">{{studyType.title}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <input type="hidden" name="studyType" ng-model="metadata.studyType" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Kind of data:</span>
+                                        <div class="form-group">
+                                            <div class="btn-group dropdown">
+                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    {{metadata.kindOfData}}
+                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
+                                                </button>
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                    <li ng-repeat="kindOfData in questionnaire.kindsOfData">
+                                                        <a ng-click="metadata.kindOfData = kindOfData.code" value="{{kindOfData.code}}" href="#">{{kindOfData.title}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="kindOfData" ng-model="metadata.kindOfData" />
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Mode of Data Collection:</span>
+                                        
+                                        <div class="form-group">
+                                            <div class="btn-group dropdown">
+                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    {{metadata.modeOfDataCollection}}
+                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
+                                                </button>
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                    <li ng-repeat="modeOfData in questionnaire.modesOfDataCollection">
+                                                        <a ng-click="metadata.modeOfDataCollection = modeOfData.code" value="{{modeOfData.code}}" href="#">{{modeOfData.title}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="modeOfDataCollection" name="modeOfDataCollection" ng-model="metadata.modeOfDataCollection" />
+                                    </div>
+                                </li>
+                                <li>
+                                    <h4>Survey information</h4>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Country:</span>
+                                        <div class="form-group">
+                                            <div class="btn-group dropdown">
+                                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    {{metadata.country}}
+                                                    <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
+                                                </button>
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                    <li ng-repeat="country in questionnaire.countries">
+                                                        <a ng-click="metadata.country = country.code" value="{{country.code}}" href="#">{{country.title}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="country" ng-model="metadata.country" />
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Year:</span>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control date-field" name="year" ng-model="metadata.year" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Languages:</span>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="language" ng-model="metadata.language" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Unit of alalysis:</span>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="unitOfAnalysis" ng-model="metadata.unitOfAnalysis" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Coverage:</span>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="coverage" ng-model="metadata.coverage" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Universe:</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea" name="universe" ng-model="metadata.universe" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Primary Investigator:</span>
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="primaryInvestigator" ng-model="metadata.primaryInvestigator" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Consultants:</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea" name="consultant" ng-model="metadata.consultant">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h4>Additional info</h4>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Notes:</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea"  name="notes" ng-model="metadata.notes" />
+                                        </div>
+                                    </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">Keywords:</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea" name="keywords" ng-model="metadata.keywords">
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <h4>Questionnaire access</h4>
+                                    <div class="checkbox">
+                                        <input id="agreeToMakeThisQuestionnairePubic" name="agreeToMakeThisQuestionnairePubic" ng-model="metadata.agreeToMakeThisQuestionnairePubic" type="checkbox" class="checkbox-filter" checked>
+                                        <label for="agreeToMakeThisQuestionnairePubic" class=""><span class="tick"></span>Agree to make this questionnaire public</label>
+                                    </div>
+                                    <!--<div class="checkbox">
+                                        <input id="qazqaz123" type="checkbox" class="checkbox-filter" checked>
+                                        <label for="qazqaz123" class=""><span class="tick"></span>Visible to admin</label>
+                                    </div>-->
+                                </li>
+                            </ul>
+                            <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
+                                <button type="submit" ng-disabled="!metadata.form.$dirty" class="btn btn-lg ng-isolate-scope btn-primary" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
+                                <button type="reset" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
+                            </div>
+                        </ng-form>
+                    </form>
+                </perfect-scrollbar>
+
+            </div>
+        </div>
     </div>
 
     <div id="left-menu" ng-controller="LeftMenuCtrl">
         <ul>
             <li><a class="left-menu-chapters" ng-class="{unfolded: isUnfoldedChapters }" ng-click="unfoldChapters();" ng-i18next="[title]SideBarSectionsTitle"></a></li>
+            <li><a class="left-menu-metadata" ng-class="{unfolded: isUnfoldedMetadata }" ng-click="unfoldMetadata();" ng-i18next="[title]SideBarMetadataTitle"></a></li>
             <li><a class="left-menu-translations" ng-class="{unfolded: isUnfoldedTranslations }" ng-click="unfoldTranslations();" ng-i18next="[title]SideBarTranslationsTitle"></a></li>
             <li><a class="left-menu-macroses" ng-class="{unfolded: isUnfoldedMacros }" ng-click="unfoldMacros();" ng-i18next="[title]SideBarMacroTitle"></a></li>
             <li><a class="left-menu-lookupTables" ng-class="{unfolded: isUnfoldedLookupTables }" ng-click="unfoldLookupTables();" ng-i18next="[title]SideBarLookupTitle"></a></li>
