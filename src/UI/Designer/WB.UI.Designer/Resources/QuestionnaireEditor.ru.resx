@@ -920,4 +920,12 @@
   <data name="UntitledStaticText" xml:space="preserve">
     <value>Статический текст без названия</value>
   </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>Закрыть панель метаинформации</value>
+    <comment>Закрыть панель метаинформации</comment>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Метаинформация</value>
+    <comment>Метаинформация</comment>
+  </data>
 </root>

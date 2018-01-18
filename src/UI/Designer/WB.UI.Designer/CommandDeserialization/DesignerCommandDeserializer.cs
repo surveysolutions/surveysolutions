@@ -78,6 +78,8 @@ namespace WB.UI.Designer.CommandDeserialization
                     { "AddOrUpdateTranslation", typeof (AddOrUpdateTranslation) },
                     { "DeleteTranslation", typeof (DeleteTranslation) },
                     { "SetDefaultTranslation", typeof (SetDefaultTranslation) },
+                    // Metadata
+                    { "UpdateMetadata", typeof (UpdateMetadata) },
                 };
             }
         }
