@@ -17,11 +17,12 @@
 
         <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
 
-        <!--not supported in wix 3.10 should be in 3.11 and 4-->
-        <PropertyRef Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" />
+        <!--not supported in wix 3.11-->
+        <!--<PropertyRef Id="WIX_IS_NETFRAMEWORK_471_OR_LATER_INSTALLED" />-->
 
-        <Condition Message="This application requires .NET Framework 4.6.2 Please install the .NET 4.6.2 Framework then run this installer again.">
-            <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED]]>
+        <PropertyRef Id="NETFRAMEWORK45" />
+        <Condition Message="This application requires .NET Framework 4.7.1 Please install the .NET 4.7.1 Framework then run this installer again.">
+            <![CDATA[Installed OR (NETFRAMEWORK45 AND NETFRAMEWORK45 >= "#461308")]]>
         </Condition>
         
         <Condition Message="This application only runs in Windows Server 2012 R2 or higher.">
@@ -39,7 +40,8 @@
         <!--<SetDirectory Id='INSTALLFOLDERPATH' Value='[WindowsVolume]SurveySolutions' />-->
 
         <Property Id="INSTALLFOLDER" Value="c:\Survey Solutions"> 
-            <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" Name="Install Path" Win64='yes'></RegistrySearch>
+            <RegistrySearch Id="SurveySolutionsPath" Type="directory" Root="HKLM" Key="SOFTWARE\World Bank\Survey Solutions" 
+                            Name="Install Path" Win64='yes'></RegistrySearch>
         </Property>
 
 <!--        <Condition Message="Path was not found.">
