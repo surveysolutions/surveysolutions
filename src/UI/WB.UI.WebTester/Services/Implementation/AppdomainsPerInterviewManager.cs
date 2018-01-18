@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Infrastructure.Native.Logging;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
@@ -90,6 +91,8 @@ namespace WB.UI.WebTester.Services.Implementation
                     Formatting = Formatting.None,
                 });
 
+            appDomainsAlive.Inc();
+
             RemoteAction.Invoke(domainContext.Domain,
                 documentString, supportingAssembly,
                 (questionnaire, assembly) =>
@@ -108,6 +111,8 @@ namespace WB.UI.WebTester.Services.Implementation
                     ServiceLocator.Current.GetInstance<IQuestionnaireStorage>().StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
                 });
         }
+
+        private readonly Gauge appDomainsAlive = new Gauge(@"wb_app_domains_total", @"Count of appdomains per interview in memory");
 
         private static void SetupAppDomainsSeviceLocator()
         {
@@ -138,6 +143,7 @@ namespace WB.UI.WebTester.Services.Implementation
                 }
 
                 this.appDomains.Remove(interviewId);
+                appDomainsAlive.Dec();
             }
         }
 

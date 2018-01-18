@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Hub;
+using WB.UI.WebTester.Services;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
 
@@ -23,7 +24,8 @@ namespace WB.UI.WebTester
     {
         public void Configuration(IAppBuilder app)
         {
-            LogManager.GetCurrentClassLogger().Info($"Application started {FileVersionInfo.GetVersionInfo(typeof(Startup).Assembly.Location).ProductVersion}");
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info($"Application started {FileVersionInfo.GetVersionInfo(typeof(Startup).Assembly.Location).ProductVersion}");
             ConfigurationSource.Init();
 
             ContainerBuilder builder = AutofacConfig.CreateKernel();
@@ -46,6 +48,7 @@ namespace WB.UI.WebTester
             app.UseAutofacMiddleware(container);
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
+            MetricsService.Start(logger);
         }
     }
 }
