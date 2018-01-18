@@ -1049,18 +1049,6 @@
   <data name="StatusDurationDescription" xml:space="preserve">
     <value>Number of days that assignments and interviews have stayed in their current status</value>
   </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Excel (.xlsx)</value>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>Comma separated values (.csv)</value>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Tab separated values (.tab)</value>
-  </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>Export</value>
-  </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
     <value>Assigned to</value>
   </data>

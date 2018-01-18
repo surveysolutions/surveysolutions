@@ -1038,22 +1038,6 @@
   <data name="StatusDuration" xml:space="preserve">
     <value>Длительность статусов</value>
   </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Эксель (.xlsx)</value>
-    <comment>Эксель (.xlsx)</comment>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>Значения, разделенные запятой (.csv)</value>
-    <comment>Значения, разделенные запятой (.csv)</comment>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Значения, разделенные табуляцией (.tab)</value>
-    <comment>Значения, разделенные табуляцией (.tab)</comment>
-  </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>Экспорт</value>
-    <comment>Экспорт</comment>
-  </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
     <value>Назначено на</value>
   </data>
