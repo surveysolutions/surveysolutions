@@ -1,4 +1,5 @@
 ﻿{
+  "InstanceName":  "WebTester-local", 
   "DesignerAddress": "http://localhost/designer",
   "GoogleMapApiKey": "***REMOVED***"
 }
