@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     foreach (var interview in batch)
                     {
                         cancellationToken.ThrowIfCancellationRequested();
-                        exportBulk.Add(this.ExportSingleInterview(interview, interviews[interview.Id], questionnaireExportStructure, basePath));
+                        exportBulk.Add(this.ExportSingleInterview(interview, interviews?[interview.Id], questionnaireExportStructure, basePath));
 
                         Interlocked.Increment(ref totalInterviewsProcessed);
                         progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
