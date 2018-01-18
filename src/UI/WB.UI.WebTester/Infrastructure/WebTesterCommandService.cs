@@ -49,7 +49,7 @@ namespace WB.UI.WebTester.Infrastructure
 
                 if (aggregate == null)
                 {
-                    if (!(command is CreateInterview))/*!CommandRegistry.IsInitializer(command)*/
+                    if (!(command is CreateInterview))
                         throw new CommandServiceException($"Unable to execute not-constructing command {command.GetType().Name} because aggregate {aggregateId.FormatGuid()} does not exist.");
 
                     aggregate = (IEventSourcedAggregateRoot)this.serviceLocator.GetInstance(aggregateType);

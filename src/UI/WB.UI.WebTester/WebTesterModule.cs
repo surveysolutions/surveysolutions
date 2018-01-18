@@ -139,7 +139,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<ISnapshotStore, InMemoryEventStore>();
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
-            registry.BindAsSingleton<IMediaStorage, MediaStorage>();
+            registry.BindAsSingleton<IMediaStorage, InMemoryMediaStorage>();
 
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
