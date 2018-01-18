@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class MediaStorage : IMediaStorage, IDisposable
+    public class InMemoryMediaStorage : IMediaStorage, IDisposable
     {
         private readonly IDisposable evictionNotification;
 
         private readonly ConcurrentDictionary<Guid, Dictionary<string, MultimediaFile>> memoryCache =
             new ConcurrentDictionary<Guid, Dictionary<string, MultimediaFile>>();
         
-        public MediaStorage(IObservable<Guid> evictionNotification)
+        public InMemoryMediaStorage(IObservable<Guid> evictionNotification)
         {
             this.evictionNotification = evictionNotification.Subscribe(key =>
             {
@@ -21,12 +21,12 @@ namespace WB.UI.WebTester.Services.Implementation
         
         public void Store(Guid interviewId, MultimediaFile file)
         {
-            memoryCache.AddOrUpdate(interviewId, (key) => new Dictionary<string, MultimediaFile>
+            memoryCache.AddOrUpdate(interviewId, key => new Dictionary<string, MultimediaFile>
             {
-                {file.Filename, file}
-            }, (k, d) =>
+               [file.Filename] = file
+            }, (key, cache) =>
             {
-                d[file.Filename] = file; return d;
+                cache[file.Filename] = file; return cache;
             });
         }
         

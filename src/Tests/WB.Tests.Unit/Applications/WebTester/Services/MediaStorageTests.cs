@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +15,7 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         public void should_add_item_to_cache()
         {
             IObservable<Guid> evictionNotification = new Subject<Guid>();
-            var subj = new MediaStorage(evictionNotification);
+            var subj = Create.Storage.MediaStorage(evictionNotification);
 
             subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
             {
@@ -31,7 +29,7 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         public void should_add_multiple_items_per_interview_to_cache()
         {
             IObservable<Guid> evictionNotification = new Subject<Guid>();
-            var subj = new MediaStorage(evictionNotification);
+            var subj = new InMemoryMediaStorage(evictionNotification);
 
             subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
             {
@@ -55,7 +53,7 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         public void should_remove_items_from_cache_on_evict()
         {
             var evictionNotification = new Subject<Guid>();
-            var subj = new MediaStorage(evictionNotification);
+            var subj = new InMemoryMediaStorage(evictionNotification);
 
             subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
             {
