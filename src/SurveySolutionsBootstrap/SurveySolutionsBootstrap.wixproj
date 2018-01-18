@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>ab07cf13-d4cb-471a-81fd-ab9fa0b2a05c</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputType>Bundle</OutputType>    
+    <OutputType>Bundle</OutputType>
     <Name>SurveySolutionsBootstrap</Name>
     <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
     <OutputName>SurveySolutions.$(SurveySolutionsVersion)</OutputName>
@@ -65,7 +65,7 @@
   <ItemGroup>
     <Content Include="img\logo-50.bmp" />
     <Content Include="img\logo-50.png" />
-    <Content Include="redist\NDP462-KB3151802-Web.exe" />
+    <Content Include="redist\NDP471-KB4033344-Web.exe" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
