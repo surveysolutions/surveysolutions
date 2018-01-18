@@ -152,10 +152,12 @@ angular.module('designerApp')
             };
 
             $scope.webTest = function () {
+                var webTesterWindow = window.open("about:blank", '_blank');
+
                 webTesterService.run($state.params.questionnaireId)
                     .then(function (result) {
-                        window.open(result.data);
-                });
+                        webTesterWindow.location.href = result.data;
+                    });
             };
 
             $scope.showVerificationErrors = function () {
