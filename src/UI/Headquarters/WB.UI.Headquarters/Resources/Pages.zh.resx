@@ -921,18 +921,6 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value>不包括ESRI地图支持</value>
   </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>导出</value>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>逗号分隔值 (.csv)</value>
-  </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Excel (.xlsx)</value>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Tab分隔值 (.tsv)</value>
-  </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>任务</value>
   </data>
