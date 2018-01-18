@@ -272,6 +272,7 @@
     <Compile Include="Services\IMediaStorage.cs" />
     <Compile Include="Services\CategoricalOptionsFilter.cs" />
     <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
+    <Compile Include="Services\MetricsService.cs" />
     <Compile Include="Services\MultimediaFile.cs" />
     <Compile Include="Controllers\WebInterviewResourcesController.cs" />
     <Compile Include="Controllers\WebTesterController.cs" />
