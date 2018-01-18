@@ -109,12 +109,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void DecreaseInterviewsCount()
         {
-            // update db assignment
-            var dbAssignment = AssignmentsRepository.GetById(assignment.Id);
-            dbAssignment.CreatedInterviewsCount = Math.Max(0, (dbAssignment.CreatedInterviewsCount ?? 0) - 1);
-            AssignmentsRepository.Store(dbAssignment);
-
             interviewsByAssignmentCount--;
+
+            // update db assignment
+            assignment.CreatedInterviewsCount = interviewsByAssignmentCount;
+            AssignmentsRepository.Store(assignment);
+
+            
             BindTitles();
         }
     }
