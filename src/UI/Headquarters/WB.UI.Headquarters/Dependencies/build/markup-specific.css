@@ -1563,8 +1563,7 @@ header > .red-line {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 14px;
-  line-height: 16px; }
+  font: 14px/16px "RobotoItalic"; }
   .panel-details h3 span {
     font-family: "RobotoLight"; }
 

@@ -436,11 +436,11 @@
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{metadata.studyType}}
+                                                    {{ (questionnaire.studyTypes | filter : {'code':metadata.studyType})[0].title }}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
 
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
                                                     <li ng-repeat="studyType in questionnaire.studyTypes">
                                                         <a ng-click="metadata.studyType = studyType.code" value="{{studyType.code}}" href="#">{{studyType.title}}</a>
                                                     </li>
@@ -454,11 +454,11 @@
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{metadata.kindOfData}}
+                                                    {{ (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title }}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
 
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
                                                     <li ng-repeat="kindOfData in questionnaire.kindsOfData">
                                                         <a ng-click="metadata.kindOfData = kindOfData.code" value="{{kindOfData.code}}" href="#">{{kindOfData.title}}</a>
                                                     </li>
@@ -473,11 +473,11 @@
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{metadata.modeOfDataCollection}}
+                                                    {{ (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title }}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
 
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
                                                     <li ng-repeat="modeOfData in questionnaire.modesOfDataCollection">
                                                         <a ng-click="metadata.modeOfDataCollection = modeOfData.code" value="{{modeOfData.code}}" href="#">{{modeOfData.title}}</a>
                                                     </li>
@@ -494,11 +494,11 @@
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{metadata.country}}
+                                                    {{ (questionnaire.countries | filter : {'code':metadata.country})[0].title }}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
 
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
                                                     <li ng-repeat="country in questionnaire.countries">
                                                         <a ng-click="metadata.country = country.code" value="{{country.code}}" href="#">{{country.title}}</a>
                                                     </li>
@@ -580,7 +580,7 @@
                                 </li>
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
-                                <button type="submit" ng-disabled="!metadata.form.$dirty" class="btn btn-lg ng-isolate-scope btn-primary" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
+                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
                                 <button type="reset" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
                             </div>
                         </ng-form>
