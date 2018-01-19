@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Web.WebPages;
 using NLog;
 using StackExchange.Exceptional;
 using WB.UI.Shared.Web.Extensions;
@@ -8,7 +9,7 @@ namespace WB.UI.WebTester.Services
 {
     public class MetricsService
     {
-        public static bool IsEnabled => System.Configuration.ConfigurationManager.AppSettings.GetBool(@"Metrics.Enable", true);
+        public static bool IsEnabled => ConfigurationSource.Configuration[@"Metrics.Enable"].AsBool(true);
 
         [Localizable(false)]
         public static void Start(Logger logger)
@@ -20,16 +21,15 @@ namespace WB.UI.WebTester.Services
             }
             try
             {
-         
                 // configuring address for metrics pushgateway
-                var metricsGateway = System.Configuration.ConfigurationManager.AppSettings["Metrics.Gateway"];
-                var instanceName = System.Configuration.ConfigurationManager.AppSettings["InstanceName"] ?? "webtester";
+                var metricsGateway = ConfigurationSource.Configuration["Metrics.Gateway"];
+                var instanceName = ConfigurationSource.Configuration["InstanceName"] ?? "webtester";
 
                 if (string.IsNullOrEmpty(metricsGateway))
                     return;
 
                 // initialize push mechanizm
-                new Prometheus.MetricPusher(metricsGateway, job: "hq",
+                new Prometheus.MetricPusher(metricsGateway, job: "webtester",
                     additionalLabels: new[] { Tuple.Create("site", instanceName) },
                     intervalMilliseconds: 5000).Start();
             }
