@@ -362,7 +362,79 @@
     <value>Attachments</value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Metadata</value>
+    <value>Questionnaire description and survey info</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Basic information</value>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Title (affects name on questionnaire list):</value>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>Subtitle:</value>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>Version identificator:</value>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>Version notes:</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Survey data information</value>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>Study types:</value>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>Kind of data:</value>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>Mode of Data Collection:</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Survey information</value>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>Country:</value>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>Year:</value>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>Languages:</value>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Unit of alalysis:</value>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>Coverage:</value>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>Universe:</value>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Primary Investigator:</value>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>Consultants:</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>Additional info</value>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>Notes:</value>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>Keywords:</value>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>Funding:</value>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>Questionnaire access</value>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePubic" xml:space="preserve">
+    <value>Agree to make this questionnaire public</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
     <value>uploaded: {{-lastUpdate, MMMM DD[,] YYYY [at] k:mm}}</value>
