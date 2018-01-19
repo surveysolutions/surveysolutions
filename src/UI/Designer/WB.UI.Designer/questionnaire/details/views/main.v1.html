@@ -556,7 +556,7 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">Notes:</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea"  name="notes" ng-model="metadata.notes" />
+                                            <textarea class="form-control js-elasticArea" name="notes" ng-model="metadata.notes" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
@@ -581,7 +581,7 @@
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
                                 <button type="submit" class="btn btn-lg ng-isolate-scope" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
-                                <button type="reset" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
+                                <button type="button" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
                             </div>
                         </ng-form>
                     </form>
