@@ -17,6 +17,9 @@
                 <li>{{$t('Pages.MapList_UploadDescriptionExtra')}}</li>
             </ol>
             <p>
+                <a :href="$config.model.userMapsUrl">{{$t('Pages.MapList_UserMapsLink')}}</a>
+            </p>
+            <p>
                 <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
             </p>
         </div>
