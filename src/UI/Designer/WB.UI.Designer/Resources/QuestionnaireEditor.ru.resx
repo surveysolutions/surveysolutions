@@ -924,8 +924,100 @@
     <value>Закрыть панель метаинформации</value>
     <comment>Закрыть панель метаинформации</comment>
   </data>
-  <data name="SideBarMetadataTitle" xml:space="preserve">
+  <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Описание опросника и данные по обследованию</value>
     <comment>Метаинформация</comment>
+  </data>  
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Заголовок (влияет на имя в списка опросников):</value>
+    <comment>Метаинформация</comment>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>Подзаголовок:</value>
+    <comment>Подзаголовок:</comment>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>Версия:</value>
+    <comment>Версия:</comment>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>Заметки о версии:</value>
+    <comment>Заметки о версии:</comment>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Информация о данных по обследованию</value>
+    <comment>Информация об обследовании</comment>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>Типы исследований:</value>
+    <comment>Типы исследований:</comment>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>Вид данных:</value>
+    <comment>Вид данных:</comment>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>Режим сбора данных:</value>
+    <comment>Режим сбора данных:</comment>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Информация об обследовании</value>
+    <comment>Информация об обследовании</comment>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>Страна:</value>
+    <comment>Страна:</comment>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>Год:</value>
+    <comment>Год:</comment>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>Языки:</value>
+    <comment>Языки:</comment>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Единица анализа:</value>
+    <comment>Единица анализа:</comment>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>Покрытие:</value>
+    <comment>Покрытие:</comment>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>Сфера:</value>
+    <comment>Сфера:</comment>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Основной исследователь:</value>
+    <comment>Основной исследователь:</comment>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>Консультанты:</value>
+    <comment>Консультанты:</comment>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>Дополнительная информация:</value>
+    <comment>Дополнительная информация:</comment>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>Заметки:</value>
+    <comment>Заметки:</comment>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>Ключевые слова:</value>
+    <comment>Ключевые слова:</comment>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>Финансирование:</value>
+    <comment>Финансирование:</comment>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>Доступ к опроснику</value>
+    <comment>Доступ к опроснику</comment>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePubic" xml:space="preserve">
+    <value>Согласен, чтоб опросник был общедоступным</value>
+    <comment>Согласен, чтоб опросник был общедоступным</comment>
   </data>
 </root>
