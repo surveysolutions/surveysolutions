@@ -361,7 +361,7 @@
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Attachments</value>
   </data>
-  <data name="SideBarMetadataTitle" xml:space="preserve">
+  <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Questionnaire description and survey info</value>
   </data>
   <data name="SideBarMetadataBasicInfo" xml:space="preserve">
@@ -404,7 +404,7 @@
     <value>Languages:</value>
   </data>
   <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
-    <value>Unit of alalysis:</value>
+    <value>Unit of analysis:</value>
   </data>
   <data name="SideBarMetadataCoverage" xml:space="preserve">
     <value>Coverage:</value>

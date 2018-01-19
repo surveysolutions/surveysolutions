@@ -2221,6 +2221,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire description and survey info.
+        /// </summary>
+        public static string SideBarMetadataHeader {
+            get {
+                return ResourceManager.GetString("SideBarMetadataHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keywords:.
         /// </summary>
         public static string SideBarMetadataKeywords {
@@ -2329,7 +2338,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unit of alalysis:.
+        ///   Looks up a localized string similar to Unit of analysis:.
         /// </summary>
         public static string SideBarMetadataUnitOfAlalysis {
             get {
