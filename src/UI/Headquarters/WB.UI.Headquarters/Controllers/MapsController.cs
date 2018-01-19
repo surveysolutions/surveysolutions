@@ -64,6 +64,8 @@ namespace WB.UI.Headquarters.Controllers
 
                 UploadMapsFileUrl = Url.RouteUrl("DefaultApiWithAction",
                     new {httproute = "", controller = "MapsApi", action = "Upload"}),
+                UserMapsUrl =
+                    Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMaps" }),
                 UserMapLinkingUrl =
                     Url.RouteUrl("Default", new {httproute = "", controller = "Maps", action = "UserMapsLink"}),
                 DeleteMapLinkUrl = Url.RouteUrl("DefaultApiWithAction",
@@ -105,6 +107,7 @@ namespace WB.UI.Headquarters.Controllers
                         controller = "MapsApi",
                         action = "UserMaps"
                     }),
+                MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
             };
             return View(model);
         }

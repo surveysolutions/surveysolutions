@@ -1190,4 +1190,10 @@
   <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
     <value>Finished with errors. Please repeat the action later. Write to support if problems will repeat in future.</value>
   </data>
+  <data name="MapList_UserMapsLink" xml:space="preserve">
+    <value>User Maps</value>
+  </data>
+  <data name="MapList_UserMapsTitle" xml:space="preserve">
+    <value>User Maps</value>
+  </data>
 </root>

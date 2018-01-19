@@ -1206,4 +1206,10 @@
   <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
     <value>Перемещение пользователей в прогрессе</value>
   </data>
+  <data name="MapList_UserMapsLink" xml:space="preserve">
+    <value>Карты пользователей</value>
+  </data>
+  <data name="MapList_UserMapsTitle" xml:space="preserve">
+    <value>Карты пользователей</value>
+  </data>
 </root>

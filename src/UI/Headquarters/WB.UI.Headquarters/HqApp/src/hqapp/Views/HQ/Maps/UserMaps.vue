@@ -1,6 +1,13 @@
 <template>
-    <HqLayout :hasFilter="false" :title="$t('Pages.MapList_Title')">        
-        
+    <HqLayout :hasFilter="false" >        
+        <div slot="headers">
+                <ol class="breadcrumb">
+                    <li>
+                        <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
+                    </li>
+                </ol>
+                    <h1>{{$t("Pages.MapList_UserMapsTitle")}}</h1>                     
+        </div>   
         <DataTables ref="table" 
             :tableOptions="tableOptions" 
             :contextMenuItems="contextMenuItems">
@@ -60,6 +67,19 @@ export default {
             name: "UserName",
             class: "title",
             title: this.$t("Pages.MapList_Name")
+          },
+          {
+            data: "maps",
+            name: "Maps",
+            orderable: false,
+            searchable: false,
+            title: this.$t("Pages.MapList_Title"),
+            render(data) {
+                const mapsLinks = _.map(data, (map) => { 
+                    return "<a href='" + window.input.settings.config.basePath + "Maps/Details?mapname=" + encodeURIComponent(map) + "'>" + map + "</a>" });
+
+                return _.join(mapsLinks, ", ");
+            }            
           }          
         ],
         ajax: {
