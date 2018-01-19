@@ -9845,7 +9845,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   width: 75%;
   min-width: 538px;
 }
-.left-side-panel.metadata .left-side-panel-content h3 {
+.left-side-panel.metadata.left-side-panel-content h3 {
   margin-left: 50px;
 }
 .metadata-panel .metadata {
@@ -9854,7 +9854,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .metadata-panel .attachments .panel-header {
   margin: 18px 24px 20px 18px;
 }
-.left-side-panel.metadata .foldback-region {
+.left-side-panel.metadata.foldback-region {
   left: 75%;
   background: url(i/left-panel-shadow-small.png) repeat-y;
 }
@@ -10049,6 +10049,10 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
   text-overflow: ellipsis;
   overflow: hidden;
   height: 37px;
+}
+.metadata-panel .dropdown-menu {
+  max-height: 400px;
+  overflow-y: auto;
 }
 .metadata-panel .dropdown-menu > li > a {
   font-weight: normal;
