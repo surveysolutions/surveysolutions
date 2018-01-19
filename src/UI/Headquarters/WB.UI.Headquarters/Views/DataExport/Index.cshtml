@@ -76,30 +76,6 @@
                         <h5>@DataExport.StatusOfExportTitle</h5>
                         <select id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title', selectPicker: {}"></select>
                     </div>
-                    <div class="block-filter">
-                        <h5>@DataExport.FromDate</h5>
-                        <div class="input-group">
-                            <input type="text" id="from-date" data-bind="flatpickr: fromDateSelected, flatpickrOptions: { maxDate: 'today', wrap: true, enableTime: false, dateFormat: 'Y-m-d'}" class="form-control flatpickr-input" readonly="readonly" data-input>
-                            <button type="submit" class="btn btn-link btn-clear">
-                                <span></span>
-                            </button>
-                            <span class="input-group-addon" data-toggle>
-                                <span class="calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="block-filter">
-                        <h5>@DataExport.ToDate</h5>
-                        <div class="input-group">
-                            <input type="text" id="to-date" data-bind="flatpickr: toDateSelected, flatpickrOptions: { maxDate: 'today', wrap: true, enableTime: false, dateFormat: 'Y-m-d'}" class="form-control flatpickr-input" readonly="readonly" data-input>
-                            <button type="submit" class="btn btn-link btn-clear">
-                                <span></span>
-                            </button>
-                            <span class="input-group-addon" data-toggle>
-                                <span class="calendar"></span>
-                            </span>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="preset-filters-container" data-bind="visible: RunningDataExportProcesses().length > 0">
