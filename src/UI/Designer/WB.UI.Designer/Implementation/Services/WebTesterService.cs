@@ -42,8 +42,6 @@ namespace WB.UI.Designer.Implementation.Services
 
         public string CreateTestQuestionnaire(Guid questionnaireId)
         {
-            Cache.Remove(questionnaireKey(questionnaireId));
-            
             string token = Guid.NewGuid().ToString();
 
             AddToCache(token, questionnaireId);

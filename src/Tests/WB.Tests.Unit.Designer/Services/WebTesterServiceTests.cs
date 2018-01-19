@@ -20,20 +20,5 @@ namespace WB.Tests.Unit.Designer.Services
 
             Assert.That(questionnaireId, Is.EqualTo(Id.g1));
         }
-
-        [Test]
-        public void should_expire_older_token_linked_to_questionnaire()
-        {
-            var subj = new WebTesterService( new WebTesterSettings {ExpirationAmountMinutes = 1});
-
-            var shouldBeExpiredToken = subj.CreateTestQuestionnaire(Id.g1);
-            var token = subj.CreateTestQuestionnaire(Id.g1);
-
-            Assert.Null(subj.GetQuestionnaire(shouldBeExpiredToken));
-
-            var questionnaireId = subj.GetQuestionnaire(token);
-
-            Assert.That(questionnaireId, Is.EqualTo(Id.g1));
-        }
     }
 }
