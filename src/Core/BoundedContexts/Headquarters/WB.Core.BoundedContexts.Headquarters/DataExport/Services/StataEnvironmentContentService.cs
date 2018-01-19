@@ -118,7 +118,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         protected string CreateLabelName(string columnName)
         {
-            return $"l{columnName}";
+            return columnName;
         }
 
         private string RemoveNotAllowedChars(string s)
