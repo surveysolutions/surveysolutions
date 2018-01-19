@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
@@ -17,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
@@ -55,15 +55,18 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
         /// <param name="exportType">Format of export data to download</param>
+        /// <param name="status">Status of exported interviews</param>
+        /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// 
         /// <response code="200">Returns content of the export file as zip archrive</response>
         /// <response code="404">Export file was not generated yet</response>
         /// <response code="400">Questionnaire id is malformed</response>
         [HttpGet]
         [Route(@"{exportType}/{id}")]
-        public IHttpActionResult Get(string id, DataExportFormat exportType)
+        public IHttpActionResult Get(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
-            QuestionnaireIdentity questionnaireIdentity;
-            if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
             string exportedFilePath;
@@ -73,7 +76,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                     exportedFilePath = this.ddiMetadataAccessor.GetFilePathToDDIMetadata(questionnaireIdentity);
                     break;
                 default:
-                    exportedFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, exportType);
+                    exportedFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
+                        questionnaireIdentity, exportType, status, from, to);
                     break;
             }
 
@@ -90,12 +94,16 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
         /// <param name="exportType">Format of export data to download</param>
+        /// <param name="status">Status of exported interviews</param>
+        /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// 
         /// <response code="200">Export started</response>
         /// <response code="400">Questionnaire id is malformed</response>
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id?}/start")]
-        public IHttpActionResult StartProcess(string id, DataExportFormat exportType)
+        public IHttpActionResult StartProcess(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             switch (exportType)
             {
@@ -109,7 +117,13 @@ namespace WB.UI.Headquarters.API.PublicApi
                     if (questionnaireBrowseItem == null)
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-                    this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(exportType, questionnaireIdentity, null));
+                    this.dataExportProcessesService.AddDataExport(
+                        new DataExportProcessDetails(exportType, questionnaireIdentity, null)
+                        {
+                            FromDate = from,
+                            ToDate = to,
+                            InterviewStatus = status
+                        });
                     break;
             }
 
@@ -121,12 +135,16 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
         /// <param name="exportType">Format of export data to download</param>
+        /// <param name="status">Status of exported interviews</param>
+        /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// 
         /// <response code="200">Canceled</response>
         /// <response code="400">Questionnaire id is malformed</response>
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id}/cancel")]
-        public IHttpActionResult CancelProcess(string id, DataExportFormat exportType)
+        public IHttpActionResult CancelProcess(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
@@ -136,7 +154,12 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
             this.dataExportProcessesService.DeleteDataExport(
-                new DataExportProcessDetails(exportType, questionnaireIdentity, null).NaturalId);
+                new DataExportProcessDetails(exportType, questionnaireIdentity, null)
+                {
+                    FromDate = from,
+                    ToDate = to,
+                    InterviewStatus = status
+                }.NaturalId);
 
             return this.Ok();
         }
@@ -146,6 +169,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
         /// <param name="exportType">Format of export data to download</param>
+        /// <param name="status">Status of exported interviews</param>
+        /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
         /// 
         /// <response code="200"></response>
         /// <response code="400">Questionnaire id is malformed</response>
@@ -153,10 +179,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [Route(@"{exportType}/{id}/details")]
         [ResponseType(typeof(ExportDetails))]
-        public IHttpActionResult ProcessDetails(string id, DataExportFormat exportType)
+        public IHttpActionResult ProcessDetails(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
-            QuestionnaireIdentity questionnaireIdentity;
-            if (!QuestionnaireIdentity.TryParse(id, out questionnaireIdentity))
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -172,7 +197,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return this.NotFound();
 
             var runningExportStatus = allExportStatuses.RunningDataExportProcesses.FirstOrDefault(x =>
-                x.QuestionnaireIdentity.Equals(questionnaireIdentity) && x.Format == exportType);
+                x.QuestionnaireIdentity.Equals(questionnaireIdentity) && x.Format == exportType && x.FromDate == from &&
+                x.ToDate == to && x.InterviewStatus == status);
 
             return this.Ok(new ExportDetails
             {
