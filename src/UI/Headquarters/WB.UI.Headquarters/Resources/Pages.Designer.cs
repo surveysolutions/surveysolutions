@@ -2401,6 +2401,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User Maps.
+        /// </summary>
+        public static string MapList_UserMapsLink {
+            get {
+                return ResourceManager.GetString("MapList_UserMapsLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Maps.
+        /// </summary>
+        public static string MapList_UserMapsTitle {
+            get {
+                return ResourceManager.GetString("MapList_UserMapsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are You sure You want to delink user from the map?.
         /// </summary>
         public static string MapUserLink_DiscardConfirm {
