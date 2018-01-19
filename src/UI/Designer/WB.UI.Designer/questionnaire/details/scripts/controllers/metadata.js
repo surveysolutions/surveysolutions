@@ -57,6 +57,7 @@
                 commandService.updateMetadata($state.params.questionnaireId, $scope.metadata).then(function () {
                     dataBind($scope.metadata.checkpoint, $scope.metadata);
                     $scope.metadata.form.$setPristine();
+                    $scope.questionnaire.title = $scope.metadata.title;
                 });
             };
 

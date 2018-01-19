@@ -925,7 +925,7 @@
     <comment>Закрыть панель метаинформации</comment>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Метаинформация</value>
+    <value>Описание опросника и данные по обследованию</value>
     <comment>Метаинформация</comment>
   </data>
 </root>
