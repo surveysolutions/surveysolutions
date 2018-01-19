@@ -1156,7 +1156,7 @@ namespace WB.Tests.Unit.Designer
 
             public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic)
             {
-                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic, null);
+                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic);
             }
         }
 
