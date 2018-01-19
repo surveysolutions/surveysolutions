@@ -147,27 +147,6 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid)
             {
                 var questionnaireId = Guid.NewGuid();
-                var metaInfo = new QuestionnaireMetaInfo()
-                {
-                    Version = model.Version,
-                    KindOfData = model.KindOfData,
-                    VersionNotes = model.VersionNotes,
-                    PrimaryInvestigator = model.PrimaryInvestigator,
-                    AgreeToMakeThisQuestionnairePubic = model.AgreeToMakeThisQuestionnairePubic,
-                    Year = model.Year,
-                    Language = model.Language,
-                    Country = model.Country,
-                    ModeOfDataCollection = model.ModeOfDataCollection,
-                    UnitOfAnalysis = model.UnitOfAnalysis,
-                    Consultant = model.Consultant,
-                    Coverage = model.Coverage,
-                    Funding = model.Funding,
-                    Keywords = model.Keywords,
-                    Notes = model.Notes,
-                    StudyType = model.StudyType,
-                    SubTitle = model.SubTitle,
-                    Universe = model.Universe,
-                };
 
                 try
                 {
@@ -175,8 +154,7 @@ namespace WB.UI.Designer.Controllers
                         questionnaireId: questionnaireId,
                         text: model.Title,
                         responsibleId: this.UserHelper.WebUser.UserId,
-                        isPublic: model.IsPublic,
-                        metaInfo: metaInfo);
+                        isPublic: model.IsPublic);
 
                     this.commandService.Execute(command);
 
