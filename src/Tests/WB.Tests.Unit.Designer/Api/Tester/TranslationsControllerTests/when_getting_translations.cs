@@ -26,10 +26,8 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
 
             var questionnaireDocument = new QuestionnaireDocument();
 
-            questionnaireDocument.Translations = storedTranslations
-                .Where(x => x.QuestionnaireId == questionnaireId)
-                .Select(y => new Translation { Id = y.TranslationId, Name = y.Id.ToString() })
-                .ToList();
+            questionnaireDocument.Translations = new[] {new Translation {Id = translationId, Name = translationName}}.ToList();
+                
 
             var questionnaireView = Create.QuestionnaireView(questionnaireDocument);
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
@@ -47,12 +45,17 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
         private static TranslationController controller;
 
         private static readonly Guid questionnaireId = Id.g1;
+        private static readonly Guid translationId = Id.g2;
+        private static readonly string translationName = "translation";
+
 
         private static TranslationDto[] expectedTranslations;
 
         private static readonly TranslationInstance[] storedTranslations =
         {
+            Create.TranslationInstance(questionnaireId: questionnaireId, translationId:translationId),
             Create.TranslationInstance(questionnaireId: questionnaireId),
+            Create.TranslationInstance(questionnaireId: Guid.NewGuid()),
             Create.TranslationInstance(questionnaireId: Guid.NewGuid())
         };
     }
