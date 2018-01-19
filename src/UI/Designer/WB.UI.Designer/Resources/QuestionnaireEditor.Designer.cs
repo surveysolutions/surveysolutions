@@ -2158,11 +2158,218 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Metadata.
+        ///   Looks up a localized string similar to Additional info.
+        /// </summary>
+        public static string SideBarMetadataAdditionalInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataAdditionalInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agree to make this questionnaire public.
+        /// </summary>
+        public static string SideBarMetadataAgreeToMakeThisQuestionnairePubic {
+            get {
+                return ResourceManager.GetString("SideBarMetadataAgreeToMakeThisQuestionnairePubic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Basic information.
+        /// </summary>
+        public static string SideBarMetadataBasicInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataBasicInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consultants:.
+        /// </summary>
+        public static string SideBarMetadataConsultants {
+            get {
+                return ResourceManager.GetString("SideBarMetadataConsultants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country:.
+        /// </summary>
+        public static string SideBarMetadataCountry {
+            get {
+                return ResourceManager.GetString("SideBarMetadataCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coverage:.
+        /// </summary>
+        public static string SideBarMetadataCoverage {
+            get {
+                return ResourceManager.GetString("SideBarMetadataCoverage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Funding:.
+        /// </summary>
+        public static string SideBarMetadataFunding {
+            get {
+                return ResourceManager.GetString("SideBarMetadataFunding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keywords:.
+        /// </summary>
+        public static string SideBarMetadataKeywords {
+            get {
+                return ResourceManager.GetString("SideBarMetadataKeywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind of data:.
+        /// </summary>
+        public static string SideBarMetadataKindOfData {
+            get {
+                return ResourceManager.GetString("SideBarMetadataKindOfData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Languages:.
+        /// </summary>
+        public static string SideBarMetadataLanguages {
+            get {
+                return ResourceManager.GetString("SideBarMetadataLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode of Data Collection:.
+        /// </summary>
+        public static string SideBarMetadataModeOfDataCollection {
+            get {
+                return ResourceManager.GetString("SideBarMetadataModeOfDataCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notes:.
+        /// </summary>
+        public static string SideBarMetadataNotes {
+            get {
+                return ResourceManager.GetString("SideBarMetadataNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary Investigator:.
+        /// </summary>
+        public static string SideBarMetadataPrimaryInvestigator {
+            get {
+                return ResourceManager.GetString("SideBarMetadataPrimaryInvestigator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire access.
+        /// </summary>
+        public static string SideBarMetadataQuestionnaireAccess {
+            get {
+                return ResourceManager.GetString("SideBarMetadataQuestionnaireAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Study types:.
+        /// </summary>
+        public static string SideBarMetadataStudyTypes {
+            get {
+                return ResourceManager.GetString("SideBarMetadataStudyTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle:.
+        /// </summary>
+        public static string SideBarMetadataSubtitle {
+            get {
+                return ResourceManager.GetString("SideBarMetadataSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey data information.
+        /// </summary>
+        public static string SideBarMetadataSurveyDataInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataSurveyDataInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey information.
+        /// </summary>
+        public static string SideBarMetadataSurveyInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataSurveyInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title (affects name on questionnaire list):.
         /// </summary>
         public static string SideBarMetadataTitle {
             get {
                 return ResourceManager.GetString("SideBarMetadataTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unit of alalysis:.
+        /// </summary>
+        public static string SideBarMetadataUnitOfAlalysis {
+            get {
+                return ResourceManager.GetString("SideBarMetadataUnitOfAlalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Universe:.
+        /// </summary>
+        public static string SideBarMetadataUniverse {
+            get {
+                return ResourceManager.GetString("SideBarMetadataUniverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version identificator:.
+        /// </summary>
+        public static string SideBarMetadataVersionIdentificator {
+            get {
+                return ResourceManager.GetString("SideBarMetadataVersionIdentificator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version notes:.
+        /// </summary>
+        public static string SideBarMetadataVersionNotes {
+            get {
+                return ResourceManager.GetString("SideBarMetadataVersionNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year:.
+        /// </summary>
+        public static string SideBarMetadataYear {
+            get {
+                return ResourceManager.GetString("SideBarMetadataYear", resourceCulture);
             }
         }
         

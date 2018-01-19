@@ -396,43 +396,43 @@
 
             <div class="metadata">
                 <perfect-scrollbar class="scroller">
-                    <h3>Questionnaire description and survey info</h3>
-                            
+                    <h3 ng-i18next="SideBarMetadataTitle"></h3>
+  
                     <form role="form" name="metadataForm" novalidate>
                         <ng-form name="metadata.form">
 
                             <ul class="list-unstyled metadata-blocks">
                                 <li>
-                                    <h4>Basic information</h4>
+                                    <h4>{{'SideBarMetadataBasicInfo' | i18next}}</h4>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Title (affects name on questionnaire list):</span>
+                                        <span class="label-title">{{'SideBarMetadataTitle' | i18next}}</span>
                                         <div class="form-group">
                                             <textarea class="form-control js-elasticArea" name="title" ng-model="metadata.title"></textarea>
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Subtitle:</span>
+                                        <span class="label-title">{{'SideBarMetadataSubtitle' | i18next}}</span>
                                         <div class="form-group">
                                             <textarea class="form-control js-elasticArea" name="subTitle" ng-model="metadata.subTitle"></textarea>
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Version identificator:</span>
+                                        <span class="label-title">{{'SideBarMetadataVersionIdentificator' | i18next}}</span>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="version" ng-model="metadata.version">
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Version notes:</span>
+                                        <span class="label-title">{{'SideBarMetadataVersionNotes' | i18next}}</span>
                                         <div class="form-group">
                                             <textarea class="form-control js-elasticArea" name="versionNotes" ng-model="metadata.versionNotes"></textarea>
                                         </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <h4>Survey data information</h4>
+                                    <h4>{{'SideBarMetadataSurveyDataInfo' | i18next}}</h4>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Study types:</span>
+                                        <span class="label-title">{{'SideBarMetadataStudyTypes' | i18next}}</span>
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -450,7 +450,7 @@
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Kind of data:</span>
+                                        <span class="label-title">{{'SideBarMetadataKindOfData' | i18next}}</span>
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -468,7 +468,7 @@
                                         <input type="hidden" name="kindOfData" ng-model="metadata.kindOfData" />
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Mode of Data Collection:</span>
+                                        <span class="label-title">{{'SideBarMetadataModeOfDataCollection' | i18next}}</span>
                                         
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
@@ -488,9 +488,9 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <h4>Survey information</h4>
+                                    <h4>{{'SideBarMetadataSurveyInfo' | i18next}}</h4>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Country:</span>
+                                        <span class="label-title">{{'SideBarMetadataCountry' | i18next}}</span>
                                         <div class="form-group">
                                             <div class="btn-group dropdown">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -508,59 +508,66 @@
                                         <input type="hidden" name="country" ng-model="metadata.country" />
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Year:</span>
+                                        <span class="label-title">{{'SideBarMetadataYear' | i18next}}</span>
                                         <div class="form-group">
-                                            <input type="text" class="form-control date-field" name="year" ng-model="metadata.year" />
+                                            <input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control date-field" name="year" ng-model="metadata.year" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Languages:</span>
+                                        <span class="label-title">{{'SideBarMetadataLanguages' | i18next}}</span>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="language" ng-model="metadata.language" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Unit of alalysis:</span>
+                                        <span class="label-title">{{'SideBarMetadataUnitOfAlalysis' | i18next}}</span>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="unitOfAnalysis" ng-model="metadata.unitOfAnalysis" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Coverage:</span>
+                                        <span class="label-title">{{'SideBarMetadataCoverage' | i18next}}</span>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="coverage" ng-model="metadata.coverage" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Universe:</span>
+                                        <span class="label-title">{{'SideBarMetadataUniverse' | i18next}}</span>
                                         <div class="form-group">
                                             <textarea class="form-control js-elasticArea" name="universe" ng-model="metadata.universe" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Primary Investigator:</span>
+                                        <span class="label-title">{{'SideBarMetadataPrimaryInvestigator' | i18next}}</span>
                                         <div class="form-group">
                                             <input type="text" class="form-control" name="primaryInvestigator" ng-model="metadata.primaryInvestigator" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Consultants:</span>
+                                        <span class="label-title">{{'SideBarMetadataConsultants' | i18next}}</span>
                                         <div class="form-group">
                                             <textarea class="form-control js-elasticArea" name="consultant" ng-model="metadata.consultant">
                                             </textarea>
                                         </div>
                                     </div>
+                                    <div class="field-wrapper">
+                                        <span class="label-title">{{'SideBarMetadataFunding' | i18next}}</span>
+                                        <div class="form-group">
+                                            <textarea class="form-control js-elasticArea" name="funding" ng-model="metadata.funding">
+                                            </textarea>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
-                                    <h4>Additional info</h4>
+                                    <h4>{{'SideBarMetadataAdditionalInfo' | i18next}}</h4>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Notes:</span>
+                                        <span class="label-title">{{'SideBarMetadataNotes' | i18next}}</span>
                                         <div class="form-group">
                                             <textarea class="form-control js-elasticArea" name="notes" ng-model="metadata.notes" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
-                                        <span class="label-title">Keywords:</span>
+                                        <span class="label-title">{{'SideBarMetadataKeywords' | i18next}}</span>
                                         <div class="form-group">
                                             <textarea class="form-control js-elasticArea" name="keywords" ng-model="metadata.keywords">
                                             </textarea>
@@ -568,10 +575,10 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <h4>Questionnaire access</h4>
+                                    <h4>{{'SideBarMetadataQuestionnaireAccess' | i18next}}</h4>
                                     <div class="checkbox">
                                         <input id="agreeToMakeThisQuestionnairePubic" name="agreeToMakeThisQuestionnairePubic" ng-model="metadata.agreeToMakeThisQuestionnairePubic" type="checkbox" class="checkbox-filter" checked>
-                                        <label for="agreeToMakeThisQuestionnairePubic" class=""><span class="tick"></span>Agree to make this questionnaire public</label>
+                                        <label for="agreeToMakeThisQuestionnairePubic" class=""><span class="tick"></span>{{'SideBarMetadataAgreeToMakeThisQuestionnairePubic' | i18next}}</label>
                                     </div>
                                     <!--<div class="checkbox">
                                         <input id="qazqaz123" type="checkbox" class="checkbox-filter" checked>
@@ -580,8 +587,8 @@
                                 </li>
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
-                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
-                                <button type="button" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
+                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>{{'Save' | i18next}}</button>
+                                <button type="button" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>{{'Cancel' | i18next}}</button>
                             </div>
                         </ng-form>
                     </form>
