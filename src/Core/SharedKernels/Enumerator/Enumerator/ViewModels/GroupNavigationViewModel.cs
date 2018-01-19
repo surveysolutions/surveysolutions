@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -211,6 +212,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task NavigateAsync()
         {
+            // focus out event is fired after navigation button click event, so we cannot accept answer before leaving a section. This delay should force command to be put into the queue before navigation
+            await Task.Delay(100); 
             await this.commandService.WaitPendingCommandsAsync().ConfigureAwait(false);
             switch (this.NavigationGroupType)
             {
