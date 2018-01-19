@@ -985,8 +985,8 @@
     <comment>Покрытие:</comment>
   </data>
   <data name="SideBarMetadataUniverse" xml:space="preserve">
-    <value>Сфера:</value>
-    <comment>Сфера:</comment>
+    <value>Генеральная совокупность:</value>
+    <comment>Генеральная совокупность:</comment>
   </data>
   <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
     <value>Основной исследователь:</value>
