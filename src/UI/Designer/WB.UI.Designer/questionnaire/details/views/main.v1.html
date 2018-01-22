@@ -460,7 +460,7 @@
                                         <div class="form-group">
                                             <div class="btn-group dropdown" ng-class="{'has-value': metadata.kindOfData }">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ metadata.kindsOfData ? (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title  : 'SelectKindOfData' | i18next}}
+                                                    {{ metadata.kindOfData ? (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title  : 'SelectKindOfData' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
                                                 <button type="button" class="btn btn-link btn-clear" ng-click="metadata.kindOfData = null">
@@ -483,7 +483,7 @@
                                         <div class="form-group">
                                             <div class="btn-group dropdown" ng-class="{'has-value': metadata.modeOfDataCollection }">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ metadata.modesOfDataCollection ? (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title  : 'SelectModeOfDataCollection' | i18next}}
+                                                    {{ metadata.modeOfDataCollection ? (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title  : 'SelectModeOfDataCollection' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
                                                 <button type="button" class="btn btn-link btn-clear" ng-click="metadata.modeOfDataCollection = null">
