@@ -1016,8 +1016,24 @@
     <value>Доступ к опроснику</value>
     <comment>Доступ к опроснику</comment>
   </data>
-  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePubic" xml:space="preserve">
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
     <value>Согласен, чтоб опросник был общедоступным</value>
     <comment>Согласен, чтоб опросник был общедоступным</comment>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Выберите страну</value>
+    <comment>Выберите страну</comment>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>Выберите тип исследования</value>
+    <comment>Выберите тип исследования</comment>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>Выберите вид данных</value>
+    <comment>Выберите вид данных</comment>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>Выберите режим сбора данных</value>
+    <comment>Выберите режим сбора данных</comment>
   </data>
 </root>

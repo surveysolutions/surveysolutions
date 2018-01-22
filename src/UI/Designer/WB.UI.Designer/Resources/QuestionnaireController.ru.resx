@@ -317,10 +317,6 @@
     <value>Подзаголовок опросника</value>
     <comment>Дополнительное описание опросника</comment>
   </data>
-  <data name="SelectCountry" xml:space="preserve">
-    <value>Выберите страну</value>
-    <comment>Выберите страну</comment>
-  </data>
   <data name="SharedQuestionnaires" xml:space="preserve">
     <value>Общие со мной опросники</value>
     <comment>Общие со мной опросники</comment>
