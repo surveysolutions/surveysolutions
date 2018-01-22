@@ -9842,7 +9842,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   background-repeat: no-repeat;
 }
 .metadata-panel {
-  width: 100%;
+  width: 75%;
   min-width: 538px;
 }
 .left-side-panel.metadata.left-side-panel-content h3 {
@@ -10077,9 +10077,9 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
   top: calc(44%);
 }
 .metadata-panel .dropdown .btn-clear {
-  position: relative;
   height: 37px;
-  margin-left: 5px;
+  left: auto;
+  right: -40px;
 }
 .metadata-panel .dropdown.has-value .btn-clear {
   visibility: visible;
@@ -10088,5 +10088,8 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
 @media (max-width: 1600px) {
   .metadata-panel .form-control {
     width: 375px;
+  }
+  .metadata-panel .dropdown .btn-clear {
+    right: -32px;
   }
 }
