@@ -35,7 +35,7 @@
                 metadata.modeOfDataCollection = metadataDto.modeOfDataCollection;
                 metadata.notes = metadataDto.notes;
                 metadata.keywords = metadataDto.keywords;
-                metadata.agreeToMakeThisQuestionnairePubic = metadataDto.agreeToMakeThisQuestionnairePubic;
+                metadata.agreeToMakeThisQuestionnairePublic = metadataDto.agreeToMakeThisQuestionnairePublic;
             };
 
             $scope.loadMetadata = function () {

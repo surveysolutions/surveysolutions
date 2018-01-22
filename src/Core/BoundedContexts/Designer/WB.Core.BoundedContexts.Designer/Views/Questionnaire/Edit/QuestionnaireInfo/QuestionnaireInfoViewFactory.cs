@@ -169,7 +169,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 Country = questionnaireDocument.Metadata?.Country,
                 ModeOfDataCollection = questionnaireDocument.Metadata?.ModeOfDataCollection,
                 UnitOfAnalysis = questionnaireDocument.Metadata?.UnitOfAnalysis,
-                AgreeToMakeThisQuestionnairePubic = questionnaireDocument.Metadata?.AgreeToMakeThisQuestionnairePubic ?? false,
+                AgreeToMakeThisQuestionnairePublic = questionnaireDocument.Metadata?.AgreeToMakeThisQuestionnairePublic ?? false,
                 Universe = questionnaireDocument.Metadata?.Universe,
                 Funding = questionnaireDocument.Metadata?.Funding,
                 Coverage = questionnaireDocument.Metadata?.Coverage,

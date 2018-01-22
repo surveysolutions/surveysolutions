@@ -40,6 +40,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
 
         public string Keywords { get; set; }
 
-        public bool AgreeToMakeThisQuestionnairePubic { get; set; }
+        public bool AgreeToMakeThisQuestionnairePublic { get; set; }
     }
 }

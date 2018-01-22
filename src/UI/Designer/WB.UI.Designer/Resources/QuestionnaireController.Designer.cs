@@ -72,9 +72,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Agree to make this questionnaire pubic.
         /// </summary>
-        public static string AgreeToMakeThisQuestionnairePubic {
+        public static string AgreeToMakeThisQuestionnairePublic {
             get {
-                return ResourceManager.GetString("AgreeToMakeThisQuestionnairePubic", resourceCulture);
+                return ResourceManager.GetString("AgreeToMakeThisQuestionnairePublic", resourceCulture);
             }
         }
         
@@ -636,42 +636,6 @@ namespace WB.UI.Designer.Resources {
         public static string RetryExportPDF {
             get {
                 return ResourceManager.GetString("RetryExportPDF", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select country.
-        /// </summary>
-        public static string SelectCountry {
-            get {
-                return ResourceManager.GetString("SelectCountry", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select a Kind of data.
-        /// </summary>
-        public static string SelectKindOfData {
-            get {
-                return ResourceManager.GetString("SelectKindOfData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select a Mode of Data Collection.
-        /// </summary>
-        public static string SelectModeOfDataCollection {
-            get {
-                return ResourceManager.GetString("SelectModeOfDataCollection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select a Study Type.
-        /// </summary>
-        public static string SelectStudyType {
-            get {
-                return ResourceManager.GetString("SelectStudyType", resourceCulture);
             }
         }
         

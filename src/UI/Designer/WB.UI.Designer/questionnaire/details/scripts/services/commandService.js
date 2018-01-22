@@ -193,7 +193,7 @@
                         modeOfDataCollection: metadata.modeOfDataCollection,
                         notes: metadata.notes,
                         keywords: metadata.keywords,
-                        agreeToMakeThisQuestionnairePubic: metadata.agreeToMakeThisQuestionnairePubic
+                        agreeToMakeThisQuestionnairePublic: metadata.agreeToMakeThisQuestionnairePublic
                     }
                 };
 
