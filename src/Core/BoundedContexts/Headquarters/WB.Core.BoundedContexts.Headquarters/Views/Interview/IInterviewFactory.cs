@@ -25,7 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         string[] GetQuestionnairesWithAnsweredGpsQuestions();
 
-        Dictionary<Guid, List<InterviewEntity>> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid[] interviews);
         List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireIdentity questionnaireId, List<InterviewEntity> interviewEntities);
         void Save(InterviewState interviewState);
