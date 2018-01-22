@@ -17,7 +17,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -797,6 +797,7 @@
     <Content Include="Views\Shared\AssignFolderDialog.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
+    <Content Include="Views\Questionnaire\Shared.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
