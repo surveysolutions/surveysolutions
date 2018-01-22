@@ -1,21 +1,16 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
-using System.Web.Http.Filters;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Modules;
 using Ninject.Syntax;
-using Ninject.Web.Common;
-using Ninject.Web.Mvc.FilterBindingSyntax;
-using Ninject.Web.WebApi.FilterBindingSyntax;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Threading;
-using FilterScope = System.Web.Mvc.FilterScope;
 
-namespace WB.UI.Shared.Web.Modules
+namespace CoreTester
 {
-    public  class NinjectModuleAdapter<TModule> : NinjectModuleAdapter
+        public  class NinjectModuleAdapter<TModule> : NinjectModuleAdapter
         where TModule : IModule
     {
         private readonly TModule module;
@@ -31,23 +26,7 @@ namespace WB.UI.Shared.Web.Modules
         }
     }
 
-    public class NinjectWebModuleAdapter<TModule> : NinjectModuleAdapter
-        where TModule : IWebModule
-    {
-        private readonly TModule module;
-
-        public NinjectWebModuleAdapter(TModule module)
-        {
-            this.module = module;
-        }
-
-        public override void Load()
-        {
-            this.module.Load(this);
-        }
-    }
-    
-    public abstract class NinjectModuleAdapter : NinjectModule, IWebIocRegistry
+    public abstract class NinjectModuleAdapter : NinjectModule, IIocRegistry
     {
         void IIocRegistry.Bind<TInterface, TImplementation>()
         {
@@ -144,7 +123,7 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindToMethodInRequestScope<T>(Func<IModuleContext, T> func)
         {
-            this.Kernel.Bind<T>().ToMethod(ctx => func(new NinjectModuleContext(ctx))).InRequestScope();
+            throw new NotImplementedException();
         }
 
         void IIocRegistry.BindToConstant<T>(Func<T> func)
@@ -174,44 +153,6 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind(implementation);
         }
 
-        void IWebIocRegistry.BindMvcFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order)
-        {
-            this.Kernel.BindFilter<T>(filterScope, order);
-        }
-
-        public void BindMvcFilterInSingletonScope<T>(FilterScope filterScope, int? order)
-        {
-            this.Kernel.BindFilter<T>(filterScope, order).InSingletonScope();
-        }
-
-        void IWebIocRegistry.BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order)
-        {
-            this.Kernel.BindFilter<T>(filterScope, order).WhenActionMethodHasNo<TAttribute>();
-        }
-
-        void IWebIocRegistry.BindHttpFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) 
-        {
-            this.Kernel.BindHttpFilter<T>(filterScope);
-        }
-
-        void IWebIocRegistry.BindHttpFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order) 
-        {
-            this.Kernel.BindHttpFilter<T>(filterScope)
-                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(TAttribute)).Any());
-        }
-
-        public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
-        {
-            this.Kernel.BindHttpFilter<T>(filterScope).WhenControllerHas<TAttribute>();
-        }
-
-        public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope,
-            ConstructorArgument constructorArgument) where T : IFilter
-        {
-            this.Kernel.BindHttpFilter<T>(filterScope).WhenControllerHas<TAttribute>()
-                .WithConstructorArgument(constructorArgument.Name, ctx => constructorArgument.Value(new NinjectModuleContext(ctx)));
-        }
-
         void IIocRegistry.Unbind<TInterface>()
         {
             this.Kernel.Unbind<TInterface>();
@@ -238,12 +179,10 @@ namespace WB.UI.Shared.Web.Modules
         public static IBindingNamedWithOrOnSyntax<T> InIsolatedThreadScopeOrRequestScopeOrThreadScope<T>(IBindingInSyntax<T> syntax)
         {
             var isolatedThreadScopeCallback = GetIsolatedThreadScopeCallback();
-            var requestScopeCallback = GetScopeCallback(syntax.InRequestScope());
             var threadScopeCallback = GetScopeCallback(syntax.InThreadScope());
 
             return syntax.InScope(context
                 => isolatedThreadScopeCallback.Invoke(context)
-                   ?? requestScopeCallback.Invoke(context)
                    ?? threadScopeCallback.Invoke(context));
         }
 
@@ -255,6 +194,67 @@ namespace WB.UI.Shared.Web.Modules
         private static Func<IContext, object> GetIsolatedThreadScopeCallback()
         {
             return context => Thread.CurrentThread.AsIsolatedThread();
+        }
+    }
+    public class NinjectModuleContext : IModuleContext
+    {
+        private readonly IContext context;
+
+        public NinjectModuleContext(IContext context)
+        {
+            this.context = context;
+        }
+
+        public T Resolve<T>()
+        {
+            return context.Kernel.Get<T>();
+        }
+
+        public Type MemberDeclaringType => context.Request.Target?.Member.DeclaringType;
+
+        public T Inject<T>()
+        {
+            return context.Kernel.Get<T>();
+        }
+
+        public T Get<T>()
+        {
+            return context.Kernel.Get<T>();
+        }
+
+        public T Get<T>(string name)
+        {
+            return context.Kernel.Get<T>(name);
+        }
+
+        public object Get(Type type)
+        {
+            return context.Kernel.Get(type);
+        }
+
+        public object GetServiceWithGenericType(Type type, Type genericType)
+        {
+            return context.Kernel.GetService(type.MakeGenericType(genericType));
+        }
+
+        public Type GetGenericArgument()
+        {
+            return context.GenericArguments[0];
+        }
+    }
+
+    public class NinjectConstructorContext : IConstructorContext
+    {
+        private readonly IContext context;
+
+        public NinjectConstructorContext(IContext context)
+        {
+            this.context = context;
+        }
+
+        public T Inject<T>()
+        {
+            return context.Kernel.Get<T>();
         }
     }
 }

@@ -233,7 +233,7 @@ namespace WB.Core.Infrastructure.CommandBus
                 preProcessors: configuration.GetPreProcessors()));
         }
 
-        internal static bool Contains(ICommand command)
+        public static bool Contains(ICommand command)
             => Handlers.ContainsKey(command.GetType().Name);
 
         private static HandlerDescriptor GetHandlerDescriptor(ICommand command)

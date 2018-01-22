@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Main.Core.Documents;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -27,6 +30,8 @@ namespace CoreTester
         private readonly ILogger logger;
         private readonly ICommandService commandService;
         private readonly ITransactionManagerProvider transactionManager;
+        private readonly IPlainTransactionManagerProvider plainTransactionManager;
+        private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireBrowseViewFactory questionnairesBrowseFactory;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummaries;
@@ -38,8 +43,9 @@ namespace CoreTester
             ILogger logger,
             ITransactionManagerProvider transactionManager, 
             INativeReadSideStorage<InterviewSummary> interviewSummaries, 
-            IQuestionnaireStorage questionnaireStorage, 
-            IEventStore eventStore)
+            IPlainKeyValueStorage<QuestionnaireDocument> questionnaireRepository, 
+            IEventStore eventStore, 
+            IQuestionnaireStorage questionnaireStorage, IPlainTransactionManagerProvider plainTransactionManager)
         {
             this.commandService = commandService;
             this.questionnairesBrowseFactory = questionnairesBrowseFactory;
@@ -47,19 +53,28 @@ namespace CoreTester
             this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.questionnaireStorage = questionnaireStorage;
+            this.plainTransactionManager = plainTransactionManager;
             this.eventStore = eventStore;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public int Run()
         {
-            var questionnaireBrowseItems = questionnairesBrowseFactory.Load(new QuestionnaireBrowseInputModel { PageSize = 1000 });
+            var questionnaireBrowseItems =  this.plainTransactionManager.GetPlainTransactionManager().ExecuteInQueryTransaction(() =>
+                questionnairesBrowseFactory.Load(new QuestionnaireBrowseInputModel { PageSize = 1000 }));
+            
             foreach (var questionnaireBrowseItem in questionnaireBrowseItems.Items)
             {
                 var questionnaireIdentity = new QuestionnaireIdentity(questionnaireBrowseItem.QuestionnaireId, questionnaireBrowseItem.Version);
                 var interviewIdsToProcess = GetCompletedInterviewIdsByQuestionnaire(questionnaireIdentity).ToList();
                 if (interviewIdsToProcess.Count <= 0) continue;
 
-                var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+                var questionnaireRepositoryId = $"{questionnaireBrowseItem.QuestionnaireId.FormatGuid()}${questionnaireBrowseItem.Version}";
+                QuestionnaireDocument questionnaire =this.plainTransactionManager.GetPlainTransactionManager().ExecuteInQueryTransaction(() =>
+                    questionnaireRepository.GetById(questionnaireRepositoryId));
+
+                // UpdateQuestionnaire(questionnaire);
+                questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId, questionnaireBrowseItem.Version, questionnaire);
 
                 foreach (var interviewId in interviewIdsToProcess)
                 {
@@ -82,6 +97,7 @@ namespace CoreTester
                                 : $"Error during processing interview {interviewId}", exception);
                     }
                 }
+                questionnaireStorage.DeleteQuestionnaireDocument(questionnaireBrowseItem.QuestionnaireId, questionnaireBrowseItem.Version);
             }
             return 0;
         }
