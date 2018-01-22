@@ -126,7 +126,7 @@
         onSuccessCommandExecuting,
         onCancelConfirmation)
     {
-        var allItems  = selectedRowAsArray || self.SelectedItems();
+        var allItems  = _.isArray(selectedRowAsArray) ? selectedRowAsArray : self.SelectedItems();
         var filteredItems = ko.utils.arrayFilter(allItems, filterFunc);
 
         var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
