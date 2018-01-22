@@ -144,6 +144,11 @@ namespace WB.Tests.Abc.TestFactories
                 new Identity(questionId, questionRosterVector ?? new decimal[0]),
                 options ?? new RosterVector[0]);
 
+        public List<HeaderColumn> ColumnHeaders(string[] columnNames)
+        {
+            return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
+        }
+
         public CommentedStatusHistroyView CommentedStatusHistroyView(
             InterviewStatus status = InterviewStatus.InterviewerAssigned, string comment = null, DateTime? timestamp = null)
             => new CommentedStatusHistroyView
