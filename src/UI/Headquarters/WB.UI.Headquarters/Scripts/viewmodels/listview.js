@@ -130,7 +130,7 @@
     });
 
     self.GetSelectedItemsAfterFilter = function (selectedRowAsArray, filterFunc) {
-        var allItems = selectedRowAsArray || self.SelectedItems();
+        var allItems = _.isArray(selectedRowAsArray) ? selectedRowAsArray : self.SelectedItems();
         var filteredItems = ko.utils.arrayFilter(allItems, filterFunc);
         return filteredItems;
     }
