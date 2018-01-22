@@ -269,9 +269,13 @@
     <Compile Include="Infrastructure\WebTesterStatefulInterview.cs" />
     <Compile Include="Services\Implementation\AppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\IAppdomainsPerInterviewManager.cs" />
-    <Compile Include="Services\IMediaStorage.cs" />
+    <Compile Include="Services\ICacheStorage.cs" />
     <Compile Include="Services\CategoricalOptionsFilter.cs" />
+    <Compile Include="Services\IEvictionObservable.cs" />
+    <Compile Include="Services\IEvictionObserver.cs" />
+    <Compile Include="Services\Implementation\TokenEviction.cs" />
     <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
+    <Compile Include="Services\Implementation\WebTesterQuestionnaireStorage.cs" />
     <Compile Include="Services\MetricsService.cs" />
     <Compile Include="Services\MultimediaFile.cs" />
     <Compile Include="Controllers\WebInterviewResourcesController.cs" />
@@ -289,7 +293,7 @@
       <DependentUpon>Common.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IDesignerWebTesterApi.cs" />
-    <Compile Include="Services\Implementation\InMemoryMediaStorage.cs" />
+    <Compile Include="Services\Implementation\InMemoryCacheStorage.cs" />
     <Compile Include="Services\Implementation\TranslationStorage.cs" />
     <Compile Include="Services\SoundInfo.cs" />
     <Compile Include="Startup.cs" />

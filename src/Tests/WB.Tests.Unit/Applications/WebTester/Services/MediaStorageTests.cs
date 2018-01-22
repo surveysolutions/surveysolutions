@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Tests.Abc;
+using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Unit.Applications.WebTester.Services
@@ -14,69 +13,70 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         [Test]
         public void should_add_item_to_cache()
         {
-            IObservable<Guid> evictionNotification = new Subject<Guid>();
-            var subj = Create.Storage.MediaStorage(evictionNotification);
+            string fileName = Id.g1.ToString();
+            
+            var subj = Create.Storage.MediaStorage();
 
-            subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
+            subj.Store(new MultimediaFile
             {
-                Filename = Id.g1.ToString()
-            });
+                Filename = fileName
+            }, fileName, Id.g1);
 
-            Assert.That(subj.Get(Id.gA, Id.g1.ToString()).Filename, Is.EqualTo(Id.g1.ToString()));
+            Assert.That(subj.Get(fileName, Id.g1).Filename, Is.EqualTo(fileName));
         }
 
         [Test]
         public void should_add_multiple_items_per_interview_to_cache()
         {
-            IObservable<Guid> evictionNotification = new Subject<Guid>();
-            var subj = new InMemoryMediaStorage(evictionNotification);
+            var subj = Create.Storage.MediaStorage();
 
-            subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
-            {
-                Filename = Id.g1.ToString()
-            });
+            var interviewA = Id.gA;
+            var interviewB = Id.gB;
 
-            subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
-            {
-                Filename = Id.g2.ToString()
-            });
+            string fileA = Id.g1.ToString(),
+                fileA1 = Id.g1.ToString(),
+                fileB = Id.g1.ToString();
 
-            subj.Store(Id.gB, new UI.WebTester.Services.MultimediaFile
-            {
-                Filename = Id.g2.ToString()
-            });
+            StoreFile(subj, fileA,  interviewA);
+            StoreFile(subj, fileA1, interviewA);
+            StoreFile(subj, fileB,  interviewB);
 
-            Assert.That(subj.Get(Id.gA, Id.g2.ToString()).Filename, Is.EqualTo(Id.g2.ToString()));
+            Assert.That(subj.Get(fileA1, interviewA).Filename, Is.EqualTo(fileA1));
         }
 
         [Test]
         public void should_remove_items_from_cache_on_evict()
         {
-            var evictionNotification = new Subject<Guid>();
-            var subj = new InMemoryMediaStorage(evictionNotification);
+            var evictionNotification = new TokenEviction();
+            InMemoryCacheStorage<MultimediaFile, string> subj = Create.Storage.MediaStorage(evictionNotification);
 
-            subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
-            {
-                Filename = Id.g1.ToString()
-            });
+            var interviewA = Id.gA;
+            var interviewB = Id.gB;
 
-            subj.Store(Id.gA, new UI.WebTester.Services.MultimediaFile
-            {
-                Filename = Id.g2.ToString()
-            });
+            string fileA = Id.g1.ToString(),
+                fileA1 = Id.g1.ToString(),
+                fileB = Id.g1.ToString();
 
-            subj.Store(Id.gB, new UI.WebTester.Services.MultimediaFile
-            {
-                Filename = Id.g2.ToString()
-            });
+            StoreFile(subj, fileA,  interviewA);
+            StoreFile(subj, fileA1, interviewA);
+            StoreFile(subj, fileB,  interviewB);
 
-            evictionNotification.OnNext(Id.gA);
+            evictionNotification.OnNext(interviewA);
                 
-            Assert.That(subj.Get(Id.gA, Id.g2.ToString()), Is.Null);
+            Assert.That(subj.Get(fileA1, interviewA), Is.Null);
+            Assert.That(subj.Get(fileA, interviewA), Is.Null);
 
             evictionNotification.OnNext(Id.gB);
+            
+            Assert.That(subj.Get(fileB, interviewB), Is.Null);
+        }
 
-            Assert.That(subj.Get(Id.gB, Id.g2.ToString()), Is.Null);
+        private void StoreFile(InMemoryCacheStorage<MultimediaFile, string> subj, string filename, Guid interviewId)
+        {
+            subj.Store(new MultimediaFile
+            {
+                Filename = filename
+            }, filename, interviewId);
         }
     }
 }
