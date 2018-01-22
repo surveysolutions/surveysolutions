@@ -21,13 +21,13 @@ namespace WB.UI.WebTester.Controllers
         private readonly ICommandService commandService;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IMediaStorage mediaStorage;
+        private readonly ICacheStorage<MultimediaFile,string> mediaStorage;
         private readonly IImageProcessingService imageProcessingService;
 
         public MultimediaController(ICommandService commandService,
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
-            IMediaStorage mediaStorage,
+            ICacheStorage<MultimediaFile, string> mediaStorage,
             IImageProcessingService imageProcessingService)
         {
             this.commandService = commandService;
@@ -50,7 +50,7 @@ namespace WB.UI.WebTester.Controllers
             MultimediaFile file = null;
             if (fileName != null)
             {
-                file = this.mediaStorage.Get(id, fileName);
+                file = this.mediaStorage.Get(fileName, id);
             }
 
             if (file == null || file.Data.Length == 0)
@@ -84,13 +84,13 @@ namespace WB.UI.WebTester.Controllers
 
                     var duration = SoundInfo.GetSoundLength(bytes);
 
-                    mediaStorage.Store(interview.Id, new MultimediaFile
+                    mediaStorage.Store(new MultimediaFile
                     {
                         Filename = fileName,
                         Data = bytes,
                         Duration = duration,
                         MimeType = "audio/wav"
-                    });
+                    }, fileName, interview.Id);
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
                         interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
@@ -122,7 +122,7 @@ namespace WB.UI.WebTester.Controllers
                 return this.Json("fail");
             }
 
-            string filename = null;
+            string fileName = null;
 
             try
             {
@@ -132,25 +132,25 @@ namespace WB.UI.WebTester.Controllers
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                    filename = $@"{question.VariableName}{
+                    fileName = $@"{question.VariableName}{
                             string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))
                         }{DateTime.UtcNow.GetHashCode()}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
-                    this.mediaStorage.Store(interview.Id, new MultimediaFile
+                    this.mediaStorage.Store(new MultimediaFile
                     {
-                        Filename = filename,
+                        Filename = fileName,
                         Data = ms.ToArray(),
                         MimeType = "image/jpg"
-                    });
+                    }, fileName, interview.Id);
 
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, fileName));
                 }
             }
             catch (Exception e)
             {
-                if (filename != null)
+                if (fileName != null)
                     webInterviewNotificationService.MarkAnswerAsNotSaved(interviewId, questionId,
                         WebInterview.GetUiMessageFromException(e));
                 throw;

@@ -46,7 +46,7 @@ namespace WB.UI.WebTester.Services.Implementation
             new Dictionary<Guid, InterviewContainer>();
 
         public AppdomainsPerInterviewManager(string binFolderPath,
-            IObservable<Guid> evictNotification,
+            IEvictionObservable evictNotification,
             ILogger logger)
         {
             this.binFolderPath = binFolderPath ?? throw new ArgumentNullException(nameof(binFolderPath));

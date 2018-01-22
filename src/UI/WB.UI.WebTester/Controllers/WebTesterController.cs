@@ -106,7 +106,7 @@ namespace WB.UI.WebTester.Controllers
 
         private async Task<QuestionnaireIdentity> ImportQuestionnaire(Guid id, Questionnaire questionnaire)
         {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.Document.PublicKey, 1);
+            var questionnaireIdentity = new QuestionnaireIdentity(id, 1);
             var translations = await webTesterApi.GetTranslationsAsync(id.ToString());
 
             var attachments = new List<QuestionnaireAttachment>();
