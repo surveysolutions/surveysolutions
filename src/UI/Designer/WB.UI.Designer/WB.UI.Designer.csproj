@@ -460,6 +460,7 @@
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
     <Content Include="questionnaire\details\scripts\extensions\ace\mode-text-extended.js" />
     <Content Include="questionnaire\details\scripts\modules\ng-context-menu.js" />
+    <Content Include="questionnaire\details\scripts\modules\angular-elastic.js" />
     <Content Include="questionnaire\details\scripts\modules\perfect_scrollbar.js" />
     <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
     <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
