@@ -129,7 +129,7 @@ angular.module('designerApp')
             var ERROR = "error";
             var WARNING = "warning";
 
-            $scope.verify = function (callbackIfNoErrors) {
+            $scope.verify = function () {
                 $scope.verificationStatus.errors = null;
                 $scope.verificationStatus.warnings = null;
                 $rootScope.$broadcast("verifing", {});
@@ -142,10 +142,9 @@ angular.module('designerApp')
                         $scope.verificationStatus.time = new Date();
                         $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
 
-                        if ($scope.verificationStatus.errors.length > 0)
+                        if ($scope.verificationStatus.errors.length > 0) {
                             $scope.showVerificationErrors();
-                        else if (callbackIfNoErrors)
-                            callbackIfNoErrors();
+                        }
                         else {
                             $scope.closeVerifications();
                         }
@@ -154,13 +153,10 @@ angular.module('designerApp')
             };
 
             $scope.webTest = function () {
-                $scope.verify(function() {
-                    var webTesterWindow = window.open("about:blank", '_blank');
+                var webTesterWindow = window.open("about:blank", 'child');
 
-                    webTesterService.run($state.params.questionnaireId)
-                        .then(function(result) {
-                            webTesterWindow.location.href = result.data;
-                        });
+                webTesterService.run($state.params.questionnaireId).then(function (result) {
+                    webTesterWindow.location.href = result.data;
                 });
             };
 
