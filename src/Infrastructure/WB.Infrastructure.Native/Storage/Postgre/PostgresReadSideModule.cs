@@ -22,7 +22,6 @@ using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
