@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             List<QuestionnaireListViewFolder> folders = new List<QuestionnaireListViewFolder>();
             List<QuestionnaireListViewItem> questionnaires = new List<QuestionnaireListViewItem>(); 
             int foldersCount = 0, questionnairesCount = 0;
-            var isSupportFolders = input.IsPublic;
+            var isSupportFolders = input.Type == QuestionnairesType.Public;
 
             if (isSupportFolders)
             {
@@ -204,53 +204,41 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         x => x.Title.ToLower().Contains(filterLowerCase) || x.CreatorName.ToLower().Contains(filterLowerCase));
             }
 
-            if (input.IsAdminMode)
+
+            switch (input.Type)
             {
-                if (!input.IsPublic)
-                {
-                    result =
-                        result.Where(
-                            x =>
-                                x.CreatedBy == input.ViewerId ||
-                                x.SharedPersons.Any(person => person.UserId == input.ViewerId));
-                }
+                case QuestionnairesType.My:
+                    result = result.Where(x => x.CreatedBy == input.ViewerId);
+                    break;
+                case QuestionnairesType.Shared:
+                    result = result.Where(x => x.CreatedBy != input.ViewerId && x.SharedPersons.Any(person => person.UserId == input.ViewerId));
+                    break;
+                case QuestionnairesType.Public:
+                    result = input.IsAdminMode ? result : result.Where(x => x.IsPublic);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else
-            {
-                if (input.IsPublic)
-                    result = result.Where(x => x.IsPublic);
-                else
-                    result =
-                        result.Where(
-                            x =>
-                                x.CreatedBy == input.ViewerId ||
-                                x.SharedPersons.Any(person => person.UserId == input.ViewerId));
-            }
+
             return result;
         }
 
         private IQueryable<QuestionnaireListViewFolder> FilterFolders(IQueryable<QuestionnaireListViewFolder> _,
             QuestionnaireListInputModel input)
         {
-            var result = _.Where(x => input.IsPublic == true); // support only public folders
+            if (string.IsNullOrEmpty(input.SearchFor))
+                return _.Where(x => input.FolderId == x.Parent);
 
-            if (!string.IsNullOrEmpty(input.SearchFor))
-            {
-                var filterLowerCase = input.SearchFor.Trim().ToLower();
-                result = result.Where(x => x.Title.ToLower().Contains(filterLowerCase));
+            var filterLowerCase = input.SearchFor.Trim().ToLower();
+            _ = _.Where(x => x.Title.ToLower().Contains(filterLowerCase));
 
-                if (input.FolderId.HasValue)
-                {
-                    var folderId = input.FolderId.Value.ToString();
-                    result = result.Where(f => f.Path.Contains(folderId));
-                }
-            }
-            else 
+            if (input.FolderId.HasValue)
             {
-                result = result.Where(x => input.FolderId == x.Parent);
+                var folderId = input.FolderId.Value.ToString();
+                _ = _.Where(f => f.Path.Contains(folderId));
             }
 
-            return result;
+            return _;
         }
     }
 }
