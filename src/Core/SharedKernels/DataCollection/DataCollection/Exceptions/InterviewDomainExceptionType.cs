@@ -10,6 +10,7 @@
         StatusIsNotOneOfExpected,
         AnswerNotAccepted,
         InterviewRecievedByDevice,
-        CantMoveToUndefinedTeam
+        CantMoveToUndefinedTeam,
+        ExpessionCalculationError
     }
 }
