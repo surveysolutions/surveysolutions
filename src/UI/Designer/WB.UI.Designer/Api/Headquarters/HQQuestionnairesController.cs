@@ -78,7 +78,8 @@ namespace WB.UI.Designer.Api.Headquarters
                 Page = pageIndex,
                 PageSize = pageSize,
                 Order = sortOrder,
-                SearchFor = filter
+                SearchFor = filter,
+                Type = QuestionnairesType.My
             });
 
             var questionnaires = new PagedQuestionnaireCommunicationPackage
