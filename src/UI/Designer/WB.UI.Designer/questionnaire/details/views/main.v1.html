@@ -702,29 +702,3 @@
         </div>
     </div>
 </script>
-<!--
-<script>
-    (function() {
-        'use strict';
-        function elasticArea() {
-            $('.msd-elastic').each(function (index, element) {
-                var elasticElement = element;
-                var $elasticElement = $(element);
-                var initialHeight = initialHeight || $elasticElement.height();
-                var delta = parseInt($elasticElement.css('paddingBottom')) + parseInt($elasticElement.css('paddingTop')) || 0;
-                var resize = function() {
-                    $elasticElement.height(initialHeight);
-                    $elasticElement.height(elasticElement.scrollHeight - delta);
-                    console.log(elasticElement.scrollHeight - delta);
-                    alert(elasticElement.scrollHeight - delta);
-                };
-                    
-                $elasticElement.on('input change keyup', resize);
-                resize();
-            });
-                  
-        };
-
-        elasticArea();
-    })();
-</script>-->
