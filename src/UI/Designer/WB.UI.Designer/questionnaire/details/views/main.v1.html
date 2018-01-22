@@ -407,13 +407,13 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataTitle' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="title" ng-model="metadata.title"></textarea>
+                                            <input type="text" class="form-control" name="title" ng-model="metadata.title"></input>
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataSubtitle' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="subTitle" ng-model="metadata.subTitle"></textarea>
+                                            <textarea class="form-control msd-elastic" name="subTitle" ng-model="metadata.subTitle"></textarea>
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
@@ -425,7 +425,7 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataVersionNotes' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="versionNotes" ng-model="metadata.versionNotes"></textarea>
+                                            <textarea class="form-control msd-elastic" name="versionNotes" ng-model="metadata.versionNotes"></textarea>
                                         </div>
                                     </div>
                                 </li>
@@ -554,7 +554,7 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataUniverse' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="universe" ng-model="metadata.universe" />
+                                            <textarea class="form-control msd-elastic" name="universe" ng-model="metadata.universe" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
@@ -566,14 +566,14 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataConsultants' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="consultant" ng-model="metadata.consultant">
+                                            <textarea class="form-control msd-elastic" name="consultant" ng-model="metadata.consultant">
                                             </textarea>
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataFunding' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="funding" ng-model="metadata.funding">
+                                            <textarea class="form-control msd-elastic" name="funding" ng-model="metadata.funding">
                                             </textarea>
                                         </div>
                                     </div>
@@ -583,13 +583,13 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataNotes' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="notes" ng-model="metadata.notes" />
+                                            <textarea class="form-control msd-elastic" name="notes" ng-model="metadata.notes" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataKeywords' | i18next}}</span>
                                         <div class="form-group">
-                                            <textarea class="form-control js-elasticArea" name="keywords" ng-model="metadata.keywords">
+                                            <textarea class="form-control msd-elastic" name="keywords" ng-model="metadata.keywords">
                                             </textarea>
                                         </div>
                                     </div>
@@ -702,3 +702,29 @@
         </div>
     </div>
 </script>
+<!--
+<script>
+    (function() {
+        'use strict';
+        function elasticArea() {
+            $('.msd-elastic').each(function (index, element) {
+                var elasticElement = element;
+                var $elasticElement = $(element);
+                var initialHeight = initialHeight || $elasticElement.height();
+                var delta = parseInt($elasticElement.css('paddingBottom')) + parseInt($elasticElement.css('paddingTop')) || 0;
+                var resize = function() {
+                    $elasticElement.height(initialHeight);
+                    $elasticElement.height(elasticElement.scrollHeight - delta);
+                    console.log(elasticElement.scrollHeight - delta);
+                    alert(elasticElement.scrollHeight - delta);
+                };
+                    
+                $elasticElement.on('input change keyup', resize);
+                resize();
+            });
+                  
+        };
+
+        elasticArea();
+    })();
+</script>-->
