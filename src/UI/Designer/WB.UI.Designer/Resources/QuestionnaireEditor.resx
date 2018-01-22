@@ -433,7 +433,7 @@
   <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
     <value>Questionnaire access</value>
   </data>
-  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePubic" xml:space="preserve">
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
     <value>Agree to make this questionnaire public</value>
   </data>
   <data name="SideBarAttachmentUploaded" xml:space="preserve">
@@ -1041,5 +1041,17 @@
   </data>
   <data name="UntitledStaticText" xml:space="preserve">
     <value>Untitled static text</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>Select a Mode of Data Collection</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Select country</value>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>Select a Study Type</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>Select a Kind of data</value>
   </data>
 </root>

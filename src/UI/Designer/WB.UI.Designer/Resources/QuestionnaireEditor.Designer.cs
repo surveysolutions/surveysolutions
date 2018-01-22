@@ -1582,6 +1582,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select country.
+        /// </summary>
+        public static string SelectCountry {
+            get {
+                return ResourceManager.GetString("SelectCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected invalid item. Fix it..
         /// </summary>
         public static string SelectedInvalidItem {
@@ -1596,6 +1605,24 @@ namespace WB.UI.Designer.Resources {
         public static string SelectItemFromTheList {
             get {
                 return ResourceManager.GetString("SelectItemFromTheList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a Kind of data.
+        /// </summary>
+        public static string SelectKindOfData {
+            get {
+                return ResourceManager.GetString("SelectKindOfData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a Mode of Data Collection.
+        /// </summary>
+        public static string SelectModeOfDataCollection {
+            get {
+                return ResourceManager.GetString("SelectModeOfDataCollection", resourceCulture);
             }
         }
         
@@ -1623,6 +1650,15 @@ namespace WB.UI.Designer.Resources {
         public static string SelectQuestion {
             get {
                 return ResourceManager.GetString("SelectQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a Study Type.
+        /// </summary>
+        public static string SelectStudyType {
+            get {
+                return ResourceManager.GetString("SelectStudyType", resourceCulture);
             }
         }
         
@@ -2169,9 +2205,9 @@ namespace WB.UI.Designer.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Agree to make this questionnaire public.
         /// </summary>
-        public static string SideBarMetadataAgreeToMakeThisQuestionnairePubic {
+        public static string SideBarMetadataAgreeToMakeThisQuestionnairePublic {
             get {
-                return ResourceManager.GetString("SideBarMetadataAgreeToMakeThisQuestionnairePubic", resourceCulture);
+                return ResourceManager.GetString("SideBarMetadataAgreeToMakeThisQuestionnairePublic", resourceCulture);
             }
         }
         

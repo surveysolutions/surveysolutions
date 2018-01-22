@@ -434,57 +434,71 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataStudyTypes' | i18next}}</span>
                                         <div class="form-group">
-                                            <div class="btn-group dropdown">
+                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.studyType }">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ (questionnaire.studyTypes | filter : {'code':metadata.studyType})[0].title }}
+                                                    {{ metadata.studyType ? (questionnaire.studyTypes | filter : {'code':metadata.studyType})[0].title : 'SelectStudyType' | i18next }}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-
-                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
-                                                    <li ng-repeat="studyType in questionnaire.studyTypes">
-                                                        <a ng-click="metadata.studyType = studyType.code" value="{{studyType.code}}" href="#">{{studyType.title}}</a>
-                                                    </li>
-                                                </ul>
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.studyType = null">
+                                                    <span></span>
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                    <perfect-scrollbar class="scroller">
+                                                        <ul class="scroller list-unstyled">
+                                                            <li ng-repeat="studyType in questionnaire.studyTypes">
+                                                                <a ng-click="metadata.studyType = studyType.code; metadata.form.$setDirty();" value="{{studyType.code}}" href="#">{{studyType.title}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </perfect-scrollbar>
+                                                </div>
                                             </div>
-                                            <input type="hidden" name="studyType" ng-model="metadata.studyType" />
+                                            <input type="hidden" class="form-control" name="studyType" ng-model="metadata.studyType" />
                                         </div>
                                     </div>
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataKindOfData' | i18next}}</span>
                                         <div class="form-group">
-                                            <div class="btn-group dropdown">
+                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.kindOfData }">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title }}
+                                                    {{ metadata.kindsOfData ? (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title  : 'SelectKindOfData' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-
-                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
-                                                    <li ng-repeat="kindOfData in questionnaire.kindsOfData">
-                                                        <a ng-click="metadata.kindOfData = kindOfData.code" value="{{kindOfData.code}}" href="#">{{kindOfData.title}}</a>
-                                                    </li>
-                                                </ul>
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.kindOfData = null">
+                                                    <span></span>
+                                                </button>
+                                                <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
+                                                    <ul class="scroller list-unstyled">
+                                                        <li ng-repeat="kindOfData in questionnaire.kindsOfData">
+                                                            <a ng-click="metadata.kindOfData = kindOfData.code; metadata.form.$setDirty();" value="{{kindOfData.code}}" href="#">{{kindOfData.title}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                        <input type="hidden" name="kindOfData" ng-model="metadata.kindOfData" />
+                                        <input type="hidden" class="form-control" name="kindOfData" ng-model="metadata.kindOfData" />
                                     </div>
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataModeOfDataCollection' | i18next}}</span>
                                         
                                         <div class="form-group">
-                                            <div class="btn-group dropdown">
+                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.modeOfDataCollection }">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title }}
+                                                    {{ metadata.modesOfDataCollection ? (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title  : 'SelectModeOfDataCollection' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-
-                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
-                                                    <li ng-repeat="modeOfData in questionnaire.modesOfDataCollection">
-                                                        <a ng-click="metadata.modeOfDataCollection = modeOfData.code" value="{{modeOfData.code}}" href="#">{{modeOfData.title}}</a>
-                                                    </li>
-                                                </ul>
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.modeOfDataCollection = null">
+                                                    <span></span>
+                                                </button>
+                                                <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
+                                                    <ul class="scroller list-unstyled">
+                                                        <li ng-repeat="modeOfData in questionnaire.modesOfDataCollection">
+                                                            <a ng-click="metadata.modeOfDataCollection = modeOfData.code; metadata.form.$setDirty();" value="{{modeOfData.code}}" href="#">{{modeOfData.title}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                        <input type="hidden" id="modeOfDataCollection" name="modeOfDataCollection" ng-model="metadata.modeOfDataCollection" />
+                                        <input type="hidden" class="form-control" id="modeOfDataCollection" name="modeOfDataCollection" ng-model="metadata.modeOfDataCollection" />
                                     </div>
                                 </li>
                                 <li>
@@ -492,20 +506,26 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataCountry' | i18next}}</span>
                                         <div class="form-group">
-                                            <div class="btn-group dropdown">
+                                            <div class="btn-group dropdown" ng-class="{'has-value': metadata.country }">
                                                 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                    {{ (questionnaire.countries | filter : {'code':metadata.country})[0].title }}
+                                                    {{ metadata.country ? (questionnaire.countries | filter : {'code':metadata.country})[0].title  : 'SelectCountry' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-
-                                                <ul class="dropdown-menu scroller" aria-labelledby="dropdownMenu12">
-                                                    <li ng-repeat="country in questionnaire.countries">
-                                                        <a ng-click="metadata.country = country.code" value="{{country.code}}" href="#">{{country.title}}</a>
-                                                    </li>
-                                                </ul>
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.country = null">
+                                                    <span></span>
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
+                                                    <perfect-scrollbar class="scroller">
+                                                        <ul class="list-unstyled">
+                                                            <li ng-repeat="country in questionnaire.countries">
+                                                                <a ng-click="metadata.country = country.code; metadata.form.$setDirty();" value="{{country.code}}" href="#">{{country.title}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </perfect-scrollbar>
+                                                </div>
                                             </div>
                                         </div>
-                                        <input type="hidden" name="country" ng-model="metadata.country" />
+                                        <input type="hidden" class="form-control" name="country" ng-model="metadata.country" />
                                     </div>
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataYear' | i18next}}</span>
@@ -577,13 +597,9 @@
                                 <li>
                                     <h4>{{'SideBarMetadataQuestionnaireAccess' | i18next}}</h4>
                                     <div class="checkbox">
-                                        <input id="agreeToMakeThisQuestionnairePubic" name="agreeToMakeThisQuestionnairePubic" ng-model="metadata.agreeToMakeThisQuestionnairePubic" type="checkbox" class="checkbox-filter" checked>
-                                        <label for="agreeToMakeThisQuestionnairePubic" class=""><span class="tick"></span>{{'SideBarMetadataAgreeToMakeThisQuestionnairePubic' | i18next}}</label>
+                                        <input id="agreeToMakeThisQuestionnairePublic" name="agreeToMakeThisQuestionnairePublic" ng-model="metadata.agreeToMakeThisQuestionnairePublic" type="checkbox" class="checkbox-filter" checked>
+                                        <label for="agreeToMakeThisQuestionnairePublic" class=""><span class="tick"></span>{{'SideBarMetadataAgreeToMakeThisQuestionnairePublic' | i18next}}</label>
                                     </div>
-                                    <!--<div class="checkbox">
-                                        <input id="qazqaz123" type="checkbox" class="checkbox-filter" checked>
-                                        <label for="qazqaz123" class=""><span class="tick"></span>Visible to admin</label>
-                                    </div>-->
                                 </li>
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">

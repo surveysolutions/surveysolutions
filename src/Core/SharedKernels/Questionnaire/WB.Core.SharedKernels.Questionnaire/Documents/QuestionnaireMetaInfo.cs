@@ -36,6 +36,6 @@
 
         public string Keywords { get; set; }
 
-        public bool AgreeToMakeThisQuestionnairePubic { get; set; }
+        public bool AgreeToMakeThisQuestionnairePublic { get; set; }
     }
 }
