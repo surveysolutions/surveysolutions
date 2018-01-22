@@ -685,6 +685,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaires shared with me.
+        /// </summary>
+        public static string SharedQuestionnaires {
+            get {
+                return ResourceManager.GetString("SharedQuestionnaires", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Study Type.
         /// </summary>
         public static string StudyType {

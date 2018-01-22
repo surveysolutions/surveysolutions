@@ -39,7 +39,10 @@ namespace WB.UI.Designer.Models
         public string LastPasswordChangedDate { get; set; }
 
         [Display(Name = "Questionnaires", Order = 13)]
-        public IEnumerable<QuestionnaireListViewModel> Questionnaires { get; set; }
+        public IEnumerable<QuestionnaireListViewModel> OwnedQuestionnaires { get; set; }
+
+        [Display(Name = "Questionnaires", Order = 14)]
+        public IEnumerable<QuestionnaireListViewModel> SharedQuestionnaires { get; set; }
 
         [Display(Name = "Name", Order = 1)]
         public string UserName { get; set; }
