@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
 using WB.Tests.Integration.InterviewTests;
+using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services
@@ -16,7 +17,7 @@ namespace WB.Tests.Integration.WebTester.Services
     {
         protected AppdomainsPerInterviewManager Manager;
 
-        protected AppdomainsPerInterviewManager CreateManager(IObservable<Guid> evictNotification = null)
+        protected AppdomainsPerInterviewManager CreateManager(IEvictionObservable evictNotification = null)
         {
             var bin = Path.GetDirectoryName(typeof(when_configured).Assembly.Location);
             return new AppdomainsPerInterviewManager(bin, evictNotification, Mock.Of<ILogger>());

@@ -20,12 +20,12 @@ namespace WB.UI.WebTester.Controllers
     {
         private readonly IPlainStorageAccessor<QuestionnaireAttachment> attachmentStorage;
         private readonly IImageProcessingService imageProcessingService;
-        private readonly IMediaStorage mediaStorage;
+        private readonly ICacheStorage<MultimediaFile, string> mediaStorage;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
         public WebInterviewResourcesController(IPlainStorageAccessor<QuestionnaireAttachment> attachmentStorage,
-            IImageProcessingService imageProcessingService, 
-            IMediaStorage mediaStorage, 
+            IImageProcessingService imageProcessingService,
+            ICacheStorage<MultimediaFile, string> mediaStorage, 
             IStatefulInterviewRepository statefulInterviewRepository)
         {
             this.attachmentStorage = attachmentStorage ?? throw new ArgumentNullException(nameof(attachmentStorage));
@@ -58,7 +58,7 @@ namespace WB.UI.WebTester.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(interviewId);
             
-            var file = this.mediaStorage.Get(interview.Id, filename);
+            var file = this.mediaStorage.Get(filename, interview.Id);
 
             if ((file?.Data?.Length ?? 0) == 0)
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);

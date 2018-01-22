@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reactive.Subjects;
 using NUnit.Framework;
 using WB.Tests.Abc;
+using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Integration.WebTester.Services
 {
@@ -11,7 +12,7 @@ namespace WB.Tests.Integration.WebTester.Services
         private Guid interviewId = Guid.NewGuid();
         private Guid numericQuestionId = Id.gB;
         private Guid interviewerId = Id.g1;
-        private Subject<Guid> evictionNotification = new Subject<Guid>();
+        private TokenEviction evictionNotification = new TokenEviction();
 
         [SetUp]
         public void Setup()

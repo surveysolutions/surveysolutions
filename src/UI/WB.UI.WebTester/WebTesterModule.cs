@@ -25,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -66,9 +65,9 @@ namespace WB.UI.WebTester
 
             registry.Bind<WebTesterStatefulInterview>();
 
-            registry.BindAsSingleton<IObservable<Guid>, IObserver<Guid>, Subject<Guid>>();
+            registry.BindAsSingleton<IEvictionObservable, IEvictionObserver, TokenEviction>();
 
-            registry.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
+            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();
             registry.BindAsSingleton<IEventBus, InProcessEventBus>();
@@ -123,6 +122,14 @@ namespace WB.UI.WebTester
 
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
+            registry.BindAsSingleton<IEventStore, ISnapshotStore, InMemoryEventStore>();
+            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
+            registry.BindAsSingleton(typeof(ICacheStorage<,>), typeof(InMemoryCacheStorage<,>));
+            registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
+            registry.BindAsSingleton<IQuestionnaireStorage, Infrastructure.WebTesterQuestionnaireStorage>();
+            registry.Bind<ITranslationStorage, TranslationStorage>();
+
+
             // TODO: Find a generic place for each of the dependencies below
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
@@ -134,17 +141,7 @@ namespace WB.UI.WebTester
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
-
-            registry.BindAsSingleton<IEventStore, InMemoryEventStore>();
-            registry.BindAsSingleton<ISnapshotStore, InMemoryEventStore>();
-            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
-            registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
-            registry.BindAsSingleton<IMediaStorage, InMemoryMediaStorage>();
-
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
-            registry.Bind<ITranslationStorage, TranslationStorage>();
         }
-
         
         public static Type[] HubPipelineModules => new[]
         {

@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
+using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.Tests.Abc.TestFactories
@@ -59,9 +60,10 @@ namespace WB.Tests.Abc.TestFactories
             new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true),
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
-        public InMemoryMediaStorage MediaStorage(IObservable<Guid> evictionNotification)
+        public InMemoryCacheStorage<MultimediaFile, string> MediaStorage(IEvictionObservable evictionNotification = null)
         {
-            return new InMemoryMediaStorage(evictionNotification);
+            return new InMemoryCacheStorage<MultimediaFile, string>(
+                evictionNotification ?? new TokenEviction());
         }
     }
 }
