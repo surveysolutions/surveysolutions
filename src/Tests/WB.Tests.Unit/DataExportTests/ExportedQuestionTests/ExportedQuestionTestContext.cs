@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Tests.Abc;
 using QuestionState = WB.Core.SharedKernels.DataCollection.ValueObjects.Interview.QuestionState;
 
 
@@ -35,15 +36,10 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
             {
                 QuestionType = questionType,
                 QuestionSubType = questionSubType,
-                ColumnHeaders = GetColumnHeaders(columnNames),
+                ColumnHeaders = Create.Entity.ColumnHeaders(columnNames),
                 ColumnValues = columnValues,
             };
             return new ExportQuestionService().GetExportedQuestion(interviewQuestion, headerItem);
-        }
-
-        private static List<HeaderColumn> GetColumnHeaders(string[] columnNames)
-        {
-            return columnNames?.Select(x => new HeaderColumn() {Name = x, Title = x}).ToList() ?? new List<HeaderColumn>();
         }
 
         public static string[] CreateFilledExportedQuestion(QuestionType questionType,
