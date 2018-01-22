@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             var allUsedTypes = FindUsedTypes(syntaxTree, compilation);
 
             HashSet<string> foundForbiddenTypes = new HashSet<string>();
-            foreach (var namedTypeSymbol in allUsedTypes.Where(x => x.ContainingAssembly.Name != compilation.AssemblyName))
+            foreach (var namedTypeSymbol in allUsedTypes.Where(x => x.ContainingAssembly?.Name != compilation.AssemblyName))
             {
                 var containingNamespace = namedTypeSymbol.ContainingNamespace.ToString();
 

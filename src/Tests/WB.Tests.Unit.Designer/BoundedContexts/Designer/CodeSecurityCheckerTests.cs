@@ -18,6 +18,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
     public class CodeSecurityCheckerTests
     {
         [Test]
+        public void should_not_crash_when_used_class_from_not_referenced_assembly()
+        {
+            string code = string.Format(TestClassToCompile, "Activator.CreateInstance<System.Net.Http.HttpClientFactory>().GetReturnUrl()");
+            var syntaxTree = SyntaxFactory.ParseSyntaxTree(code);
+            var codeSecurityChecker = GetCodeSecurityChecker();
+            var compilation = CreateCompilation(syntaxTree.ToEnumerable());
+
+            // Act
+            codeSecurityChecker.FindForbiddenClassesUsage(syntaxTree, compilation);
+        }
+
+        [Test]
         public void should_allow_use_of_simple_two_digits()
         {
             string code = string.Format(TestClassToCompile, "2 + 2");
