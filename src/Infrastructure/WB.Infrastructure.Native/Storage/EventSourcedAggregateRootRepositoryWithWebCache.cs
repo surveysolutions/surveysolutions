@@ -18,8 +18,10 @@ namespace WB.Infrastructure.Native.Storage
 
         private static readonly ConcurrentDictionary<string, bool> CacheCountTracker = new ConcurrentDictionary<string, bool>();
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore,
-            IDomainRepository repository, IAggregateLock aggregateLock)
+        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
+            ISnapshotStore snapshotStore,
+            IDomainRepository repository, 
+            IAggregateLock aggregateLock)
             : base(eventStore, snapshotStore, repository)
         {
             this.aggregateLock = aggregateLock;
@@ -63,6 +65,7 @@ namespace WB.Infrastructure.Native.Storage
         }
 
         private static Cache Cache => System.Web.HttpRuntime.Cache;
+        protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
 
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
@@ -71,8 +74,7 @@ namespace WB.Infrastructure.Native.Storage
             CacheCountTracker.AddOrUpdate(key, true, (k, old) => true);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
 
-            Cache.Insert(key, aggregateRoot, null, Cache.NoAbsoluteExpiration,
-                TimeSpan.FromMinutes(5), OnUpdateCallback);
+            Cache.Insert(key, aggregateRoot, null, Cache.NoAbsoluteExpiration, Expiration, OnUpdateCallback);
         }
 
         protected virtual string Key(Guid id) => $"aggregateRoot_" + id.ToString();
