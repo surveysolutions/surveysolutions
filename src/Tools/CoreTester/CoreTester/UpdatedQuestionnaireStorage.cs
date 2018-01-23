@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -10,6 +13,12 @@ namespace CoreTester
     {
         private IQuestionnaire questionnaire = null;
         private QuestionnaireDocument questionnaireDocument = null;
+        private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
+
+        public UpdatedQuestionnaireStorage(IExpressionsPlayOrderProvider expressionsPlayOrderProvider)
+        {
+            this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
+        }
 
         public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
@@ -19,6 +28,12 @@ namespace CoreTester
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             this.questionnaireDocument = questionnaireDocument;
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            this.questionnaireDocument.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            this.questionnaireDocument.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            this.questionnaireDocument.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument)
+                .ToDictionary(x => x.Key, x => x.Value.ToArray());
+
             this.questionnaire = new PlainQuestionnaire(questionnaireDocument, version, null);
         }
 

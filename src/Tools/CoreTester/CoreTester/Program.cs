@@ -11,6 +11,9 @@ using Newtonsoft.Json;
 using Ninject;
 using Ninject.Modules;
 using NLog;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -277,6 +280,14 @@ namespace CoreTester
                 .Handles<CompleteInterviewCommand>(command => command.InterviewId,
                     (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.CompleteTime))
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
+
+            //Designer
+            registry.Bind<IExpressionProcessorGenerator, QuestionnaireExpressionProcessorGenerator>();
+            registry.Bind<IExpressionsGraphProvider, ExpressionsGraphProvider>();
+            registry.Bind<IExpressionsPlayOrderProvider, ExpressionsPlayOrderProvider>();
+            registry.Bind<IMacrosSubstitutionService, MacrosSubstitutionService>();
+            
+            registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
         }
     }
 
