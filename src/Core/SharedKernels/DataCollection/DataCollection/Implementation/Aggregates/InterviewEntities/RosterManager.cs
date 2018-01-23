@@ -33,6 +33,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             roster.SetIdentity(rosterIdentity);
             roster.SortIndex = sortIndex;
             roster.SetTitle(GetGroupTitle(rosterIdentity));
+
+            if (this.interviewTree.GetGroup(parentIdentity).IsDisabled())
+                roster.Disable();
         }
 
         protected InterviewTreeQuestion GetRosterSizeQuestion(Identity parentIdentity, Guid sizeQuestionId)
