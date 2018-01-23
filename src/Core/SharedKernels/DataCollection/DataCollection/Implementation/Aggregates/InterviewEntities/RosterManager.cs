@@ -165,6 +165,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId);
             var rosterTitle = (rosterSizeQuestion.GetAsInterviewTreeTextListQuestion()).GetTitleByItemCode(rosterIdentity.RosterVector.Last());
             
+            if (this.interviewTree.GetGroup(parentIdentity).IsDisabled())
+                roster.Disable();
+
             roster.SetRosterTitle(rosterTitle);
         }
     }
