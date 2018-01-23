@@ -37,6 +37,8 @@ namespace WB.UI.WebTester.Services.Implementation
 
         private void Evict(Guid interviewId)
         {
+            webInterviewNotification.ShutDownInterview(interviewId);
+
             appdomainsPerInterviewManager.TearDown(interviewId);
 
             var questionnaireId = new QuestionnaireIdentity(interviewId, 1);
@@ -49,8 +51,6 @@ namespace WB.UI.WebTester.Services.Implementation
             {
                 attachmentsStorage.Remove(attachment.ContentId);
             }
-
-            webInterviewNotification.FinishInterview(interviewId);
         }
 
         public void Dispose()

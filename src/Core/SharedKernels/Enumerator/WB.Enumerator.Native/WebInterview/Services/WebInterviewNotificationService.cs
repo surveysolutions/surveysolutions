@@ -244,5 +244,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         public void ReloadInterviewByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
             => this.webInterviewInvoker.ReloadInterviews(questionnaireIdentity);
+
+        public void ShutDownInterview(Guid interviewId) => this.webInterviewInvoker.ShutDown(interviewId);
     }
 }
