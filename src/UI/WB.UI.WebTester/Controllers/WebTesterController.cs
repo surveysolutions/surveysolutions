@@ -38,7 +38,7 @@ namespace WB.UI.WebTester.Controllers
             ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
             IDesignerWebTesterApi webTesterApi,
-            IAppdomainsPerInterviewManager appdomainsPerInterviewManager, 
+            IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             ITranslationManagementService translationManagementService,
             IPlainStorageAccessor<QuestionnaireAttachment> attachmentsStorage)
         {
@@ -52,6 +52,11 @@ namespace WB.UI.WebTester.Controllers
         }
 
         public async Task<ActionResult> Run(Guid id)
+        {
+            return View(id);
+        }
+
+        public async Task<ActionResult> Redirect(Guid id)
         {
             Questionnaire questionnaire;
             try
@@ -120,7 +125,7 @@ namespace WB.UI.WebTester.Controllers
                 });
             }
 
-            var attachmnetsToStore = attachments.Select(x => Tuple.Create(x, (object) x.Content.Id));
+            var attachmnetsToStore = attachments.Select(x => Tuple.Create(x, (object)x.Content.Id));
             this.attachmentsStorage.Store(attachmnetsToStore);
 
             this.appdomainsPerInterviewManager.SetupForInterview(id, questionnaire.Document, questionnaire.Assembly);
