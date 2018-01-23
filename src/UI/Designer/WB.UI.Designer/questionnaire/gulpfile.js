@@ -73,7 +73,6 @@ const paths = {
     'external/jquery.validate.unobtrusive.bootstrap.js',
     'node_modules/jquery-validation/dist/jquery.validate.js',
     'details/scripts/modules/perfect_scrollbar.js',
-    'details/scripts/modules/angular-elastic.js',
     'node_modules/angular-pnotify/src/angular-pnotify.js',
     'node_modules/angular-moment/angular-moment.js',
     'node_modules/xss/dist/xss.js',
