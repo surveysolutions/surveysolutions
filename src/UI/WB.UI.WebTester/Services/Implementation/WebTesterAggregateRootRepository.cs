@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.WebPages;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -18,11 +19,14 @@ namespace WB.UI.WebTester.Services.Implementation
             IEvictionObserver notify) : base(eventStore, snapshotStore, repository, aggregateLock)
         {
             this.notify = notify;
+            Expiration = TimeSpan.FromMinutes(ConfigurationSource.Configuration["Cache.Expiration"].AsInt(10));
         }
 
         const string CachePrefix = "cache:";
 
         protected override string Key(Guid id) => CachePrefix + id;
+
+        protected override TimeSpan Expiration { get; }
 
         protected override void CacheItemRemoved(string key)
         {
