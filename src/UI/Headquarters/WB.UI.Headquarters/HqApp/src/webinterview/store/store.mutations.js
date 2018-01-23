@@ -34,11 +34,15 @@ export default {
         Vue.set(state, "breadcrumbs", crumps)
     },
     SET_LANGUAGE_INFO(state, languageInfo) {
+        if(languageInfo == null) return
+
         Vue.set(state, "originalLanguageName", languageInfo.originalLanguageName)
         Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
         Vue.set(state, "languages", languageInfo.languages)
     },
     SET_INTERVIEW_INFO(state, interviewInfo) {
+        if(interviewInfo == null) return
+        
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
         state.interviewKey = interviewInfo.interviewKey

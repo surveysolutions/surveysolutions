@@ -12,7 +12,8 @@ const isDevMode = !utils.env.production
 
 const config = {
     dist: 'dist',
-    hqViews: '../Views/Shared'
+    hqViews: '../Views/Shared',
+    webTester: '../../../WB.UI.WebTester/Content/Dist'
 }
 
 config.resources = {
@@ -23,7 +24,7 @@ config.resources = {
 gulp.task("webTester", ['build'], function(){
     return gulp.src(config.dist + "/**/*.*")
         .pipe(plugins.filter(['**/*.js', isDevMode ? '**/*.map' : null, '**/*.css'].filter((x) => x)))
-        .pipe(gulp.dest('../../../WB.UI.WebTester/Content/Dist'));
+        .pipe(gulp.dest(config.webTester));
 });
 
 gulp.task("default", ['cleanup', 'resx2json', 'build', 'webTester', 'test'].filter((x) => x));
@@ -92,6 +93,7 @@ gulp.task('cleanup', (cb) => {
         rimraf.sync(config.dist + "/**/*.*")
         rimraf.sync(config.resources.dest + "/**/*.*")
         rimraf.sync(config.hqViews + "/partial.*.cshtml")
+        rimraf.sync(config.webTester  + "/**/*.*")
     }
     return cb();
 });

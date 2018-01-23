@@ -7,6 +7,7 @@ import Complete from "../components/Complete"
 import Cover from "../components/Cover"
 import Section from "../components/Section"
 import SideBar from "../components/Sidebar"
+import Splash from "../components/Splash"
 
 function NewRouter(store) {
 
@@ -41,6 +42,14 @@ function NewRouter(store) {
             {
                 name: "finish",
                 path: "/Finish/:interviewId"
+            },
+            {
+                name: "splash",
+                path: "/run/:interviewId",
+                components: {
+                    default: Splash,
+                    sideBar: SideBar
+                }
             }
         ],
         scrollBehavior(to, from, savedPosition) {
@@ -54,6 +63,7 @@ function NewRouter(store) {
 
     // tslint:disable:no-string-literal
     router.beforeEach(async (to, from, next) => {
+        if(Vue.$config.splashScreen) { next(); return; }
         await Vue.$api.hub({ interviewId: to.params["interviewId"] })
 
         if(to.params.sectionId == null)

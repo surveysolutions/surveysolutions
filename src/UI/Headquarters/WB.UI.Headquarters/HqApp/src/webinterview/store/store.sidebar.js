@@ -85,6 +85,8 @@ export default {
 
     mutations: {
         SET_SIDEBAR_STATE(state, sideBar) {
+            if(sideBar == null) return
+            
             const byParentId = groupBy(sideBar.groups, "parentId")
             forEach(byParentId, (panels, id) => {
                 Vue.set(state.panels, id, panels)
