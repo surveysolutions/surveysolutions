@@ -37,7 +37,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var questionnaire = questionnaireStorage.GetQuestionnaire(exportStructure.Identity, null);
             List<string[]> exportRecords = new List<string[]>();
 
-            foreach (var interviewEntity in entitiesToExport.Where(x => (x.EntityType == EntityType.Question  || x.EntityType == EntityType.StaticText) && x.InvalidValidations?.Length > 0))
+            foreach (var interviewEntity in entitiesToExport.Where(
+                x => (x.EntityType == EntityType.Question  || x.EntityType == EntityType.StaticText) 
+                     && x.InvalidValidations?.Length > 0 
+                     && x.IsEnabled))
             {
                 foreach (var failedValidationConditionIndex in interviewEntity.InvalidValidations)
                 {
