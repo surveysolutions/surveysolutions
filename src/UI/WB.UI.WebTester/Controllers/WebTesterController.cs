@@ -54,11 +54,6 @@ namespace WB.UI.WebTester.Controllers
 
         public async Task<JsonResult> ImportQuestionnaire(Guid id)
         {
-            return View(id);
-        }
-
-        public async Task<ActionResult> Redirect(Guid id)
-        {
             Questionnaire questionnaire;
             try
             {
@@ -90,7 +85,9 @@ namespace WB.UI.WebTester.Controllers
             public bool HasErrors { get; set; }
         }
 
-        public ActionResult Run(Guid id) => Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+        public ActionResult Run(Guid id) => this.View(id);
+
+        public ActionResult Redirect(Guid id) => this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
 
         public async Task<ActionResult> Interview(string id)
         {
