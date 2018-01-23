@@ -15,8 +15,5 @@ namespace WB.UI.WebTester.Services
         
         List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId, Identity questionIdentity, 
             int? parentQuestionValue, string filter, int itemsCount = 200);
-
-        CategoricalOption GetOptionForQuestionWithFilter(Guid interviewId, Identity question,
-            string optionText, int? parentQuestionValue = null);
     }
 }
