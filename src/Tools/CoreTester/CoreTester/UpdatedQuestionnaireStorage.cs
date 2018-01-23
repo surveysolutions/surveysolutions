@@ -6,35 +6,36 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace CoreTester
 {
-    public interface IUpdatedQuestionnaireStorage : IQuestionnaireStorage
+    public class UpdatedQuestionnaireStorage : IQuestionnaireStorage
     {
-    }
+        private IQuestionnaire questionnaire = null;
+        private QuestionnaireDocument questionnaireDocument = null;
 
-    public class UpdatedQuestionnaireStorage : IUpdatedQuestionnaireStorage
-    {
         public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
         {
-            throw new NotImplementedException();
+            return questionnaire;
         }
 
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            throw new NotImplementedException();
+            this.questionnaireDocument = questionnaireDocument;
+            this.questionnaire = new PlainQuestionnaire(questionnaireDocument, version, null);
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
         {
-            throw new NotImplementedException();
+            return this.questionnaireDocument;
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
-            throw new NotImplementedException();
+            return this.questionnaireDocument;
         }
 
         public void DeleteQuestionnaireDocument(Guid id, long version)
         {
-            throw new NotImplementedException();
+            this.questionnaire = null;
+            this.questionnaireDocument = null;
         }
     }
 }

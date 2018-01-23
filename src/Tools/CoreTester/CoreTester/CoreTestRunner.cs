@@ -73,7 +73,6 @@ namespace CoreTester
                 QuestionnaireDocument questionnaire =this.plainTransactionManager.GetPlainTransactionManager().ExecuteInQueryTransaction(() =>
                     questionnaireRepository.GetById(questionnaireRepositoryId));
 
-                // UpdateQuestionnaire(questionnaire);
                 questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId, questionnaireBrowseItem.Version, questionnaire);
 
                 foreach (var interviewId in interviewIdsToProcess)
@@ -81,13 +80,18 @@ namespace CoreTester
                     var newInterviewId = Guid.Parse("11111111111111111111111111111111");
                     var userId = Guid.Parse("22222222222222222222222222222222");
 
-                    var committedEvents = this.eventStore.Read(newInterviewId, 0).ToList();
+                    var committedEvents = this.eventStore.Read(interviewId, 0).ToList();
 
+                    if (committedEvents.Count == 0)
+                        continue;
+                    
                     try
                     {
-                        var createCommand = GetCreateInterviewCommand(committedEvents, interviewId, userId);
-                        commandService.Execute(createCommand);
+                        var createCommand = GetCreateInterviewCommand(committedEvents, newInterviewId, userId);
+                        // to read assembly
+                        this.plainTransactionManager.GetPlainTransactionManager().ExecuteInQueryTransaction(() => commandService.Execute(createCommand));
                         ApplyEventOnStatefulInterview(newInterviewId, committedEvents);
+                        commandService.Execute(new DeleteInterviewCommand(newInterviewId, userId));
                     }
                     catch (InterviewException exception)
                     {

@@ -69,17 +69,17 @@ namespace CoreTester
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (!CommandRegistry.Contains(command))
-                throw new CommandServiceException(
-                    $"Unable to execute command {command.GetType().Name} because it is not registered.");
-
-
             if (command is DeleteInterviewCommand)
             {
                 this.aggregate = null;
                 return;
             }
 
+
+            if (!CommandRegistry.Contains(command))
+                throw new CommandServiceException(
+                    $"Unable to execute command {command.GetType().Name} because it is not registered.");
+            
             Type aggregateType = CommandRegistry.GetAggregateRootType(command);
             Func<ICommand, Guid> aggregateRootIdResolver = CommandRegistry.GetAggregateRootIdResolver(command);
             Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(command);
