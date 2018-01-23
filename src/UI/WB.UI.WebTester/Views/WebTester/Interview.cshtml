@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Title</title>
     
-    @Styles.Render("~/Content/StylesRuntime")
+    @Styles.Render("~/Content/StylesRuntime/")
 
 </head>
 <body class="gray-background">
@@ -26,8 +26,7 @@
         appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
         googleApiKey: '@Model.GoogleMapsKey',
         hqLink: "null",
-        hubName: "interview",
-        
+        hubName: "interview"
     }
     </script>
     <div id="app"></div>
