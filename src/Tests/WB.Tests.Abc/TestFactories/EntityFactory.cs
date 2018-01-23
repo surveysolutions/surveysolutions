@@ -1886,14 +1886,16 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, int[] invalidValidations = null)
+        public InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, 
+            int[] invalidValidations = null, bool isEnabled = true)
         {
             return new InterviewEntity
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
                 EntityType = entityType,
                 Identity = identity ?? Create.Identity(),
-                InvalidValidations = invalidValidations ?? Array.Empty<int>()
+                InvalidValidations = invalidValidations ?? Array.Empty<int>(),
+                IsEnabled = isEnabled
             };
         }
 
