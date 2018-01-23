@@ -25,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -126,9 +127,9 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton(typeof(ICacheStorage<,>), typeof(InMemoryCacheStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
-            registry.BindAsSingleton<IQuestionnaireStorage, Infrastructure.WebTesterQuestionnaireStorage>();
+            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
-
+            registry.Bind<EvictionService>();
 
             // TODO: Find a generic place for each of the dependencies below
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
