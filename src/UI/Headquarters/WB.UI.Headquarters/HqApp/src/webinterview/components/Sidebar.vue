@@ -4,7 +4,7 @@
         <div class="panel-group structured-content">
             <SidebarPanel :panel="coverSection" v-if="showCover" />
             <SidebarPanel v-for="section in sections" :key="section.id" :panel="section" :currentPanel="currentPanel" />
-            <SidebarPanel :panel="completeSection" v-if="showComplete" />
+            <SidebarPanel :panel="completeSection" v-if="showComplete && !$config.splashScreen" />
         </div>
     </aside>
 </template>
@@ -45,7 +45,7 @@
                 return this.$store.state.webinterview.hasCoverPage
             },
             sections() {
-                return this.$store.getters.rootSections
+                return this.$config.splashScreen ? [] : this.$store.getters.rootSections
             },
             currentPanel() {
                 return this.$route.params.sectionId

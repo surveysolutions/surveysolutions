@@ -190,6 +190,7 @@ export async function apiCallerAndFetch(id, action) {
 }
 
 export async function apiCaller(action) {
+    if(config.splashScreen) return
     const hub = await getInterviewHub()
 
     store.dispatch("fetchProgress", 1)
