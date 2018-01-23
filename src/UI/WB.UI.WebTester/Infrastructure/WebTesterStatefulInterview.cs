@@ -24,10 +24,9 @@ namespace WB.UI.WebTester.Infrastructure
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
         }
 
-        public override List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount, IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
+        public override List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount = 200)
         {
-            return this.appdomainsPerInterviewManager.FilteredCategoricalOptions(EventSourceId,
-                new CategoricalOptionsFilter(questionIdentity, itemsCount, unfilteredOptionsForQuestion.ToArray()));
+            return this.appdomainsPerInterviewManager.GetFirstTopFilteredOptionsForQuestion(this.Id, questionIdentity, parentQuestionValue, filter, itemsCount);
         }
     }
 }
