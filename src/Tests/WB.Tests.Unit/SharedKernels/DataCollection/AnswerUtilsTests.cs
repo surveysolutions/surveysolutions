@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     public class AnswerUtilsTests
     {
         [Test]
-        public void When_Getting_options_from_categorical_question_in_mixed_format_and_parent_value()
+        public void When_Getting_options_from_categorical_question_in_mixed_format_and_parent_value_is_not_set()
         {
             var question = Create.Entity.SingleQuestion(options: new List<Answer>
             {
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             var options = AnswerUtils.GetCategoricalOptionsFromQuestion(question, null, null).ToArray();
 
-            Assert.That(options.Length, Is.EqualTo(2));
+            Assert.That(options.Length, Is.EqualTo(4));
         }
         
         [Test]
