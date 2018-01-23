@@ -209,11 +209,16 @@ namespace WB.UI.Designer.Api
 
         [HttpGet]
         [CamelCase]
-        public string WebTest(Guid id)
+        public WebTesterInfo WebTest(Guid id) => new WebTesterInfo
         {
-            var token = this.webTesterService.CreateTestQuestionnaire(id);
-            var uri = $"{webTesterSettings.BaseUri}/{token}";
-            return uri;
+            Token = this.webTesterService.CreateTestQuestionnaire(id),
+            BaseUri = webTesterSettings.BaseUri
+        };
+
+        public class WebTesterInfo
+        {
+            public string BaseUri { get; set; }
+            public string Token { get; set; }
         }
 
         [HttpGet]

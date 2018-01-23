@@ -153,10 +153,20 @@ angular.module('designerApp')
             };
 
             $scope.webTest = function () {
-                var webTesterWindow = window.open("about:blank", 'child');
+                var webTesterWindow = window.open("about:blank", '_blank');
 
-                webTesterService.run($state.params.questionnaireId).then(function (result) {
-                    webTesterWindow.location.href = result.data;
+                webTesterService.run($state.params.questionnaireId).then(function (response) {
+                    var importQuestionnaireUrl = response.data.baseUri + "/ImportQuestionnaire/" + response.data.token;
+                    var interviewUrl = response.data.baseUri + "/Run/" + response.data.token;
+
+                    webTesterService.importQuestionnaire(importQuestionnaireUrl).then(function(response) {
+                        if (response.data.HasErrors === true) {
+                            webTesterWindow.close();
+                            $scope.verify();
+                        } else webTesterWindow.location.href = interviewUrl;
+                    }, function() {
+                        webTesterWindow.close();
+                    });
                 });
             };
 
