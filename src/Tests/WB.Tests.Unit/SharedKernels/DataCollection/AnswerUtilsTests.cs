@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     public class AnswerUtilsTests
     {
         [Test]
-        public void When_Getting_options_from_categorical_question_in_old_format_and_parent_value()
+        public void When_Getting_options_from_categorical_question_in_mixed_format_and_parent_value()
         {
             var question = Create.Entity.SingleQuestion(options: new List<Answer>
             {
