@@ -152,6 +152,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             internalTreeNode.SetTree(this.Tree);
             internalTreeNode.SetParent(this);
 
+            if (this.IsDisabled())
+                child.Disable();
+
             if (insertTo.HasValue)
                 this.children.Insert(insertTo.Value, child);
             else
