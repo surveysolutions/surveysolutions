@@ -272,9 +272,9 @@
     <Compile Include="Services\ICacheStorage.cs" />
     <Compile Include="Services\IEvictionObservable.cs" />
     <Compile Include="Services\IEvictionObserver.cs" />
+    <Compile Include="Services\Implementation\EvictionService.cs" />
     <Compile Include="Services\Implementation\TokenEviction.cs" />
     <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
-    <Compile Include="Services\Implementation\WebTesterQuestionnaireStorage.cs" />
     <Compile Include="Services\MetricsService.cs" />
     <Compile Include="Services\MultimediaFile.cs" />
     <Compile Include="Controllers\WebInterviewResourcesController.cs" />

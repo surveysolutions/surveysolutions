@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reactive.Subjects;
 using AppDomainToolkit;
 using Autofac;
@@ -47,16 +48,14 @@ namespace WB.UI.WebTester.Services.Implementation
             new Dictionary<Guid, InterviewContainer>();
 
         public AppdomainsPerInterviewManager(string binFolderPath,
-            IEvictionObservable evictNotification,
             ILogger logger)
         {
             this.binFolderPath = binFolderPath ?? throw new ArgumentNullException(nameof(binFolderPath));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-            this.evictNotification = evictNotification?.Subscribe(TearDown);
         }
 
-        public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument, string supportingAssembly)
+        public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument,
+            string supportingAssembly)
         {
             if (appDomains.ContainsKey(interviewId))
             {
@@ -108,12 +107,15 @@ namespace WB.UI.WebTester.Services.Implementation
                             FloatParseHandling = FloatParseHandling.Decimal,
                             Formatting = Formatting.None,
                         });
-                    ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>().StoreAssembly(document1.PublicKey, QuestionnaireVersion, assembly);
-                    ServiceLocator.Current.GetInstance<IQuestionnaireStorage>().StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
+                    ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>()
+                        .StoreAssembly(document1.PublicKey, QuestionnaireVersion, assembly);
+                    ServiceLocator.Current.GetInstance<IQuestionnaireStorage>()
+                        .StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
                 });
         }
 
-        private readonly Gauge appDomainsAlive = new Gauge(@"wb_app_domains_total", @"Count of appdomains per interview in memory");
+        private readonly Gauge appDomainsAlive =
+            new Gauge(@"wb_app_domains_total", @"Count of appdomains per interview in memory");
 
         private static void SetupAppDomainsSeviceLocator()
         {
@@ -139,7 +141,9 @@ namespace WB.UI.WebTester.Services.Implementation
                     }
                     catch (UnauthorizedAccessException exception)
                     {
-                        this.logger.Error($"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}", exception);
+                        this.logger.Error(
+                            $"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}",
+                            exception);
                     }
                 }
 
@@ -154,17 +158,20 @@ namespace WB.UI.WebTester.Services.Implementation
             var appDomain = appDomains[interviewCommand.InterviewId];
 
             var commandString = JsonConvert.SerializeObject(command, Formatting.None, CommandsSerializerSettings);
-            
+
             string eventsFromCommand = RemoteFunc.Invoke(appDomain.Context.Domain, commandString, cmd =>
             {
-                ICommand deserializedCommand = (ICommand)JsonConvert.DeserializeObject(cmd, CommandsSerializerSettings);
-                var aggregateid = CommandRegistry.GetAggregateRootIdResolver(deserializedCommand).Invoke(deserializedCommand);
+                ICommand deserializedCommand =
+                    (ICommand) JsonConvert.DeserializeObject(cmd, CommandsSerializerSettings);
+                var aggregateid = CommandRegistry.GetAggregateRootIdResolver(deserializedCommand)
+                    .Invoke(deserializedCommand);
 
                 StatefulInterview interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
 
                 interview.SetId(aggregateid);
 
-                Action<ICommand, IAggregateRoot> commandHandler = CommandRegistry.GetCommandHandler(deserializedCommand);
+                Action<ICommand, IAggregateRoot>
+                    commandHandler = CommandRegistry.GetCommandHandler(deserializedCommand);
                 commandHandler.Invoke(deserializedCommand, interview);
 
                 var eventStream = new UncommittedEventStream(null, interview.GetUnCommittedChanges());
@@ -189,22 +196,26 @@ namespace WB.UI.WebTester.Services.Implementation
                 return result;
             });
 
-            List<CommittedEvent> resultResult = JsonConvert.DeserializeObject<List<CommittedEvent>>(eventsFromCommand, EventsSerializerSettings);
+            List<CommittedEvent> resultResult =
+                JsonConvert.DeserializeObject<List<CommittedEvent>>(eventsFromCommand, EventsSerializerSettings);
             return resultResult;
         }
-        
-        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId, Identity questionIdentity, 
+
+        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId,
+            Identity questionIdentity,
             int? parentQuestionValue, string filter, int itemsCount = 200)
         {
             var appDomain = appDomains[interviewId];
 
-            var sArg = JsonConvert.SerializeObject((questionIdentity, parentQuestionValue, filter, itemsCount), 
+            var sArg = JsonConvert.SerializeObject((questionIdentity, parentQuestionValue, filter, itemsCount),
                 CommandsSerializerSettings);
 
             var invokeResult = RemoteFunc.Invoke(appDomain.Context.Domain, sArg, jsonArg =>
             {
-                var args = JsonConvert.DeserializeObject<(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount)>
-                    (jsonArg, CommandsSerializerSettings);
+                var args = JsonConvert
+                    .DeserializeObject<(Identity questionIdentity, int? parentQuestionValue, string filter, int
+                            itemsCount)>
+                        (jsonArg, CommandsSerializerSettings);
 
                 var interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
 
@@ -218,7 +229,7 @@ namespace WB.UI.WebTester.Services.Implementation
 
             return JsonConvert.DeserializeObject<List<CategoricalOption>>(invokeResult, CommandsSerializerSettings);
         }
-        
+
         private static JsonSerializerSettings EventsSerializerSettings =>
             EventSerializerSettings.BackwardCompatibleJsonSerializerSettings;
 
@@ -226,10 +237,12 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             TypeNameHandling = TypeNameHandling.Objects,
             ContractResolver = new PrivateSetterContractResolver(),
-            Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() }
+            Converters = new JsonConverter[]
+                {new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter()}
         };
 
         #region IDisposable Support
+
         private bool disposedValue = false; // To detect redundant calls
 
         protected virtual void Dispose(bool disposing)
@@ -239,19 +252,19 @@ namespace WB.UI.WebTester.Services.Implementation
                 if (disposing)
                 {
                     this.evictNotification.Dispose();
-
                 }
-                
+
                 disposedValue = true;
             }
         }
-        
+
         // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
             Dispose(true);
         }
+
         #endregion
     }
 }

@@ -17,10 +17,10 @@ namespace WB.Tests.Integration.WebTester.Services
     {
         protected AppdomainsPerInterviewManager Manager;
 
-        protected AppdomainsPerInterviewManager CreateManager(IEvictionObservable evictNotification = null)
+        protected AppdomainsPerInterviewManager CreateManager()
         {
             var bin = Path.GetDirectoryName(typeof(when_configured).Assembly.Location);
-            return new AppdomainsPerInterviewManager(bin, evictNotification, Mock.Of<ILogger>());
+            return new AppdomainsPerInterviewManager(bin, Mock.Of<ILogger>());
         }
 
         protected void SetupAppDomainInterview(AppdomainsPerInterviewManager manager, Guid interviewId, QuestionnaireDocument questionnaire)

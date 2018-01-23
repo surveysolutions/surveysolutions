@@ -4,18 +4,11 @@ using System.Collections.Generic;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class InMemoryCacheStorage<T, TK> : IDisposable, ICacheStorage<T, TK> where T : class
+    public class InMemoryCacheStorage<T, TK> : ICacheStorage<T, TK> where T : class
     {
         private readonly ConcurrentDictionary<Guid, Dictionary<TK, T>> memoryCache =
             new ConcurrentDictionary<Guid, Dictionary<TK, T>>();
-
-        private readonly IDisposable evictionNotification;
-
-        public InMemoryCacheStorage(IEvictionObservable evictionNotification)
-        {
-            this.evictionNotification = evictionNotification.Subscribe(RemoveArea);
-        }
-
+        
         public void Remove(TK id, Guid area = default(Guid))
         {
             if (!memoryCache.TryGetValue(area, out var cache)) return;
@@ -44,11 +37,6 @@ namespace WB.UI.WebTester.Services.Implementation
             if (!memoryCache.TryGetValue(area, out var cache)) return null;
 
             return cache.TryGetValue(id, out var file) ? file : null;
-        }
-
-        public void Dispose()
-        {
-            evictionNotification?.Dispose();
         }
     }
 }
