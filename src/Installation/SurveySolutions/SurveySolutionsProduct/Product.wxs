@@ -13,6 +13,10 @@
              UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
+        <!--Will override all files-->
+        <Property Id="REINSTALLMODE" Value="amus" />
+        
+
         <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
 
         <Media Id="1" Cabinet="Site.cab" EmbedCab="yes" />
