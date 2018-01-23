@@ -45,10 +45,9 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
         }
 
         [Test]
-        public void should_remove_items_from_cache_on_evict()
+        public void should_remove_items_from_cache_by_area()
         {
-            var evictionNotification = new TokenEviction();
-            InMemoryCacheStorage<MultimediaFile, string> subj = Create.Storage.MediaStorage(evictionNotification);
+            InMemoryCacheStorage<MultimediaFile, string> subj = Create.Storage.MediaStorage();
 
             var interviewA = Id.gA;
             var interviewB = Id.gB;
@@ -61,12 +60,12 @@ namespace WB.Tests.Unit.Applications.WebTester.Services
             StoreFile(subj, fileA1, interviewA);
             StoreFile(subj, fileB,  interviewB);
 
-            evictionNotification.OnNext(interviewA);
+            subj.RemoveArea(interviewA);
                 
             Assert.That(subj.Get(fileA1, interviewA), Is.Null);
             Assert.That(subj.Get(fileA, interviewA), Is.Null);
 
-            evictionNotification.OnNext(Id.gB);
+            subj.RemoveArea(Id.gB);
             
             Assert.That(subj.Get(fileB, interviewB), Is.Null);
         }

@@ -60,10 +60,9 @@ namespace WB.Tests.Abc.TestFactories
             new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true),
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
-        public InMemoryCacheStorage<MultimediaFile, string> MediaStorage(IEvictionObservable evictionNotification = null)
+        public InMemoryCacheStorage<MultimediaFile, string> MediaStorage()
         {
-            return new InMemoryCacheStorage<MultimediaFile, string>(
-                evictionNotification ?? new TokenEviction());
+            return new InMemoryCacheStorage<MultimediaFile, string>();
         }
     }
 }

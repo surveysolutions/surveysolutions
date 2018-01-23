@@ -15,6 +15,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Hub;
 using WB.UI.WebTester.Services;
+using WB.UI.WebTester.Services.Implementation;
 
 [assembly: OwinStartup(typeof(WB.UI.WebTester.Startup))]
 
@@ -22,6 +23,8 @@ namespace WB.UI.WebTester
 {
     public partial class Startup
     {
+        private EvictionService evictionService;
+
         public void Configuration(IAppBuilder app)
         {
             var logger = LogManager.GetCurrentClassLogger();
@@ -49,6 +52,8 @@ namespace WB.UI.WebTester
             app.UseAutofacWebApi(config);
             app.UseWebApi(config);
             MetricsService.Start(logger);
+
+            evictionService = ServiceLocator.Current.GetInstance<EvictionService>();
         }
     }
 }
