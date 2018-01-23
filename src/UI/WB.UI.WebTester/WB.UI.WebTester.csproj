@@ -270,7 +270,6 @@
     <Compile Include="Services\Implementation\AppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\IAppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\ICacheStorage.cs" />
-    <Compile Include="Services\CategoricalOptionsFilter.cs" />
     <Compile Include="Services\IEvictionObservable.cs" />
     <Compile Include="Services\IEvictionObserver.cs" />
     <Compile Include="Services\Implementation\TokenEviction.cs" />

@@ -667,7 +667,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
 
         /// Filter for regular categorical questions, such as YesNo, Single and Multi.
-        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, 
+        public virtual List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Identity questionIdentity, 
             int? parentQuestionValue, string filter, int itemsCount = 200)
         {
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
@@ -686,7 +686,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 questionnaire.GetOptionsForQuestion(questionIdentity.Id, parentQuestionValue, filter)).Take(itemsCount).ToList();
         }
 
-        public virtual List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
+        protected List<CategoricalOption> FilteredCategoricalOptions(Identity questionIdentity, int itemsCount,
             IEnumerable<CategoricalOption> unfilteredOptionsForQuestion)
         {
             // too much

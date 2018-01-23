@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reactive.Subjects;
 using AppDomainToolkit;
@@ -191,30 +192,33 @@ namespace WB.UI.WebTester.Services.Implementation
             List<CommittedEvent> resultResult = JsonConvert.DeserializeObject<List<CommittedEvent>>(eventsFromCommand, EventsSerializerSettings);
             return resultResult;
         }
-
-        public List<CategoricalOption> FilteredCategoricalOptions(Guid interviewId, CategoricalOptionsFilter categoricalOptionsFilter)
+        
+        public List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId, Identity questionIdentity, 
+            int? parentQuestionValue, string filter, int itemsCount = 200)
         {
             var appDomain = appDomains[interviewId];
 
-            var sArg = JsonConvert.SerializeObject(categoricalOptionsFilter, CommandsSerializerSettings);
+            var sArg = JsonConvert.SerializeObject((questionIdentity, parentQuestionValue, filter, itemsCount), 
+                CommandsSerializerSettings);
 
             var invokeResult = RemoteFunc.Invoke(appDomain.Context.Domain, sArg, jsonArg =>
             {
-                var filter = JsonConvert.DeserializeObject<CategoricalOptionsFilter>(jsonArg, CommandsSerializerSettings);
+                var args = JsonConvert.DeserializeObject<(Identity questionIdentity, int? parentQuestionValue, string filter, int itemsCount)>
+                    (jsonArg, CommandsSerializerSettings);
 
                 var interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
 
-                var result = interview.FilteredCategoricalOptions(
-                    filter.QuestionIdentity,
-                    filter.ItemsCount,
-                    filter.UnfilteredOptionsForQuestion);
+                var result = interview.GetFirstTopFilteredOptionsForQuestion(
+                    args.questionIdentity,
+                    args.parentQuestionValue,
+                    args.filter, args.itemsCount);
 
                 return JsonConvert.SerializeObject(result, CommandsSerializerSettings);
             });
 
             return JsonConvert.DeserializeObject<List<CategoricalOption>>(invokeResult, CommandsSerializerSettings);
         }
-
+        
         private static JsonSerializerSettings EventsSerializerSettings =>
             EventSerializerSettings.BackwardCompatibleJsonSerializerSettings;
 
