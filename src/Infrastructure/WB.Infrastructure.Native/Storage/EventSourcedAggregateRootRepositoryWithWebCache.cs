@@ -74,21 +74,13 @@ namespace WB.Infrastructure.Native.Storage
             CacheCountTracker.AddOrUpdate(key, true, (k, old) => true);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
 
-            Cache.Insert(key, aggregateRoot, null, Cache.NoAbsoluteExpiration, Expiration, OnUpdateCallback);
+            Cache.Add(key, aggregateRoot, null, Cache.NoAbsoluteExpiration, Expiration, CacheItemPriority.Normal, OnUpdateCallback);
         }
 
         protected virtual string Key(Guid id) => $"aggregateRoot_" + id.ToString();
-
-        private void OnUpdateCallback(string key, CacheItemUpdateReason reason,
-            out object expensiveObject,
-            out CacheDependency dependency,
-            out DateTime absoluteExpiration,
-            out TimeSpan slidingExpiration)
+        
+        private void OnUpdateCallback(string key, object value, CacheItemRemovedReason reason)
         {
-            expensiveObject = null;
-            dependency = null;
-            absoluteExpiration = Cache.NoAbsoluteExpiration;
-            slidingExpiration = Cache.NoSlidingExpiration;
             CacheItemRemoved(key);
         }
 
