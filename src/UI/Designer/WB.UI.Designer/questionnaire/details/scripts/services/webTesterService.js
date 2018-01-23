@@ -8,6 +8,10 @@
                     return $http.get('../../api/questionnaire/webTest/' + questionnaireId);
                 };
 
+                webTesterService.importQuestionnaire = function (link) {
+                    return $http.get(link);
+                };
+
                 return webTesterService;
             }
         ]);

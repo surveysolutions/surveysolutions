@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Refit;
 using WB.Core.GenericSubdomains.Portable;
@@ -51,7 +52,7 @@ namespace WB.UI.WebTester.Controllers
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
         }
 
-        public async Task<ActionResult> Run(Guid id)
+        public async Task<JsonResult> ImportQuestionnaire(Guid id)
         {
             return View(id);
         }
@@ -63,9 +64,9 @@ namespace WB.UI.WebTester.Controllers
             {
                 questionnaire = await webTesterApi.GetQuestionnaireAsync(id.ToString());
             }
-            catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
+            catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
             {
-                return HttpNotFound();
+                return this.Json(new ImportQuestionnaireResponse {HasErrors = true}, JsonRequestBehavior.AllowGet);
             }
 
             var questionnaireIdentity = await ImportQuestionnaire(id, questionnaire);
@@ -81,8 +82,15 @@ namespace WB.UI.WebTester.Controllers
                 interviewKey: new InterviewKey(00_00_00),
                 assignmentId: null));
 
-            return Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
+            return this.Json(new ImportQuestionnaireResponse {HasErrors = false}, JsonRequestBehavior.AllowGet);
         }
+
+        public class ImportQuestionnaireResponse
+        {
+            public bool HasErrors { get; set; }
+        }
+
+        public ActionResult Run(Guid id) => Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
 
         public async Task<ActionResult> Interview(string id)
         {
