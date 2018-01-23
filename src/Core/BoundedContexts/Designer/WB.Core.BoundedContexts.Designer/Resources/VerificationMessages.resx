@@ -691,6 +691,6 @@
     <value>Variable is using forbidden type.</value>
   </data>
   <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
-    <value>FIlter expression is using forbidden type.</value>
+    <value>Filter expression is using forbidden type.</value>
   </data>
 </root>

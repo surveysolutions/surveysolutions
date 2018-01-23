@@ -1781,7 +1781,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FIlter expression is using forbidden type..
+        ///   Looks up a localized string similar to Filter expression is using forbidden type..
         /// </summary>
         public static string WB0275_FilterExpressionIsUsingForbiddenClasses {
             get {
