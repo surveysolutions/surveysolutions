@@ -390,5 +390,25 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new InterviewOpenedBySupervisor(Guid.NewGuid(), DateTime.Now);
         }
+
+        public InterviewPaused InterviewPaused(DateTime? localTime = null, DateTime? utcTime = null)
+        {
+            return new InterviewPaused(Guid.NewGuid(), localTime ?? DateTime.Now, utcTime ?? DateTime.UtcNow);
+        }
+
+        public InterviewResumed InterviewResumed(DateTime? localTime = null, DateTime? utcTime = null)
+        {
+            return new InterviewResumed(Guid.NewGuid(), localTime ?? DateTime.Now, utcTime ?? DateTime.UtcNow);
+        }
+
+        public InterviewOpenedBySupervisor InterviewOpenedBySupervisor(DateTime? localTime = null)
+        {
+            return new InterviewOpenedBySupervisor(Guid.NewGuid(), localTime ?? DateTime.Now);
+        }
+
+        public InterviewClosedBySupervisor InterviewClosedBySupervisor(DateTime? localTime = null)
+        {
+            return new InterviewClosedBySupervisor(Guid.NewGuid(), localTime ?? DateTime.Now);
+        }
     }
 }
