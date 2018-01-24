@@ -261,6 +261,7 @@
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MultimediaController.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\PrivateSettersResolver.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterAppDomainModule.cs" />
@@ -329,6 +330,7 @@
     <Content Include="Views\ApiTest\Test.cshtml" />
     <Content Include="Views\Shared\partial.webtester.cshtml" />
     <Content Include="Views\WebTester\Run.cshtml" />
+    <Content Include="Views\Error\QuestionnaireWithErrors.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -369,6 +371,7 @@
     <EmbeddedResource Include="Resources\Common.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Common.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

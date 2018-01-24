@@ -126,4 +126,13 @@
   <data name="TheWorldBankGroup" xml:space="preserve">
     <value>The World Bank Group</value>
   </data>
+  <data name="QuestionnaireHasErrors" xml:space="preserve">
+    <value>The questionnaire has errors.</value>
+  </data>
+  <data name="CantOpenQuestionnaire" xml:space="preserve">
+    <value>Can't open the questionnaire.</value>
+  </data>
+  <data name="FixErrorsOnDesigner" xml:space="preserve">
+    <value>Please fix this in Designer.</value>
+  </data>
 </root>

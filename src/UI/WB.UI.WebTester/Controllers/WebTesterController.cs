@@ -52,7 +52,9 @@ namespace WB.UI.WebTester.Controllers
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
         }
 
-        public async Task<JsonResult> ImportQuestionnaire(Guid id)
+        public ActionResult Run(Guid id) => this.View(id);
+
+        public async Task<ActionResult> Redirect(Guid id)
         {
             Questionnaire questionnaire;
             try
@@ -61,7 +63,7 @@ namespace WB.UI.WebTester.Controllers
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
             {
-                return this.Json(new ImportQuestionnaireResponse {HasErrors = true}, JsonRequestBehavior.AllowGet);
+                return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
 
             var questionnaireIdentity = await ImportQuestionnaire(id, questionnaire);
@@ -77,17 +79,8 @@ namespace WB.UI.WebTester.Controllers
                 interviewKey: new InterviewKey(00_00_00),
                 assignmentId: null));
 
-            return this.Json(new ImportQuestionnaireResponse {HasErrors = false}, JsonRequestBehavior.AllowGet);
+            return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
-
-        public class ImportQuestionnaireResponse
-        {
-            public bool HasErrors { get; set; }
-        }
-
-        public ActionResult Run(Guid id) => this.View(id);
-
-        public ActionResult Redirect(Guid id) => this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
 
         public async Task<ActionResult> Interview(string id)
         {
