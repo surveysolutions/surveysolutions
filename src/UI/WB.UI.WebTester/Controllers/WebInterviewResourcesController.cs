@@ -18,26 +18,27 @@ namespace WB.UI.WebTester.Controllers
     [RoutePrefix("api")]
     public class WebInterviewResourcesController : ApiController
     {
-        private readonly IPlainStorageAccessor<QuestionnaireAttachment> attachmentStorage;
+        private readonly ICacheStorage<QuestionnaireAttachment, string> attachmentStorage;
         private readonly IImageProcessingService imageProcessingService;
         private readonly ICacheStorage<MultimediaFile, string> mediaStorage;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
 
-        public WebInterviewResourcesController(IPlainStorageAccessor<QuestionnaireAttachment> attachmentStorage,
+        public WebInterviewResourcesController(
+            ICacheStorage<QuestionnaireAttachment, string> attachmentStorage,
             IImageProcessingService imageProcessingService,
             ICacheStorage<MultimediaFile, string> mediaStorage, 
             IStatefulInterviewRepository statefulInterviewRepository)
         {
             this.attachmentStorage = attachmentStorage ?? throw new ArgumentNullException(nameof(attachmentStorage));
             this.imageProcessingService = imageProcessingService ?? throw new ArgumentNullException(nameof(imageProcessingService));
-            this.mediaStorage = mediaStorage;
-            this.statefulInterviewRepository = statefulInterviewRepository;
+            this.mediaStorage = mediaStorage ?? throw new ArgumentNullException(nameof(mediaStorage));
+            this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
         }
 
         [HttpGet]
         public HttpResponseMessage Content([FromUri] string interviewId, [FromUri] string contentId)
         {
-            var attachment = attachmentStorage.GetById(contentId);
+            var attachment = attachmentStorage.Get(contentId, Guid.Parse(interviewId));
             if (attachment == null)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NoContent);
