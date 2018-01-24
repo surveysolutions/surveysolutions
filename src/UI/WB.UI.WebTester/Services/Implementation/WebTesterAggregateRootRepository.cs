@@ -4,6 +4,7 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.WebTester.Infrastructure;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
@@ -28,10 +29,15 @@ namespace WB.UI.WebTester.Services.Implementation
 
         protected override TimeSpan Expiration { get; }
 
-        protected override void CacheItemRemoved(string key)
+        protected override void CacheItemRemoved(string key, object value)
         {
-            notify.OnNext(Guid.Parse(key.Substring(CachePrefix.Length)));
-            base.CacheItemRemoved(key);
+            if (value is WebTesterStatefulInterview interview)
+            {
+                notify.OnNext(Guid.Parse(key.Substring(CachePrefix.Length)));
+            }
+
+            
+            base.CacheItemRemoved(key, value);
         }
     }
 }
