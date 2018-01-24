@@ -1,27 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-
-  <style name="Dashboard_Interviews_Header" parent="AppTheme">
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_TabMenu_marginTop</item>
-    <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
-    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
-    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
-  </style>
-
-  <style name="Dashboard_Interviews_Header_Body" parent="AppTheme">
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:orientation">horizontal</item>
-  </style>
-
-  <style name="Dashboard_InterviewsList" parent="AppTheme">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-  </style>
-
-  <style name="Dashboard_InterviewListItem" parent="AppTheme">
+  <style name="Dashboard_InterviewListItem">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
@@ -31,21 +10,6 @@
     <item name="android:clipChildren">false</item>
     <item name="android:clipToPadding">false</item>
     <item name="android:padding">@dimen/Dashboard_Card_Elevation</item>
-  </style>
-
-  <style name="Dashboard_InterviewItem_Layout" parent="AppTheme">
-    <item name="android:layout_width">fill_parent</item>
-    <item name="android:layout_height">fill_parent</item>
-    <item name="android:orientation">horizontal</item>
-    <item name="android:background">@drawable/dashboard_item_layout_border</item>
-  </style>
-
-  <style name="Dashboard_InterviewItem_StatusPanel" parent="AppTheme">
-    <item name="android:layout_width">@dimen/Dashboard_InterviewItem_StatusPanel_width</item>
-    <item name="android:layout_height">fill_parent</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
-    <item name="android:layout_marginBottom">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
-    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_StatusPanel_margin</item>
   </style>
 
   <style name="Dashboard_Card_Status">
@@ -134,7 +98,7 @@
     <item name="android:focusableInTouchMode">false</item>
   </style>
 
-  <style name="Dashboard_InterviewItem_PrefilledQuestion" parent="AppTheme">
+  <style name="Dashboard_InterviewItem_PrefilledQuestion">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/dashboard_card_duo_margin</item>
     <item name="android:orientation">horizontal</item>
@@ -144,7 +108,7 @@
     <item name="android:singleLine">true</item>
   </style>
 
-  <style name="Dashboard_InterviewItem_PrefilledQuestion_Question" parent="AppTheme">
+  <style name="Dashboard_InterviewItem_PrefilledQuestion_Question">
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_weight">34</item>
     <item name="android:textSize">@dimen/textsize_14</item>
@@ -156,7 +120,7 @@
     <item name="android:maxWidth">@dimen/Dashboard_PrefilledQuestion_Width</item>
   </style>
 
-  <style name="Dashboard_InterviewItem_PrefilledQuestion_Answer" parent="AppTheme">
+  <style name="Dashboard_InterviewItem_PrefilledQuestion_Answer">
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:layout_gravity">left|center_vertical</item>
@@ -242,7 +206,7 @@
     <item name="android:background">?attr/selectableItemBackground</item>
   </style>
 
-  <style name="Dashboard_Tab_Description" parent="AppTheme">
+  <style name="Dashboard_Tab_Description">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_22</item>
@@ -260,7 +224,7 @@
     <item name="android:paddingRight">0dp</item>
   </style>
   
-  <style name="Dashboard_NoInterviewsPanel" parent="AppTheme">
+  <style name="Dashboard_NoInterviewsPanel">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:orientation">vertical</item>
@@ -275,7 +239,7 @@
     <item name="android:layout_marginBottom">@dimen/zero</item>
   </style>
 
-  <style name="Dashboard_NoInterviewsTitle" parent="AppTheme">
+  <style name="Dashboard_NoInterviewsTitle">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_22</item>
@@ -287,7 +251,7 @@
     <item name="android:layout_marginTop">@dimen/zero</item>
   </style>
 
-  <style name="Dashboard_NoInterviewsText" parent="AppTheme">
+  <style name="Dashboard_NoInterviewsText">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_20</item>
@@ -296,7 +260,7 @@
     <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsText_marginTop</item>
   </style>
 
-  <style name="Dashboard_NoInterviewsSyncButton" parent="AppTheme">
+  <style name="Dashboard_NoInterviewsSyncButton">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:background">@drawable/default_input_button</item>
@@ -318,7 +282,7 @@
     <item name="android:background">@color/dashboard_synchronization_delimiter</item>
   </style>
 
-  <style name="Dashboard_Synchronization_Operation_Title" parent="AppTheme">
+  <style name="Dashboard_Synchronization_Operation_Title">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_14</item>
@@ -330,7 +294,7 @@
     <item name="android:textColor">@color/dashboard_synchronization_fail_title</item>
   </style>
 
-  <style name="Dashboard_Synchronization_Statistics_Text" parent="AppTheme">
+  <style name="Dashboard_Synchronization_Statistics_Text">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:textSize">@dimen/textsize_14</item>
@@ -352,7 +316,7 @@
     <item name="android:padding">@dimen/button_shadow_margin</item>
   </style>
 
-  <style name="Dashboard_Synchronization_Holder" parent="AppTheme">
+  <style name="Dashboard_Synchronization_Holder">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">@dimen/Dashboard_Synchronization_Statistics_Height</item>
     <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
@@ -361,7 +325,7 @@
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
   </style>
 
-  <style name="Dashboard_Synchronization_Image" parent="AppTheme">
+  <style name="Dashboard_Synchronization_Image">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
   </style>
