@@ -160,7 +160,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View all (reset all filters).
+        ///   Looks up a localized string similar to Reset all filters.
         /// </summary>
         public static string Filters_ClearSelection {
             get {
