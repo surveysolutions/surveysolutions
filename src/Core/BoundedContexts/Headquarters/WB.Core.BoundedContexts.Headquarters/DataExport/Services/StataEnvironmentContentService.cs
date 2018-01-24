@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private static void BuildInsheet(string fileName, StringBuilder doContent)
         {
-            doContent.AppendLine($"insheet using \"{fileName}\", tab");
+            doContent.AppendLine($"insheet using \"{fileName}\", tab case");
         }
 
         protected void BuildLabelsForLevel(QuestionnaireLevelLabels questionnaireLevelLabels, StringBuilder doContent)
