@@ -156,20 +156,7 @@ angular.module('designerApp')
                 var webTesterWindow = window.open("about:blank", '_blank');
 
                 webTesterService.run($state.params.questionnaireId).then(function (response) {
-                    var importQuestionnaireUrl = response.data.baseUri + "/ImportQuestionnaire/" + response.data.token;
-                    var interviewSplashUrl = response.data.baseUri + "/Run/" + response.data.token;
-                    var interviewUrl = response.data.baseUri + "/Redirect/" + response.data.token;
-
-                    webTesterWindow.location.href = interviewSplashUrl;
-
-                    webTesterService.importQuestionnaire(importQuestionnaireUrl).then(function(response) {
-                        if (response.data.HasErrors === true) {
-                            webTesterWindow.close();
-                            $scope.verify();
-                        } else webTesterWindow.location.href = interviewUrl;
-                    }, function() {
-                        webTesterWindow.close();
-                    });
+                    webTesterWindow.location.href = response.data;
                 });
             };
 

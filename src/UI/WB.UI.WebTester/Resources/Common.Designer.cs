@@ -70,11 +70,38 @@ namespace WB.UI.WebTester.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t open the questionnaire..
+        /// </summary>
+        public static string CantOpenQuestionnaire {
+            get {
+                return ResourceManager.GetString("CantOpenQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please fix this in Designer..
+        /// </summary>
+        public static string FixErrorsOnDesigner {
+            get {
+                return ResourceManager.GetString("FixErrorsOnDesigner", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Legal.
         /// </summary>
         public static string Legal {
             get {
                 return ResourceManager.GetString("Legal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The questionnaire has errors..
+        /// </summary>
+        public static string QuestionnaireHasErrors {
+            get {
+                return ResourceManager.GetString("QuestionnaireHasErrors", resourceCulture);
             }
         }
         
