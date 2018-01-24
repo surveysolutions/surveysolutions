@@ -228,9 +228,6 @@
   <data name="StartPageTitle" xml:space="preserve">
     <value>Веб опрос</value>
   </data>
-  <data name="Stopped" xml:space="preserve">
-    <value>Веб интервью остановлено</value>
-  </data>
   <data name="SurveyFormatText" xml:space="preserve">
     <value>Опрос: "{0}"</value>
   </data>

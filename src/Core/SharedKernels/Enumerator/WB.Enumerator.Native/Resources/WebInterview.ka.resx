@@ -240,9 +240,6 @@
   <data name="StartPageTitle" xml:space="preserve">
     <value>ვებ კვლევა</value>
   </data>
-  <data name="Stopped" xml:space="preserve">
-    <value>ვებ-ინტერვიუ შეჩერდა</value>
-  </data>
   <data name="SurveyFormatText" xml:space="preserve">
     <value>კვლევა: "{0}"</value>
   </data>
