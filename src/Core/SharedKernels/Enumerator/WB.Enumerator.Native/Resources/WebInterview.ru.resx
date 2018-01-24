@@ -287,7 +287,7 @@
     <value>Без флага</value>
   </data>
   <data name="Filters_ClearSelection" xml:space="preserve">
-    <value>Посмотреть всё (сбросить фильтры)</value>
+    <value>Сбросить фильтры</value>
   </data>
   <data name="Filters_OldDetailsLink" xml:space="preserve">
     <value>Деталика интервью (старый дизайн)</value>

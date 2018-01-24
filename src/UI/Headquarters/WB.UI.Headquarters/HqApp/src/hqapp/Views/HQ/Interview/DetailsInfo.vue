@@ -4,15 +4,25 @@
         <div class="panel-body clearfix">
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details">
-                    <h3><span>#{{$config.model.key}}</span> {{this.$store.state.webinterview.questionnaireTitle}}</h3>
-                    <p>
-                        {{this.$t('Details.Status', {name: this.$config.model.statusName })}}, {{this.$t('Details.Responsible')}}:
-                        <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">
-                            {{this.$config.model.responsible}}
-                        </a>, {{lastUpdateDate}}
-                        <button type="button" class="btn btn-link" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
-                    </p>
-
+                    <ul class="main-info-column list-unstyled pull-left">
+                        <li>Interview #{{$config.model.key}} ({{this.$t('Common.Assignment')}} {{this.$config.model.assignmentId}})</li>
+                        <li class="questionnaire-title" :title="$store.state.webinterview.questionnaireTitle">{{this.$store.state.webinterview.questionnaireTitle}}</li>
+                    </ul>
+                    <ul class="list-unstyled pull-left">
+                        <li><span class="data-label">{{this.$t('Details.Responsible')}}: </span> <span class="data">
+                                <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl"> {{this.$config.model.responsible}}</a>
+                            </span></li>
+                        <li><span class="data-label">{{this.$t('Users.Supervisor')}} : </span> <span class="data"><a href="javascript:void(0);" target="_blank" class="supervisor">{{this.$config.model.supervisor}}</a></span></li>
+                    </ul>
+                    <ul class="list-unstyled pull-left">
+                        <li><span class="data-label">{{this.$t('Details.Status')}}</span> 
+                            <span class="data">{{this.$config.model.statusName}}</span>
+                        </li>
+                        <li><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
+                            <span class="data">{{lastUpdateDate}}</span>
+                            <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="questionnaire-details-actions clearfix">
@@ -122,9 +132,7 @@ export default {
       );
     },
     lastUpdateDate() {
-      return this.$t("Details.LastUpdated", {
-        date: moment.utc(this.$config.model.lastUpdatedAtUtc).fromNow()
-      });
+      return moment.utc(this.$config.model.lastUpdatedAtUtc).fromNow();      
     },
     canChangeLanguage() {
       return (

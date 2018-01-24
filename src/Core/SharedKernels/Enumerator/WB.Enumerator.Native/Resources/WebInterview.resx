@@ -290,7 +290,7 @@
     <value>Powered by</value>
   </data>
   <data name="Filters_ClearSelection" xml:space="preserve">
-    <value>View all (reset all filters)</value>
+    <value>Reset all filters</value>
   </data>
   <data name="Filters_OldDetailsLink" xml:space="preserve">
     <value>Old interview details</value>

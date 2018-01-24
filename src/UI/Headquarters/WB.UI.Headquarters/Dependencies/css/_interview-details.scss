@@ -56,7 +56,7 @@
 	
 }
 .about-questionnaire{
-	font: 14px/16px "RobotoBold";
+	font: 14px/16px "RobotoRegular";
 }
 .web-interview-for-supervisor,
 .web-interview-for-supervisor.fullscreen-hidden-content,
@@ -72,6 +72,9 @@
 	}
 }
 .panel-details{
+	.panel-body{
+		padding-top: 0;
+	}
 	.aside-menu{
 		position: relative;
 		display: inline-block;
@@ -101,14 +104,58 @@
 			font-family: "RobotoLight";
 		}
 	}
-	p{
+	.about-questionnaire-details ul{
+		padding-top: 15px;
+		margin-right: 20px;
 		margin-bottom: 0;
+		li{
+			margin-bottom: 5px;
+			&:last-child{
+				margin-bottom: 0;
+			}
+			.gray-action-unit{
+				margin-left: 10px;
+			}
+		}
 		.btn-link{
-			padding-top: 0;
-			padding-bottom: 0;
-			color: $gray_light;
+			padding: 0;
 		}
 	}
+	.main-info-column{
+		max-width: 375px;
+		font-family: "RobotoBold";
+		.questionnaire-title{
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-family: "RobotoRegular";
+		}
+	}
+	.data-label{
+		display: inline-block;
+		width: 110px;
+		text-align: right;
+		color: $gray_light;
+	}
+	.data{
+		font-family: "RobotoMedium";
+
+	}
+	// .data-row{
+	// 	font-size: 12px;
+	// 	line-height: 14px;
+	// 	.btn-link{
+	// 		padding-top: 0;
+	// 		padding-bottom: 0;
+	// 		color: $gray_light;
+	// 	}
+	// 	ul{
+	// 		margin-bottom: 0;
+	// 	}
+	// 	.data{
+	// 		font: 14px/16px "RobotoBold";
+	// 	}
+	// }
 	.questionnaire-details-actions,
 	.about-questionnaire{
 		min-height: 40px;
@@ -116,6 +163,7 @@
 
 	.questionnaire-details-actions{
 		float: right;
+		padding-top: 17px;
 		.reject{
 			margin-right: 15px;
 		}
@@ -125,6 +173,11 @@
 	}
 	.bootstrap-select.btn-group {
 		width: 180px !important;
+		.dropdown-toggle{
+			height: 36px;
+			line-height: 16px;
+		}
+		
 	}
 }
 .filters-results{

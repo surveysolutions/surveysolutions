@@ -143,6 +143,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
                 StatusName = interviewSummary.Status.ToLocalizeString(),
                 Responsible = interviewSummary.ResponsibleName,
+                Supervisor = interviewSummary.TeamLeadName,
+                AssignmentId = interviewSummary.AssignmentId,
                 ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
                                             Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
@@ -227,5 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string InterviewsUrl { get; set; }
 
         public string ResponsibleProfileUrl { get; set; }
+        public string Supervisor { get; set; }
+        public int? AssignmentId { get; set; }
     }
 }
