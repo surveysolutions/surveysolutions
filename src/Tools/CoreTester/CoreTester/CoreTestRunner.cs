@@ -16,7 +16,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -60,6 +59,9 @@ namespace CoreTester
 
         public int Run()
         {
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine($"started at {DateTime.Now}");
+
             var questionnaireBrowseItems = this.plainTransactionManager.GetPlainTransactionManager()
                 .ExecuteInQueryTransaction(() =>
                     questionnairesBrowseFactory.Load(new QuestionnaireBrowseInputModel {PageSize = 1000}));
@@ -76,6 +78,7 @@ namespace CoreTester
                 QuestionnaireDocument questionnaire = this.plainTransactionManager.GetPlainTransactionManager()
                     .ExecuteInQueryTransaction(() =>
                         questionnaireRepository.GetById(questionnaireRepositoryId));
+                
                 Console.WriteLine("============================================");
                 Console.WriteLine($"Questionnaire: {questionnaireRepositoryId}");
                 Console.WriteLine($"               {questionnaire.Title}");
@@ -86,13 +89,13 @@ namespace CoreTester
                 var stopwatch = Stopwatch.StartNew();
                 var eventsCount = 0;
                 int lastTimeSomethingWasDumpedInOutput = 0;
-                int pingIntervalInMinutes = 3;
+                int pingIntervalInMinutes = 2;
                 int dotsInARow = 0;
                 int interviewsProcessed = 0;
                 foreach (var interviewId in interviewIdsToProcess)
                 {
                     interviewsProcessed++;
-                    var newInterviewId = Guid.Parse("11111111111111111111111111111111");
+                    var newInterviewId = interviewId;//  Guid.Parse("11111111111111111111111111111111");
                     var userId = Guid.Parse("22222222222222222222222222222222");
 
                     var committedEvents = this.eventStore.Read(interviewId, 0).ToList();
@@ -100,69 +103,96 @@ namespace CoreTester
                     if (committedEvents.Count == 0)
                         continue;
 
-                    try
-                    {
+                    
                         var createCommand = GetCreateInterviewCommand(committedEvents, newInterviewId, userId);
                         // to read assembly
                         this.plainTransactionManager.GetPlainTransactionManager()
                             .ExecuteInQueryTransaction(() => commandService.Execute(createCommand));
-                        foreach (var committedEvent in (IEnumerable<CommittedEvent>) committedEvents)
+                        foreach (var committedEvent in committedEvents)
                         {
-                            ICommand command = null;
-                            if (committedEvent.Payload is QuestionAnswered)
-                            {
-                                command = ConvertEventToCommand(newInterviewId, committedEvent);
-                            }
+                            var commands = ConvertEventToCommands(newInterviewId, committedEvent);
 
-                            if (command == null)
+                            if (commands == null)
                                 continue;
-                            commandService.Execute(command);
+
+                            try
+                            {
+                                foreach (var command in commands)
+                                {
+                                    if (command is RemoveAnswerCommand)
+                                    {
+                                        try
+                                        {
+                                            commandService.Execute(command);
+                                        }
+                                        catch (InterviewException exception)
+                                        {
+                                            if(!(exception.Message.Contains("is disabled and question's answer cannot be changed") ||
+                                                exception.Message.Contains("No questions found for roster vector")))
+                                            {
+                                                throw;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        commandService.Execute(command);
+                                    }
+                                }
+                            }
+                            catch (InterviewException exception)
+                            {
+                                var message = exception.ExceptionType == InterviewDomainExceptionType.ExpessionCalculationError
+                                    ? $"Expression calculation error for interview {interviewId}"
+                                    : $"Error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
+
+                                Console.WriteLine(message);
+                                this.logger.Info(message, exception);
+                            }
 
                             if (!(stopwatch.Elapsed.TotalMinutes > lastTimeSomethingWasDumpedInOutput + pingIntervalInMinutes)) continue;
                             lastTimeSomethingWasDumpedInOutput = (int) stopwatch.Elapsed.TotalMinutes;
                             Console.Write('.');
                             dotsInARow++;
-                            if (60 / pingIntervalInMinutes == dotsInARow)
+                            if (dotsInARow % 10 == 0)
                             {
-                                Console.WriteLine($"{(interviewsProcessed/interviewIdsToProcess.Count)*100}% finished.");
-                                ShowStatistics(stopwatch.ElapsedMilliseconds, interviewsProcessed, eventsCount);
+                                
+                                ShowStatistics(stopwatch.ElapsedMilliseconds, interviewsProcessed, eventsCount, interviewIdsToProcess.Count);
+                                dotsInARow = 0;
                             }
                         }
 
                         commandService.Execute(new DeleteInterviewCommand(newInterviewId, userId));
-                    }
-                    catch (InterviewException exception)
-                    {
-                        var message = exception.ExceptionType == InterviewDomainExceptionType.ExpessionCalculationError
-                            ? $"Expression calculation error for interview {interviewId}"
-                            : $"Error during processing interview {interviewId}. {committedEvents.Count} events.";
-
-                        Console.WriteLine(message);
-                        this.logger.Debug(message, exception);
-                    }
+                    
 
                     eventsCount += committedEvents.Count;
                 }
 
                 stopwatch.Stop();
-                ShowStatistics(stopwatch.ElapsedMilliseconds, interviewIdsToProcess.Count, eventsCount);
+                ShowStatistics(stopwatch.ElapsedMilliseconds, interviewIdsToProcess.Count, eventsCount, interviewIdsToProcess.Count);
 
                 questionnaireStorage.DeleteQuestionnaireDocument(questionnaireBrowseItem.QuestionnaireId,
                     questionnaireBrowseItem.Version);
             }
 
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine($"Finished at {DateTime.Now}");
             return 0;
         }
 
-        private static void ShowStatistics(long elapsedMilliseconds, int processedInterviewsCount, int eventsCount)
+        private static void ShowStatistics(long elapsedMilliseconds, int processedInterviewsCount, int eventsCount, int totalInterviewsCount)
         {
             var total = TimeSpan.FromMilliseconds(elapsedMilliseconds);
             var averagePerInterview = TimeSpan.FromMilliseconds(elapsedMilliseconds / processedInterviewsCount);
             var averagePerEvent = TimeSpan.FromMilliseconds(elapsedMilliseconds / eventsCount);
-            Console.WriteLine();
-            Console.WriteLine($"{total:g} - total time to complete.");
+            var finishTime = DateTime.Now.AddMilliseconds((totalInterviewsCount - processedInterviewsCount) *
+                                                          (elapsedMilliseconds / processedInterviewsCount));
+            
+            Console.WriteLine("--------------------------------------------");
+            Console.WriteLine($"{(processedInterviewsCount/totalInterviewsCount)*100:0.##}% finished. Will finish at {finishTime}. {total:g} - time running.");
             Console.WriteLine($"{averagePerInterview:g} - average per interview.");
             Console.WriteLine($"{averagePerEvent:g} - average per event.");
+            Console.WriteLine();
         }
 
         private static ICommand GetCreateInterviewCommand(List<CommittedEvent> committedEvents, Guid interviewId,
@@ -223,7 +253,7 @@ namespace CoreTester
             return createCommand;
         }
 
-        private static ICommand ConvertEventToCommand(Guid interviewId, CommittedEvent committedEvent)
+        private static IEnumerable<ICommand> ConvertEventToCommands(Guid interviewId, CommittedEvent committedEvent)
         {
             var userId = Guid.NewGuid();
             switch (committedEvent.Payload)
@@ -231,70 +261,75 @@ namespace CoreTester
                 case AnswerRemoved answerRemoved:
                     return new RemoveAnswerCommand(interviewId, userId,
                         new Identity(answerRemoved.QuestionId, answerRemoved.RosterVector),
-                        answerRemoved.RemoveTimeUtc);
+                        answerRemoved.RemoveTimeUtc).ToEnumerable();
+                case AnswersRemoved answersRemoved:
+                    return answersRemoved.Questions.Select(x =>
+                        new RemoveAnswerCommand(interviewId, userId, x, committedEvent.EventTimeStamp));
                 case AreaQuestionAnswered areaQuestion:
                     return new AnswerAreaQuestionCommand(interviewId, userId,
                         areaQuestion.QuestionId, areaQuestion.RosterVector, areaQuestion.AnswerTimeUtc,
                         areaQuestion.Geometry,
                         areaQuestion.MapName, areaQuestion.AreaSize, areaQuestion.Coordinates, areaQuestion.Length,
-                        areaQuestion.DistanceToEditor);
+                        areaQuestion.DistanceToEditor).ToEnumerable();
                 case AudioQuestionAnswered audioQuestion:
                     return new AnswerAudioQuestionCommand(interviewId, userId, audioQuestion.QuestionId,
                         audioQuestion.RosterVector, audioQuestion.AnswerTimeUtc,
-                        audioQuestion.FileName, audioQuestion.Length);
+                        audioQuestion.FileName, audioQuestion.Length).ToEnumerable();
                 case DateTimeQuestionAnswered dateTimeQuestion:
                     return new AnswerDateTimeQuestionCommand(interviewId, userId, dateTimeQuestion.QuestionId,
                         dateTimeQuestion.RosterVector,
-                        dateTimeQuestion.AnswerTimeUtc, dateTimeQuestion.Answer);
+                        dateTimeQuestion.AnswerTimeUtc, dateTimeQuestion.Answer).ToEnumerable();
                 case GeoLocationQuestionAnswered geoLocation:
                     return new AnswerGeoLocationQuestionCommand(interviewId, userId, geoLocation.QuestionId,
                         geoLocation.RosterVector, geoLocation.AnswerTimeUtc,
                         geoLocation.Latitude, geoLocation.Longitude, geoLocation.Accuracy, geoLocation.Altitude,
-                        geoLocation.Timestamp);
+                        geoLocation.Timestamp).ToEnumerable();
                 case MultipleOptionsLinkedQuestionAnswered multipleOptionsLinked:
                     return new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, userId,
                         multipleOptionsLinked.QuestionId, multipleOptionsLinked.RosterVector,
                         multipleOptionsLinked.AnswerTimeUtc,
-                        multipleOptionsLinked.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray());
+                        multipleOptionsLinked.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray()).ToEnumerable();
                 case MultipleOptionsQuestionAnswered multipleOptions:
                     return new AnswerMultipleOptionsQuestionCommand(interviewId, userId, multipleOptions.QuestionId,
                         multipleOptions.RosterVector,
                         multipleOptions.AnswerTimeUtc,
-                        multipleOptions.SelectedValues.Select(Convert.ToInt32).ToArray());
+                        multipleOptions.SelectedValues.Select(Convert.ToInt32).ToArray()).ToEnumerable();
                 case NumericIntegerQuestionAnswered numericInteger:
                     return new AnswerNumericIntegerQuestionCommand(interviewId, userId, numericInteger.QuestionId,
                         numericInteger.RosterVector,
-                        numericInteger.AnswerTimeUtc, numericInteger.Answer);
+                        numericInteger.AnswerTimeUtc, numericInteger.Answer).ToEnumerable();
                 case NumericRealQuestionAnswered numericReal:
                     return new AnswerNumericRealQuestionCommand(interviewId, userId, numericReal.QuestionId,
                         numericReal.RosterVector,
-                        numericReal.AnswerTimeUtc, Convert.ToDouble(numericReal.Answer));
+                        numericReal.AnswerTimeUtc, Convert.ToDouble(numericReal.Answer)).ToEnumerable();
                 case PictureQuestionAnswered picture:
                     return new AnswerPictureQuestionCommand(interviewId, userId, picture.QuestionId,
                         picture.RosterVector,
-                        picture.AnswerTimeUtc, picture.PictureFileName);
+                        picture.AnswerTimeUtc, picture.PictureFileName).ToEnumerable();
                 case QRBarcodeQuestionAnswered qrBarcode:
                     return new AnswerQRBarcodeQuestionCommand(interviewId, userId, qrBarcode.QuestionId,
                         qrBarcode.RosterVector,
-                        qrBarcode.AnswerTimeUtc, qrBarcode.Answer);
+                        qrBarcode.AnswerTimeUtc, qrBarcode.Answer).ToEnumerable();
                 case SingleOptionLinkedQuestionAnswered singleOptionLinked:
                     return new AnswerSingleOptionLinkedQuestionCommand(interviewId, userId,
                         singleOptionLinked.QuestionId, singleOptionLinked.RosterVector,
-                        singleOptionLinked.AnswerTimeUtc, singleOptionLinked.SelectedRosterVector);
+                        singleOptionLinked.AnswerTimeUtc, singleOptionLinked.SelectedRosterVector).ToEnumerable();
                 case SingleOptionQuestionAnswered singleOption:
                     return new AnswerSingleOptionQuestionCommand(interviewId, userId, singleOption.QuestionId,
                         singleOption.RosterVector, singleOption.AnswerTimeUtc,
-                        Convert.ToInt32(singleOption.SelectedValue));
+                        Convert.ToInt32(singleOption.SelectedValue)).ToEnumerable();
                 case TextListQuestionAnswered textList:
                     return new AnswerTextListQuestionCommand(interviewId, userId, textList.QuestionId,
                         textList.RosterVector,
-                        textList.AnswerTimeUtc, textList.Answers);
+                        textList.AnswerTimeUtc, textList.Answers).ToEnumerable();
                 case TextQuestionAnswered text:
                     return new AnswerTextQuestionCommand(interviewId, userId, text.QuestionId, text.RosterVector,
-                        text.AnswerTimeUtc, text.Answer);
+                        text.AnswerTimeUtc, text.Answer).ToEnumerable();
                 case YesNoQuestionAnswered yesNo:
                     return new AnswerYesNoQuestion(interviewId, userId, yesNo.QuestionId, yesNo.RosterVector,
-                        yesNo.AnswerTimeUtc, yesNo.AnsweredOptions);
+                        yesNo.AnswerTimeUtc, yesNo.AnsweredOptions).ToEnumerable();
+                default:
+                    return null;
             }
 
             return null;
