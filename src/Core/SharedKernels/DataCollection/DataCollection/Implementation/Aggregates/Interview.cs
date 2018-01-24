@@ -699,7 +699,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var question = this.tree.GetQuestion(questionIdentity);
 
             var nearestRoster = question.Parents.OfType<InterviewTreeRoster>().LastOrDefault()?.Identity ??
-                                new Identity(this.Tree.Questionnaire.QuestionnaireId, RosterVector.Empty);
+                                new Identity(this.QuestionnaireIdentity.QuestionnaireId, RosterVector.Empty);
 
             var level = expressionStorage.GetLevel(nearestRoster);
             var categoricalFilter = level.GetCategoricalFilter(questionIdentity);

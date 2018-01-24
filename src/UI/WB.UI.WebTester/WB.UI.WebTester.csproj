@@ -274,6 +274,8 @@
     <Compile Include="Services\IEvictionObservable.cs" />
     <Compile Include="Services\IEvictionObserver.cs" />
     <Compile Include="Services\Implementation\EvictionService.cs" />
+    <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
+    <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\TokenEviction.cs" />
     <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
     <Compile Include="Services\MetricsService.cs" />
@@ -318,7 +320,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Elmah\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Configuration\config.json" />
