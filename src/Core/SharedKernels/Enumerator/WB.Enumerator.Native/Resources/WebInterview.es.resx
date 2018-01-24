@@ -234,9 +234,6 @@
   <data name="StartPageTitle" xml:space="preserve">
     <value>Encuesta Web</value>
   </data>
-  <data name="Stopped" xml:space="preserve">
-    <value>Se detuvo la entrevista en la Web</value>
-  </data>
   <data name="SurveyFormatText" xml:space="preserve">
     <value>Encuesta: "{0}"</value>
   </data>

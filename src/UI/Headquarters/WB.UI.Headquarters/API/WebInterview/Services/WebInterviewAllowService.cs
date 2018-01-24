@@ -76,8 +76,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     .ExecuteInPlainTransaction(
                         () => webInterviewConfigProvider.Get( questionnaireIdentity));
 
-            //interview is not public available and responsible is not logged in
-            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned)
+            //interview is not public available and logged in user is not current interview responsible
+            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned && this.authorizedUser.IsAuthenticated)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
                     Enumerator.Native.Resources.WebInterview.Error_UserNotAuthorised);

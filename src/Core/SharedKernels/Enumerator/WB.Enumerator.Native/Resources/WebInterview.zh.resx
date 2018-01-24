@@ -228,9 +228,6 @@
   <data name="StartPageTitle" xml:space="preserve">
     <value>网络调查</value>
   </data>
-  <data name="Stopped" xml:space="preserve">
-    <value>已停止网络访谈</value>
-  </data>
   <data name="SurveyFormatText" xml:space="preserve">
     <value>调查：“{0}”</value>
   </data>
