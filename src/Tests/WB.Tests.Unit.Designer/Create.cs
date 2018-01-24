@@ -1258,15 +1258,22 @@ namespace WB.Tests.Unit.Designer
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
             => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
 
-        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, 
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, SharedPerson[] sharedPersons = null)
+            => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, sharedPersons);
+
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid id, bool isPublic = false, Guid? createdBy = null,
             SharedPerson[] sharedPersons = null)
         {
             return new QuestionnaireListViewItem() {
+                CreatedBy = createdBy,
                 IsPublic = isPublic,
-                PublicId = id ?? Guid.Empty,
+                PublicId = id,
                 SharedPersons = new HashSet<SharedPerson>(sharedPersons ?? Enumerable.Empty<SharedPerson>())
             };
         }
+
+        public static QuestionnaireListView QuestionnaireListView(params QuestionnaireListViewItem[] items)
+            => new QuestionnaireListView(1, 10, items.Length, items, string.Empty);
 
         public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
 
