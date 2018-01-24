@@ -565,15 +565,6 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web interview stopped.
-        /// </summary>
-        public static string Stopped {
-            get {
-                return ResourceManager.GetString("Stopped", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Survey: &quot;{0}&quot;.
         /// </summary>
         public static string SurveyFormatText {
