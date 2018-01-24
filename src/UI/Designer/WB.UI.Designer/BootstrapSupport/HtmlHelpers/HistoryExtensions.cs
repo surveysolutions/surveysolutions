@@ -56,6 +56,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                             case QuestionnaireItemType.StaticText:
                             case QuestionnaireItemType.Questionnaire:
                             case QuestionnaireItemType.Person:
+                            case QuestionnaireItemType.Metadata:
                                 text = string.Format(QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}"), recordLink);
                                 break;
                         }

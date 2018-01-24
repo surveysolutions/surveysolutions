@@ -166,7 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
             this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
                 QuestionnaireActionType.Update,
-                QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
+                QuestionnaireItemType.Metadata, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
         }
         #endregion
 
