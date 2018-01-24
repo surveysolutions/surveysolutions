@@ -2241,7 +2241,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Elmah\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Dependencies\dist\" />
     <Folder Include="Migrations\ReadSide\M101-200\" />

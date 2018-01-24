@@ -89,3 +89,4 @@ src/Tools/k6/k6.exe
 /src/UI/WB.UI.WebTester/Content/Dist/**
 /src/UI/WB.UI.WebTester/Content/Fonts/**
 /src/UI/WB.UI.WebTester/Views/Shared/partial.webtester.cshtml
+Elmah/

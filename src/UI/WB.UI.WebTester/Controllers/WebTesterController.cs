@@ -1,24 +1,17 @@
-﻿using System;
+﻿using Refit;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
-using Refit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Api;
-using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
-using WB.Enumerator.Native.Questionnaire;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
@@ -29,9 +22,7 @@ namespace WB.UI.WebTester.Controllers
         private readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IDesignerWebTesterApi webTesterApi;
-        private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
-        private readonly ITranslationManagementService translationManagementService;
-        private readonly IPlainStorageAccessor<QuestionnaireAttachment> attachmentsStorage;
+        private readonly IQuestionnaireImportService questionnaireImportService;
 
         public static readonly Dictionary<Guid, QuestionnaireIdentity> Questionnaires = new Dictionary<Guid, QuestionnaireIdentity>();
 
@@ -39,34 +30,29 @@ namespace WB.UI.WebTester.Controllers
             ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
             IDesignerWebTesterApi webTesterApi,
-            IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
-            ITranslationManagementService translationManagementService,
-            IPlainStorageAccessor<QuestionnaireAttachment> attachmentsStorage)
+            IQuestionnaireImportService questionnaireImportService)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-            this.appdomainsPerInterviewManager = appdomainsPerInterviewManager ?? throw new ArgumentNullException(nameof(appdomainsPerInterviewManager));
-            this.translationManagementService = translationManagementService ?? throw new ArgumentNullException(nameof(translationManagementService));
-            this.attachmentsStorage = attachmentsStorage ?? throw new ArgumentNullException(nameof(attachmentsStorage));
-            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
+            this.questionnaireStorage = questionnaireStorage;
             this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
+            this.questionnaireImportService = questionnaireImportService;
         }
 
         public ActionResult Run(Guid id) => this.View(id);
 
         public async Task<ActionResult> Redirect(Guid id)
         {
-            Questionnaire questionnaire;
             try
             {
-                questionnaire = await webTesterApi.GetQuestionnaireAsync(id.ToString());
+                await webTesterApi.GetQuestionnaireInfoAsync(id.ToString());
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
 
-            var questionnaireIdentity = await ImportQuestionnaire(id, questionnaire);
+            var questionnaireIdentity = await this.questionnaireImportService.ImportQuestionnaire(id);
 
             this.commandService.Execute(new CreateInterview(
                 interviewId: id,
@@ -82,12 +68,12 @@ namespace WB.UI.WebTester.Controllers
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
-        public async Task<ActionResult> Interview(string id)
+        public ActionResult Interview(string id)
         {
             try
             {
-                await this.webTesterApi.GetQuestionnaireInfoAsync(Guid.Parse(id).ToString());
                 var interview = statefulInterviewRepository.Get(id);
+
                 if (interview == null)
                 {
                     return HttpNotFound();
@@ -106,42 +92,6 @@ namespace WB.UI.WebTester.Controllers
             {
                 return HttpNotFound();
             }
-        }
-
-        private async Task<QuestionnaireIdentity> ImportQuestionnaire(Guid id, Questionnaire questionnaire)
-        {
-            var questionnaireIdentity = new QuestionnaireIdentity(id, 1);
-            var translations = await webTesterApi.GetTranslationsAsync(id.ToString());
-
-            var attachments = new List<QuestionnaireAttachment>();
-            foreach (Attachment documentAttachment in questionnaire.Document.Attachments)
-            {
-                var content = await webTesterApi.GetAttachmentContentAsync(id.ToString(), documentAttachment.ContentId);
-                attachments.Add(new QuestionnaireAttachment
-                {
-                    Id = documentAttachment.AttachmentId,
-                    Content = content
-                });
-            }
-
-            var attachmnetsToStore = attachments.Select(x => Tuple.Create(x, (object)x.Content.Id));
-            this.attachmentsStorage.Store(attachmnetsToStore);
-
-            this.appdomainsPerInterviewManager.SetupForInterview(id, questionnaire.Document, questionnaire.Assembly);
-            this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version,
-                questionnaire.Document);
-
-            this.translationManagementService.Delete(questionnaireIdentity);
-            this.translationManagementService.Store(translations.Select(x => new TranslationInstance
-            {
-                QuestionnaireId = questionnaireIdentity,
-                Value = x.Value,
-                QuestionnaireEntityId = x.QuestionnaireEntityId,
-                Type = x.Type,
-                TranslationIndex = x.TranslationIndex,
-                TranslationId = x.TranslationId
-            }));
-            return questionnaireIdentity;
         }
     }
 
