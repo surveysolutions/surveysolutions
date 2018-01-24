@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
@@ -84,8 +85,50 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                 InterviewExportedAction.InterviewerAssigned,
                 InterviewExportedAction.Completed,
                 InterviewExportedAction.Completed
-
             }));
+        }
+
+        [Test]
+        public void should_not_include_pause_events_in_duration_calculations()
+        {
+            Guid interviewId = Id.gA;
+
+            var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
+            var interviewSummary = Create.Entity.InterviewSummary(interviewId);
+            DateTime startDate = new DateTime(2010, 11, 1);
+
+            // Act
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, createTime: startDate));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, assignTime: startDate));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, answerTime: startDate.AddHours(2)));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewPaused().ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewResumed().ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId, completeTime: startDate.AddHours(5)));
+
+            // Assert
+            Assert.That(interviewSummary.InterviewCommentedStatuses.Last(), 
+                Has.Property(nameof(InterviewCommentedStatus.TimeSpanWithPreviousStatus)).EqualTo(TimeSpan.FromHours(3)));
+        }
+
+        [Test]
+        public void should_not_include_stop_resume_events_in_duration_calculations()
+        {
+            Guid interviewId = Id.gA;
+
+            var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
+            var interviewSummary = Create.Entity.InterviewSummary(interviewId);
+            DateTime startDate = new DateTime(2010, 11, 1);
+
+            // Act
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, createTime: startDate));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, assignTime: startDate.AddHours(2)));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewClosedBySupervisor().ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewOpenedBySupervisor().ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, assignTime: startDate.AddHours(5)));
+
+            // Assert
+            Assert.That(interviewSummary.InterviewCommentedStatuses.Last(), 
+                Has.Property(nameof(InterviewCommentedStatus.TimeSpanWithPreviousStatus)).EqualTo(TimeSpan.FromHours(3)));
         }
     }
 }
