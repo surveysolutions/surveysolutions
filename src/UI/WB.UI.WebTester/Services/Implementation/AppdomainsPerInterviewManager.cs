@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Reactive.Subjects;
-using AppDomainToolkit;
+﻿using AppDomainToolkit;
 using Autofac;
 using Main.Core.Documents;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -27,14 +24,12 @@ using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
-using IDisposable = System.IDisposable;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager, IDisposable
+    public class AppdomainsPerInterviewManager : IAppdomainsPerInterviewManager
     {
         private readonly string binFolderPath;
-        private readonly IDisposable evictNotification;
         private readonly ILogger logger;
         private const int QuestionnaireVersion = 1;
 
@@ -57,61 +52,64 @@ namespace WB.UI.WebTester.Services.Implementation
         public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument,
             string supportingAssembly)
         {
-            if (appDomains.ContainsKey(interviewId))
+            lock (appDomains)
             {
-                this.TearDown(interviewId);
+                if (appDomains.ContainsKey(interviewId))
+                {
+                    this.TearDown(interviewId);
+                }
+
+                var cachePath = Path.Combine(Path.GetTempPath(), interviewId.FormatGuid());
+                Directory.CreateDirectory(cachePath);
+                var rulesAssemblyPath = Path.Combine(cachePath, "rules.dll");
+                File.WriteAllBytes(rulesAssemblyPath, Convert.FromBase64String(supportingAssembly));
+
+                var setupInfo = new AppDomainSetup
+                {
+                    ApplicationName = interviewId.FormatGuid(),
+                    ApplicationBase = binFolderPath,
+                    CachePath = cachePath,
+                    ShadowCopyFiles = "true"
+                };
+
+                var domainContext = AppDomainContext.Create(setupInfo);
+                appDomains[interviewId] = new InterviewContainer
+                {
+                    Context = domainContext,
+                    CachePath = cachePath
+                };
+
+                string documentString = JsonConvert.SerializeObject(questionnaireDocument, Formatting.None,
+                    new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Objects,
+                        NullValueHandling = NullValueHandling.Ignore,
+                        FloatParseHandling = FloatParseHandling.Decimal,
+                        Formatting = Formatting.None,
+                    });
+
+                appDomainsAlive.Inc();
+
+                RemoteAction.Invoke(domainContext.Domain,
+                    documentString, supportingAssembly,
+                    (questionnaire, assembly) =>
+                    {
+                        SetupAppDomainsSeviceLocator();
+
+                        QuestionnaireDocument document1 = JsonConvert.DeserializeObject<QuestionnaireDocument>(
+                            questionnaire, new JsonSerializerSettings
+                            {
+                                TypeNameHandling = TypeNameHandling.Objects,
+                                NullValueHandling = NullValueHandling.Ignore,
+                                FloatParseHandling = FloatParseHandling.Decimal,
+                                Formatting = Formatting.None,
+                            });
+                        ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>()
+                            .StoreAssembly(document1.PublicKey, QuestionnaireVersion, assembly);
+                        ServiceLocator.Current.GetInstance<IQuestionnaireStorage>()
+                            .StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
+                    });
             }
-
-            var cachePath = Path.Combine(Path.GetTempPath(), interviewId.FormatGuid());
-            Directory.CreateDirectory(cachePath);
-            var rulesAssemblyPath = Path.Combine(cachePath, "rules.dll");
-            File.WriteAllBytes(rulesAssemblyPath, Convert.FromBase64String(supportingAssembly));
-
-            var setupInfo = new AppDomainSetup
-            {
-                ApplicationName = interviewId.FormatGuid(),
-                ApplicationBase = binFolderPath,
-                CachePath = cachePath,
-                ShadowCopyFiles = "true"
-            };
-
-            var domainContext = AppDomainContext.Create(setupInfo);
-            appDomains[interviewId] = new InterviewContainer
-            {
-                Context = domainContext,
-                CachePath = cachePath
-            };
-
-            string documentString = JsonConvert.SerializeObject(questionnaireDocument, Formatting.None,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    NullValueHandling = NullValueHandling.Ignore,
-                    FloatParseHandling = FloatParseHandling.Decimal,
-                    Formatting = Formatting.None,
-                });
-
-            appDomainsAlive.Inc();
-
-            RemoteAction.Invoke(domainContext.Domain,
-                documentString, supportingAssembly,
-                (questionnaire, assembly) =>
-                {
-                    SetupAppDomainsSeviceLocator();
-
-                    QuestionnaireDocument document1 = JsonConvert.DeserializeObject<QuestionnaireDocument>(
-                        questionnaire, new JsonSerializerSettings
-                        {
-                            TypeNameHandling = TypeNameHandling.Objects,
-                            NullValueHandling = NullValueHandling.Ignore,
-                            FloatParseHandling = FloatParseHandling.Decimal,
-                            Formatting = Formatting.None,
-                        });
-                    ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>()
-                        .StoreAssembly(document1.PublicKey, QuestionnaireVersion, assembly);
-                    ServiceLocator.Current.GetInstance<IQuestionnaireStorage>()
-                        .StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
-                });
         }
 
         private readonly Gauge appDomainsAlive =
@@ -129,26 +127,29 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public void TearDown(Guid interviewId)
         {
-            if (this.appDomains.ContainsKey(interviewId))
+            lock (appDomains)
             {
-                var interviewContainer = this.appDomains[interviewId];
-                interviewContainer.Context.Dispose();
-                if (Directory.Exists(interviewContainer.CachePath))
+                if (this.appDomains.ContainsKey(interviewId))
                 {
-                    try
+                    var interviewContainer = this.appDomains[interviewId];
+                    interviewContainer.Context.Dispose();
+                    if (Directory.Exists(interviewContainer.CachePath))
                     {
-                        Directory.Delete(interviewContainer.CachePath, true);
+                        try
+                        {
+                            Directory.Delete(interviewContainer.CachePath, true);
+                        }
+                        catch (UnauthorizedAccessException exception)
+                        {
+                            this.logger.Error(
+                                $"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}",
+                                exception);
+                        }
                     }
-                    catch (UnauthorizedAccessException exception)
-                    {
-                        this.logger.Error(
-                            $"Failed to delete folder during interview tear down. Path: {interviewContainer.CachePath}",
-                            exception);
-                    }
-                }
 
-                this.appDomains.Remove(interviewId);
-                appDomainsAlive.Dec();
+                    this.appDomains.Remove(interviewId);
+                    appDomainsAlive.Dec();
+                }
             }
         }
 
@@ -240,31 +241,5 @@ namespace WB.UI.WebTester.Services.Implementation
             Converters = new JsonConverter[]
                 {new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter()}
         };
-
-        #region IDisposable Support
-
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    this.evictNotification.Dispose();
-                }
-
-                disposedValue = true;
-            }
-        }
-
-        // This code added to correctly implement the disposable pattern.
-        public void Dispose()
-        {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-        }
-
-        #endregion
     }
 }

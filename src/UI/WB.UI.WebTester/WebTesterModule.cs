@@ -129,7 +129,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
-            registry.Bind<IQuestionnaireImportService, QuestionnaireImportService>();
+            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
             registry.Bind<EvictionService>();
 
             // TODO: Find a generic place for each of the dependencies below
