@@ -303,4 +303,58 @@
   <data name="QuestionScope_Supervisor" xml:space="preserve">
     <value>супервизор</value>
   </data>
+  <data name="MetadataSubtitle" xml:space="preserve">
+    <value>Подзаголовок:</value>
+  </data>
+  <data name="MetadataVersionIdentificator" xml:space="preserve">
+    <value>Версия:</value>
+  </data>
+  <data name="MetadataVersionNotes" xml:space="preserve">
+    <value>Заметки о версии:</value>
+  </data>
+  <data name="MetadataStudyType" xml:space="preserve">
+    <value>Тип исследования:</value>
+  </data>
+  <data name="MetadataKindOfData" xml:space="preserve">
+    <value>Вид данных:</value>
+  </data>
+  <data name="MetadataModeOfDataCollection" xml:space="preserve">
+    <value>Режим сбора данных:</value>
+  </data>
+  <data name="MetadataCountry" xml:space="preserve">
+    <value>Страна:</value>
+  </data>
+  <data name="MetadataYear" xml:space="preserve">
+    <value>Год:</value>
+  </data>
+  <data name="MetadataLanguages" xml:space="preserve">
+    <value>Языки:</value>
+  </data>
+  <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Единица анализа:</value>
+  </data>
+  <data name="MetadataCoverage" xml:space="preserve">
+    <value>Покрытие:</value>
+  </data>
+  <data name="MetadataUniverse" xml:space="preserve">
+    <value>Генеральная совокупность:</value>
+  </data>
+  <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Основной исследователь:</value>
+  </data>
+  <data name="MetadataConsultants" xml:space="preserve">
+    <value>Консультанты:</value>
+  </data>
+  <data name="MetadataNotes" xml:space="preserve">
+    <value>Заметки:</value>
+  </data>
+  <data name="MetadataKeywords" xml:space="preserve">
+    <value>Ключевые слова:</value>
+  </data>
+  <data name="MetadataFunding" xml:space="preserve">
+    <value>Финансирование:</value>
+  </data>
+  <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Согласен, чтоб опросник был общедоступным</value>
+  </data>
 </root>
