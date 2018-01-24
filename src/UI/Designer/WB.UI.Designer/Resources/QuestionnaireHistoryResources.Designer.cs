@@ -169,6 +169,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire metadata {0} updated.
+        /// </summary>
+        public static string Metadata_Update {
+            get {
+                return ResourceManager.GetString("Metadata_Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Untitled.
         /// </summary>
         public static string NoTitle {

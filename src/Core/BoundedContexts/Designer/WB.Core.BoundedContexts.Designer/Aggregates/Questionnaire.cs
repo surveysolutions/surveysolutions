@@ -2386,6 +2386,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         public void UpdateMetaInfo(UpdateMetadata command)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(command.Title);
 
             this.innerDocument.Title = command.Title;
             this.innerDocument.Metadata = command.Metadata;
