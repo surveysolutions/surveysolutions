@@ -25,7 +25,7 @@
         supportedTransports: ["webSockets", "longPolling"],
         appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
         googleApiKey: '@Model.GoogleMapsKey',
-        hqLink: "null",
+        hqLink: '@Url.Action("Interview", "WebTester", new{id = Model.Id})',
         hubName: "interview"
     }
     </script>
