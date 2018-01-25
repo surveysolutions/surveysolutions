@@ -9,8 +9,7 @@
                     <h1>{{$t("Pages.MapList_UserMapsTitle")}}</h1>                     
         </div>   
         <DataTables ref="table" 
-            :tableOptions="tableOptions" 
-            :contextMenuItems="contextMenuItems">
+            :tableOptions="tableOptions">
         </DataTables>
 
         <Confirm ref="confirmDiscard"
@@ -61,6 +60,10 @@ export default {
       var self = this;
       return {
         deferLoading: 0,
+        select: {
+            style: 'api',
+            info: false
+        },
         columns: [
           {
             data: "userName",
