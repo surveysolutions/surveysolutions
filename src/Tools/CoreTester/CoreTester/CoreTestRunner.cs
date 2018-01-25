@@ -143,8 +143,8 @@ namespace CoreTester
                             catch (InterviewException exception)
                             {
                                 var message = exception.ExceptionType == InterviewDomainExceptionType.ExpessionCalculationError
-                                    ? $"Expression calculation error for interview {interviewId}"
-                                    : $"Error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
+                                    ? $"Calculation error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}"
+                                    : $"General error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
 
                                 Console.WriteLine(message);
                                 this.logger.Info(message, exception);

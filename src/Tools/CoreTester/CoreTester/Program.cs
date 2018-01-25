@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
 using System.Reflection;
 using CommandLine;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-using NConfig;
 using Newtonsoft.Json;
 using Ninject;
 using Ninject.Modules;
@@ -60,65 +57,55 @@ namespace CoreTester
         [Verb("run", HelpText = "Test core.")]
         protected class CoreTestOptions
         {
-            [Option('a', "apppath", Required = true, HelpText = "Path to directory with web.config")]
-            public string AppPath { get; set; }
+            [Option('c', "connection", Required = true, HelpText = "Connection string to DB")]
+            public string ConnectionString { get; set; }
         }
 
         static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<CoreTestOptions>(args).MapResult(RunCoreTestOptions, errs => 1);
+            var logger = LogManager.GetCurrentClassLogger();
+            logger.Info("Application started");
+
+            return Parser.Default.ParseArguments<CoreTestOptions>(args).MapResult(RunCoreTestOptions, errs =>
+            {
+                foreach (var error in errs)
+                {
+                    Console.WriteLine(error);    
+                }
+                
+                return 1;
+            });
         }
 
         private static int RunCoreTestOptions(CoreTestOptions opts)
         {
-            IKernel container = CreateKernel(opts);
-            CoreTestRunner coreTestRunner = GetCoreTester(container);
+            IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
+
+            CoreTestRunner coreTestRunner = container.Get<CoreTestRunner>();
 
             return coreTestRunner.Run();
-        }
-
-        private static CoreTestRunner GetCoreTester(IKernel kernel)
-        {
-            return kernel.Get<CoreTestRunner>();
-        }
-
-        private static IKernel CreateKernel(CoreTestOptions options)
-        {
-            var logger = LogManager.GetCurrentClassLogger();
-            logger.Info($"Application started");
-
-            var pathToWebConfig = Path.Combine(options.AppPath, @"Web.config");
-            var pathToConfiguragtion = Path.Combine(options.AppPath, @"Configuration\Headquarters.Web.config");
-
-            NConfigurator.UsingFiles(new[] { pathToConfiguragtion, pathToWebConfig }).SetAsSystemDefault();
-
-            var connectionStringSettingsCollection = NConfigurator.Default.ConnectionStrings;
-
-            IKernel kernel = NinjectConfig.CreateKernel(connectionStringSettingsCollection);
-           
-            return kernel;
         }
     }
 
     public class NinjectConfig
     {
-        public static IKernel CreateKernel(ConnectionStringSettingsCollection connectionStringSettingsCollection)
+        public static IKernel CreateKernel(string connectionString)
         {
-            var dbConnectionStringName = @"Postgres";
             var cacheSettings = new ReadSideCacheSettings(1024, 512);
-            var mappingAssemblies = new List<Assembly> { typeof(HeadquartersBoundedContextModule).Assembly };
+            var mappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
 
             var eventStoreSettings = new PostgreConnectionSettings
             {
-                ConnectionString = connectionStringSettingsCollection[dbConnectionStringName].ConnectionString,
+                ConnectionString = connectionString,
                 SchemaName = "events"
             };
 
-            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
+            var postgresPlainStorageSettings = new PostgresPlainStorageSettings
             {
-                ConnectionString = connectionStringSettingsCollection[dbConnectionStringName].ConnectionString,
+                ConnectionString = connectionString,
                 SchemaName = "plainstore",
-                DbUpgradeSettings = new DbUpgradeSettings(typeof(CoreTestRunner).Assembly, typeof(CoreTestRunner).Namespace),
+                DbUpgradeSettings =
+                    new DbUpgradeSettings(typeof(CoreTestRunner).Assembly, typeof(CoreTestRunner).Namespace),
                 MappingAssemblies = new List<Assembly>
                 {
                     typeof(HeadquartersBoundedContextModule).Assembly
@@ -135,7 +122,7 @@ namespace CoreTester
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new PostgresKeyValueModule(cacheSettings).AsNinject(),
                 new PostgresReadSideModule(
-                    connectionStringSettingsCollection[dbConnectionStringName].ConnectionString,
+                    connectionString,
                     PostgresReadSideModule.ReadSideSchemaName,
                     new DbUpgradeSettings(typeof(CoreTestRunner).Assembly, typeof(CoreTestRunner).Namespace),
                     cacheSettings,
@@ -172,16 +159,19 @@ namespace CoreTester
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
-            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>("eventBusSettings", new EventBusSettings
-            {
-                DisabledEventHandlerTypes = Array.Empty<Type>(),
-                EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
-                IgnoredAggregateRoots = new HashSet<string>()
-            });
+            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
+                "eventBusSettings", new EventBusSettings
+                {
+                    DisabledEventHandlerTypes = Array.Empty<Type>(),
+                    EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
+                    IgnoredAggregateRoots = new HashSet<string>()
+                });
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<IEventBus, InProcessEventBus>();
 
-            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry
+                .BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner,
+                    EventSourcedAggregateRootRepositoryWithWebCache>();
 
             registry.Bind<IWebInterviewInterviewEntityFactory, WebInterviewInterviewEntityFactory>();
 
@@ -197,7 +187,8 @@ namespace CoreTester
                 }
             }));
 
-            registry.BindAsSingletonWithConstructorArgument<IStreamableEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.BindAsSingletonWithConstructorArgument<IStreamableEventStore, PostgresEventStore>(
+                "connectionSettings", this.eventStoreSettings);
             registry.BindToMethod<IEventStore>(context => context.Get<IStreamableEventStore>());
 
             // TODO: Find a generic place for each of the dependencies below
@@ -210,7 +201,7 @@ namespace CoreTester
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.BindAsSingleton<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
-            
+
             registry.Unbind<ICommandService>();
             registry.BindAsSingleton<ICommandService, CustomCommandService>();
 
@@ -286,7 +277,7 @@ namespace CoreTester
             registry.Bind<IExpressionsGraphProvider, ExpressionsGraphProvider>();
             registry.Bind<IExpressionsPlayOrderProvider, ExpressionsPlayOrderProvider>();
             registry.Bind<IMacrosSubstitutionService, MacrosSubstitutionService>();
-            
+
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
         }
     }
