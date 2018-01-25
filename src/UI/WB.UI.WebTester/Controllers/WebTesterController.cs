@@ -43,16 +43,16 @@ namespace WB.UI.WebTester.Controllers
 
         public async Task<ActionResult> Redirect(Guid id)
         {
+            QuestionnaireIdentity questionnaireIdentity;
+
             try
             {
-                await webTesterApi.GetQuestionnaireInfoAsync(id.ToString());
+                questionnaireIdentity = await this.questionnaireImportService.ImportQuestionnaire(id);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
-
-            var questionnaireIdentity = await this.questionnaireImportService.ImportQuestionnaire(id);
 
             this.commandService.Execute(new CreateInterview(
                 interviewId: id,
