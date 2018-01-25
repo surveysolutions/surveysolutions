@@ -570,6 +570,7 @@
     <Compile Include="WebTester\Services\AppdomainsPerInterviewManagerTestsBase.cs" />
     <Compile Include="WebTester\Services\when_interview_exception_occures.cs" />
     <Compile Include="WebTester\Services\when_filter_categorical_options.cs" />
+    <Compile Include="WebTester\Services\when_translation_provided.cs" />
     <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
   </ItemGroup>
   <ItemGroup>

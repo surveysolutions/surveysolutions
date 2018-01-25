@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Enumerator.Native.Questionnaire;
 using WB.Tests.Abc;
 using WB.UI.WebTester.Services.Implementation;
 
@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.WebTester.Services
             var supportingAssembly = IntegrationCreate.CompileAssembly(questionnaire);
 
             // act
-            manager.SetupForInterview(interviewId, questionnaire, supportingAssembly);
+            manager.SetupForInterview(interviewId, questionnaire, null, supportingAssembly);
             var events = manager.Execute(new CreateInterview(interviewId, Id.g1,
                 Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 new List<InterviewAnswer>(),
@@ -54,5 +54,8 @@ namespace WB.Tests.Integration.WebTester.Services
             var rules = Assembly.Load(Convert.FromBase64String(supportingAssembly));
             Assert.That(rules.FullName, Does.StartWith($"rules-{questionnaire.PublicKey:N}"), "Recheck previous assert because naming rules for assebmly has changed and it might not catch that assembly was loaded when it shouldn't");
         }
+
+        [TearDown]
+        public void TearDown() => manager.TearDown(interviewId);
     }
 }
