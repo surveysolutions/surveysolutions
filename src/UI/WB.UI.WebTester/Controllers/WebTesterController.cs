@@ -21,21 +21,16 @@ namespace WB.UI.WebTester.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IDesignerWebTesterApi webTesterApi;
         private readonly IQuestionnaireImportService questionnaireImportService;
-
-        public static readonly Dictionary<Guid, QuestionnaireIdentity> Questionnaires = new Dictionary<Guid, QuestionnaireIdentity>();
 
         public WebTesterController(IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
-            IDesignerWebTesterApi webTesterApi,
             IQuestionnaireImportService questionnaireImportService)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
             this.questionnaireStorage = questionnaireStorage;
-            this.webTesterApi = webTesterApi ?? throw new ArgumentNullException(nameof(webTesterApi));
             this.questionnaireImportService = questionnaireImportService;
         }
 
