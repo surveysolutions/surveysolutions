@@ -83,7 +83,7 @@ export default {
     },
     computed: {
             audioRecordPath() {
-                return api.resources.audioRecordUri(this.interviewId, this.$me.filename)
+                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.$me.updatedAt.toString()
             },
             formattedLength() {
                 if (this.$me.isAnswered){
