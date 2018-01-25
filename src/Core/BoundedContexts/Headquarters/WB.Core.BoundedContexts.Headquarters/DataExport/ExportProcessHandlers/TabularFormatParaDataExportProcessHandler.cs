@@ -21,9 +21,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
@@ -121,8 +119,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                         var paradata = paradataReader.Query(_ => _.FirstOrDefault());
                         for (int i = 0; i < paradata.Records.Count; i++)
                         {
-                            var evnt = paradata?.Records[i];
-                            writer.WriteField(interviewId);
+                            var evnt = paradata.Records[i];
+                            writer.WriteField(interviewId.Id);
                             writer.WriteField(i + 1);
                             writer.WriteField(evnt.Action);
                             writer.WriteField(evnt.OriginatorName);
