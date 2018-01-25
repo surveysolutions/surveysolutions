@@ -16,10 +16,12 @@ namespace WB.UI.WebTester.Services.Implementation
             ISnapshotStore snapshotStore,
             IDomainRepository repository,
             IAggregateLock aggregateLock,
-            IEvictionObserver notify) : base(eventStore, snapshotStore, repository, aggregateLock)
+            IEvictionObserver notify,
+            IEvictionObservable evictionNotification) : base(eventStore, snapshotStore, repository, aggregateLock)
         {
             this.notify = notify;
             Expiration = TimeSpan.FromMinutes(ConfigurationSource.Configuration["Cache.Expiration"].AsInt(10));
+            evictionNotification.Subscribe(this.Evict);
         }
 
         const string CachePrefix = "cache:";
