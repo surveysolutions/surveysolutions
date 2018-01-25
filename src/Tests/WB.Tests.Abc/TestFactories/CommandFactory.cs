@@ -49,11 +49,11 @@ namespace WB.Tests.Abc.TestFactories
                 answerTime: DateTime.UtcNow,
                 selectedRosterVectors: answer);
 
-        public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, int[] answer = null)
+        public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, int[] answer = null, Guid? questionId = null)
             => new AnswerMultipleOptionsQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
-                questionId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
                 answerTime: DateTime.UtcNow,
                 selectedValues: answer);
@@ -219,9 +219,9 @@ namespace WB.Tests.Abc.TestFactories
             return new DisableQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
         }
 
-        public SwitchTranslation SwitchTranslation(string language = null)
+        public SwitchTranslation SwitchTranslation(string language = null, Guid? interviewId = null)
         {
-            return new SwitchTranslation(Guid.Empty, language, Guid.NewGuid());
+            return new SwitchTranslation(interviewId ?? Guid.Empty, language, Guid.NewGuid());
         }
 
 

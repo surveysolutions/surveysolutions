@@ -19,10 +19,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 
 namespace WB.UI.WebTester.Services.Implementation
@@ -49,7 +52,9 @@ namespace WB.UI.WebTester.Services.Implementation
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public void SetupForInterview(Guid interviewId, QuestionnaireDocument questionnaireDocument,
+        public void SetupForInterview(Guid interviewId, 
+            QuestionnaireDocument questionnaireDocument,
+            List<TranslationDto> translations,
             string supportingAssembly)
         {
             lock (appDomains)
@@ -73,6 +78,8 @@ namespace WB.UI.WebTester.Services.Implementation
                 };
 
                 var domainContext = AppDomainContext.Create(setupInfo);
+                appDomainsAlive.Inc();
+
                 appDomains[interviewId] = new InterviewContainer
                 {
                     Context = domainContext,
@@ -88,26 +95,31 @@ namespace WB.UI.WebTester.Services.Implementation
                         Formatting = Formatting.None,
                     });
 
-                appDomainsAlive.Inc();
+                var translationsString = JsonConvert.SerializeObject(translations ?? new List<TranslationDto>(), Formatting.None);
 
                 RemoteAction.Invoke(domainContext.Domain,
-                    documentString, supportingAssembly,
-                    (questionnaire, assembly) =>
+                    documentString, translationsString, supportingAssembly,
+                    (questionnaireJson, translationsJson, assembly) =>
                     {
                         SetupAppDomainsSeviceLocator();
 
-                        QuestionnaireDocument document1 = JsonConvert.DeserializeObject<QuestionnaireDocument>(
-                            questionnaire, new JsonSerializerSettings
+                        QuestionnaireDocument document = JsonConvert.DeserializeObject<QuestionnaireDocument>(
+                            questionnaireJson, new JsonSerializerSettings
                             {
                                 TypeNameHandling = TypeNameHandling.Objects,
                                 NullValueHandling = NullValueHandling.Ignore,
                                 FloatParseHandling = FloatParseHandling.Decimal,
                                 Formatting = Formatting.None,
                             });
+
+                        List<TranslationInstance> translationsList =
+                            JsonConvert.DeserializeObject<List<TranslationInstance>>(translationsJson);
+
                         ServiceLocator.Current.GetInstance<IQuestionnaireAssemblyAccessor>()
-                            .StoreAssembly(document1.PublicKey, QuestionnaireVersion, assembly);
+                            .StoreAssembly(document.PublicKey, QuestionnaireVersion, assembly);
                         ServiceLocator.Current.GetInstance<IQuestionnaireStorage>()
-                            .StoreQuestionnaire(document1.PublicKey, QuestionnaireVersion, document1);
+                            .StoreQuestionnaire(document.PublicKey, QuestionnaireVersion, document);
+                        ServiceLocator.Current.GetInstance<IWebTesterTranslationService>().Store(translationsList);
                     });
             }
         }

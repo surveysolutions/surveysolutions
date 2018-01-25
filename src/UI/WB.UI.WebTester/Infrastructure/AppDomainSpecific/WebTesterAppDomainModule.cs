@@ -25,8 +25,6 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
         {
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));
-            registry.BindAsSingleton<ITranslationManagementService, TranslationManagementService>();
-            registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
             registry.Bind<ISubstitutionService, SubstitutionService>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
@@ -38,6 +36,7 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.BindAsSingleton<StatefulInterview, StatefulInterview>();
+            registry.BindAsSingleton<IWebTesterTranslationService, WebTesterTranslationStorage>();
 
              CommandRegistry
                 .Setup<StatefulInterview>()

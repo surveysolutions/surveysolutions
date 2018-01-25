@@ -88,8 +88,11 @@ namespace WB.UI.WebTester.Services.Implementation
                     this.attachmentsStorage.Store(attachment,attachment.Content.Id, designerToken);
                 }
                 
-                this.appdomainsPerInterviewManager.SetupForInterview(designerToken, questionnaire.Document,
+                this.appdomainsPerInterviewManager.SetupForInterview(designerToken, 
+                    questionnaire.Document,
+                    translations,
                     questionnaire.Assembly);
+
                 this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version,
                     questionnaire.Document);

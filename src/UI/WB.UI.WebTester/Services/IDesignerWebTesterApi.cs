@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Refit;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -18,6 +19,6 @@ namespace WB.UI.WebTester.Services
         Task<AttachmentContent> GetAttachmentContentAsync(string token, string attachmentContentId);
 
         [Get("/api/webtester/{token}/translations")]
-        Task<TranslationDto[]> GetTranslationsAsync(string token);
+        Task<List<TranslationDto>> GetTranslationsAsync(string token);
     }
 }
