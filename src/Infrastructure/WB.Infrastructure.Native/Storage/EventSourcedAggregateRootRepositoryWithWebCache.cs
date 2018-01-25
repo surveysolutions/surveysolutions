@@ -81,10 +81,10 @@ namespace WB.Infrastructure.Native.Storage
         
         private void OnUpdateCallback(string key, object value, CacheItemRemovedReason reason)
         {
-            CacheItemRemoved(key, value);
+            CacheItemRemoved(key);
         }
 
-        protected virtual void CacheItemRemoved(string key, object value)
+        protected virtual void CacheItemRemoved(string key)
         {
             CacheCountTracker.TryRemove(key, out _);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
@@ -95,9 +95,9 @@ namespace WB.Infrastructure.Native.Storage
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
                 var key = Key(aggregateId);
-                
-                var removed = Cache.Remove(key);
-                CacheItemRemoved(key, removed);
+
+                CacheItemRemoved(key);
+                Cache.Remove(key);
             });
         }
 
