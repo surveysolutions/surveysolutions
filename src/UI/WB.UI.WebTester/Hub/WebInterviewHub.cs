@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
@@ -22,7 +23,7 @@ namespace WB.UI.WebTester.Hub
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
             appdomainsPerInterviewManager.TearDown(GetCallerInterview().Id);
-            Clients.All.shutDown();
+            this.Clients.Group(base.GetCallerInterview().Id.FormatGuid()).shutDown();
         }
     }
 }
