@@ -1,11 +1,13 @@
 ﻿using Refit;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -67,26 +69,58 @@ namespace WB.UI.WebTester.Controllers
         {
             try
             {
-                var interview = statefulInterviewRepository.Get(id);
+                var interviewPageModel = GetInterviewPageModel(id);
+                if (interviewPageModel == null) return null;
 
-                if (interview == null)
-                {
-                    return HttpNotFound();
-                }
-
-                var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
-                return View(new InterviewPageModel
-                {
-                    Id = id,
-                    Title = $"{questionnaire.Title} | Web Tester",
-                    GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"]
-                });
+                return View(interviewPageModel);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 return HttpNotFound();
             }
+        }
+
+        private InterviewPageModel GetInterviewPageModel(string id)
+        {
+            var interview = statefulInterviewRepository.Get(id);
+
+            if (interview == null)
+            {
+                return null;
+            }
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            var interviewPageModel = new InterviewPageModel
+            {
+                Id = id,
+                Title = $"{questionnaire.Title} | Web Tester",
+                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"]
+            };
+            return interviewPageModel;
+        }
+
+        public ActionResult Section(string id, string sectionId)
+        {
+            var interview = this.statefulInterviewRepository.Get(id);
+
+            var targetSectionIsEnabled = interview?.IsEnabled(Identity.Parse(sectionId));
+            if (targetSectionIsEnabled != true)
+            {
+                var firstSectionId = interview.GetAllEnabledGroupsAndRosters().First().Identity.ToString();
+                var uri = $@"~/WebTester/Interview/{interview.Id:N}/Section/{firstSectionId}";
+
+                return Redirect(uri);
+            }
+
+            var model = GetInterviewPageModel(id);
+            if (model == null)
+            {
+                return HttpNotFound();
+            }
+
+
+            return this.View("Interview", model);
         }
     }
 

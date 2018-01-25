@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Routing.Constraints;
 using System.Web.Routing;
 
 namespace WB.UI.WebTester
@@ -13,7 +14,11 @@ namespace WB.UI.WebTester
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute("ReviewAll", "WebTester/Interview/{id}/{*url}", new
+            routes.MapRoute("Section", "WebTester/Interview/{id}/Section/{sectionId}", 
+                defaults: new { controller = "WebTester", action = "Section" },
+                constraints: new { id = new GuidRouteConstraint() });
+
+            routes.MapRoute("Interview", "WebTester/Interview/{id}/{*url}", new
             {
                 controller = "WebTester",
                 action = "Interview"
