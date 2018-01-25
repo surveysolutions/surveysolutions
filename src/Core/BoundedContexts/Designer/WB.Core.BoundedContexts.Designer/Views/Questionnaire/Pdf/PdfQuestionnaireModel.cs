@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             this.questionnaire = questionnaire;
             this.Settings = settings;
+            this.Metadata = this.questionnaire.Metadata ?? new QuestionnaireMetaInfo();
         }
 
         public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<IVariable> VariableWithLongExpressions { get; internal set; }
 
         public string Title => this.questionnaire.Title;
-        public QuestionnaireMetaInfo Metadata => this.questionnaire.Metadata;
+        public QuestionnaireMetaInfo Metadata { get; internal set; } 
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
         public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; }
 
