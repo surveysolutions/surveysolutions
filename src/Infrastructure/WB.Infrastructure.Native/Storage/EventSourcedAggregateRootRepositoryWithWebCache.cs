@@ -96,8 +96,10 @@ namespace WB.Infrastructure.Native.Storage
             {
                 var key = Key(aggregateId);
 
-                CacheItemRemoved(key);
-                Cache.Remove(key);
+                if (Cache.Remove(key) != null)
+                {
+                    CacheItemRemoved(key);
+                }
             });
         }
 
