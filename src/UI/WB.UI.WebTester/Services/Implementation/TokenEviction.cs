@@ -12,7 +12,7 @@ namespace WB.UI.WebTester.Services.Implementation
             this.subject = new Subject<Guid>();
         }
         
-        public void OnNext(Guid token)
+        public void Evict(Guid token)
         {
             subject.OnNext(token);
         }

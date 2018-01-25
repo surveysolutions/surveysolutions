@@ -4,7 +4,6 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.WebTester.Infrastructure;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
@@ -13,9 +12,9 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IEvictionObserver notify;
 
         public WebTesterAggregateRootRepository(
-            IEventStore eventStore, 
-            ISnapshotStore snapshotStore, 
-            IDomainRepository repository, 
+            IEventStore eventStore,
+            ISnapshotStore snapshotStore,
+            IDomainRepository repository,
             IAggregateLock aggregateLock,
             IEvictionObserver notify) : base(eventStore, snapshotStore, repository, aggregateLock)
         {
@@ -29,15 +28,11 @@ namespace WB.UI.WebTester.Services.Implementation
 
         protected override TimeSpan Expiration { get; }
 
-        protected override void CacheItemRemoved(string key, object value)
+        protected override void CacheItemRemoved(string key)
         {
-            if (value is WebTesterStatefulInterview interview)
-            {
-                notify.OnNext(Guid.Parse(key.Substring(CachePrefix.Length)));
-            }
-
-            
-            base.CacheItemRemoved(key, value);
+            var interviewId = Guid.Parse(key.Substring(CachePrefix.Length));
+            notify.Evict(interviewId);
+            base.CacheItemRemoved(key);
         }
     }
 }

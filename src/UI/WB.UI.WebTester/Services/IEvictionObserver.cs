@@ -4,6 +4,6 @@ namespace WB.UI.WebTester.Services
 {
     public interface IEvictionObserver
     {
-        void OnNext(Guid token);
+        void Evict(Guid token);
     }
 }
