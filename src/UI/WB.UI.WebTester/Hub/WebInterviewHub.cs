@@ -11,19 +11,23 @@ namespace WB.UI.WebTester.Hub
     public class WebInterviewHub : WebInterview
     {
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
-        private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
+        private readonly IEvictionObserver evictionNotify;
 
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IAppdomainsPerInterviewManager appdomainsPerInterviewManager) : 
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, 
+            ICommandService commandService, 
+            IQuestionnaireStorage questionnaireRepository, 
+            IWebInterviewNotificationService webInterviewNotificationService, 
+            IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IEvictionObserver evictionNotify) : 
             base(statefulInterviewRepository, commandService, questionnaireRepository, webInterviewNotificationService, interviewEntityFactory)
         {
             this.webInterviewNotificationService = webInterviewNotificationService;
-            this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
+            this.evictionNotify = evictionNotify;
         }
 
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
-            appdomainsPerInterviewManager.TearDown(GetCallerInterview().Id);
+            evictionNotify.Evict(GetCallerInterview().Id);
             webInterviewNotificationService.ShutDownInterview(base.GetCallerInterview().Id);
         }
     }
