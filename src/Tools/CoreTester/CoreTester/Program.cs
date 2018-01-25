@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Reflection;
 using CommandLine;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -79,6 +80,12 @@ namespace CoreTester
 
         private static int RunCoreTestOptions(CoreTestOptions opts)
         {
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine($"started at {DateTime.Now}");
+            DbConnectionStringBuilder db = new DbConnectionStringBuilder {ConnectionString = opts.ConnectionString};
+            Console.WriteLine(db["User Id"].ToString());
+            Console.WriteLine();
+
             IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
 
             CoreTestRunner coreTestRunner = container.Get<CoreTestRunner>();
@@ -126,7 +133,9 @@ namespace CoreTester
                     PostgresReadSideModule.ReadSideSchemaName,
                     new DbUpgradeSettings(typeof(CoreTestRunner).Assembly, typeof(CoreTestRunner).Namespace),
                     cacheSettings,
-                    mappingAssemblies).AsNinject(),
+                    mappingAssemblies,
+                    runInitAndMigrations: false
+                    ).AsNinject(),
                 new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
                 new CoreTesterdule(eventStoreSettings).AsNinject());
             return kernel;

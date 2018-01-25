@@ -59,9 +59,6 @@ namespace CoreTester
 
         public int Run()
         {
-            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
-            Console.WriteLine($"started at {DateTime.Now}");
-
             var questionnaireBrowseItems = this.plainTransactionManager.GetPlainTransactionManager()
                 .ExecuteInQueryTransaction(() =>
                     questionnairesBrowseFactory.Load(new QuestionnaireBrowseInputModel {PageSize = 1000}));
@@ -148,6 +145,7 @@ namespace CoreTester
 
                                 Console.WriteLine(message);
                                 this.logger.Info(message, exception);
+                                break;
                             }
 
                             if (!(stopwatch.Elapsed.TotalMinutes > lastTimeSomethingWasDumpedInOutput + pingIntervalInMinutes)) continue;
@@ -156,7 +154,6 @@ namespace CoreTester
                             dotsInARow++;
                             if (dotsInARow % 10 == 0)
                             {
-                                
                                 ShowStatistics(stopwatch.ElapsedMilliseconds, interviewsProcessed, eventsCount, interviewIdsToProcess.Count);
                                 dotsInARow = 0;
                             }
@@ -189,7 +186,7 @@ namespace CoreTester
                                                           (elapsedMilliseconds / processedInterviewsCount));
             
             Console.WriteLine("--------------------------------------------");
-            Console.WriteLine($"{(processedInterviewsCount/totalInterviewsCount)*100:0.##}% finished. Will finish at {finishTime}. {total:g} - time running.");
+            Console.WriteLine($"{processedInterviewsCount*100/totalInterviewsCount:0.##}% finished. Will finish at {finishTime}. {total:g} - time running.");
             Console.WriteLine($"{averagePerInterview:g} - average per interview.");
             Console.WriteLine($"{averagePerEvent:g} - average per event.");
             Console.WriteLine();

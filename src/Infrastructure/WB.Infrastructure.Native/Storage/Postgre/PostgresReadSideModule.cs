@@ -34,19 +34,22 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private readonly string schemaName;
         private readonly DbUpgradeSettings dbUpgradeSettings;
         private readonly IEnumerable<Assembly> mappingAssemblies;
+        private readonly bool runInitAndMigrations;
 
 
         public PostgresReadSideModule(string connectionString, 
             string schemaName,
             DbUpgradeSettings dbUpgradeSettings,
             ReadSideCacheSettings cacheSettings,
-            IEnumerable<Assembly> mappingAssemblies)
+            IEnumerable<Assembly> mappingAssemblies,
+            bool runInitAndMigrations = true)
             : base(cacheSettings)
         {
             this.connectionString = connectionString;
             this.schemaName = schemaName;
             this.dbUpgradeSettings = dbUpgradeSettings;
             this.mappingAssemblies = mappingAssemblies;
+            this.runInitAndMigrations = runInitAndMigrations;
         }
 
         protected override IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IModuleContext context)
@@ -56,14 +59,18 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             base.Load(registry);
 
-            try
+            if (runInitAndMigrations)
             {
-                DatabaseManagement.InitDatabase(this.connectionString, this.schemaName);
-            }
-            catch (Exception exc)
-            {
-                LogManager.GetLogger("maigration", typeof(PostgresReadSideModule)).Fatal(exc, "Error during db initialization.");
-                throw new InitializationException(Subsystem.Database, null, exc);
+                try
+                {
+                    DatabaseManagement.InitDatabase(this.connectionString, this.schemaName);
+                }
+                catch (Exception exc)
+                {
+                    LogManager.GetLogger("maigration", typeof(PostgresReadSideModule))
+                        .Fatal(exc, "Error during db initialization.");
+                    throw new InitializationException(Subsystem.Database, null, exc);
+                }
             }
 
             registry.BindToConstant<PostgreConnectionSettings>(() => new PostgreConnectionSettings
@@ -104,7 +111,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<ITransactionManagerProvider>(context => context.Get<TransactionManagerProvider>());
             registry.BindToMethod<ITransactionManagerProviderManager>(context => context.Get<TransactionManagerProvider>());
 
-            DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
+            if (runInitAndMigrations)
+            {
+                DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
+            }
         }
 
         private object GetEntityIdentifierColumnName(IModuleContext context)
