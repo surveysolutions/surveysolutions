@@ -22,8 +22,19 @@ config.resources = {
 }
 
 gulp.task("webTester", ['build'], function(){
+
+    const filter = [
+        '**/*.js', 
+        '!**/hq/*',
+        '!**/webinterview/*',
+        '!**/hq.bundle*.js',
+        '!**/webinterview.bundle*.js',
+        '!**/review.bundle*.js',
+        isDevMode ? '**/*.map' : null, 
+        '**/*.css'].filter(x => x)
+
     return gulp.src(config.dist + "/**/*.*")
-        .pipe(plugins.filter(['**/*.js', isDevMode ? '**/*.map' : null, '**/*.css'].filter((x) => x)))
+        .pipe(plugins.filter(filter))
         .pipe(gulp.dest(config.webTester));
 });
 
