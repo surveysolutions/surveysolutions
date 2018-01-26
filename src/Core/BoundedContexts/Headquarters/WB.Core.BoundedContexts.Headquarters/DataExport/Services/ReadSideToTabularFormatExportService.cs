@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }
 
             this.fileSystemAccessor.WriteAllText(
-                Path.Combine(basePath, "description.txt"),
+                Path.Combine(basePath, "export__readme.txt"),
                 descriptionBuilder.ToString());
         }
 
