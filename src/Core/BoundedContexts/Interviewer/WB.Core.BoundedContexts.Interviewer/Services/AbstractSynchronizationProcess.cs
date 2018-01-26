@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -14,7 +15,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IPrincipal principal;
+        private readonly IInterviewerPrincipal principal;
         private IHttpStatistician httpStatistician;
         private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -38,9 +38,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         protected abstract string SucsessDescription { get; }
 
-        protected AbstractSynchronizationProcess(ISynchronizationService synchronizationService, ILogger logger,
-            IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IPrincipal principal,
-            IPasswordHasher passwordHasher, IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
+        protected AbstractSynchronizationProcess(
+            ISynchronizationService synchronizationService, 
+            ILogger logger,
+            IHttpStatistician httpStatistician, 
+            IUserInteractionService userInteractionService, 
+            IInterviewerPrincipal principal,
+            IPasswordHasher passwordHasher, 
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository)
         {
             this.logger = logger;
@@ -86,6 +91,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 this.logger.Error("Synchronization. Exception when send exception to server", ex);
             }
         }
+
+        private void UpdateSupervisorOfInterviewer(Guid supervisorId)
+        {
+            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
+            localInterviewer.SupervisorId = supervisorId;
+            this.interviewersPlainStorage.Store(localInterviewer);
+            this.principal.SignInWithHash(localInterviewer.Name, localInterviewer.PasswordHash, true);
+        }
+
 
         private void UpdatePasswordOfInterviewer(RestCredentials credentials)
         {
@@ -223,6 +237,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 }
 
                 await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
+
+                var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.restCredentials);
+
+                if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
+                {
+                    this.UpdateSupervisorOfInterviewer(currentSupervisorId);
+                }
 
                 cancellationToken.ThrowIfCancellationRequested();
 

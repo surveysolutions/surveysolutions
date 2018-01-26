@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         protected void GenerateDescriptionTxt(QuestionnaireIdentity questionnaireIdentity, string directoryPath, string dataFilesExtension)
             => this.tabularFormatExportService.GenerateDescriptionFile(questionnaireIdentity, directoryPath, dataFilesExtension);
 
-        protected string[] CreateTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
+        protected string[] CreateTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken, DateTime? fromDate, DateTime? toDate)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(donePercent / 2);
 
-            this.tabularFormatExportService.ExportInterviewsInTabularFormat(questionnaireIdentity, status, directoryPath, exportProgress, cancellationToken);
+            this.tabularFormatExportService.ExportInterviewsInTabularFormat(questionnaireIdentity, status, directoryPath, exportProgress, cancellationToken, fromDate, toDate);
 
             return this.fileSystemAccessor.GetFilesInDirectory(directoryPath);
         }

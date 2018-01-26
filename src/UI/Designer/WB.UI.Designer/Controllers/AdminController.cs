@@ -511,32 +511,40 @@ namespace WB.UI.Designer.Controllers
         {
             DesignerMembershipUser account = (DesignerMembershipUser)Membership.GetUser(id, false);
 
-            var questionnaires = this.questionnaireHelper.GetQuestionnairesByViewerId(viewerId: id,
+            var ownedQuestionnaires = this.questionnaireHelper.GetMyQuestionnairesByViewerId(viewerId: id,
                     isAdmin: this.UserHelper.WebUser.IsAdmin, folderId: null);
-            questionnaires.ToList().ForEach(
-                x =>
-                    {
-                        x.CanEdit = false;
-                        x.CanDelete = false;
-                    });
-            
-            return
-                this.View(
-                    new AccountViewModel
-                        {
-                            Id = account.ProviderUserKey.AsGuid(),
-                            CreationDate = account.CreationDate.ToUIString(),
-                            Email = account.Email,
-                            IsApproved = account.IsApproved,
-                            IsLockedOut = account.IsLockedOut,
-                            CanImportOnHq = account.CanImportOnHq,
-                            LastLoginDate = account.LastLoginDate.ToUIString(),
-                            UserName = account.UserName,
-                            LastLockoutDate = account.LastLockoutDate.ToUIString(),
-                            LastPasswordChangedDate = account.LastPasswordChangedDate.ToUIString(),
-                            Comment = account.Comment ?? GlobalHelper.EmptyString,
-                            Questionnaires = questionnaires
-                        });
+
+            var sharedQuestionnaires = this.questionnaireHelper.GetSharedQuestionnairesByViewerId(viewerId: id,
+                isAdmin: this.UserHelper.WebUser.IsAdmin, folderId: null);
+
+            ownedQuestionnaires.ToList().ForEach(x =>
+            {
+                x.CanEdit = false;
+                x.CanDelete = false;
+            });
+
+            sharedQuestionnaires.ToList().ForEach(x =>
+            {
+                x.CanEdit = false;
+                x.CanDelete = false;
+            });
+
+            return this.View(new AccountViewModel
+            {
+                Id = account.ProviderUserKey.AsGuid(),
+                CreationDate = account.CreationDate.ToUIString(),
+                Email = account.Email,
+                IsApproved = account.IsApproved,
+                IsLockedOut = account.IsLockedOut,
+                CanImportOnHq = account.CanImportOnHq,
+                LastLoginDate = account.LastLoginDate.ToUIString(),
+                UserName = account.UserName,
+                LastLockoutDate = account.LastLockoutDate.ToUIString(),
+                LastPasswordChangedDate = account.LastPasswordChangedDate.ToUIString(),
+                Comment = account.Comment ?? GlobalHelper.EmptyString,
+                OwnedQuestionnaires = ownedQuestionnaires,
+                SharedQuestionnaires = sharedQuestionnaires
+            });
         }
 
         public ActionResult Edit(Guid id)

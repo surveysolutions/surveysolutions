@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Web.Configuration;
-using Ninject.Modules;
-using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Modules
 {
-    public class WebConfigurationModule : NinjectModule
+    public class WebConfigurationModule : IModule
     {
         private readonly NameValueCollection membershipSettings;
         public WebConfigurationModule(NameValueCollection membershipSettings = null)
@@ -15,15 +13,12 @@ namespace WB.UI.Shared.Web.Modules
             this.membershipSettings = membershipSettings;
         }
 
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            Bind<IConfigurationManager>()
-                .ToConstant(new ConfigurationManager(appSettings: WebConfigurationManager.AppSettings,
-                    membershipSettings: this.membershipSettings));
-
-            Bind(typeof(int)).ToMethod(context => 
-                    Convert.ToInt32(WebConfigurationManager.AppSettings["MaxCachedAggregateRoots"]))
-                .WhenInjectedInto<IEventSourcedAggregateRootRepository>();
+            registry.BindToConstant<IConfigurationManager>(() => new ConfigurationManager(
+                appSettings: WebConfigurationManager.AppSettings,
+                membershipSettings: this.membershipSettings)
+            );
         }
     }
 }

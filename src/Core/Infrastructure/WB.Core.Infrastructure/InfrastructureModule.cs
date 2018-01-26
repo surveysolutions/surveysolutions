@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Ncqrs;
+﻿using Ncqrs;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;

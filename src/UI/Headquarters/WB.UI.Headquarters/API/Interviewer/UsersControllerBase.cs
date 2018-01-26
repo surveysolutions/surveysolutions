@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
     public class UsersControllerBase : ApiController
     {
         protected readonly IAuthorizedUser authorizedUser;
-        private readonly IUserViewFactory userViewFactory;
+        protected readonly IUserViewFactory userViewFactory;
 
         public UsersControllerBase(
             IAuthorizedUser authorizedUser,

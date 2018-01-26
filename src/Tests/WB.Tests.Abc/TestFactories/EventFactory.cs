@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Events;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -117,8 +118,8 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewReceivedBySupervisor InterviewReceivedBySupervisor()
             => new InterviewReceivedBySupervisor();
 
-        public InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello")
-            => new InterviewStatusChanged(status, comment);
+        public InterviewStatusChanged InterviewStatusChanged(InterviewStatus status, string comment = "hello",InterviewStatus? previousStatus= null, DateTime? utcTime= null)
+            => new InterviewStatusChanged(status, comment, previousStatus, utcTime);
 
         public InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             => new InterviewSynchronized(synchronizationDto);
@@ -383,6 +384,31 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewKeyAssigned InterviewKeyAssigned(InterviewKey existingInterviewKey = null)
         {
             return new InterviewKeyAssigned(existingInterviewKey ?? new InterviewKey(111));
+        }
+
+        public InterviewOpenedBySupervisor InterviewOpenedBySupervisor()
+        {
+            return new InterviewOpenedBySupervisor(Guid.NewGuid(), DateTime.Now);
+        }
+
+        public InterviewPaused InterviewPaused(DateTime? localTime = null, DateTime? utcTime = null)
+        {
+            return new InterviewPaused(Guid.NewGuid(), localTime ?? DateTime.Now, utcTime ?? DateTime.UtcNow);
+        }
+
+        public InterviewResumed InterviewResumed(DateTime? localTime = null, DateTime? utcTime = null)
+        {
+            return new InterviewResumed(Guid.NewGuid(), localTime ?? DateTime.Now, utcTime ?? DateTime.UtcNow);
+        }
+
+        public InterviewOpenedBySupervisor InterviewOpenedBySupervisor(DateTime? localTime = null)
+        {
+            return new InterviewOpenedBySupervisor(Guid.NewGuid(), localTime ?? DateTime.Now);
+        }
+
+        public InterviewClosedBySupervisor InterviewClosedBySupervisor(DateTime? localTime = null)
+        {
+            return new InterviewClosedBySupervisor(Guid.NewGuid(), localTime ?? DateTime.Now);
         }
     }
 }

@@ -9,10 +9,16 @@
                     </label>
                 </div>
                 <div ref="status" ><p>{{statusMessage}}</p></div>
+                <div ref="errors" class="alert alert-danger">
+                    <div v-for="error in errorList" :key="error">{{error}}</div>
+                </div>
             <ol class="list-unstyled">
                 <li>{{$t('Pages.MapList_UploadDescription')}} </li>
                 <li>{{$t('Pages.MapList_UploadDescriptionExtra')}}</li>
             </ol>
+            <p>
+                <a :href="$config.model.userMapsUrl">{{$t('Pages.MapList_UserMapsLink')}}</a>
+            </p>
             <p>
                 <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
             </p>
@@ -34,15 +40,21 @@
 export default {
     data: function(){
         return {        
-            statusMessage: ''
+            statusMessage: '',
+            errorList: []
         }        
     },
   mounted() {
     this.$refs.table.reload();
   },
   methods: {
-      updateStatus(newMessage){
+      updateStatus(newMessage, errors){
           this.statusMessage = this.$t("Pages.Map_Status") + ": " + newMessage;
+          if(errors != null){
+            this.errorList = errors;
+          }
+          else
+            this.errorList = [];
       },
       progressStyle() {
                 return {
@@ -57,7 +69,8 @@ export default {
         const reloader = this.reload;
         const uploadingMessage = this.$t("Pages.Map_Uploading");
         const uploadingErrorMessage = this.$t("Pages.Map_UploadingError");
-        
+        const uploadingSuccess = this.$t("Pages.Map_UploadingSuccess");
+
         const fd = new FormData();
         fd.append("", this.$refs.uploader.files[0]);
         
@@ -75,7 +88,10 @@ export default {
                 contentType: false,
                 type: "POST",
                 success: function(data) {
-                    statusupdater(data);
+                    if(!data.isSuccess)
+                       statusupdater(uploadingErrorMessage, data.errors);
+                    else   
+                        statusupdater(uploadingSuccess);
                     reloader();                    
                 },
                 error : function(error){

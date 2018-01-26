@@ -11,6 +11,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 $ProjectDesigner = 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj'
 $ProjectHeadquarters = 'src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj'
+$ProjectWebTester = 'src\UI\WB.UI.WebTester\WB.UI.WebTester.csproj'
 $MainSolution = 'src\WB without Xamarin.sln'
 $SupportToolSolution = 'src\Tools\support\support.sln'
 
@@ -69,6 +70,7 @@ try {
 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
+	RunConfigTransform $ProjectWebTester $BuildConfiguration
 
         $ExtPackageName = 'WBCapi.Ext.apk'
         . "$scriptFolder\build-android-package.ps1" `
@@ -105,11 +107,13 @@ try {
 
         BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
         BuildWebPackage $ProjectDesigner $BuildConfiguration | % { if (-not $_) { Exit } }
+        BuildWebPackage $ProjectWebTester $BuildConfiguration | % { if (-not $_) { Exit } }        
 
         BuildAndDeploySupportTool $SupportToolSolution $BuildConfiguration | % { if (-not $_) { Exit } }
 
         AddArtifacts $ProjectDesigner $BuildConfiguration -folder "Designer"
         AddArtifacts $ProjectHeadquarters $BuildConfiguration -folder "Headquarters"
+        AddArtifacts $ProjectWebTester $BuildConfiguration -folder "WebTester"
 
         Write-Host "##teamcity[publishArtifacts '$artifactsFolder']"
     }

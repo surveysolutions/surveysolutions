@@ -3,8 +3,8 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {

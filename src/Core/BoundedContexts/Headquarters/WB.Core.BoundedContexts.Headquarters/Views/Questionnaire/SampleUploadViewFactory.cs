@@ -51,9 +51,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
                     continue;
 
                 var questionExportedColumn = topLevelOfQuestionnaire.HeaderItems[featuredQuestionItem.Id];
-                foreach (var columnName in questionExportedColumn.ColumnNames)
+                foreach (var column in questionExportedColumn.ColumnHeaders)
                 {
-                    columnListToPreload.Add(new FeaturedQuestionItem(featuredQuestionItem.Id, featuredQuestionItem.Title, columnName));
+                    columnListToPreload.Add(new FeaturedQuestionItem(featuredQuestionItem.Id, featuredQuestionItem.Title, column.Name));
                 }
             }
             return new SampleUploadView(input.QuestionnaireId, input.Version, columnListToPreload);

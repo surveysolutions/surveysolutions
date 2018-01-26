@@ -27,16 +27,6 @@ namespace WB.Tests.Abc
         }
     }
 
-    // Geniuos way to override singleton.
-    public class MxvMainThreadStub : MvxSingleton<IMvxMainThreadDispatcher>, IMvxMainThreadDispatcher
-    {
-        public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
-        {
-            action();
-            return true;
-        }
-    }
-
     internal class Stub
     {
         public static TestInMemoryWriter<TEntity> ReadSideRepository<TEntity>() where TEntity : class, IReadSideRepositoryEntity
@@ -44,18 +34,7 @@ namespace WB.Tests.Abc
             return new TestInMemoryWriter<TEntity>();
         }
 
-        public static IMvxMainThreadDispatcher MvxMainThreadDispatcher()
-        {
-            return mainThreadStub.Value;
-        }
-
-        private static readonly Lazy<MxvMainThreadStub> mainThreadStub = new Lazy<MxvMainThreadStub>(() => new MxvMainThreadStub());
-
-        public static IMvxMainThreadDispatcher InitMvxMainThreadDispatcher()
-        {
-            // The only way to provide own dispatcher realization, as it's not registered in mvvccross own IoC
-            return mainThreadStub.Value;
-        }
+        public static IMvxMainThreadDispatcher MvxMainThreadDispatcher() => Create.Fake.MvxMainThreadDispatcher();
 
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {

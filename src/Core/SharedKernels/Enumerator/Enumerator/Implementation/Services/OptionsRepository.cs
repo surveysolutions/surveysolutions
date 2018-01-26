@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    internal class OptionsRepository : IOptionsRepository
+    public class OptionsRepository : IOptionsRepository
     {
         private readonly IPlainStorage<OptionView> optionsStorage;
         

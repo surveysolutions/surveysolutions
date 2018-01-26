@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1),
                 interviewData);
 
-            result.Levels[0].Records[0].GetPlainAnswers().First().ShouldEqual(new[] { exportResult });
+            result.Levels[0].Records[0].Answers.First().ShouldEqual(new[] { exportResult });
         }
 
 

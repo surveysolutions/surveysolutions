@@ -13,19 +13,21 @@
         font-family: "RobotoLight";
         min-width: 110px;
         cursor: default;
+        .amount-of-questionnaires,
+        .description{
+            @include transition(all, 0.2s);
+        }
         .amount-of-questionnaires{
             padding-right: 10px;
             border-bottom: 2px solid #f0f0f0; 
             font-size: 60px;
             line-height: 62px;
-            @include transition(all, 0.2s);
         }
         .description{
             padding-top: 7px;
             text-transform: uppercase;
             font: 10px/12px "RobotoMedium";
             width: 100px;
-            @include transition(all, 0.2s);
         }
         &:hover, &:focus, &:active, &:active:focus{
             text-decoration: none;
@@ -264,12 +266,6 @@
     background: rgba(42, 129, 203, 0.7);
     position: relative;
     z-index: 2;
-    &.census{
-        background: rgba(42, 129, 203, 0.9);
-        &.census-update{
-             @include gradient-horizontal(#00ceed, rgba(42, 129, 203, 0.9), 60%, 100%);            
-        }
-    }
 }
 .census{
     .unfinished-assignments{

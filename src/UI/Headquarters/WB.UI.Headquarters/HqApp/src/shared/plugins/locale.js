@@ -13,7 +13,8 @@ export default {
             fallbackLocale: 'en',
             resources: {
                 [locale]: window.CONFIG.locale.data
-            }
+            },
+            interpolation: { escapeValue: false }
         }
         i18next.init(options)
 

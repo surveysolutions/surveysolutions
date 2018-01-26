@@ -25,15 +25,19 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly IEventStore eventStore;
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
-
-
-        public NcqrCompatibleEventDispatcher(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger)
+        
+        public NcqrCompatibleEventDispatcher(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger, IEnumerable<IEventHandler> eventHandlers)
         {
             this.eventStore = eventStore;
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
             this.getInProcessEventBus = () => new InProcessEventBus(eventStore, eventBusSettings, logger);
+
+            foreach (var handler in eventHandlers)
+            {
+                Register(handler);
+            }
         }
 
         public event EventHandlerExceptionDelegate OnCatchingNonCriticalEventHandlerException;

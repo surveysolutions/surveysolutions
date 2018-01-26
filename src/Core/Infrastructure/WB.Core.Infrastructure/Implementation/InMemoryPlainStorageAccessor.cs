@@ -8,33 +8,33 @@ namespace WB.Core.Infrastructure.Implementation
     public class InMemoryPlainStorageAccessor<TEntity> : IPlainStorageAccessor<TEntity>, IPlainKeyValueStorage<TEntity>
         where TEntity : class
     {
-        private readonly Dictionary<object,TEntity> inMemroyStorage = new Dictionary<object, TEntity>(); 
+        private readonly Dictionary<object,TEntity> inMemoryStorage = new Dictionary<object, TEntity>(); 
 
         public TEntity GetById(object id)
         {
-            if (this.inMemroyStorage.ContainsKey(id))
-                return this.inMemroyStorage[id];
+            if (this.inMemoryStorage.ContainsKey(id))
+                return this.inMemoryStorage[id];
             return null;
         }
 
         public void Remove(object id)
         {
-            if (this.inMemroyStorage.ContainsKey(id))
-                this.inMemroyStorage.Remove(id);
+            if (this.inMemoryStorage.ContainsKey(id))
+                this.inMemoryStorage.Remove(id);
         }
 
         public void Remove(IEnumerable<TEntity> entities)
         {
             foreach (var entity in entities)
             {
-                var itemToRemove = this.inMemroyStorage.SingleOrDefault(x => x.Value.Equals(entity));
-                this.inMemroyStorage.Remove(itemToRemove.Key);
+                var itemToRemove = this.inMemoryStorage.SingleOrDefault(x => x.Value.Equals(entity));
+                this.inMemoryStorage.Remove(itemToRemove.Key);
             }
         }
 
         public void Store(TEntity entity, object id)
         {
-            this.inMemroyStorage[id] = entity;
+            this.inMemoryStorage[id] = entity;
         }
 
         public void Store(IEnumerable<Tuple<TEntity, object>> entities)
@@ -51,7 +51,7 @@ namespace WB.Core.Infrastructure.Implementation
 
         public TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            return query.Invoke(this.inMemroyStorage.Values.AsQueryable());
+            return query.Invoke(this.inMemoryStorage.Values.AsQueryable());
         }
 
         public TEntity GetById(string id)

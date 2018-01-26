@@ -166,18 +166,14 @@
           position: relative; }
           .structured-content .panel-default > .panel-heading h3 a:hover, .structured-content .panel-default > .panel-heading h3 a:focus {
             text-decoration: none; }
-        .structured-content .panel-default > .panel-heading h3.has-error .btn-plus:before, .structured-content .panel-default > .panel-heading h3.has-error .btn-plus:after {
+        .structured-content .panel-default > .panel-heading h3.has-error .btn-plus:before, .structured-content .panel-default > .panel-heading h3.has-error .btn-plus:after, .structured-content .panel-default > .panel-heading h3.has-error a:before, .structured-content .panel-default > .panel-heading h3.has-error a:after {
           background-color: #e74924; }
         .structured-content .panel-default > .panel-heading h3.has-error a {
           color: #e74924; }
-          .structured-content .panel-default > .panel-heading h3.has-error a:before, .structured-content .panel-default > .panel-heading h3.has-error a:after {
-            background-color: #e74924; }
-        .structured-content .panel-default > .panel-heading h3.complete .btn-plus:before, .structured-content .panel-default > .panel-heading h3.complete .btn-plus:after {
+        .structured-content .panel-default > .panel-heading h3.complete .btn-plus:before, .structured-content .panel-default > .panel-heading h3.complete .btn-plus:after, .structured-content .panel-default > .panel-heading h3.complete a:before, .structured-content .panel-default > .panel-heading h3.complete a:after {
           background-color: #3ca21a; }
         .structured-content .panel-default > .panel-heading h3.complete a {
           color: #3ca21a; }
-          .structured-content .panel-default > .panel-heading h3.complete a:before, .structured-content .panel-default > .panel-heading h3.complete a:after {
-            background-color: #3ca21a; }
       .structured-content .panel-default > .panel-heading .active, .structured-content .panel-default > .panel-heading:hover, .structured-content .panel-default > .panel-heading:focus {
         background-color: #ebebeb; }
     .structured-content .panel-default .current {

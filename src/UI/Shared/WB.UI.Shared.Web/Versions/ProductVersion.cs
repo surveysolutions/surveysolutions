@@ -4,7 +4,7 @@ using WB.Core.Infrastructure.Versions;
 
 namespace WB.UI.Shared.Web.Versions
 {
-    internal class ProductVersion : IProductVersion
+    public class ProductVersion : IProductVersion
     {
         private readonly Assembly assembly;
 

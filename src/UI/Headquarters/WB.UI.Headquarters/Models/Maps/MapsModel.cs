@@ -10,5 +10,6 @@
         public bool IsObserver { get; set; }
         public bool IsObserving { get; set; }
         public string UploadMapsFileUrl { get; set; }
+        public string UserMapsUrl { get; set; }
     }
 }

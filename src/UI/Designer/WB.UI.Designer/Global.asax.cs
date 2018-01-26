@@ -40,7 +40,7 @@ namespace WB.UI.Designer
 
             AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
 
-            Settings.Current.GetCustomData = (exception, dictionary) =>
+            Exceptional.Settings.GetCustomData = (exception, dictionary) =>
             {   
                 // abusing get custom data call to clean out HTTP_AUTHORIZATION header
                 if (HttpContext.Current != null)
@@ -101,8 +101,8 @@ namespace WB.UI.Designer
             var currRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
             if (currRouteData != null)
             {
-                currentController = (string)currRouteData.Values["controller"] ?? string.Empty;
-                currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
+                currentController = (string)currRouteData.Values["controller"] ?? "[Unknown]";
+                currentAction = (string)currRouteData.Values["action"] ?? "[Unknown]";
             }
 
             if (httpEx != null)

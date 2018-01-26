@@ -618,18 +618,6 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value>Exclure le support de la carte ESRI</value>
   </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>Exportation</value>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>Valeurs séparées par des virgules (.csv)</value>
-  </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Excel (.xlsx)</value>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Valeurs séparées par des tabulations (.tab)</value>
-  </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Affectation</value>
   </data>

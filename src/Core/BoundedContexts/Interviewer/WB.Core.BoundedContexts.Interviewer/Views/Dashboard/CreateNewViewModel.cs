@@ -18,7 +18,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<AssignmentDocument, int> assignmentViewRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private SynchronizationViewModel synchronization;
@@ -29,14 +28,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IAssignmentDocumentsStorage assignmentsRepository,
-            IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<AssignmentDocument, int> assignmentViewRepository,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.viewModelFactory = viewModelFactory;
             this.assignmentsRepository = assignmentsRepository;
-            this.interviewViewRepository = interviewViewRepository;
             this.assignmentViewRepository = assignmentViewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
         }
@@ -87,12 +84,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 yield return censusQuestionnaireDashboardItem;
             }
 
-            var interviewsCount = this.interviewViewRepository.LoadAll().ToLookup(iv => iv.Assignment);
-
             foreach (var assignment in dbAssignments)
             {
                 var dashboardItem = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
-                dashboardItem.Init(assignment, interviewsCount[assignment.Id].Count());
+                dashboardItem.Init(assignment);
 
                 yield return dashboardItem;
             }
@@ -107,6 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             else
             {
+                // update UI assignment
                 var assignment = this.UiItems.OfType<AssignmentDashboardItemViewModel>()
                     .FirstOrDefault(x => x.AssignmentId == assignmentId.Value);
 

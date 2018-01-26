@@ -31,13 +31,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var reader = GetCsvReader(ouptutBytes);
 
             reader.Read();
+            reader.ReadHeader();
 
-            Assert.That(reader.FieldHeaders.Length, Is.EqualTo(2));
-            Assert.That(reader.FieldHeaders[0], Is.EqualTo("interview__link"));
-            Assert.That(reader.FieldHeaders[1], Is.EqualTo("id"));
+            Assert.That(reader.Context.HeaderRecord.Length, Is.EqualTo(2));
+            Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("interview__link"));
+            Assert.That(reader.Context.HeaderRecord[1], Is.EqualTo("id"));
 
-            var csvReaderException = Assert.Throws<CsvReaderException>(() => reader.Read(), "Only header row should be written to the output file");
-            Assert.That(csvReaderException.Message, Does.Contain("exhausted all records"));
+            var isReaded = reader.Read();
+            Assert.IsFalse(isReaded);
         }
 
         [Test]
@@ -57,9 +58,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var reader = GetCsvReader(ouptutBytes);
 
             reader.Read();
-            Assert.That(reader.FieldHeaders.Length, Is.EqualTo(2));
-            Assert.That(reader.FieldHeaders[0], Is.EqualTo("interview__link"));
-            Assert.That(reader.FieldHeaders[1], Is.EqualTo("id"));
+            reader.ReadHeader();
+            reader.Read();
+            Assert.That(reader.Context.HeaderRecord.Length, Is.EqualTo(2));
+            Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("interview__link"));
+            Assert.That(reader.Context.HeaderRecord[1], Is.EqualTo("id"));
 
             Assert.That(reader.GetField(0), Is.EqualTo($"http://baseurl/{assignmentId}/Start"));
             Assert.That(reader.GetField(1), Is.EqualTo($"{assignmentId}"));
@@ -94,20 +97,21 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             var reader = GetCsvReader(ouptutBytes);
 
             reader.Read();
-            Assert.That(reader.FieldHeaders[2], Is.EqualTo(expectedHeader));
-            Assert.That(reader.FieldHeaders[2], Is.EqualTo(expectedHeader));
+            reader.ReadHeader();
+            Assert.That(reader.Context.HeaderRecord[2], Is.EqualTo(expectedHeader));
+            Assert.That(reader.Context.HeaderRecord[2], Is.EqualTo(expectedHeader));
         }
 
         private static CsvReader GetCsvReader(byte[] ouptutBytes)
         {
             var streamReader = new StreamReader(new MemoryStream(ouptutBytes), Encoding.UTF8);
-            var reader = new CsvReader(streamReader, new CsvConfiguration
+            var reader = new CsvReader(streamReader, new Configuration
             {
                 HasHeaderRecord = true,
-                TrimFields = true,
+                TrimOptions = TrimOptions.Trim,
                 IgnoreQuotes = false,
                 Delimiter = "\t",
-                WillThrowOnMissingField = false
+                MissingFieldFound = null,
             });
             return reader;
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -17,13 +16,12 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Tester.Implementation.Services
 {
-    internal class QuestionnaireImportService : IQuestionnaireImportService
+    public class QuestionnaireImportService : IQuestionnaireImportService
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private readonly IOptionsRepository optionsRepository;
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
-
 
         public QuestionnaireImportService(IQuestionnaireStorage questionnaireRepository, 
             IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor, 

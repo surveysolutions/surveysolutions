@@ -120,31 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>arquivo '{0}' contém colunas que não podem ser mapeadas na Propriedade do usuário qualquer existente na sequência: {1}</value>
   </data>
-  <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>máximo número de erros de validação {0}foram atingidos</value>
-  </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>O dataset contém {0} registros, mas o máximo permitido é de número recorde {1}</value>
-  </data>
-  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>pré-carregamento do processo com o id de usuário '{0}' não pode ser concluída porque só {1} criado de {2}</value>
-  </data>
-  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>Usuário de pré-carregamento do processo '{0}' está em estado '{1}', não é permitido excluir processos em Estados: {2}.</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>pré-carregamento do processo com o id de usuário '{0}' não é possível criar mais usuários depois {1}</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>pré-carregamento do processo com o id de usuário '{0}' tem {1} erro (s).</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>pré-carregamento do processo com o id de usuário '{0}' está faltando</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>pré-carregamento do processo com o id de usuário '{0}' está em estado '{1}', mas deve estar em estado '{2}'</value>
-  </data>
-  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>progresso de validação em porcentagens não pode ser negativo ou maior então 100, mas o valor é {0}</value>
-  </data>
 </root>

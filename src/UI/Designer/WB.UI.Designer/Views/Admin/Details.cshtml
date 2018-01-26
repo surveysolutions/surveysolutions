@@ -32,38 +32,70 @@
             <span></span>Can import on HQ
         </label><br />
     </div>
-    <h4>Questionnaires:</h4>
-        <table class="table table-content ">
-            <thead>
-                <tr>
-                    <th>
-                        Title
-                    </th>
-                    <th>
-                        Last modified
-                    </th>
-                    <th>
-                        Created date
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach (QuestionnaireListViewModel listViewModel in Model.Questionnaires)
-            {
-                <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
-                    <td class="search-value">
-                        <a href="@Url.Action("Details", "Questionnaire", listViewModel.GetIdValue())" target="_blank">@listViewModel.Title</a>
-                    </td>
-                    <td class="date">
-                        @listViewModel.LastEntryDate.FormatDate()
-                    </td>
-                    <td class="date">
-                        @listViewModel.CreationDate.FormatDate()
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+    <h4>Owned questionnaires:</h4>
+    <table class="table table-content ">
+        <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Last modified
+            </th>
+            <th>
+                Created date
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (QuestionnaireListViewModel listViewModel in Model.OwnedQuestionnaires)
+        {
+            <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
+                <td class="search-value">
+                    <a href="@Url.Action("Details", "Questionnaire", listViewModel.GetIdValue())" target="_blank">@listViewModel.Title</a>
+                </td>
+                <td class="date">
+                    @listViewModel.LastEntryDate.FormatDate()
+                </td>
+                <td class="date">
+                    @listViewModel.CreationDate.FormatDate()
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <h4>Shared questionnaires:</h4>
+    <table class="table table-content ">
+        <thead>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Last modified
+            </th>
+            <th>
+                Created date
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (QuestionnaireListViewModel listViewModel in Model.SharedQuestionnaires)
+        {
+            <tr class="@(listViewModel.IsDeleted ? "deleted" : "")">
+                <td class="search-value">
+                    <a href="@Url.Action("Details", "Questionnaire", listViewModel.GetIdValue())" target="_blank">@listViewModel.Title</a>
+                </td>
+                <td class="date">
+                    @listViewModel.LastEntryDate.FormatDate()
+                </td>
+                <td class="date">
+                    @listViewModel.CreationDate.FormatDate()
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 </div>
 
 @helper ShowSortIcon(string field)

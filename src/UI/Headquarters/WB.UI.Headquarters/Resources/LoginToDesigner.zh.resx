@@ -135,4 +135,13 @@
   <data name="UserDesignerCredentials" xml:space="preserve">
     <value>请使用您在问卷设计网站和问卷测试程序中的账号登陆</value>
   </data>
+  <data name="AccessForbidden" xml:space="preserve">
+    <value>服务器未在问卷设计器网站注册。请联系支持团队进行注册。</value>
+  </data>
+  <data name="LoginWatermark" xml:space="preserve">
+    <value>登录或email</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>此部分已过期请重新登录</value>
+  </data>
 </root>

@@ -130,7 +130,7 @@
     <value>可以把设备分配给调查员</value>
   </data>
   <data name="DeviceRelinkRequired" xml:space="preserve">
-    <value>&lt;font color="orange"&gt;需要重新链接&lt;/font&gt;</value>
+    <value>&lt;font color="orange"&gt;需要重新关联&lt;/font&gt;</value>
   </data>
   <data name="DeviceUpdateRequired" xml:space="preserve">
     <value>&lt;font color="red"&gt;需要更新。调查员引擎版本 - &lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
@@ -154,10 +154,10 @@
     <value>下载访谈包：&lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviewPackages" xml:space="preserve">
-    <value>下载访谈包列表。&lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;最近一次同步包：&lt;b&gt;{0}&lt;/b&gt;</value>
+    <value>下载访谈包列表。&lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;最近一次同步包：&lt;b&gt;{0}&lt;/b&gt;</value>
   </data>
   <data name="GetInterviews" xml:space="preserve">
-    <value>下载访谈列表。&lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    <value>下载访谈列表。&lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
   </data>
   <data name="GetQuestionnaire" xml:space="preserve">
     <value>下载问卷：&lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
@@ -178,7 +178,7 @@
     <value>&lt;font color="green"'&gt;成功处理了访谈&lt;b&gt;{0}&lt;/b&gt;&lt;/font&gt;</value>
   </data>
   <data name="LinkToDevice" xml:space="preserve">
-    <value>将调查员与设备链接</value>
+    <value>将调查员与设备关联</value>
   </data>
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
     <value>没有新的访谈包需要下载</value>
@@ -203,5 +203,20 @@
   </data>
   <data name="InterviewerLoggedIn" xml:space="preserve">
     <value>调查员已登录并获得了认证令牌</value>
+  </data>
+  <data name="GetAssignmentFormat" xml:space="preserve">
+    <value>下载任务 ({0})&lt;/br&gt;</value>
+  </data>
+  <data name="GetAssignmentsFormat" xml:space="preserve">
+    <value>下载任务列表 ({0}). &lt;/br&gt; &lt;ul&gt;{1}&lt;/ul&gt;</value>
+  </data>
+  <data name="GetMap" xml:space="preserve">
+    <value>下载地图：{0}</value>
+  </data>
+  <data name="GetMaps" xml:space="preserve">
+    <value>下载地图列表： &lt;/br&gt; &lt;ul&gt;{0}&lt;/ul&gt;</value>
+  </data>
+  <data name="NoMapsForUser" xml:space="preserve">
+    <value>没有可以下载的地图</value>
   </data>
 </root>

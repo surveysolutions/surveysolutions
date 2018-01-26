@@ -46,7 +46,7 @@ export default {
         },
         promt(callback) {
             this.callback = callback
-            $(this.$el).modal();
+            $(this.$el).appendTo("body").modal();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
@@ -19,9 +18,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public IEnumerable<PortableExecutableReference> GetAssembliesToReference(int apiVersion)
+        public List<MetadataReference> GetAssembliesToReference()
         {
-            var references = new List<PortableExecutableReference>();
+            var references = new List<MetadataReference>();
             references.Add(AssemblyMetadata.CreateFromFile(typeof(Identity).Assembly.Location).GetReference());
             references.AddRange(this.GetPathToAssemblies("profile111"));
             return references;
@@ -45,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                             settings.PortableAssembliesPath,
                             defaultReferencedPortableAssembly
                         )
-                ).GetReference()
+                    ).GetReference()
             );
         }
     }

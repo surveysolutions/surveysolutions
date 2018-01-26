@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Enumerator.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {

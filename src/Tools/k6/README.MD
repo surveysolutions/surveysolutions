@@ -3,7 +3,7 @@ K6 is a stress tool for devs
 Homepage: https://github.com/loadimpact/k6
 
 Latest win64 version can found here
-https://github.com/loadimpact/k6/releases/download/v0.17.1/k6-v0.17.1-win64.zip
+https://github.com/loadimpact/k6/releases/download/v0.18.2/k6-v0.18.2-win64.zip
 
 Installing
 ==========
@@ -23,6 +23,6 @@ In `VS Code` there is two tasks:
 
 Outside of `VS Code` just use `k6.exe` cli.
 
-`k6.exe -u {numberOfUsers} -i {numberOfIterations} interview.js`
+`k6.exe run -u {numberOfUsers} -i {numberOfIterations} interview.js`
 
 More details on their doc page: https://docs.k6.io/

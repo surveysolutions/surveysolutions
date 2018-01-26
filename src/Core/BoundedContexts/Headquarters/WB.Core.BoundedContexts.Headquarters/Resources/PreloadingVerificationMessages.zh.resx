@@ -145,13 +145,13 @@
     <value>登记表编号与登记表大小不一致。</value>
   </data>
   <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>数据预加载不支持链接问题。</value>
+    <value>数据预加载不支持关联问题。</value>
   </data>
   <data name="PL0011_GeneralError" xml:space="preserve">
     <value>发生了一般错误。</value>
   </data>
   <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>未找到问题。</value>
+    <value>在问卷中不存在已上传文件中的问题</value>
   </data>
   <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
     <value>提供的为空值</value>
@@ -215,5 +215,23 @@
   </data>
   <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
     <value>数值型答案中不允许","符号。请使用.作为小数点分隔符。</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>只允许整数</value>
+  </data>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>数量需大于等于-1</value>
+  </data>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>列未能与识别问题相匹配</value>
+  </data>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>不能预加载面积问题</value>
+  </data>
+  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
+    <value>不能预加载录音问题</value>
+  </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>问卷模板层级的数据文件丢失。</value>
   </data>
 </root>

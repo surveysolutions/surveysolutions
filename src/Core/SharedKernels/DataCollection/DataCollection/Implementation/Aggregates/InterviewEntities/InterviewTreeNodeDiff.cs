@@ -4,41 +4,45 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         public InterviewTreeNodeDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
         {
-            this.SourceNode = sourceNode;
-            this.ChangedNode = changedNode;
+            IsNodeAdded = sourceNode == null && changedNode != null;
+            IsNodeRemoved = sourceNode != null && changedNode == null;
+            Identity = changedNode?.Identity ?? sourceNode?.Identity;
+            IsNodeDisabled = IsNodeDisabledImpl(sourceNode, changedNode);
+            IsNodeEnabled = IsNodeEnabledImpl(sourceNode, changedNode) && ! IsNodeRemoved;
+            SourceNode = sourceNode;
+            ChangedNode = changedNode;
         }
 
         public IInterviewTreeNode SourceNode { get; }
         public IInterviewTreeNode ChangedNode { get; }
 
-        public bool IsNodeAdded => this.SourceNode == null && this.ChangedNode != null;
-        public bool IsNodeRemoved => this.SourceNode != null && this.ChangedNode == null;
 
-        public bool IsNodeDisabled
+        bool IsNodeDisabledImpl(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
         {
-            get
-            {
-                var newNodeIsDisabled = this.SourceNode == null && this.ChangedNode != null &&
-                    this.ChangedNode.IsDisabledByOwnCondition();
-                var existingNodeWasEnadledAndWasDisabled = this.SourceNode != null && this.ChangedNode != null &&
-                    !this.SourceNode.IsDisabledByOwnCondition() && this.ChangedNode.IsDisabledByOwnCondition();
-                return newNodeIsDisabled || existingNodeWasEnadledAndWasDisabled;
-            }
+            var newNodeIsDisabled = sourceNode == null && changedNode != null &&
+                                    changedNode.IsDisabledByOwnCondition();
+            var existingNodeWasEnadledAndWasDisabled = sourceNode != null && changedNode != null &&
+                                                       !sourceNode.IsDisabledByOwnCondition() && changedNode.IsDisabledByOwnCondition();
+            return newNodeIsDisabled || existingNodeWasEnadledAndWasDisabled;
         }
 
-        public bool IsNodeEnabled
+        bool IsNodeEnabledImpl(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
         {
-            get
-            {
-                var nodeIsRemovedAndWasDisabled = this.ChangedNode == null && this.SourceNode != null &&
-                    this.SourceNode.IsDisabledByOwnCondition();
-                var existingNodeWasEnabledAndNowIsDisabled = this.SourceNode != null && this.ChangedNode != null &&
-                    this.SourceNode.IsDisabledByOwnCondition() && !this.ChangedNode.IsDisabledByOwnCondition();
-                return existingNodeWasEnabledAndNowIsDisabled || nodeIsRemovedAndWasDisabled;
-            }
+            var nodeIsRemovedAndWasDisabled = changedNode == null && sourceNode != null &&
+                                              sourceNode.IsDisabledByOwnCondition();
+            var existingNodeWasEnabledAndNowIsDisabled = sourceNode != null && changedNode != null &&
+                                                         sourceNode.IsDisabledByOwnCondition() && !changedNode.IsDisabledByOwnCondition();
+            return existingNodeWasEnabledAndNowIsDisabled || nodeIsRemovedAndWasDisabled;
         }
 
-        public Identity Identity => this.ChangedNode?.Identity ?? this.SourceNode?.Identity;
+        public bool IsNodeAdded { get; private set; }
+        public bool IsNodeRemoved { get; private set; }
+
+        public bool IsNodeDisabled { get; private set; }
+
+        public bool IsNodeEnabled { get; private set; }
+
+        public Identity Identity { get; private set; }
 
         public static InterviewTreeNodeDiff Create(IInterviewTreeNode source, IInterviewTreeNode changed)
         {

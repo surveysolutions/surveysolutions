@@ -29,13 +29,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public virtual string[] ParentRecordIds { get; set; }
         public virtual string[] ReferenceValues { get; set; }
         public virtual string[] SystemVariableValues { set; get; }
-        public virtual string[] Answers { get; set; }
+        public virtual string[][] Answers { get; set; }
 
-        public virtual IEnumerable<string[]> GetPlainAnswers() 
+        public virtual IEnumerable<string[]> GetPlainAnswers()
         {
             foreach (var answer in Answers)
             {
-                yield return answer.Split(ExportFileSettings.NotReadableAnswersSeparator);
+                yield return answer;
             }
         }
     }

@@ -47,7 +47,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             var questionnaire = Create.Questionnaire();
 
-            questionnaire.CreateQuestionnaire(publicKey: Guid.NewGuid(), title: "title", createdBy: responsibleId, isPublic: false);
+            var createQuestionnaire = Create.Command.CreateQuestionnaire(questionnaireId: Guid.NewGuid(), title: "title", createdBy: responsibleId, isPublic: false);
+            questionnaire.CreateQuestionnaire(createQuestionnaire);
             
             return questionnaire;
         }
@@ -62,7 +63,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             var questionnaire = Create.Questionnaire(expressionProcessor: expressionProcessor);
 
-            questionnaire.CreateQuestionnaire(publicKey: questionnaireId ?? Guid.NewGuid(), title: text, createdBy: responsibleId, isPublic: false);
+            var command = Create.Command.CreateQuestionnaire(questionnaireId: questionnaireId ?? Guid.NewGuid(), title: text, createdBy: responsibleId, isPublic: false);
+            questionnaire.CreateQuestionnaire(command);
 
             return questionnaire;
         }

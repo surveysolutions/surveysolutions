@@ -78,7 +78,7 @@
             });
         },
         updated(){
-            document.title = `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterviewUI.WebInterview")}`
+            document.title = this.$config.splashScreen ? "Loading" : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterviewUI.WebInterview")}`
         },
         computed: {
             canChangeLanguage() {
@@ -88,6 +88,7 @@
                 return this.$store.state.webinterview.currentLanguage || this.$store.state.webinterview.originalLanguageName
             },
             questionnaireTitle(){
+                if(this.$config.splashScreen) return "Loading questionnaire. Please wait";
                 return this.$store.state.webinterview.questionnaireTitle || ""
             },
             toFirstSection(){

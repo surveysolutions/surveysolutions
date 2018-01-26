@@ -566,4 +566,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
     <value>Unexpected exception during start audio recording</value>
   </data>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Answer accepted. Took {0} to process</value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Dismiss</value>
+  </data>
 </root>

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -19,13 +20,15 @@ namespace WB.UI.Designer.Api
         private readonly ILogger logger;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IDesignerEngineVersionService engineVersionService;
+        private IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
 
-        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IQuestionnaireViewFactory questionnaireViewFactory, IDesignerEngineVersionService engineVersionService)
+        public ExpressionGenerationController(ILogger logger, IExpressionProcessorGenerator expressionProcessorGenerator, IQuestionnaireViewFactory questionnaireViewFactory, IDesignerEngineVersionService engineVersionService, IQuestionnaireCompilationVersionService questionnaireCompilationVersionService)
         {
             this.logger = logger;
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.engineVersionService = engineVersionService;
+            this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
         }
 
         [HttpGet]
@@ -35,9 +38,9 @@ namespace WB.UI.Designer.Api
 
             var supervisorVersion = version ?? this.engineVersionService.LatestSupportedVersion;
 
-            var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion);
+            var generated = this.expressionProcessorGenerator.GenerateProcessorStateClasses(questionnaire, supervisorVersion, inSingleFile: true);
             
-            var resultBuilder =new StringBuilder();
+            var resultBuilder = new StringBuilder();
             
             foreach (KeyValuePair<string, string> keyValuePair in generated)
             {
@@ -54,9 +57,11 @@ namespace WB.UI.Designer.Api
         {
             //do async
             var questionnaire = this.GetQuestionnaire(id).Source;
-            string assembly;
+
+            var specifiedCompilationVersion = this.questionnaireCompilationVersionService.GetById(id)?.Version;
+
             var generated = this.expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaire,
-                this.engineVersionService.LatestSupportedVersion, out assembly);
+                specifiedCompilationVersion ?? this.engineVersionService.LatestSupportedVersion, out _);
             if (generated.Success)
             {
                 return this.Request.CreateResponse(HttpStatusCode.OK, "No errors");

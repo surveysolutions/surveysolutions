@@ -1,102 +1,86 @@
 ﻿using System;
 using Main.Core.Entities.Composite;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
+
+using static WB.Enumerator.Native.WebInterview.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService
 {
     public class WebInterviewNotificationServiceTests
     {
         private StatefulInterview interview;
-        private Mock<IClientContract> coverGroup;
-        private Mock<IClientContract> sectionGroup;
-        private Mock<IClientContract> interviewGroup;
-        
-        private WebInterviewNotificationService Subj { get; set; }
+        private Mock<IWebInterviewInvoker> hubMock;
+        private string prefilledSectionId;
+        private WebInterviewNotificationService NotificationService { get; set; }
+        private readonly Identity subGroup = Id.IdentityA;
+        private readonly Identity textQuestion = Id.Identity1;
+        private readonly Identity prefilledTextQuestion = Id.Identity2;
 
         [SetUp]
         public void Setup()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
             {
-                Create.Entity.TextQuestion(Id.g1),
-                Create.Entity.TextQuestion(Id.g2, variable:"text2", 
-                    preFilled: true)
+                Create.Entity.Group(subGroup.Id, children: new IComposite[] {
+                    Create.Entity.TextQuestion(textQuestion.Id),
+                    Create.Entity.TextQuestion(prefilledTextQuestion.Id, variable:"text2",
+                    preFilled: true)})
             });
 
             this.interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
-            
-            var mockClients = new Mock<IHubCallerConnectionContext<dynamic>>();
-            this.coverGroup = new Mock<IClientContract>();
-            this.sectionGroup = new Mock<IClientContract>();
-            this.interviewGroup = new Mock<IClientContract>();
 
-            var hubMock = new Mock<IHubContext>();
-            hubMock.Setup(h => h.Clients).Returns(mockClients.Object);
-
-            coverGroup.Setup(m => m.refreshEntities(It.IsAny<string[]>())).Verifiable();
-            sectionGroup.Setup(m => m.refreshEntities(It.IsAny<string[]>())).Verifiable();
-            interviewGroup.Setup(m => m.refreshEntities(It.IsAny<string[]>())).Verifiable();
-
-            var prefilledSectionnid = WB.UI.Headquarters.API.WebInterview.WebInterview
-                .GetConnectedClientPrefilledSectionKey(interview.Id.FormatGuid());
-
-
-            mockClients.Setup(m => m.Group(prefilledSectionnid)).Returns(coverGroup.Object);
-            mockClients.Setup(m => m.Group(It.Is<string>(s => s != prefilledSectionnid && s != interview.Id.FormatGuid())))
-                .Returns(sectionGroup.Object);
-
-            mockClients.Setup(m => m.Group(It.Is<string>(s => s == interview.Id.FormatGuid())))
-                .Returns(interviewGroup.Object);
+            this.hubMock = new Mock<IWebInterviewInvoker>();
+            this.prefilledSectionId = GetConnectedClientPrefilledSectionKey(interview.Id);
 
             var repo = Mock.Of<IStatefulInterviewRepository>(s => s.Get(interview.Id.FormatGuid()) == interview);
-            
-            this.Subj = new WebInterviewNotificationService(repo, null, hubMock.Object);
+
+            this.NotificationService = new WebInterviewNotificationService(repo, null, hubMock.Object);
         }
 
-        public class WebInterviewHubMock<TClientContract> where TClientContract: class
+        public class WebInterviewHubMock<TClientContract> where TClientContract : class
         {
             private Mock<TClientContract> coverGroup;
-            public Mock<TClientContract> GetCoverGroup(Guid interviewId) => 
+            public Mock<TClientContract> GetCoverGroup(Guid interviewId) =>
                 coverGroup ?? (coverGroup = new Mock<TClientContract>());
         }
 
         [Test]
-        public void should_notify_on_prefilled_question_cover_section()
+        public void should_notify_on_prefilled_question_at_cover_section()
         {
-            this.Subj.RefreshEntities(interview.Id, Id.Identity1, Id.Identity2);
+            this.NotificationService.RefreshEntities(interview.Id, textQuestion, prefilledTextQuestion);
 
-            this.coverGroup.Verify(g => g.refreshEntities(new[] { Id.Identity2.ToString()}), Times.Once);
+            this.hubMock.Verify(v => v.RefreshEntities(prefilledSectionId, new[] { prefilledTextQuestion.ToString() }), Times.Once);
         }
 
         [Test]
         public void should_notify_on_prefilled_question_sections_with_affected_question()
         {
-            this.Subj.RefreshEntities(interview.Id, Id.Identity1, Id.Identity2);
+            this.NotificationService.RefreshEntities(interview.Id, textQuestion, prefilledTextQuestion);
 
-            this.sectionGroup.Verify(g => g.refreshEntities(new[] { Id.Identity1.ToString(), Id.Identity2.ToString() }), Times.Once);
+            var sectionKey = GetConnectedClientSectionKey(subGroup, interview.Id);
+
+            this.hubMock.Verify(g => g.RefreshEntities(
+                sectionKey,
+                new[] { textQuestion.ToString(), prefilledTextQuestion.ToString() }
+            ), Times.Once);
         }
 
         [Test]
-        public void should_notify_clients()
+        public void should_refresh_client_section_state()
         {
-            this.Subj.RefreshEntities(interview.Id, Id.Identity1, Id.Identity2);
+            this.NotificationService.RefreshEntities(interview.Id, textQuestion, prefilledTextQuestion);
 
-            this.interviewGroup.Verify(g => g.refreshSection(), Times.Once);
-        }
-
-
-        public interface IClientContract
-        {
-            void refreshEntities(string[] identities);
-            void refreshSection();
+            this.hubMock.Verify(g => g.RefreshSection(interview.Id), Times.Once);
         }
     }
 }

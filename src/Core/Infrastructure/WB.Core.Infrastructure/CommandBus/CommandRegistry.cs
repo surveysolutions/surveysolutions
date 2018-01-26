@@ -233,28 +233,28 @@ namespace WB.Core.Infrastructure.CommandBus
                 preProcessors: configuration.GetPreProcessors()));
         }
 
-        internal static bool Contains(ICommand command)
+        public static bool Contains(ICommand command)
             => Handlers.ContainsKey(command.GetType().Name);
 
         private static HandlerDescriptor GetHandlerDescriptor(ICommand command)
             => Handlers[command.GetType().Name];
 
-        internal static Type GetAggregateRootType(ICommand command)
+        public static Type GetAggregateRootType(ICommand command)
             => GetHandlerDescriptor(command).AggregateType;
 
         internal static AggregateKind GetAggregateRootKind(ICommand command)
             => GetHandlerDescriptor(command).AggregateKind;
 
-        internal static bool IsInitializer(ICommand command)
+        public static bool IsInitializer(ICommand command)
             => GetHandlerDescriptor(command).IsInitializer;
 
         internal static bool IsStateless(ICommand command)
             => GetHandlerDescriptor(command).IsStateless;
 
-        internal static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
+        public static Func<ICommand, Guid> GetAggregateRootIdResolver(ICommand command)
             => GetHandlerDescriptor(command).IdResolver;
 
-        internal static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
+        public static Action<ICommand, IAggregateRoot> GetCommandHandler(ICommand command)
             => GetHandlerDescriptor(command).Handler;
 
         public static IEnumerable<Action<IAggregateRoot, ICommand>> GetValidators(ICommand command, IServiceLocator serviceLocator)

@@ -120,31 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>Le fichier '{0}' contient les colonnes suivantes qui ne peuvent être mappées à aucune propriété utilisateur (par exemple, nom complet, numéro de téléphone, etc.): {1}</value>
   </data>
-  <data name="MaxNumberOfValidationErrorsHaveBeenReachedFormat" xml:space="preserve">
-    <value>Le nombre maximal d'erreurs de validation {0} a été atteint</value>
-  </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>La base de données contient {0} enregistrements, mais le nombre maximal autorisé d'enregistrements est {1}</value>
-  </data>
-  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>Le processus de préchargement de l'utilisateur avec l'ID '{0}' ne peut pas être terminé car seul {1} ​​a été créé sur {2}</value>
-  </data>
-  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>Le processus de préchargement de l'utilisateur '{0}' est en cours '{1}', il n'est pas autorisé de supprimer les processus en cours: {2}.</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>Le processus de préchargement de l'utilisateur avec l'ID '{0}' ne peut créer plus d'utilisateurs que {1}</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>Le processus de préchargement de l'utilisateur avec l'ID '{0}' comporte {1} erreur (s).</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>Le processus de préchargement de l'utilisateur avec l'ID '{0}' est manquant</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>Le processus de préchargement de l'utilisateur avec l'ID '{0}' est en cours '{1}', mais doit être en cours '{2}'</value>
-  </data>
-  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>Le pourcentage de progression de la validation ne peut être négatif ni supérieure à 100, mais la valeur est {0}</value>
-  </data>
 </root>

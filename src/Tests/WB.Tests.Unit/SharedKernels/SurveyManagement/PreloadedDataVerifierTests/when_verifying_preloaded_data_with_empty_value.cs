@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Tests.Abc;
 using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -45,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     HeaderItems =
                         new Dictionary<Guid, IExportedHeaderItem>
                         {
-                            { Guid.NewGuid(), new ExportedQuestionHeaderItem() { VariableName = "q1", ColumnNames = new[] { "q1" } } }
+                            { Guid.NewGuid(), new ExportedQuestionHeaderItem() { VariableName = "q1", ColumnHeaders = new List<HeaderColumn>(){new HeaderColumn(){Name = "q1"}} } }
                         }
                 });
 
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, new[] { preloadedDataByFile }, status);
+            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
         It should_result_has_1_error = () =>
             status.VerificationState.Errors.Count().ShouldEqual(1);

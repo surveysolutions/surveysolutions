@@ -1,6 +1,4 @@
 ﻿using Ncqrs.Eventing.Storage;
-using Ninject;
-using Ninject.Modules;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
@@ -33,14 +31,15 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
-using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer
 {
-    public class DesignerBoundedContextModule : NinjectModule
+    public class DesignerBoundedContextModule : IModule
     {
         private readonly ICompilerSettings compilerSettings;
 
@@ -48,48 +47,48 @@ namespace WB.Core.BoundedContexts.Designer
         {
             this.compilerSettings = compilerSettings;
         }
-        public override void Load()
+
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IEventTypeResolver>().ToConstant(
-                new EventTypeResolver(
-                    typeof(DesignerBoundedContextModule).Assembly));
+            registry.BindToConstant<IEventTypeResolver>(() => new EventTypeResolver(typeof(DesignerBoundedContextModule).Assembly));
 
-            this.Bind<IKeywordsProvider>().To<KeywordsProvider>();
-            this.Bind<ISubstitutionService>().To<SubstitutionService>();
+            registry.Bind<IKeywordsProvider, KeywordsProvider>();
+            registry.Bind<ISubstitutionService, SubstitutionService>();
 
-            this.Bind<IPlainAggregateRootRepository<User>>().To<UserRepository>();
-            this.Bind<IPlainAggregateRootRepository<Questionnaire>>().To<QuestionnaireRepository>();
-            this.Bind<IFindReplaceService>().ToMethod((c) => new FindReplaceService(c.Kernel.Get<IPlainAggregateRootRepository<Questionnaire>>()));
+            registry.Bind<IPlainAggregateRootRepository<User>, UserRepository>();
+            registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
+            registry.BindToMethod<IFindReplaceService>(c => new FindReplaceService(c.Get<IPlainAggregateRootRepository<Questionnaire>>()));
 
-            this.Bind<IQuestionnaireListViewFactory>().To<QuestionnaireListViewFactory>();
-            this.Bind<IPublicFoldersStorage>().To<PublicFoldersStorage>();
-            this.Bind<IQuestionnaireChangeHistoryFactory>().To<QuestionnaireChangeHistoryFactory>();
-            this.Bind<IQuestionnaireViewFactory>().To<QuestionnaireViewFactory>();
-            this.Bind<IChapterInfoViewFactory>().To<ChapterInfoViewFactory>();
-            this.Bind<IQuestionnaireInfoViewFactory>().To<QuestionnaireInfoViewFactory>();
-            this.Bind<IAccountListViewFactory>().To<AccountListViewFactory>();
-            this.Bind<IAccountViewFactory>().To<AccountViewFactory>();
-            this.Bind<IAllowedAddressService>().To<AllowedAddressService>();
-            this.Bind<IQuestionnaireCompilationVersionService>().To<QuestionnaireCompilationVersionService>();
-            this.Bind<IIpAddressProvider>().To<IpAddressProvider>();
-            this.Bind<ITranslationsService>().To<TranslationsService>();
-            this.Bind<IQuestionnaireTranslator>().To<QuestionnaireTranslator>();
+            registry.Bind<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
+            registry.Bind<IPublicFoldersStorage, PublicFoldersStorage>();
+            registry.Bind<IQuestionnaireChangeHistoryFactory, QuestionnaireChangeHistoryFactory>();
+            registry.Bind<IQuestionnaireViewFactory, QuestionnaireViewFactory>();
+            registry.Bind<IChapterInfoViewFactory, ChapterInfoViewFactory>();
+            registry.Bind<IQuestionnaireInfoViewFactory, QuestionnaireInfoViewFactory>();
+            registry.Bind<IAccountListViewFactory, AccountListViewFactory>();
+            registry.Bind<IAccountViewFactory, AccountViewFactory>();
+            registry.Bind<IAllowedAddressService, AllowedAddressService>();
+            registry.Bind<IQuestionnaireCompilationVersionService, QuestionnaireCompilationVersionService>();
+            registry.Bind<IIpAddressProvider, IpAddressProvider>();
+            registry.Bind<ITranslationsService, TranslationsService>();
+            registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
 
-            this.Unbind<IExpressionProcessor>();
-            this.Bind<IExpressionProcessor>().To<RoslynExpressionProcessor>().InSingletonScope();
-            this.Unbind<ICompilerSettings>();
-            this.Bind<ICompilerSettings>().ToConstant(this.compilerSettings);
-            this.Bind<IDynamicCompilerSettingsProvider>().To<DynamicCompilerSettingsProvider>();
+            registry.Unbind<IExpressionProcessor>();
+            registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
+            registry.Unbind<ICompilerSettings>();
+            registry.BindToConstant<ICompilerSettings>(() => this.compilerSettings);
+            registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
+            registry.Bind<ILookupTableService, LookupTableService>();
+            registry.Bind<IAttachmentService, AttachmentService>();
 
-            this.Bind<IDesignerEngineVersionService>().To<DesignerEngineVersionService>().InSingletonScope();
-            this.Bind<ICodeGenerator>().To<CodeGenerator>();
-            this.Bind<ICodeGeneratorV2>().To<CodeGeneratorV2>();
-            this.Bind<IQuestionTypeToCSharpTypeMapper>().To<QuestionTypeToCSharpTypeMapper>();
-            this.Bind<ICodeGenerationModelsFactory>().To<CodeGenerationModelsFactory>();
-            this.Bind<ILookupTableService>().To<LookupTableService>();
-            this.Bind<IAttachmentService>().To<AttachmentService>();
-            this.Bind(typeof(ITopologicalSorter<>)).To(typeof(TopologicalSorter<>));
-            
+            registry.Bind<IDesignerEngineVersionService, DesignerEngineVersionService>();
+            registry.Bind<ICodeGenerator, CodeGenerator>();
+            registry.Bind<ICodeGeneratorV2, CodeGeneratorV2>();
+            registry.Bind<IQuestionTypeToCSharpTypeMapper, QuestionTypeToCSharpTypeMapper>();
+            registry.Bind<ICodeGenerationModelsFactory, CodeGenerationModelsFactory>();
+            registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
+          
+
             CommandRegistry
                 .Setup<User>()
                 .ResolvesIdFrom<UserCommand>(command => command.UserId)
@@ -111,7 +110,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
                 .InitializesWith<CloneQuestionnaire>((command, aggregate) => aggregate.CloneQuestionnaire(command.Title, command.IsPublic, command.ResponsibleId, command.QuestionnaireId, command.Source), config =>config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
-                .InitializesWith<CreateQuestionnaire>((command, aggregate) => aggregate.CreateQuestionnaire(command.QuestionnaireId, command.Title, command.ResponsibleId, command.IsPublic), config =>config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                .InitializesWith<CreateQuestionnaire>((command, aggregate) => aggregate.CreateQuestionnaire(command), config =>config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .InitializesWith<ImportQuestionnaire>((command, aggregate) => aggregate.ImportQuestionnaire(command.ResponsibleId, command.Source), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<DeleteQuestionnaire>((command, aggregate) => aggregate.DeleteQuestionnaire(), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<RevertVersionQuestionnaire>((command, aggregate) => aggregate.RevertVersion(command), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
@@ -130,6 +129,8 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<AddOrUpdateTranslation>(aggregate => aggregate.AddOrUpdateTranslation, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<DeleteTranslation>(aggregate => aggregate.DeleteTranslation, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<SetDefaultTranslation>(aggregate => aggregate.SetDefaultTranslation, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                // Metadata
+                .Handles<UpdateMetadata>(aggregate => aggregate.UpdateMetaInfo, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 // Group
                 .Handles<AddGroup>((command, aggregate) => aggregate.AddGroupAndMoveIfNeeded(command.GroupId, command.ResponsibleId, command.Title, command.VariableName, command.RosterSizeQuestionId, command.Description, command.Condition, command.HideIfDisabled, command.ParentGroupId, command.IsRoster, command.RosterSizeSource, command.FixedRosterTitles, command.RosterTitleQuestionId, command.Index), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<DeleteGroup>((command, aggregate) => aggregate.DeleteGroup(command.GroupId, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())

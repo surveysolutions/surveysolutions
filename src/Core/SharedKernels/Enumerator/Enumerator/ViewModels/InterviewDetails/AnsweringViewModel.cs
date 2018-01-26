@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -15,15 +17,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
     {
         private readonly ICommandService commandService;
         readonly IUserInterfaceStateService userInterfaceStateService;
+        private readonly IMvxMessenger messenger;
 
         private int inProgressDepth = 0;
 
         protected AnsweringViewModel() { }
 
-        public AnsweringViewModel(ICommandService commandService, IUserInterfaceStateService userInterfaceStateService)
+        public AnsweringViewModel(ICommandService commandService, 
+            IUserInterfaceStateService userInterfaceStateService,
+            IMvxMessenger messenger)
         {
             this.commandService = commandService;
             this.userInterfaceStateService = userInterfaceStateService;
+            this.messenger = messenger;
         }
 
         private bool inProgress;
@@ -42,7 +48,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             try
             {
+                Stopwatch commandTime = Stopwatch.StartNew();
                 await this.ExecuteCommandAsync(answerCommand);
+                commandTime.Stop();
+                messenger.Publish(new AnswerAcceptedMessage(this, commandTime.Elapsed));
             }
             catch (Exception e)
             {

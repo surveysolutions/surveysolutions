@@ -34,14 +34,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly CompanyLogoSynchronizer logoSynchronizer;
         private readonly IAssignmentsSynchronizer assignmentsSynchronizer;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
-        private readonly IPrincipal principal;
+        private readonly IInterviewerPrincipal principal;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly ISynchronizationService synchronizationService;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IPrincipal principal,
+            IInterviewerPrincipal principal,
             ILogger logger,
             IUserInteractionService userInteractionService,
             IInterviewerQuestionnaireAccessor questionnairesAccessor,

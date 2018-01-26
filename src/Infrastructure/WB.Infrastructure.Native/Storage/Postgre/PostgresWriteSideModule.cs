@@ -1,14 +1,13 @@
 ﻿using System;
 using Ncqrs.Eventing.Storage;
-using Ninject;
-using Ninject.Modules;
-using WB.Core.GenericSubdomains.Portable.Services;
+using NLog;
+using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    public class PostgresWriteSideModule : NinjectModule
+    public class PostgresWriteSideModule : IModule
     {
         private readonly PostgreConnectionSettings eventStoreSettings;
         private readonly DbUpgradeSettings dbUpgradeSettings;
@@ -19,7 +18,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.dbUpgradeSettings = dbUpgradeSettings;
         }
 
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
             try
             {
@@ -28,13 +27,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
             catch (Exception exc)
             {
-                this.Kernel.Get<ILogger>().Fatal("Error during db initialization.", exc);
+                LogManager.GetLogger("maigration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
                 throw;
             }
 
-
-            this.Kernel.Bind<IStreamableEventStore>().To<PostgresEventStore>().InSingletonScope().WithConstructorArgument("connectionSettings", this.eventStoreSettings);
-            this.Kernel.Bind<IEventStore>().ToMethod(context => context.Kernel.Get<IStreamableEventStore>());
+            registry.BindAsSingletonWithConstructorArgument<IStreamableEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.BindToMethod<IEventStore>(context => context.Get<IStreamableEventStore>());
         }
     }
 }
