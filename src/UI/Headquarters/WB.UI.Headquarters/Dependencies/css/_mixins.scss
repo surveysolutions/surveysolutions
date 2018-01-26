@@ -341,7 +341,7 @@
         background-size: 793px 18px;
         background-position: 4px 2px;
         margin-right: 12px;
-        @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 629px, 18px);
+        @include image-2x("#{$assetsPath}/img/questionnaire-sprite2k.png", 793px, 18px);
     }
 }
 %visibility-visible{
