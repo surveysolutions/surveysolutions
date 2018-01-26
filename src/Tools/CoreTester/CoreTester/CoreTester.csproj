@@ -82,6 +82,7 @@
   <ItemGroup>
     <Compile Include="CoreTestRunner.cs" />
     <Compile Include="CustomCommandService.cs" />
+    <Compile Include="DebugInformationDumper.cs" />
     <Compile Include="Ninject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -128,6 +129,11 @@
       <Project>{f3191b63-3453-4b5e-957b-21216632bef3}</Project>
       <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="runCoreTester.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

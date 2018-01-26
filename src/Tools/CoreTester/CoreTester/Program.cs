@@ -62,20 +62,47 @@ namespace CoreTester
             public string ConnectionString { get; set; }
         }
 
+        [Verb("dump", HelpText = "Dump debug information in folder")]
+        protected class DumpDebugInformationOptions
+        {
+            [Option('c', "connection", Required = true, HelpText = "Connection string to DB")]
+            public string ConnectionString { get; set; }
+        }
+
         static int Main(string[] args)
         {
             var logger = LogManager.GetCurrentClassLogger();
             logger.Info("Application started");
 
-            return Parser.Default.ParseArguments<CoreTestOptions>(args).MapResult(RunCoreTestOptions, errs =>
-            {
-                foreach (var error in errs)
+            return Parser.Default
+                .ParseArguments<CoreTestOptions, DumpDebugInformationOptions>(args)
+                .MapResult(
+                (CoreTestOptions o) => RunCoreTestOptions(o), 
+                (DumpDebugInformationOptions o) => RunDumpDebugInformationOptions(o), errs =>
                 {
-                    Console.WriteLine(error);    
-                }
+                    foreach (var error in errs)
+                    {
+                        Console.WriteLine(error);    
+                    }
                 
-                return 1;
-            });
+                    return 1;
+                });
+        }
+
+        private static int RunDumpDebugInformationOptions(DumpDebugInformationOptions opts)
+        {
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine($"started at {DateTime.Now}");
+            DbConnectionStringBuilder db = new DbConnectionStringBuilder {ConnectionString = opts.ConnectionString};
+            var serverName = db["Database"].ToString();
+            Console.WriteLine(serverName);
+            Console.WriteLine();
+
+            IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
+
+            DebugInformationDumper dumper = container.Get<DebugInformationDumper>();
+
+            return dumper.Run(serverName);
         }
 
         private static int RunCoreTestOptions(CoreTestOptions opts)
@@ -83,14 +110,20 @@ namespace CoreTester
             Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
             Console.WriteLine($"started at {DateTime.Now}");
             DbConnectionStringBuilder db = new DbConnectionStringBuilder {ConnectionString = opts.ConnectionString};
-            Console.WriteLine(db["User Id"].ToString());
+            var serverName = db["User Id"].ToString();
+            Console.WriteLine(serverName);
             Console.WriteLine();
 
             IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
 
             CoreTestRunner coreTestRunner = container.Get<CoreTestRunner>();
 
-            return coreTestRunner.Run();
+            DebugInformationDumper dumper = container.Get<DebugInformationDumper>();
+
+            var result = coreTestRunner.Run(serverName);
+            dumper.Run(serverName);
+
+            return result;
         }
     }
 
@@ -223,7 +256,10 @@ namespace CoreTester
 
             registry.BindAsSingleton<IQuestionnaireStorage, UpdatedQuestionnaireStorage>();
             registry.Bind<CoreTestRunner>();
+            registry.Bind<DebugInformationDumper>();
 
+            registry.Bind<ISerializer, NewtonJsonSerializer>();
+             
             CommandRegistry
                 .Setup<StatefulInterview>()
                 .InitializesWith<CreateInterview>(command => command.InterviewId,

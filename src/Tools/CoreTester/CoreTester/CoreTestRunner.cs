@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Ncqrs.Eventing;
@@ -44,7 +45,9 @@ namespace CoreTester
             INativeReadSideStorage<InterviewSummary> interviewSummaries,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireRepository,
             IEventStore eventStore,
-            IQuestionnaireStorage questionnaireStorage, IPlainTransactionManagerProvider plainTransactionManager)
+            IQuestionnaireStorage questionnaireStorage, 
+            IPlainTransactionManagerProvider plainTransactionManager, 
+            ISerializer serializer)
         {
             this.commandService = commandService;
             this.questionnairesBrowseFactory = questionnairesBrowseFactory;
@@ -57,7 +60,7 @@ namespace CoreTester
             this.questionnaireRepository = questionnaireRepository;
         }
 
-        public int Run()
+        public int Run(string serverName)
         {
             var questionnaireBrowseItems = this.plainTransactionManager.GetPlainTransactionManager()
                 .ExecuteInQueryTransaction(() =>
@@ -75,7 +78,7 @@ namespace CoreTester
                 QuestionnaireDocument questionnaire = this.plainTransactionManager.GetPlainTransactionManager()
                     .ExecuteInQueryTransaction(() =>
                         questionnaireRepository.GetById(questionnaireRepositoryId));
-                
+
                 Console.WriteLine("============================================");
                 Console.WriteLine($"Questionnaire: {questionnaireRepositoryId}");
                 Console.WriteLine($"               {questionnaire.Title}");
@@ -89,10 +92,17 @@ namespace CoreTester
                 int pingIntervalInMinutes = 2;
                 int dotsInARow = 0;
                 int interviewsProcessed = 0;
+                var interviewWithCalculationError = new List<Guid>();
                 foreach (var interviewId in interviewIdsToProcess)
                 {
+                    if (interviewWithCalculationError.Count > 10)
+                    {
+                        Console.WriteLine("10 Interviewes with calculation errors found. Finishing task.");
+                        break;
+                    }
+
                     interviewsProcessed++;
-                    var newInterviewId = interviewId;//  Guid.Parse("11111111111111111111111111111111");
+                    var newInterviewId = interviewId; //  Guid.Parse("11111111111111111111111111111111");
                     var userId = Guid.Parse("22222222222222222222222222222222");
 
                     var committedEvents = this.eventStore.Read(interviewId, 0).ToList();
@@ -100,73 +110,101 @@ namespace CoreTester
                     if (committedEvents.Count == 0)
                         continue;
 
-                    
-                        var createCommand = GetCreateInterviewCommand(committedEvents, newInterviewId, userId);
-                        // to read assembly
-                        this.plainTransactionManager.GetPlainTransactionManager()
-                            .ExecuteInQueryTransaction(() => commandService.Execute(createCommand));
-                        foreach (var committedEvent in committedEvents)
+                    var createCommand = GetCreateInterviewCommand(committedEvents, newInterviewId, userId);
+                    // to read assembly
+                    this.plainTransactionManager.GetPlainTransactionManager()
+                        .ExecuteInQueryTransaction(() => commandService.Execute(createCommand));
+                    foreach (var committedEvent in committedEvents)
+                    {
+                        var commands = ConvertEventToCommands(newInterviewId, committedEvent);
+
+                        if (commands == null)
+                            continue;
+
+                        try
                         {
-                            var commands = ConvertEventToCommands(newInterviewId, committedEvent);
-
-                            if (commands == null)
-                                continue;
-
-                            try
+                            foreach (var command in commands)
                             {
-                                foreach (var command in commands)
+                                if (command is RemoveAnswerCommand)
                                 {
-                                    if (command is RemoveAnswerCommand)
-                                    {
-                                        try
-                                        {
-                                            commandService.Execute(command);
-                                        }
-                                        catch (InterviewException exception)
-                                        {
-                                            if(!(exception.Message.Contains("is disabled and question's answer cannot be changed") ||
-                                                exception.Message.Contains("No questions found for roster vector")))
-                                            {
-                                                throw;
-                                            }
-                                        }
-                                    }
-                                    else
+                                    try
                                     {
                                         commandService.Execute(command);
                                     }
+                                    catch (InterviewException exception)
+                                    {
+                                        if (!(exception.Message.Contains(
+                                                  "is disabled and question's answer cannot be changed") ||
+                                              exception.Message.Contains("No questions found for roster vector")))
+                                        {
+                                            throw;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    commandService.Execute(command);
                                 }
                             }
-                            catch (InterviewException exception)
-                            {
-                                var message = exception.ExceptionType == InterviewDomainExceptionType.ExpessionCalculationError
-                                    ? $"Calculation error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}"
-                                    : $"General error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
+                        }
+                        catch (InterviewException exception)
+                        {
+                            var message = exception.ExceptionType ==
+                                          InterviewDomainExceptionType.ExpessionCalculationError
+                                ? $"Calculation error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}"
+                                : $"General error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
 
+                            if (exception.ExceptionType == InterviewDomainExceptionType.ExpessionCalculationError)
+                            {
+                                interviewWithCalculationError.Add(interviewId);
                                 Console.WriteLine(message);
-                                this.logger.Info(message, exception);
-                                break;
                             }
 
-                            if (!(stopwatch.Elapsed.TotalMinutes > lastTimeSomethingWasDumpedInOutput + pingIntervalInMinutes)) continue;
-                            lastTimeSomethingWasDumpedInOutput = (int) stopwatch.Elapsed.TotalMinutes;
-                            Console.Write('.');
-                            dotsInARow++;
-                            if (dotsInARow % 10 == 0)
-                            {
-                                ShowStatistics(stopwatch.ElapsedMilliseconds, interviewsProcessed, eventsCount, interviewIdsToProcess.Count);
-                                dotsInARow = 0;
-                            }
+                            this.logger.Info(message, exception);
+                            break;
                         }
 
-                        commandService.Execute(new DeleteInterviewCommand(newInterviewId, userId));
-                    
+                        if (!(stopwatch.Elapsed.TotalMinutes >
+                              lastTimeSomethingWasDumpedInOutput + pingIntervalInMinutes)) continue;
+                        lastTimeSomethingWasDumpedInOutput = (int) stopwatch.Elapsed.TotalMinutes;
+                        Console.Write('.');
+                        dotsInARow++;
+                        if (dotsInARow % 10 == 0)
+                        {
+                            ShowStatistics(stopwatch.ElapsedMilliseconds, interviewsProcessed, eventsCount,
+                                interviewIdsToProcess.Count);
+                            dotsInARow = 0;
+                        }
+                    }
+
+                    commandService.Execute(new DeleteInterviewCommand(newInterviewId, userId));
+
 
                     eventsCount += committedEvents.Count;
                 }
 
+                if (interviewWithCalculationError.Count > 0)
+                {
+                    Console.WriteLine("Dumping debug information");
+                    
+                    var fileName = Path.Combine(serverName, $"{serverName}.results.txt");
+                    File.AppendAllLines(fileName,new string[]
+                    {
+                        "============================================",
+                        $"=Questionnaire: {questionnaireRepositoryId}",
+                        $"=               {questionnaire.Title}",
+                        "=Interviews with calculation error: "
+                    });
+                    File.AppendAllLines(fileName, interviewWithCalculationError.Select(x => x.ToString()));
+                    File.AppendAllLines(fileName,new string[]
+                    {
+                        "============================================",
+                    });
+                }
+
                 stopwatch.Stop();
-                ShowStatistics(stopwatch.ElapsedMilliseconds, interviewIdsToProcess.Count, eventsCount, interviewIdsToProcess.Count);
+                ShowStatistics(stopwatch.ElapsedMilliseconds, interviewIdsToProcess.Count, eventsCount,
+                    interviewIdsToProcess.Count);
 
                 questionnaireStorage.DeleteQuestionnaireDocument(questionnaireBrowseItem.QuestionnaireId,
                     questionnaireBrowseItem.Version);
@@ -177,16 +215,18 @@ namespace CoreTester
             return 0;
         }
 
-        private static void ShowStatistics(long elapsedMilliseconds, int processedInterviewsCount, int eventsCount, int totalInterviewsCount)
+        private static void ShowStatistics(long elapsedMilliseconds, int processedInterviewsCount, int eventsCount,
+            int totalInterviewsCount)
         {
             var total = TimeSpan.FromMilliseconds(elapsedMilliseconds);
             var averagePerInterview = TimeSpan.FromMilliseconds(elapsedMilliseconds / processedInterviewsCount);
             var averagePerEvent = TimeSpan.FromMilliseconds(elapsedMilliseconds / eventsCount);
             var finishTime = DateTime.Now.AddMilliseconds((totalInterviewsCount - processedInterviewsCount) *
                                                           (elapsedMilliseconds / processedInterviewsCount));
-            
+
             Console.WriteLine("--------------------------------------------");
-            Console.WriteLine($"{processedInterviewsCount*100/totalInterviewsCount:0.##}% finished. Will finish at {finishTime}. {total:g} - time running.");
+            Console.WriteLine(
+                $"{processedInterviewsCount * 100 / totalInterviewsCount:0.##}% finished. Will finish at {finishTime}. {total:g} - time running.");
             Console.WriteLine($"{averagePerInterview:g} - average per interview.");
             Console.WriteLine($"{averagePerEvent:g} - average per event.");
             Console.WriteLine();
@@ -283,9 +323,10 @@ namespace CoreTester
                         geoLocation.Timestamp).ToEnumerable();
                 case MultipleOptionsLinkedQuestionAnswered multipleOptionsLinked:
                     return new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, userId,
-                        multipleOptionsLinked.QuestionId, multipleOptionsLinked.RosterVector,
-                        multipleOptionsLinked.AnswerTimeUtc,
-                        multipleOptionsLinked.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray()).ToEnumerable();
+                            multipleOptionsLinked.QuestionId, multipleOptionsLinked.RosterVector,
+                            multipleOptionsLinked.AnswerTimeUtc,
+                            multipleOptionsLinked.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray())
+                        .ToEnumerable();
                 case MultipleOptionsQuestionAnswered multipleOptions:
                     return new AnswerMultipleOptionsQuestionCommand(interviewId, userId, multipleOptions.QuestionId,
                         multipleOptions.RosterVector,
