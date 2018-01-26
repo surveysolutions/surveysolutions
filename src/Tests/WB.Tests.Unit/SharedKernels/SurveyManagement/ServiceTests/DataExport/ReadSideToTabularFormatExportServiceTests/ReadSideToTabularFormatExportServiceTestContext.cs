@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             string description = null;
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor
-                .Setup(accessor => accessor.WriteAllText(@"x:\description.txt", It.IsAny<string>()))
+                .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
                 .Callback<string, string>((file, content) => description = content);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
