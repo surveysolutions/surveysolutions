@@ -37,7 +37,10 @@ namespace WB.UI.WebTester.Controllers
             this.questionnaireImportService = questionnaireImportService;
         }
 
-        public ActionResult Run(Guid id) => this.View(id);
+        public ActionResult Run(Guid id) => this.View(new InterviewPageModel
+        {
+            Id = id.ToString()
+        });
 
         public async Task<ActionResult> Redirect(Guid id)
         {
