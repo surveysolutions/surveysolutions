@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
@@ -49,5 +50,7 @@ namespace WB.Core.GenericSubdomains.Portable
             }
             return valueAsString;
         }
+
+        public static int[] ToIntArray(this decimal[] value) => value?.Select(x => (int) x)?.ToArray();
     }
 }

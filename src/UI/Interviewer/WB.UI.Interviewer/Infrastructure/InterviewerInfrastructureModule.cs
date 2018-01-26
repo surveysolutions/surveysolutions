@@ -19,11 +19,11 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.UI.Interviewer.Infrastructure.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Interviewer.Infrastructure
 {

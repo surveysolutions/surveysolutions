@@ -46,10 +46,20 @@
     font-style: italic;
     color: $gray_light !important;
 }
+input.wb-checkbox,
+input.checkbox-filter,
+input.double-checkbox,
+input.double-checkbox-white,
+.radio input.wb-radio{
+	display: block;
+    position: absolute;
+	left: -999999px;
+}
 input.wb-checkbox{
-    display: none;
+    //display: none;
     @extend %questionnaire-sprite;
-    & ~ label:hover .tick,
+	& ~ label:hover .tick,
+	&:focus ~ label .tick,
   	& ~ label:focus .tick{
     	background-position: -37px 2px;
   	}
@@ -57,7 +67,8 @@ input.wb-checkbox{
     	background-position: -78px 2px;
   	}
   	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick {
+  	&:checked ~ label:focus .tick,
+	&:checked:focus ~ label .tick {
     	background-position: -119px 2px;
   	}
   	&:disabled ~ label .tick {
@@ -73,10 +84,11 @@ input.wb-checkbox{
   	&:checked:disabled ~ label:hover .tick,
   	&:checked:disabled ~ label:focus .tick{
     	background-position: -283px 2px;
-  	}
+	}
 }
+
 input.checkbox-filter{
-  	display: none;
+  	//display: none;
   	& ~ label{
   		position: relative;
   		padding-left: 30px;
@@ -92,16 +104,18 @@ input.checkbox-filter{
 	    background-position: 0 0;
 	    margin-right: 10px;
 		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
-  	}
+	  }
+	&:focus ~ label .tick,
   	& ~ label:hover .tick,
   	& ~ label:focus .tick{
     	background-position: 0px -36px;
   	}
   	&:checked ~ label .tick {
     	background-position: 0px -72px;
-  	}
+	}
   	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick {
+	&:checked ~ label:focus .tick,
+	&:checked:focus ~ label .tick{
     	background-position: 0px -108px;
   	}
   	&:disabled ~ label .tick,
@@ -113,10 +127,10 @@ input.checkbox-filter{
   	&:disabled ~ label:focus .tick,
   	&:checked:disabled ~ label:focus .tick {
     	background-position: 0px -180px;
-  	}
+	  }
 }
 input.double-checkbox{
-  	display: none;
+  	//display: none;
   	& ~ label{
   		position: relative;
   		cursor: pointer;
@@ -131,7 +145,8 @@ input.double-checkbox{
 	    background-position: 0 -216px;
 		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
   	}
-  	& ~ label:hover .tick,
+	& ~ label:hover .tick,
+	&:focus ~ label .tick,
   	& ~ label:focus .tick{
     	background-position: 0px -254px;
   	}
@@ -139,12 +154,13 @@ input.double-checkbox{
     	background-position: 0px -292px;
   	}
   	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick {
+  	&:checked ~ label:focus .tick,
+	&:checked:focus ~ label .tick {
     	background-position: 0px -330px;
   	}
 }
 input.double-checkbox-white{
-  	display: none;
+  	//display: none;
   	& ~ label{
   		position: relative;
   		cursor: pointer;
@@ -158,7 +174,8 @@ input.double-checkbox-white{
 	    background-size: 68px 350px;
 	    background-position: -44px -216px;
 		@include image-2x("#{$assetsPath}/img/chekboxes2k.png", 68px, 350px);
-  	}
+	}
+	&:focus ~ label .tick,
   	& ~ label:hover .tick,
   	& ~ label:focus .tick{
     	background-position: -44px -254px;
@@ -167,7 +184,8 @@ input.double-checkbox-white{
     	background-position: -44px -292px;
   	}
   	&:checked ~ label:hover .tick,
-  	&:checked ~ label:focus .tick {
+  	&:checked ~ label:focus .tick,
+	&:checked:focus ~ label .tick {
     	background-position: -44px -330px;
   	}
 }
@@ -179,7 +197,7 @@ input.double-checkbox-white{
 	    padding: 7px 0;
 	}
     input.wb-radio{
-        display: none;
+        //display: none;
 	    @extend %questionnaire-sprite;
 	    &:checked + label{
             color:  $gray_text;
@@ -187,7 +205,8 @@ input.double-checkbox-white{
         }
        	& + label .tick {background-position: -326px 2px;}
 
-	    & + label:hover .tick,
+		& + label:hover .tick,
+		&:focus + label .tick,
 	  	& + label:focus .tick{
 	    	background-position: -367px 2px;
 	  	}
@@ -195,7 +214,8 @@ input.double-checkbox-white{
 	    	background-position: -408px 2px;
 	  	}
 	  	&:checked + label:hover .tick,
-	  	&:checked + label:focus .tick {
+	  	&:checked + label:focus .tick,
+		&:checked:focus + label .tick {
 	    	background-position: -449px 2px;
 	  	}
 	  	&:disabled + label .tick {
@@ -278,7 +298,6 @@ input.double-checkbox-white{
 		line-height: 20px;
 		font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 		border-color:  $gray_form;
-		/* outline: none !important; */
 		height: 40px;
 		&:hover, &:focus, &:active, &:active:focus{
 			outline: none !important;

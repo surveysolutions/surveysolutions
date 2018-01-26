@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -119,5 +119,110 @@
   </resheader>
   <data name="Questionnaire" xml:space="preserve">
     <value>问卷</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>活动的</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>所有任务</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>归档</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>已归档</value>
+  </data>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}}个任务被选中</value>
+  </data>
+  <data name="AssignmentsSelected_plural" xml:space="preserve">
+    <value>{{count}}个任务被选中</value>
+  </data>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>为任务{{assignmentId}}编辑大小</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>总计</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>填写全部或某些识别型的字段</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>为此任务选择负责人 （督导员或调查员）</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>创建基于</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>开始新的访谈</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>识别型问题</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>需要访谈</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>大小必须是 -1 或更大</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}}个任务将被修改</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+    <value>{{count}}个任务将被修改</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>选择责任人</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>归档状况</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>大小</value>
+  </data>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>明确由任务生成的最大访谈数量。-1表示不限量，0表示空任务，其它数字指定访谈的数量</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>任务是否是活动的或已被归档的指示器</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>负责人。点击户名名字选定或进一步在过滤器中输入名字以选定一个负责人用户。</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>此任务最近提交的访谈数量。更多的访谈可能已完成，但尚未同步。点击任意单元格以查看相关的访谈。点击排序按钮已完成数量排序</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>当任务被首次创建，点击排序按钮以创建时间排序。</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>区别各个任务的信息。这个是被标记的题目答案，用来在问卷设计器中识别。</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>此任务需要被完成的访谈数量</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>最近任务的负责人。点击排序按钮按负责人名字排序。</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>此任务可能完成的最大访谈数量。点击任何单元格已更改数量。</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>当任务最近被更新，点击排序按钮按时间排序。</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>取消归档</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>无限制</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>更新于</value>
   </data>
 </root>

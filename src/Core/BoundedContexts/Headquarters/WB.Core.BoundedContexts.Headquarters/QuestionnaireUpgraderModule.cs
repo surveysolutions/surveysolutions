@@ -1,14 +1,14 @@
-﻿using Ninject.Modules;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+﻿using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
-    public class QuestionnaireUpgraderModule : NinjectModule
+    public class QuestionnaireUpgraderModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<IQuestionnaireUpgradeService>().To<QuestionnaireUpgradeService>();
+            registry.Bind<IQuestionnaireUpgradeService, QuestionnaireUpgradeService>();
         }
     }
 }

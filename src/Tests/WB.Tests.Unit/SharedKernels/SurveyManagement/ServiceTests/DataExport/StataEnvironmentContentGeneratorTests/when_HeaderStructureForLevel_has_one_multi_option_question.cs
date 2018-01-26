@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         Because of = () => stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "", default(CancellationToken))/*.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath)*/;
 
         It should_contain_stata_script_for_insheet_file = () =>
-            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}.tab\", tab\r\n", dataFileName));
+            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName));
 
         It should_contain_stata_variable_on_title_mapping_for_first_option = () =>
            stataGeneratedContent.ShouldContain("label variable var1__1 `\"title1:one\"'");

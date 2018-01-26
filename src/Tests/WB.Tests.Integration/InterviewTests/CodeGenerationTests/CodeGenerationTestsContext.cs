@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
@@ -453,6 +454,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
         public static IExpressionProcessorGenerator CreateExpressionProcessorGenerator(ICodeGenerator codeGenerator = null, IDynamicCompiler dynamicCompiler = null)
         {
+
             var fileSystemAccessor = new FileSystemIOAccessor();
 
             const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
@@ -460,14 +462,13 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
             var settings = new List<IDynamicCompilerSettings>
             {
-                Mock.Of<IDynamicCompilerSettings>(_ 
+                Mock.Of<IDynamicCompilerSettings>(_
                     => _.PortableAssembliesPath == pathToProfile
-                    && _.DefaultReferencedPortableAssemblies == referencesToAdd 
-                    && _.Name == "profile111")
+                       && _.DefaultReferencedPortableAssemblies == referencesToAdd
+                       && _.Name == "profile111")
             };
 
             var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);
-
             return
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),

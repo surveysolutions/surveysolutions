@@ -41,8 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Preloading
             return
                 level.HeaderItems.Values.SelectMany(
                     headerItem =>
-                        headerItem.ColumnNames.Select(
-                            (column, i) => new QuestionDescription(headerItem.PublicKey, headerItem.Titles[i], column)));
+                        headerItem.ColumnHeaders.Select(
+                            (column, i) => new QuestionDescription(headerItem.PublicKey, column.Title, column.Name)));
         }
     }
 }

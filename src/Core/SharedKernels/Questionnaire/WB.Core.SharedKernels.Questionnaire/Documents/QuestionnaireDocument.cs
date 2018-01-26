@@ -6,6 +6,8 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernel.Structures.Synchronization;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace Main.Core.Documents
@@ -101,6 +103,8 @@ namespace Main.Core.Documents
 
         public string Description { get; set; }
 
+        public QuestionnaireMetaInfo Metadata { get; set; }
+
         public string VariableName { get; set; }
 
         public bool IsRoster => false;
@@ -128,6 +132,9 @@ namespace Main.Core.Documents
 
         // fill in before export to HQ or Tester
         public List<Guid> ExpressionsPlayOrder { get; set; }
+
+        public Dictionary<Guid, Guid[]> DependencyGraph { get; set; }
+        public Dictionary<Guid, Guid[]> ValidationDependencyGraph { get; set; }
 
         public void Insert(int index, IComposite c, Guid? parentId)
         {

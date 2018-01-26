@@ -163,6 +163,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         internal IEnumerable<Identity> GetSectionsAndExpandedSubSections(bool clearExpanded, ToggleSectionEventArgs toggledSection = null)
         {
             var interview = this.statefulInterviewRepository.Get(this.interviewId);
+            if(interview == null) yield break;
 
             List<Identity> expandedSectionIdentities = CollectAllExpandedUiSections().ToList();
             var currentGroup = interview.GetGroup(this.navigationState.CurrentGroup);
@@ -191,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 if (sectionOrSubSection.Parent == null) continue;
 
                 var isInCurrentSection = sectionOrSubSection.Parent.Identity == currentGroup?.Identity;
-                var isParentOfCurrentSection = parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity);
+                var isParentOfCurrentSection = currentGroup != null && parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity);
                 var isExpandedSection = itemsToBeExpandedAndTheirImmidiateChildren.Contains(sectionOrSubSection.Identity);
 
                 if (clearExpanded && (isParentOfCurrentSection || isInCurrentSection))

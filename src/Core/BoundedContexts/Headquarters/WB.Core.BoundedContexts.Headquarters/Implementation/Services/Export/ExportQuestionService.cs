@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -21,9 +22,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
         {
             var answers = this.GetAnswers(question, header);
 
-            if (answers.Length != header.ColumnNames.Length)
+            if (answers.Length != header.ColumnHeaders.Count)
                 throw new InvalidOperationException(
-                    $"Something wrong with export logic, answer's count is less then required by template. Was '{answers.Length}', expected '{header.ColumnNames.Length}'");
+                    $"Something wrong with export logic, answer's count is less then required by template. Was '{answers.Length}', expected '{header.ColumnHeaders.Count}'");
 
             return answers;
         }
@@ -31,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
         public string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header, bool isDisabled)
         {
             if (isDisabled)
-                return header.ColumnNames.Select(c => ExportFormatSettings.DisableValue).ToArray();
+                return header.ColumnHeaders.Select(c => ExportFormatSettings.DisableValue).ToArray();
 
             switch (header.VariableType)
             {
@@ -57,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                 return BuildMissingValueAnswer(header);
 
             if (question.IsDisabled())
-                return header.ColumnNames.Select(c => ExportFormatSettings.DisableValue).ToArray();
+                return header.ColumnHeaders.Select(c => ExportFormatSettings.DisableValue).ToArray();
 
             if (question.Answer == null)
                 return BuildMissingValueAnswer(header);
@@ -107,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                                   || header.QuestionType == QuestionType.YesNo)
                     ? ExportFormatSettings.MissingNumericQuestionValue
                     : ExportFormatSettings.MissingStringQuestionValue;
-            return header.ColumnNames.Select(c => missingValue).ToArray();
+            return header.ColumnHeaders.Select(c => missingValue).ToArray();
         }
 
         private IEnumerable<object> TryCastToEnumerable(object value)
@@ -166,10 +167,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
         private string[] BuildAnswerListForQuestionByHeader(object answer, ExportedQuestionHeaderItem header)
         {
-            if (header.ColumnNames.Length == 1)
+            if (header.ColumnHeaders.Count == 1)
                 return new string[] { this.ConvertAnswerToStringValue(answer, header)};
 
-            var result = new string[header.ColumnNames.Length];
+            var result = new string[header.ColumnHeaders.Count];
 
             var answersAsEnumerable = this.TryCastToEnumerable(answer);
             var answers = answersAsEnumerable?.ToArray() ?? new object[] { answer };
@@ -305,11 +306,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             if (questionType == QuestionType.Audio)
                 return ((AudioAnswer) obj)?.FileName;
 
+            var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
+
             if (questionType == QuestionType.TextList)
-                return ((InterviewTextListAnswer) obj)?.Answer;
+                return ((InterviewTextListAnswer) obj)?.Answer.Replace(answersSeparator, String.Empty);
 
-
-            return obj.ToString();
+            return obj.ToString().Replace(answersSeparator, string.Empty);
         }
     }
 }

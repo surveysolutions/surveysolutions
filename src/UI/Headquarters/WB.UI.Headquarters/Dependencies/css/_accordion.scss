@@ -46,29 +46,23 @@
 					}
 				}
 				&.has-error {
-					.btn-plus{
+					.btn-plus, a{
 						&:before, &:after{
 							background-color: $red_error;
 						}
 					}
 					a{
 						color: $red_error;
-						&:before, &:after{
-							background-color: $red_error;
-						}
 					}
 				}
 				&.complete {
-					.btn-plus{
+					.btn-plus, a{
 						&:before, &:after{
 							background-color: $green;
 						}
 					}
 					a{
 						color: $green;
-						&:before, &:after{
-							background-color: $green;
-						}
 					}
 				}
 			} 

@@ -396,7 +396,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireRosterSizeAnswerNotNegative(int answer)
         {
-            if (!this.Questionnaire.ShouldQuestionSpecifyRosterSize(this.QuestionId))
+            if (!this.Questionnaire.IsRosterSizeQuestion(this.QuestionId))
                 return this;
 
             if (answer < 0)
@@ -412,7 +412,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 ? this.Questionnaire.GetMaxLongRosterRowCount()
                 : this.Questionnaire.GetMaxRosterRowCount();
 
-            if (!this.Questionnaire.ShouldQuestionSpecifyRosterSize(this.QuestionId))
+            if (!this.Questionnaire.IsRosterSizeQuestion(this.QuestionId))
                 return this;
 
             if (answer > maxRosterRowCount)

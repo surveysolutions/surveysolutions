@@ -110,7 +110,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 UserId = person.UserId,
                 Name = this.accountsStorage.GetById(person.UserId.FormatGuid())?.UserName,
                 Date = modificationStatisticsByUsers.FirstOrDefault(x => x.UserId == person.UserId)?.Date
-            }).Where(sharedPerson => sharedPerson.Name != requestedByUserName);
+            });
+
+            if (questionnaire.CreatedBy == requestedByUserId)
+                statisticsByUsers = statisticsByUsers.Where(sharedPerson => sharedPerson.Name != requestedByUserName);
 
             var pdfView = new PdfQuestionnaireModel(questionnaire, pdfSettings)
             {

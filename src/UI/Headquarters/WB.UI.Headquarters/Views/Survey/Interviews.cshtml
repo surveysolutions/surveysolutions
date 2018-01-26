@@ -93,7 +93,7 @@
                     name: "@HttpUtility.JavaScriptStringEncode(Common.Assign)",
                     className: "primary-text",
                     callback: function(t, e) {
-                        model.AssignInterview();
+                        model.AssignInterview([selectedRow]);
                     }
                 };
 
@@ -101,7 +101,7 @@
                     name: "@HttpUtility.JavaScriptStringEncode(Common.Approve)",
                     className: "success-text",
                     callback: function(t, e) {
-                        model.ApproveInterview();
+                        model.ApproveInterview([selectedRow]);
                     }
                 };
 
@@ -109,7 +109,7 @@
                     name: "@HttpUtility.JavaScriptStringEncode(Common.Reject)",
                     className: "error-text",
                     callback: function(t, e) {
-                        model.RejectInterview();
+                        model.RejectInterview([selectedRow]);
                     }
                 };
 
@@ -247,7 +247,7 @@
                                         <tr data-bind="css: { 'selected' : IsSelected }">
                                             @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
                                             {
-                                                <td class="checkbox-cell">
+                                                <td class="checkbox-cell" data-bind="click: function() { IsSelected(!IsSelected()) }">
                                                     <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
                                                     <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
                                                 </td>

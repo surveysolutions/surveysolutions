@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -33,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IPauseResumeQueue pauseResumeQueue;
 
         public InterviewController(
             ICommandService commandService, 
@@ -42,7 +44,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory, 
             IInterviewDetailsViewFactory interviewDetailsViewFactory,
-            IStatefulInterviewRepository statefulInterviewRepository)
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IPauseResumeQueue pauseResumeQueue)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -51,6 +54,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.interviewDetailsViewFactory = interviewDetailsViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
+            this.pauseResumeQueue = pauseResumeQueue;
         }
 
         public ActionResult Details(Guid id, InterviewDetailsFilter? questionsTypes, string currentGroupId)
@@ -124,6 +128,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
 
+
+            if (this.authorizedUser.IsSupervisor)
+            {
+                this.pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id, DateTime.Now));
+            }
+
             ViewBag.SpecificPageCaption = interviewSummary.Key;
 
             return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
@@ -133,6 +143,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 LastUpdatedAtUtc = interviewSummary.UpdateDate,
                 StatusName = interviewSummary.Status.ToLocalizeString(),
                 Responsible = interviewSummary.ResponsibleName,
+                Supervisor = interviewSummary.TeamLeadName,
+                AssignmentId = interviewSummary.AssignmentId,
                 ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
                                             Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
@@ -151,7 +163,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                                           (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 SupervisorRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.RejectedByHeadquarters) &&
                                           authorizedUser.IsSupervisor,
-                HqOrAdminRejectAllowed = interviewSummary.Status == InterviewStatus.ApprovedBySupervisor &&
+                HqOrAdminRejectAllowed = (interviewSummary.Status == InterviewStatus.Completed || interviewSummary.Status == InterviewStatus.ApprovedBySupervisor) &&
                                          (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 HqOrAdminUnapproveAllowed = interviewSummary.Status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator),
                 InterviewersListUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "InterviewersCombobox" })
@@ -217,5 +229,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string InterviewsUrl { get; set; }
 
         public string ResponsibleProfileUrl { get; set; }
+        public string Supervisor { get; set; }
+        public int? AssignmentId { get; set; }
     }
 }

@@ -8,9 +8,10 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Enumerator.Native.WebInterview.Models;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
-using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 {
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
         private Mock<IAuthorizedUser> authorizedUserMock;
         private QuestionnaireDocument document;
-        private IQuestionnaire questionnaire;
+        protected IQuestionnaire questionnaire;
 
         protected WebInterviewInterviewEntityFactory Subject { get; set; }
 
@@ -47,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
 
             authorizedUserMock = new Mock<IAuthorizedUser>();
 
-            Subject = new WebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
+            Subject = new HqWebInterviewInterviewEntityFactory(autoMapperConfig.CreateMapper(),
                 authorizedUserMock.Object);
         }
 

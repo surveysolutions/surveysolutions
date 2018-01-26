@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+﻿using System;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -40,10 +41,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return this.fileSystemAccessor.CombinePath(pathToDdiMetadata, $"{questionnaireTitle}_{identity.Version}_ddi.zip");
         }
 
-        public string GetFileNameForTabByQuestionnaire(QuestionnaireIdentity identity, string pathToExportedData, DataExportFormat format, string statusSuffix)
+        public string GetFileNameForTabByQuestionnaire(QuestionnaireIdentity identity, string pathToExportedData,
+            DataExportFormat format, string statusSuffix, DateTime? fromDate = null, DateTime? toDate = null)
         {
             var questionnaireTitle = GetQuestionnaireTitle(identity);
-            var archiveName = $"{questionnaireTitle}_{identity.Version}_{format}_{statusSuffix}.zip";
+
+            var fromDatePrefix = fromDate == null ? "" : $"_{fromDate.Value:yyyyMMddTHHmm}Z";
+            var toDatePrefix = toDate == null ? "" : $"_{toDate.Value:yyyyMMddTHHmm}Z";
+
+            var archiveName = $"{questionnaireTitle}_{identity.Version}_{format}_{statusSuffix}{fromDatePrefix}{toDatePrefix}.zip";
             return this.fileSystemAccessor.CombinePath(pathToExportedData, archiveName);
         }
 

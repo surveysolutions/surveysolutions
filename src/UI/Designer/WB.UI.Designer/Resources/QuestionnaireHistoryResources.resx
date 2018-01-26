@@ -321,4 +321,7 @@
   <data name="Translation_DefaultTranslationSet" xml:space="preserve">
     <value>Default translation set to {0}</value>
   </data>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>Questionnaire metadata {0} updated</value>
+  </data>
 </root>

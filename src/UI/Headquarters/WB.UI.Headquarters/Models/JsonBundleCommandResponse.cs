@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WB.UI.Headquarters.Models;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 {

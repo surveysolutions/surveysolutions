@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
@@ -22,7 +23,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
-    internal class PlainQuestionnaire : IQuestionnaire
+    public class PlainQuestionnaire : IQuestionnaire
     {
         public ISubstitutionService SubstitutionService
         {
@@ -76,7 +77,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfUnderlyingStaticTexts = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
 
 
-        internal QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
+        public QuestionnaireDocument QuestionnaireDocument => this.innerDocument;
 
         public Guid? ResponsibleId => null;
 
@@ -223,7 +224,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Translation Translation => this.translation;
 
-        public IQuestion GetQuestionByStataCaption(string stataCaption) => GetQuestionByStataCaption(this.QuestionCache, stataCaption);
+        public IQuestion GetQuestionByVariable(string variable)
+        {
+            var questionId = this.GetQuestionIdByVariable(variable);
+            return !questionId.HasValue ? null : this.GetQuestion(questionId.Value);
+        }
 
         public bool HasQuestion(Guid questionId) => this.GetQuestion(questionId) != null;
 
@@ -307,9 +312,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.VariablesCache.Values.Single(x => x.Name == variableName).PublicKey;
         }
-        public Guid GetGroupIdByVariableName(string variableName)
+        public Guid? GetRosterIdByVariableName(string variableName, bool ignoreCase = false)
         {
-            return this.GroupCache.Values.Single(x => x.VariableName == variableName).PublicKey;
+            return this.GroupCache.Values.SingleOrDefault(x => string.Equals(x.VariableName, variableName, ignoreCase? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))?.PublicKey;
         }
 
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
@@ -525,7 +530,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return group.ConditionExpression;
         }
 
-        public bool ShouldQuestionSpecifyRosterSize(Guid questionId)
+        public bool IsRosterSizeQuestion(Guid questionId)
         {
             return this.DoesQuestionSupportRoster(questionId)
                 && this.GetRosterGroupsByRosterSizeQuestion(questionId).Any();
@@ -807,7 +812,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 ? targetRostersWithSameScope.First()
                 : targetRostersWithSameScope.FirstOrDefault(rosterId => isQuestionLinkedToQuestion 
                     ? IsQuestionChildOfGroup(questionSourceId, rosterId)
-                    : IsRosterChildOfGroup(questionSourceId, rosterId));
+                    : IsRosterChildOfGroupRecursive(questionSourceId, rosterId));
+
+            if (targetRoster == Guid.Empty) return null;
 
             return targetRoster;
         }
@@ -816,7 +823,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
-
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
 
@@ -825,11 +831,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return GetAllUnderlyingQuestions(groupId).Contains(questionId);
         }
 
-        private bool IsRosterChildOfGroup(Guid rosterId, Guid groupId)
+        private bool IsRosterChildOfGroupRecursive(Guid rosterId, Guid groupId)
         {
-            return rosterId == groupId || this.GetAllUnderlyingChildRosters(groupId).Contains(rosterId);
+            if (rosterId == groupId) return true;
+            var group = this.GetGroup(rosterId);
+            return group.UnwrapReferences<IComposite>(x => x.GetParent()).Any(x => x.PublicKey == groupId);
         }
-
 
         public IReadOnlyList<Guid> GetAllUnderlyingInterviewerEntities(Guid groupId)
         {
@@ -846,7 +853,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
-
+         
 
         public ReadOnlyCollection<Guid> GetChildInterviewerQuestions(Guid groupId)
             => this.cacheOfChildInterviewerQuestions.GetOrAdd(groupId, this
@@ -1590,11 +1597,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private static IGroup GetGroup(Dictionary<Guid, IGroup> groups, Guid groupId) => groups.GetOrNull(groupId);
 
-        private static IQuestion GetQuestionByStataCaption(Dictionary<Guid, IQuestion> questions, string identifier)
-        {
-            return questions.Values.FirstOrDefault(q => q.StataExportCaption == identifier);
-        }
-
         public Guid GetFirstSectionId()
         {
             return this.GetAllSections().First();
@@ -1615,6 +1617,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public List<Guid> GetExpressionsPlayOrder()
         {
+            return this.QuestionnaireDocument.ExpressionsPlayOrder;
+        }
+
+        public bool SupportsExpressionsGraph()
+        {
+            return this.QuestionnaireDocument.DependencyGraph != null;
+        }
+
+        public List<Guid> GetExpressionsPlayOrder(Guid changedEntity)
+        {
+            var sorter = new TopologicalSorter<Guid>();
+            IEnumerable<Guid> lisOsfOrderedConditions = sorter.Sort(this.QuestionnaireDocument.DependencyGraph, changedEntity);
+            return lisOsfOrderedConditions.ToList();
+        }
+
+        public List<Guid> GetValidationExpressionsPlayOrder(IEnumerable<Guid> entities)
+        {
+            if (IsUsingExpressionStorage())
+            {
+                HashSet<Guid> entityIds = new HashSet<Guid>();
+                foreach (var entity in entities)
+                {
+                    entityIds.Add(entity);
+
+                    if (this.QuestionnaireDocument.ValidationDependencyGraph.TryGetValue(entity, out Guid[] referancecs))
+                        referancecs.ForEach(id => entityIds.Add(id));
+                }
+
+                return entityIds.ToList();
+            }
+
             return this.QuestionnaireDocument.ExpressionsPlayOrder;
         }
 

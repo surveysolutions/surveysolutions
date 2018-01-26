@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
@@ -62,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 
         private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
-        private static PreloadedDataRecord[] result;
+        private static AssignmentPreloadedDataRecord[] result;
         private static Guid rosterGroupId = Guid.NewGuid();
     }
 }

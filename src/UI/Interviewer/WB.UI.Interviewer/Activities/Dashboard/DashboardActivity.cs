@@ -22,7 +22,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class DashboardActivity : AuthorizedUserActivity<DashboardViewModel>, ISyncBgService
+    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
     {
         protected override int ViewResourceId => Resource.Layout.dashboard;
 

@@ -69,9 +69,6 @@
 
 		public Func<bool> GetConditionExpression(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!enablementConditions.ContainsKey(identity.Id))
 				return null;
 			
@@ -80,9 +77,6 @@
 
 		public Func<bool>[] GetValidationExpressions(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!validationConditions.ContainsKey(identity.Id))
 				return null;
 			
@@ -91,9 +85,6 @@
 
 		public Func<object> GetVariableExpression(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!variableExpressions.ContainsKey(identity.Id))
 				return null;
 			
@@ -102,24 +93,17 @@
 
 		public Func<int, bool> GetCategoricalFilter(Identity identity)
 		{
-			if (!identity.RosterVector.Equals(this.RosterVector))
-				return null;
-			
 			if (!categoricalFilters.ContainsKey(identity.Id))
 				return null;
 			
 			return categoricalFilters[identity.Id];
 		}
 
-		private Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
-
-		private Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
-
-		private Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
-
-		private Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
-
-		private Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
+		private readonly Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>> linkedFilters = new Dictionary<Guid, Func<<#=typeof(IInterviewLevel).Name#>, bool>>();
+		private readonly Dictionary<Guid, Func<int, bool>> categoricalFilters = new Dictionary<Guid, Func<int, bool>>();
+		private readonly Dictionary<Guid, Func<bool>> enablementConditions = new Dictionary<Guid, Func<bool>>();
+		private readonly Dictionary<Guid, Func<bool>[]> validationConditions = new Dictionary<Guid, Func<bool>[]>();
+		private readonly Dictionary<Guid, Func<object>> variableExpressions = new Dictionary<Guid, Func<object>>();
 
 		private readonly <#= Storage.ClassName #> _storage;
 

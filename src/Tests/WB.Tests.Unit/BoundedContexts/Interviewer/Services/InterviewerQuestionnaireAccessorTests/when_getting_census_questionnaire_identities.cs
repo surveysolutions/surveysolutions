@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Machine.Specifications;
 using System.Linq;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -13,20 +15,24 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
 {
     internal class when_getting_census_questionnaire_identities : InterviewerQuestionnaireAccessorTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             var questionnaireAsyncPlainStorage = new SqliteInmemoryStorage<QuestionnaireView>();
             questionnaireAsyncPlainStorage.Store(emulatedStorageQuestionnaires);
             interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(questionnaireViewRepository: questionnaireAsyncPlainStorage);
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        public void BecauseOf() =>
              resultCensusQuestionnairesIds = interviewerQuestionnaireAccessor.GetCensusQuestionnaireIdentities();
 
-        It should_result_contains_only_census_questionnaire_identities = () =>
+        [Test]
+        public void should_result_contains_only_census_questionnaire_identities() =>
             resultCensusQuestionnairesIds.All(questionnaireIdentity =>
                 questionnaireIdentity.ToString() == firstCensusQuestionnaireIdentity.ToString() ||
-                questionnaireIdentity.ToString() == secondCensusQuestionnaireIdentity.ToString());
+                questionnaireIdentity.ToString() == secondCensusQuestionnaireIdentity.ToString()).Should().BeTrue();
 
         static readonly string firstCensusQuestionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString();
         static readonly string secondCensusQuestionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("22222222222222222222222222222222"), 2).ToString();

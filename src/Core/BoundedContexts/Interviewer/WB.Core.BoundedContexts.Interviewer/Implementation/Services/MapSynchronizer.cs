@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,7 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IMapService mapService;
 
         public MapSyncProvider(IMapService mapService, ISynchronizationService synchronizationService, ILogger logger,
-            IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IPrincipal principal,
+            IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IInterviewerPrincipal principal,
             IPasswordHasher passwordHasher, IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
@@ -45,7 +46,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 Title = InterviewerUIResources.MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server,
                 Status = SynchronizationStatus.Started
             });
-
 
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
 
@@ -77,11 +77,42 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                 try
                 {
-                    using (var stream = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
+                    long downloded = 0;
+                    using (var streamToSave = this.mapService.GetTempMapSaveStream(mapDescription.MapName))
+                    using (var contentStreamResult = await this.synchronizationService
+                        .GetMapContentStream(mapDescription.MapName, cancellationToken).ConfigureAwait(false))
                     {
-                        await this.synchronizationService
-                            .GetMapContentAndSave(mapDescription.MapName, stream, cancellationToken, OnDownloadProgressChanged)
-                            .ConfigureAwait(false);
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            cancellationToken.ThrowIfCancellationRequested();
+                        }
+                        
+                        var buffer = new byte[1024];
+                        var downloadProgressChangedEventArgs = new DownloadProgressChangedEventArgs()
+                        {
+                            TotalBytesToReceive = contentStreamResult.ContentLength
+                        };
+
+                        int read;
+                        while ((read = await contentStreamResult.Stream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)
+                                   .ConfigureAwait(false)) > 0)
+                        {
+                            if (cancellationToken.IsCancellationRequested)
+                            {
+                                cancellationToken.ThrowIfCancellationRequested();
+                            }
+
+                            downloded += read;
+
+                            streamToSave.Write(buffer, 0, read);
+
+                            if (contentStreamResult.ContentLength != null)
+                                downloadProgressChangedEventArgs.ProgressPercentage =
+                                    Math.Min(Math.Round((decimal)(100 * downloded) / contentStreamResult.ContentLength.Value), 100);
+
+                            downloadProgressChangedEventArgs.BytesReceived = downloded;
+                            OnDownloadProgressChanged(downloadProgressChangedEventArgs);
+                        }
                     }
                     
                     this.mapService.MoveTempMapToPermanent(mapDescription.MapName);

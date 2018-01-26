@@ -9,6 +9,7 @@
     "datatables.net-select": "^1.2.3",
     "del": "^2.2.2",
     "flatpickr": "^3.0.7",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-clean": "^0.3.2",
     "gulp-clean-css": "^3.9.0",
@@ -27,6 +28,7 @@
     "gulp-util": "^3.0.7",
     "jquery-contextmenu": "^2.6.2",
     "jquery-highlight": "^3.4.0",
+    "merge-stream": "^1.0.1",
     "moment": "^2.18.1",
     "pnotify": "^3.2.1",
     "vinyl-source-stream": "^1.1.0"

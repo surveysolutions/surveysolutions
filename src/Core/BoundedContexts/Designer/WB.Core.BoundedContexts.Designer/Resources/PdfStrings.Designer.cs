@@ -178,6 +178,168 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agree to make this questionnaire public.
+        /// </summary>
+        public static string MetadataAgreeToMakeThisQuestionnairePublic {
+            get {
+                return ResourceManager.GetString("MetadataAgreeToMakeThisQuestionnairePublic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consultants:.
+        /// </summary>
+        public static string MetadataConsultants {
+            get {
+                return ResourceManager.GetString("MetadataConsultants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Country:.
+        /// </summary>
+        public static string MetadataCountry {
+            get {
+                return ResourceManager.GetString("MetadataCountry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coverage:.
+        /// </summary>
+        public static string MetadataCoverage {
+            get {
+                return ResourceManager.GetString("MetadataCoverage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Funding:.
+        /// </summary>
+        public static string MetadataFunding {
+            get {
+                return ResourceManager.GetString("MetadataFunding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keywords:.
+        /// </summary>
+        public static string MetadataKeywords {
+            get {
+                return ResourceManager.GetString("MetadataKeywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kind of data:.
+        /// </summary>
+        public static string MetadataKindOfData {
+            get {
+                return ResourceManager.GetString("MetadataKindOfData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Languages:.
+        /// </summary>
+        public static string MetadataLanguages {
+            get {
+                return ResourceManager.GetString("MetadataLanguages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode of Data Collection:.
+        /// </summary>
+        public static string MetadataModeOfDataCollection {
+            get {
+                return ResourceManager.GetString("MetadataModeOfDataCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notes:.
+        /// </summary>
+        public static string MetadataNotes {
+            get {
+                return ResourceManager.GetString("MetadataNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Primary Investigator:.
+        /// </summary>
+        public static string MetadataPrimaryInvestigator {
+            get {
+                return ResourceManager.GetString("MetadataPrimaryInvestigator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Study type:.
+        /// </summary>
+        public static string MetadataStudyType {
+            get {
+                return ResourceManager.GetString("MetadataStudyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtitle:.
+        /// </summary>
+        public static string MetadataSubtitle {
+            get {
+                return ResourceManager.GetString("MetadataSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unit of analysis:.
+        /// </summary>
+        public static string MetadataUnitOfAlalysis {
+            get {
+                return ResourceManager.GetString("MetadataUnitOfAlalysis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Universe:.
+        /// </summary>
+        public static string MetadataUniverse {
+            get {
+                return ResourceManager.GetString("MetadataUniverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version identificator:.
+        /// </summary>
+        public static string MetadataVersionIdentificator {
+            get {
+                return ResourceManager.GetString("MetadataVersionIdentificator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version notes:.
+        /// </summary>
+        public static string MetadataVersionNotes {
+            get {
+                return ResourceManager.GetString("MetadataVersionNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year:.
+        /// </summary>
+        public static string MetadataYear {
+            get {
+                return ResourceManager.GetString("MetadataYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} (never edited).
         /// </summary>
         public static string NeverEdited {

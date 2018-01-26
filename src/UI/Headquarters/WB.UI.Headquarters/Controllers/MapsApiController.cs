@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters;
@@ -22,8 +21,9 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Implementation.Maps;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Shared.Web.Filters;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters.Controllers
@@ -32,20 +32,24 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class MapsApiController : BaseApiController
     {
+        private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk" };
+
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapBrowseViewFactory mapBrowseViewFactory;
         private readonly ILogger logger;
         private readonly IMapStorageService mapStorageService;
         private readonly IExportFactory exportFactory;
-        private readonly IMapPropertiesProvider mapPropertiesProvider;
+        private readonly IMapService mapPropertiesProvider;
         private readonly IRecordsAccessorFactory recordsAccessorFactory;
+        private readonly IArchiveUtils archiveUtils;
 
         public MapsApiController(ICommandService commandService,
             IMapBrowseViewFactory mapBrowseViewFactory, ILogger logger,
             IMapStorageService mapStorageService, IExportFactory exportFactory,
-            IMapPropertiesProvider mapPropertiesProvider,
+            IMapService mapPropertiesProvider,
             IFileSystemAccessor fileSystemAccessor,
-            IRecordsAccessorFactory recordsAccessorFactory) : base(commandService, logger)
+            IRecordsAccessorFactory recordsAccessorFactory,
+            IArchiveUtils archiveUtils) : base(commandService, logger)
         {
             this.mapBrowseViewFactory = mapBrowseViewFactory;
             this.logger = logger;
@@ -54,6 +58,7 @@ namespace WB.UI.Headquarters.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
             this.mapPropertiesProvider = mapPropertiesProvider;
             this.recordsAccessorFactory = recordsAccessorFactory;
+            this.archiveUtils = archiveUtils;
         }
 
         
@@ -87,6 +92,35 @@ namespace WB.UI.Headquarters.Controllers
             return Ok(table);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public IHttpActionResult UserMaps([FromUri] DataTableRequest request)
+        {
+            var input = new UserMapsInputModel
+            {
+                Page = request.PageIndex,
+                PageSize = request.PageSize,
+                Orders = request.GetSortOrderRequestItems(),
+                SearchBy = request.Search.Value,
+            };
+
+            var items = this.mapBrowseViewFactory.Load(input);
+
+            var table = new DataTableResponse<UserMapsViewItem>
+            {
+                Draw = request.Draw + 1,
+                RecordsTotal = items.TotalCount,
+                RecordsFiltered = items.TotalCount,
+                Data = items.Items.ToList().Select(x => new UserMapsViewItem
+                {
+                    UserName = x.UserName,
+                    Maps = x.Maps.ToList()
+                })
+            };
+
+            return Ok(table);
+        }
+
         public class MapUsersTableRequest : DataTableRequest
         {
             public string MapName { get; set; }
@@ -95,61 +129,85 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public async Task<HttpResponseMessage> UploadMapsFile(HttpFile file)
+        public async Task<JsonMapResponse> Upload(HttpFile file)
         {
-            if (".zip" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
+            var response = new JsonMapResponse();
+
+            if (file == null)
             {
-                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable, (string)Maps.MapLoadingNotZipError);
+                response.Errors.Add(Maps.MapsLoadingError);
+                return response;
             }
 
-            string tempStore = null;
-            var processedMaps = new Dictionary<string, bool>();
+            if (".zip" != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
+            {
+                response.Errors.Add(Maps.MapLoadingNotZipError);
+                return response;
+            }
 
+            if (!this.mapPropertiesProvider.IsEngineEnabled())
+            {
+                logger.Error($"Map engine is not initialized");
+                response.Errors.Add(Maps.MapEngineIsNotInitialized);
+                return response;
+            }
             try
             {
+                var filesInArchive = archiveUtils.GetArchivedFileNamesAndSize(file.FileBytes);
+                
+                var validMapFilesCount = filesInArchive.Keys.Count(x =>
+                    permittedMapFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(x)));
 
-                if (!this.mapPropertiesProvider.IsMapEngineOperational())
+                if (validMapFilesCount == 0)
                 {
-                    logger.Error($"Map engine is not initialized");
-                    this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.MapEngineIsNotInitialized);
+                    response.Errors.Add(Maps.MapLoadingNoMapsInArchive);
+                    return response;
                 }
+                if (filesInArchive.Count > validMapFilesCount)
+                {
+                    response.Errors.Add(Maps.MapLoadingUnsupportedFilesInArchive);
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error($"Invalid map archive", ex);
 
-                var maps = mapStorageService.UnzipAndGetFileList(file.FileBytes, out tempStore);
+                response.Errors.Add(Maps.MapsLoadingError);
+                return response;
+            }
 
-                if (maps == null)
-                    this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.MapsLoadingError);
-
-                foreach (var map in maps)
+            var invalidMaps = new List<string>();
+            try
+            {
+                var extractedFiles = archiveUtils.GetFilesFromArchive(file.FileBytes);
+                foreach (var map in extractedFiles)
                 {
                     try
                     {
                         await mapStorageService.SaveOrUpdateMapAsync(map);
-                        processedMaps.Add(map, true);
                     }
 
                     catch (Exception e)
                     {
-                        logger.Error($"Error on maps import map {map}", e);
-                        processedMaps.Add(map, false);
+                        logger.Error($"Error on maps import map {map.Name}", e);
+                        invalidMaps.Add(map.Name);
                     }
                 }
+
+                if (invalidMaps.Count > 0)
+                    response.Errors.AddRange(invalidMaps.Select(x => String.Format(Maps.MapLoadingInvalidFile, x)).ToList());
+                else
+                    response.IsSuccess = true;
             }
             catch (Exception e)
             {
                 logger.Error("Error on maps import", e);
-                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.MapsLoadingError);
-
-            }
-            finally
-            {
-                if (tempStore != null)
-                    mapStorageService.DeleteTemporaryData(tempStore);
+                response.Errors.Add(Maps.MapsLoadingError);
+                return response;
             }
 
-            string resultMessage = string.Format(Maps.UploadMapsSummaryFormat, processedMaps.Count,
-                processedMaps.Values.Count(x => x == false));
-
-            return this.Request.CreateResponse(HttpStatusCode.OK, resultMessage);
+            return response;
         }
 
         [HttpPost]

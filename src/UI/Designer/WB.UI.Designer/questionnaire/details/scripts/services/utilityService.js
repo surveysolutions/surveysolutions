@@ -78,8 +78,19 @@
                 });
             };
 
+            utilityService.sanitize = function(input) {
+                if (input) {
+                    var html = filterXSS(input, {
+                        whiteList: [],        // empty, means filter out all tags
+                        stripIgnoreTag: true      // filter out all HTML not in the whilelist
+                    });
+                    return html;
+                }
+                return input || '';
+            };
+
             utilityService.createQuestionForDeleteConfirmationPopup = function (title) {
-                var trimmedTitle = title.substring(0, 50) + (title.length > 50 ? "..." : "");
+                var trimmedTitle = utilityService.sanitize(title).substring(0, 50) + (title.length > 50 ? "..." : "");
                 var message = $i18next.t('DeleteConfirmQuestion',  {trimmedTitle: trimmedTitle});
                 return {
                     title: message,

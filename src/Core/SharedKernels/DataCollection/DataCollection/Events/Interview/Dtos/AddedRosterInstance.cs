@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 
         public static AddedRosterInstance CreateFromIdentityAndSortIndex(Identity identity, int? sortIndex)
             => new AddedRosterInstance(identity.Id, identity.RosterVector.Shrink(identity.RosterVector.Length - 1),
-                identity.RosterVector.Coordinates.Last(), sortIndex);
+                identity.RosterVector.Last(), sortIndex);
 
         public Identity GetIdentity()
         {

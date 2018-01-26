@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1));
 
         It should_cut_html_tags_from_header = () =>
-             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithHtml].Titles[0].ShouldEqual("with html");
+             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithHtml].ColumnHeaders[0].Title.ShouldEqual("with html");
 
         static QuestionnaireExportStructure questionnaireExportStructure;
         static ExportViewFactory exportViewFactory;

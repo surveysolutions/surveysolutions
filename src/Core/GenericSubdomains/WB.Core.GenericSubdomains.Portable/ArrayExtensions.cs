@@ -38,6 +38,40 @@ namespace WB.Core.GenericSubdomains.Portable
             return false;
         }
 
+        public static bool SequenceEqual(this int[] source, int[] target, int targetLength)
+        {
+            if (source.Length == targetLength)
+            {
+                for (var i = 0; i < source.Length; i++)
+                {
+                    if (target[i] == source[i]) continue;
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool SequenceEqual(int[] source, int sourceLength, int[] target, int targetLength)
+        {
+            if (sourceLength == targetLength)
+            {
+                for (var i = 0; i < sourceLength; i++)
+                {
+                    if (target[i] == source[i]) continue;
+
+                    return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
         public static bool SequenceEqual(this Guid[] source, Guid[] target)
         {
             if (source.Length == target.Length)

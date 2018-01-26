@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountBlocked" xml:space="preserve">
+    <value>您的账户被锁定。联系管理员解锁账户。</value>
+  </data>
+  <data name="ApplicationUpdateRequired" xml:space="preserve">
+    <value>需要更新应用程序</value>
+  </data>
+  <data name="ClientVersionIsNotSupported" xml:space="preserve">
+    <value>打开问卷模板失败。您的版本是{0}。请更新。</value>
+  </data>
+  <data name="ConfirmAccount" xml:space="preserve">
+    <value>请首先确认您的账户。我们已经向{0}发送了确认关联。您没有收到吗？</value>
+  </data>
+  <data name="Email_required" xml:space="preserve">
+    <value>电子邮件必填</value>
+  </data>
+  <data name="EmptyTranslationFile" xml:space="preserve">
+    <value>选择的翻译文件为空</value>
+  </data>
+  <data name="EmptyUserNameOrPassword" xml:space="preserve">
+    <value>用户名或密码为空。</value>
+  </data>
+  <data name="IncorrectUserNameOrPassword" xml:space="preserve">
+    <value>用户名或密码不正确。请重试</value>
+  </data>
+  <data name="InvalidEmailAddress" xml:space="preserve">
+    <value>不是有效的电子邮件地址</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>服务器正处于维护模式。非常抱歉给您带来不便。请稍后重试。</value>
+  </data>
+  <data name="NoAccessToQuestionnaire" xml:space="preserve">
+    <value>用户没有权限访问请求的问卷模板</value>
+  </data>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>问卷的 id 没有提供有效的批准。</value>
+  </data>
+  <data name="NotSupportedQuestionnaireVersion" xml:space="preserve">
+    <value>导入问卷失败。您的问卷 "{0}" 有了版本{1}。总部程序最高只支持版本{2}。</value>
+  </data>
+  <data name="OldClientPleaseUpdate" xml:space="preserve">
+    <value>您的总部的程序的版本太旧。请联系support@mysurvey.solutions获取更新。</value>
+  </data>
+  <data name="OldPassword_required" xml:space="preserve">
+    <value>当前密码是必填项</value>
+  </data>
+  <data name="Password_must_be_at_least_characters_long" xml:space="preserve">
+    <value>密码的长度至少为{2}。</value>
+  </data>
+  <data name="Password_must_contain_at_least_one_number_one_upper_case_character_and_one_lower_case_character" xml:space="preserve">
+    <value>密码必须至少包含一个数字、一个大写字母和一个小写字母。</value>
+  </data>
+  <data name="Password_required" xml:space="preserve">
+    <value>密码是必填项</value>
+  </data>
+  <data name="PasswordResetNotAllowed" xml:space="preserve">
+    <value>密码不能重置</value>
+  </data>
+  <data name="Questionnaire_verification_failed" xml:space="preserve">
+    <value>您的问卷模板有错误。请在问卷设计系统中确认。</value>
+  </data>
+  <data name="QuestionnaireTitle_required" xml:space="preserve">
+    <value>问卷标题是必填项</value>
+  </data>
+  <data name="RequestAnotherEmail" xml:space="preserve">
+    <value>请求另外一个。</value>
+  </data>
+  <data name="RestorePassword_EmailSentInstructions" xml:space="preserve">
+    <value>信息已经发送到您的电子邮箱账户。请按照电子邮件中的指引恢复密码。</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>发生服务器错误哦。请联系support@mysurvey.solutions。</value>
+  </data>
+  <data name="TemplateNotFound" xml:space="preserve">
+    <value>未找到编号（id）为{0}的问卷模板。请检查可用问卷模板列表，或与和您分享问卷模板的同事联系。</value>
+  </data>
+  <data name="The_current_password_is_incorrect_or_the_new_password_is_invalid" xml:space="preserve">
+    <value>当前密码/新密码组合无效。请重新输入。</value>
+  </data>
+  <data name="The_password_and_confirmation_password_do_not_match" xml:space="preserve">
+    <value>密码与确认密码不匹配</value>
+  </data>
+  <data name="The_user_name_or_password_provided_is_incorrect" xml:space="preserve">
+    <value>提供的用户名或密码不正确，请重新输入。</value>
+  </data>
+  <data name="Unexpected_error_occurred_Please_try_again_later" xml:space="preserve">
+    <value>发生了未知错误，请尝试稍后访问Designer</value>
+  </data>
+  <data name="User_already_confirmed_in_system" xml:space="preserve">
+    <value>用户{0}已存在于系统中。请输入用户名和密码开始使用问卷设计系统。</value>
+  </data>
+  <data name="User_does_not_exist" xml:space="preserve">
+    <value>用户{0}不存在。请输入一个有效的用户名或电子邮箱。</value>
+  </data>
+  <data name="User_does_not_exist_Please_enter_a_valid_user_name" xml:space="preserve">
+    <value>用户{0}不存在。请输入一个有效的用户名或电子邮箱。</value>
+  </data>
+  <data name="User_name_needs_to_be_between_3_and_15_characters" xml:space="preserve">
+    <value>用户名长度须在3-15个字符之间，且只能包括字母、数字和下划线。</value>
+  </data>
+  <data name="User_Not_authorized" xml:space="preserve">
+    <value>用户未获授权。请检查您的用户名和密码。</value>
+  </data>
+  <data name="UserLockedOut" xml:space="preserve">
+    <value>您的账户被锁定。请联系support@mysurvey.solutions解锁。</value>
+  </data>
+  <data name="UserName_required" xml:space="preserve">
+    <value>用户名必填</value>
+  </data>
+  <data name="UserNeedToContactSupport" xml:space="preserve">
+    <value>您没有权限进行这个操作。请联系支持</value>
+  </data>
+  <data name="UserNotApproved" xml:space="preserve">
+    <value>您的账户未被批准通过，请首先确认账户。我们已向{0}发送了确认关联。</value>
+  </data>
+  <data name="VersionParameterIsIncorrect" xml:space="preserve">
+    <value>您的问卷模板版本有问题。请联系support@mysurvey.solutions。</value>
+  </data>
+  <data name="You_did_not_type_the_verification_word_correctly" xml:space="preserve">
+    <value>验证码不正确。请重试。</value>
+  </data>
+  <data name="Your_email_is_verified" xml:space="preserve">
+    <value>问卷设计系统成功确认了您的电子邮箱。</value>
+  </data>
+  <data name="Your_password_successfully_changed" xml:space="preserve">
+    <value>您已经成功更改了密码。</value>
+  </data>
+  <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
+    <value>您的问卷模板“{0}”包含新的功能：{1}。您现在安装的应用程序不支持新功能。请更新。</value>
+  </data>
+</root>

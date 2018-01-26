@@ -13,6 +13,7 @@
     <HiddenComponentWarnings>
       <Value>CopyReferencedAssembliesToWorkspaceIsOn</Value>
       <Value>UnnecessaryFileIncludeWarning</Value>
+      <Value>AssemblyReferenceToBuildOutputDirectory</Value>
     </HiddenComponentWarnings>
     <IgnoredTests>
       <NamedTestSelector>

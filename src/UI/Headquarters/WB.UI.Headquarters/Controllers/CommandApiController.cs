@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Resources;
+using WB.UI.Headquarters.Models;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Filters;
 

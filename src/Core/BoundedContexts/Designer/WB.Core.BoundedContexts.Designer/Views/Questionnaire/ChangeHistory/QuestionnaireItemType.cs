@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
         LookupTable,
         Attachment,
         Variable,
-        Translation
+        Translation,
+        Metadata
     }
 }

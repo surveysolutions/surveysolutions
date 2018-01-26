@@ -1,20 +1,14 @@
 ﻿using System.Linq;
-using System.Web.Mvc;
-using Ninject.Modules;
-using Ninject.Web.Mvc.FilterBindingSyntax;
-using Ninject.Web.WebApi.FilterBindingSyntax;
-using WB.UI.Designer.Code;
-using WB.UI.Shared.Web.Attributes;
+using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.CommandDeserialization;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.CommandDeserialization
 {
-    public class DesignerCommandDeserializationModule : NinjectModule
+    public class DesignerCommandDeserializationModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<ICommandDeserializer>().To<DesignerCommandDeserializer>();
+            registry.Bind<ICommandDeserializer, DesignerCommandDeserializer>();
         }
     }
 }

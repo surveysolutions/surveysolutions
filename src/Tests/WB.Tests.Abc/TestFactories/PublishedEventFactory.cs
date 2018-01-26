@@ -20,14 +20,19 @@ namespace WB.Tests.Abc.TestFactories
                 .ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewCompleted> InterviewCompleted(
-            Guid? interviewId = null, string userId = null, string comment = null, Guid? eventId = null)
-            => new InterviewCompleted(ToGuid(userId) ?? Guid.NewGuid(), DateTime.Now, comment)
+            Guid? interviewId = null, string userId = null, string comment = null, Guid? eventId = null,
+            DateTime? completeTime = null)
+            => new InterviewCompleted(ToGuid(userId) ?? Guid.NewGuid(), completeTime ?? DateTime.Now, comment)
                 .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
 
         public IPublishedEvent<InterviewCreated> InterviewCreated(
-            Guid? interviewId = null, string userId = null, string questionnaireId = null, long questionnaireVersion = 0, DateTime? createTime = null)
+            Guid? interviewId = null, string userId = null, 
+            string questionnaireId = null,
+            long questionnaireVersion = 0,
+            DateTime? createTime = null,
+            DateTime? eventTimeStamp = null)
             => new InterviewCreated(ToGuid(userId) ?? Guid.NewGuid(), ToGuid(questionnaireId) ?? Guid.NewGuid(), questionnaireVersion, null, creationTime: createTime)
-                .ToPublishedEvent(eventSourceId: interviewId);
+                .ToPublishedEvent(eventSourceId: interviewId, eventTimeStamp: eventTimeStamp);
 
         public IPublishedEvent<InterviewDeleted> InterviewDeleted(string userId = null, string origin = null, Guid? interviewId = null)
             => new InterviewDeleted(ToGuid(userId) ?? Guid.NewGuid())
@@ -70,8 +75,8 @@ namespace WB.Tests.Abc.TestFactories
                 .ToPublishedEvent(origin: origin, eventSourceId: interviewId);
 
         public IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
-            Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null)
-            => Create.Event.InterviewStatusChanged(status, comment)
+            Guid interviewId, InterviewStatus status, string comment = "hello", Guid? eventId = null, InterviewStatus? previousStatus = null)
+            => Create.Event.InterviewStatusChanged(status, comment, previousStatus: previousStatus)
                 .ToPublishedEvent(eventSourceId: interviewId, eventId: eventId);
 
         public IPublishedEvent<InterviewStatusChanged> InterviewStatusChanged(
@@ -98,8 +103,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerAssignedDateTime: null)
                 .ToPublishedEvent();
 
-        public IPublishedEvent<TextQuestionAnswered> TextQuestionAnswered(Guid? interviewId = null, string userId = null)
-            => new TextQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), Guid.NewGuid(), new decimal[0], DateTime.Now, "tttt")
+        public IPublishedEvent<TextQuestionAnswered> TextQuestionAnswered(Guid? interviewId = null, string userId = null, DateTime? answerTime = null)
+            => new TextQuestionAnswered(ToGuid(userId) ?? Guid.NewGuid(), Guid.NewGuid(), new decimal[0], answerTime ?? DateTime.Now, "tttt")
                 .ToPublishedEvent();
 
         private static Guid? ToGuid(string stringGuid)

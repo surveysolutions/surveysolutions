@@ -1049,18 +1049,6 @@
   <data name="StatusDurationDescription" xml:space="preserve">
     <value>Number of days that assignments and interviews have stayed in their current status</value>
   </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Excel (.xlsx)</value>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>Comma separated values (.csv)</value>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Tab separated values (.tab)</value>
-  </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>Export</value>
-  </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
     <value>Assigned to</value>
   </data>
@@ -1165,5 +1153,47 @@
   </data>
   <data name="Map_UploadingError" xml:space="preserve">
     <value>Error occurred during upload</value>
+  </data>
+  <data name="Map_UploadingSuccess" xml:space="preserve">
+    <value>Maps were succesfuly uploaded</value>
+  </data>
+  <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
+    <value>Move to another team</value>
+  </data>
+  <data name="Interviewers_InterviewersToMove" xml:space="preserve">
+    <value>Interviewer(s) {0} will be moved to another team of supervisor {1}.</value>
+  </data>
+  <data name="Interviewers_InterviewersToStay" xml:space="preserve">
+    <value>Interviewer(s) {0} are in the team of supervisor {1} and no actions will be performed.</value>
+  </data>
+  <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
+    <value>Move interviewer(s) with their assignments and interviews to the new team of supervisor {0}.</value>
+  </data>
+  <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
+    <value>Select a team to move {0}</value>
+  </data>
+  <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
+    <value>{0} and {1}</value>
+  </data>
+  <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
+    <value>{0} and {1} more</value>
+  </data>
+  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+    <value>Make original supervisor responsible for the assignments and interviews of the moved interviewer(s).</value>
+  </data>
+  <data name="Interviewers_MovingCompleted" xml:space="preserve">
+    <value>Moving users completed</value>
+  </data>
+  <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+    <value>Moving is in progress</value>
+  </data>
+  <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+    <value>Finished with errors. Please repeat the action later. Write to support if problems will repeat in future.</value>
+  </data>
+  <data name="MapList_UserMapsLink" xml:space="preserve">
+    <value>User Maps</value>
+  </data>
+  <data name="MapList_UserMapsTitle" xml:space="preserve">
+    <value>User Maps</value>
   </data>
 </root>

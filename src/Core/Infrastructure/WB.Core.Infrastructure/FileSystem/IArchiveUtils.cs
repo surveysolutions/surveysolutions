@@ -7,12 +7,13 @@ namespace WB.Core.Infrastructure.FileSystem
     {
         void ZipDirectoryToFile(string sourceDirectory, string archiveFilePath);
         void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false);
-
-        void Unzip(byte[] archivedFileByteArray, string extractToFolder);
+        
+        IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray);
 
         bool IsZipFile(string filePath);
 
         Dictionary<string, long> GetArchivedFileNamesAndSize(string filePath);
+        Dictionary<string, long> GetArchivedFileNamesAndSize(byte[] archivedFileAsArray);
         byte[] CompressStringToByteArray(string fileName, string fileContentAsString);
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);

@@ -1,42 +1,42 @@
 using System;
-using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using It = Machine.Specifications.It;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceTests
 {
-    internal class when_storing_package : InterviewPackagesServiceTestsContext
+    [TestFixture]
+    internal class when_storing_package
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Setup()
         {
             mockOfPackagesStorage = new Mock<IPlainStorageAccessor<InterviewPackage>>();
 
-            var compressor = Mock.Of<IArchiveUtils>(x => x.CompressString(expectedPackage.Events) == compressedEvents);
             var syncSettings = Mock.Of<SyncSettings>(x => x.UseBackgroundJobForProcessingPackages == true);
+            
+            interviewPackagesService = Create.Service.InterviewPackagesService(interviewPackageStorage: mockOfPackagesStorage.Object, syncSettings: syncSettings);
 
-            interviewPackagesService = CreateInterviewPackagesService(interviewPackageStorage: mockOfPackagesStorage.Object,
-                    archiver: compressor, syncSettings: syncSettings);
-        };
+            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+            {
+                InterviewId = expectedPackage.InterviewId,
+                QuestionnaireId = expectedPackage.QuestionnaireId,
+                QuestionnaireVersion = expectedPackage.QuestionnaireVersion,
+                ResponsibleId = expectedPackage.ResponsibleId,
+                InterviewStatus = expectedPackage.InterviewStatus,
+                IsCensusInterview = expectedPackage.IsCensusInterview,
+                Events = expectedPackage.Events
+            });
+        }
 
-        Because of = () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
-        {
-            InterviewId = expectedPackage.InterviewId,
-            QuestionnaireId = expectedPackage.QuestionnaireId,
-            QuestionnaireVersion = expectedPackage.QuestionnaireVersion,
-            ResponsibleId = expectedPackage.ResponsibleId,
-            InterviewStatus = expectedPackage.InterviewStatus,
-            IsCensusInterview = expectedPackage.IsCensusInterview,
-            Events = expectedPackage.Events
-        });
-
-        It should_store_specified_package =
-            () => mockOfPackagesStorage.Verify(x => x.Store(Moq.It.IsAny<InterviewPackage>(), null), Times.Once);
+        [Test]
+        public void should_store_specified_package() 
+            => mockOfPackagesStorage.Verify(x => x.Store(It.IsAny<InterviewPackage>(), null), Times.Once);
 
         private static readonly InterviewPackage expectedPackage = new InterviewPackage
         {
@@ -49,7 +49,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             Events = "compressed events by interview"
         };
 
-        private static string compressedEvents = "compressed events";
         private static InterviewPackagesService interviewPackagesService;
         private static Mock<IPlainStorageAccessor<InterviewPackage>> mockOfPackagesStorage;
     }

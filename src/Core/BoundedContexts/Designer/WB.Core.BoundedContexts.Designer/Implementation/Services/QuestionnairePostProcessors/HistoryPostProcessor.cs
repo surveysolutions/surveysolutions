@@ -73,7 +73,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         ICommandPostProcessor<Questionnaire, ReplaceTextsCommand>,
         ICommandPostProcessor<Questionnaire, RevertVersionQuestionnaire>,
         ICommandPostProcessor<Questionnaire, UpdateAreaQuestion>,
-        ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>
+        ICommandPostProcessor<Questionnaire, UpdateAudioQuestion>,
+        ICommandPostProcessor<Questionnaire, UpdateMetadata>
     {
         private IPlainStorageAccessor<User> accountStorage
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<User>>();
@@ -155,6 +156,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 command.QuestionnaireId, command.Source.Title, aggregate.QuestionnaireDocument);
 
             this.UpdateFullQuestionnaireState(command.Source, command.QuestionnaireId, command.Source.CreatedBy ?? Guid.Empty);
+        }
+
+        public void Process(Questionnaire aggregate, UpdateMetadata command)
+        {
+            var questionnaireId = command.QuestionnaireId;
+
+            this.UpdateQuestionnaireTitleIfNeed(questionnaireId, command.Title);
+
+            this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
+                QuestionnaireActionType.Update,
+                QuestionnaireItemType.Metadata, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
         }
         #endregion
 

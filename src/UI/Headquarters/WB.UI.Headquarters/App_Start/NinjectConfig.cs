@@ -2,80 +2,60 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
-using AutoMapper;
-using Main.DenormalizerStorage;
 using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Security;
+using Microsoft.AspNet.SignalR.Ninject;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
 using Ninject;
-using Ninject.Modules;
 using Ninject.Web.Common;
-using Ninject.Web.WebApi.FilterBindingSyntax;
-using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
-using WB.UI.Headquarters.API.Attributes;
-using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Implementation.Maps;
-using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Migrations.Users;
-using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Models.WebInterview;
-using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
-using WB.UI.Shared.Web.Filters;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
-using FilterScope = System.Web.Http.Filters.FilterScope;
+
 
 namespace WB.UI.Headquarters
 {
@@ -132,23 +112,23 @@ namespace WB.UI.Headquarters
 
             var kernel = new StandardKernel(
                 new NinjectSettings {InjectNonPublic = true},
-                new NLogLoggingModule(),
+                new NLogLoggingModule().AsNinject(),
                 new ServiceLocationModule(),
                 new EventSourcedInfrastructureModule().AsNinject(),
                 new InfrastructureModule().AsNinject(),
                 new NcqrsModule().AsNinject(),
-                new WebConfigurationModule(),
-                new CaptchaModule(),
-                new QuestionnaireUpgraderModule(),
-                new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
-                new HeadquartersUIModule(),
-                new PostgresKeyValueModule(cacheSettings),
+                new WebConfigurationModule().AsNinject(),
+                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")).AsNinject(),
+                new QuestionnaireUpgraderModule().AsNinject(),
+                new FileInfrastructureModule().AsNinject(),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly).AsNinject(),
+                new HeadquartersUIModule().AsWebNinject(),
+                new PostgresKeyValueModule(cacheSettings).AsNinject(),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
                     PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
-                    mappingAssemblies)
+                    mappingAssemblies).AsNinject()
             );
             
             kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
@@ -159,8 +139,8 @@ namespace WB.UI.Headquarters
                 SchemaName = "events"
             };
 
-            var eventStoreModule = (NinjectModule) new PostgresWriteSideModule(eventStoreSettings,
-                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
+            var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace)).AsNinject();
 
             var interviewCountLimitString = settingsProvider.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
@@ -173,13 +153,7 @@ namespace WB.UI.Headquarters
 
             var userPreloadingSettings =
                 new UserPreloadingSettings(
-                    userPreloadingConfigurationSection.VerificationIntervalInSeconds,
-                    userPreloadingConfigurationSection.CreationIntervalInSeconds,
-                    userPreloadingConfigurationSection.CleaningIntervalInHours,
-                    userPreloadingConfigurationSection.HowOldInDaysProcessShouldBeInOrderToBeCleaned,
                     userPreloadingConfigurationSection.MaxAllowedRecordNumber,
-                    userPreloadingConfigurationSection.NumberOfRowsToBeVerifiedInOrderToUpdateVerificationProgress,
-                    userPreloadingConfigurationSection.NumberOfValidationErrorsBeforeStopValidation,
                     loginFormatRegex: UserModel.UserNameRegularExpression,
                     emailFormatRegex: userPreloadingConfigurationSection.EmailFormatRegex,
                     passwordFormatRegex: applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression,
@@ -209,8 +183,14 @@ namespace WB.UI.Headquarters
                 AssembliesDirectoryName = "QuestionnaireAssemblies"
             });
 
+            var trackingSettings = GetTrackingSettings(settingsProvider);
+
+            var owinSecurityModule = new OwinSecurityModule();
+            var mainModule = new MainModule(settingsProvider, applicationSecuritySection);
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
+
             kernel.Load(
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
                 eventStoreModule,
                 new DataCollectionSharedKernelModule().AsNinject(),
                 new HeadquartersBoundedContextModule(basePath,
@@ -220,12 +200,13 @@ namespace WB.UI.Headquarters
                     interviewDataExportSettings,
                     sampleImportSettings,
                     synchronizationSettings,
-                    interviewCountLimit),
-                new WebInterviewNinjectModule(),
-                new OwinSecurityModule());
-
-            kernel.Bind<ILiteEventRegistry>().To<LiteEventRegistry>();
-            kernel.Bind<ISettingsProvider>().ToConstant(settingsProvider);
+                    trackingSettings,
+                    interviewCountLimit).AsNinject(),
+                new QuartzModule().AsNinject(),
+                new WebInterviewModule().AsNinject(),
+                new HqWebInterviewModule().AsNinject(),
+                owinSecurityModule.AsNinject(),
+                mainModule.AsWebNinject());
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
 
@@ -233,84 +214,30 @@ namespace WB.UI.Headquarters
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             CreateAndRegisterEventBus(kernel);
 
-            kernel.Bind<ITokenVerifier>()
-                .ToConstant(new SimpleTokenVerifier(settingsProvider.AppSettings["Synchronization.Key"]));
-
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
-                .WhenControllerHas<TokenValidationAuthorizationAttribute>();
-
-            kernel.BindHttpFilter<TokenValidationAuthorizationFilter>(FilterScope.Controller)
-                .WhenControllerHas<ApiValidationAntiForgeryTokenAttribute>()
-                .WithConstructorArgument("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
-
-            kernel.Bind(typeof(InMemoryReadSideRepositoryAccessor<>)).ToSelf().InSingletonScope();
-
-            ServiceLocator.Current.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            ServiceLocator.Current.GetInstance<UserPreloadingCleanerTask>().Configure();
-            ServiceLocator.Current.GetInstance<ExportJobScheduler>().Configure();
-
-            ServiceLocator.Current.GetInstance<IScheduler>().Start();
+            owinSecurityModule.Init(ServiceLocator.Current);
+            mainModule.Init(ServiceLocator.Current);
             
-            kernel.Unbind<IInterviewImportService>();
-            kernel.Bind<IInterviewImportService>().To<InterviewImportService>().InSingletonScope();
-
-            var autoMapperConfig = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new WebInterviewAutoMapProfile());
-                cfg.AddProfile(new AssignmentProfile());
-                cfg.AddProfile(new AssignmentsPublicApiMapProfile());
-                cfg.ConstructServicesUsing(t => kernel.Get(t));
-            });
-            kernel.Bind<IMapper>().ToConstant(autoMapperConfig.CreateMapper());
-            kernel.Bind<JsonSerializer>().ToConstant(JsonSerializer.Create(new JsonSerializerSettings
-            {
-                ContractResolver = new FilteredCamelCasePropertyNamesContractResolver
-                {
-                    AssembliesToInclude =
-                    {
-                        typeof(WebInterview).Assembly,
-                        typeof(CategoricalOption).Assembly
-                    }
-                }
-            }));
-            
-            kernel.Bind<IPasswordPolicy>().ToConstant(new PasswordPolicy
-            {
-                PasswordMinimumLength = applicationSecuritySection.PasswordPolicy.PasswordMinimumLength,
-                MinRequiredNonAlphanumericCharacters = applicationSecuritySection.PasswordPolicy.MinRequiredNonAlphanumericCharacters,
-                PasswordStrengthRegularExpression = applicationSecuritySection.PasswordPolicy.PasswordStrengthRegularExpression
-            });
-
-            kernel.Bind<GoogleApiSettings>()
-                .ToMethod(_ => new GoogleApiSettings(_.Kernel.Get<IConfigurationManager>().AppSettings[@"Google.Map.ApiKey"]))
-                .InSingletonScope();
-
-            kernel.Bind<IInterviewCreatorFromAssignment>().To<InterviewCreatorFromAssignment>();
-
-            kernel.Bind<IMapPropertiesProvider>().To<MapPropertiesProvider>();
-
             return kernel;
+        }
+
+        private static TrackingSettings GetTrackingSettings(SettingsProvider settingsProvider)
+        {
+            if (TimeSpan.TryParse(settingsProvider.AppSettings["Tracking.WebInterviewPauseResumeGraceTimespan"],
+                CultureInfo.InvariantCulture, out TimeSpan timespan))
+            {
+                return new TrackingSettings(timespan);
+            }
+            return new TrackingSettings(TimeSpan.FromMinutes(2));
         }
 
         private static void CreateAndRegisterEventBus(StandardKernel kernel)
         {
-            var eventBusConfigSection = kernel.Get<ISettingsProvider>().GetSection<EventBusConfigSection>("eventBus");
-
-            var bus = new NcqrCompatibleEventDispatcher(
-                kernel.Get<IEventStore>(),
-                eventBusConfigSection.GetSettings(),
-                kernel.Get<ILogger>());
-
-            kernel.Bind<IEventBus>().ToConstant(bus);
-            kernel.Bind<ILiteEventBus>().ToConstant(bus);
-            kernel.Bind<IEventDispatcher>().ToConstant(bus);
-
-            //Kernel.RegisterDenormalizer<>() - should be used instead
-            var enumerable = kernel.GetAll(typeof(IEventHandler)).ToList();
-            foreach (object handler in enumerable)
-            {
-                bus.Register((IEventHandler)handler);
-            }
+            kernel.Bind<IEventBus, ILiteEventBus, IEventDispatcher>()
+                .To<NcqrCompatibleEventDispatcher>()
+                .InSingletonScope()
+                .WithConstructorArgument(
+                    "eventBusSettings", 
+                    ctx => ctx.Kernel.Get<ISettingsProvider>().GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
     }
 }

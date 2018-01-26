@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
@@ -23,13 +22,14 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Captcha;
-using WebInterview = WB.UI.Headquarters.Resources.WebInterview;
 using Microsoft.AspNet.Identity;
 using StackExchange.Exceptional;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -51,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioProcessingService audioProcessingService;
+        private readonly IPauseResumeQueue pauseResumeQueue;
 
         private const string CapchaCompletedKey = "CaptchaCompletedKey";
         public static readonly string LastCreatedInterviewIdKey = "lastCreatedInterviewId";
@@ -85,7 +86,8 @@ namespace WB.UI.Headquarters.Controllers
             ICaptchaProvider captchaProvider,
             IPlainStorageAccessor<Assignment> assignments, 
             IAudioFileStorage audioFileStorage,
-            IAudioProcessingService audioProcessingService)
+            IAudioProcessingService audioProcessingService,
+            IPauseResumeQueue pauseResumeQueue)
             : base(commandService, logger)
         {
             this.commandService = commandService;
@@ -103,6 +105,7 @@ namespace WB.UI.Headquarters.Controllers
             this.assignments = assignments;
             this.audioFileStorage = audioFileStorage;
             this.audioProcessingService = audioProcessingService;
+            this.pauseResumeQueue = pauseResumeQueue;
         }
         
         [WebInterviewAuthorize]
@@ -123,6 +126,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id, returnUrl });
             }
 
+            LogResume(interview);
             return this.View("Index");
         }
 
@@ -141,12 +145,12 @@ namespace WB.UI.Headquarters.Controllers
 
             if (assignment.Archived || assignment.IsCompleted)
             {
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
@@ -161,7 +165,7 @@ namespace WB.UI.Headquarters.Controllers
             var assignment = this.assignments.GetById(id);
             var webInterviewConfig = this.configProvider.Get(assignment.QuestionnaireId);
             if (!webInterviewConfig.Started)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
             if (!this.connectionLimiter.CanConnect())
             {
@@ -175,7 +179,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (!this.captchaProvider.IsCaptchaValid(this))
                 {
                     var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
-                    this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
+                    this.ModelState.AddModelError("InvalidCaptcha", Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha);
                     return this.View(model);
                 }
             }
@@ -199,7 +203,19 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
+            LogResume(interview);
+
             return View("Index");
+        }
+
+        private void LogResume(IStatefulInterview statefulInterview)
+        {
+            var lastCreatedInterview = TempData[LastCreatedInterviewIdKey] as string;
+            if (lastCreatedInterview != statefulInterview.Id.FormatGuid())
+            {
+                this.pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(statefulInterview.Id,
+                    statefulInterview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+            }
         }
 
         public ActionResult Finish(string id)
@@ -261,10 +277,10 @@ namespace WB.UI.Headquarters.Controllers
             if (!isAuthorizedUser)
             {
                 if (!webInterviewConfig.Started)
-                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
 
                 if(interview.Status == InterviewStatus.Completed)
-                    throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, WebInterview.Error_NoActionsNeeded);
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
             }
 
             if (webInterviewConfig.UseCaptcha && this.CapchaVerificationNeededForInterview(id))
@@ -284,7 +300,7 @@ namespace WB.UI.Headquarters.Controllers
             if (!this.captchaProvider.IsCaptchaValid(this))
             {
                 var model = this.GetResumeModel(id);
-                this.ModelState.AddModelError("InvalidCaptcha", WebInterview.PleaseFillCaptcha);
+                this.ModelState.AddModelError("InvalidCaptcha", Enumerator.Native.Resources.WebInterview.PleaseFillCaptcha);
                 return this.View(model);
             }
 
@@ -337,7 +353,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
             return new ResumeWebInterview
@@ -355,7 +371,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
             var view = new StartWebInterview
@@ -373,7 +389,7 @@ namespace WB.UI.Headquarters.Controllers
 
             if (questionnaireBrowseItem.IsDeleted)
             {
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, WebInterview.Error_InterviewExpired);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
             return new FinishWebInterview
@@ -416,14 +432,14 @@ namespace WB.UI.Headquarters.Controllers
             if (interviewException != null 
                 && interviewException.ExceptionType != InterviewDomainExceptionType.Undefined)
             {
-                string errorMessage = Headquarters.API.WebInterview.WebInterview.GetUiMessageFromException(interviewException);
+                string errorMessage = WebInterview.GetUiMessageFromException(interviewException);
                 
                 this.HandleInterviewAccessError(filterContext, errorMessage);
                 return;
             }
             if (filterContext.Exception is HttpAntiForgeryException)
             {
-                this.HandleInterviewAccessError(filterContext, WebInterview.Error_CookiesTurnedOff);
+                this.HandleInterviewAccessError(filterContext, Enumerator.Native.Resources.WebInterview.Error_CookiesTurnedOff);
                 return;
             }
 
