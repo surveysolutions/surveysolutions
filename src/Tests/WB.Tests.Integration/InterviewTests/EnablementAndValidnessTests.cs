@@ -330,5 +330,78 @@ namespace WB.Tests.Integration.InterviewTests
             appDomainContext = null;
         }
 
+        [Test]
+        public void when_answering_datetime_question_with_in_roster()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId  = Guid.Parse("77778888000000000000000000000000");
+            var textListQuestionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var singleEnablementQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var singleQuestion1Id = Guid.Parse("55555555555555555555555555555555");
+            var singleQuestion2Id = Guid.Parse("44444444444444444444444444444444");
+            var intQuestionId   = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+            var roster1Id = Guid.Parse("99999999999999999999999999999999");
+            var roster2Id = Guid.Parse("88888888888888888888888888888888");
+            var section1Id = Guid.Parse("77777777777777777777777777777777");
+            var section2Id = Guid.Parse("66666666666666666666666666666666");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.SingleOptionQuestion(singleEnablementQuestionId, variable: "soe", answerCodes: new decimal[] { 1, 2 }),
+                    Abc.Create.Entity.Group(section1Id, enablementCondition: "soe == 1", children: new IComposite[]{
+                        Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
+                        Abc.Create.Entity.ListRoster(roster1Id, variable: "lr1", rosterSizeQuestionId: textListQuestionId, children: new IComposite[] {
+                            Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "inn"),
+                            Abc.Create.Entity.SingleOptionQuestion(singleQuestion1Id, variable: "so", enablementCondition: "inn > 4", answerCodes: new decimal[] { 1, 2 }),
+                        }),
+                    }),
+                    Abc.Create.Entity.Group(section2Id, enablementCondition: "soe == 1", children: new IComposite[]{
+                        Abc.Create.Entity.ListRoster(roster2Id, variable: "lr2", enablementCondition: "so == 1", rosterSizeQuestionId: textListQuestionId, children: new IComposite[]{
+                            Abc.Create.Entity.SingleOptionQuestion(singleQuestion2Id, variable: "so2", answerCodes: new decimal[] { 1, 2 }),
+                        })
+                    })
+                );
+
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+                interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty, DateTime.Now, 1);
+                interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now, new[] { new Tuple<decimal, string>(1, "name"), });
+                interview.AnswerNumericIntegerQuestion(userId, intQuestionId, Abc.Create.RosterVector(1), DateTime.Now, 5);
+                interview.AnswerSingleOptionQuestion(userId, singleQuestion1Id, Abc.Create.RosterVector(1), DateTime.Now, 1);
+                interview.AnswerSingleOptionQuestion(userId, singleQuestion2Id, Abc.Create.RosterVector(1), DateTime.Now, 1);
+                interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty, DateTime.Now, 2);
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty, DateTime.Now, 1);
+
+                    return new
+                    {
+                        GroupsEnabledEvent = GetFirstEventByType<GroupsEnabled>(eventContext.Events),
+                        QuestionsEnabledEvent = GetFirstEventByType<QuestionsEnabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.QuestionsEnabledEvent, Is.Not.Null);
+//            Assert.That(results.QuestionsEnabledEvent.Questions, Is.EqualTo(new[]
+//            {
+//                Abc.Create.Identity(singleInRosterQuestionId, new int[] { 1 }),
+//                Abc.Create.Identity(multiInRosterQuestionId, new int[] { 1 }),
+//            }));
+
+            Assert.That(results.GroupsEnabledEvent, Is.Not.Null);
+            Assert.That(results.GroupsEnabledEvent.Groups.Any(i => i == Abc.Create.Identity(roster2Id, new int[] { 1 })), Is.True);
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
     }
 }
