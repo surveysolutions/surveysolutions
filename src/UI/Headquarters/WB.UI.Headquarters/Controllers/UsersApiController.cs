@@ -114,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate = x.CreationDate.FormatDateWithTime(),
+                    CreationDate = x.CreationDate,
                     SupervisorId = x.SupervisorId,
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
@@ -160,7 +160,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             public virtual Guid UserId { get; set; }
             public virtual string UserName { get; set; }
-            public virtual string CreationDate { get; set; }
+            public virtual DateTime CreationDate { get; set; }
             public virtual string SupervisorName { get; set; }
             public virtual string Email { get; set; }
             public virtual string DeviceId { get; set; }
@@ -261,7 +261,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate = x.CreationDate.FormatDateWithTime(),
+                    CreationDate = x.CreationDate,
                     Email = x.Email,
                     IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
                     IsArchived = x.IsArchived
