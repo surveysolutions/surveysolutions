@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Main.Core.Documents;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -12,7 +14,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace CoreTester
+namespace CoreTester.Commands
 {
     public class DebugInformationDumper
     {
@@ -46,6 +48,15 @@ namespace CoreTester
 
             if (!File.Exists(fileName))
             {
+                //File format exaple. 
+                //============================================
+                //=Questionnaire: 3c049ea6-8524-4aa8-8ca3-9f8ba4ab351f$10
+                //=               LPDP_Tajikistan_IFAD_v6
+                //=Interviews with calculation error: 
+                //3cdf0898-d31e-492e-b747-00e1c0edb80e
+                //9a6d3115-de81-449a-aa8d-499f0507a0ed
+                //c1fc1c69-dbe6-467a-9bc9-a1842fb24384
+                //============================================
                 Console.WriteLine($"File {fileName} is missing. Nothing to dump");
                 return 0;
             }
@@ -85,7 +96,7 @@ namespace CoreTester
         private void DumpSerializedEventStream(string folder, Guid interviewId)
         {
             var eventFileName = Path.Combine(folder, $"{interviewId.FormatGuid()}.json");
-            var committedEvents = this.eventStore.Read(interviewId, 0).ToList();
+            List<CommittedEvent> committedEvents = this.eventStore.Read(interviewId, 0).ToList();
             var serializedEvents = serializer.Serialize(committedEvents);
             File.WriteAllText(eventFileName, serializedEvents);
         }

@@ -8,9 +8,8 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
-namespace CoreTester
+namespace CoreTester.CustomInfrastructure
 {
     public class CustomCommandService : ICommandService
     {
