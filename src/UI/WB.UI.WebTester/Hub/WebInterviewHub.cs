@@ -28,7 +28,6 @@ namespace WB.UI.WebTester.Hub
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
             evictionNotify.Evict(GetCallerInterview().Id);
-            webInterviewNotificationService.ShutDownInterview(base.GetCallerInterview().Id);
         }
     }
 }
