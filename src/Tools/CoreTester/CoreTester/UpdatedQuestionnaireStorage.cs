@@ -31,8 +31,7 @@ namespace CoreTester
             var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
             this.questionnaireDocument.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             this.questionnaireDocument.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
-            this.questionnaireDocument.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument)
-                .ToDictionary(x => x.Key, x => x.Value.ToArray());
+            this.questionnaireDocument.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             this.questionnaire = new PlainQuestionnaire(questionnaireDocument, version, null);
         }
