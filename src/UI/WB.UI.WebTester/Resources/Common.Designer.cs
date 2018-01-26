@@ -97,6 +97,24 @@ namespace WB.UI.WebTester.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not found.
+        /// </summary>
+        public static string PageNotFound {
+            get {
+                return ResourceManager.GetString("PageNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page not found. Please return to the Designer application and restart web test..
+        /// </summary>
+        public static string PageNotFoundDesc {
+            get {
+                return ResourceManager.GetString("PageNotFoundDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The questionnaire has errors..
         /// </summary>
         public static string QuestionnaireHasErrors {

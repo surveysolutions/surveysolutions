@@ -135,4 +135,10 @@
   <data name="QuestionnaireHasErrors" xml:space="preserve">
     <value>Опросник содержит ошибки.</value>
   </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Не найдено</value>
+  </data>
+  <data name="PageNotFoundDesc" xml:space="preserve">
+    <value>Страница не найдена. Вернитесь на Дизайнер и запустите тест заново.</value>
+  </data>
 </root>

@@ -305,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\**\*.*" />
+    <Content Include="ErrorPages\genericError.html" />
     <Content Include="Global.asax" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\WebTester\Interview.cshtml" />
@@ -335,6 +336,8 @@
     <Content Include="Views\Shared\partial.webtester.cshtml" />
     <Content Include="Views\WebTester\Run.cshtml" />
     <Content Include="Views\Error\QuestionnaireWithErrors.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\_ErrorLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -392,7 +395,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50944</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
