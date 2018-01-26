@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -70,13 +71,14 @@ namespace WB.UI.WebTester.Controllers
             try
             {
                 var interviewPageModel = GetInterviewPageModel(id);
-                if (interviewPageModel == null) return null;
+                if (interviewPageModel == null) 
+                    throw new HttpException(404, string.Empty);
 
                 return View(interviewPageModel);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                return HttpNotFound();
+                throw new HttpException(404, string.Empty);
             }
         }
 
@@ -116,7 +118,7 @@ namespace WB.UI.WebTester.Controllers
             var model = GetInterviewPageModel(id);
             if (model == null)
             {
-                return HttpNotFound();
+                throw new HttpException(404, string.Empty);
             }
 
 
