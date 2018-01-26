@@ -32,15 +32,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override DataExportFormat Format => DataExportFormat.STATA;
 
-        protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
+        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
-            var tabFiles = this.CreateTabularDataFiles(questionnaireIdentity, status, directoryPath, progress, cancellationToken);
+            var tabFiles = this.CreateTabularDataFiles(settings.QuestionnaireId, settings.InterviewStatus,
+                settings.ExportDirectory, progress, cancellationToken, settings.FromDate, settings.ToDate);
 
-            this.CreateStataDataFilesFromTabularDataFiles(questionnaireIdentity, tabFiles, progress, cancellationToken);
+            this.CreateStataDataFilesFromTabularDataFiles(settings.QuestionnaireId, tabFiles, progress, cancellationToken);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
-            this.GenerateDescriptionTxt(questionnaireIdentity, directoryPath, ExportFileSettings.StataDataFileExtension);
+            this.GenerateDescriptionTxt(settings.QuestionnaireId, settings.ExportDirectory, ExportFileSettings.StataDataFileExtension);
         }
 
         private void CreateStataDataFilesFromTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, string[] tabDataFiles,

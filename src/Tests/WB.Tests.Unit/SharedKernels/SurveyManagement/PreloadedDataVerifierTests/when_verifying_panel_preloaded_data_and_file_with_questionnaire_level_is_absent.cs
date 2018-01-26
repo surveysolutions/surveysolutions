@@ -24,11 +24,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             questionnaireDocument.Title = "title";
 
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaireDocument);
-            var assignmentData = new[]
-            {
+            var assignmentData = Create.Entity.PreloadedDataByFile(
                 Create.Entity.PreloadedDataByFile(fileName: "roster1"),
                 Create.Entity.PreloadedDataByFile(fileName: "roster2")
-            };
+            );
 
             importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, assignmentData, status);
 

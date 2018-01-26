@@ -16,6 +16,7 @@ const gulp = require('gulp'),
     es = require('event-stream'),
     cleanCSS = require('gulp-clean-css'),
     _ = require('lodash');
+var merge = require('merge-stream');
 
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
@@ -43,7 +44,7 @@ function wrapPipe(taskFn) {
 
 const config = {
     production: !!util.env.production,
-    bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
+    bootstrapFontFiles: './node_modules/bootstrap-sass/assets/fonts/bootstrap/*.*',
     fontsDir: './fonts',
     buildDir: './build',
     buildDistDir: './dist',
@@ -90,7 +91,14 @@ const config = {
         markup: "./css/markup.scss",
         ["markup-web-interview"]: "./css/markup-web-interview.scss",
         ["markup-specific"]: "./css/markup-specific.scss"
+    },
+    webTester: {
+        targetFolder: '../../../WB.UI.WebTester/Content/',
+        stylesFolder: 'Styles',
+        scriptsFolder: 'Scripts',
+        fontsFolder: 'Fonts',
     }
+
 };
 
 config.sourceFiles = [
@@ -260,12 +268,35 @@ gulp.task('inject', ['styles', 'libsJs'],
         });
 
         return tasks;
-    }));
+}));
+
+gulp.task('webtester:fonts', function() {
+    return gulp.src(config.bootstrapFontFiles)
+               .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.fontsFolder));
+});
+gulp.task('webtester:styles', ['styles'], function() {
+    var webInterview = gulp.src(config.buildDir + "/markup-web-interview.css");
+    var markup = gulp.src(config.buildDir + "/markup.css");
+
+    return merge(webInterview, markup)
+        .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.stylesFolder));
+});
+
+gulp.task('webtester:js', ['libsJs'], function() {
+    return gulp.src("../HqApp/dist/webinterview.bundle.js")
+        .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.scriptsFolder));
+});
+
+gulp.task('webtester', ['webtester:fonts', 'webtester:styles', 'webtester:js'])
 
 gulp.task('clean', function () {
-    return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());
+    var buildDir = gulp.src(config.buildDistDir + '/*');
+    var tester2 = gulp.src(config.webTester.targetFolder + config.webTester.scriptsFolder);
+    var tester3 = gulp.src(config.webTester.targetFolder + config.webTester.stylesFolder);
+
+    return merge(buildDir, tester2, tester3).pipe(plugins.clean({read: false, force: true}));
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'libsJs', 'inject');
+    gulp.start('move-bootstrap-fonts', 'styles', 'libsJs', 'webtester', 'inject');
 });

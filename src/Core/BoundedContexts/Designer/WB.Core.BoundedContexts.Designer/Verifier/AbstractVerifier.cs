@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         protected const int DefaultVariableLengthLimit = 32;
         protected const int DefaultRestrictedVariableLengthLimit = 20;
+        protected const int RosterVariableNameLimit = 28;
 
         protected const int MaxRosterPropagationLimit = 10000;
         protected const int MaxTotalRosterPropagationLimit = 80000;
@@ -93,7 +94,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             return rosterMaxPropagationCount;
         }
-
 
         protected bool IsVariableNameValid(string variableName)
         {

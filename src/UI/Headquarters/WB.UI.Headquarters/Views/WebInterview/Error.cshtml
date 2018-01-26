@@ -1,10 +1,11 @@
-﻿@model WB.UI.Headquarters.Models.WebInterview.WebInterviewError
+﻿@using WB.Enumerator.Native.Resources
+@model WB.Enumerator.Native.WebInterview.Models.WebInterviewError
 @{
     Layout = "_WebInterviewLayout.cshtml";
 }
 <h1>
-    @WebInterview.WelcomeText
+	@WebInterview.WelcomeText
 </h1>
 <h3>
-    @Model.Message
+	@Model.Message
 </h3>

@@ -47,13 +47,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
             var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(questionnaireId, version)).ColumnListToPreload;
 
             byte[] templateFile = null;
-            var csvConfiguration = new CsvConfiguration
+            var csvConfiguration = new Configuration
             {
                 HasHeaderRecord = true,
-                TrimFields = true,
+                TrimOptions = TrimOptions.Trim,
                 IgnoreQuotes = false,
                 Delimiter = "\t",
-                WillThrowOnMissingField = false
+                MissingFieldFound = null,
             };
 
             using (MemoryStream memoryStream = new MemoryStream())

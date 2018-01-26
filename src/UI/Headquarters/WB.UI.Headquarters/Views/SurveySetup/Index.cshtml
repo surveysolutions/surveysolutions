@@ -36,7 +36,12 @@
         $(function() {
             var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax, $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
                 $deleteQuestionnaireUrl, $webInterviewUrl);
+            model.toLocalDate = function(data) {
+                if (data === null || data === undefined || data === "") return "";
 
+                var localDate = moment.utc(data).local();
+                return localDate.format(window.CONFIG.dateFormat);
+            }
             model.getDataTableColumns = function() {
                 return [
                     {
@@ -55,17 +60,26 @@
                     {
                         data: "importDate",
                         name: "ImportDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                        "class": "date"
+                        "class": "date",
+                        render: function (data, type, row) {
+                            return model.toLocalDate(data);
+                        }
                     },
                     {
                         data: "lastEntryDate",
                         name: "LastEntryDate",// case-sensitive! should be DB name here from Designer questionnairelistviewitems? to sort column
-                        "class": "date"
+                        "class": "date",
+                        render: function (data, type, row) {
+                            return model.toLocalDate(data);
+                        }
                     },
                     {
                         data: "creationDate",
                         name: "CreationDate",// case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                        "class": "date"
+                        "class": "date",
+                        render: function (data, type, row) {
+                            return model.toLocalDate(data);
+                        }
                     }
                 ];
             };

@@ -25,11 +25,6 @@ namespace WB.UI.Shared.Web.Extensions
             return decimal.TryParse(value, out result);
         }
 
-        public static bool ToBool(this string value, bool @default)
-        {
-            return Boolean.TryParse(value, out var result) ? result : @default;
-        }
-
         public static string Ellipsis(this string value, int maxLength)
         {
             if (string.IsNullOrEmpty(value)) return value;

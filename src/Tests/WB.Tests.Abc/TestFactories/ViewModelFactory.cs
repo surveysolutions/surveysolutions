@@ -170,7 +170,8 @@ namespace WB.Tests.Abc.TestFactories
             IUserInterfaceStateService userInterfaceStateService = null)
             => new AnsweringViewModel(
                 commandService ?? Stub<ICommandService>.WithNotEmptyValues,
-                userInterfaceStateService ?? Stub<IUserInterfaceStateService>.WithNotEmptyValues);
+                userInterfaceStateService ?? Stub<IUserInterfaceStateService>.WithNotEmptyValues,
+                Mock.Of<IMvxMessenger>());
 
         public ValidityViewModel ValidityViewModel(
             ILiteEventRegistry eventRegistry = null,

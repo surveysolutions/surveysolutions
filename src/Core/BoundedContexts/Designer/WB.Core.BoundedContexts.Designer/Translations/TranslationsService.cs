@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
+using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -142,7 +143,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                                     QuestionnaireId = questionnaireId,
                                     TranslationId = translationId,
                                     QuestionnaireEntityId = questionnaireEntityId,
-                                    Value = importedTranslation.Translation,
+                                    Value = System.Web.HttpUtility.HtmlDecode(importedTranslation.Translation.RemoveHtmlTags()),
                                     TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
                                     Type = (TranslationType)Enum.Parse(typeof(TranslationType), importedTranslation.Type)
                                 };

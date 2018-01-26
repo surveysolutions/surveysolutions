@@ -18,7 +18,7 @@ const wrap = (jqueryPromise) => {
 const scriptIncludedPromise = new Promise(resolve =>
     $script(config.signalrPath, () => {
         // $.connection.hub.logging = true
-        const interviewProxy = $.connection.interview
+        const interviewProxy = $.connection[config.hubName]
 
         interviewProxy.client.reloadInterview = () => {
             store.dispatch("reloadInterview")
@@ -31,6 +31,10 @@ const scriptIncludedPromise = new Promise(resolve =>
             store.dispatch("stop")
         }
 
+        interviewProxy.client.shutDown = () => {
+            window.close();
+        }
+        
         interviewProxy.client.finishInterview = () => {
             store.dispatch("finishInterview")
         }
@@ -149,7 +153,7 @@ function hubStarter(options) {
                 store.dispatch("disconnected")
             })
 
-            resolve(jQuery.signalR.interview)
+            resolve(jQuery.signalR[config.hubName])
         })
     }));
 }
@@ -186,6 +190,7 @@ export async function apiCallerAndFetch(id, action) {
 }
 
 export async function apiCaller(action) {
+    if(config.splashScreen) return
     const hub = await getInterviewHub()
 
     store.dispatch("fetchProgress", 1)
@@ -207,7 +212,7 @@ export function install(Vue, options) {
         stop: apiStop,
         callAndFetch: apiCallerAndFetch,
         setState: (callback) => {
-            callback(jQuery.signalR.interview.state);
+            callback(jQuery.signalR[config.hubName].state);
         }
     };
 

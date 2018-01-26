@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Attachment_Delete" xml:space="preserve">
+    <value>附件{0}已删除</value>
+  </data>
+  <data name="Attachment_Update" xml:space="preserve">
+    <value>附件{0}已更新</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>更改</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="LookupTable_Add" xml:space="preserve">
+    <value>查询表{0}添加成功</value>
+  </data>
+  <data name="LookupTable_Delete" xml:space="preserve">
+    <value>查询表{0}删除成功</value>
+  </data>
+  <data name="LookupTable_Update" xml:space="preserve">
+    <value>查询表{0}更新成功</value>
+  </data>
+  <data name="Macro_Add" xml:space="preserve">
+    <value>宏{0}添加成功</value>
+  </data>
+  <data name="Macro_Delete" xml:space="preserve">
+    <value>宏{0}删除成功</value>
+  </data>
+  <data name="Macro_Update" xml:space="preserve">
+    <value>宏{0}更新成功</value>
+  </data>
+  <data name="NoTitle" xml:space="preserve">
+    <value>无标题</value>
+  </data>
+  <data name="Person_Add" xml:space="preserve">
+    <value>Email为{0}的用户已被添加到分享对象</value>
+  </data>
+  <data name="Person_Delete" xml:space="preserve">
+    <value>Email为{0}的用户从分享对象移除</value>
+  </data>
+  <data name="Question_Add" xml:space="preserve">
+    <value>问题{0}已添加</value>
+  </data>
+  <data name="Question_Clone" xml:space="preserve">
+    <value>问题{0}由问题{1}克隆而来</value>
+  </data>
+  <data name="Question_Delete" xml:space="preserve">
+    <value>问题{0}已删除</value>
+  </data>
+  <data name="Question_Move_To_Roster" xml:space="preserve">
+    <value>问题{0}已被移到二维表{1}</value>
+  </data>
+  <data name="Question_Move_To_Section" xml:space="preserve">
+    <value>问题{0}已被移到问卷模块{1}</value>
+  </data>
+  <data name="Question_Update" xml:space="preserve">
+    <value>问题{0}已更新</value>
+  </data>
+  <data name="Questionnaire_Add" xml:space="preserve">
+    <value>问卷{0}已创建</value>
+  </data>
+  <data name="Questionnaire_Clone" xml:space="preserve">
+    <value>问卷{0}由问卷{1}克隆而来</value>
+  </data>
+  <data name="Questionnaire_Delete" xml:space="preserve">
+    <value>问卷{0}已删除</value>
+  </data>
+  <data name="Questionnaire_Import" xml:space="preserve">
+    <value>问卷{0}已导入</value>
+  </data>
+  <data name="Questionnaire_Replace" xml:space="preserve">
+    <value>问卷{0}已替换</value>
+  </data>
+  <data name="Questionnaire_Update" xml:space="preserve">
+    <value>问卷{0}已更新</value>
+  </data>
+  <data name="QuestionnaireChangeHistory" xml:space="preserve">
+    <value>问卷修改历史</value>
+  </data>
+  <data name="ResetQuestionnaireToThis" xml:space="preserve">
+    <value>恢复问卷至版本{0}？</value>
+  </data>
+  <data name="Revert" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="reverted" xml:space="preserve">
+    <value>问卷 "{0}" 已恢复</value>
+  </data>
+  <data name="reverted_to" xml:space="preserve">
+    <value>问卷 "{0}" 由版本{1}恢复而来</value>
+  </data>
+  <data name="RevertToThisVersion" xml:space="preserve">
+    <value>恢复至此版本</value>
+  </data>
+  <data name="Roster_Add" xml:space="preserve">
+    <value>二维表{0}已添加</value>
+  </data>
+  <data name="Roster_Clone" xml:space="preserve">
+    <value>二维表{0}由二维表{1}克隆而来</value>
+  </data>
+  <data name="Roster_Delete" xml:space="preserve">
+    <value>二维表{0}已删除</value>
+  </data>
+  <data name="Roster_Move_To_Roster" xml:space="preserve">
+    <value>二维表{0}已移至二维表{1}</value>
+  </data>
+  <data name="Roster_Move_To_Section" xml:space="preserve">
+    <value>二维表{0}已移至问卷子模块{1}</value>
+  </data>
+  <data name="Roster_RosterBecameAGroup" xml:space="preserve">
+    <value>二维表{0}已变成 问卷模块</value>
+  </data>
+  <data name="Roster_Update" xml:space="preserve">
+    <value>二维表{0}已更新</value>
+  </data>
+  <data name="Section_Add" xml:space="preserve">
+    <value>问卷模块{0}已添加</value>
+  </data>
+  <data name="Section_Clone" xml:space="preserve">
+    <value>问卷模块{0}由问卷模块{1}克隆而来</value>
+  </data>
+  <data name="Section_Delete" xml:space="preserve">
+    <value>问卷模块{0}已删除</value>
+  </data>
+  <data name="Section_GroupBecameARoster" xml:space="preserve">
+    <value>问卷子模块 {0} 已变成二维表</value>
+  </data>
+  <data name="Section_Move_To_Roster" xml:space="preserve">
+    <value>问卷模块{0}已移至二维表{1}</value>
+  </data>
+  <data name="Section_Move_To_Section" xml:space="preserve">
+    <value>文件块{0}已移至问卷模块{1}</value>
+  </data>
+  <data name="Section_Update" xml:space="preserve">
+    <value>问卷模块{0}已更新</value>
+  </data>
+  <data name="StaticText_Add" xml:space="preserve">
+    <value>静态文本{0}已添加</value>
+  </data>
+  <data name="StaticText_Clone" xml:space="preserve">
+    <value>静态文本{0}由静态文本{1}克隆而来</value>
+  </data>
+  <data name="StaticText_Delete" xml:space="preserve">
+    <value>静态文本{0}已删除</value>
+  </data>
+  <data name="StaticText_Move_To_Roster" xml:space="preserve">
+    <value>静态文本{0}已移至二维表{1}</value>
+  </data>
+  <data name="StaticText_Move_To_Section" xml:space="preserve">
+    <value>静态文本{0}已移至问卷模块{1}</value>
+  </data>
+  <data name="StaticText_Update" xml:space="preserve">
+    <value>静态文本{0}已更新</value>
+  </data>
+  <data name="TextsReplaced" xml:space="preserve">
+    <value>所有的 '{0}' 被替换为 '{1}'。{2}条目受到影响</value>
+  </data>
+  <data name="ThisListDoesNotContainAnyRecords" xml:space="preserve">
+    <value>这个列表不包含任何记录</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>时间戳</value>
+  </data>
+  <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+    <value>缺省翻译设为{0}</value>
+  </data>
+  <data name="Translation_Delete" xml:space="preserve">
+    <value>翻译{0}已删除</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>初始的</value>
+  </data>
+  <data name="Translation_Update" xml:space="preserve">
+    <value>翻译{0}已更新</value>
+  </data>
+  <data name="UnknownUserName" xml:space="preserve">
+    <value>&lt;&lt;未知&gt;&gt;</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Variable_Add" xml:space="preserve">
+    <value>变量{0}已添加</value>
+  </data>
+  <data name="Variable_Clone" xml:space="preserve">
+    <value>变量{0}由变量{1}克隆而来</value>
+  </data>
+  <data name="Variable_Delete" xml:space="preserve">
+    <value>变量{0}已添加</value>
+  </data>
+  <data name="Variable_Move_To_Roster" xml:space="preserve">
+    <value>变量{0}已移至二维表{1}</value>
+  </data>
+  <data name="Variable_Move_To_Section" xml:space="preserve">
+    <value>变量{0}已移至问卷模块{1}</value>
+  </data>
+  <data name="Variable_Update" xml:space="preserve">
+    <value>变量{0}已添加</value>
+  </data>
+</root>

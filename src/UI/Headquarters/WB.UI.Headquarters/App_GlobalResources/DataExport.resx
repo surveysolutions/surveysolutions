@@ -213,6 +213,12 @@
   <data name="StatusOfExportTitle" xml:space="preserve">
     <value>Status of exported interviews</value>
   </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>To</value>
+  </data>
   <data name="SurveyTemplateTitle" xml:space="preserve">
     <value>(version) Survey questionnaire</value>
   </data>

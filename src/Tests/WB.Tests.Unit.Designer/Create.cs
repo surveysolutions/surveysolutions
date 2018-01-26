@@ -31,7 +31,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePost
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -46,11 +45,13 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.NonConficltingNamespace;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
@@ -1152,6 +1153,11 @@ namespace WB.Tests.Unit.Designer
             {
                 return new RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
             }
+
+            public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic)
+            {
+                return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic);
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -1201,6 +1207,7 @@ namespace WB.Tests.Unit.Designer
         {
             return new TranslationInstance
             {
+                Id = Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Guid.NewGuid(),
                 QuestionnaireEntityId = questionnaireEntityId ?? Guid.NewGuid(),
                 Type = type,
@@ -1251,21 +1258,49 @@ namespace WB.Tests.Unit.Designer
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
             => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
 
-        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, 
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, SharedPerson[] sharedPersons = null)
+            => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, sharedPersons);
+
+        public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid id, bool isPublic = false, Guid? createdBy = null,
             SharedPerson[] sharedPersons = null)
         {
             return new QuestionnaireListViewItem() {
+                CreatedBy = createdBy,
                 IsPublic = isPublic,
-                PublicId = id ?? Guid.Empty,
+                PublicId = id,
                 SharedPersons = new HashSet<SharedPerson>(sharedPersons ?? Enumerable.Empty<SharedPerson>())
             };
         }
+
+        public static QuestionnaireListView QuestionnaireListView(params QuestionnaireListViewItem[] items)
+            => new QuestionnaireListView(1, 10, items.Length, items, string.Empty);
 
         public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
 
         public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
         {
             return new CustomWebApiAuthorizeFilter();
+        }
+
+        public static DynamicCompilerSettingsProvider DynamicCompilerSettingsProvider()
+        {
+
+            var fileSystemAccessor = new FileSystemIOAccessor();
+
+            const string pathToProfile = "C:\\Program Files (x86)\\Reference Assemblies\\Microsoft\\Framework\\.NETPortable\\v4.5\\Profile\\Profile111";
+            var referencesToAdd = new[] { "System.dll", "System.Core.dll", "System.Runtime.dll", "System.Collections.dll", "System.Linq.dll", "System.Linq.Expressions.dll", "System.Linq.Queryable.dll", "mscorlib.dll", "System.Runtime.Extensions.dll", "System.Text.RegularExpressions.dll" };
+
+            var settings = new List<IDynamicCompilerSettings>
+            {
+                Mock.Of<IDynamicCompilerSettings>(_
+                    => _.PortableAssembliesPath == pathToProfile
+                       && _.DefaultReferencedPortableAssemblies == referencesToAdd
+                       && _.Name == "profile111")
+            };
+
+            var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);
+
+            return new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor);
         }
 
         public static QuestionnaireVerifier QuestionnaireVerifier(
@@ -1309,7 +1344,8 @@ namespace WB.Tests.Unit.Designer
                 topologicalSorter ?? Create.TopologicalSorter<string>(),
                 Mock.Of<ITranslationsService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
-                Mock.Of<IQuestionnaireCompilationVersionService>());
+                Mock.Of<IQuestionnaireCompilationVersionService>(), 
+                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()));
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()

@@ -5,19 +5,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTreeStaticTextDiff(IInterviewTreeNode sourceNode, IInterviewTreeNode changedNode)
             : base(sourceNode, changedNode)
         {
+            IsTitleChanged = IsTitleChangedImp(SourceNode, ChangedNode);
         }
 
         public new InterviewTreeStaticText SourceNode => base.SourceNode as InterviewTreeStaticText;
         public new InterviewTreeStaticText ChangedNode => base.ChangedNode as InterviewTreeStaticText;
 
-        public bool IsTitleChanged
+        public bool IsTitleChanged { get; }
+
+        public bool IsTitleChangedImp(InterviewTreeStaticText sourceNode, InterviewTreeStaticText changedNode)
         {
-            get
-            {
-                if (this.IsNodeRemoved) return false;
-                if (this.IsNodeAdded && !this.ChangedNode.Title.HasSubstitutions) return false;
-                return this.SourceNode?.Title.Text != this.ChangedNode.Title.Text;
-            }
+            if (this.IsNodeRemoved) return false;
+            if (this.IsNodeAdded && !changedNode.Title.HasSubstitutions) return false;
+            return sourceNode?.Title.Text != changedNode.Title.Text;
         }
     }
 }

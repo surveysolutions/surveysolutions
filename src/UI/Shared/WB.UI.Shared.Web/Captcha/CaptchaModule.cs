@@ -1,37 +1,40 @@
-﻿using Ninject;
-using Ninject.Modules;
+﻿using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Captcha
 {
-    public class CaptchaModule : NinjectModule
+    public class CaptchaModule : IModule
     {
-        public override void Load()
+        private readonly string captcha;
+
+        public CaptchaModule(string captcha)
         {
-            var configuration = this.Kernel.Get<IConfigurationManager>().AppSettings;
+            this.captcha = captcha;
+        }
 
-            var captcha = configuration.Get("CaptchaService");
-
+        public void Load(IIocRegistry registry)
+        {
             if (string.IsNullOrWhiteSpace(captcha))
             {
-                this.Bind<ICaptchaProvider>().To<NoCaptchaProvider>();
+                registry.Bind<ICaptchaProvider, NoCaptchaProvider>();
             }
             else
             {
                 switch (captcha.ToLowerInvariant())
                 {
-                    case "recaptcha": this.Bind<ICaptchaProvider>().To<ReCaptchaProvider>();
+                    case "recaptcha":
+                        registry.Bind<ICaptchaProvider, ReCaptchaProvider>();
                         break;
                     case "hosted":
-                        this.Bind<ICaptchaProvider>().To<HostedCaptchaProvider>();
+                        registry.Bind<ICaptchaProvider, HostedCaptchaProvider>();
                         break;
                     default:
-                        this.Bind<ICaptchaProvider>().To<NoCaptchaProvider>();
+                        registry.Bind<ICaptchaProvider, NoCaptchaProvider>();
                         break;
                 }
             }
 
-            this.Bind<ICaptchaService>().To<WebCacheBasedCaptchaService>();
+            registry.Bind<ICaptchaService, WebCacheBasedCaptchaService>();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing.Storage;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
@@ -14,13 +15,13 @@ using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests
 {
     internal class when_removing_interview
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             var principal = Mock.Of<IInterviewerPrincipal>(x =>
                 x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(y => y.UserId == Guid.Parse("22222222222222222222222222222222")));
@@ -42,28 +43,33 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 eventStore: eventStore.Object,
                 interviewMultimediaViewRepository: inMemoryMultimediaViewRepository,
                 interviewFileViewRepository: inMemoryFileViewRepository);
-        };
 
-        Because of = () => interviewerInterviewAccessor.RemoveInterview(interviewId);
+            BecauseOf();
+        }
 
-        It should_remove_interview_view_from_plain_storage = () =>
+        public void BecauseOf() => interviewerInterviewAccessor.RemoveInterview(interviewId);
+
+        [Test]
+        public void should_remove_interview_view_from_plain_storage() =>
             interviewViewRepositoryMock.Verify(x => x.Remove(interviewStringId), Times.Once);
 
-        It should_clean_cache_of_aggregate_root_repository = () =>
+
+        [Test]
+        public void should_clean_cache_of_aggregate_root_repository() =>
             mockOfAggregateRootRepositoryWithCache.Verify(x => x.CleanCache(), Times.Once);
 
-        It should_clean_cache_of_snapshot_repository = () =>
-            mockOfSnapshotStoreWithCache.Verify(x => x.CleanCache(), Times.Once);
 
-        It should_not_multimedia_repository_contains_views_by_specified_id = () =>
+        [Test]
+        public void should_not_multimedia_repository_contains_views_by_specified_id() =>
             inMemoryMultimediaViewRepository.Where(multimedia => multimedia.InterviewId == interviewId).Any().ShouldBeFalse();
 
-        It should_not_file_repository_contains_views_by_specified_interview_id = () =>
+        [Test]
+        public void should_not_file_repository_contains_views_by_specified_interview_id() =>
             inMemoryFileViewRepository.Where(file => file.Id == interviewFile1 || file.Id == interviewFile2).Any().ShouldBeFalse();
 
-        It should_remove_events_by_specified_interview = () =>
+        [Test]
+        public void should_remove_events_by_specified_interview() =>
              eventStore.Verify(x => x.RemoveEventSourceById(interviewId), Times.Once);
-
 
         private static readonly string interviewStringId = "11111111111111111111111111111111";
         private static readonly Guid interviewId = Guid.Parse(interviewStringId);

@@ -430,42 +430,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export.
-        /// </summary>
-        public static string ExportButton {
-            get {
-                return ResourceManager.GetString("ExportButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Comma separated values (.csv).
-        /// </summary>
-        public static string ExportToCsv {
-            get {
-                return ResourceManager.GetString("ExportToCsv", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Excel (.xlsx).
-        /// </summary>
-        public static string ExportToExcel {
-            get {
-                return ResourceManager.GetString("ExportToExcel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tab separated values (.tab).
-        /// </summary>
-        public static string ExportToTab {
-            get {
-                return ResourceManager.GetString("ExportToTab", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Assignment.
         /// </summary>
         public static string Filters_Assignment {
@@ -1780,6 +1744,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished with errors. Please repeat the action later. Write to support if problems will repeat in future..
+        /// </summary>
+        public static string Interviewers_FinishedWithErrors {
+            get {
+                return ResourceManager.GetString("Interviewers_FinishedWithErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interviewers.
         /// </summary>
         public static string Interviewers_Header {
@@ -1798,6 +1771,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer(s) {0} will be moved to another team of supervisor {1}..
+        /// </summary>
+        public static string Interviewers_InterviewersToMove {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewersToMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer(s) {0} are in the team of supervisor {1} and no actions will be performed..
+        /// </summary>
+        public static string Interviewers_InterviewersToStay {
+            get {
+                return ResourceManager.GetString("Interviewers_InterviewersToStay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App version.
         /// </summary>
         public static string Interviewers_InterviewerVersion {
@@ -1812,6 +1803,69 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_InterviewerVersionTooltip {
             get {
                 return ResourceManager.GetString("Interviewers_InterviewerVersionTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the new team of supervisor {0}..
+        /// </summary>
+        public static string Interviewers_MoveAllToNewTeam {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveAllToNewTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a team to move {0}.
+        /// </summary>
+        public static string Interviewers_MoveInterviewerPopupTitle {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveInterviewerPopupTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move to another team.
+        /// </summary>
+        public static string Interviewers_MoveToAnotherTeam {
+            get {
+                return ResourceManager.GetString("Interviewers_MoveToAnotherTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving users completed.
+        /// </summary>
+        public static string Interviewers_MovingCompleted {
+            get {
+                return ResourceManager.GetString("Interviewers_MovingCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving is in progress.
+        /// </summary>
+        public static string Interviewers_MovingIsInProgress {
+            get {
+                return ResourceManager.GetString("Interviewers_MovingIsInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} and {1}.
+        /// </summary>
+        public static string Interviewers_NamesFormatLessThanLimit {
+            get {
+                return ResourceManager.GetString("Interviewers_NamesFormatLessThanLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} and {1} more.
+        /// </summary>
+        public static string Interviewers_NamesFormatMoreThanLimit {
+            get {
+                return ResourceManager.GetString("Interviewers_NamesFormatMoreThanLimit", resourceCulture);
             }
         }
         
@@ -1839,6 +1893,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviewers_OutdatedOption {
             get {
                 return ResourceManager.GetString("Interviewers_OutdatedOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make original supervisor responsible for the assignments and interviews of the moved interviewer(s)..
+        /// </summary>
+        public static string Interviewers_ReassigntToOriginalSupervisor {
+            get {
+                return ResourceManager.GetString("Interviewers_ReassigntToOriginalSupervisor", resourceCulture);
             }
         }
         
@@ -2095,6 +2158,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred during upload.
+        /// </summary>
+        public static string Map_UploadingError {
+            get {
+                return ResourceManager.GetString("Map_UploadingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maps were succesfuly uploaded.
+        /// </summary>
+        public static string Map_UploadingSuccess {
+            get {
+                return ResourceManager.GetString("Map_UploadingSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delink User from map.
         /// </summary>
         public static string MapDetails_DelinkUser {
@@ -2316,6 +2397,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string MapList_UserLinking {
             get {
                 return ResourceManager.GetString("MapList_UserLinking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Maps.
+        /// </summary>
+        public static string MapList_UserMapsLink {
+            get {
+                return ResourceManager.GetString("MapList_UserMapsLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Maps.
+        /// </summary>
+        public static string MapList_UserMapsTitle {
+            get {
+                return ResourceManager.GetString("MapList_UserMapsTitle", resourceCulture);
             }
         }
         

@@ -21,8 +21,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         
         Translation Translation { get; }
 
-        [Obsolete("This method is for import service only and should be removed at all.")]
-        IQuestion GetQuestionByStataCaption(string stataCaption);
+        IQuestion GetQuestionByVariable(string variable);
 
         bool HasQuestion(Guid questionId);
 
@@ -46,7 +45,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid GetVariableIdByVariableName(string variableName);
 
-        Guid GetGroupIdByVariableName(string variableName);
+        Guid? GetRosterIdByVariableName(string variableName, bool ignoreCase = false);
 
         string GetQuestionTitle(Guid questionId);
 
@@ -102,7 +101,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetCustomEnablementConditionForGroup(Guid groupId);
 
-        bool ShouldQuestionSpecifyRosterSize(Guid questionId);
+        bool IsRosterSizeQuestion(Guid questionId);
 
         IEnumerable<Guid> GetRosterGroupsByRosterSizeQuestion(Guid questionId);
 
@@ -259,6 +258,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsUsingExpressionStorage();
 
         List<Guid> GetExpressionsPlayOrder();
+        bool SupportsExpressionsGraph();
+        List<Guid> GetExpressionsPlayOrder(Guid changedEntity);
+        List<Guid> GetValidationExpressionsPlayOrder(IEnumerable<Guid> entities);
+
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
         string GetRosterVariableName(Guid id);
     }

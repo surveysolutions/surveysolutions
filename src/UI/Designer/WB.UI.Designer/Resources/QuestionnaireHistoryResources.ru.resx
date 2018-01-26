@@ -321,4 +321,7 @@
   <data name="Translation_DefaultTranslationSet" xml:space="preserve">
     <value>Установлен язык по умолчанию {0}</value>
   </data>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>Метаданные опросника {0} обновлены</value>
+  </data>
 </root>

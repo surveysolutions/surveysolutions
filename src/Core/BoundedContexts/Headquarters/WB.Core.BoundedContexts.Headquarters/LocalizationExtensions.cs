@@ -12,43 +12,43 @@ namespace WB.Core.BoundedContexts.Headquarters
             string returnValue = string.Empty;
             switch (status)
             {
-                    case InterviewStatus.Created:
+                case InterviewStatus.Created:
                     returnValue = Strings.InterviewStatus_Created;
                     break;
-                    case InterviewStatus.SupervisorAssigned:
+                case InterviewStatus.SupervisorAssigned:
                     returnValue = Strings.InterviewStatus_SupervisorAssigned;
                     break;
-                    case InterviewStatus.Deleted:
+                case InterviewStatus.Deleted:
                     returnValue = Strings.InterviewStatus_Deleted;
                     break;
-                    case InterviewStatus.Restored:
+                case InterviewStatus.Restored:
                     returnValue = Strings.InterviewStatus_Restored;
                     break;
-                    case InterviewStatus.InterviewerAssigned:
+                case InterviewStatus.InterviewerAssigned:
                     returnValue = Strings.InterviewStatus_InterviewerAssigned;
                     break;
-                    case InterviewStatus.ReadyForInterview:
+                case InterviewStatus.ReadyForInterview:
                     returnValue = Strings.InterviewStatus_ReadyForInterview;
                     break;
-                    case InterviewStatus.SentToCapi:
+                case InterviewStatus.SentToCapi:
                     returnValue = Strings.InterviewStatus_SentToCapi;
                     break;
-                    case InterviewStatus.Completed:
+                case InterviewStatus.Completed:
                     returnValue = Strings.InterviewStatus_Completed;
                     break;
-                    case  InterviewStatus.Restarted:
+                case InterviewStatus.Restarted:
                     returnValue = Strings.InterviewStatus_Restarted;
                     break;
-                    case InterviewStatus.ApprovedBySupervisor:
+                case InterviewStatus.ApprovedBySupervisor:
                     returnValue = Strings.InterviewStatus_ApprovedBySupervisor;
                     break;
-                    case InterviewStatus.RejectedBySupervisor:
+                case InterviewStatus.RejectedBySupervisor:
                     returnValue = Strings.InterviewStatus_RejectedBySupervisor;
                     break;
-                    case InterviewStatus.ApprovedByHeadquarters:
+                case InterviewStatus.ApprovedByHeadquarters:
                     returnValue = Strings.InterviewStatus_ApprovedByHeadquarters;
                     break;
-                    case InterviewStatus.RejectedByHeadquarters:
+                case InterviewStatus.RejectedByHeadquarters:
                     returnValue = Strings.InterviewStatus_RejectedByHeadquarters;
                     break;
             }

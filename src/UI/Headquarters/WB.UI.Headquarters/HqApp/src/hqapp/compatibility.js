@@ -19,20 +19,19 @@ $.fn.preventDoubleSubmission = function () {
 
 window.ajustNoticeHeight = function () {
     var height = $(".view-mode").outerHeight();
-    $('.content').css("top", height+"px"); 
-    $('.filters').css("top", height+"px"); 
-    $('.filters-results').css("top", height+"px");
-    $('main').css("margin-top", height+"px");
+    $(".view-mode + main .container-fluid .panel-details").css("padding-top", height);
 };
+window.ajustDetailsPanelHeight = function () {
+    var height = $(".panel-details").outerHeight();
+    $('.filters').css("top", height + "px");
+    $('.filters-results').css("top", height + "px");
+    $('.content').css("top", height + "px");
+    $('main').css("margin-top", height + "px");
+}
 
-
-$(function() {
+$(function () {
     var globalSettings = window.input.settings;
-    
-    $("#hide-filters").click(function () {
-        $(".filters").toggleClass("hidden-filters");
-        $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
-    });
+
     $("main").removeClass("hold-transition");
     $("footer").removeClass("hold-transition");
 
@@ -68,12 +67,12 @@ $(function() {
 
     var syncQueueConfig = globalSettings.config.syncQueue;
     if (syncQueueConfig.enabled) {
-        var updateQueueLength = function() {
+        var updateQueueLength = function () {
             $.ajax({
                 url: syncQueueConfig.lengthUrl,
                 type: 'get',
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     $('#sync-queue-size').text(data);
                     if (data > 0) {
                         $('#IncomingPackagesQueueIndicator').fadeIn();
@@ -86,14 +85,17 @@ $(function() {
 
         setInterval(updateQueueLength, 3000);
     }
-    
-    window.ajustNoticeHeight();
 
-    $('.view-mode .alerts .alert').on('closed.bs.alert', function() {
+    window.ajustNoticeHeight();
+    window.ajustDetailsPanelHeight();
+
+    $('.view-mode .alerts .alert').on('closed.bs.alert', function () {
         window.ajustNoticeHeight();
-    });
+        window.ajustDetailsPanelHeight();
+    })
 });
 
 $(window).resize(function () {
     window.ajustNoticeHeight();
+    window.ajustDetailsPanelHeight();
 });

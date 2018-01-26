@@ -63,7 +63,8 @@ export default {
         },
 
         resetFilters() {
-            this.$store.dispatch("resetAllFilters")
+            this.$store.dispatch("resetAllFilters");
+            this.$store.dispatch("hideSearchResults");
         }
     },
     components: {

@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -9,6 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChangeHistoryDenormalizerFunctionalTests
 {
+    [TestOf(typeof(InterviewSummaryCompositeDenormalizer))]
     internal class StatusChangeHistoryDenormalizerFunctionalTestContext
     {
         public static InterviewSummaryCompositeDenormalizer CreateDenormalizer(IReadSideRepositoryWriter<InterviewSummary> interviewStatuses = null)

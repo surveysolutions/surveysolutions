@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
         {
             ExportedVariableHeaderItem headerItem = new ExportedVariableHeaderItem()
             {
-                ColumnNames = new []{ "column_name" },
+                ColumnHeaders = new List<HeaderColumn>() { new HeaderColumn(){Name = "column_name" } },
                 VariableType = variableType,
             };
 

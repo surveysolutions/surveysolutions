@@ -1,7 +1,13 @@
-﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
-using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.BoundedContexts.Tester.ViewModels;
+﻿using Main.Core.Documents;
+using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Tester
 {
@@ -9,13 +15,11 @@ namespace WB.Core.BoundedContexts.Tester
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
-
-            registry.Bind<LoginViewModel>();
-            registry.Bind<DashboardViewModel>();
-            registry.Bind<QuestionnaireDownloadViewModel>();
-            registry.Bind<PrefilledQuestionsViewModel>();
-            registry.Bind<InterviewViewModel>();
+            registry.BindAsSingleton<IEventStore, InMemoryEventStore>();
+            registry.BindAsSingleton<ISnapshotStore, InMemoryEventStore>();
+            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
+            registry.BindAsSingleton<IPlainStorage<OptionView>, InMemoryPlainStorage<OptionView>>();
+            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
     }
 }

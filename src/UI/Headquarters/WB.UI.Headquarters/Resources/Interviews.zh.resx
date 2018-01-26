@@ -161,4 +161,55 @@
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>一些访谈没有选择负责人。请选择一个调查员。</value>
   </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>一些访谈没有选择负责人。请选择一个调查员或督导员。</value>
+  </data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
+    <value>一些访谈没有选择负责人。请选择一个督导员。</value>
+  </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>键在设备上被生成，但是由于和服务器上已有的访谈产生冲突故被修改。</value>
+  </data>
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve">
+    <value>任务ID。点击相应区域输入完整的ID。</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>负责人用户。直接点选一个用户名或在筛选器中直接输入用户名，以选定某个用户。</value>
+  </data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+    <value>访谈的状态。选择一个状态以查看相关的全部访谈。点击排序按钮以任务编号排序。</value>
+  </data>
+  <data name="Tooltip_Table_Assignment" xml:space="preserve">
+    <value>用于标记任务所属访谈的标识。点击排序按钮以任务编号进行排序。</value>
+  </data>
+  <data name="Tooltip_Table_HasErrors" xml:space="preserve">
+    <value>访谈是否有至少一个验证性错误的指示器。“是”表示只要有一个错误， “-” 表示没有错误。点击排序按钮以出现的错误进行排序。</value>
+  </data>
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
+    <value>点击这里显示或隐藏识别型问题。隐藏识别型问题可能为其它信息提供更多的空间。显示识别型问题可能可以提供更多的识别细节</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>区分各个任务的信息。这些信息是在问卷设计器中用来识别的、被标记的问题答案。</value>
+  </data>
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
+    <value>在系统（总部、督导员、调查员）中出现的短项目识别器。考虑使用此类识别器的ID于田野调研团队进行沟通，而不是大量的识别性问题。</value>
+  </data>
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
+    <value>访谈的改变最后公布在服务器上。点击排序按钮以时间进行排序。</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
+    <value>访谈是否已被调查员下载到平板的标识。点击排序按钮，以调查员的收据进行排序。</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>该用户最近是此访谈的负责人。点击排序按钮对用户名进行排序。</value>
+  </data>
+  <data name="Tooltip_Table_Status" xml:space="preserve">
+    <value>调研工作流程中的访谈状态。点击排序按钮以状态进行排序。</value>
+  </data>
 </root>

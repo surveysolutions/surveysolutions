@@ -7,6 +7,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
@@ -52,10 +53,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     () => interviewSummaryStorage.GetById(interviewGuid));
 
             if (interview == null)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Headquarters.Resources.WebInterview.Error_NotFound);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             if (!AllowedInterviewStatuses.Contains(interview.Status))
-                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Headquarters.Resources.WebInterview.Error_NoActionsNeeded);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.NoActionsNeeded, Enumerator.Native.Resources.WebInterview.Error_NoActionsNeeded);
 
             if (this.authorizedUser.IsInterviewer)
             {
@@ -64,7 +65,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 else
                 {
                     throw new InterviewAccessException(InterviewAccessExceptionReason.Forbidden,
-                        Headquarters.Resources.WebInterview.Error_Forbidden);
+                        Enumerator.Native.Resources.WebInterview.Error_Forbidden);
                 }
             }
 
@@ -75,17 +76,17 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     .ExecuteInPlainTransaction(
                         () => webInterviewConfigProvider.Get( questionnaireIdentity));
 
-            //interview is not public available and responsible is not logged in
-            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned)
+            //interview is not public available and logged in user is not current interview responsible
+            if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned && this.authorizedUser.IsAuthenticated)
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised,
-                    Headquarters.Resources.WebInterview.Error_UserNotAuthorised);
+                    Enumerator.Native.Resources.WebInterview.Error_UserNotAuthorised);
             }
 
             if (!webInterviewConfig.Started || !AnonymousUserAllowedStatuses.Contains(interview.Status))
             {
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired,
-                    Headquarters.Resources.WebInterview.Error_InterviewExpired);
+                    Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
         }
     }

@@ -1,0 +1,36 @@
+﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.Infrastructure.Versions
+@model Guid
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @Styles.Render("~/Content/StylesRuntime/")
+
+</head>
+<body class="gray-background">
+<script>
+    window.CONFIG = {
+        virtualPath:    '@Url.Content("~/WebTester")',
+        imageUploadUri: '@Url.Content("~/multimedia/image")',
+        audioUploadUri: '@Url.Content("~/multimedia/audio")',
+        imageGetBase:   '@Url.Content("~/api/WebInterviewResources")',
+        audioGet: '@Url.Content("~/Multimedia/AudioRecord")',
+        signalrPath: '@Url.Content("~/signalr/hubs")',
+        verboseLogging: false,
+        supportedTransports: ["webSockets", "longPolling"],
+        appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
+        hqLink: "null",
+        hubName: "interview",
+        splashScreen: true
+    }
+</script>
+<div id="app"></div>
+@Html.Partial("partial.webtester")
+<script>
+    window.location = '@Url.Content("~/WebTester/Redirect/" + Model)'
+</script>
+</body>
+</html>

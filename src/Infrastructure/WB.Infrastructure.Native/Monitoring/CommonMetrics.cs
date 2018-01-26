@@ -14,6 +14,6 @@
 
             public static readonly Gauge BrokenPackagesCount = new Gauge(
             "wb_broken_packages_count",
-            "Amount of broken packages on server");
+            "Amount of broken packages on server", "type");
     }
 }

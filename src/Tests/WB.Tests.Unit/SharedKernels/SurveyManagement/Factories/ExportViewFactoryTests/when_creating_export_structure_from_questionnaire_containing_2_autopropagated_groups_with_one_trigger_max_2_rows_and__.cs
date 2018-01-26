@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1);
 
         It should_create_header_with_60_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster2Id }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(60);
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster2Id }].HeaderItems[linkedQuestionId].ColumnHeaders.Count.ShouldEqual(60);
 
         It should_create_header_with_nullable_level_labels = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();

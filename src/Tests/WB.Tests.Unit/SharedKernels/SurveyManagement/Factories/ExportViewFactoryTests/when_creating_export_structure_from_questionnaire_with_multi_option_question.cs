@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -40,9 +41,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             questionnaireExportStructure =
                 exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1);
+
             multiOptionQuestionColumnNames =
                 questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[multiOptionQuestion]
-                    .ColumnNames;
+                    .ColumnHeaders.Select(x => x.Name).ToArray();
         };
 
         It should_create_header_where_negative_sign_and_decimal_separator_of_a_multioption_question_value_replaced_with_n_and_underscore_respectively = () =>

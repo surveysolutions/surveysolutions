@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Emit;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -30,7 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public GenerationResult GenerateProcessorStateAssembly(QuestionnaireDocument questionnaire, int targetVersion, out string generatedAssembly)
         {
             var generatedEvaluator = this.GenerateProcessorStateClasses(questionnaire, targetVersion);
-            var referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference(targetVersion);
+            List<MetadataReference> referencedPortableAssemblies = this.compilerSettingsProvider.GetAssembliesToReference();
 
             EmitResult emitedResult = this.codeCompiler.TryGenerateAssemblyAsStringAndEmitResult(
                 questionnaire.PublicKey, 
@@ -41,10 +42,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return new GenerationResult(emitedResult.Success, emitedResult.Diagnostics);
         }
 
-        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion)
+        public Dictionary<string, string> GenerateProcessorStateClasses(QuestionnaireDocument questionnaire, int targetVersion, bool inSingleFile = false)
         {
             return targetVersion >= 20 
-                ? this.codeGeneratorV2.Generate(questionnaire, targetVersion) 
+                ? this.codeGeneratorV2.Generate(questionnaire, targetVersion, inSingleFile) 
                 : this.codeGenerator.Generate(questionnaire, targetVersion);
         }
     }

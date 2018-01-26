@@ -25,8 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             => new InterviewFactory(
                 summaryRepository: interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                sessionProvider: sessionProvider ?? Mock.Of<ISessionProvider>(),
-                jsonSerializer: jsonSerializer ?? Mock.Of<IEntitySerializer<object>>());
+                sessionProvider: sessionProvider ?? Mock.Of<ISessionProvider>());
         [Test]
         public void when_remove_flag_question_received_by_interviewer()
         {

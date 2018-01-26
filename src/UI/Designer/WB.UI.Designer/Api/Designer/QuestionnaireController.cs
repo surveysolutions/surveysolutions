@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,7 +15,9 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Filters;
+using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Models;
+using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api
@@ -29,10 +32,12 @@ namespace WB.UI.Designer.Api
         private readonly IQuestionnaireInfoFactory questionnaireInfoFactory;
 
         private readonly IMembershipUserService userHelper;
+        private readonly WebTesterSettings webTesterSettings;
 
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IChapterInfoViewFactory chapterInfoViewFactory;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
+        private readonly IWebTesterService webTesterService;
         private const int MaxCountOfOptionForFileredCombobox = 200;
         public const int MaxVerificationErrors = 100;
 
@@ -42,7 +47,9 @@ namespace WB.UI.Designer.Api
             IQuestionnaireVerifier questionnaireVerifier,
             IVerificationErrorsMapper verificationErrorsMapper,
             IQuestionnaireInfoFactory questionnaireInfoFactory,
-            IMembershipUserService userHelper)
+            IMembershipUserService userHelper, 
+            WebTesterSettings webTesterSettings,
+            IWebTesterService webTesterService)
         {
             this.chapterInfoViewFactory = chapterInfoViewFactory;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
@@ -52,6 +59,8 @@ namespace WB.UI.Designer.Api
             this.questionnaireInfoFactory = questionnaireInfoFactory;
 
             this.userHelper = userHelper;
+            this.webTesterSettings = webTesterSettings;
+            this.webTesterService = webTesterService;
         }
 
         [HttpGet]
@@ -196,6 +205,14 @@ namespace WB.UI.Designer.Api
                 Errors = errors,
                 Warnings = warnings
             };
+        }
+
+        [HttpGet]
+        [CamelCase]
+        public string WebTest(Guid id)
+        {
+            var token = this.webTesterService.CreateTestQuestionnaire(id);
+            return $"{webTesterSettings.BaseUri}/{token}";
         }
 
         [HttpGet]
