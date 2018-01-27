@@ -80,12 +80,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoreTestRunner.cs" />
-    <Compile Include="CustomCommandService.cs" />
-    <Compile Include="Ninject.cs" />
+    <Compile Include="Commands\CoreDebugger.cs" />
+    <Compile Include="CustomInfrastructure\EventsToCommandConverter.cs" />
+    <Compile Include="Setup\ServiceLocationModule.cs" />
+    <Compile Include="Setup\CoreDebugModule.cs" />
+    <Compile Include="Setup\CoreTesterModule.cs" />
+    <Compile Include="Commands\CoreTestRunner.cs" />
+    <Compile Include="CustomInfrastructure\CustomQuestionnaireAssemblyAccessor.cs" />
+    <Compile Include="CustomInfrastructure\CustomCommandService.cs" />
+    <Compile Include="Commands\DebugInformationDumper.cs" />
+    <Compile Include="Setup\ModuleExtensions.cs" />
+    <Compile Include="Setup\Ninject.cs" />
+    <Compile Include="Setup\NinjectConfig.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpdatedQuestionnaireStorage.cs" />
+    <Compile Include="CustomInfrastructure\CustomQuestionnaireStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -128,6 +137,11 @@
       <Project>{f3191b63-3453-4b5e-957b-21216632bef3}</Project>
       <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="runCoreTester.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

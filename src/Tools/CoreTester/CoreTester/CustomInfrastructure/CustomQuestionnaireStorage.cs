@@ -7,15 +7,15 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace CoreTester
+namespace CoreTester.CustomInfrastructure
 {
-    public class UpdatedQuestionnaireStorage : IQuestionnaireStorage
+    public class CustomQuestionnaireStorage : IQuestionnaireStorage
     {
         private IQuestionnaire questionnaire = null;
         private QuestionnaireDocument questionnaireDocument = null;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
 
-        public UpdatedQuestionnaireStorage(IExpressionsPlayOrderProvider expressionsPlayOrderProvider)
+        public CustomQuestionnaireStorage(IExpressionsPlayOrderProvider expressionsPlayOrderProvider)
         {
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
         }
