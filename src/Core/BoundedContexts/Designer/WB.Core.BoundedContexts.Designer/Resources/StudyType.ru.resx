@@ -118,75 +118,75 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdministrativeRecords" xml:space="preserve">
-    <value>Administrative Records</value>
+    <value>Административные записи</value>
   </data>
   <data name="AgriculturalCensus" xml:space="preserve">
-    <value>Agricultural Census</value>
+    <value>Сельскохозяйственная перепись</value>
   </data>
   <data name="AgriculturalSurvey" xml:space="preserve">
-    <value>Agricultural Survey</value>
+    <value>Сельскохозяйственный обзор</value>
   </data>
   <data name="ChildLaborSurvey" xml:space="preserve">
-    <value>Child Labor Survey</value>
+    <value>Обзор детского труда</value>
   </data>
   <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
-    <value>Core Welfare Indicators Questionnaire</value>
+    <value>Вопросник по индикаторам социального обеспечения</value>
   </data>
   <data name="DemographicAndHealthSurvey" xml:space="preserve">
-    <value>Demographic and Health Survey</value>
+    <value>Демографическое и медицинское обследование</value>
   </data>
   <data name="EnterpriseCensus" xml:space="preserve">
-    <value>Enterprise Census</value>
+    <value>Перепись предприятий</value>
   </data>
   <data name="EnterpriseSurvey" xml:space="preserve">
-    <value>Enterprise Survey</value>
+    <value>Обзор предприятий</value>
   </data>
   <data name="HouseholdHealthSurvey" xml:space="preserve">
-    <value>Household Health Survey</value>
+    <value>Обследование домашних хозяйств</value>
   </data>
   <data name="HouseholdSurvey" xml:space="preserve">
-    <value>Household Survey</value>
+    <value>Обследование домашних хозяйств</value>
   </data>
   <data name="InformalSectorSurvey" xml:space="preserve">
-    <value>Informal Sector Survey</value>
+    <value>Обзор неформального сектора</value>
   </data>
   <data name="IntegratedSurvey" xml:space="preserve">
-    <value>Integrated Survey</value>
+    <value>Интегрированный опрос</value>
   </data>
   <data name="LaborForceSurvey" xml:space="preserve">
-    <value>Labor Force Survey</value>
+    <value>Обследование рабочей силы</value>
   </data>
   <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
-    <value>Living Standards Measurement Study</value>
+    <value>Исследование уровня жизни</value>
   </data>
   <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
-    <value>Multiple Indicator Cluster Survey</value>
+    <value>Многоуровневое кластерное обследование</value>
   </data>
   <data name="PopulationAndHousingCensus" xml:space="preserve">
-    <value>Population and Housing Census</value>
+    <value>Перепись населения и жилого фонда</value>
   </data>
   <data name="PriceSurvey" xml:space="preserve">
-    <value>Price Survey</value>
+    <value>Обзор цен</value>
   </data>
   <data name="PrioritySurvey" xml:space="preserve">
-    <value>Priority Survey</value>
+    <value>Приоритетное обследование</value>
   </data>
   <data name="SampleFrame" xml:space="preserve">
-    <value>Sample Frame</value>
+    <value>Образец рамки</value>
   </data>
   <data name="ServiceProvisionAssessments" xml:space="preserve">
-    <value>Service Provision Assessments</value>
+    <value>Оценка предоставления услуг</value>
   </data>
   <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
-    <value>Socio Economic / Monitoring Survey</value>
+    <value>Обследование социально-экономического мониторинга</value>
   </data>
   <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
-    <value>Statistical Info and Monitoring Prog.</value>
+    <value>Статистическая информация и мониторинг.</value>
   </data>
   <data name="WorldFertilitySurvey" xml:space="preserve">
-    <value>World Fertility Survey</value>
+    <value>Обзор мировой фертильности</value>
   </data>
   <data name="WorldHealthSurvey" xml:space="preserve">
-    <value>World Health Survey</value>
+    <value>Всемирный обзор состояния здоровья</value>
   </data>
 </root>

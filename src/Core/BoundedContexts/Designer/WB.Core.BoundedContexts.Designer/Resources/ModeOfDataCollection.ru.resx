@@ -124,18 +124,18 @@
     <value>CATI</value>
   </data>
   <data name="FaceToFace" xml:space="preserve">
-    <value>Face-to-Face</value>
+    <value>Лицом к лицу</value>
   </data>
   <data name="FocusGroup" xml:space="preserve">
-    <value>Focus Group</value>
+    <value>Фокус-группа</value>
   </data>
   <data name="Internet" xml:space="preserve">
-    <value>Internet</value>
+    <value>Интернет</value>
   </data>
   <data name="Mail" xml:space="preserve">
-    <value>Mail</value>
+    <value>Почта</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>Другие</value>
   </data>
 </root>

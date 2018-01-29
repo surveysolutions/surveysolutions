@@ -118,30 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="adm" xml:space="preserve">
-    <value>Administrative records data [adm]</value>
+    <value>Данные административных записей [adm]</value>
   </data>
   <data name="agg" xml:space="preserve">
-    <value>Aggregate data [agg]</value>
+    <value>Совокупные данные [agg]</value>
   </data>
   <data name="cen" xml:space="preserve">
-    <value>Census/enumeration data [cen]</value>
+    <value>Данные переписи / перечисления [cen]</value>
   </data>
   <data name="cli" xml:space="preserve">
-    <value>Clinical data [cli]</value>
+    <value>Клинические данные [cli]</value>
   </data>
   <data name="evn" xml:space="preserve">
-    <value>Event/transaction data [evn]</value>
+    <value>Данные о событиях / транзакциях [evn]</value>
   </data>
   <data name="obs" xml:space="preserve">
-    <value>Observation data/ratings [obs]</value>
+    <value>Данные наблюдения / оценки [obs]</value>
   </data>
   <data name="pro" xml:space="preserve">
-    <value>Process-produced data [pro]</value>
+    <value>Обработанные данные [pro]</value>
   </data>
   <data name="ssd" xml:space="preserve">
-    <value>Sample survey data [ssd]</value>
+    <value>Пример данных опроса [ssd]</value>
   </data>
   <data name="tbd" xml:space="preserve">
-    <value>Time budget diaries [tbd]</value>
+    <value>Дневники дневного бюджета [tbd]</value>
   </data>
 </root>
