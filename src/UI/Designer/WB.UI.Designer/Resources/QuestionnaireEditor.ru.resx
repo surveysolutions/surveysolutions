@@ -996,9 +996,12 @@
     <value>Консультанты:</value>
     <comment>Консультанты:</comment>
   </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Базовая информация</value>
+  </data>
   <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
-    <value>Дополнительная информация:</value>
-    <comment>Дополнительная информация:</comment>
+    <value>Дополнительная информация</value>
+    <comment>Дополнительная информация</comment>
   </data>
   <data name="SideBarMetadataNotes" xml:space="preserve">
     <value>Заметки:</value>
