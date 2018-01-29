@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WB.UI.Headquarters.Services
+namespace WB.Enumerator.Native.WebInterview.Services
 {
     public interface IAudioProcessingService
     {

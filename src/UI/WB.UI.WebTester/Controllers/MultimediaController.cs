@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Shared.Web.Services;
 using WB.UI.WebTester.Services;
 
@@ -22,12 +23,14 @@ namespace WB.UI.WebTester.Controllers
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly ICacheStorage<MultimediaFile,string> mediaStorage;
+        private readonly IAudioProcessingService audioProcessingService;
         private readonly IImageProcessingService imageProcessingService;
 
         public MultimediaController(ICommandService commandService,
             IStatefulInterviewRepository statefulInterviewRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
             ICacheStorage<MultimediaFile, string> mediaStorage,
+            IAudioProcessingService audioProcessingService,
             IImageProcessingService imageProcessingService)
         {
             this.commandService = commandService;
@@ -37,6 +40,7 @@ namespace WB.UI.WebTester.Controllers
                                                    throw new ArgumentNullException(
                                                        nameof(webInterviewNotificationService));
             this.mediaStorage = mediaStorage;
+            this.audioProcessingService = audioProcessingService;
             this.imageProcessingService = imageProcessingService;
         }
 
@@ -80,21 +84,21 @@ namespace WB.UI.WebTester.Controllers
 
                     byte[] bytes = ms.ToArray();
 
-                    var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
+                    var audioFile = await audioProcessingService.CompressAudioFileAsync(bytes);
 
-                    var duration = SoundInfo.GetSoundLength(bytes);
+                    var fileName = $@"{question.VariableName}__{questionIdentity.RosterVector}.m4a";
 
                     mediaStorage.Store(new MultimediaFile
                     {
                         Filename = fileName,
-                        Data = bytes,
-                        Duration = duration,
+                        Data = audioFile.Binary,
+                        Duration = audioFile.Duration,
                         MimeType = "audio/wav"
                     }, fileName, interview.Id);
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
                         interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                        DateTime.UtcNow, fileName, duration);
+                        DateTime.UtcNow, fileName, audioFile.Duration);
 
                     this.commandService.Execute(command);
                 }

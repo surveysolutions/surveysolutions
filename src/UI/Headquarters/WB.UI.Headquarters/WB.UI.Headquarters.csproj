@@ -2208,9 +2208,7 @@
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
-    <Compile Include="Services\AudioProcessingService.cs" />
     <Compile Include="Services\MetricsService.cs" />
-    <Compile Include="Services\IAudioProcessingService.cs" />
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
