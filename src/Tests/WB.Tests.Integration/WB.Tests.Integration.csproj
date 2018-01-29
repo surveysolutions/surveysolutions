@@ -331,6 +331,7 @@
     <Compile Include="InterviewTests\EnablementAndValidness\when_answering_makes_interview_invalid.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_cascading_question_used_in_conditions.cs" />
     <Compile Include="InterviewTests\EnablementAndValidness\when_completing_interview_with_disabled_invalid_question.cs" />
+    <Compile Include="InterviewTests\Interview.Synchronization.Tests.cs" />
     <Compile Include="InterviewTests\LanguageTests\when_remove_roster_of_hiddenIfDisabled_roster.cs" />
     <Compile Include="InterviewTests\Substitution\when_variable_from_one_roster_using_in_another_triggered_by_the_same_question.cs" />
     <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable_and_then_complete_interview.cs" />
