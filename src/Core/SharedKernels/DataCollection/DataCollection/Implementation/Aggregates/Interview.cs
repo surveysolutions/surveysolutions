@@ -1901,7 +1901,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyEvent(synchronizedEvent);
             }
             
-            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire);
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, null);
 
             if (command.InterviewKey != null)
             {
