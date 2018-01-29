@@ -160,9 +160,17 @@
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>Country.Designer.cs</LastGenOutput>
 	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\KindOfData.ru.resx">
+    <DependentUpon>KindOfData.resx</DependentUpon>
+	  <Generator>ResXFileCodeGenerator</Generator>
+	</EmbeddedResource>
 	<EmbeddedResource Update="Resources\KindOfData.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>KindOfData.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\ModeOfDataCollection.ru.resx">
+    <DependentUpon>ModeOfDataCollection.resx</DependentUpon>
+	  <Generator>ResXFileCodeGenerator</Generator>
 	</EmbeddedResource>
 	<EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>
@@ -200,6 +208,10 @@
     <EmbeddedResource Update="Resources\QuestionnaireEditor.ru.resx">
       <Generator></Generator>
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\StudyType.ru.resx">
+      <DependentUpon>StudyType.resx</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\StudyType.resx">
       <Generator>ResXFileCodeGenerator</Generator>
