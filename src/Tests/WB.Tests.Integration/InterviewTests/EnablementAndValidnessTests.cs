@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
+using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
