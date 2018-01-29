@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consultants:.
+        ///   Looks up a localized string similar to Consultants.
         /// </summary>
         public static string MetadataConsultants {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Country:.
+        ///   Looks up a localized string similar to Country.
         /// </summary>
         public static string MetadataCountry {
             get {
@@ -205,7 +205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Coverage:.
+        ///   Looks up a localized string similar to Coverage.
         /// </summary>
         public static string MetadataCoverage {
             get {
@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Funding:.
+        ///   Looks up a localized string similar to Funding.
         /// </summary>
         public static string MetadataFunding {
             get {
@@ -223,7 +223,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keywords:.
+        ///   Looks up a localized string similar to Keywords.
         /// </summary>
         public static string MetadataKeywords {
             get {
@@ -232,7 +232,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Kind of data:.
+        ///   Looks up a localized string similar to Kind of data.
         /// </summary>
         public static string MetadataKindOfData {
             get {
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Languages:.
+        ///   Looks up a localized string similar to Languages.
         /// </summary>
         public static string MetadataLanguages {
             get {
@@ -250,7 +250,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mode of Data Collection:.
+        ///   Looks up a localized string similar to Mode of Data Collection.
         /// </summary>
         public static string MetadataModeOfDataCollection {
             get {
@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Notes:.
+        ///   Looks up a localized string similar to Notes.
         /// </summary>
         public static string MetadataNotes {
             get {
@@ -268,7 +268,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Primary Investigator:.
+        ///   Looks up a localized string similar to Primary Investigator.
         /// </summary>
         public static string MetadataPrimaryInvestigator {
             get {
@@ -277,7 +277,25 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Study type:.
+        ///   Looks up a localized string similar to questionnaire description.
+        /// </summary>
+        public static string MetadataSectionSubTitle {
+            get {
+                return ResourceManager.GetString("MetadataSectionSubTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey identification information.
+        /// </summary>
+        public static string MetadataSectionTitle {
+            get {
+                return ResourceManager.GetString("MetadataSectionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Study type.
         /// </summary>
         public static string MetadataStudyType {
             get {
@@ -286,7 +304,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subtitle:.
+        ///   Looks up a localized string similar to Subtitle.
         /// </summary>
         public static string MetadataSubtitle {
             get {
@@ -295,7 +313,16 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unit of analysis:.
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string MetadataTitle {
+            get {
+                return ResourceManager.GetString("MetadataTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unit of analysis.
         /// </summary>
         public static string MetadataUnitOfAlalysis {
             get {
@@ -304,7 +331,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Universe:.
+        ///   Looks up a localized string similar to Universe.
         /// </summary>
         public static string MetadataUniverse {
             get {
@@ -313,7 +340,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version identificator:.
+        ///   Looks up a localized string similar to Version identificator.
         /// </summary>
         public static string MetadataVersionIdentificator {
             get {
@@ -322,7 +349,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Version notes:.
+        ///   Looks up a localized string similar to Version notes.
         /// </summary>
         public static string MetadataVersionNotes {
             get {
@@ -331,7 +358,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Year:.
+        ///   Looks up a localized string similar to Year.
         /// </summary>
         public static string MetadataYear {
             get {
@@ -642,6 +669,42 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string SharedWith {
             get {
                 return ResourceManager.GetString("SharedWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional info.
+        /// </summary>
+        public static string SideBarMetadataAdditionalInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataAdditionalInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Basic information.
+        /// </summary>
+        public static string SideBarMetadataBasicInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataBasicInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey data information.
+        /// </summary>
+        public static string SideBarMetadataSurveyDataInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataSurveyDataInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey information.
+        /// </summary>
+        public static string SideBarMetadataSurveyInfo {
+            get {
+                return ResourceManager.GetString("SideBarMetadataSurveyInfo", resourceCulture);
             }
         }
         
