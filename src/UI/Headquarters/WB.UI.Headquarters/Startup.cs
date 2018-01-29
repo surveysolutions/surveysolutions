@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,7 @@ using NLog;
 using Owin;
 using Quartz;
 using StackExchange.Exceptional;
+using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -59,6 +61,8 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
+            EnsureJsonStorageForErrorsExists();
+
             app.Use(RemoveServerNameFromHeaders);
 
             var kernel = ConfigureNinject(app);
@@ -312,6 +316,20 @@ namespace WB.UI.Headquarters
 
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
         {
+        }
+
+        private void EnsureJsonStorageForErrorsExists()
+        {
+            if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
+            {
+                var jsonStorePath = exceptionalConfig.Settings.Path;
+                var jsonStorePathAbsolute = HostingEnvironment.MapPath(jsonStorePath);
+
+                if (!Directory.Exists(jsonStorePathAbsolute))
+                {
+                    Directory.CreateDirectory(jsonStorePathAbsolute);
+                }
+            }
         }
     }
 }
