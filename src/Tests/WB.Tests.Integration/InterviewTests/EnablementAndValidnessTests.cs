@@ -13,7 +13,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Integration.InterviewTests
 {
     [TestFixture]
-    public class EnablementAndValidnessTests: InterviewTestsContext
+    public class EnablementAndValidnessTests : InterviewTestsContext
     {
         [Test]
         public void when_answering_integer_question_with_dependency_on_one_variable()
@@ -21,8 +21,8 @@ namespace WB.Tests.Integration.InterviewTests
             var userId = Guid.Parse("11111111111111111111111111111111");
 
             var questionnaireId = Guid.Parse("77778888000000000000000000000000");
-            var questionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var variableId      = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var appDomainContext = AppDomainContext.Create();
 
@@ -31,9 +31,9 @@ namespace WB.Tests.Integration.InterviewTests
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "i", validationConditions: new []
+                    Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "i", validationConditions: new[]
                     {
-                        new ValidationCondition("v == 5", "v == 5"), 
+                        new ValidationCondition("v == 5", "v == 5"),
                     }),
                     Abc.Create.Entity.Variable(variableId, VariableType.LongInteger, "v", "i")
                 );
@@ -54,8 +54,11 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results, Is.Not.Null);
             Assert.That(results.AnswersDeclaredInvalidEvent, Is.Not.Null);
             Assert.That(results.AnswersDeclaredInvalidEvent.Questions.Single().Id, Is.EqualTo(questionId));
-            Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Keys.Single().Id, Is.EqualTo(questionId));
-            Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Values.Single().Single().FailedConditionIndex, Is.EqualTo(0));
+            Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Keys.Single().Id,
+                Is.EqualTo(questionId));
+            Assert.That(
+                results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Values.Single().Single()
+                    .FailedConditionIndex, Is.EqualTo(0));
 
 
             appDomainContext.Dispose();
@@ -68,13 +71,13 @@ namespace WB.Tests.Integration.InterviewTests
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
 
-            var questionnaireId  = Guid.Parse("22222222222222222222222222222222");
-            var questionFirstId  = Guid.Parse("55555555555555555555555555555555");
+            var questionnaireId = Guid.Parse("22222222222222222222222222222222");
+            var questionFirstId = Guid.Parse("55555555555555555555555555555555");
             var questionSecondId = Guid.Parse("66666666666666666666666666666666");
-            var questionAgeId    = Guid.Parse("77777777777777777777777777777777");
-            var variableIsOldId       = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var variableIsYoungId     = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            var variableMsgOldId      = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var questionAgeId = Guid.Parse("77777777777777777777777777777777");
+            var variableIsOldId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var variableIsYoungId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var variableMsgOldId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             var variableMsgYoungOldId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
             var appDomainContext = AppDomainContext.Create();
@@ -84,17 +87,19 @@ namespace WB.Tests.Integration.InterviewTests
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.TextQuestion(questionFirstId, variable: "name"),                   
-                    Abc.Create.Entity.TextQuestion(questionSecondId, variable: "s_name"),                   
-                    Abc.Create.Entity.NumericIntegerQuestion(questionAgeId, variable: "age", validationConditions: new []
+                    Abc.Create.Entity.TextQuestion(questionFirstId, variable: "name"),
+                    Abc.Create.Entity.TextQuestion(questionSecondId, variable: "s_name"),
+                    Abc.Create.Entity.NumericIntegerQuestion(questionAgeId, variable: "age", validationConditions: new[]
                     {
                         new ValidationCondition("!(bool)IsYoung", "%msgYoung%"),
-                        new ValidationCondition("!(bool)IsOld", "%msgOld%"), 
+                        new ValidationCondition("!(bool)IsOld", "%msgOld%"),
                     }),
                     Abc.Create.Entity.Variable(variableIsOldId, VariableType.Boolean, "IsOld", "age>100"),
                     Abc.Create.Entity.Variable(variableIsYoungId, VariableType.Boolean, "IsYoung", "age<1"),
-                    Abc.Create.Entity.Variable(variableMsgOldId, VariableType.String, "msgOld", "s_name + name + \" is too old\""),
-                    Abc.Create.Entity.Variable(variableMsgYoungOldId, VariableType.String, "msgYoung", "s_name + name + \" is too young\"")
+                    Abc.Create.Entity.Variable(variableMsgOldId, VariableType.String, "msgOld",
+                        "s_name + name + \" is too old\""),
+                    Abc.Create.Entity.Variable(variableMsgYoungOldId, VariableType.String, "msgYoung",
+                        "s_name + name + \" is too young\"")
                 );
 
                 var interview = SetupStatefullInterviewWithExpressionStorage(questionnaireDocument);
@@ -103,12 +108,14 @@ namespace WB.Tests.Integration.InterviewTests
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerNumericIntegerQuestion(userId, questionAgeId, RosterVector.Empty, DateTime.Now, 1000);
+                    interview.AnswerNumericIntegerQuestion(userId, questionAgeId, RosterVector.Empty, DateTime.Now,
+                        1000);
 
                     return new
                     {
                         AnswersDeclaredInvalidEvent = GetFirstEventByType<AnswersDeclaredInvalid>(eventContext.Events),
-                        ValidationErrorMessage = interview.GetFailedValidationMessages(Abc.Create.Identity(questionAgeId), null)
+                        ValidationErrorMessage =
+                        interview.GetFailedValidationMessages(Abc.Create.Identity(questionAgeId), null)
                     };
                 }
             });
@@ -116,8 +123,11 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results, Is.Not.Null);
             Assert.That(results.AnswersDeclaredInvalidEvent, Is.Not.Null);
             Assert.That(results.AnswersDeclaredInvalidEvent.Questions.Single().Id, Is.EqualTo(questionAgeId));
-            Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Keys.Single().Id, Is.EqualTo(questionAgeId));
-            Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Values.Single().Single().FailedConditionIndex, Is.EqualTo(1));
+            Assert.That(results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Keys.Single().Id,
+                Is.EqualTo(questionAgeId));
+            Assert.That(
+                results.AnswersDeclaredInvalidEvent.FailedValidationConditions.Values.Single().Single()
+                    .FailedConditionIndex, Is.EqualTo(1));
 
             Assert.That(results.ValidationErrorMessage.Single(), Is.EqualTo("SmithJohn is too old [2]"));
 
@@ -126,14 +136,15 @@ namespace WB.Tests.Integration.InterviewTests
         }
 
         [Test]
-        public void when_answering_integer_question_as_roster_triger_should_execute_condition_for_new_element_inside_roster()
+        public void
+            when_answering_integer_question_as_roster_triger_should_execute_condition_for_new_element_inside_roster()
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
 
             var questionnaireId = Guid.Parse("77778888000000000000000000000000");
-            var questionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            var rosterId        = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            var textQuestionId  = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var textQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
             var appDomainContext = AppDomainContext.Create();
 
@@ -143,7 +154,7 @@ namespace WB.Tests.Integration.InterviewTests
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "i"),
-                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: questionId, children: new []
+                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: questionId, children: new[]
                     {
                         Abc.Create.Entity.TextQuestion(textQuestionId, "i != 5")
                     })
@@ -165,7 +176,8 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results, Is.Not.Null);
             Assert.That(results.DisabledEvent, Is.Not.Null);
             Assert.That(results.DisabledEvent.Questions.Length, Is.EqualTo(5));
-            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(), Is.EqualTo(new[] { textQuestionId, textQuestionId , textQuestionId , textQuestionId , textQuestionId }));
+            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(),
+                Is.EqualTo(new[] {textQuestionId, textQuestionId, textQuestionId, textQuestionId, textQuestionId}));
 
 
             appDomainContext.Dispose();
@@ -190,10 +202,11 @@ namespace WB.Tests.Integration.InterviewTests
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(questionId, variable: "i"),
-                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: questionId, enablementCondition: "i != 5", children: new[]
-                    {
-                        Abc.Create.Entity.TextQuestion(textQuestionId)
-                    })
+                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: questionId,
+                        enablementCondition: "i != 5", children: new[]
+                        {
+                            Abc.Create.Entity.TextQuestion(textQuestionId)
+                        })
                 );
 
                 var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
@@ -212,7 +225,8 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results, Is.Not.Null);
             Assert.That(results.DisabledQuestionEvent, Is.Not.Null);
             Assert.That(results.DisabledQuestionEvent.Questions.Length, Is.EqualTo(5));
-            Assert.That(results.DisabledQuestionEvent.Questions.Select(e => e.Id).ToArray(), Is.EqualTo(new[] { textQuestionId, textQuestionId, textQuestionId, textQuestionId, textQuestionId }));
+            Assert.That(results.DisabledQuestionEvent.Questions.Select(e => e.Id).ToArray(),
+                Is.EqualTo(new[] {textQuestionId, textQuestionId, textQuestionId, textQuestionId, textQuestionId}));
 
 
             appDomainContext.Dispose();
@@ -224,11 +238,11 @@ namespace WB.Tests.Integration.InterviewTests
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
 
-            var questionnaireId  = Guid.Parse("77778888000000000000000000000000");
-            var intQuestionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var intQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var singleQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            var singleWithFilterQuestionId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var groupId   = Guid.Parse("99999999999999999999999999999999");
+            var singleWithFilterQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var groupId = Guid.Parse("99999999999999999999999999999999");
 
             var appDomainContext = AppDomainContext.Create();
 
@@ -237,11 +251,15 @@ namespace WB.Tests.Integration.InterviewTests
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.SingleOptionQuestion(singleQuestionId, variable: "sq", answerCodes: new decimal[] {1, 2, 3}),
+                    Abc.Create.Entity.SingleOptionQuestion(singleQuestionId, variable: "sq",
+                        answerCodes: new decimal[] {1, 2, 3}),
                     Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "i"),
-                    Abc.Create.Entity.Group(groupId, enablementCondition: "i == 5", children: new []{
-                        Abc.Create.Entity.SingleOptionQuestion(singleWithFilterQuestionId, variable: "sf", answerCodes: new decimal[] { 1, 2, 3 }, 
-                            optionsFilterExpression: "sq.InList(2, 3) && @optioncode!=1 || !sq.InList(2, 3) && @optioncode >= 1")
+                    Abc.Create.Entity.Group(groupId, enablementCondition: "i == 5", children: new[]
+                    {
+                        Abc.Create.Entity.SingleOptionQuestion(singleWithFilterQuestionId, variable: "sf",
+                            answerCodes: new decimal[] {1, 2, 3},
+                            optionsFilterExpression:
+                            "sq.InList(2, 3) && @optioncode!=1 || !sq.InList(2, 3) && @optioncode >= 1")
                     })
                 );
 
@@ -270,14 +288,14 @@ namespace WB.Tests.Integration.InterviewTests
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
 
-            var questionnaireId  = Guid.Parse("77778888000000000000000000000000");
-            var textListQuestionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var textListQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var singleQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var singleEnabledForSectionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
-            var singleInRosterQuestionId   = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-            var multiInRosterQuestionId   = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
-            var rosterId   = Guid.Parse("99999999999999999999999999999999");
-            var sectionId   = Guid.Parse("88888888888888888888888888888888");
+            var singleInRosterQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var multiInRosterQuestionId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var rosterId = Guid.Parse("99999999999999999999999999999999");
+            var sectionId = Guid.Parse("88888888888888888888888888888888");
 
             var appDomainContext = AppDomainContext.Create();
 
@@ -287,14 +305,21 @@ namespace WB.Tests.Integration.InterviewTests
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
-                    Abc.Create.Entity.SingleOptionQuestion(singleEnabledForSectionId, variable: "sos", answerCodes: new decimal[] { 1, 2 }),
-                    Abc.Create.Entity.Group(sectionId, enablementCondition: "sos == 1", children: new IComposite[]{
-                        Abc.Create.Entity.SingleOptionQuestion(singleQuestionId, variable: "so", answerCodes: new decimal[] { 1, 2 }),
-                        Abc.Create.Entity.ListRoster(rosterId, rosterSizeQuestionId: textListQuestionId, enablementCondition: "so == 1", children: new IComposite[]{
-                            Abc.Create.Entity.SingleOptionQuestion(singleInRosterQuestionId, variable: "sor", answerCodes: new decimal[] { 1, 2 }, 
-                                title: "DID %rostertitle% OBTAIN"),
-                            Abc.Create.Entity.MultipleOptionsQuestion(multiInRosterQuestionId, enablementCondition: "so == 1", answers: new int[] {1,2,3} )
-                        })
+                    Abc.Create.Entity.SingleOptionQuestion(singleEnabledForSectionId, variable: "sos",
+                        answerCodes: new decimal[] {1, 2}),
+                    Abc.Create.Entity.Group(sectionId, enablementCondition: "sos == 1", children: new IComposite[]
+                    {
+                        Abc.Create.Entity.SingleOptionQuestion(singleQuestionId, variable: "so",
+                            answerCodes: new decimal[] {1, 2}),
+                        Abc.Create.Entity.ListRoster(rosterId, rosterSizeQuestionId: textListQuestionId,
+                            enablementCondition: "so == 1", children: new IComposite[]
+                            {
+                                Abc.Create.Entity.SingleOptionQuestion(singleInRosterQuestionId, variable: "sor",
+                                    answerCodes: new decimal[] {1, 2},
+                                    title: "DID %rostertitle% OBTAIN"),
+                                Abc.Create.Entity.MultipleOptionsQuestion(multiInRosterQuestionId,
+                                    enablementCondition: "so == 1", answers: new int[] {1, 2, 3})
+                            })
                     })
                 );
 
@@ -302,7 +327,8 @@ namespace WB.Tests.Integration.InterviewTests
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now, new[] { new Tuple<decimal, string>(1, "name"), });
+                    interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now,
+                        new[] {new Tuple<decimal, string>(1, "name"),});
 
                     return new
                     {
@@ -316,14 +342,14 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results.DisabledQuestionsEvent, Is.Not.Null);
             Assert.That(results.DisabledQuestionsEvent.Questions, Is.EqualTo(new[]
             {
-                Abc.Create.Identity(singleInRosterQuestionId, new int[] { 1 }),
-                Abc.Create.Identity(multiInRosterQuestionId, new int[] { 1 }),
+                Abc.Create.Identity(singleInRosterQuestionId, new int[] {1}),
+                Abc.Create.Identity(multiInRosterQuestionId, new int[] {1}),
             }));
 
             Assert.That(results.DisabledGroupsEvent, Is.Not.Null);
             Assert.That(results.DisabledGroupsEvent.Groups, Is.EqualTo(new[]
             {
-                Abc.Create.Identity(rosterId, new int[] { 1 }),
+                Abc.Create.Identity(rosterId, new int[] {1}),
             }));
 
             appDomainContext.Dispose();
@@ -335,12 +361,12 @@ namespace WB.Tests.Integration.InterviewTests
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
 
-            var questionnaireId  = Guid.Parse("77778888000000000000000000000000");
-            var textListQuestionId      = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var textListQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var singleEnablementQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var singleQuestion1Id = Guid.Parse("55555555555555555555555555555555");
             var singleQuestion2Id = Guid.Parse("44444444444444444444444444444444");
-            var intQuestionId   = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+            var intQuestionId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             var roster1Id = Guid.Parse("99999999999999999999999999999999");
             var roster2Id = Guid.Parse("88888888888888888888888888888888");
             var section1Id = Guid.Parse("77777777777777777777777777777777");
@@ -353,32 +379,48 @@ namespace WB.Tests.Integration.InterviewTests
                 Setup.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.SingleOptionQuestion(singleEnablementQuestionId, variable: "soe", answerCodes: new decimal[] { 1, 2 }),
-                    Abc.Create.Entity.Group(section1Id, enablementCondition: "soe == 1", children: new IComposite[]{
+                    Abc.Create.Entity.SingleOptionQuestion(singleEnablementQuestionId, variable: "soe",
+                        answerCodes: new decimal[] {1, 2}),
+                    Abc.Create.Entity.Group(section1Id, enablementCondition: "soe == 1", children: new IComposite[]
+                    {
                         Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
-                        Abc.Create.Entity.ListRoster(roster1Id, variable: "lr1", rosterSizeQuestionId: textListQuestionId, children: new IComposite[] {
-                            Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "inn"),
-                            Abc.Create.Entity.SingleOptionQuestion(singleQuestion1Id, variable: "so", enablementCondition: "inn > 4", answerCodes: new decimal[] { 1, 2 }),
-                        }),
+                        Abc.Create.Entity.ListRoster(roster1Id, variable: "lr1",
+                            rosterSizeQuestionId: textListQuestionId, children: new IComposite[]
+                            {
+                                Abc.Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "inn"),
+                                Abc.Create.Entity.SingleOptionQuestion(singleQuestion1Id, variable: "so",
+                                    enablementCondition: "inn > 4", answerCodes: new decimal[] {1, 2}),
+                            }),
                     }),
-                    Abc.Create.Entity.Group(section2Id, enablementCondition: "soe == 1", children: new IComposite[]{
-                        Abc.Create.Entity.ListRoster(roster2Id, variable: "lr2", enablementCondition: "so == 1", rosterSizeQuestionId: textListQuestionId, children: new IComposite[]{
-                            Abc.Create.Entity.SingleOptionQuestion(singleQuestion2Id, variable: "so2", answerCodes: new decimal[] { 1, 2 }),
-                        })
+                    Abc.Create.Entity.Group(section2Id, enablementCondition: "soe == 1", children: new IComposite[]
+                    {
+                        Abc.Create.Entity.ListRoster(roster2Id, variable: "lr2", enablementCondition: "so == 1",
+                            rosterSizeQuestionId: textListQuestionId, children: new IComposite[]
+                            {
+                                Abc.Create.Entity.SingleOptionQuestion(singleQuestion2Id, variable: "so2",
+                                    answerCodes: new decimal[] {1, 2}),
+                            })
                     })
                 );
 
                 var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
-                interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty, DateTime.Now, 1);
-                interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now, new[] { new Tuple<decimal, string>(1, "name"), });
-                interview.AnswerNumericIntegerQuestion(userId, intQuestionId, Abc.Create.RosterVector(1), DateTime.Now, 5);
-                interview.AnswerSingleOptionQuestion(userId, singleQuestion1Id, Abc.Create.RosterVector(1), DateTime.Now, 1);
-                interview.AnswerSingleOptionQuestion(userId, singleQuestion2Id, Abc.Create.RosterVector(1), DateTime.Now, 1);
-                interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty, DateTime.Now, 2);
+                interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty,
+                    DateTime.Now, 1);
+                interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now,
+                    new[] {new Tuple<decimal, string>(1, "name"),});
+                interview.AnswerNumericIntegerQuestion(userId, intQuestionId, Abc.Create.RosterVector(1), DateTime.Now,
+                    5);
+                interview.AnswerSingleOptionQuestion(userId, singleQuestion1Id, Abc.Create.RosterVector(1),
+                    DateTime.Now, 1);
+                interview.AnswerSingleOptionQuestion(userId, singleQuestion2Id, Abc.Create.RosterVector(1),
+                    DateTime.Now, 1);
+                interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty,
+                    DateTime.Now, 2);
 
                 using (var eventContext = new EventContext())
                 {
-                    interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty, DateTime.Now, 1);
+                    interview.AnswerSingleOptionQuestion(userId, singleEnablementQuestionId, RosterVector.Empty,
+                        DateTime.Now, 1);
 
                     return new
                     {
@@ -397,16 +439,18 @@ namespace WB.Tests.Integration.InterviewTests
 //            }));
 
             Assert.That(results.GroupsEnabledEvent, Is.Not.Null);
-            Assert.That(results.GroupsEnabledEvent.Groups.Any(i => i == Abc.Create.Identity(roster2Id, new int[] { 1 })), Is.True);
+            Assert.That(results.GroupsEnabledEvent.Groups.Any(i => i == Abc.Create.Identity(roster2Id, new int[] {1})),
+                Is.True);
 
             appDomainContext.Dispose();
             appDomainContext = null;
         }
 
-    }
-[Test]
+
+        [Test]
         [Ignore("Fixed on server side")]
-        public void when_complete_previously_rejected_interview_with_re_answered_text_list_question_as_roster_triger_should_publish_disabled_questions_event_by_questions_inside_new_roster_instance()
+        public void
+            when_complete_previously_rejected_interview_with_re_answered_text_list_question_as_roster_triger_should_publish_disabled_questions_event_by_questions_inside_new_roster_instance()
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
 
@@ -443,14 +487,14 @@ namespace WB.Tests.Integration.InterviewTests
                     })));
 
                 interview.AnswerTextListQuestion(userId, textListId, RosterVector.Empty, DateTime.UtcNow,
-                    new[] { new Tuple<decimal, string>(1, "1") });
+                    new[] {new Tuple<decimal, string>(1, "1")});
 
                 interview.AnswerTextListQuestion(userId, textListId, RosterVector.Empty, DateTime.UtcNow,
-                    new[] { new Tuple<decimal, string>(1, "1"), new Tuple<decimal, string>(2, "2") });
+                    new[] {new Tuple<decimal, string>(1, "1"), new Tuple<decimal, string>(2, "2")});
 
                 using (var eventContext = new EventContext())
                 {
-                    
+
                     interview.Complete(userId, "complete", DateTime.UtcNow);
 
                     return new
@@ -463,7 +507,8 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results, Is.Not.Null);
             Assert.That(results.DisabledEvent, Is.Not.Null);
             Assert.That(results.DisabledEvent.Questions.Length, Is.EqualTo(1));
-            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(), Is.EquivalentTo(new[] { textQuestionId }));
+            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(),
+                Is.EquivalentTo(new[] {textQuestionId}));
 
 
             appDomainContext.Dispose();
@@ -472,7 +517,8 @@ namespace WB.Tests.Integration.InterviewTests
 
         [Test]
         [Ignore("Fixed on server side")]
-        public void when_complete_previously_rejected_interview_with_re_answered_numeric_question_as_roster_triger_after_reject_should_publish_disabled_questions_event_by_questions_inside_new_roster_instance()
+        public void
+            when_complete_previously_rejected_interview_with_re_answered_numeric_question_as_roster_triger_after_reject_should_publish_disabled_questions_event_by_questions_inside_new_roster_instance()
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
 
@@ -491,10 +537,11 @@ namespace WB.Tests.Integration.InterviewTests
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(numericId, variable: "i"),
                     Abc.Create.Entity.NumericIntegerQuestion(rosterSourceId),
-                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: rosterSourceId, children: new[]
-                    {
-                        Abc.Create.Entity.TextQuestion(textQuestionId, "i != 5")
-                    })
+                    Abc.Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: rosterSourceId,
+                        children: new[]
+                        {
+                            Abc.Create.Entity.TextQuestion(textQuestionId, "i != 5")
+                        })
                 );
 
                 var interview = SetupStatefullInterview(questionnaireDocument, new List<object>());
@@ -524,10 +571,12 @@ namespace WB.Tests.Integration.InterviewTests
             Assert.That(results, Is.Not.Null);
             Assert.That(results.DisabledEvent, Is.Not.Null);
             Assert.That(results.DisabledEvent.Questions.Length, Is.EqualTo(1));
-            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(), Is.EquivalentTo(new[] { textQuestionId }));
+            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(),
+                Is.EquivalentTo(new[] {textQuestionId}));
 
 
             appDomainContext.Dispose();
             appDomainContext = null;
         }
+    }
 }
