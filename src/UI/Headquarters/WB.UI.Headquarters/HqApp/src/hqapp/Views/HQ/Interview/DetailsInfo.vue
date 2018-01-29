@@ -6,7 +6,7 @@
                 <div class="about-questionnaire-details">
                     <ul class="main-info-column list-unstyled pull-left">
                         <li>Interview #{{$config.model.key}} ({{this.$t('Common.Assignment')}} {{this.$config.model.assignmentId}})</li>
-                        <li class="questionnaire-title" :title="$store.state.webinterview.questionnaireTitle">{{this.$store.state.webinterview.questionnaireTitle}}</li>
+                        <li class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
                     </ul>
                     <ul class="list-unstyled pull-left">
                         <li><span class="data-label">{{this.$t('Details.Responsible')}}: </span> <span class="data">
@@ -65,6 +65,7 @@
 <script>
 import SwitchLanguage from "./SwitchLanguage";
 import StatusesHistory from "./StatusesHistory";
+import Vue from "vue";
 
 export default {
   data() {
@@ -104,8 +105,9 @@ export default {
     },
     showStatusesHistory() {
       this.$refs.statusesHistory.show();
-    }
+    }    
   },
+  
   computed: {
     responsibleRole() {
       return this.$config.model.responsibleRole.toLowerCase();

@@ -145,6 +145,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 Responsible = interviewSummary.ResponsibleName,
                 Supervisor = interviewSummary.TeamLeadName,
                 AssignmentId = interviewSummary.AssignmentId,
+                QuestionnaireTitle = interviewSummary.QuestionnaireTitle,
+                QuestionnaireVersion = interviewSummary.QuestionnaireVersion,
                 ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
                                             Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
@@ -231,5 +233,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public string ResponsibleProfileUrl { get; set; }
         public string Supervisor { get; set; }
         public int? AssignmentId { get; set; }
+        public string QuestionnaireTitle { get; set; }
+        public long QuestionnaireVersion { get; set; }
     }
 }
