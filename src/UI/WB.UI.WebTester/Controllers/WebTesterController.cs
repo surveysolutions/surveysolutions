@@ -22,16 +22,20 @@ namespace WB.UI.WebTester.Controllers
     public class WebTesterController : Controller
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IEvictionObserver evictionService;
         private readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireImportService questionnaireImportService;
 
-        public WebTesterController(IStatefulInterviewRepository statefulInterviewRepository,
+        public WebTesterController(
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IEvictionObserver evictionService,
             ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
             IQuestionnaireImportService questionnaireImportService)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
+            this.evictionService = evictionService;
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireImportService = questionnaireImportService;
@@ -48,6 +52,11 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
+                if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
+                {
+                    evictionService.Evict(id);
+                }
+
                 questionnaireIdentity = await this.questionnaireImportService.ImportQuestionnaire(id);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
@@ -109,6 +118,11 @@ namespace WB.UI.WebTester.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(id);
 
+            if (interview == null)
+            {
+                throw new HttpException(404, string.Empty);
+            }
+
             var targetSectionIsEnabled = interview?.IsEnabled(Identity.Parse(sectionId));
             if (targetSectionIsEnabled != true)
             {
@@ -123,7 +137,6 @@ namespace WB.UI.WebTester.Controllers
             {
                 throw new HttpException(404, string.Empty);
             }
-
 
             return this.View("Interview", model);
         }
