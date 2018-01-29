@@ -77,7 +77,7 @@ namespace CoreTester.Commands
             commandService.Execute(createCommand);
             foreach (var committedEvent in committedEvents)
             {
-                var commands = EventsToCommandConverter.ConvertEventToCommands(interviewId, committedEvent);
+                var commands = EventsToCommandConverter.ConvertEventToCommands(interviewId, committedEvent)?.ToList();
 
                 if (commands == null)
                     continue;

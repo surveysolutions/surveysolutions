@@ -60,11 +60,11 @@ namespace CoreTester.Commands
                 Console.WriteLine($"File {fileName} is missing. Nothing to dump");
                 return 0;
             }
-            if (Directory.Exists(serverName))
+
+            if (!Directory.Exists(serverName))
             {
-                Directory.Delete(serverName);
+                Directory.CreateDirectory(serverName);
             }
-            Directory.CreateDirectory(serverName);
 
             var lines = File.ReadAllLines(fileName);
 
@@ -98,6 +98,10 @@ namespace CoreTester.Commands
             var eventFileName = Path.Combine(folder, $"{interviewId.FormatGuid()}.json");
             List<CommittedEvent> committedEvents = this.eventStore.Read(interviewId, 0).ToList();
             var serializedEvents = serializer.Serialize(committedEvents);
+
+            if (File.Exists(eventFileName))
+                File.Delete(eventFileName);
+
             File.WriteAllText(eventFileName, serializedEvents);
         }
 
@@ -106,6 +110,9 @@ namespace CoreTester.Commands
             var assemblyFileName = Path.Combine(folder, $"assembly-{questionnaireIdentity}.dll");
             var assemblyAsBytes = this.plainTransactionManager.GetPlainTransactionManager()
                 .ExecuteInQueryTransaction(() => questionnaireAssemblyFileAccessor.GetAssemblyAsByteArray(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+
+            if (File.Exists(assemblyFileName))
+                File.Delete(assemblyFileName);
 
             File.WriteAllBytes(assemblyFileName, assemblyAsBytes);
         }
@@ -123,6 +130,10 @@ namespace CoreTester.Commands
                 .ToDictionary(x => x.Key, x => x.Value.ToArray());
 
             var serializedQuestionnaire = serializer.Serialize(questionnaireDocument);
+
+            if(File.Exists(questionnaireFileName))
+                File.Delete(questionnaireFileName);
+
             File.WriteAllText(questionnaireFileName, serializedQuestionnaire);
         }
     }
