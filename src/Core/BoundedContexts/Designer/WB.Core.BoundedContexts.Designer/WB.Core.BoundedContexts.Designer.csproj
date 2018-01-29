@@ -156,6 +156,10 @@
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>Common.Designer.cs</LastGenOutput>
 	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\Country.ru.resx">
+      <DependentUpon>Country.resx</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
 	<EmbeddedResource Update="Resources\Country.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>Country.Designer.cs</LastGenOutput>
