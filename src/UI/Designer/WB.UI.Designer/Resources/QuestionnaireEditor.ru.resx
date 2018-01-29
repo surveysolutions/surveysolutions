@@ -929,7 +929,7 @@
     <comment>Метаинформация</comment>
   </data>  
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Заголовок (влияет на имя в списка опросников):</value>
+    <value>Заголовок (влияет на имя в списке опросников):</value>
     <comment>Метаинформация</comment>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
@@ -1020,7 +1020,7 @@
     <comment>Доступ к опроснику</comment>
   </data>
   <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
-    <value>Согласен, чтоб опросник был общедоступным</value>
+    <value>Согласен, чтобы опросник был общедоступным</value>
     <comment>Согласен, чтоб опросник был общедоступным</comment>
   </data>
   <data name="SelectCountry" xml:space="preserve">
