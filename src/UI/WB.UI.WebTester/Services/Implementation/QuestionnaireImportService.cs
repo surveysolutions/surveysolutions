@@ -24,7 +24,8 @@ namespace WB.UI.WebTester.Services.Implementation
 
         private static long version;
 
-        public QuestionnaireImportService(IQuestionnaireStorage questionnaireStorage,
+        public QuestionnaireImportService(
+            IQuestionnaireStorage questionnaireStorage,
             IDesignerWebTesterApi webTesterApi,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             ITranslationManagementService translationManagementService,
