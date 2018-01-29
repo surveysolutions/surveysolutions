@@ -18,7 +18,7 @@ namespace WB.Enumerator.Native.WebInterview
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
 
-        private string CallerInterviewId => this.Context.QueryString[@"interviewId"];
+        protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
 
         protected IStatefulInterview GetCallerInterview() => this.statefulInterviewRepository.Get(this.CallerInterviewId);
