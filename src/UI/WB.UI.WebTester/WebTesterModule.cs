@@ -121,6 +121,8 @@ namespace WB.UI.WebTester
                 }
             }));
 
+            registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
+
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
             registry.BindAsSingleton<IEventStore, ISnapshotStore, InMemoryEventStore>();
@@ -130,6 +132,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
+            
             registry.Bind<EvictionService>();
 
             // TODO: Find a generic place for each of the dependencies below

@@ -298,7 +298,6 @@
     <Compile Include="Services\IDesignerWebTesterApi.cs" />
     <Compile Include="Services\Implementation\InMemoryCacheStorage.cs" />
     <Compile Include="Services\Implementation\TranslationStorage.cs" />
-    <Compile Include="Services\SoundInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
