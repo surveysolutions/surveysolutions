@@ -83,7 +83,7 @@ export default {
     },
     computed: {
             audioRecordPath() {
-                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.$me.updatedAt.toString()
+                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.audioRecordHash
             },
             formattedLength() {
                 if (this.$me.isAnswered){
@@ -100,6 +100,17 @@ export default {
             },
             isRecorded() {
                 return this.isRecording == false && this.$me.isAnswered;
+            },
+            audioRecordHash() {
+                const str = this.$me.updatedAt.toString()
+                let hash = 0, i, chr;
+                if (str.length === 0) return hash;
+                for (i = 0; i < str.length; i++) {
+                    chr   = str.charCodeAt(i);
+                    hash  = ((hash << 5) - hash) + chr;
+                    hash |= 0; // Convert to 32bit integer
+                }
+                return hash;
             }
         },
     methods: {
@@ -163,6 +174,6 @@ export default {
             var diff = moment.utc(this.currentTime() - this.startRecordingTime);
             this.formattedTimer = diff.format("mm:ss:SS");
         }
-    }
+    }   
 }
 </script>
