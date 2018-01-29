@@ -1851,14 +1851,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
             bool isInterviewNeedToBeCreated = command.CreatedOnClient && this.Version == 0;
-            var questionnaire = this.GetQuestionnaireOrThrow();
 
             if (isInterviewNeedToBeCreated)
             {
                 if (!(command.SynchronizedEvents.FirstOrDefault() is InterviewOnClientCreated))
                 {
-                    this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId,
-                        command.QuestionnaireVersion, null, questionnaire.IsUsingExpressionStorage()));
+                    bool isUsingExpressionStorage = this.GetQuestionnaireOrThrow().IsUsingExpressionStorage();
+                    this.ApplyEvent(new InterviewOnClientCreated(command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, null, isUsingExpressionStorage));
                 }
             }
             else
@@ -1875,9 +1874,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(synchronizedEvent);
             }
-            
-            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire);
-
             if (command.InterviewKey != null)
             {
                 this.ApplyEvent(new InterviewKeyAssigned(command.InterviewKey));
