@@ -119,6 +119,13 @@ export default {
         })
     },
 
+    shutDownInterview({ state, commit }) {
+        if(!state.interviewShutdown){
+            commit("SET_INTERVIEW_SHUTDOWN")
+            window.close();
+        }
+    },
+
     // called by server side. refresh
     refreshEntities({ state, dispatch, getters }, questions) {
         questions.forEach(id => {
@@ -217,7 +224,7 @@ export default {
 
         commit("COMPLETE_INTERVIEW");
 
-        Vue.$api.call(api => api.completeInterview(comment))
+        Vue.$api.call(api => api.completeInterview(comment))        
     },
 
     cleanUpEntity: batchedAction(({ commit }, ids) => {
