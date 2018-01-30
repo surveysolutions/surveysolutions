@@ -75,8 +75,11 @@ namespace CoreTester.Commands
             var userId = Guid.Parse("22222222222222222222222222222222");
             var createCommand = EventsToCommandConverter.GetCreateInterviewCommand(committedEvents, interviewId, userId);
             commandService.Execute(createCommand);
-            foreach (var committedEvent in committedEvents)
+
+            for (int i = 0; i < committedEvents.Count; i++)
             {
+                var committedEvent = committedEvents[i];
+
                 var commands = EventsToCommandConverter.ConvertEventToCommands(interviewId, committedEvent)?.ToList();
 
                 if (commands == null)

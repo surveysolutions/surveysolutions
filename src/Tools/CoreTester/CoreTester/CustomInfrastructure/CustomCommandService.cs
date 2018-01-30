@@ -90,7 +90,7 @@ namespace CoreTester.CustomInfrastructure
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            if (this.aggregate == null)
+            if (this.aggregate == null || this.aggregate.EventSourceId != aggregateId)
             {
                 if (!CommandRegistry.IsInitializer(command))
                     throw new CommandServiceException(
