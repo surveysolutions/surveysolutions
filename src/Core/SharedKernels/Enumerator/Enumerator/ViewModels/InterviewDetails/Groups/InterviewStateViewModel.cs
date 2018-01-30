@@ -1,8 +1,6 @@
-using MvvmCross.Platform.Core;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
@@ -48,6 +46,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 return SimpleGroupStatus.Completed;
 
             return SimpleGroupStatus.Other;
+        }
+
+        private GroupStatus CalculateDetailedStatus()
+        {
+            switch (this.SimpleStatus)
+            {
+                case SimpleGroupStatus.Completed:
+                    return GroupStatus.Completed;
+
+                case SimpleGroupStatus.Invalid:
+                    return this.AreAllQuestionsAnswered() ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
+
+                case SimpleGroupStatus.Other:
+                    return this.AnsweredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
+
+                default:
+                    return GroupStatus.Started;
+            }
         }
     }
 }
