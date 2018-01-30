@@ -93,7 +93,7 @@ namespace WB.UI.WebTester.Controllers
                         Filename = fileName,
                         Data = audioFile.Binary,
                         Duration = audioFile.Duration,
-                        MimeType = "audio/wav"
+                        MimeType = audioFile.MimeType
                     }, fileName, interview.Id);
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
