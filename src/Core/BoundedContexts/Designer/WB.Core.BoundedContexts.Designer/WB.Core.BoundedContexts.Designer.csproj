@@ -158,7 +158,7 @@
 	</EmbeddedResource>
 	<EmbeddedResource Update="Resources\Country.ru.resx">
       <DependentUpon>Country.resx</DependentUpon>
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator></Generator>
     </EmbeddedResource>
 	<EmbeddedResource Update="Resources\Country.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>
