@@ -372,4 +372,12 @@
   <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
     <value>Дополнительная информация</value>
   </data>
+  <data name="MetadataSectionTitle" xml:space="preserve">
+    <value>Информация об опросе</value>
+    <comment>Информация об опросе</comment>
+  </data>
+  <data name="MetadataSectionSubTitle" xml:space="preserve">
+    <value>описание опросника</value>
+    <comment>описание опросника</comment>
+  </data>
 </root>
