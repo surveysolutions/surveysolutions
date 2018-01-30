@@ -1054,4 +1054,7 @@
   <data name="SelectKindOfData" xml:space="preserve">
     <value>Select a Kind of data</value>
   </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
+  </data>
 </root>

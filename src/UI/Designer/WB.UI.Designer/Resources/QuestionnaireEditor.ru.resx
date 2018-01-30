@@ -927,7 +927,7 @@
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Описание опросника и данные по обследованию</value>
     <comment>Метаинформация</comment>
-  </data>  
+  </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
     <value>Заголовок (влияет на имя в списке опросников):</value>
     <comment>Метаинформация</comment>
@@ -1038,5 +1038,8 @@
   <data name="SelectModeOfDataCollection" xml:space="preserve">
     <value>Выберите режим сбора данных</value>
     <comment>Выберите режим сбора данных</comment>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Тест</value>
   </data>
 </root>
