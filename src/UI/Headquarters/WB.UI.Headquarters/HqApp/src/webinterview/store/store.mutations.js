@@ -58,6 +58,9 @@ export default {
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, "interviewState", interviewState)
     },
+    SET_INTERVIEW_SHUTDOWN(state){
+        state.interviewShutdown = true
+    },
     SET_HAS_COVER_PAGE(state, hasCoverPage) {
         state.hasCoverPage = hasCoverPage
     },
