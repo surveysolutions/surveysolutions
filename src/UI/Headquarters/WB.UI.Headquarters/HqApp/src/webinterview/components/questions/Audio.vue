@@ -83,7 +83,7 @@ export default {
     },
     computed: {
             audioRecordPath() {
-                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.audioRecordHash
+                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.$me.updatedAt.getTime()
             },
             formattedLength() {
                 if (this.$me.isAnswered){
@@ -103,6 +103,7 @@ export default {
             },
             audioRecordHash() {
                 const str = this.$me.updatedAt.toString()
+                
                 let hash = 0, i, chr;
                 if (str.length === 0) return hash;
                 for (i = 0; i < str.length; i++) {
