@@ -72,7 +72,7 @@ namespace WB.UI.WebTester.Controllers
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: new InterviewKey(00_00_00),
+                interviewKey: new InterviewKey(new Random().Next(99999999)),
                 assignmentId: null));
 
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
