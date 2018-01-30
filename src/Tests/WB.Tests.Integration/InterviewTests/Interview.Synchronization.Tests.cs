@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AppDomainToolkit;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
@@ -26,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var appDomainContext = AppDomainContext.Create();
 
-            var result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
 
@@ -55,11 +57,18 @@ namespace WB.Tests.Integration.InterviewTests
                                 DateTime.UtcNow)
                         }));
 
-                    return interview.GetQuestion(Identity.Create(textQuestionId, Create.RosterVector(1))).IsDisabled();
+                    return new
+                    {
+                        DisabledEvent = GetFirstEventByType<QuestionsDisabled>(eventContext.Events)
+                    };
                 }
             });
 
-            Assert.That(result, Is.True);
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.DisabledEvent, Is.Not.Null);
+            Assert.That(results.DisabledEvent.Questions.Length, Is.EqualTo(1));
+            Assert.That(results.DisabledEvent.Questions.Select(e => e.Id).ToArray(),
+                Is.EquivalentTo(new[] { textQuestionId }));
 
             appDomainContext.Dispose();
             appDomainContext = null;
