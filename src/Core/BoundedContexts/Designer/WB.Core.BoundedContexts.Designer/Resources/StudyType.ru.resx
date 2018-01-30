@@ -118,75 +118,75 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AdministrativeRecords" xml:space="preserve">
-    <value>Административные записи</value>
+    <value>Административный учет</value>
   </data>
   <data name="AgriculturalCensus" xml:space="preserve">
     <value>Сельскохозяйственная перепись</value>
   </data>
   <data name="AgriculturalSurvey" xml:space="preserve">
-    <value>Сельскохозяйственный обзор</value>
+    <value>Сельскохозяйственное исследование</value>
   </data>
   <data name="ChildLaborSurvey" xml:space="preserve">
-    <value>Обзор детского труда</value>
+    <value>Исследование о трудовой деятельности несовершеннолетних</value>
   </data>
   <data name="CoreWelfareIndicatorsQuestionnaire" xml:space="preserve">
-    <value>Вопросник по индикаторам социального обеспечения</value>
+    <value>Исследование по индикаторам социального обеспечения</value>
   </data>
   <data name="DemographicAndHealthSurvey" xml:space="preserve">
-    <value>Демографическое и медицинское обследование</value>
+    <value>Демографическое и медецинское исследование</value>
   </data>
   <data name="EnterpriseCensus" xml:space="preserve">
     <value>Перепись предприятий</value>
   </data>
   <data name="EnterpriseSurvey" xml:space="preserve">
-    <value>Обзор предприятий</value>
+    <value>Исследование обзора предприятий</value>
   </data>
   <data name="HouseholdHealthSurvey" xml:space="preserve">
-    <value>Обследование домашних хозяйств</value>
+    <value>Медицинское исследование домашних хозяйств</value>
   </data>
   <data name="HouseholdSurvey" xml:space="preserve">
-    <value>Обследование домашних хозяйств</value>
+    <value>Исследование домашних хозяйств</value>
   </data>
   <data name="InformalSectorSurvey" xml:space="preserve">
-    <value>Обзор неформального сектора</value>
+    <value>Исследование неформального сектора</value>
   </data>
   <data name="IntegratedSurvey" xml:space="preserve">
-    <value>Интегрированный опрос</value>
+    <value>Комплексное исследование</value>
   </data>
   <data name="LaborForceSurvey" xml:space="preserve">
-    <value>Обследование рабочей силы</value>
+    <value>Исследование рабочей силы</value>
   </data>
   <data name="LivingStandardsMeasurementStudy" xml:space="preserve">
     <value>Исследование уровня жизни</value>
   </data>
   <data name="MultipleIndicatorClusterSurvey" xml:space="preserve">
-    <value>Многоуровневое кластерное обследование</value>
+    <value>Многоуровневое кластерное исследование</value>
   </data>
   <data name="PopulationAndHousingCensus" xml:space="preserve">
     <value>Перепись населения и жилого фонда</value>
   </data>
   <data name="PriceSurvey" xml:space="preserve">
-    <value>Обзор цен</value>
+    <value>Исследование в области ценообразования</value>
   </data>
   <data name="PrioritySurvey" xml:space="preserve">
-    <value>Приоритетное обследование</value>
+    <value>Исследование приоретизации</value>
   </data>
   <data name="SampleFrame" xml:space="preserve">
-    <value>Образец рамки</value>
+    <value>Выборочная совокупность</value>
   </data>
   <data name="ServiceProvisionAssessments" xml:space="preserve">
     <value>Оценка предоставления услуг</value>
   </data>
   <data name="SocioEconomicMonitoringSurvey" xml:space="preserve">
-    <value>Обследование социально-экономического мониторинга</value>
+    <value>Исследование по социальной экономике и мониторингу</value>
   </data>
   <data name="StatisticalInfoAndMonitoringProg" xml:space="preserve">
-    <value>Статистическая информация и мониторинг.</value>
+    <value>Статистическая информация и мониторинг</value>
   </data>
   <data name="WorldFertilitySurvey" xml:space="preserve">
-    <value>Обзор мировой фертильности</value>
+    <value>Исследование по фертильности</value>
   </data>
   <data name="WorldHealthSurvey" xml:space="preserve">
-    <value>Всемирный обзор состояния здоровья</value>
+    <value>Всемирное исследование о состоянии здоровья</value>
   </data>
 </root>
