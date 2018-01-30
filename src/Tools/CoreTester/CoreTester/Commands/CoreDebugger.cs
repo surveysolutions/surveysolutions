@@ -36,6 +36,24 @@ namespace CoreTester.Commands
 
         public int Run(string folder)
         {
+            int result = 1;
+
+            var directories = Directory.EnumerateDirectories(folder).ToList();
+            if (!directories.Any())
+                result *= RunForQuestionnire(folder);
+
+            foreach (var directory in directories)
+            {
+                result *= Run(directory);
+            }
+
+            return result;
+        }
+
+        public int RunForQuestionnire(string folder)
+        {
+            Console.WriteLine($"Analize folder {folder}");
+
             var files = Directory.EnumerateFiles(folder).ToList();
 
             if (!files.Any())
@@ -60,8 +78,14 @@ namespace CoreTester.Commands
 
             foreach (var file in files)
             {
-                if (Guid.TryParse(Path.GetFileNameWithoutExtension(file), out Guid interviewId))
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+//                if (!fileNameWithoutExtension.Contains("1fcb900d92e74de286eb119df741909d"))
+//                    continue;
+
+                if (Guid.TryParse(fileNameWithoutExtension, out Guid interviewId))
                 {
+                    Console.WriteLine($"Process interviewId {interviewId}, in file {fileNameWithoutExtension}");
+
                     var events = serializer.Deserialize<List<CommittedEvent>>(File.ReadAllText(file));
                     CreateInterviewAndApplyEvents(interviewId, events);
                 }
