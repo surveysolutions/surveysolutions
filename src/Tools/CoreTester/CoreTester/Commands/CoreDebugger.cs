@@ -55,8 +55,6 @@ namespace CoreTester.Commands
 
         public int RunForQuestionnire(string folder)
         {
-            Console.WriteLine($"Analize folder {folder}");
-
             var files = Directory.EnumerateFiles(folder).ToList();
 
             if (!files.Any())
@@ -72,7 +70,7 @@ namespace CoreTester.Commands
 
             if (IsExistsMacrosesInDocument(questionnaireDocument))
             {
-                Console.WriteLine($"Questionnaire {questionnaireDocument.PublicKey} contains macroses. Skiped.");
+                Console.WriteLine($"Analize folder {folder}. Questionnaire contains macroses. Skiped.");
                 return 1;
             }
 
@@ -214,8 +212,8 @@ namespace CoreTester.Commands
                 return false;
 
             var isExpressionContainsMacros = expression.Contains("$");
-            if (isExpressionContainsMacros)
-                Console.WriteLine("Found macros in condition: " + expression);
+//            if (isExpressionContainsMacros)
+//                Console.WriteLine("Found macros in condition: " + expression);
 
             return isExpressionContainsMacros;
         }
