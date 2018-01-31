@@ -54,7 +54,8 @@ namespace WB.Enumerator.Native.WebInterview
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving,
-                ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer
+                ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
+                IsCurrentUserObserving = this.IsCurrentUserObserving
             };
         }
 
