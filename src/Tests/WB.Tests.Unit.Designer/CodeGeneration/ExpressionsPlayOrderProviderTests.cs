@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
@@ -199,13 +200,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
                 })
             });
 
-
-            var expressionProcessor = Create.RoslynExpressionProcessor();
-            var macrosesService = Create.MacrosSubstitutionService();
-            var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
-
-            var expressionsPlayOrder = expressionsPlayOrderProvider.GetDependencyGraph(questionnaireDocument.AsReadOnly());
-            var dependensies = new TopologicalSorter<Guid>().Sort(expressionsPlayOrder, q5Id);
+            var dependensies = GetDependensies(questionnaireDocument, q5Id);
 
             Assert.That(dependensies, Is.EqualTo(new[] { q5Id, q4Id }));
         }
@@ -236,15 +231,44 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
                 })
             });
 
+            var dependensies = GetDependensies(questionnaireDocument, q3Id);
 
+            Assert.That(dependensies, Is.EqualTo(new[] { q3Id, q4Id }));
+        }
+
+        [Test]
+        public void when_GetDependencyGraph_for_dependent_questions()
+        {
+            Guid questionnaireId = Guid.Parse("99999999999999999999999999999999");
+            Guid q1Id = Guid.Parse("11111111111111111111111111111111");
+            Guid q2Id = Guid.Parse("22222222222222222222222222222222");
+            Guid q3Id = Guid.Parse("33333333333333333333333333333333");
+            Guid q4Id = Guid.Parse("44444444444444444444444444444444");
+
+            var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, children: new IComposite[]
+            {
+                Abc.Create.Entity.MultyOptionsQuestion(q1Id, variable: "mo_start"),
+                Abc.Create.Entity.NumericIntegerQuestion(q2Id, "n1", enablementCondition: "mo_start.Contains(1)"),
+                Abc.Create.Entity.NumericIntegerQuestion(q3Id, "n2", enablementCondition: "mo_start.Contains(2)"),
+                Abc.Create.Entity.MultyOptionsQuestion(q4Id, variable: "mo_end", enablementCondition: "n1>0 || n2>0"),
+            });
+
+            var dependensies = GetDependensies(questionnaireDocument, q1Id);
+
+            Assert.That(dependensies, Is.EqualTo(new[] { q1Id, q3Id, q2Id, q4Id }));
+        }
+
+
+
+        private static List<Guid> GetDependensies(QuestionnaireDocument questionnaireDocument, Guid entityId)
+        {
             var expressionProcessor = Create.RoslynExpressionProcessor();
             var macrosesService = Create.MacrosSubstitutionService();
             var expressionsPlayOrderProvider = new ServiceFactory().ExpressionsPlayOrderProvider(expressionProcessor, macrosesService);
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetDependencyGraph(questionnaireDocument.AsReadOnly());
-            var dependensies = new TopologicalSorter<Guid>().Sort(expressionsPlayOrder, q3Id);
-
-            Assert.That(dependensies, Is.EqualTo(new[] { q3Id, q4Id }));
+            var dependensies = new TopologicalSorter<Guid>().Sort(expressionsPlayOrder, entityId);
+            return dependensies;
         }
     }
 }
