@@ -2365,7 +2365,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title (affects name on questionnaire list):.
+        ///   Looks up a localized string similar to Questionnaire description.
         /// </summary>
         public static string SideBarMetadataTitle {
             get {

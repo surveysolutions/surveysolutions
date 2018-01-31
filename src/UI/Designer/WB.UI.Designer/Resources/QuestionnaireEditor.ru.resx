@@ -929,7 +929,7 @@
     <comment>Метаинформация</comment>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Заголовок (влияет на имя в списке опросников):</value>
+    <value>Описание опросника</value>
     <comment>Метаинформация</comment>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
