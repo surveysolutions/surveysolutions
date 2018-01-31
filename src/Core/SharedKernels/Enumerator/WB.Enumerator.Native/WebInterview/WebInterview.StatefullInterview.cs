@@ -26,16 +26,24 @@ namespace WB.Enumerator.Native.WebInterview
             }
         };
 
-        public LanguageInfo GetLanguageInfo() => new LanguageInfo
+        public LanguageInfo GetLanguageInfo()
         {
-            OriginalLanguageName = Enumerator.Native.Resources.WebInterview.Original_Language,
-            Languages = this.GetCallerQuestionnaire().GetTranslationLanguages(),
-            CurrentLanguage = this.GetCallerInterview().Language
-        };
+            var statefulInterview = this.GetCallerInterview();
+            if (statefulInterview == null) return null;
+
+            return new LanguageInfo
+            {
+                OriginalLanguageName = Resources.WebInterview.Original_Language,
+                Languages = this.GetCallerQuestionnaire().GetTranslationLanguages(),
+                CurrentLanguage = statefulInterview.Language
+            };
+        }
 
         public InterviewInfo GetInterviewDetails()
         {
             var statefulInterview = this.GetCallerInterview();
+            if (statefulInterview == null) return null;
+
             var questionnaire = this.GetCallerQuestionnaire();
 
             return new InterviewInfo
@@ -59,7 +67,10 @@ namespace WB.Enumerator.Native.WebInterview
 
         public GroupStatus GetInterviewStatus()
         {
-            return this.interviewEntityFactory.GetInterviewSimpleStatus(this.GetCallerInterview(), IsReviewMode);
+            var interview = this.GetCallerInterview();
+            if (interview == null) return GroupStatus.Invalid;
+
+            return this.interviewEntityFactory.GetInterviewSimpleStatus(interview, IsReviewMode);
         }
 
         private IdentifyingQuestion GetIdentifyingQuestion(Guid questionId, IStatefulInterview interview, IQuestionnaire questionnaire)
@@ -127,6 +138,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             Identity sectionIdentity = Identity.Parse(sectionId);
             var statefulInterview = this.GetCallerInterview();
+            if (statefulInterview == null) return null;
 
             var ids = IsReviewMode ? statefulInterview.GetUnderlyingEntitiesForReview(sectionIdentity) : 
                                      statefulInterview.GetUnderlyingInterviewerEntities(sectionIdentity);
@@ -148,7 +160,8 @@ namespace WB.Enumerator.Native.WebInterview
         public ButtonState GetNavigationButtonState(string id, IQuestionnaire questionnaire = null)
         {
             var statefulInterview = this.GetCallerInterview();
-            
+            if (statefulInterview == null) return null;
+
             ButtonState NewButtonState(ButtonState button, InterviewTreeGroup target)
             {
                 button.Id = id;
@@ -225,6 +238,8 @@ namespace WB.Enumerator.Native.WebInterview
             Identity groupId = Identity.Parse(sectionId);
 
             var statefulInterview = this.GetCallerInterview();
+            if (statefulInterview == null) return null;
+
             var callerQuestionnaire = this.GetCallerQuestionnaire();
             ReadOnlyCollection<Guid> parentIds = callerQuestionnaire.GetParentsStartingFromTop(groupId.Id);
 
@@ -303,6 +318,8 @@ namespace WB.Enumerator.Native.WebInterview
         public InterviewEntity[] GetEntitiesDetails(string[] ids)
         {
             var callerInterview = this.GetCallerInterview();
+            if (callerInterview == null) return null;
+
             var questionnaire = this.GetCallerQuestionnaire();
             return ids.Select(id => 
                 id == @"NavigationButton"
@@ -316,6 +333,7 @@ namespace WB.Enumerator.Native.WebInterview
         public bool HasCoverPage()
         {
             var interview = this.GetCallerInterview();
+            if (interview == null) return false;
 
             return this.GetCallerQuestionnaire().GetPrefilledQuestions().Any()
                 || interview.GetAllCommentedEnabledQuestions().Any()
@@ -326,6 +344,8 @@ namespace WB.Enumerator.Native.WebInterview
         {
             var sectionId = CallerSectionid;
             var interview = this.GetCallerInterview();
+            if (interview == null) return null;
+
             return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, parentIds, IsReviewMode);
         }
 
@@ -333,6 +353,8 @@ namespace WB.Enumerator.Native.WebInterview
         {
             var questionIdentity = Identity.Parse(id);
             var statefulInterview = this.GetCallerInterview();
+            if (statefulInterview == null) return null;
+
             var question = statefulInterview.GetQuestion(questionIdentity);
             var parentCascadingQuestion = question.GetAsInterviewTreeCascadingQuestion()?.GetCascadingParentQuestion();
             var parentCascadingQuestionAnswer = parentCascadingQuestion?.IsAnswered() ?? false
@@ -346,6 +368,7 @@ namespace WB.Enumerator.Native.WebInterview
         public CompleteInfo GetCompleteInfo()
         {
             var interview = this.GetCallerInterview();
+            if (interview == null) return null;
 
             var questionsCount = interview.CountActiveQuestionsInInterview();
             var answeredQuestionsCount = interview.CountActiveAnsweredQuestionsInInterview();
@@ -379,6 +402,7 @@ namespace WB.Enumerator.Native.WebInterview
         public CoverInfo GetCoverInfo()
         {
             var interview = this.GetCallerInterview();
+            if (interview == null) return null;
 
             var allCommented = IsReviewMode ? interview.GetAllCommentedEnabledQuestions().ToList() : 
                                               interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToList();
