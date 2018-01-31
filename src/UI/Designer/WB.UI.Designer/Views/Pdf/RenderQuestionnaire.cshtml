@@ -250,7 +250,7 @@
                     @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Country))
                     {
                         <dt>@PdfStrings.MetadataCountry</dt>
-                        <dd>@questionnaire.Metadata.Country</dd>
+                        <dd>@CountryListProvider.GetCountryTitleByCode(questionnaire.Metadata.Country)</dd>
                     }
                     @if (questionnaire.Metadata.Year.HasValue)
                     {
