@@ -368,7 +368,7 @@
     <value>Basic information</value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Title (affects name on questionnaire list):</value>
+    <value>Questionnaire description</value>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
     <value>Subtitle:</value>
