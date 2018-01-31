@@ -87,9 +87,7 @@
                 return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
             },
             competeButtonTitle() {
-                return this.shouldCloseWindow
-                ? this.$t("WebInterviewUI.Close")
-                : this.$t("WebInterviewUI.Complete")
+                return this.$t("WebInterviewUI.Complete")
             },
             hasCompleteInfo() {
                 return this.completeInfo != undefined
