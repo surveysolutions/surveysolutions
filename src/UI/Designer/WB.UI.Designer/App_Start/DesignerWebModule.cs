@@ -9,6 +9,7 @@ using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientN
 using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Modules;
@@ -29,6 +30,7 @@ namespace WB.UI.Designer
             registry.BindToMethod<ISerializer>(() => new NewtonJsonSerializer());
             registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
 
+            registry.BindAsSingleton<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
             registry.BindToConstant<IMembershipHelper>(() => new MembershipHelper());
