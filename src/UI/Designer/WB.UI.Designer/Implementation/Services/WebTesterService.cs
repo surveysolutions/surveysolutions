@@ -1,21 +1,24 @@
 using System;
-using System.Web.Caching;
+using System.Runtime.Caching;
 using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Implementation.Services
 {
     class WebTesterService : IWebTesterService
     {
-        private readonly WebTesterSettings settings;
+        private readonly CacheItemPolicy cacheItemPolicy;
 
         public WebTesterService(WebTesterSettings settings)
         {
-            this.settings = settings;
+            cacheItemPolicy = new CacheItemPolicy
+            {
+                SlidingExpiration = TimeSpan.FromMinutes(settings.ExpirationAmountMinutes)
+            };
         }
 
-        private Cache Cache => System.Web.HttpRuntime.Cache;
-        
-        string cacheKey(string token) => $"webtester:token:{token}";
+        private MemoryCache Cache { get; } = new MemoryCache("WebTester");
+
+        string cacheKey(string token) => $"token:{token}";
 
         public Guid? GetQuestionnaire(string token)
         {
@@ -27,9 +30,7 @@ namespace WB.UI.Designer.Implementation.Services
 
         private void AddToCache(string token, Guid questionnaireId)
         {
-            Cache.Add(cacheKey(token), questionnaireId.ToString(), null,
-                Cache.NoAbsoluteExpiration,
-                TimeSpan.FromMinutes(this.settings.ExpirationAmountMinutes), CacheItemPriority.Normal, null);
+            Cache.Add(cacheKey(token), questionnaireId.ToString(), cacheItemPolicy);
         }
 
         public string CreateTestQuestionnaire(Guid questionnaireId)
