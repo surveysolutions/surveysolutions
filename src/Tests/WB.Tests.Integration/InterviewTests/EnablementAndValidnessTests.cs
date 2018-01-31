@@ -357,6 +357,72 @@ namespace WB.Tests.Integration.InterviewTests
         }
 
         [Test]
+        public void when_answering_list_question_with_trigger_roster2()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var textListQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var singleEnabledForSectionId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            var singleInRosterQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var rosterId = Guid.Parse("99999999999999999999999999999999");
+            var sectionId = Guid.Parse("88888888888888888888888888888888");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
+                    Abc.Create.Entity.SingleOptionQuestion(singleEnabledForSectionId, variable: "sos",
+                        answerCodes: new decimal[] {1, 2}),
+                    Abc.Create.Entity.Group(sectionId, enablementCondition: "sos == 1", children: new IComposite[]
+                    {
+                        Abc.Create.Entity.ListRoster(rosterId, rosterSizeQuestionId: textListQuestionId,
+                            children: new IComposite[]
+                            {
+                                Abc.Create.Entity.SingleOptionQuestion(singleInRosterQuestionId, variable: "sor",
+                                    answerCodes: new decimal[] {1, 2},
+                                    title: "DID %rostertitle% OBTAIN")
+                            })
+                    })
+                );
+
+                var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>());
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerTextListQuestion(userId, textListQuestionId, RosterVector.Empty, DateTime.Now,
+                        new[] {new Tuple<decimal, string>(1, "name"),});
+
+                    return new
+                    {
+                        DisabledGroupsEvent = GetFirstEventByType<GroupsDisabled>(eventContext.Events),
+                        DisabledQuestionsEvent = GetFirstEventByType<QuestionsDisabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.DisabledQuestionsEvent, Is.Not.Null);
+            Assert.That(results.DisabledQuestionsEvent.Questions, Is.EqualTo(new[]
+            {
+                Abc.Create.Identity(singleInRosterQuestionId, new int[] {1}),
+            }));
+
+            Assert.That(results.DisabledGroupsEvent, Is.Not.Null);
+            Assert.That(results.DisabledGroupsEvent.Groups, Is.EqualTo(new[]
+            {
+                Abc.Create.Identity(rosterId, new int[] {1}),
+            }));
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        [Test]
         public void when_answering_datetime_question_with_in_roster()
         {
             var userId = Guid.Parse("11111111111111111111111111111111");
