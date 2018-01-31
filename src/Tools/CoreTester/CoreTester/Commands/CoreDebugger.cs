@@ -81,6 +81,8 @@ namespace CoreTester.Commands
                 return 0;
             }
 
+            Console.WriteLine($"Analize folder {folder}.");
+
             var assemblyDllFileName = files.Single(x => Path.GetFileName(x).StartsWith("assembly-"));
             assemblyAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, File.ReadAllBytes(assemblyDllFileName));
 
