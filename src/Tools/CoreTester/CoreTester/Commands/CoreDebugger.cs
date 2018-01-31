@@ -92,11 +92,6 @@ namespace CoreTester.Commands
 
                 if (Guid.TryParse(fileNameWithoutExtension, out Guid interviewId))
                 {
-//                    if (interviewId != Guid.Parse("2d3695b5-a3fa-461a-b818-927ca15eb4ce"))
-//                        continue;
-
-                    Console.WriteLine($"Process interviewId {interviewId}");
-
                     var events = serializer.Deserialize<List<CommittedEvent>>(File.ReadAllText(file));
                     try
                     {
@@ -115,6 +110,11 @@ namespace CoreTester.Commands
 
         private void CreateInterviewAndApplyEvents(Guid interviewId, List<CommittedEvent> committedEvents)
         {
+//            if (interviewId != Guid.Parse("07153208-526f-4688-9173-2d7d691328f1"))
+//                return;
+
+            //Console.WriteLine($"Process interviewId {interviewId}");
+
             var userId = Guid.Parse("22222222222222222222222222222222");
             var createCommand = EventsToCommandConverter.GetCreateInterviewCommand(committedEvents, interviewId, userId);
             commandService.Execute(createCommand);
@@ -180,6 +180,14 @@ namespace CoreTester.Commands
                 if (entity is IConditional conditionalEntity)
                 {
                     isExistsMacros |= IsExpressionContainsMacros(conditionalEntity.ConditionExpression);
+                }
+
+                if (entity is IValidatable validatable)
+                {
+                    foreach (var validationCondition in validatable.ValidationConditions)
+                    {
+                        isExistsMacros |= IsExpressionContainsMacros(validationCondition.Expression);
+                    }
                 }
 
                 if (entity is IQuestion question)
