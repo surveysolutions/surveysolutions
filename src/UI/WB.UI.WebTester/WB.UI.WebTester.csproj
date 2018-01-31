@@ -276,6 +276,7 @@
     <Compile Include="Services\IEvictionObserver.cs" />
     <Compile Include="Services\Implementation\EvictionService.cs" />
     <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
+    <Compile Include="Services\Implementation\RemoteInterviewContainer.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\TokenEviction.cs" />
     <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
