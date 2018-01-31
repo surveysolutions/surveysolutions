@@ -3,12 +3,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Caching;
+using System.Threading;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.UI.Designer.Api.WebTester
@@ -26,7 +28,7 @@ namespace WB.UI.Designer.Api.WebTester
             IQuestionnaireViewFactory questionnaireViewFactory,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IDesignerEngineVersionService engineVersionService,
-            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
             IQuestionnaireVerifier questionnaireVerifier)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
@@ -38,6 +40,7 @@ namespace WB.UI.Designer.Api.WebTester
         }
 
         readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
+        readonly NamedLocker locker = new NamedLocker();
 
         public Questionnaire ComposeQuestionnaire(Guid questionnaireId)
         {
@@ -47,16 +50,18 @@ namespace WB.UI.Designer.Api.WebTester
             var dbEntryDate = questionnaireView.Source.LastEntryDate;
             var cacheKey = $"{questionnaireId}.{dbEntryDate.Ticks}";
 
-            if (!(Cache.Get(cacheKey) is Questionnaire cacheEntry))
+            var cacheEntry = Cache.Get(cacheKey) as Lazy<Questionnaire>;
+
+            if (cacheEntry == null)
             {
-                cacheEntry = ComposeQuestionnaireImpl(questionnaireId);
+                cacheEntry = new Lazy<Questionnaire>(() => ComposeQuestionnaireImpl(questionnaireId));
                 Cache.Add(cacheKey, cacheEntry, new CacheItemPolicy
                 {
                     SlidingExpiration = TimeSpan.FromMinutes(10)
                 });
             }
 
-            return cacheEntry;
+            return cacheEntry.Value;
         }
 
         private Questionnaire ComposeQuestionnaireImpl(Guid questionnaireId)
