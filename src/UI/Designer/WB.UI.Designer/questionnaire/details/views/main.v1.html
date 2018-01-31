@@ -439,7 +439,7 @@
                                                     {{ metadata.studyType ? (questionnaire.studyTypes | filter : {'code':metadata.studyType})[0].title : 'SelectStudyType' | i18next }}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.studyType = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.studyType = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
@@ -463,7 +463,7 @@
                                                     {{ metadata.kindOfData ? (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title  : 'SelectKindOfData' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.kindOfData = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.kindOfData = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
@@ -486,7 +486,7 @@
                                                     {{ metadata.modeOfDataCollection ? (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title  : 'SelectModeOfDataCollection' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.modeOfDataCollection = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.modeOfDataCollection = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
@@ -511,7 +511,7 @@
                                                     {{ metadata.country ? (questionnaire.countries | filter : {'code':metadata.country})[0].title  : 'SelectCountry' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.country = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.country = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
