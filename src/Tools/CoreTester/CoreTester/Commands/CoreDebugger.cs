@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using CoreTester.CustomInfrastructure;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace CoreTester.Commands
 {
@@ -66,6 +69,13 @@ namespace CoreTester.Commands
             var questionnaireJsonFileName = files.Single(x => Path.GetFileName(x).StartsWith(questionnairePrefix));
             var questionnaireIdentity = QuestionnaireIdentity.Parse(Path.GetFileNameWithoutExtension(questionnaireJsonFileName).Substring(questionnairePrefix.Length));
             var questionnaireDocument = serializer.Deserialize<QuestionnaireDocument>(File.ReadAllText(questionnaireJsonFileName));
+
+            if (IsExistsMacrosesInDocument(questionnaireDocument))
+            {
+                Console.WriteLine($"Questionnaire {questionnaireDocument.PublicKey} contains macroses. Skiped.");
+                return 1;
+            }
+
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
             if (questionnaireDocument == null)
             {
@@ -79,15 +89,24 @@ namespace CoreTester.Commands
             foreach (var file in files)
             {
                 var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
-//                if (!fileNameWithoutExtension.Contains("1fcb900d92e74de286eb119df741909d"))
-//                    continue;
 
                 if (Guid.TryParse(fileNameWithoutExtension, out Guid interviewId))
                 {
-                    Console.WriteLine($"Process interviewId {interviewId}, in file {fileNameWithoutExtension}");
+//                    if (interviewId != Guid.Parse("2d3695b5-a3fa-461a-b818-927ca15eb4ce"))
+//                        continue;
+
+                    Console.WriteLine($"Process interviewId {interviewId}");
 
                     var events = serializer.Deserialize<List<CommittedEvent>>(File.ReadAllText(file));
-                    CreateInterviewAndApplyEvents(interviewId, events);
+                    try
+                    {
+                        CreateInterviewAndApplyEvents(interviewId, events);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
             }
 
@@ -147,6 +166,50 @@ namespace CoreTester.Commands
                     break;
                 }
             }
+        }
+
+
+        private bool IsExistsMacrosesInDocument(QuestionnaireDocument questionnaireDocument)
+        {
+            bool isExistsMacros = false;
+
+            var entities = questionnaireDocument.Children.TreeToEnumerable(x => x.Children);
+
+            foreach (var entity in entities)
+            {
+                if (entity is IConditional conditionalEntity)
+                {
+                    isExistsMacros |= IsExpressionContainsMacros(conditionalEntity.ConditionExpression);
+                }
+
+                if (entity is IQuestion question)
+                {
+                    isExistsMacros |= IsExpressionContainsMacros(question.Properties.OptionsFilterExpression);
+                    isExistsMacros |= IsExpressionContainsMacros(question.LinkedFilterExpression);
+                }
+
+                if (entity is IVariable variable)
+                {
+                    isExistsMacros |= IsExpressionContainsMacros(variable.Expression);
+                }
+
+                if (isExistsMacros)
+                    return true;
+            }
+
+            return isExistsMacros;
+        }
+
+        private bool IsExpressionContainsMacros(string expression)
+        {
+            if (string.IsNullOrWhiteSpace(expression))
+                return false;
+
+            var isExpressionContainsMacros = expression.Contains("$");
+            if (isExpressionContainsMacros)
+                Console.WriteLine("Found macros in condition: " + expression);
+
+            return isExpressionContainsMacros;
         }
     }
 }
