@@ -164,7 +164,7 @@
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;
-&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ უარყოთ ინტერვიუები მხოლოდ შემდეგი სტატუსით: &lt;i&gt; {1} &lt;/ i&gt;. </value>
+&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ უარყოთ ინტერვიუები მხოლოდ შემდეგი სტატუსით: &lt;i&gt; {1} &lt;/ i&gt; , &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) დაუშვებელია. &lt;/ h3&gt;
