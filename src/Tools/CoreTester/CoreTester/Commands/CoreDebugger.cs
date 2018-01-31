@@ -68,9 +68,9 @@ namespace CoreTester.Commands
             var questionnaireIdentity = QuestionnaireIdentity.Parse(Path.GetFileNameWithoutExtension(questionnaireJsonFileName).Substring(questionnairePrefix.Length));
             var questionnaireDocument = serializer.Deserialize<QuestionnaireDocument>(File.ReadAllText(questionnaireJsonFileName));
 
-            if (IsExistsMacrosesInDocument(questionnaireDocument))
+            if (Utils.IsExistsMacrosesInDocument(questionnaireDocument))
             {
-                Console.WriteLine($"Analize folder {folder}. Questionnaire contains macroses. Skiped.");
+                Console.WriteLine($"Analyze folder {folder}. Questionnaire contains macroses. Skiped.");
                 return 1;
             }
 
@@ -81,7 +81,7 @@ namespace CoreTester.Commands
                 return 0;
             }
 
-            Console.WriteLine($"Analize folder {folder}.");
+            Console.WriteLine($"Analyze folder {folder}.");
 
             var assemblyDllFileName = files.Single(x => Path.GetFileName(x).StartsWith("assembly-"));
             assemblyAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, File.ReadAllBytes(assemblyDllFileName));
@@ -166,58 +166,6 @@ namespace CoreTester.Commands
                     break;
                 }
             }
-        }
-
-
-        private bool IsExistsMacrosesInDocument(QuestionnaireDocument questionnaireDocument)
-        {
-            bool isExistsMacros = false;
-
-            var entities = questionnaireDocument.Children.TreeToEnumerable(x => x.Children);
-
-            foreach (var entity in entities)
-            {
-                if (entity is IConditional conditionalEntity)
-                {
-                    isExistsMacros |= IsExpressionContainsMacros(conditionalEntity.ConditionExpression);
-                }
-
-                if (entity is IValidatable validatable)
-                {
-                    foreach (var validationCondition in validatable.ValidationConditions)
-                    {
-                        isExistsMacros |= IsExpressionContainsMacros(validationCondition.Expression);
-                    }
-                }
-
-                if (entity is IQuestion question)
-                {
-                    isExistsMacros |= IsExpressionContainsMacros(question.Properties.OptionsFilterExpression);
-                    isExistsMacros |= IsExpressionContainsMacros(question.LinkedFilterExpression);
-                }
-
-                if (entity is IVariable variable)
-                {
-                    isExistsMacros |= IsExpressionContainsMacros(variable.Expression);
-                }
-
-                if (isExistsMacros)
-                    return true;
-            }
-
-            return isExistsMacros;
-        }
-
-        private bool IsExpressionContainsMacros(string expression)
-        {
-            if (string.IsNullOrWhiteSpace(expression))
-                return false;
-
-            var isExpressionContainsMacros = expression.Contains("$");
-//            if (isExpressionContainsMacros)
-//                Console.WriteLine("Found macros in condition: " + expression);
-
-            return isExpressionContainsMacros;
         }
     }
 }

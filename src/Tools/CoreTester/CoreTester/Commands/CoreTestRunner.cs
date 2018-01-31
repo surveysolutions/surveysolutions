@@ -84,6 +84,13 @@ namespace CoreTester.Commands
                 Console.WriteLine($"               {questionnaire.Title}");
                 Console.WriteLine($"{interviewIdsToProcess.Count} interviews were found.");
 
+                if (Utils.IsExistsMacrosesInDocument(questionnaire))
+                {
+                    Console.WriteLine($"Questionnaire contains macros. Skipping.");
+                    Console.WriteLine("============================================");
+                    continue;
+                }
+
                 questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId,
                     questionnaireBrowseItem.Version, questionnaire);
                 var stopwatch = Stopwatch.StartNew();
