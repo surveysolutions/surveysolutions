@@ -181,10 +181,12 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         public virtual async Task<IdentityResult> MoveUserToAnotherTeamAsync(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
         {
             var interviewer = await this.FindByIdAsync(interviewerId);
-            
+            var newSupervisor = await this.FindByIdAsync(newSupervisorId);
+            var previousSupervisor = await this.FindByIdAsync(previousSupervisorId);
+
             interviewer.Profile.SupervisorId = newSupervisorId;
 
-            this.auditLog.UserMovedToAnotherTeam(interviewerId, newSupervisorId, previousSupervisorId);
+            this.auditLog.UserMovedToAnotherTeam(interviewer.UserName, newSupervisor.UserName, previousSupervisor.UserName);
 
             return await this.UpdateUserAsync(interviewer, null);
         }
