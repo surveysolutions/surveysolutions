@@ -6,7 +6,7 @@
                 <div class="about-questionnaire-details">
                     <ul class="main-info-column list-unstyled pull-left">
                         <li>Interview #{{$config.model.key}} ({{this.$t('Common.Assignment')}} {{this.$config.model.assignmentId}})</li>
-                        <li class="questionnaire-title" :title="$store.state.webinterview.questionnaireTitle">{{this.$store.state.webinterview.questionnaireTitle}}</li>
+                        <li class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
                     </ul>
                     <ul class="list-unstyled pull-left">
                         <li><span class="data-label">{{this.$t('Details.Responsible')}}: </span> <span class="data">
@@ -26,11 +26,11 @@
                 </div>
             </div>
             <div class="questionnaire-details-actions clearfix">
-                <SwitchLanguage v-if="canChangeLanguage" />
-                <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve">
+                <SwitchLanguage v-if="canChangeLanguage" :disabled="changeLanguageDisabled"/>
+                <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
                     {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
                 </button>
-                <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject">
+                <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
                     {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
                 </button>
             </div>
@@ -65,6 +65,7 @@
 <script>
 import SwitchLanguage from "./SwitchLanguage";
 import StatusesHistory from "./StatusesHistory";
+import Vue from "vue";
 
 export default {
   data() {
@@ -104,8 +105,9 @@ export default {
     },
     showStatusesHistory() {
       this.$refs.statusesHistory.show();
-    }
+    }    
   },
+  
   computed: {
     responsibleRole() {
       return this.$config.model.responsibleRole.toLowerCase();
@@ -119,13 +121,13 @@ export default {
     rejectCharsLeft() {
       return `${this.rejectComment.length} / ${this.commentMaxLength}`;
     },
-    showApproveButton() {
+    showApproveButton() {      
       return (
         this.$config.model.approveReject.supervisorApproveAllowed ||
         this.$config.model.approveReject.hqOrAdminApproveAllowed
       );
     },
-    showRejectButton() {
+    showRejectButton() {      
       return (
         this.$config.model.approveReject.supervisorRejectAllowed ||
         this.$config.model.approveReject.hqOrAdminRejectAllowed
@@ -138,7 +140,13 @@ export default {
       return (
         this.$store.state.webinterview.languages != undefined &&
         this.$store.state.webinterview.languages.length > 0
-      );
+      );      
+    },
+    changeLanguageDisabled() {
+      return this.$store.state.webinterview.interviewCannotBeChanged;
+    },
+    changeStatusDisabled() {
+      return this.$store.state.webinterview.isCurrentUserObserving;
     }
   },
 

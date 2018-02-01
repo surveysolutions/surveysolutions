@@ -927,9 +927,9 @@
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Описание опросника и данные по обследованию</value>
     <comment>Метаинформация</comment>
-  </data>  
+  </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Заголовок (влияет на имя в списка опросников):</value>
+    <value>Описание опросника</value>
     <comment>Метаинформация</comment>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
@@ -996,9 +996,12 @@
     <value>Консультанты:</value>
     <comment>Консультанты:</comment>
   </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Базовая информация</value>
+  </data>
   <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
-    <value>Дополнительная информация:</value>
-    <comment>Дополнительная информация:</comment>
+    <value>Дополнительная информация</value>
+    <comment>Дополнительная информация</comment>
   </data>
   <data name="SideBarMetadataNotes" xml:space="preserve">
     <value>Заметки:</value>
@@ -1017,7 +1020,7 @@
     <comment>Доступ к опроснику</comment>
   </data>
   <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
-    <value>Согласен, чтоб опросник был общедоступным</value>
+    <value>Согласен, чтобы опросник был общедоступным</value>
     <comment>Согласен, чтоб опросник был общедоступным</comment>
   </data>
   <data name="SelectCountry" xml:space="preserve">
@@ -1035,5 +1038,8 @@
   <data name="SelectModeOfDataCollection" xml:space="preserve">
     <value>Выберите режим сбора данных</value>
     <comment>Выберите режим сбора данных</comment>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Тест</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reactive.Subjects;
 using AutoMapper;
 using Main.Core.Documents;
@@ -80,9 +81,16 @@ namespace WB.UI.WebTester
             
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
             registry.BindAsSingleton<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
-            registry.BindToMethod<IDesignerWebTesterApi>(() => Refit.RestService.For<IDesignerWebTesterApi>(DesignerAddress(),
+            registry.BindToMethod(() => Refit.RestService.For<IDesignerWebTesterApi>(
+                new HttpClient
+                {
+                    MaxResponseContentBufferSize = long.MaxValue,
+                    BaseAddress = new Uri(DesignerAddress()),
+                    Timeout = TimeSpan.FromMinutes(3)
+                },
                 new RefitSettings
                 {
+                   
                     JsonSerializerSettings = new JsonSerializerSettings
                     {
                         TypeNameHandling = TypeNameHandling.All,
@@ -121,6 +129,8 @@ namespace WB.UI.WebTester
                 }
             }));
 
+            registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
+
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
             registry.BindAsSingleton<IEventStore, ISnapshotStore, InMemoryEventStore>();
@@ -130,6 +140,7 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
+            
             registry.Bind<EvictionService>();
 
             // TODO: Find a generic place for each of the dependencies below

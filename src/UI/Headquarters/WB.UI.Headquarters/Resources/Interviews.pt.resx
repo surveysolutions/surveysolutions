@@ -144,7 +144,7 @@
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) serão rejeitadas.&lt;/h3&gt;
-&lt;b&gt;Nota!&lt;/b&gt; Você pode rejeitar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt;.</value>
+&lt;b&gt;Nota!&lt;/b&gt; Você pode rejeitar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser não aprovadas.&lt;/h3&gt;

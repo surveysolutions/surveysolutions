@@ -36,6 +36,9 @@
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
+    </Reference>
     <Reference Include="Dapper, Version=1.50.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\packages\Dapper.1.50.2\lib\net451\Dapper.dll</HintPath>
     </Reference>
@@ -110,9 +113,11 @@
     <Compile Include="WebInterview\Pipeline\SignalrErrorHandler.cs" />
     <Compile Include="WebInterview\Pipeline\WebInterviewConnectionsCounter.cs" />
     <Compile Include="WebInterview\Pipeline\WebInterviewStateManager.cs" />
+    <Compile Include="WebInterview\Services\AudioProcessingService.cs" />
     <Compile Include="WebInterview\Services\ConnectionLimiter.cs" />
     <Compile Include="WebInterview\Services\ConnectionsMonitor.cs" />
     <Compile Include="Questionnaire\Impl\QuestionnaireQuestionOptionsRepository.cs" />
+    <Compile Include="WebInterview\Services\IAudioProcessingService.cs" />
     <Compile Include="WebInterview\Services\WebInterviewInterviewEntityFactory.cs" />
     <Compile Include="WebInterview\Services\WebInterviewInvoker.cs" />
     <Compile Include="WebInterview\Services\WebInterviewLazyNotificationService.cs" />
@@ -176,6 +181,9 @@
     <EmbeddedResource Include="Resources\WebInterview.zh.resx">
       <DependentUpon>WebInterview.resx</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

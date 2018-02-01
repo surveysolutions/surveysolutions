@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using CoreTester.CustomInfrastructure;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace CoreTester.Commands
 {
@@ -36,6 +39,22 @@ namespace CoreTester.Commands
 
         public int Run(string folder)
         {
+            int result = 1;
+
+            var directories = Directory.EnumerateDirectories(folder).ToList();
+            if (!directories.Any())
+                result *= RunForQuestionnire(folder);
+
+            foreach (var directory in directories)
+            {
+                result *= Run(directory);
+            }
+
+            return result;
+        }
+
+        public int RunForQuestionnire(string folder)
+        {
             var files = Directory.EnumerateFiles(folder).ToList();
 
             if (!files.Any())
@@ -48,6 +67,13 @@ namespace CoreTester.Commands
             var questionnaireJsonFileName = files.Single(x => Path.GetFileName(x).StartsWith(questionnairePrefix));
             var questionnaireIdentity = QuestionnaireIdentity.Parse(Path.GetFileNameWithoutExtension(questionnaireJsonFileName).Substring(questionnairePrefix.Length));
             var questionnaireDocument = serializer.Deserialize<QuestionnaireDocument>(File.ReadAllText(questionnaireJsonFileName));
+
+            if (Utils.IsExistsMacrosesInDocument(questionnaireDocument))
+            {
+                Console.WriteLine($"Analyze folder {folder}. Questionnaire contains macroses. Skiped.");
+                return 1;
+            }
+
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
             if (questionnaireDocument == null)
             {
@@ -55,15 +81,27 @@ namespace CoreTester.Commands
                 return 0;
             }
 
+            Console.WriteLine($"Analyze folder {folder}.");
+
             var assemblyDllFileName = files.Single(x => Path.GetFileName(x).StartsWith("assembly-"));
             assemblyAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, File.ReadAllBytes(assemblyDllFileName));
 
             foreach (var file in files)
             {
-                if (Guid.TryParse(Path.GetFileNameWithoutExtension(file), out Guid interviewId))
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+
+                if (Guid.TryParse(fileNameWithoutExtension, out Guid interviewId))
                 {
                     var events = serializer.Deserialize<List<CommittedEvent>>(File.ReadAllText(file));
-                    CreateInterviewAndApplyEvents(interviewId, events);
+                    try
+                    {
+                        CreateInterviewAndApplyEvents(interviewId, events);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
                 }
             }
 
@@ -72,12 +110,20 @@ namespace CoreTester.Commands
 
         private void CreateInterviewAndApplyEvents(Guid interviewId, List<CommittedEvent> committedEvents)
         {
+//            if (interviewId != Guid.Parse("07153208-526f-4688-9173-2d7d691328f1"))
+//                return;
+
+            //Console.WriteLine($"Process interviewId {interviewId}");
+
             var userId = Guid.Parse("22222222222222222222222222222222");
             var createCommand = EventsToCommandConverter.GetCreateInterviewCommand(committedEvents, interviewId, userId);
             commandService.Execute(createCommand);
-            foreach (var committedEvent in committedEvents)
+
+            for (int i = 0; i < committedEvents.Count; i++)
             {
-                var commands = EventsToCommandConverter.ConvertEventToCommands(interviewId, committedEvent);
+                var committedEvent = committedEvents[i];
+
+                var commands = EventsToCommandConverter.ConvertEventToCommands(interviewId, committedEvent)?.ToList();
 
                 if (commands == null)
                     continue;

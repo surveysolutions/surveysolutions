@@ -135,4 +135,10 @@
   <data name="FixErrorsOnDesigner" xml:space="preserve">
     <value>Please fix this in Designer.</value>
   </data>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="PageNotFoundDesc" xml:space="preserve">
+    <value>Page not found. Please return to the Designer application and restart web test.</value>
+  </data>
 </root>

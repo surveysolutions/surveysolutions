@@ -17,7 +17,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -156,6 +156,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -212,6 +213,8 @@
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
+    <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
+    <Compile Include="Api\WebTester\QuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\WebTesterController.cs" />
     <Compile Include="App_Start\NinjectWebCommonModule.cs" />
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
@@ -471,8 +474,12 @@
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
-    <EmbeddedResource Include="Resources\AccountResources.es.resx" />
-    <EmbeddedResource Include="Resources\AccountResources.fr.resx" />
+    <EmbeddedResource Include="Resources\AccountResources.es.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AccountResources.fr.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AccountResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
@@ -480,53 +487,103 @@
     <EmbeddedResource Include="Resources\AccountResources.ru.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AccountResources.zh.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.es.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\AccountResources.zh.resx">
+      <DependentUpon>AccountResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.es.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\FindReplaceResources.es.resx" />
-    <EmbeddedResource Include="Resources\FindReplaceResources.fr.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FindReplaceResources.es.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FindReplaceResources.fr.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\FindReplaceResources.ru.resx">
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\FindReplaceResources.zh.resx" />
-    <EmbeddedResource Include="Resources\NotificationResources.es.resx" />
-    <EmbeddedResource Include="Resources\NotificationResources.fr.resx" />
+    <EmbeddedResource Include="Resources\FindReplaceResources.zh.resx">
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.es.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.fr.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\NotificationResources.ru.resx">
       <DependentUpon>NotificationResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\NotificationResources.zh.resx" />
-    <EmbeddedResource Include="Resources\Paging.es.resx" />
-    <EmbeddedResource Include="Resources\Paging.fr.resx" />
+    <EmbeddedResource Include="Resources\NotificationResources.zh.resx">
+      <DependentUpon>NotificationResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Paging.es.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Paging.fr.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Paging.ru.resx">
       <DependentUpon>Paging.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Paging.zh.resx" />
-    <EmbeddedResource Include="Resources\PdfMessages.es.resx" />
-    <EmbeddedResource Include="Resources\PdfMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\Paging.zh.resx">
+      <DependentUpon>Paging.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.es.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.fr.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\PdfMessages.ru.resx">
       <DependentUpon>PdfMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\PdfMessages.zh.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireController.es.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireController.fr.resx" />
+    <EmbeddedResource Include="Resources\PdfMessages.zh.resx">
+      <DependentUpon>PdfMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireController.es.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireController.fr.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireController.ru.resx">
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireController.zh.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.es.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.fr.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireEditor.zh.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.es.resx" />
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.fr.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireController.zh.resx">
+      <DependentUpon>QuestionnaireController.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.es.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.fr.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.zh.resx">
+      <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.es.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.fr.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ru.resx">
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.zh.resx" />
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.zh.resx">
+      <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -953,20 +1010,6 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <!-- questionnaire -->
-  <Target Name="CleanupQuestionnaire" BeforeTargets="BeforeRebuild">
-    <Message Text="Cleaning up questionnaire" />
-    <RemoveDir Directories="questionnaire\vendor" ContinueOnError="true" />
-  </Target>
-  <Target Name="RestoreNodeModules" AfterTargets="AfterBuild" Condition=" '$(Configuration)' == 'Debug' And '$(NCrunch)' != '1'">
-    <Message Importance="High" Text="Restoring node_modules" />
-    <Exec Command="yarn --version" ContinueOnError="true">
-      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
-    </Exec>
-    <Exec Command="yarn --ignore-scripts" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' == '0'" />
-    <Exec Command="npm install" WorkingDirectory="questionnaire" Condition="'$(ErrorCode)' != '0'" />
-  </Target>
-  <!-- /questionnaire -->
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">

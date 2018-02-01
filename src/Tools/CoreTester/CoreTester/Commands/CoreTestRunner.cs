@@ -84,6 +84,13 @@ namespace CoreTester.Commands
                 Console.WriteLine($"               {questionnaire.Title}");
                 Console.WriteLine($"{interviewIdsToProcess.Count} interviews were found.");
 
+                if (Utils.IsExistsMacrosesInDocument(questionnaire))
+                {
+                    Console.WriteLine($"Questionnaire contains macros. Skipping.");
+                    Console.WriteLine("============================================");
+                    continue;
+                }
+
                 questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId,
                     questionnaireBrowseItem.Version, questionnaire);
                 var stopwatch = Stopwatch.StartNew();
@@ -186,9 +193,14 @@ namespace CoreTester.Commands
                 if (interviewWithCalculationError.Count > 0)
                 {
                     Console.WriteLine("Dumping debug information");
-                    
+
+                    if (Directory.Exists(serverName))
+                        Directory.Delete(serverName);
+                    Directory.CreateDirectory(serverName);
+
                     var fileName = Path.Combine(serverName, $"{serverName}.results.txt");
-                    File.AppendAllLines(fileName,new string[]
+                    
+                    File.AppendAllLines(fileName, new string[]
                     {
                         "============================================",
                         $"=Questionnaire: {questionnaireRepositoryId}",

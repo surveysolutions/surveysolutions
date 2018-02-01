@@ -51,7 +51,7 @@
                         <span class="text-success"><em ng-i18next="[i18next]({dateTime: verificationStatus.time})SavedAtTimestamp"></em></span>
                     </span>
                     <span class="error-message strong" ng-show="questionnaire.isReadOnlyForUser" ng-i18next>ReadOnly</span>
-                    <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable" ng-i18next="[value]WebTest" value="WebTest" ng-click="webTest()" />
+                    <input id="webtest-btn" type="button" class="btn" ng-if="questionnaire.webTestAvailable" ng-i18next="[value]Test" value="Test" ng-click="webTest()" />
                 </div>
             </div>
         </div>
@@ -439,7 +439,7 @@
                                                     {{ metadata.studyType ? (questionnaire.studyTypes | filter : {'code':metadata.studyType})[0].title : 'SelectStudyType' | i18next }}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.studyType = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.studyType = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
@@ -463,7 +463,7 @@
                                                     {{ metadata.kindOfData ? (questionnaire.kindsOfData | filter : {'code':metadata.kindOfData})[0].title  : 'SelectKindOfData' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.kindOfData = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.kindOfData = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
@@ -486,7 +486,7 @@
                                                     {{ metadata.modeOfDataCollection ? (questionnaire.modesOfDataCollection | filter : {'code':metadata.modeOfDataCollection})[0].title  : 'SelectModeOfDataCollection' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.modeOfDataCollection = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.modeOfDataCollection = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu " aria-labelledby="dropdownMenu12">
@@ -511,7 +511,7 @@
                                                     {{ metadata.country ? (questionnaire.countries | filter : {'code':metadata.country})[0].title  : 'SelectCountry' | i18next}}
                                                     <span class="dropdown-arrow" aria-labelledby="dropdownMenu12"></span>
                                                 </button>
-                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.country = null">
+                                                <button type="button" class="btn btn-link btn-clear" ng-click="metadata.country = null; metadata.form.$setDirty();">
                                                     <span></span>
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenu12">
@@ -530,8 +530,10 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataYear' | i18next}}</span>
                                         <div class="form-group">
-                                            <input type="text" onkeypress='return event.charCode >= 48 && event.charCode <= 57' class="form-control date-field" name="year" ng-model="metadata.year" />
+                                            <input type="text" min="0" max="9999" pattern="\d*" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4" ng-pattern="/^\d+$/" class="form-control date-field" name="year" ng-model="metadata.year" />
                                         </div>
+                                        <p class="help-block ng-cloak" ng-show="metadata.form.year.$error.pattern" ng-i18next="QuestionOnlyInts">
+                                        </p>
                                     </div>
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataLanguages' | i18next}}</span>
@@ -602,7 +604,7 @@
                                 </li>
                             </ul>
                             <div class="form-buttons-holder" ng-class="{dirty: metadata.form.$dirty }">
-                                <button type="submit" class="btn btn-lg ng-isolate-scope" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
+                                <button type="submit" class="btn btn-lg ng-isolate-scope"  ng-disabled="metadata.form.$invalid" ng-class="{ 'btn-primary': metadata.form.$dirty }" ng-click="saveMetadata();$event.stopPropagation()" ng-i18next>Save</button>
                                 <button type="button" class="btn btn-lg btn-link ng-isolate-scope" ng-click="cancelMetadata();$event.stopPropagation()" ng-i18next>Cancel</button>
                             </div>
                         </ng-form>

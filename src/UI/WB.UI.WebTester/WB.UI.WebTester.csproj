@@ -255,7 +255,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\ConfigurationSource.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
@@ -277,6 +276,7 @@
     <Compile Include="Services\IEvictionObserver.cs" />
     <Compile Include="Services\Implementation\EvictionService.cs" />
     <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
+    <Compile Include="Services\Implementation\RemoteInterviewContainer.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\TokenEviction.cs" />
     <Compile Include="Services\Implementation\WebTesterAggregateRootRepository.cs" />
@@ -299,12 +299,12 @@
     <Compile Include="Services\IDesignerWebTesterApi.cs" />
     <Compile Include="Services\Implementation\InMemoryCacheStorage.cs" />
     <Compile Include="Services\Implementation\TranslationStorage.cs" />
-    <Compile Include="Services\SoundInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="WebTesterModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\**\*.*" />
+    <Content Include="ErrorPages\genericError.html" />
     <Content Include="Global.asax" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\WebTester\Interview.cshtml" />
@@ -335,6 +335,9 @@
     <Content Include="Views\Shared\partial.webtester.cshtml" />
     <Content Include="Views\WebTester\Run.cshtml" />
     <Content Include="Views\Error\QuestionnaireWithErrors.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
+    <Content Include="Views\Error\_ErrorLayout.cshtml" />
+    <Content Include="Views\WebTester\InterviewLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">

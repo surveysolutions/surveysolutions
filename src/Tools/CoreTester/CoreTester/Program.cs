@@ -59,7 +59,13 @@ namespace CoreTester
 
             CoreDebugger dumper = container.Get<CoreDebugger>();
 
-            return dumper.Run(opts.Folder);
+            var runResult = dumper.Run(opts.Folder);
+
+            Console.WriteLine();
+            Console.WriteLine("Press Any key");
+            Console.ReadLine();
+
+            return runResult;
         }
 
         private static int RunDumpDebugInformationOptions(DumpDebugInformationOptions opts)

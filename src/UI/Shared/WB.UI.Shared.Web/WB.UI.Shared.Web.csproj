@@ -219,10 +219,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Captcha.es.resx" />
-    <EmbeddedResource Include="Resources\Captcha.ar.resx" />
-    <EmbeddedResource Include="Resources\Captcha.fr.resx" />
-    <EmbeddedResource Include="Resources\Captcha.ka.resx" />
+    <EmbeddedResource Include="Resources\Captcha.ar.resx">
+      <DependentUpon>Captcha.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.es.resx">
+      <DependentUpon>Captcha.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.fr.resx">
+      <DependentUpon>Captcha.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.ka.resx">
+      <DependentUpon>Captcha.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Captcha.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Captcha.Designer.cs</LastGenOutput>
@@ -231,8 +239,12 @@
     <EmbeddedResource Include="Resources\Captcha.zh.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.es.resx" />
-    <EmbeddedResource Include="Resources\ErrorMessages.ka.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.es.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ka.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.pt.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
