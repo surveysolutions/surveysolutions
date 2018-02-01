@@ -530,7 +530,7 @@
                                     <div class="field-wrapper">
                                         <span class="label-title">{{'SideBarMetadataYear' | i18next}}</span>
                                         <div class="form-group">
-                                            <input type="text" min="0" max="2147483647" pattern="\d*" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="10" ng-pattern="/^\d+$/" class="form-control date-field" name="year" ng-model="metadata.year" />
+                                            <input type="text" min="0" max="9999" pattern="\d*" onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4" ng-pattern="/^\d+$/" class="form-control date-field" name="year" ng-model="metadata.year" />
                                         </div>
                                         <p class="help-block ng-cloak" ng-show="metadata.form.year.$error.pattern" ng-i18next="QuestionOnlyInts">
                                         </p>
