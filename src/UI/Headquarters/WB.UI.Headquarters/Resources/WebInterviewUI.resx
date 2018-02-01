@@ -396,4 +396,7 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>You should close this browser window or tab manually</value>
   </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Loading questionnaire. Please wait...</value>
+  </data>
 </root>
