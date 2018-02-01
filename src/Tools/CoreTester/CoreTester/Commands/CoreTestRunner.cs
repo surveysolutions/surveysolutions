@@ -5,21 +5,19 @@ using System.IO;
 using System.Linq;
 using CoreTester.CustomInfrastructure;
 using Main.Core.Documents;
-using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage;
@@ -37,6 +35,7 @@ namespace CoreTester.Commands
         private readonly IQuestionnaireBrowseViewFactory questionnairesBrowseFactory;
         private readonly INativeReadSideStorage<InterviewSummary> interviewSummaries;
         private readonly IEventStore eventStore;
+        private IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
 
         public CoreTestRunner(
             ICommandService commandService,
@@ -47,7 +46,8 @@ namespace CoreTester.Commands
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireRepository,
             IEventStore eventStore,
             IQuestionnaireStorage questionnaireStorage, 
-            IPlainTransactionManagerProvider plainTransactionManager)
+            IPlainTransactionManagerProvider plainTransactionManager,
+            IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor)
         {
             this.commandService = commandService;
             this.questionnairesBrowseFactory = questionnairesBrowseFactory;
@@ -58,6 +58,7 @@ namespace CoreTester.Commands
             this.plainTransactionManager = plainTransactionManager;
             this.eventStore = eventStore;
             this.questionnaireRepository = questionnaireRepository;
+            this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
         }
 
         public int Run(string serverName)
@@ -65,6 +66,8 @@ namespace CoreTester.Commands
             var questionnaireBrowseItems = this.plainTransactionManager.GetPlainTransactionManager()
                 .ExecuteInQueryTransaction(() =>
                     questionnairesBrowseFactory.Load(new QuestionnaireBrowseInputModel {PageSize = 1000}));
+
+            Console.WriteLine($"Found {questionnaireBrowseItems.Items.Count()} questionnaires");
 
             foreach (var questionnaireBrowseItem in questionnaireBrowseItems.Items)
             {
@@ -84,11 +87,19 @@ namespace CoreTester.Commands
                 Console.WriteLine($"               {questionnaire.Title}");
                 Console.WriteLine($"{interviewIdsToProcess.Count} interviews were found.");
 
-                if (Utils.IsExistsMacrosesInDocument(questionnaire))
+                var isExistsMacrosesInDocument = Utils.IsExistsMacrosesInDocument(questionnaire);
+                if (isExistsMacrosesInDocument)
                 {
-                    Console.WriteLine($"Questionnaire contains macros. Skipping.");
-                    Console.WriteLine("============================================");
-                    continue;
+                    var assemblyFileName = Path.Combine(Path.GetTempPath(), $"assembly-{questionnaireIdentity}.dll");
+                    var assemblyAsBytes = this.plainTransactionManager.GetPlainTransactionManager()
+                        .ExecuteInQueryTransaction(() => questionnaireAssemblyFileAccessor.GetAssemblyAsByteArray(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+
+                    if (File.Exists(assemblyFileName))
+                        File.Delete(assemblyFileName);
+
+                    File.WriteAllBytes(assemblyFileName, assemblyAsBytes);
+
+                    Utils.InlineMacrosesInDocument(questionnaire, assemblyFileName);
                 }
 
                 questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId,

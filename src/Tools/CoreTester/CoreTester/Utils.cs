@@ -1,29 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
 using ICSharpCode.Decompiler.TypeSystem;
-using ICSharpCode.Decompiler.TypeSystem.Implementation;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Mono.Cecil;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
-using WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.Questionnaire.Documents;
-using FullTypeName = ICSharpCode.Decompiler.TypeSystem.FullTypeName;
 using Group = Main.Core.Entities.SubEntities.Group;
 using ITypeDefinition = ICSharpCode.Decompiler.TypeSystem.ITypeDefinition;
 using IVariable = WB.Core.SharedKernels.QuestionnaireEntities.IVariable;
-using MethodAttributes = Mono.Cecil.MethodAttributes;
 using TypeAttributes = Mono.Cecil.TypeAttributes;
 
 namespace CoreTester

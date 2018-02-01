@@ -1,11 +1,8 @@
 ﻿using CoreTester.Commands;
 using CoreTester.CustomInfrastructure;
-using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -14,7 +11,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Modularity;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -24,10 +20,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Enumerator.Native.JsonConversion;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.Questionnaire.Impl;
-using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 
 namespace CoreTester.Setup
