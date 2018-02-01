@@ -3,14 +3,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Caching;
-using System.Threading;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.UI.Designer.Api.WebTester
@@ -40,7 +38,6 @@ namespace WB.UI.Designer.Api.WebTester
         }
 
         readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
-        readonly NamedLocker locker = new NamedLocker();
 
         public Questionnaire ComposeQuestionnaire(Guid questionnaireId)
         {
