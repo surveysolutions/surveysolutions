@@ -29,8 +29,11 @@ namespace WB.Tests.Integration.WebTester.Services
             QuestionnaireDocument questionnaire, List<TranslationDto> translations = null)
         {
             questionnaire.IsUsingExpressionStorage = true;
-            questionnaire.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider()
-                .GetExpressionsPlayOrder(new ReadOnlyQuestionnaireDocument(questionnaire));
+            var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
+            var playOrderProvider = Create.Service.ExpressionsPlayOrderProvider();
+            questionnaire.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaire.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaire.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var supportingAssembly = IntegrationCreate.CompileAssembly(questionnaire);
             manager.SetupForInterview(interviewId, questionnaire, translations, supportingAssembly);

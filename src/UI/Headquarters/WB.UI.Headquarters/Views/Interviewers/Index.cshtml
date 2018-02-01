@@ -83,7 +83,11 @@
                     {
                         data: "creationDate",
                         name: "CreationDate", // case-sensitive!
-                        "class": "changed-recently"
+                        "class": "changed-recently",
+                        render: function (data) {
+                            var localDate = moment.utc(data).local();
+                            return localDate.format(window.CONFIG.dateFormat);
+                        }
                     },
                     {
                         data: "email",

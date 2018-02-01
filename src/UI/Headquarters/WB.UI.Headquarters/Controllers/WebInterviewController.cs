@@ -29,6 +29,7 @@ using StackExchange.Exceptional;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers

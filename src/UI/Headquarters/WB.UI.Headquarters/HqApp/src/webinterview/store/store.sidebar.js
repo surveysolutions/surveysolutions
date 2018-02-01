@@ -51,9 +51,8 @@ export default {
         hideSearchResults({ commit, dispatch, state }, newState = null) {
             if (state.screenWidth >= state.mediumScreenThreshold){
                 commit("SET_FACET_HIDDEN", false)
-            }
-            dispatch("resetAllFilters")
-            commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? !state.searchResultsHidden : newState)
+            }            
+            commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? true : newState)
         },
         showSearchResults({ commit, state }) {
             commit("SET_SEARCH_RESULTS_HIDDEN", false)

@@ -76,7 +76,13 @@ export default {
 
     this.$store.dispatch("fetchFlags");
   },
-
+  
+  updated(){
+    Vue.nextTick(() => {
+      window.ajustNoticeHeight();
+      window.ajustDetailsPanelHeight();
+    });
+  },
   components: {
     Facets,
     SearchResults,

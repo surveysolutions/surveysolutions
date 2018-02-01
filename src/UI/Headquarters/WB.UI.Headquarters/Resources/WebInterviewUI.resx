@@ -390,4 +390,10 @@
   <data name="ShowOnMap" xml:space="preserve">
     <value>Show on map</value>
   </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>Tester session is over</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>You should close this browser window or tab manually</value>
+  </data>
 </root>

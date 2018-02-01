@@ -83,7 +83,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
                 if (!string.IsNullOrEmpty(input.SearchBy))
                 {
-                    query = query.Where(x => x.UserName.Contains(input.SearchBy));
+                    var searchByToLower = input.SearchBy.ToLower();
+                    query = query.Where(x => x.UserName.ToLower().Contains(searchByToLower));
                 }
                 
                 var queryResult = query.OrderUsingSortExpression(input.Order);

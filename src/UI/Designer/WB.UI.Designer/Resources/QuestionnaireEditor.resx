@@ -368,7 +368,7 @@
     <value>Basic information</value>
   </data>
   <data name="SideBarMetadataTitle" xml:space="preserve">
-    <value>Title (affects name on questionnaire list):</value>
+    <value>Questionnaire description</value>
   </data>
   <data name="SideBarMetadataSubtitle" xml:space="preserve">
     <value>Subtitle:</value>
@@ -1053,5 +1053,8 @@
   </data>
   <data name="SelectKindOfData" xml:space="preserve">
     <value>Select a Kind of data</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Test</value>
   </data>
 </root>

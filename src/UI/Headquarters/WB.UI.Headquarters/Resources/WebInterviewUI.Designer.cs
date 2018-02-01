@@ -844,6 +844,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tester session is over.
+        /// </summary>
+        internal static string WebTesterSessionOver {
+            get {
+                return ResourceManager.GetString("WebTesterSessionOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You should close this browser window or tab manually.
+        /// </summary>
+        internal static string WebTesterSessionOverMessage {
+            get {
+                return ResourceManager.GetString("WebTesterSessionOverMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         internal static string Yes {

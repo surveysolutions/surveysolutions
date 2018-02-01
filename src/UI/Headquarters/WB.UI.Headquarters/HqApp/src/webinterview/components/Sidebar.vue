@@ -55,6 +55,7 @@
             },
             completeSection() {
                 return {
+                    id: "SidebarCompleted",
                     collapsed: true,
                     title: this.$t("WebInterviewUI.Complete"),
                     to: {

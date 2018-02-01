@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.SignalR.Hubs;
+﻿using System;
+using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
@@ -10,7 +11,6 @@ namespace WB.UI.WebTester.Hub
     [HubName(@"interview")]
     public class WebInterviewHub : WebInterview
     {
-        private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IEvictionObserver evictionNotify;
 
         public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, 
@@ -21,14 +21,13 @@ namespace WB.UI.WebTester.Hub
             IEvictionObserver evictionNotify) : 
             base(statefulInterviewRepository, commandService, questionnaireRepository, webInterviewNotificationService, interviewEntityFactory)
         {
-            this.webInterviewNotificationService = webInterviewNotificationService;
             this.evictionNotify = evictionNotify;
         }
 
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
-            evictionNotify.Evict(GetCallerInterview().Id);
-            webInterviewNotificationService.ShutDownInterview(base.GetCallerInterview().Id);
+            var interviewId = Guid.Parse(this.CallerInterviewId);
+            evictionNotify.Evict(interviewId);
         }
     }
 }

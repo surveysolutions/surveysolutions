@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using CSCore;
 using CSCore.Codecs.WAV;
 using CSCore.MediaFoundation;
-using System.Diagnostics;
-using System.Threading;
-using System.Text;
-using System.Web;
 using StackExchange.Exceptional;
 using WB.Infrastructure.Native.Monitoring;
 
-namespace WB.UI.Headquarters.Services
+namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class AudioProcessingService : IAudioProcessingService
     {

@@ -75,7 +75,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void UpdateEnablement(InterviewTreeGroup group)
         {
             if (this.IsParentDiabled(group))
+            {
+                var isRoster = @group is InterviewTreeRoster;
+                var isRosterEnabledInDisabledParent = isRoster && !group.IsDisabledByOwnCondition();
+                if (isRosterEnabledInDisabledParent)
+                    DisableGroup();
+
                 return;
+            }
 
             var level = this.GetLevel(group);
 
@@ -83,6 +90,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (result)
                 group.Enable();
             else
+                DisableGroup();
+
+            void DisableGroup()
             {
                 group.Disable();
                 List<Identity> disabledChildNodes = group.DisableChildNodes();
