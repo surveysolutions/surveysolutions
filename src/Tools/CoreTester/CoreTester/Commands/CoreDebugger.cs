@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using CoreTester.CustomInfrastructure;
+using ICSharpCode.Decompiler;
+using ICSharpCode.Decompiler.CSharp;
+using ICSharpCode.Decompiler.TypeSystem;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
@@ -14,7 +19,9 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using AssemblyDefinition = Mono.Cecil.AssemblyDefinition;
+using IMemberDefinition = Mono.Cecil.IMemberDefinition;
+using IVariable = WB.Core.SharedKernels.QuestionnaireEntities.IVariable;
 
 namespace CoreTester.Commands
 {
@@ -26,9 +33,9 @@ namespace CoreTester.Commands
         private readonly ICommandService commandService;
 
         public CoreDebugger(
-            ISerializer serializer, 
-            IQuestionnaireAssemblyAccessor assemblyAccessor, 
-            IQuestionnaireStorage questionnaireStorage, 
+            ISerializer serializer,
+            IQuestionnaireAssemblyAccessor assemblyAccessor,
+            IQuestionnaireStorage questionnaireStorage,
             ICommandService commandService)
         {
             this.serializer = serializer;
@@ -63,16 +70,16 @@ namespace CoreTester.Commands
                 return 0;
             }
 
+            var assemblyDllFileName = files.Single(x => Path.GetFileName(x).StartsWith("assembly-"));
+
             var questionnairePrefix = "questionnaire-";
             var questionnaireJsonFileName = files.Single(x => Path.GetFileName(x).StartsWith(questionnairePrefix));
             var questionnaireIdentity = QuestionnaireIdentity.Parse(Path.GetFileNameWithoutExtension(questionnaireJsonFileName).Substring(questionnairePrefix.Length));
             var questionnaireDocument = serializer.Deserialize<QuestionnaireDocument>(File.ReadAllText(questionnaireJsonFileName));
 
-            if (Utils.IsExistsMacrosesInDocument(questionnaireDocument))
-            {
-                Console.WriteLine($"Analyze folder {folder}. Questionnaire contains macroses. Skiped.");
-                return 1;
-            }
+            var isExistsMacrosesInDocument = Utils.IsExistsMacrosesInDocument(questionnaireDocument);
+            if (isExistsMacrosesInDocument)
+                Utils.InlineMacrosesInDocument(questionnaireDocument, assemblyDllFileName);
 
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
             if (questionnaireDocument == null)
@@ -81,9 +88,8 @@ namespace CoreTester.Commands
                 return 0;
             }
 
-            Console.WriteLine($"Analyze folder {folder}.");
+            Console.WriteLine($"Analyze folder {folder}. Is exists macroses: {isExistsMacrosesInDocument}");
 
-            var assemblyDllFileName = files.Single(x => Path.GetFileName(x).StartsWith("assembly-"));
             assemblyAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, File.ReadAllBytes(assemblyDllFileName));
 
             foreach (var file in files)
