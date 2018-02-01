@@ -388,4 +388,7 @@
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
     <value>Пожалуйста закройте окно тестера.</value>
   </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Загружаем опросник. Пожалуйста подождите...</value>
+  </data>
 </root>
