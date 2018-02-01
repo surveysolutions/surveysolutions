@@ -1,0 +1,41 @@
+﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.Infrastructure.Versions
+@model WB.UI.WebTester.Controllers.InterviewPageModel
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Title</title>
+    
+    <!-- css_markup:css -->
+    <link rel='stylesheet' async href='@Url.Content(@"~/Content/Build/markup.css")' >
+    <!-- endinject -->
+    <!-- css_markupWebInterview:css -->
+    <link rel='stylesheet' async href='@Url.Content(@"~/Content/Build/markup-web-interview.css")' >
+    <!-- endinject -->
+</head>
+<body class="gray-background">
+    <script>
+    window.CONFIG = {
+        virtualPath:    '@Url.Content(@"~/WebTester/Interview")',
+        imageUploadUri: '@Url.Content(@"~/multimedia/image")',
+        audioUploadUri: '@Url.Content(@"~/multimedia/audio")',
+        imageGetBase:   '@Url.Content(@"~/api/WebInterviewResources")',
+        audioGet: '@Url.Content(@"~/Multimedia/AudioRecord")',
+        signalrPath: '@Url.Content(@"~/signalr/hubs")',
+        verboseLogging: false,
+        supportedTransports: ["webSockets", "longPolling"],
+        appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
+        googleApiKey: '@Model.GoogleMapsKey',
+        hubName: "interview",
+        inWebTesterMode: true
+    }
+    </script>
+    @RenderSection("scripts", false)
+    <div id="app"></div>
+    @Html.Partial("partial.webtester")
+    @RenderSection("footer", false)
+</body>
+</html>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -21,22 +22,29 @@ namespace WB.UI.WebTester.Controllers
     public class WebTesterController : Controller
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IEvictionObserver evictionService;
         private readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireImportService questionnaireImportService;
 
-        public WebTesterController(IStatefulInterviewRepository statefulInterviewRepository,
+        public WebTesterController(
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IEvictionObserver evictionService,
             ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
             IQuestionnaireImportService questionnaireImportService)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
+            this.evictionService = evictionService;
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireImportService = questionnaireImportService;
         }
 
-        public ActionResult Run(Guid id) => this.View(id);
+        public ActionResult Run(Guid id) => this.View(new InterviewPageModel
+        {
+            Id = id.ToString()
+        });
 
         public async Task<ActionResult> Redirect(Guid id)
         {
@@ -44,6 +52,11 @@ namespace WB.UI.WebTester.Controllers
 
             try
             {
+                if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
+                {
+                    evictionService.Evict(id);
+                }
+
                 questionnaireIdentity = await this.questionnaireImportService.ImportQuestionnaire(id);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
@@ -59,7 +72,7 @@ namespace WB.UI.WebTester.Controllers
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
-                interviewKey: new InterviewKey(00_00_00),
+                interviewKey: new InterviewKey(new Random().Next(99999999)),
                 assignmentId: null));
 
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
@@ -70,13 +83,14 @@ namespace WB.UI.WebTester.Controllers
             try
             {
                 var interviewPageModel = GetInterviewPageModel(id);
-                if (interviewPageModel == null) return null;
+                if (interviewPageModel == null) 
+                    throw new HttpException(404, string.Empty);
 
                 return View(interviewPageModel);
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                return HttpNotFound();
+                throw new HttpException(404, string.Empty);
             }
         }
 
@@ -104,6 +118,11 @@ namespace WB.UI.WebTester.Controllers
         {
             var interview = this.statefulInterviewRepository.Get(id);
 
+            if (interview == null)
+            {
+                throw new HttpException(404, string.Empty);
+            }
+
             var targetSectionIsEnabled = interview?.IsEnabled(Identity.Parse(sectionId));
             if (targetSectionIsEnabled != true)
             {
@@ -116,9 +135,8 @@ namespace WB.UI.WebTester.Controllers
             var model = GetInterviewPageModel(id);
             if (model == null)
             {
-                return HttpNotFound();
+                throw new HttpException(404, string.Empty);
             }
-
 
             return this.View("Interview", model);
         }

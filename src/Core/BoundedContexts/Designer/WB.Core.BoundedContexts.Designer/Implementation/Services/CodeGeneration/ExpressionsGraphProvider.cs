@@ -118,10 +118,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                         .Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
                         .Where(x => x.RosterTitleQuestionId.HasValue)
                         .Select(x => new { Key = x.RosterTitleQuestionId.Value, Value = x.PublicKey }))
-                    .Union(questionnaire
-                        .Find<Group>(x => x.IsRoster)
-                        .Where(x => x.GetParent() != null)
-                        .Select(x => new { Key = x.PublicKey, Value = x.GetParent().PublicKey }))
                     .GroupBy(x => x.Key)
                     .ToDictionary(x => x.Key, x => x.Select(r => r.Value).ToList());
 

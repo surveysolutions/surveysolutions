@@ -24,7 +24,8 @@ namespace WB.UI.WebTester.Services.Implementation
 
         private static long version;
 
-        public QuestionnaireImportService(IQuestionnaireStorage questionnaireStorage,
+        public QuestionnaireImportService(
+            IQuestionnaireStorage questionnaireStorage,
             IDesignerWebTesterApi webTesterApi,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
             ITranslationManagementService translationManagementService,
@@ -66,6 +67,11 @@ namespace WB.UI.WebTester.Services.Implementation
 
             var translations = await webTesterApi.GetTranslationsAsync(designerToken.ToString());
 
+            this.appdomainsPerInterviewManager.SetupForInterview(designerToken,
+                questionnaire.Document,
+                translations,
+                questionnaire.Assembly);
+
             var attachments = new List<QuestionnaireAttachment>();
 
             foreach (Attachment documentAttachment in questionnaire.Document.Attachments)
@@ -78,7 +84,7 @@ namespace WB.UI.WebTester.Services.Implementation
                     Content = content
                 });
             }
-
+            
             lock (TokenToQuestionnaireMap)
             {
                 TokenToQuestionnaireMap[designerToken] = questionnaireIdentity;
@@ -88,11 +94,6 @@ namespace WB.UI.WebTester.Services.Implementation
                     this.attachmentsStorage.Store(attachment,attachment.Content.Id, designerToken);
                 }
                 
-                this.appdomainsPerInterviewManager.SetupForInterview(designerToken, 
-                    questionnaire.Document,
-                    translations,
-                    questionnaire.Assembly);
-
                 this.questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId,
                     questionnaireIdentity.Version,
                     questionnaire.Document);

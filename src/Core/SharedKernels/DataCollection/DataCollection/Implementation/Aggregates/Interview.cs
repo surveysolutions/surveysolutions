@@ -1900,8 +1900,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(synchronizedEvent);
             }
-            
+
+            var sourceInterview = this.Tree.Clone();
+
             this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, null);
+            var treeDifference = FindDifferenceBetweenTrees(sourceInterview, this.Tree);
+            this.ApplyPassiveEvents(treeDifference);
 
             if (command.InterviewKey != null)
             {

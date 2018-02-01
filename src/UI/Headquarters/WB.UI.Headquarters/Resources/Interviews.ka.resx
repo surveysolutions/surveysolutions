@@ -118,15 +118,18 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ApproveConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;
+
 &lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსებიდან: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="ApproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;
+
 &lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსიდან: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="AssignConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ შერჩეულია დავალებისთვის (s). &lt;/ h3&gt;
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ შერჩეულია დავალებისთვის (s). &lt;/ h3&gt;
+
 &lt;b&gt;Note!&lt;/b&gt; თქვენ შეგიძლიათ აირჩიოთ ინერვიუები მხოლოდ შემდეგი სტატუსებიდან: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (მხოლოდ სხვა ინტერვიუზე )&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;.</value>
   </data>
   <data name="Assignment" xml:space="preserve">
@@ -136,7 +139,8 @@
     <value>მიმართეთ {0} ინტერვიუს, რომელიც უკვე მიიღო ინტერვიუერმა</value>
   </data>
   <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) ენიჭება. &lt;/ h3&gt;
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) ენიჭება. &lt;/ h3&gt;
+
 &lt;b&gt; შენიშვნა! &lt;/ b&gt; მხოლოდ ის ინტერვიუები რომელიც არ არის სტატუსში &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt; შეიძლება მიენიჭოს. </value>
   </data>
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
@@ -155,19 +159,23 @@
     <value>გსურთ გააგრძელოთ?</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) წაიშლება. &lt;/ h3&gt;
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) წაიშლება. &lt;/ h3&gt;
+
 &lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ წაშალოთ  ინტერვიუები მხოლოდ შემდეგი სტატუსებით: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;
+
 &lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ უარი ეთქვათ ინტერვიუებზე მხოლოდ შემდეგი სტატუსებით : &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;
-&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ უარყოთ ინტერვიუები მხოლოდ შემდეგი სტატუსით: &lt;i&gt; {1} &lt;/ i&gt;. </value>
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;
+
+&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ უარყოთ ინტერვიუები მხოლოდ შემდეგი სტატუსით: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) დაუშვებელია. &lt;/ h3&gt;
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) დაუშვებელია. &lt;/ h3&gt;
+
 &lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ შემდეგნაირად შეუძლებელია: &lt;i&gt; {1} &lt;/ i&gt;. </value>
   </data>
 </root>

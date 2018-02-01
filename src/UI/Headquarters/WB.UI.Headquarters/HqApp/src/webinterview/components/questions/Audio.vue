@@ -83,7 +83,7 @@ export default {
     },
     computed: {
             audioRecordPath() {
-                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.$me.updatedAt.toString()
+                return api.resources.audioRecordUri(this.interviewId, this.$me.filename) + "#" + this.$me.updatedAt.getTime()
             },
             formattedLength() {
                 if (this.$me.isAnswered){
@@ -163,6 +163,6 @@ export default {
             var diff = moment.utc(this.currentTime() - this.startRecordingTime);
             this.formattedTimer = diff.format("mm:ss:SS");
         }
-    }
+    }   
 }
 </script>

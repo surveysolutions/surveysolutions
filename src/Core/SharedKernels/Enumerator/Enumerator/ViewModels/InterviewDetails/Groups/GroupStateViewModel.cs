@@ -3,7 +3,6 @@ using MvvmCross.Core.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
@@ -39,15 +38,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private GroupStatus status;
         public GroupStatus Status
         {
-            get { return this.status; }
-            protected set { this.RaiseAndSetIfChanged(ref this.status, value); }
+            get => this.status;
+            protected set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
         private SimpleGroupStatus simpleStatus;
         public SimpleGroupStatus SimpleStatus
         {
-            get { return this.simpleStatus; }
-            protected set { this.RaiseAndSetIfChanged(ref this.simpleStatus, value); }
+            get => this.simpleStatus;
+            protected set => this.RaiseAndSetIfChanged(ref this.simpleStatus, value);
         }
 
         public virtual void UpdateFromGroupModel()
@@ -57,55 +56,51 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.SubgroupsCount = interview.GetGroupsInGroupCount(this.group);
             this.AnsweredQuestionsCount = interview.CountEnabledAnsweredQuestions(this.group);
             this.InvalidAnswersCount = interview.CountEnabledInvalidQuestionsAndStaticTexts(this.group);
-            this.SimpleStatus = CalculateSimpleStatus(this.group, interview);
-            this.Status = this.CalculateDetailedStatus();
+            this.Status = this.CalculateDetailedStatus(this.group, interview);
+            this.SimpleStatus = CalculateSimpleStatus();
         }
 
-        private static SimpleGroupStatus CalculateSimpleStatus(Identity group, IStatefulInterview interview)
+        private SimpleGroupStatus CalculateSimpleStatus()
         {
-            if (interview.HasEnabledInvalidQuestionsAndStaticTexts(group))
-                return SimpleGroupStatus.Invalid;
-
-            if (interview.HasUnansweredQuestions(group))
-                return SimpleGroupStatus.Other;
-
-            bool isSomeSubgroupNotCompleted = interview
-                .GetEnabledSubgroups(group)
-                .Select(subgroup => CalculateSimpleStatus(subgroup, interview))
-                .Any(status => status != SimpleGroupStatus.Completed);
-
-            if (isSomeSubgroupNotCompleted)
-                return SimpleGroupStatus.Other;
-
-            return SimpleGroupStatus.Completed;
-        }
-
-        protected GroupStatus CalculateDetailedStatus()
-        {
-            switch (this.SimpleStatus)
+            switch (this.Status)
             {
-                case SimpleGroupStatus.Completed:
-                    return GroupStatus.Completed;
-
-                case SimpleGroupStatus.Invalid:
-                    return this.AreAllQuestionsAnswered() ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
-
-                case SimpleGroupStatus.Other:
-                    return this.IsStarted() ? GroupStatus.Started : GroupStatus.NotStarted;
-
+                case GroupStatus.Completed:
+                    return SimpleGroupStatus.Completed;
+                case GroupStatus.StartedInvalid:
+                case GroupStatus.CompletedInvalid:
+                    return SimpleGroupStatus.Invalid;
                 default:
-                    return GroupStatus.Started;
+                    return SimpleGroupStatus.Other;
             }
         }
 
-        private bool IsStarted()
+        private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
         {
-            return this.AnsweredQuestionsCount > 0;
+            if (interview.HasEnabledInvalidQuestionsAndStaticTexts(groupIdentity))
+                return this.QuestionsCount == this.AnsweredQuestionsCount ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
+
+            var groupStatus = GroupStatus.Completed;
+
+            if (interview.HasUnansweredQuestions(groupIdentity))
+                groupStatus = this.AnsweredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
+
+            var subgroupStatuses = interview.GetEnabledSubgroups(groupIdentity)
+                .Select(subgroup => CalculateDetailedStatus(subgroup, interview));
+
+            foreach (var subGroupStatus in subgroupStatuses)
+            {
+                switch (groupStatus)
+                {
+                    case GroupStatus.Completed when subGroupStatus != GroupStatus.Completed:
+                        return GroupStatus.Started;
+                    case GroupStatus.NotStarted when subGroupStatus != GroupStatus.NotStarted:
+                        return GroupStatus.Started;
+                }
+            }
+
+            return groupStatus;
         }
 
-        protected bool AreAllQuestionsAnswered()
-        {
-            return this.QuestionsCount == this.AnsweredQuestionsCount;
-        }
+        protected bool AreAllQuestionsAnswered() => this.QuestionsCount == this.AnsweredQuestionsCount;
     }
 }

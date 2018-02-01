@@ -2365,7 +2365,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title (affects name on questionnaire list):.
+        ///   Looks up a localized string similar to Questionnaire description.
         /// </summary>
         public static string SideBarMetadataTitle {
             get {
@@ -2568,6 +2568,15 @@ namespace WB.UI.Designer.Resources {
         public static string StaticTextAttachmentName {
             get {
                 return ResourceManager.GetString("StaticTextAttachmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Test.
+        /// </summary>
+        public static string Test {
+            get {
+                return ResourceManager.GetString("Test", resourceCulture);
             }
         }
         

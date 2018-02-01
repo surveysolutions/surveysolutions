@@ -53,13 +53,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
             QuestionnaireExportStructure exportStructure = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
 
-            PreloadedDataByFile[] preloadedDataByFiles = mode == AssignmentImportType.Panel
-                ? this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId)
-                : this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId).ToEnumerable().ToArray();
+            IEnumerable<PreloadedInterviewBaseLevel> levels = mode == AssignmentImportType.Panel
+                ? CreateParsedInterviewLevels(this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId), exportStructure, questionnaire)
+                : new[]
+                {
+                    new PreloadedInterviewQuestionnaireLevel(
+                        this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId),
+                        exportStructure)
+                };
 
-            List<PreloadedInterviewBaseLevel> levels = CreateParsedInterviewLevels(preloadedDataByFiles, exportStructure, questionnaire).ToList();
-
-            PreloadedInterviewData[] interviewsToPreload = ParseInterviews(levels, questionnaire);
+            PreloadedInterviewData[] interviewsToPreload = ParseInterviews(levels.ToList(), questionnaire);
 
             var result = new List<AssignmentImportData>();
             var supervisorsCache = new Dictionary<string, Guid>();

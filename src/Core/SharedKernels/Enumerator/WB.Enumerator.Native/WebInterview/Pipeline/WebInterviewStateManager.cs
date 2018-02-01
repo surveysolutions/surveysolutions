@@ -29,6 +29,12 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
             var interview = this.statefulInterviewRepository.Get(interviewId);
+            if (interview == null)
+            {
+                hub.Clients.Caller.shutDown();
+                return;
+            }
+
             var isReview = hub.Context.QueryString[@"review"].ToBool(false);
 
             if (!isReview)

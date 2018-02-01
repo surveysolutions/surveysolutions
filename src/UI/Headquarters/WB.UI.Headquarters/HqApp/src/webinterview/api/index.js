@@ -15,6 +15,8 @@ const wrap = (jqueryPromise) => {
     )
 }
 
+
+
 const scriptIncludedPromise = new Promise(resolve =>
     $script(config.signalrPath, () => {
         // $.connection.hub.logging = true
@@ -32,7 +34,7 @@ const scriptIncludedPromise = new Promise(resolve =>
         }
 
         interviewProxy.client.shutDown = () => {
-            window.close();
+            store.dispatch("shutDownInterview")
         }
         
         interviewProxy.client.finishInterview = () => {
