@@ -14,7 +14,7 @@ using WB.UI.Designer.Api.WebTester;
 namespace WB.Tests.Unit.Designer.Api.WebTester
 {
     [TestFixture]
-    public class When_Compilte_With_QuestionnairePackageComposer
+    public class When_Compile_With_QuestionnairePackageComposer
     {
         private Questionnaire result;
         private QuestionnairePackageComposer subj;
