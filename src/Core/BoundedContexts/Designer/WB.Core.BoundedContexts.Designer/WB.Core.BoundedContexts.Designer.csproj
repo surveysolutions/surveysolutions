@@ -164,6 +164,15 @@
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>Country.Designer.cs</LastGenOutput>
 	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\ExceptionMessages.es.resx">
+	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\ExceptionMessages.fr.resx">
+	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\ExceptionMessages.zh.resx">
+	  <DependentUpon>ExceptionMessages.resx</DependentUpon>
+	</EmbeddedResource>
 	<EmbeddedResource Update="Resources\KindOfData.ru.resx">
     <DependentUpon>KindOfData.resx</DependentUpon>
 	  <Generator>ResXFileCodeGenerator</Generator>
@@ -179,6 +188,24 @@
 	<EmbeddedResource Update="Resources\ModeOfDataCollection.resx">
 	  <Generator>ResXFileCodeGenerator</Generator>
 	  <LastGenOutput>ModeOfDataCollection.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\PdfStrings.es.resx">
+	  <DependentUpon>PdfStrings.resx</DependentUpon>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\PdfStrings.zh.resx">
+	  <DependentUpon>PdfStrings.resx</DependentUpon>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\QuestionnaireEditor.es.resx">
+	  <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\QuestionnaireEditor.fr.resx">
+	  <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\QuestionnaireEditor.zh.resx">
+	  <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Resources\Roster.es.resx">
+	  <DependentUpon>Roster.resx</DependentUpon>
 	</EmbeddedResource>
 	<EmbeddedResource Update="Resources\Roster.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -203,7 +230,7 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\PdfStrings.ru.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-	   <DependentUpon>Resources\PdfStrings.resx</DependentUpon>
+	   <DependentUpon>PdfStrings.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\QuestionnaireEditor.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -213,6 +240,9 @@
       <Generator></Generator>
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Roster.zh.resx">
+      <DependentUpon>Roster.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\StudyType.ru.resx">
       <DependentUpon>StudyType.resx</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -220,6 +250,12 @@
     <EmbeddedResource Update="Resources\StudyType.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>StudyType.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\VerificationMessages.es.resx">
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\VerificationMessages.fr.resx">
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\VerificationMessages.ru.resx">
       <Generator></Generator>
@@ -229,6 +265,9 @@
       <CustomToolNamespace></CustomToolNamespace>
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>VerificationMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\VerificationMessages.zh.resx">
+      <DependentUpon>VerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>
