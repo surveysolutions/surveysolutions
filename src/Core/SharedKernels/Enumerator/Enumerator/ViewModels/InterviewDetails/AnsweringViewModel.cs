@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected AnsweringViewModel() { }
 
-        public AnsweringViewModel(ICommandService commandService, 
+        public AnsweringViewModel(ICommandService commandService,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxMessenger messenger)
         {
@@ -42,16 +42,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             private set => this.RaiseAndSetIfChanged(ref this.inProgress, value);
         }
 
+        private async Task MeasureCommandTime(Func<Task> action)
+        {
+            Stopwatch commandTime = Stopwatch.StartNew();
+            try
+            {
+                await action();
+            }
+            finally
+            {
+                commandTime.Stop();
+                messenger.Publish(new AnswerAcceptedMessage(this, commandTime.Elapsed));
+            }
+        }
+
         /// <exception cref="InterviewException">All consumers of this method should gracefully handle InterviewException's</exception>
         /// <exception cref="Exception">All other exceptions will be wrapped into Exception with readable message</exception>
         public virtual async Task SendAnswerQuestionCommandAsync(AnswerQuestionCommand answerCommand)
         {
             try
             {
-                Stopwatch commandTime = Stopwatch.StartNew();
-                await this.ExecuteCommandAsync(answerCommand);
-                commandTime.Stop();
-                messenger.Publish(new AnswerAcceptedMessage(this, commandTime.Elapsed));
+                await MeasureCommandTime(() => this.ExecuteCommandAsync(answerCommand));
             }
             catch (Exception e)
             {
@@ -64,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public virtual Task SendRemoveAnswerCommandAsync(RemoveAnswerCommand command)
         {
-            return this.ExecuteCommandAsync(command);
+            return MeasureCommandTime(() => this.ExecuteCommandAsync(command));
         }
 
         public async Task ExecuteActionAsync(Func<CancellationToken, Task> action, CancellationToken cancellationToken = default(CancellationToken))
