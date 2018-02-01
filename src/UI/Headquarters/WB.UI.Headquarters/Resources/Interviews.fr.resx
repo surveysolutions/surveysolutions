@@ -145,7 +145,7 @@
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;
-&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt; , &lt;i&gt; {2} &lt;/i&gt;.
+&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.
 </value>
   </data>
   <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
