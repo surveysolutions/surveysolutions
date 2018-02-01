@@ -64,7 +64,7 @@
             answer() {
                 if (this.$me && this.$me.answer) {
                     if (this.$me.isTimestamp){
-                        return moment(this.$me.answer).utc().format(DateFormats.dateTime)
+                        return moment(this.$me.answer).format(DateFormats.dateTime)
                     }
                     else {
                         const result = moment(this.$me.answer).utc().format(DateFormats.date)
