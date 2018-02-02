@@ -13,6 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void UserCreated(UserRoles role, string userName);
         void AssignmentSizeChanged(int id, int? quantity);
         void ExportEncriptionChanged(bool enabled);
-        void UserMovedToAnotherTeam(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId);
+        void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName);
     }
 }
