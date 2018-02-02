@@ -1,4 +1,5 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters
+@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.User
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
@@ -358,10 +359,10 @@
                     </tr>
                     <tr>
                         <th>@MainMenu.Interviewers</th>
-                        <th>total</th>
-                        <th>with errors</th>
-                        <th>total</th>
-                        <th>with errors</th>
+                        <th>@Strings.Total</th>
+                        <th>@Strings.WithErrors</th>
+                        <th>@Strings.Total</th>
+                        <th>@Strings.WithErrors</th>
                     </tr>
                 </thead>
                 <tbody data-bind="foreach: Interviewers">
