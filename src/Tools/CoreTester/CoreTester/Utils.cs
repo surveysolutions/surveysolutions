@@ -63,6 +63,38 @@ namespace CoreTester
             return isExistsMacros;
         }
 
+        public static bool IsSupportedDecompile(string pathToAssembly)
+        {
+            var module = UniversalAssemblyResolver.LoadMainModule(pathToAssembly, true, true);
+            var path = AppDomain.CurrentDomain.BaseDirectory;
+            ((UniversalAssemblyResolver) module.AssemblyResolver).AddSearchDirectory(path);
+            var decompiler = new CSharpDecompiler(module, new DecompilerSettings());
+
+            var typeDefinition = new TypeDefinition("WB.Core.SharedKernels.DataCollection.Generated",
+                CodeGeneratorV2.QuestionnaireLevel, TypeAttributes.Class);
+
+            try
+            {
+                var classCode = decompiler.DecompileAsString(typeDefinition);
+            }
+            catch (InvalidOperationException e)
+            {
+                if (e.Message == "Could not find type definition in NR type system")
+                {
+                    var typeDefinitionForOldCode = new TypeDefinition("WB.Core.SharedKernels.DataCollection.Generated",
+                        WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.CodeGenerator.QuestionnaireTypeName, 
+                        TypeAttributes.Class);
+                    var classCode = decompiler.DecompileAsString(typeDefinitionForOldCode);
+
+                    return false;
+                }
+
+                throw;
+            }
+
+            return true;
+        }
+
         public static void InlineMacrosesInDocument(QuestionnaireDocument questionnaireDocument, string pathToAssembly)
         {
             var levels = GenerateLevels(questionnaireDocument);

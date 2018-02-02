@@ -99,7 +99,15 @@ namespace CoreTester.Commands
 
                     File.WriteAllBytes(assemblyFileName, assemblyAsBytes);
 
-                    Utils.InlineMacrosesInDocument(questionnaire, assemblyFileName);
+                    if (Utils.IsSupportedDecompile(assemblyFileName))
+                    {
+                        Utils.InlineMacrosesInDocument(questionnaire, assemblyFileName);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Dll doesn't supported decompile operation. Questionnaire: {questionnaireRepositoryId} skiped.");
+                        continue;
+                    }
                 }
 
                 questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId,

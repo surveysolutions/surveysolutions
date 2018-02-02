@@ -79,7 +79,15 @@ namespace CoreTester.Commands
 
             var isExistsMacrosesInDocument = Utils.IsExistsMacrosesInDocument(questionnaireDocument);
             if (isExistsMacrosesInDocument)
+            {
+                if (!Utils.IsSupportedDecompile(assemblyDllFileName))
+                {
+                    Console.WriteLine($"Analyze folder {folder}. Dll doesn't supported decompile operation. Skiped.");
+                    return 1;
+                }
+
                 Utils.InlineMacrosesInDocument(questionnaireDocument, assemblyDllFileName);
+            }
 
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
             if (questionnaireDocument == null)
