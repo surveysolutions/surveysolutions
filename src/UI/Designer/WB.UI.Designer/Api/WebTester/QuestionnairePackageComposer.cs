@@ -58,7 +58,15 @@ namespace WB.UI.Designer.Api.WebTester
                 });
             }
 
-            return cacheEntry.Value;
+            try
+            {
+                return cacheEntry.Value;
+            }
+            catch
+            {
+                Cache.Remove(cacheKey);
+                throw;
+            }
         }
 
         private Questionnaire ComposeQuestionnaireImpl(Guid questionnaireId)
