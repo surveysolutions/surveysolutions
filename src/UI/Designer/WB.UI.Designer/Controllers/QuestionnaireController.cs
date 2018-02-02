@@ -489,6 +489,7 @@ namespace WB.UI.Designer.Controllers
                     {
                         csvWriter.WriteRecord(new { key = option.Value, value = option.Title, parent = option.ParentValue });
                     }
+                    csvWriter.NextRecord();
                 }
             }
 
