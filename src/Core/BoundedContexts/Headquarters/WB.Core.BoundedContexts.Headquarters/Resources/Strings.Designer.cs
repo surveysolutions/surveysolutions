@@ -383,5 +383,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("ViewHelpers_Invalid_property", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to With errors.
+        /// </summary>
+        public static string WithErrors {
+            get {
+                return ResourceManager.GetString("WithErrors", resourceCulture);
+            }
+        }
     }
 }
