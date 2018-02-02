@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web;
 using System.Web.Http;
 using AutoFixture;
@@ -8,7 +9,9 @@ using Microsoft.CodeAnalysis;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
 using WB.UI.Designer.Api.WebTester;
@@ -28,44 +31,47 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         [SetUp]
         public void Arrange()
         {
-            this.fixture = new Fixture().Customize(new AutoMoqCustomization());
-            this.document = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.NumericIntegerQuestion());
-            this.questionnaireView = Create.QuestionnaireView(document);
+            fixture = new Fixture().Customize(new AutoMoqCustomization());
+            document = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.NumericIntegerQuestion());
+            questionnaireView = Create.QuestionnaireView(document);
 
             // will make provided type singletone
             fixture.Freeze<Mock<IQuestionnaireViewFactory>>()
                 .Setup(q => q.Load(It.IsAny<QuestionnaireViewInputModel>()))
                 .Returns(questionnaireView);
 
+            fixture.Freeze<Mock<IPlainStorageAccessor<QuestionnaireChangeRecord>>>()
+                .Setup(q => q.Query(It.IsAny<Func<IQueryable<QuestionnaireChangeRecord>, int?>>())).Returns(1);
+
+            // ReSharper disable once RedundantAssignment - value will be used in GenerateProcessorStateAssembly usage
             string assembly = fixture.Create<string>();
 
-            this.assemblyGeneratorMock = fixture.Freeze<Mock<IExpressionProcessorGenerator>>();
-
+            assemblyGeneratorMock = fixture.Freeze<Mock<IExpressionProcessorGenerator>>();
             assemblyGeneratorMock
                 .Setup(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly))
                 .Returns(new GenerationResult(true, Array.Empty<Diagnostic>()));
 
-            this.subj = fixture.Create<QuestionnairePackageComposer>();
+            subj = fixture.Create<QuestionnairePackageComposer>();
         }
 
         [Test]
-        public void should_get_questionnaire_two_times()
+        public void should_get_questionnaire_once()
         {
             // ACT
-            this.result = subj.ComposeQuestionnaire(Id.gA);
+            result = subj.ComposeQuestionnaire(Id.gA);
 
             fixture.Create<Mock<IQuestionnaireViewFactory>>()
-                .Verify(m => m.Load(It.IsAny<QuestionnaireViewInputModel>()), Times.Exactly(2));
+                .Verify(m => m.Load(It.IsAny<QuestionnaireViewInputModel>()), Times.Once());
         }
 
         [Test]
         public void should_call_generateProcessorStateAssembly_once()
         {
             // ACT
-            this.result = subj.ComposeQuestionnaire(Id.gA);
+            result = subj.ComposeQuestionnaire(Id.gA);
 
             string assembly;
-            this.assemblyGeneratorMock
+            assemblyGeneratorMock
                 .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
         }
 
@@ -73,7 +79,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         public void should_cache_questionnaire_generation_and_call_generateProcessorStateAssembly_once()
         {
             // ACT
-            this.result = subj.ComposeQuestionnaire(Id.gA);
+            result = subj.ComposeQuestionnaire(Id.gA);
 
             // calling compose two more times
             var result1 = subj.ComposeQuestionnaire(Id.gA);
@@ -81,7 +87,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
 
             string assembly;
             // should still generate assembly only once
-            this.assemblyGeneratorMock
+            assemblyGeneratorMock
                 .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
 
             Assert.That(result, Is.EqualTo(result1));
@@ -92,20 +98,21 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         public void should_invalidate_cache_if_questionnaire_changed_and_call_generateProcessorStateAssembly_once()
         {
             // ACT
-            this.result = subj.ComposeQuestionnaire(Id.gA);
+            result = subj.ComposeQuestionnaire(Id.gA);
 
             string assembly;
             // should still generate assembly only once
-            this.assemblyGeneratorMock
+            assemblyGeneratorMock
                 .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
 
-            this.questionnaireView.Source.LastEntryDate = DateTime.Now.AddDays(1);
+            fixture.Freeze<Mock<IPlainStorageAccessor<QuestionnaireChangeRecord>>>()
+                .Setup(q => q.Query(It.IsAny<Func<IQueryable<QuestionnaireChangeRecord>, int?>>())).Returns(2);
 
-            this.assemblyGeneratorMock.ResetCalls();
+            assemblyGeneratorMock.ResetCalls();
             subj.ComposeQuestionnaire(Id.gA);
             subj.ComposeQuestionnaire(Id.gA);
 
-            this.assemblyGeneratorMock
+            assemblyGeneratorMock
                 .Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
         }
 
@@ -114,20 +121,20 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         {
             string assembly;
 
-            this.assemblyGeneratorMock
+            assemblyGeneratorMock
                 .Setup(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly))
                 .Throws<HttpException>();
 
             // Act
-            Assert.Throws<HttpResponseException>(() => this.result = subj.ComposeQuestionnaire(Id.gA));
+            Assert.Throws<HttpResponseException>(() => result = subj.ComposeQuestionnaire(Id.gA));
 
             // ensure that generate processor were called
-            this.assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
-            this.assemblyGeneratorMock.ResetCalls();
+            assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
+            assemblyGeneratorMock.ResetCalls();
 
             // should not cache error, and throw again and try to generate assembly
-            Assert.Throws<HttpResponseException>(() => this.result = subj.ComposeQuestionnaire(Id.gA));
-            this.assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
+            Assert.Throws<HttpResponseException>(() => result = subj.ComposeQuestionnaire(Id.gA));
+            assemblyGeneratorMock.Verify(m => m.GenerateProcessorStateAssembly(document, It.IsAny<int>(), out assembly), Times.Once);
         }
     }
 }
