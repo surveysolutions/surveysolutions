@@ -269,8 +269,8 @@
 						   data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
 						<thead>
 							<tr>
-								@if (isAdminOrHQ)
-								{
+								@if (isAdminOrHQ && !authorizedUser.IsObserving)
+                                {
 								<th class="sorting_disabled checkbox-cell">
 									<input class="double-checkbox" id="check-all" type="checkbox">
 									<label for="check-all">
