@@ -8,7 +8,10 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
 namespace WB.UI.Designer.Api.WebTester
@@ -16,6 +19,7 @@ namespace WB.UI.Designer.Api.WebTester
     public class QuestionnairePackageComposer : IQuestionnairePackageComposer
     {
         private readonly IExpressionProcessorGenerator expressionProcessorGenerator;
+        private readonly IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage;
         private readonly IQuestionnaireViewFactory questionnaireViewFactory;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IDesignerEngineVersionService engineVersionService;
@@ -23,6 +27,7 @@ namespace WB.UI.Designer.Api.WebTester
         private readonly IQuestionnaireVerifier questionnaireVerifier;
 
         public QuestionnairePackageComposer(IExpressionProcessorGenerator expressionProcessorGenerator,
+            IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage,
             IQuestionnaireViewFactory questionnaireViewFactory,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IDesignerEngineVersionService engineVersionService,
@@ -30,6 +35,7 @@ namespace WB.UI.Designer.Api.WebTester
             IQuestionnaireVerifier questionnaireVerifier)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
+            this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
             this.questionnaireViewFactory = questionnaireViewFactory;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.engineVersionService = engineVersionService;
@@ -41,11 +47,10 @@ namespace WB.UI.Designer.Api.WebTester
 
         public Questionnaire ComposeQuestionnaire(Guid questionnaireId)
         {
-            var questionnaireView = this.questionnaireViewFactory.Load(new QuestionnaireViewInputModel(questionnaireId))
-                                    ?? throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-
-            var dbEntryDate = questionnaireView.Source.LastEntryDate;
-            var cacheKey = $"{questionnaireId}.{dbEntryDate.Ticks}";
+            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage
+                .Query(x => x.Where(y => y.QuestionnaireId == questionnaireId.FormatGuid()).Select(y => (int?)y.Sequence).Max());
+            
+            var cacheKey = $"{questionnaireId}.{maxSequenceByQuestionnaire}";
 
             var cacheEntry = Cache.Get(cacheKey) as Lazy<Questionnaire>;
 
