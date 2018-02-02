@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             Guid chapterId = mainChapterId ?? Guid.NewGuid();
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId, title:"New section" );
             AddQuestion(questionnaire, rosterSizeQuestionId, chapterId, responsibleId, QuestionType.MultyOption, "rosterSizeQuestion",
-                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") });
+                new[] { new Option("1", "opt1"), new Option("2", "opt2") });
             AddGroup(questionnaire, rosterGroupId, chapterId, "", responsibleId, rosterSizeQuestionId, isRoster: true);
             return questionnaire;
         }
@@ -135,7 +135,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             
             AddQuestion(questionnaire, questionId, groupId.Value, responsibleId, questionType, alias,
                                                (questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption)?
-                                                  new Option[2]{new Option(Guid.NewGuid(),"1", "1"),new Option(Guid.NewGuid(), "2", "2") }:
+                                                  new Option[2]{new Option("1", "1"),new Option("2", "2") }:
                                                   new Option[0]);
 
             return questionnaire;
@@ -203,7 +203,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     variableName: "auto",
                     responsible: responsibleId);
 
-            AddQuestion(questionnaire, questionId, nonRosterGroupId, responsibleId, firstQuestionType, "manual", new[] { new Option(Guid.NewGuid(), "1", "first title"), new Option(Guid.NewGuid(), "2", "second title") });
+            AddQuestion(questionnaire, questionId, nonRosterGroupId, responsibleId, firstQuestionType, "manual", new[] { new Option("1", "first title"), new Option("2", "second title") });
             return questionnaire;
         }
 
@@ -223,7 +223,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     responsible : responsibleId
                 );
             AddQuestion(questionnaire, questionId, secondGroup, responsibleId, questionType, "manual",
-                new[] { new Option(Guid.NewGuid(), "1", "title") });
+                new[] { new Option("1", "title") });
             return questionnaire;
         }
 
@@ -273,8 +273,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             return new[]
                 {
-                    new Option(Guid.Parse("00000000-1111-0000-1111-000000000000"), "-1", "No"),
-                    new Option(Guid.Parse("00000000-2222-0000-2222-000000000000"), "42", "Yes"),
+                    new Option("-1", "No"),
+                    new Option("42", "Yes"),
                 };
         }
 
@@ -302,7 +302,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 description: null, condition: null, hideIfDisabled: false, parentGroupId: chapterId, isRoster: false,
                 rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
             questionnaire.AddMultiOptionQuestion(rosterSizeQuestionId, regularGroupId,responsibleId, 
-                new[] { new Option(Guid.NewGuid(), "1", "opt1"), new Option(Guid.NewGuid(), "2", "opt2") }, "rosterSizeQuestion",
+                new[] { new Option("1", "opt1"), new Option("2", "opt2") }, "rosterSizeQuestion",
                 "rosterSizeQuestion", null, QuestionScope.Interviewer, "", "", "", "", null, false, null, false);
             questionnaire.AddGroupAndMoveIfNeeded(rosterGroupId, responsibleId: responsibleId, title: "autoPropagateGroup", variableName: null,
                 rosterSizeQuestionId: rosterSizeQuestionId, description: null, condition: null, hideIfDisabled: false, parentGroupId: chapterId, isRoster: true,

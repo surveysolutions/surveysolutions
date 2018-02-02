@@ -2137,7 +2137,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             return new Answer
             {
-                PublicKey = option.Id,
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
                 ParentValue = option.ParentValue
