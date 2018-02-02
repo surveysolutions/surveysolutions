@@ -1176,7 +1176,7 @@
     <value>Интервьюер(ы) {0} уже в команде супервизора {1} и никакие действия предприняты не будут.</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Перености интервьюера(ов) с их заданиями и интервью в новую команду супервизора {0}</value>
+    <value>Перенести интервьюера(ов) с их заданиями и интервью в новую команду супервизора {0}</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
     <value>Выберите команду для переноса {0}</value>
