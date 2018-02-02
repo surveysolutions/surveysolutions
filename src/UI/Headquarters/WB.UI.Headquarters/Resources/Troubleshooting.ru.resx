@@ -145,10 +145,10 @@
     <value>Выберите даты</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
-    <value>Интервьювер</value>
+    <value>Интервьюер</value>
   </data>
   <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
-    <value>Выберите интервьювера</value>
+    <value>Выберите интервьюера</value>
   </data>
   <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
     <value>Опросник</value>
@@ -161,7 +161,7 @@
   </data>
   <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
     <value>Чтобы найти интервью, выберите название опросника.&lt;br/&gt;
-Выберите интервьювера и диапазон дат, чтобы ограничить результаты поиска</value>
+Выберите интервьюера и диапазон дат, чтобы ограничить результаты поиска</value>
   </data>
   <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
     <value>{0} интервью удовлетворяют условиям поиска</value>
@@ -176,7 +176,7 @@
     <value>Поиск интервью</value>
   </data>
   <data name="TableTitle_Enumerator" xml:space="preserve">
-    <value>Интервьювер</value>
+    <value>Интервьюер</value>
   </data>
   <data name="TableTitle_InterviewId" xml:space="preserve">
     <value>Id интервью</value>
