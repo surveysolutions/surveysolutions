@@ -67,20 +67,16 @@ export default {
     this.$nextTick(function() {
       window.addEventListener("resize", self.onResize);
       self.onResize();
-    });
-
-    Vue.nextTick(() => {
-      window.ajustNoticeHeight();
-      window.ajustDetailsPanelHeight();
-    });
+    });   
 
     this.$store.dispatch("fetchFlags");
   },
   
   updated(){
     Vue.nextTick(() => {
-      window.ajustNoticeHeight();
-      window.ajustDetailsPanelHeight();
+        _.delay(function() {       
+            window.ajustNoticeHeight();
+            window.ajustDetailsPanelHeight(); }, 300);
     });
   },
   components: {
