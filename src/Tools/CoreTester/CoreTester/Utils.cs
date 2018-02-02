@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using ICSharpCode.Decompiler;
@@ -171,7 +173,7 @@ namespace CoreTester
             if (mainModule?.FileName != assemblyPath)
             {
                 mainModule = UniversalAssemblyResolver.LoadMainModule(assemblyPath, true, true);
-                var path = Directory.GetCurrentDirectory();
+                var path = AppDomain.CurrentDomain.BaseDirectory;//Directory.GetCurrentDirectory();
                 (mainModule.AssemblyResolver as UniversalAssemblyResolver).AddSearchDirectory(path);
                 decompiler = new CSharpDecompiler(mainModule, new DecompilerSettings());
                 classes = new HashSet<string>();
