@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
 
                 substitutionResult = shouldAddBrowserTags && shouldEncode 
-                    ? WebUtility.HtmlEncode(substitutionResult)
+                    ? WebUtility.HtmlEncode(substitutionResult) // DO NOT CHANGE TO HttpUtility.HtmlEncode: KP-10869
                     : substitutionResult;
 
                 substitutionResult = string.IsNullOrEmpty(substitutionResult)
