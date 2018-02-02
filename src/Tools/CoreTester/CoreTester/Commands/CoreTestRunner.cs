@@ -110,6 +110,8 @@ namespace CoreTester.Commands
                     }
                 }
 
+                //continue;
+
                 questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId,
                     questionnaireBrowseItem.Version, questionnaire);
                 var stopwatch = Stopwatch.StartNew();
@@ -119,6 +121,8 @@ namespace CoreTester.Commands
                 int dotsInARow = 0;
                 int interviewsProcessed = 0;
                 var interviewWithCalculationError = new List<Guid>();
+
+                
                 foreach (var interviewId in interviewIdsToProcess)
                 {
                     if (interviewWithCalculationError.Count > 10)
