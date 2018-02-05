@@ -157,6 +157,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 case InterviewExportedAction.Completed:
                 case InterviewExportedAction.RejectedByHeadquarter:
                 case InterviewExportedAction.UnapprovedByHeadquarter:
+                case InterviewExportedAction.OpenedBySupervisor:
+                case InterviewExportedAction.ClosedBySupervisor:
                     return FileBasedDataExportRepositoryWriterMessages.Supervisor;
                 case InterviewExportedAction.ApprovedBySupervisor:
                     return FileBasedDataExportRepositoryWriterMessages.Headquarter;
