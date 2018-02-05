@@ -232,7 +232,7 @@ h5{
 	color: $red_error !important;
 }
 .success-text{
-	color: $green_btn !important;
+	color: $green !important;
 }
 .default-text{
 	color: $gray_form !important;
@@ -702,8 +702,34 @@ dl{
 .warning-message{
 	font-family: "RobotoBold";
 }
-
-.max-height-in-popup {
-    max-height: calc(100vh - 200px);
-    overflow-y: auto;
+.underlined-link{
+	text-decoration: underline;
+	&:hover, &:focus, &:active{
+		text-decoration: none;
+	}
+}
+.gray-text-row{
+	font-style: normal;
+	text-transform: uppercase;
+	font: 14px/16px "TrebuchetMS";
+	letter-spacing: 1px;
+	color: $gray_light;
+}
+.gray-action-unit{
+	color: $gray_light;
+	&:hover, &:focus, &:active{
+		color: $gray-highlight-font !important;
+	}
+}
+.green-action-unit{
+	color: $green;
+	&:hover, &:focus, &:active{
+		color: darken($green, 10%);
+	}
+}
+.action-block{
+	margin-top: 30px;
+}
+.always-visible-scroll{
+	overflow-y: scroll;
 }

@@ -73,11 +73,9 @@ export default {
   },
   
   updated(){
-    Vue.nextTick(() => {
-        _.delay(function() {       
+    Vue.nextTick(() => {               
             window.ajustNoticeHeight();
-            window.ajustDetailsPanelHeight(); }, 300);
-    });
+            window.ajustDetailsPanelHeight(); });
   },
   components: {
     Facets,
