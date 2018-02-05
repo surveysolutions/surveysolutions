@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
 
         public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName)
         {
-            this.Append($"User {interviewerName}", "moved", $"From team {newSupervisorName}' to {previousSupervisorName}");
+            this.Append($"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
         private void Append(string target, string action, string args = null)

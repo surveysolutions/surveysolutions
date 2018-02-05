@@ -1,4 +1,5 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters
+@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.BoundedContexts.Headquarters.Views.User
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
@@ -304,7 +305,7 @@
 						<button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">@Pages.Interviewers_Archive</button>
 						<button type="button" class="btn btn-default btn-success" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Pages.Interviewers_Unarchive</button>
 						}
-						<button type="button" class="btn btn-default btn-success" data-bind="disable: IsNothingSelected, click: $root.MoveToAnotherTeam">@Pages.Interviewers_MoveToAnotherTeam</button>
+						<button type="button" class="btn btn-default btn-warning" data-bind="disable: IsNothingSelected, click: $root.MoveToAnotherTeam">@Pages.Interviewers_MoveToAnotherTeam</button>
 					</div>
 				</div>
 				}
@@ -348,29 +349,34 @@
     </script>
 
     <script type="text/html" id="move-interviewer-progress-template">
-        <div>
+        <div class="max-height-in-popup">
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th colspan="2">@MainMenu.Interviews</th>
-                        <th colspan="2">@MainMenu.Assignments</th>
-                    </tr>
-                    <tr>
                         <th>@MainMenu.Interviewers</th>
-                        <th>total</th>
-                        <th>with errors</th>
-                        <th>total</th>
-                        <th>with errors</th>
+                        <th>@MainMenu.Interviews</th>
+                        <th>@MainMenu.Assignments</th>
                     </tr>
                 </thead>
                 <tbody data-bind="foreach: Interviewers">
-                    <tr data-bind="">
-                        <td><span class="interviewer" data-bind="text: userName, css: { 'text-danger' : inProgress }"></span></td>
-                        <td data-bind="text: interviewsProcessed"></td>
-                        <td data-bind="text: interviewsProcessedWithErrors, css: {'text-danger': interviewsProcessedWithErrors() > 0 }"></td>
-                        <td data-bind="text: assignmentsProcessed"></td>
-                        <td data-bind="text: assignmentsProcessedWithErrors, css: {'text-danger': assignmentsProcessedWithErrors() > 0 }"></td>
+                    <tr>
+                        <td><span class="interviewer"><a target="_blank" data-bind="attr: { href: '@Url.Action("Profile", "Interviewer")/' + userId }, text: userName, css: { 'text-danger' : inProgress }"></a></span></td>
+                        <td>
+                            <!-- ko if: interviewsProcessed() > 0 -->
+                            <a target="_blank" data-bind="attr: { href: '@Url.Action("Interviews", "HQ")?responsible=' + userName }, text: interviewsProcessed"></a>
+                            <!-- /ko -->
+                            <!-- ko if: interviewsProcessed() == 0 -->
+                            <span data-bind="text: interviewsProcessed"></span>
+                            <!-- /ko -->
+                        </td>
+                        <td>
+                            <!-- ko if: assignmentsProcessed() > 0 -->
+                            <a target="_blank" data-bind="attr: { href: '@Url.Action("Index", "Assignments")?responsible=' + userName }, text: assignmentsProcessed"></a>
+                            <!-- /ko -->
+                            <!-- ko if: assignmentsProcessed() == 0 -->
+                            <span data-bind="text: assignmentsProcessed"></span>
+                            <!-- /ko -->
+                        </td>
                     </tr>
                     <tr data-bind="if: errors().length > 0">
                         <td colspan="5">

@@ -175,7 +175,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             }
         }
 
-        private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> _,
+        private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(
+            IQueryable<QuestionnaireListViewItem> _,
             QuestionnaireListInputModel input, bool isSupportFolders)
         {
             var result = _.Where(x => x.IsDeleted == false);
@@ -204,22 +205,13 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         x => x.Title.ToLower().Contains(filterLowerCase) || x.CreatorName.ToLower().Contains(filterLowerCase));
             }
 
-
-            switch (input.Type)
-            {
-                case QuestionnairesType.My:
-                    result = result.Where(x => x.CreatedBy == input.ViewerId);
-                    break;
-                case QuestionnairesType.Shared:
-                    result = result.Where(x => x.CreatedBy != input.ViewerId && x.SharedPersons.Any(person => person.UserId == input.ViewerId));
-                    break;
-                case QuestionnairesType.Public:
-                    result = input.IsAdminMode ? result : result.Where(x => x.IsPublic);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
+            result = result.Where(x =>
+                input.Type.HasFlag(QuestionnairesType.My) && x.CreatedBy == input.ViewerId
+                || input.Type.HasFlag(QuestionnairesType.Shared) && x.CreatedBy != input.ViewerId 
+                                                                 && x.SharedPersons.Any(person => person.UserId == input.ViewerId)
+                || input.Type.HasFlag(QuestionnairesType.Public) && (input.IsAdminMode || x.IsPublic)
+            );
+            
             return result;
         }
 
