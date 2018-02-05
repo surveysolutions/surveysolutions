@@ -305,7 +305,7 @@
 						<button type="button" class="btn btn-default btn-danger" data-bind="visible: Archived() != 'true', disable: IsNothingSelected, click: $root.archiveInterviewers">@Pages.Interviewers_Archive</button>
 						<button type="button" class="btn btn-default btn-success" data-bind="visible: Archived() == 'true', disable: IsNothingSelected, click: $root.unarchiveInterviewers">@Pages.Interviewers_Unarchive</button>
 						}
-						<button type="button" class="btn btn-default btn-warning" data-bind="disable: IsNothingSelected, click: $root.MoveToAnotherTeam">@Pages.Interviewers_MoveToAnotherTeam</button>
+					    <button type="button" class="btn btn-default btn-warning last-btn" data-bind="disable: IsNothingSelected, click: $root.MoveToAnotherTeam">@Pages.Interviewers_MoveToAnotherTeam</button>
 					</div>
 				</div>
 				}
