@@ -63,9 +63,12 @@ namespace CoreTester.Commands
 
         public int Run(string serverName)
         {
+            logger.Info($"TestRunner for db {serverName}");
+
             var questionnaireBrowseItems = this.plainTransactionManager.GetPlainTransactionManager()
                 .ExecuteInQueryTransaction(() =>
                     questionnairesBrowseFactory.Load(new QuestionnaireBrowseInputModel {PageSize = 1000}));
+            
 
             Console.WriteLine($"Found {questionnaireBrowseItems.Items.Count()} questionnaires");
 
@@ -182,7 +185,7 @@ namespace CoreTester.Commands
                             var message = exception.ExceptionType ==
                                           InterviewDomainExceptionType.ExpessionCalculationError
                                 ? $"Calculation error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}"
-                                : $"General error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
+                                : $"General error! Exception type:{exception.ExceptionType} IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
 
                             if (exception.ExceptionType == InterviewDomainExceptionType.ExpessionCalculationError)
                             {
@@ -294,7 +297,8 @@ namespace CoreTester.Commands
 
             stopwatch.Stop();
 
-            this.logger.Info($"Received {skipInterviewsCount:N0} interviewIds to start export. " +
+            this.logger.Info($"Received {skipInterviewsCount:N0} interviewIds to process. " +
+                             $"Questionnaire {questionnaireIdentity.ToString()}. " +
                              $"Took {stopwatch.Elapsed:g} to complete.");
         }
     }
