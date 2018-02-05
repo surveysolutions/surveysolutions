@@ -163,5 +163,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Views.Interview
             Assert.That(foundEntries.TotalCount, Is.EqualTo(1));
             Assert.That(foundEntries.Items.Single().InterviewId, Is.EqualTo(interviewIdWithAssignment));
         }
+
+        [Test]
+        public void Should_find_interviews_by_interviewer()
+        {
+            var interviewerName = "int";
+            var supervisorName = "supervisor";
+
+            var summaryWithResponsibleSupervisor = Create.Entity.InterviewSummary(responsibleName: supervisorName);
+            var summaryWithresponsibleInterviewer = Create.Entity.InterviewSummary(responsibleName: interviewerName);
+
+            var interviews = new TestInMemoryWriter<InterviewSummary>();
+            interviews.Store(summaryWithResponsibleSupervisor, summaryWithResponsibleSupervisor.InterviewId);
+            interviews.Store(summaryWithresponsibleInterviewer, summaryWithresponsibleInterviewer.InterviewId);
+
+            var factory = Create.Service.AllInterviewsFactory(interviews);
+
+            // Act
+            var foundEntries = factory.Load(new AllInterviewsInputModel { SupervisorOrInterviewerName = interviewerName });
+
+            // Assert
+            Assert.That(foundEntries.TotalCount, Is.EqualTo(1));
+            Assert.That(foundEntries.Items.Single().InterviewId, Is.EqualTo(summaryWithresponsibleInterviewer.InterviewId));
+        }
     }
 }
