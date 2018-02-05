@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -133,7 +134,9 @@ namespace CoreTester.Commands
             var createCommand = EventsToCommandConverter.GetCreateInterviewCommand(committedEvents, interviewId, userId);
             commandService.Execute(createCommand);
 
-            for (int i = 0; i < committedEvents.Count; i++)
+            var indexOfFirstSupervisorAssignedEvent = committedEvents.FindIndex(0, x => x.Payload is SupervisorAssigned);
+
+            for (int i = indexOfFirstSupervisorAssignedEvent; i < committedEvents.Count; i++)
             {
                 var committedEvent = committedEvents[i];
 

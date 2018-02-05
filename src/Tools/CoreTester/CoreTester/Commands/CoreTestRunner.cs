@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -147,7 +148,10 @@ namespace CoreTester.Commands
                     // to read assembly
                     this.plainTransactionManager.GetPlainTransactionManager()
                         .ExecuteInQueryTransaction(() => commandService.Execute(createCommand));
-                    foreach (var committedEvent in committedEvents)
+
+                    var indexOfFirstSupervisorAssignedEvent = committedEvents.FindIndex(0, x => x.Payload is SupervisorAssigned);
+
+                    foreach (var committedEvent in committedEvents.Skip(indexOfFirstSupervisorAssignedEvent))
                     {
                         var commands = EventsToCommandConverter.ConvertEventToCommands(newInterviewId, committedEvent);
 
