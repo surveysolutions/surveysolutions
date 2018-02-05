@@ -11,6 +11,9 @@
 }
 @section Scripts{
     @Html.RenderHqConfig(Model)
+    <script>
+        window.CONFIG.audioGet = '@Url.Content(@"~/Resource/AudioRecordReview")'
+    </script>
 }
 
 <div id="vueApp"></div>
