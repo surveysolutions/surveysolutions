@@ -9334,6 +9334,10 @@ dl dd:after {
 .warning-message {
   font-family: "RobotoBold"; }
 
+.max-height-in-popup {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto; }
+
 .left-column #log-in {
   text-align: left; }
 

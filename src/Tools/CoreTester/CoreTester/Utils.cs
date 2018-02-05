@@ -63,6 +63,38 @@ namespace CoreTester
             return isExistsMacros;
         }
 
+        public static bool IsSupportedDecompile(string pathToAssembly)
+        {
+            var module = UniversalAssemblyResolver.LoadMainModule(pathToAssembly, true, true);
+            var path = AppDomain.CurrentDomain.BaseDirectory;
+            ((UniversalAssemblyResolver) module.AssemblyResolver).AddSearchDirectory(path);
+            var decompiler = new CSharpDecompiler(module, new DecompilerSettings());
+
+            var typeDefinition = new TypeDefinition("WB.Core.SharedKernels.DataCollection.Generated",
+                CodeGeneratorV2.QuestionnaireLevel, TypeAttributes.Class);
+
+            try
+            {
+                var classCode = decompiler.DecompileAsString(typeDefinition);
+            }
+            catch (InvalidOperationException e)
+            {
+                if (e.Message == "Could not find type definition in NR type system")
+                {
+                    var typeDefinitionForOldCode = new TypeDefinition("WB.Core.SharedKernels.DataCollection.Generated",
+                        WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.CodeGenerator.QuestionnaireTypeName, 
+                        TypeAttributes.Class);
+                    var classCode = decompiler.DecompileAsString(typeDefinitionForOldCode);
+
+                    return false;
+                }
+
+                throw;
+            }
+
+            return true;
+        }
+
         public static void InlineMacrosesInDocument(QuestionnaireDocument questionnaireDocument, string pathToAssembly)
         {
             var levels = GenerateLevels(questionnaireDocument);
@@ -77,8 +109,9 @@ namespace CoreTester
                         ? group.IsRoster ? $"IsEnabled__{entity.VariableName}" : $"IsEnabled__subsection_{entity.PublicKey.FormatGuid()}"
                         : entity is StaticText ? $"IsEnabled__text_{entity.PublicKey.FormatGuid()}"
                         : $"IsEnabled__{entity.VariableName}";
+                    string className = GetParentVariable(entity, questionnaireDocument, levels);
                     if (IsExpressionContainsMacros(conditionalEntity.ConditionExpression))
-                        conditionalEntity.ConditionExpression = DecompileMacrosFromAssembly(name, entity, questionnaireDocument, levels, pathToAssembly);
+                        conditionalEntity.ConditionExpression = DecompileMacrosFromAssembly(name, className, pathToAssembly);
                 }
 
                 if (entity is IValidatable validatable)
@@ -88,28 +121,32 @@ namespace CoreTester
                         var validationCondition = validatable.ValidationConditions[i];
 
                         var name = $"IsValid__{entity.VariableName}__{i}";
+                        string className = GetParentVariable(entity, questionnaireDocument, levels, false);
 
                         if (IsExpressionContainsMacros(validationCondition.Expression))
-                            validationCondition.Expression = DecompileMacrosFromAssembly(name, entity, questionnaireDocument, levels, pathToAssembly);
+                            validationCondition.Expression = DecompileMacrosFromAssembly(name, className, pathToAssembly);
                     }
                 }
 
                 if (entity is IQuestion question)
                 {
                     var filterExpressionName = $"FilterOption__{entity.VariableName}";
+                    string filterExpressionNameClassName = GetParentVariable(entity, questionnaireDocument, levels);
                     if (IsExpressionContainsMacros(question.Properties.OptionsFilterExpression))
-                        question.Properties.OptionsFilterExpression = DecompileMacrosFromAssembly(filterExpressionName, entity, questionnaireDocument, levels, pathToAssembly);
+                        question.Properties.OptionsFilterExpression = DecompileMacrosFromAssembly(filterExpressionName, filterExpressionNameClassName, pathToAssembly);
 
                     var linkedFilterExpressionName = $"FilterForLinkedQuestion__{entity.VariableName}";
+                    string linkedFilterExpressionNameClassName = GetParentVariable(entity, questionnaireDocument, levels);
                     if (IsExpressionContainsMacros(question.LinkedFilterExpression))
-                        question.LinkedFilterExpression = DecompileMacrosFromAssembly(linkedFilterExpressionName, entity, questionnaireDocument, levels, pathToAssembly);
+                        question.LinkedFilterExpression = DecompileMacrosFromAssembly(linkedFilterExpressionName, linkedFilterExpressionNameClassName, pathToAssembly);
                 }
 
                 if (entity is IVariable variable)
                 {
                     var variableName = $"Variable__{variable.VariableName}";
+                    string className = GetParentVariable(entity, questionnaireDocument, levels);
                     if (IsExpressionContainsMacros(variable.Expression))
-                        variable.Expression = DecompileMacrosFromAssembly(variableName, entity, questionnaireDocument, levels, pathToAssembly);
+                        variable.Expression = DecompileMacrosFromAssembly(variableName, className, pathToAssembly);
                 }
             }
         }
@@ -168,7 +205,7 @@ namespace CoreTester
         private static CSharpDecompiler decompiler;
         private static HashSet<string> classes;
 
-        private static string DecompileMacrosFromAssembly(string methodName, IComposite entity, QuestionnaireDocument questionnaireDocument, Dictionary<string, string> levels, string assemblyPath)
+        private static string DecompileMacrosFromAssembly(string methodName, string className, string assemblyPath)
         {
             if (mainModule?.FileName != assemblyPath)
             {
@@ -179,7 +216,6 @@ namespace CoreTester
                 classes = new HashSet<string>();
             }
 
-            string className = GetParentVariable(entity, questionnaireDocument, levels);
             var typeDefinition = new TypeDefinition("WB.Core.SharedKernels.DataCollection.Generated", className, TypeAttributes.Class);
             if (!classes.Contains(className))
             {
@@ -200,13 +236,13 @@ namespace CoreTester
             return methodBody;
         }
 
-        private static string GetParentVariable(IComposite entity, QuestionnaireDocument questionnaireDocument, Dictionary<string, string> levels)
+        private static string GetParentVariable(IComposite entity, QuestionnaireDocument questionnaireDocument, Dictionary<string, string> levels, bool suppertLinkedRedirection = true)
         {
-            if (entity is SingleQuestion singleQuestion && singleQuestion.LinkedToRosterId.HasValue)
+            if (suppertLinkedRedirection && entity is SingleQuestion singleQuestion && singleQuestion.LinkedToRosterId.HasValue)
             {
                 entity = questionnaireDocument.Find<Group>(singleQuestion.LinkedToRosterId.Value);
             }
-            else if (entity is MultyOptionsQuestion multiQuestion && multiQuestion.LinkedToRosterId.HasValue)
+            else if (suppertLinkedRedirection && entity is MultyOptionsQuestion multiQuestion && multiQuestion.LinkedToRosterId.HasValue)
             {
                 entity = questionnaireDocument.Find<Group>(multiQuestion.LinkedToRosterId.Value);
             }

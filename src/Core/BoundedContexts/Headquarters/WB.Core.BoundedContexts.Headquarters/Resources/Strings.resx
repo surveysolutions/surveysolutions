@@ -123,6 +123,9 @@
   <data name="Total" xml:space="preserve">
     <value>Total</value>
   </data>
+  <data name="WithErrors" xml:space="preserve">
+    <value>With errors</value>
+  </data>
   <data name="Average" xml:space="preserve">
     <value>Average</value>
   </data>

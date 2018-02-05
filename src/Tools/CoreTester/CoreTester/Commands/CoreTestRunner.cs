@@ -99,8 +99,18 @@ namespace CoreTester.Commands
 
                     File.WriteAllBytes(assemblyFileName, assemblyAsBytes);
 
-                    Utils.InlineMacrosesInDocument(questionnaire, assemblyFileName);
+                    if (Utils.IsSupportedDecompile(assemblyFileName))
+                    {
+                        Utils.InlineMacrosesInDocument(questionnaire, assemblyFileName);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Dll doesn't supported decompile operation. Questionnaire: {questionnaireRepositoryId} skiped.");
+                        continue;
+                    }
                 }
+
+                //continue;
 
                 questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId,
                     questionnaireBrowseItem.Version, questionnaire);
@@ -111,6 +121,8 @@ namespace CoreTester.Commands
                 int dotsInARow = 0;
                 int interviewsProcessed = 0;
                 var interviewWithCalculationError = new List<Guid>();
+
+                
                 foreach (var interviewId in interviewIdsToProcess)
                 {
                     if (interviewWithCalculationError.Count > 10)

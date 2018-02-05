@@ -36,21 +36,30 @@ namespace CoreTester
             var logger = LogManager.GetCurrentClassLogger();
             logger.Info("Application started");
 
-            return Parser.Default
-                .ParseArguments<CoreTestOptions, DumpDebugInformationOptions, CoreDebugOptions>(args)
-                .MapResult(
-                (CoreTestOptions o) => RunCoreTestOptions(o), 
-                (DumpDebugInformationOptions o) => RunDumpDebugInformationOptions(o), 
-                (CoreDebugOptions o) => RunCoreDebugger(o),
-                errs =>
-                {
-                    foreach (var error in errs)
-                    {
-                        Console.WriteLine(error);    
-                    }
-                
-                    return 1;
-                });
+            try
+            {
+                return Parser.Default
+                    .ParseArguments<CoreTestOptions, DumpDebugInformationOptions, CoreDebugOptions>(args)
+                    .MapResult(
+                        (CoreTestOptions o) => RunCoreTestOptions(o),
+                        (DumpDebugInformationOptions o) => RunDumpDebugInformationOptions(o),
+                        (CoreDebugOptions o) => RunCoreDebugger(o),
+                        errs =>
+                        {
+                            foreach (var error in errs)
+                            {
+                                Console.WriteLine(error);
+                            }
+
+                            return 1;
+                        });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                logger.Error(e);
+                return 1;
+            }
         }
 
         private static int RunCoreDebugger(CoreDebugOptions opts)
