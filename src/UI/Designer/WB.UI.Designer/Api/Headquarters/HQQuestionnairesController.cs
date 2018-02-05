@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 PageSize = pageSize,
                 Order = sortOrder,
                 SearchFor = filter,
-                Type = QuestionnairesType.My
+                Type = QuestionnairesType.My | QuestionnairesType.Shared
             });
 
             var questionnaires = new PagedQuestionnaireCommunicationPackage
