@@ -111,7 +111,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
                     historicalRecordReference.Type));
         }
 
-        private static string ToCloneMessage(HtmlHelper helper, UrlHelper urlHelper, Guid questionnaireId,
+        private static string  ToCloneMessage(HtmlHelper helper, UrlHelper urlHelper, Guid questionnaireId,
             QuestionnaireChangeHistoricalRecord record, MvcHtmlString recordLink)
         {
             var historicalRecordReference = record.HistoricalRecordReferences.FirstOrDefault();
@@ -119,6 +119,7 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             return string.Format(
                 QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}"),
                 recordLink,
+                historicalRecordReference == null ? MvcHtmlString.Empty :
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId,
                     historicalRecordReference.Id, historicalRecordReference.ParentId,
                     historicalRecordReference.Title, historicalRecordReference.IsExist,
