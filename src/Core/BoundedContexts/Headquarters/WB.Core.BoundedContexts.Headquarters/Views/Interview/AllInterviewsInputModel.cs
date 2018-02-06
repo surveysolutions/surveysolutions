@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         public Guid? QuestionnaireId { get; set; }
 
-        public string TeamLeadName { get; set; }
+        public string SupervisorOrInterviewerName { get; set; }
 
         public Guid? InterviewId { get; set; }
 

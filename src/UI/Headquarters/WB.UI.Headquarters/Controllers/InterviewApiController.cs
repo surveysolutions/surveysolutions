@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Controllers
                 Orders = data.SortOrder,
                 QuestionnaireId = data.TemplateId,
                 QuestionnaireVersion = data.TemplateVersion,
-                TeamLeadName = data.ResponsibleName,
+                SupervisorOrInterviewerName = data.ResponsibleName,
                 Statuses = data.Status.HasValue ? new [] {data.Status.Value} : null,
                 SearchBy = data.SearchBy,
                 AssignmentId = data.AssignmentId,

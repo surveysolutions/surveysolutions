@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace CoreTester.CustomInfrastructure
 {
@@ -17,8 +20,8 @@ namespace CoreTester.CustomInfrastructure
         public static ICommand GetCreateInterviewCommand(List<CommittedEvent> committedEvents, Guid interviewId,
             Guid userId)
         {
-            var supervisorAssigned =
-                committedEvents.First(x => x.Payload is SupervisorAssigned).Payload as SupervisorAssigned;
+            var supervisorAssignedEvent = committedEvents.First(x => x.Payload is SupervisorAssigned);
+            var supervisorAssigned = supervisorAssignedEvent.Payload as SupervisorAssigned;
             var interviewerAssigned =
                 committedEvents.FirstOrDefault(x => x.Payload is InterviewerAssigned)?.Payload as InterviewerAssigned;
             var interviewKey =
@@ -26,12 +29,25 @@ namespace CoreTester.CustomInfrastructure
 
             var interviewCreated =
                 committedEvents.FirstOrDefault(x => x.Payload is InterviewCreated)?.Payload as InterviewCreated;
+
+            var preloadedAnswers = committedEvents
+                .Where(x => x.EventSequence < supervisorAssignedEvent.EventSequence)
+                .Where(x => x.Payload is QuestionAnswered)
+                .Select(x => x.Payload as QuestionAnswered)
+                .Where(x => x!=null)
+                .Select(x => new InterviewAnswer
+                {
+                    Identity = new Identity(x.QuestionId, x.RosterVector),
+                    Answer = ConvertEventToInterviewAnswer(x)
+                })
+                .ToList();
+
             ICommand createCommand = null;
             if (interviewCreated != null)
             {
                 createCommand = new CreateInterview(interviewId, userId,
                     new QuestionnaireIdentity(interviewCreated.QuestionnaireId, interviewCreated.QuestionnaireVersion),
-                    new List<InterviewAnswer>(),
+                    preloadedAnswers,
                     interviewCreated.CreationTime ?? DateTime.UtcNow,
                     supervisorAssigned.SupervisorId,
                     interviewerAssigned?.InterviewerId,
@@ -47,7 +63,7 @@ namespace CoreTester.CustomInfrastructure
                     createCommand = new CreateInterview(interviewId, userId,
                         new QuestionnaireIdentity(interviewOnClientCreated.QuestionnaireId,
                             interviewOnClientCreated.QuestionnaireVersion),
-                        new List<InterviewAnswer>(),
+                        preloadedAnswers,
                         supervisorAssigned.AssignTime ?? DateTime.UtcNow,
                         supervisorAssigned.SupervisorId,
                         interviewerAssigned?.InterviewerId,
@@ -60,7 +76,7 @@ namespace CoreTester.CustomInfrastructure
                     createCommand = new CreateInterview(interviewId, userId,
                         new QuestionnaireIdentity(interviewFromPreloadedDataCreated.QuestionnaireId,
                             interviewFromPreloadedDataCreated.QuestionnaireVersion),
-                        new List<InterviewAnswer>(),
+                        preloadedAnswers,
                         supervisorAssigned.AssignTime ?? DateTime.UtcNow,
                         supervisorAssigned.SupervisorId,
                         interviewerAssigned?.InterviewerId,
@@ -70,6 +86,47 @@ namespace CoreTester.CustomInfrastructure
             }
 
             return createCommand;
+        }
+
+        private static AbstractAnswer ConvertEventToInterviewAnswer(QuestionAnswered questionAnswered)
+        {
+            switch (questionAnswered)
+            {
+                case AreaQuestionAnswered area:
+                    return AreaAnswer.FromArea(new Area(area.Geometry, area.MapName,
+                        area.AreaSize, area.Length, area.Coordinates,
+                        area.DistanceToEditor));
+                case AudioQuestionAnswered audio:
+                    return AudioAnswer.FromString(audio.FileName, audio.Length);
+                case DateTimeQuestionAnswered dateTime:
+                    return DateTimeAnswer.FromDateTime(dateTime.Answer);
+                case GeoLocationQuestionAnswered geo:
+                    return GpsAnswer.FromGeoPosition(new GeoPosition(geo.Latitude, geo.Longitude, geo.Accuracy, geo.Altitude, geo.Timestamp));
+                case MultipleOptionsLinkedQuestionAnswered multiLinked:
+                    return CategoricalLinkedMultiOptionAnswer.FromRosterVectors(multiLinked.SelectedRosterVectors.Select(x => new RosterVector(x)));
+                case MultipleOptionsQuestionAnswered multipleOptions:
+                    return CategoricalFixedMultiOptionAnswer.FromDecimalArray(multipleOptions.SelectedValues);
+                case NumericIntegerQuestionAnswered numericInteger:
+                    return NumericIntegerAnswer.FromInt(numericInteger.Answer);
+                case NumericRealQuestionAnswered numericReal:
+                    return NumericRealAnswer.FromDecimal(numericReal.Answer);
+                case PictureQuestionAnswered picture:
+                    return MultimediaAnswer.FromString(picture.PictureFileName);
+                case QRBarcodeQuestionAnswered qr:
+                    return QRBarcodeAnswer.FromString(qr.Answer);
+                case SingleOptionLinkedQuestionAnswered singleLinked:
+                    return CategoricalLinkedSingleOptionAnswer.FromRosterVector(singleLinked.SelectedRosterVector);
+                case SingleOptionQuestionAnswered single:
+                    return CategoricalFixedSingleOptionAnswer.FromDecimal(single.SelectedValue);
+                case TextListQuestionAnswered textList:
+                    return TextListAnswer.FromTupleArray(textList.Answers);
+                case TextQuestionAnswered text:
+                    return TextAnswer.FromString(text.Answer);
+                case YesNoQuestionAnswered yesNo:
+                    return YesNoAnswer.FromAnsweredYesNoOptions(yesNo.AnsweredOptions);
+            }
+
+            return null;
         }
 
         public static IEnumerable<ICommand> ConvertEventToCommands(Guid interviewId, CommittedEvent committedEvent)

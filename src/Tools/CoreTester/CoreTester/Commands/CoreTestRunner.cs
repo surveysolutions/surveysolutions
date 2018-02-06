@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -63,9 +64,12 @@ namespace CoreTester.Commands
 
         public int Run(string serverName)
         {
+            logger.Info($"TestRunner for db {serverName}");
+
             var questionnaireBrowseItems = this.plainTransactionManager.GetPlainTransactionManager()
                 .ExecuteInQueryTransaction(() =>
                     questionnairesBrowseFactory.Load(new QuestionnaireBrowseInputModel {PageSize = 1000}));
+            
 
             Console.WriteLine($"Found {questionnaireBrowseItems.Items.Count()} questionnaires");
 
@@ -144,7 +148,10 @@ namespace CoreTester.Commands
                     // to read assembly
                     this.plainTransactionManager.GetPlainTransactionManager()
                         .ExecuteInQueryTransaction(() => commandService.Execute(createCommand));
-                    foreach (var committedEvent in committedEvents)
+
+                    var indexOfFirstSupervisorAssignedEvent = committedEvents.FindIndex(0, x => x.Payload is SupervisorAssigned);
+
+                    foreach (var committedEvent in committedEvents.Skip(indexOfFirstSupervisorAssignedEvent))
                     {
                         var commands = EventsToCommandConverter.ConvertEventToCommands(newInterviewId, committedEvent);
 
@@ -182,7 +189,7 @@ namespace CoreTester.Commands
                             var message = exception.ExceptionType ==
                                           InterviewDomainExceptionType.ExpessionCalculationError
                                 ? $"Calculation error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}"
-                                : $"General error! IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
+                                : $"General error! Exception type:{exception.ExceptionType} IN: {interviewId}. Event: {committedEvent.EventSequence} / {committedEvents.Count}";
 
                             if (exception.ExceptionType == InterviewDomainExceptionType.ExpessionCalculationError)
                             {
@@ -294,7 +301,8 @@ namespace CoreTester.Commands
 
             stopwatch.Stop();
 
-            this.logger.Info($"Received {skipInterviewsCount:N0} interviewIds to start export. " +
+            this.logger.Info($"Received {skipInterviewsCount:N0} interviewIds to process. " +
+                             $"Questionnaire {questionnaireIdentity.ToString()}. " +
                              $"Took {stopwatch.Elapsed:g} to complete.");
         }
     }

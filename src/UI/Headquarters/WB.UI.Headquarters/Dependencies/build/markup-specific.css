@@ -91,7 +91,9 @@
         padding-top: 3px;
         padding-bottom: 3px; }
       .panel-table .panel-body .btn:last-of-type {
-        margin-bottom: 0; } }
+        margin-bottom: 0; }
+      .panel-table .panel-body .btn.last-btn:last-of-type {
+        margin-bottom: 10px; } }
 
 .questionnaire-statistics {
   margin-bottom: 30px; }
