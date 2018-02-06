@@ -135,6 +135,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
 
             ViewBag.SpecificPageCaption = interviewSummary.Key;
+            ViewBag.AlwaysScroll = true;
 
             return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {
