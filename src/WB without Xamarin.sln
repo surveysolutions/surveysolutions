@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6B97CFA4-4A98-412B-80E8-10511E781DCE}"
 EndProject
@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Headquarters", "UI\He
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.SharedKernels.DataCollection.Portable", "Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj", "{553B4FC2-5FC7-4256-B14D-82758D64A3BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Unit", "Tests\WB.Tests.Unit\WB.Tests.Unit.csproj", "{4A3E17E6-7FCE-488C-899E-DD13FD40F289}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Unit", "Tests\WB.Tests.Unit\WB.Tests.Unit.csproj", "{4A3E17E6-7FCE-488C-899E-DD13FD40F289}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F} = {E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}
 	EndProjectSection
