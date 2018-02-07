@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -61,7 +62,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return plainQuestionnaire;
         }
 
-        public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
+        public virtual void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
             this.repository.Store(questionnaireDocument, repositoryId);

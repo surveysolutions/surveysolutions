@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             var interviewSummaryStorage = new TestInMemoryWriter<InterviewSummary>();
 
             interviewSummaryStorage.Store(interviewSummary, interviewId.FormatGuid());
-            mockOfInterviewFactory.Setup(x => x.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, Moq.It.IsAny<Guid[]>())).Returns(new[]
+            mockOfInterviewFactory.Setup(x => x.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity)).Returns(new[]
                 {new InterviewStringAnswer {InterviewId = interviewId, Answer = "var.jpg"}});
             mockOfInterviewFactory.Setup(x => x.GetAudioAnswersByQuestionnaire(questionnaireIdentity)).Returns(new[]
                 {new InterviewStringAnswer {InterviewId = interviewId, Answer = audioFileName}});

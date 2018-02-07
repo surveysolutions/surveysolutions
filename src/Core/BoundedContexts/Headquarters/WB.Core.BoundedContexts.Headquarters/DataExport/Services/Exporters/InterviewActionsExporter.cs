@@ -70,9 +70,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             foreach (var interviewsBatch in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
             {
                 var interviewIdsStrings = interviewsBatch.Select(x => x.FormatGuid()).ToArray();
-                Expression<Func<InterviewSummary, bool>> whereClauseForAction = 
-                    x => interviewIdsStrings.Contains(x.SummaryId);
-                string[][] actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction));
+                Expression<Func<InterviewSummary, bool>> whereClauseForAction = x => interviewIdsStrings.Contains(x.SummaryId);
+
+                string[][] actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
+                    () => this.QueryActionsChunkFromReadSide(whereClauseForAction));
 
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 

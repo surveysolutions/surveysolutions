@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Dapper;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json;
 using Npgsql;
+using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -27,17 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
     public class InterviewFactory : IInterviewFactory
     {
-        private const string PrimaryKeyConstraintName = "pk_interviews";
-        private const string InterviewsTableName = "readside.interviews";
-        private const string InterviewIdColumn = "interviewId";
-        private const string EntityIdColumn = "entityId";
-        private const string RosterVectorColumn = "rostervector";
-        private const string EnabledColumn = "isenabled";
-        private const string FlagColumn = "hasflag";
-        private const string AsStringColumn = "asstring";
-        private const string AsGpsColumn = "asgps";
-        private const string AsAudioColumn = "asaudio";
-
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISessionProvider sessionProvider;
@@ -50,113 +38,157 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.summaryRepository = summaryRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.sessionProvider = sessionProvider;
-            
-            NpgsqlConnection.MapCompositeGlobally<InterviewStateIdentity>("readside.interviewidentity", new NpgsqlLowerCaseNameTranslator());
-            NpgsqlConnection.MapCompositeGlobally<InterviewStateValidation>("readside.interviewvalidation", new NpgsqlLowerCaseNameTranslator());
-            NpgsqlConnection.MapCompositeGlobally<InterviewStateAnswer>("readside.interviewanswer", new NpgsqlLowerCaseNameTranslator());
+
+            NpgsqlConnection.MapCompositeGlobally<InterviewStateIdentity>("readside.interviewidentity",
+                new NpgsqlLowerCaseNameTranslator());
+            NpgsqlConnection.MapCompositeGlobally<InterviewStateValidation>("readside.interviewvalidation",
+                new NpgsqlLowerCaseNameTranslator());
+            NpgsqlConnection.MapCompositeGlobally<InterviewStateAnswer>("readside.interviewanswer",
+                new NpgsqlLowerCaseNameTranslator());
         }
 
-        public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId, Identity sectionId)
+        public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
+            Identity sectionId)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
             var questionsInSection = questionnaire.GetChildQuestions(sectionId.Id);
 
             if (!questionsInSection.Any()) return Array.Empty<Identity>();
 
-            return this.sessionProvider.GetSession().Connection.Query(
-                    $"SELECT {EntityIdColumn}, {RosterVectorColumn} " +
-                    $"FROM {InterviewsTableName} " +
-                    $"WHERE {InterviewIdColumn} = @InterviewId " +
-                    $"AND {FlagColumn} = true " +
-                    $"AND {EntityIdColumn} IN ({string.Join(",", questionsInSection.Select(x => $"'{x}'"))})" +
-                    $"AND {RosterVectorColumn} = @RosterVector",
-                    new {InterviewId = interviewId, RosterVector = sectionId.RosterVector.Array})
-                .Select(x => Identity.Create((Guid) x.entityid, (int[]) x.rostervector))
+            return this.sessionProvider.GetSession().Connection.Query<(Guid entityid, int[] rostervector)>(
+                    $@"SELECT {Column.EntityId}, {Column.RosterVector}
+                       FROM {Table.InterviewsView}
+                       WHERE {Column.InterviewId} = @InterviewId
+                        AND {Column.HasFlag} = true
+                        AND {Column.EntityId} IN (@questionsInSection)
+                        AND {Column.RosterVector} = @RosterVector",
+                    new
+                    {
+                        InterviewId = interviewId,
+                        RosterVector = sectionId.RosterVector.Array,
+                        questionsInSection
+                    })
+                .Select(x => Identity.Create(x.entityid, x.rostervector))
                 .ToArray();
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
-            => this.sessionProvider.GetSession().Connection.Query(
-                    $"SELECT {EntityIdColumn}, {RosterVectorColumn} FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId AND {FlagColumn} = true",
-                    new {InterviewId = interviewId})
-                .Select(x => Identity.Create((Guid) x.entityid, (int[]) x.rostervector))
+            => this.sessionProvider.GetSession().Connection.Query<(Guid entityId, int[] rosterVector)>(
+                    $"SELECT {Column.EntityId}, {Column.RosterVector} " +
+                    $"FROM {Table.InterviewsView} WHERE {Column.InterviewId} = @InterviewId AND {Column.HasFlag} = true",
+                    new { InterviewId = interviewId })
+                .Select(x => Identity.Create(x.entityId, x.rosterVector))
                 .ToArray();
+
+        private static class Column
+        {
+            public const string InterviewId = "interviewid";
+            public const string EntityId = "entityid";
+            public const string RosterVector = "rostervector";
+            public const string HasFlag = "hasflag";
+            public const string IsEnabled = "isenabled";
+            public const string AsGpsColumn = "asgps";
+            public const string AsString = "asstring";
+            public const string AsAudio = "asaudio";
+            public const string QuestionnaireIdentity = "questionnaireidentity";
+        }
+
+        private static class Table
+        {
+            public const string Interviews = "readside.interviews";
+            public const string InterviewSummaries = "readside.interviewsummaries";
+            public const string QuestionnaireEntities = "readside.questionnaire_entities";
+            public const string InterviewsView = "readside.interviews_view";
+        }
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged)
         {
             this.ThrowIfInterviewDeletedOrReadOnly(interviewId);
+            
+            var stateRows = GetInterviewEntities(null, interviewId);
 
-            this.sessionProvider.GetSession().Connection.Execute(
-                $"INSERT INTO {InterviewsTableName} ({InterviewIdColumn}, {EntityIdColumn}, {RosterVectorColumn}, {FlagColumn}) " +
-                $"VALUES(@InterviewId, @EntityId, @RosterVector, {flagged}) " +
-                $"ON CONFLICT ON CONSTRAINT {PrimaryKeyConstraintName} " +
-                "DO UPDATE SET " +
-                $"{FlagColumn} = {flagged};",
-                new
+            var perEntity = stateRows.ToDictionary(r => InterviewStateIdentity.Create(r.Identity));
+
+            var id = InterviewStateIdentity.Create(questionIdentity);
+            if (perEntity.TryGetValue(id, out var row))
+            {
+                row.HasFlag = flagged;
+            }
+            else
+            {
+                perEntity[id] = new InterviewEntity
                 {
-                    InterviewId = interviewId,
-                    EntityId = questionIdentity.Id,
-                    RosterVector = questionIdentity.RosterVector.Array
-                });
+                    Identity = questionIdentity,
+                    IsEnabled = true,
+                    HasFlag = flagged
+                };
+            }
+
+            SaveInterviewStateItem(interviewId, perEntity.Values.Where(v=> !v.IsAllFieldsDefault()).ToList());
         }
 
         public void RemoveInterview(Guid interviewId)
             => this.sessionProvider.GetSession().Connection.Execute(
-                $"DELETE FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
-                new[] {new {InterviewId = interviewId}});
+                $@"DELETE FROM {Table.Interviews} i
+                    USING {Table.InterviewSummaries} s
+                    WHERE i.{Column.InterviewId} = s.id AND s.{Column.InterviewId} = @InterviewId",
+                new { InterviewId = interviewId });
 
-        public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity, Guid[] multimediaQuestionIds)
+        public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
-            if (!multimediaQuestionIds?.Any() ?? true) return EmptyArray<InterviewStringAnswer>.Value;
-
             return this.sessionProvider.GetSession().Connection
-                .Query<InterviewStringAnswer>($"SELECT i.{InterviewIdColumn}, i.{AsStringColumn} as answer " +
-                                              $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                                              $"WHERE questionnaireidentity = '{questionnaireIdentity}' " +
-                                              $"AND {EnabledColumn} = true " +
-                                              $"AND {AsStringColumn} IS NOT NULL " +
-                                              $"AND {EntityIdColumn} IN ({string.Join(",", multimediaQuestionIds.Select(x => $"'{x}'"))})")
+                .Query<InterviewStringAnswer>(
+                    $@"select s.{Column.InterviewId}, i.{Column.AsString} as answer
+                       from {Table.Interviews} i
+                       join {Table.InterviewSummaries} s on s.id = i.{Column.InterviewId} 
+                            and s.{Column.QuestionnaireIdentity} = @questionnaireIdentity
+                       join {Table.QuestionnaireEntities} q on q.id = i.{Column.EntityId}
+                        where i.{Column.AsString} is not null and q.question_type = @questionType", new
+                        {
+                            questionType = QuestionType.Multimedia,
+                            questionnaireIdentity = questionnaireIdentity.ToString()
+                        })
                 .ToArray();
         }
 
         public InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
             => this.sessionProvider.GetSession().Connection.Query<InterviewStringAnswer>(
-                $"SELECT i.{InterviewIdColumn}, i.{AsAudioColumn}->>'{nameof(AudioAnswer.FileName)}' as Answer " +
-                $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                $"WHERE questionnaireidentity = '{questionnaireIdentity}' " +
-                $"AND {AsAudioColumn} IS NOT NULL " +
-                $"AND {EnabledColumn} = true").ToArray();
+                $"SELECT i.{Column.InterviewId}, i.{Column.AsAudio}->>'{nameof(AudioAnswer.FileName)}' as Answer " +
+                $"FROM readside.interviewsummaries s INNER JOIN {Table.InterviewsView} i ON(s.interviewid = i.{Column.InterviewId}) " +
+                $"WHERE {Column.QuestionnaireIdentity} = '{questionnaireIdentity}' " +
+                $"AND {Column.AsAudio} IS NOT NULL " +
+                $"AND {Column.IsEnabled} = true").ToArray();
 
         public Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
             => this.sessionProvider.GetSession().Connection.Query<Guid>(
-                $"SELECT {EntityIdColumn} " +
-                $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                $"WHERE questionnaireidentity = '{questionnaireIdentity}' " +
-                $"AND {AsGpsColumn} is not null " +
-                $"GROUP BY {EntityIdColumn} ").ToArray();
+                $"SELECT {Column.EntityId} " +
+                $"FROM readside.interviewsummaries s INNER JOIN {Table.InterviewsView} i ON(s.interviewid = i.{Column.InterviewId}) " +
+                $"WHERE {Column.QuestionnaireIdentity} = '{questionnaireIdentity}' " +
+                $"AND {Column.AsGpsColumn} is not null " +
+                $"GROUP BY {Column.EntityId} ").ToArray();
 
         public string[] GetQuestionnairesWithAnsweredGpsQuestions()
             => this.sessionProvider.GetSession().Connection.Query<string>(
-                $"SELECT questionnaireidentity " +
-                $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                $"WHERE {AsGpsColumn} is not null " +
-                $"GROUP BY questionnaireidentity").ToArray();
+                $@"select distinct {Column.QuestionnaireIdentity} from {Table.InterviewSummaries}").ToArray();
 
-        public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
+        public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(
+            QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude, double southWestCornerLatitude,
             double northEastCornerLongtitude, double southWestCornerLongtitude)
             => this.sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
-                    $"SELECT i.{InterviewIdColumn}, {AsGpsColumn}->>'{nameof(GeoPosition.Latitude)}' as latitude, {AsGpsColumn}->>'{nameof(GeoPosition.Longitude)}' as longitude " +
-                    $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                    $"WHERE questionnaireidentity = @Questionnaire " +
-                    $"AND {EntityIdColumn} = @QuestionId " +
-                    $"AND {AsGpsColumn} is not null " +
-                    $"AND ({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}')::double precision > @SouthWestCornerLatitude " +
-                    $"AND ({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}')::double precision < @NorthEastCornerLatitude " +
-                    $"AND ({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}')::double precision > @SouthWestCornerLongtitude " +
-                    $"{(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")}" +
-                    $" ({AsGpsColumn} ->> '{nameof(GeoPosition.Longitude)}')::double precision < @NorthEastCornerLongtitude " +
-                    $"LIMIT @MaxCount",
+                    $@"select interviewid, latitude, longitude
+from (
+	select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
+    from readside.interviews i
+    join {Table.QuestionnaireEntities} q on q.id = i.entityid
+    join readside.interviewsummaries s on s.id = i.interviewid
+        where i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId            
+	) as q
+where  latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
+    and longitude > @SouthWestCornerLongtitude
+        {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
+        longitude < @NorthEastCornerLongtitude
+limit @MaxCount",
                     new
                     {
                         Questionnaire = questionnaireIdentity.ToString(),
@@ -168,58 +200,202 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         NorthEastCornerLongtitude = northEastCornerLongtitude
                     })
                 .ToArray();
+        
+        public void Save(InterviewState state)
+        {
+            var rows = GetInterviewEntities(null, state.Id);
+            
+            var perEntity = rows.ToDictionary(r => InterviewStateIdentity.Create(r.Identity));
 
-        public void Save(InterviewState state) =>
-            this.sessionProvider.GetSession().Connection.Execute("readside.interview_update",
-                new
+            foreach (var removed in state.Removed)
+            {
+                perEntity.Remove(removed);
+            }
+
+            void Upsert<T>(Dictionary<InterviewStateIdentity, T> valueSource, Action<InterviewEntity, T> action)
+            {
+                foreach (var item in valueSource)
                 {
-                    id = state.Id,
-                    removed = state.Removed.ToArray(),
-                    enabled = state.Enablement.Where(x => x.Value).Select(x => x.Key).ToArray(),
-                    disabled = state.Enablement.Where(x => !x.Value).Select(x => x.Key).ToArray(),
-                    readonlyentities = state.ReadOnly.ToArray(),
-                    validations = state.Validity.Select(x => x.Value).ToArray(),
-                    answers = state.Answers.Select(x => x.Value).ToArray()
-                }, commandType: CommandType.StoredProcedure);
+                    if (perEntity.TryGetValue(item.Key, out var entity))
+                    {
+                        action(entity, item.Value);
+                    }
+                    else
+                    {
+                        entity = new InterviewEntity
+                        {
+                            InterviewId = state.Id,
+                            IsEnabled = true,
+                            Identity = Identity.Create(item.Key.Id, item.Key.RosterVector)
+                        };
+                        action(entity, item.Value);
+                        perEntity.Add(item.Key, entity);
+                    }
+                }
+            }
+
+            Upsert(state.Enablement, (entity, value) => entity.IsEnabled = value);
+            Upsert(state.ReadOnly.ToDictionary(r => r, v => true), (e, v) => e.IsReadonly = v);
+            Upsert(state.Validity, (e, v) => e.InvalidValidations = v.Validations);
+
+            Upsert(state.Answers, (entity, answer) =>
+            {
+                entity.AsString = answer.AsString;
+                entity.AsInt = answer.AsInt;
+                entity.AsLong = answer.AsLong;
+                entity.AsDouble = answer.AsDouble;
+                entity.AsDateTime = answer.AsDatetime;
+                entity.AsList = answer.AsList;
+                entity.AsIntArray = answer.AsIntArray;
+                entity.AsIntMatrix = answer.AsIntMatrix;
+                entity.AsGps = answer.AsGps;
+                entity.AsBool = answer.AsBool;
+                entity.AsYesNo = answer.AsYesNo;
+                entity.AsAudio = answer.AsAudio;
+                entity.AsArea = answer.AsArea;
+            });
+            
+            SaveInterviewStateItem(state.Id, perEntity.Values.Where(v => !v.IsAllFieldsDefault()).ToList());
+        }
+
+        private void SaveInterviewStateItem(Guid interviewId, ICollection<InterviewEntity> stateItems)
+        {
+            var conn = this.sessionProvider.GetSession().Connection;
+
+            var id = this.summaryRepository.GetById(interviewId.FormatGuid()).Id;
+
+            var idsList = string.Join(",", stateItems.Select(s => "'" + s.Identity.Id + "'").Distinct());
+
+            var entityMap = stateItems.Count == 0
+                ? new Dictionary<Guid, int>()
+                : conn.Query<(int id, Guid entityId)>($@"select q.id, q.entityId
+                        from {Table.QuestionnaireEntities} q
+                        join {Table.InterviewSummaries} s on s.{Column.QuestionnaireIdentity} = q.{Column.QuestionnaireIdentity}
+                        where {Column.EntityId} in ({idsList}) and s.{Column.InterviewId} = '{interviewId}'")
+                    .ToDictionary(q => q.entityId, q => q.id);
+
+            conn.Execute($@"delete from {Table.Interviews} where {Column.InterviewId} = {id}");
+
+            var npgConnection = conn as NpgsqlConnection;
+            using (var importer = npgConnection.BeginBinaryImport(@"copy 
+                readside.interviews (
+                    interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, asstring, asint, aslong, 
+                    asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag 
+                ) 
+                from stdin (format binary)"))
+            {
+                foreach (var item in stateItems)
+                {
+                    importer.StartRow();
+                    Write(id);
+                    Write(entityMap[item.Identity.Id]);
+                    Write(item.Identity.RosterVector.Array);
+                    Write(item.IsEnabled);
+                    Write(item.IsReadonly);
+                    Write(item.InvalidValidations);
+                    Write(item.AsString);
+                    Write(item.AsInt);
+                    Write(item.AsLong);
+                    Write(item.AsDouble);
+                    Write(item.AsDateTime);
+                    WriteJson(item.AsList);
+                    Write(item.AsIntArray);
+                    WriteJson(item.AsIntMatrix);
+                    WriteJson(item.AsGps);
+                    Write(item.AsBool);
+                    WriteJson(item.AsYesNo);
+                    WriteJson(item.AsAudio);
+                    WriteJson(item.AsArea);
+                    Write(item.HasFlag);
+                    
+                    void Write<T>(T value)
+                    {
+                        if (value == null) importer.WriteNull();
+                        else importer.Write(value);
+                    }
+
+                    void WriteJson<T>(T value)
+                    {
+                        if (value == null) importer.WriteNull();
+                        else importer.Write(JsonConvert.SerializeObject(value), NpgsqlDbType.Jsonb);
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, IEnumerable<Guid> interviews)
+        {
+            var questionnaire = questionnaireId != null ? this.questionnaireStorage.GetQuestionnaire(questionnaireId, null) : null;
+             
+            var connection = sessionProvider.GetSession().Connection as NpgsqlConnection ??
+                     throw new NotImplementedException("Only Postgres connections are supported");
+
+            var ids = string.Join(",", interviews.Select(i => "'" + i.ToString() + "'"));
+
+            using (var exporter = connection.BeginBinaryExport("COPY (" +
+                    "SELECT interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, asstring, asint," +
+                        " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag " +
+                   $" from {Table.InterviewsView} where {Column.InterviewId} in ({ids})) " +
+                    "TO STDOUT (FORMAT BINARY)"))
+            {
+                while (exporter.StartRow() > 0)
+                {
+                    var entity = new InterviewEntity();
+
+                    T Deserialize<T>() where T : class
+                    {
+                        if (IsNull()) return null;
+                        return JsonConvert.DeserializeObject<T>(exporter.Read<string>(NpgsqlDbType.Jsonb));
+                    }
+
+                    bool IsNull()
+                    {
+                        if (exporter.IsNull)
+                        {
+                            exporter.Skip();
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    entity.InterviewId = exporter.Read<Guid>();
+                    entity.Identity = new Identity(exporter.Read<Guid>(), exporter.Read<int[]>());
+
+                    if(questionnaire != null)
+                        entity.EntityType = GetEntityType(entity.Identity.Id, questionnaire);
+
+                    entity.IsEnabled = exporter.Read<bool>();
+                    entity.IsReadonly = exporter.Read<bool>();
+                    entity.InvalidValidations = IsNull() ? null : exporter.Read<int[]>();
+                    entity.AsString = IsNull() ? null : exporter.Read<string>();
+                    entity.AsInt = IsNull() ? (int?)null : exporter.Read<int>();
+                    entity.AsLong = IsNull() ? (long?)null : exporter.Read<long>();
+                    entity.AsDouble = IsNull() ? (double?)null : exporter.Read<double>();
+                    entity.AsDateTime = IsNull() ? (DateTime?)null : exporter.Read<DateTime>();
+                    entity.AsList = Deserialize<InterviewTextListAnswer[]>();
+                    entity.AsIntArray = IsNull() ? null : exporter.Read<int[]>();
+                    entity.AsIntMatrix = Deserialize<int[][]>();
+                    entity.AsGps = Deserialize<GeoPosition>();
+                    entity.AsBool = IsNull() ? (bool?)null : exporter.Read<bool>();
+
+                    entity.AsYesNo = Deserialize<AnsweredYesNoOption[]>();
+                    entity.AsAudio = Deserialize<AudioAnswer>();
+                    entity.AsArea = Deserialize<Area>();
+
+                    entity.HasFlag = exporter.Read<bool>();
+
+                    yield return entity;
+                }
+            }
+
+            //ExecuteNonQuery("drop table temp_input_data");
+        }
 
         #region Obsolete InterviewData
-
-        private IEntitySerializer<T> GetSerializer<T>() where T : class =>
-            ServiceLocator.Current.GetInstance<IEntitySerializer<T>>();
-        
-        public List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviewId)
+        public List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviews)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
-
-            var interviewEntites = sessionProvider.GetSession().Connection
-                .Query<dynamic>($"SELECT * FROM {InterviewsTableName} WHERE {InterviewIdColumn} = @InterviewId",
-                    new { InterviewId = interviewId })
-                .Select(x => new InterviewEntity
-                {
-                    InterviewId = x.interviewid,
-                    Identity = Identity.Create(x.entityid, x.rostervector),
-                    EntityType = GetEntityType(x.entityid, questionnaire),
-                    IsEnabled = x.isenabled,
-                    IsReadonly = x.isreadonly,
-                    HasFlag = x.hasflag,
-                    InvalidValidations = x.invalidvalidations,
-                    AsString = x.asstring,
-                    AsInt = x.asint,
-                    AsBool = x.asbool,
-                    AsDouble = x.asdouble,
-                    AsDateTime = x.asdatetime,
-                    AsLong = x.aslong,
-                    AsIntArray = x.asintarray,
-                    AsIntMatrix = x.asintmatrix == null ? null : this.GetSerializer<int[][]>().Deserialize(x.asintmatrix),
-                    AsGps = x.asgps == null ? null : this.GetSerializer<GeoPosition>().Deserialize(x.asgps),
-                    AsList = x.aslist == null ? null : this.GetSerializer<InterviewTextListAnswer[]>().Deserialize(x.aslist),
-                    AsYesNo = x.asyesno == null ? null : this.GetSerializer<AnsweredYesNoOption[]>().Deserialize(x.asyesno),
-                    AsAudio = x.asaudio == null ? null : this.GetSerializer<AudioAnswer>().Deserialize(x.asaudio),
-                    AsArea = x.asarea == null ? null : this.GetSerializer<Area>().Deserialize(x.asarea),
-                })
-                .ToList();
-
-            return interviewEntites;
+            return GetInterviewEntities(questionnaireId, new[] { interviews }).ToList();
         }
 
         private EntityType GetEntityType(Guid entityid, IQuestionnaire questionnaire)
@@ -232,20 +408,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             throw new NotSupportedException("Unknown entity type");
         }
 
-        public Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireIdentity questionnaireId, List<InterviewEntity> interviewEntities)
+        public Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire, List<InterviewEntity> interviewEntities)
         {
-            IQuestionnaire questionnaire =
-                this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
-
-            var interviewEntitiesGroupedByRosterVector = interviewEntities
+            var interviewLevels = interviewEntities
                 .GroupBy(x => x.Identity?.RosterVector ?? RosterVector.Empty)
-                .ToDictionary(x => x.Key, x => x.ToArray());
+                .Select(x => ToInterviewLevel(x.Key, x.ToArray(), questionnaire));
 
-            var interviewLevels = interviewEntitiesGroupedByRosterVector
-                .Select(x => ToInterviewLevel(x.Key, x.Value, questionnaire)).ToList();
-
-            var interviewDataLevels =
-                interviewLevels.ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
+            var interviewDataLevels = interviewLevels.ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
             return interviewDataLevels;
         }
 
@@ -260,7 +429,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     .Select(x => questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id))
                     .Select(x => new ValueVector<Guid>(x))
                     .Distinct()
-                    .ToDictionary(x => x, x => (int?) 0);
+                    .ToDictionary(x => x, x => (int?)0);
             }
             else
             {
@@ -276,7 +445,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .ToHashSet();
 
             var dictionary = interviewDbEntities.Where(x => x.EntityType == EntityType.Variable)
-                .Select(x => new {x.Identity.Id, Answer = ToObjectAnswer(x)})
+                .Select(x => new { x.Identity.Id, Answer = ToObjectAnswer(x) })
                 .ToDictionary(x => x.Id, x => x.Answer);
 
             var interviewStaticTexts = interviewDbEntities.Where(x => x.EntityType == EntityType.StaticText)
@@ -314,20 +483,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             QuestionState state = 0;
 
-            if(entity.IsEnabled)
-                state = state.With(QuestionState.Enabled);
-
-            if (entity.IsReadonly)
-                state = state.With(QuestionState.Readonly);
-
-            if (entity.InvalidValidations == null)
-                state = state.With(QuestionState.Valid);
-
-            if (entity.HasFlag)
-                state = state.With(QuestionState.Flagged);
-
-            if (hasAnswer)
-                state = state.With(QuestionState.Answered);
+            if (entity.IsEnabled) state = state.With(QuestionState.Enabled);
+            if (entity.IsReadonly) state = state.With(QuestionState.Readonly);
+            if (entity.InvalidValidations == null) state = state.With(QuestionState.Valid);
+            if (entity.HasFlag) state = state.With(QuestionState.Flagged);
+            if (hasAnswer) state = state.With(QuestionState.Answered);
 
             return state;
         }
@@ -340,12 +500,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                           new FailedValidationCondition[0]).ToReadOnlyCollection()
         };
 
-        private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ?? 
+        private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ??
                                                                  entity.AsDateTime ?? entity.AsLong ??
                                                                  entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
                                                                  entity.AsList ?? entity.AsYesNo ??
                                                                  entity.AsIntMatrix ?? entity.AsArea ??
-                                                                 (object) entity.AsAudio;
+                                                                 (object)entity.AsAudio;
 
         public static string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
