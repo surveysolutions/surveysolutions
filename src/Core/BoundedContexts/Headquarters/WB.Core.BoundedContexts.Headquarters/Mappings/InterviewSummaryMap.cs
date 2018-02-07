@@ -30,6 +30,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ClientKey);
             Property(x => x.HasErrors);
             Property(x => x.AssignmentId);
+            Property(x => x.Id, pm =>
+            {
+                pm.Update(false);
+                pm.Generated(PropertyGeneration.Always);
+            });
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
             {
                 cm.Default(false);
