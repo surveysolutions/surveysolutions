@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 {
     internal class when_verifying_preloaded_data_file_with_valid_interviewer_responsible_name : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
+        private Establish context = () =>
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
@@ -33,15 +33,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             var userViewFactory = new Mock<IUserViewFactory>();
 
-            var user = new UserView()
+            var user = new UserToVerify
             {
-                PublicKey = Guid.NewGuid(),
                 UserName = "fd",
-                IsLockedByHQ = false,
-                IsLockedBySupervisor = false,
-                Roles = { UserRoles.Interviewer }
+                IsLocked = false,
+                IsInterviewer = true,
+                IsSupervisor = false
             };
-            userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
+            userViewFactory.Setup(x => x.GetUsersByUserNames(Moq.It.IsAny<string[]>())).Returns(new[] {user});
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object, userViewFactory: userViewFactory.Object);
         };

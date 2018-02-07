@@ -813,8 +813,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (responsibleColumnIndex < 0)
                 return Array.Empty<string>();
 
-            return data.Content.Select(x => x[responsibleColumnIndex]?.ToLower())
-                .Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToArray();
+            return data.Content.Select(x => x[responsibleColumnIndex]?.ToLower()).Distinct().ToArray();
         }
     }
 }

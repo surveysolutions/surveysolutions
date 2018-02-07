@@ -32,14 +32,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, ServiceColumns.ResponsibleColumnName)).Returns(1);
             var userViewFactory = new Mock<IUserViewFactory>();
 
-            var user = new UserView()
+            var user = new UserToVerify
             {
-                PublicKey = Guid.NewGuid(),
                 UserName = "fd",
-                IsLockedBySupervisor = true
+                IsLocked = true
             };
 
-            userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
+            userViewFactory.Setup(x => x.GetUsersByUserNames(Moq.It.IsAny<string[]>())).Returns(new[]{user});
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object, userViewFactory: userViewFactory.Object);
         };
