@@ -8922,7 +8922,7 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   color: #e74924 !important; }
 
 .success-text {
-  color: #2fc507 !important; }
+  color: #3ca21a !important; }
 
 .default-text {
   color: #dbdfe2 !important; }
@@ -9333,6 +9333,34 @@ dl dd:after {
 
 .warning-message {
   font-family: "RobotoBold"; }
+
+.underlined-link {
+  text-decoration: underline; }
+  .underlined-link:hover, .underlined-link:focus, .underlined-link:active {
+    text-decoration: none; }
+
+.gray-text-row {
+  font-style: normal;
+  text-transform: uppercase;
+  font: 14px/16px "TrebuchetMS";
+  letter-spacing: 1px;
+  color: #a6a8a9; }
+
+.gray-action-unit {
+  color: #a6a8a9; }
+  .gray-action-unit:hover, .gray-action-unit:focus, .gray-action-unit:active {
+    color: #6b6b6b !important; }
+
+.green-action-unit {
+  color: #3ca21a; }
+  .green-action-unit:hover, .green-action-unit:focus, .green-action-unit:active {
+    color: #2c7613; }
+
+.action-block {
+  margin-top: 30px; }
+
+.always-visible-scroll {
+  overflow-y: scroll; }
 
 .left-column #log-in {
   text-align: left; }

@@ -24,6 +24,7 @@ namespace CoreTester.Commands
         private readonly ISerializer serializer;
         private readonly IExpressionsPlayOrderProvider expressionsPlayOrderProvider;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
+        private readonly ILogger logger;
 
 
         public DebugInformationDumper(
@@ -32,7 +33,8 @@ namespace CoreTester.Commands
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireRepository,
             IEventStore eventStore,
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider, 
-            IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor)
+            IQuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor,
+            ILogger logger)
         {
             this.serializer = serializer;
             this.plainTransactionManager = plainTransactionManager;
@@ -40,10 +42,13 @@ namespace CoreTester.Commands
             this.eventStore = eventStore;
             this.expressionsPlayOrderProvider = expressionsPlayOrderProvider;
             this.questionnaireAssemblyFileAccessor = questionnaireAssemblyFileAccessor;
+            this.logger = logger;
         }
 
         public int Run(string serverName)
         {
+            logger.Info($"Dumping for for db {serverName}");
+
             var fileName = $"{serverName}.results.txt";
 
             if (!File.Exists(fileName))

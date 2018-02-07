@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using CoreTester.CustomInfrastructure;
+using ICSharpCode.Decompiler;
+using ICSharpCode.Decompiler.CSharp;
+using ICSharpCode.Decompiler.TypeSystem;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
@@ -10,11 +15,14 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using AssemblyDefinition = Mono.Cecil.AssemblyDefinition;
+using IMemberDefinition = Mono.Cecil.IMemberDefinition;
+using IVariable = WB.Core.SharedKernels.QuestionnaireEntities.IVariable;
 
 namespace CoreTester.Commands
 {
@@ -26,9 +34,9 @@ namespace CoreTester.Commands
         private readonly ICommandService commandService;
 
         public CoreDebugger(
-            ISerializer serializer, 
-            IQuestionnaireAssemblyAccessor assemblyAccessor, 
-            IQuestionnaireStorage questionnaireStorage, 
+            ISerializer serializer,
+            IQuestionnaireAssemblyAccessor assemblyAccessor,
+            IQuestionnaireStorage questionnaireStorage,
             ICommandService commandService)
         {
             this.serializer = serializer;
@@ -63,15 +71,23 @@ namespace CoreTester.Commands
                 return 0;
             }
 
+            var assemblyDllFileName = files.Single(x => Path.GetFileName(x).StartsWith("assembly-"));
+
             var questionnairePrefix = "questionnaire-";
             var questionnaireJsonFileName = files.Single(x => Path.GetFileName(x).StartsWith(questionnairePrefix));
             var questionnaireIdentity = QuestionnaireIdentity.Parse(Path.GetFileNameWithoutExtension(questionnaireJsonFileName).Substring(questionnairePrefix.Length));
             var questionnaireDocument = serializer.Deserialize<QuestionnaireDocument>(File.ReadAllText(questionnaireJsonFileName));
 
-            if (Utils.IsExistsMacrosesInDocument(questionnaireDocument))
+            var isExistsMacrosesInDocument = Utils.IsExistsMacrosesInDocument(questionnaireDocument);
+            if (isExistsMacrosesInDocument)
             {
-                Console.WriteLine($"Analyze folder {folder}. Questionnaire contains macroses. Skiped.");
-                return 1;
+                if (!Utils.IsSupportedDecompile(assemblyDllFileName))
+                {
+                    Console.WriteLine($"Analyze folder {folder}. Dll doesn't supported decompile operation. Skiped.");
+                    return 1;
+                }
+
+                Utils.InlineMacrosesInDocument(questionnaireDocument, assemblyDllFileName);
             }
 
             questionnaireStorage.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, questionnaireDocument);
@@ -81,9 +97,8 @@ namespace CoreTester.Commands
                 return 0;
             }
 
-            Console.WriteLine($"Analyze folder {folder}.");
+            Console.WriteLine($"Analyze folder {folder}. Is exists macroses: {isExistsMacrosesInDocument}");
 
-            var assemblyDllFileName = files.Single(x => Path.GetFileName(x).StartsWith("assembly-"));
             assemblyAccessor.StoreAssembly(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, File.ReadAllBytes(assemblyDllFileName));
 
             foreach (var file in files)
@@ -119,7 +134,9 @@ namespace CoreTester.Commands
             var createCommand = EventsToCommandConverter.GetCreateInterviewCommand(committedEvents, interviewId, userId);
             commandService.Execute(createCommand);
 
-            for (int i = 0; i < committedEvents.Count; i++)
+            var indexOfFirstSupervisorAssignedEvent = committedEvents.FindIndex(0, x => x.Payload is SupervisorAssigned);
+
+            for (int i = indexOfFirstSupervisorAssignedEvent; i < committedEvents.Count; i++)
             {
                 var committedEvent = committedEvents[i];
 

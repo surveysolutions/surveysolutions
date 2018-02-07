@@ -84,7 +84,7 @@ namespace WB.UI.WebTester
             registry.BindToMethod(() => Refit.RestService.For<IDesignerWebTesterApi>(
                 new HttpClient
                 {
-                    MaxResponseContentBufferSize = long.MaxValue,
+                    MaxResponseContentBufferSize = 2_000_000_000,
                     BaseAddress = new Uri(DesignerAddress()),
                     Timeout = TimeSpan.FromMinutes(3)
                 },

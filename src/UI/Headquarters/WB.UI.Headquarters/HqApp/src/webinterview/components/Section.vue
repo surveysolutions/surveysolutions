@@ -38,7 +38,7 @@
         },
 
         async beforeRouteEnter (to, from, next) {
-            if(checkSectionPermission(to)) {
+            if(await checkSectionPermission(to)) {
                 next(vm => vm.$store.dispatch("changeSection", to.params.sectionId))
                 return;
             }
@@ -47,7 +47,7 @@
         },
 
         async beforeRouteUpdate (to, from, next) {
-            if(checkSectionPermission(to)) {
+            if(await checkSectionPermission(to)) {
                 this.$store.dispatch("changeSection", to.params.sectionId)
                 next();
                 return;

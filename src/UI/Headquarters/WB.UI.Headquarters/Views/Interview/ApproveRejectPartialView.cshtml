@@ -1,29 +1,12 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
-@using WB.UI.Headquarters.Resources
 @{
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
 
-@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewDetailsView
+@model dynamic
 
-@{
-    InterviewStatus status = Model.Status;
-    bool isNotAssignedToInterviewer = !Model.IsAssignedToInterviewer;
-
-    bool isSupervisorApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
-    bool isHeadquarteerOrAdminApproveSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.ApprovedBySupervisor) && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
-
-    bool isSupervisorRedjectSupport = ((status == InterviewStatus.Completed || status == InterviewStatus.RejectedByHeadquarters) && authorizedUser.IsSupervisor);
-    bool isHeadquarteerOrAdminRedjectSupport = (status == InterviewStatus.ApprovedBySupervisor && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator));
-
-    bool isHeadquarteerOrAdminUnapproveSupport = status == InterviewStatus.ApprovedByHeadquarters && (authorizedUser.IsHeadquarter || authorizedUser.IsAdministrator);
-
-    bool isShowInterviewerSelectForRejectBySupervisor = isSupervisorRedjectSupport && isNotAssignedToInterviewer;
-}
-
-@if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
+@if (Model.isApproveAllowed)
 {
     <div class="modal fade" id="approveModal" tabindex="-1" role="dialog" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -45,7 +28,7 @@
     </div>
 }
 
-@if (isSupervisorRedjectSupport || isHeadquarteerOrAdminRedjectSupport)
+@if (Model.isRejectAllowed)
 {
     <div class="modal fade" id="rejectModal" tabindex="-1" role="dialog" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -55,7 +38,7 @@
                     <h4 class="modal-title" id="rejectModalLabel">@Pages.ApproveRejectPartialView_RejectLAbel</h4>
                 </div>
                 <div class="modal-body">
-                    @if (isShowInterviewerSelectForRejectBySupervisor)
+                    @if (Model.isShowInterviewerSelectForRejectBySupervisor)
                     {
                         @Details.ChooseResponsibleInterviewer
                         <br />
@@ -76,14 +59,14 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">@Pages.CloseLabel</button>
-                    <button class="btn btn-danger" data-bind="click: @(authorizedUser.IsSupervisor ? "rejectInterview" : "hQRejectInterview"), @(isShowInterviewerSelectForRejectBySupervisor ? "enable: Users.AssignTo() != undefined" : "") ">@Pages.ApproveRejectPartialView_RejectAction</button>
+                    <button class="btn btn-danger" data-bind="click: @(authorizedUser.IsSupervisor ? "rejectInterview" : "hQRejectInterview"), @(Model.isShowInterviewerSelectForRejectBySupervisor ? "enable: Users.AssignTo() != undefined" : "") ">@Pages.ApproveRejectPartialView_RejectAction</button>
                 </div>
             </div>
         </div>
     </div>
 }
 
-@if (isHeadquarteerOrAdminUnapproveSupport)
+@if (Model.isUnapproveAllowed)
 {
     <div class="modal fade" id="unapproveByHeadquarterModal" tabindex="-1" role="dialog" aria-labelledby="unapproveInterviewModalLabel" aria-hidden="true">
         <div class="modal-dialog">
