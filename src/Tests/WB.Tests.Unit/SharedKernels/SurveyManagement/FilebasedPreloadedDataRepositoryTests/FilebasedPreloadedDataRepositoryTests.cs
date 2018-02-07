@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
                 folderPath: @"x:\",
                 fileSystemAccessor: fileAccessorMock.Object);
 
-            var newFolder = preloadedDataRepository.StoreSampleData(new MemoryStream(new byte[] { }), "new.stream");
+            var newFolder = preloadedDataRepository.Store(new MemoryStream(new byte[] { }), "new.stream");
 
             fileAccessorMock
                 .Setup(_ => _.GetDirectoriesInDirectory(@"x:\path"))

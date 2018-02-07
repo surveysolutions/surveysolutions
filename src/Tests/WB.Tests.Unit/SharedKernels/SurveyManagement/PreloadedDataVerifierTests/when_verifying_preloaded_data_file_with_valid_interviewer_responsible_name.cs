@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using It = Machine.Specifications.It;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
@@ -49,10 +46,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
 
         It should_result_has_0_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(0);
+            VerificationErrors.Count().ShouldEqual(0);
 
         
         private static ImportDataVerifier importDataVerifier;

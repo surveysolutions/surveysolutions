@@ -4,7 +4,6 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -34,29 +33,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "num" },
                 new string[][] { new string[] { "1", "-3" } },
                 "questionnaire.csv");
-
-            var preloadedDataService =
-                Create.Service.PreloadedDataService(questionnaire);
+            
+            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataService).ToList();
 
         It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            VerificationErrors.Count().ShouldEqual(1);
 
         It should_return_single_PL0022_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0022");
+            VerificationErrors.First().Code.ShouldEqual("PL0022");
 
         It should_return_reference_with_Cell_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid numericQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
+        private static ImportDataParsingService preloadedDataService;
     }
 }

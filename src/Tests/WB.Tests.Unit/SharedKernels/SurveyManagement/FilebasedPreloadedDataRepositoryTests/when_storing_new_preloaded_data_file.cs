@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.StorePanelData(CreateStream(), "fileName.zip");
+        Because of = () => result = filebasedPreloadedDataRepository.Store(CreateStream(), "fileName.zip");
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

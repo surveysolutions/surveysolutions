@@ -2,10 +2,8 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 using It = Machine.Specifications.It;
@@ -26,22 +24,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 new[] { ServiceColumns.InterviewId, "gps__Latitude", "gps__Longitude" },
                 new[] { new[] { "1", "", "1.5" } },
                 "questionnaire.csv");
-
-            var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
+            
+            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of = () => 
-            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataService).ToList();
 
         It should_return_1_error_PL0030 = () =>
-            status.VerificationState.Errors.Single().Code.ShouldEqual("PL0030");
+            VerificationErrors.Single().Code.ShouldEqual("PL0030");
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
+        private static ImportDataParsingService preloadedDataService;
     }
 }

@@ -55,10 +55,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
 
         It should_result_has_0_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(0);
+            VerificationErrors.Count().ShouldEqual(0);
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

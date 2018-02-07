@@ -38,10 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                 fileSystemAccessor.CreateDirectory(this.path);
         }
 
-        public string StoreSampleData(Stream preloadedDataFile, string fileName) => this.Store(preloadedDataFile, fileName);
-        public string StorePanelData(Stream preloadedDataFile, string fileName) => this.Store(preloadedDataFile, fileName);
-
-        private string Store(Stream stream, string fileName)
+        public string Store(Stream stream, string fileName)
         {
             var folderName = Guid.NewGuid().FormatGuid();
             var folderPath = this.FolderNameToPath(folderName);

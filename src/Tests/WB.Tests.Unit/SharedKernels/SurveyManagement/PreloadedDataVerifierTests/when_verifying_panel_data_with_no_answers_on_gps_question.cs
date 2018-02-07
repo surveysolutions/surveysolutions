@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
@@ -25,23 +25,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 new[] { ServiceColumns.InterviewId, "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude", "gps__Timestamp" },
                 new[] { new[] { "1", "", "", "", "", "" } },
                 "questionnaire.tab");
-
-            var preloadedDataService =
-                Create.Service.PreloadedDataService(questionnaire);
+            
+            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataService).ToList();
 
         It should_return_no_errors = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(0);
+            VerificationErrors.Count().ShouldEqual(0);
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
+        private static ImportDataParsingService preloadedDataService;
     }
 }

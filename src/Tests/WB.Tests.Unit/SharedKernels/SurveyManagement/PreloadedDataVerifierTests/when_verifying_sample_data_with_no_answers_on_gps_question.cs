@@ -1,8 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -25,23 +25,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 new string[][] { new string[] { "1" } },
                 "questionnaire.tab");
 
-            var preloadedDataService =
-                Create.Service.PreloadedDataService(questionnaire);
+            
+            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
-        Because of =
-            () => result = importDataVerifier.VerifyAssignmentsSample(questionnaireId, 1, preloadedDataByFile);
+        Because of = () => result = importDataVerifier.VerifyAssignmentsSample(preloadedDataByFile, preloadedDataService).ToList();
 
         It should_return_no_errors = () =>
-            result.Errors.Count().ShouldEqual(0);
+            result.Count().ShouldEqual(0);
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
+        private static List<PanelImportVerificationError> result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
+        private static ImportDataParsingService preloadedDataService;
     }
 }

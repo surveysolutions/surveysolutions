@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 {
-    internal interface IPreloadedDataService
+    public interface IPreloadedDataService
     {
         HeaderStructureForLevel FindLevelInPreloadedData(string levelFileName);
 

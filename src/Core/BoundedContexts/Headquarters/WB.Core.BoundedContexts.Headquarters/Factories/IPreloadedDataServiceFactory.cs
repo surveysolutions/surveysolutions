@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Factories
 {
-    internal interface IPreloadedDataServiceFactory
+    public interface IPreloadedDataServiceFactory
     {
         IPreloadedDataService CreatePreloadedDataService(QuestionnaireExportStructure exportStructure,
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, QuestionnaireDocument questionnaireDocument);
