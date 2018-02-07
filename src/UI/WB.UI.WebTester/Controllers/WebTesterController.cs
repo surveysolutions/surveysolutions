@@ -105,11 +105,14 @@ namespace WB.UI.WebTester.Controllers
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
+            var reloadQuestionnaireUrl =
+                $"{ConfigurationSource.Configuration["DesignerAddress"]}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
             var interviewPageModel = new InterviewPageModel
             {
                 Id = id,
                 Title = $"{questionnaire.Title} | Web Tester",
-                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"]
+                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
+                ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
             return interviewPageModel;
         }
@@ -153,6 +156,7 @@ namespace WB.UI.WebTester.Controllers
         public string Title { get; set; }
         public string GoogleMapsKey { get; set; }
         public string Id { get; set; }
+        public string ReloadQuestionnaireUrl { get; set; }
     }
 
     public class ApiTestModel

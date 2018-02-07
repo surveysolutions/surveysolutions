@@ -30,7 +30,8 @@
         appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
         googleApiKey: '@Model.GoogleMapsKey',
         hubName: "interview",
-        inWebTesterMode: true
+        inWebTesterMode: true,
+        reloadQuestionnaireUrl: '@Model.ReloadQuestionnaireUrl'
     }
     </script>
     @RenderSection("scripts", false)
