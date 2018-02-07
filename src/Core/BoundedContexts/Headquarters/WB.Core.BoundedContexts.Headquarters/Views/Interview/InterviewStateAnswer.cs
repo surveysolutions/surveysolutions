@@ -1,4 +1,10 @@
 using System;
+using Main.Core.Entities.SubEntities;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -13,11 +19,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public DateTime? AsDatetime { get; set; }
         public bool? AsBool { get; set; }
         public int[] AsIntArray { get; set; }
-        public string AsList { get; set; }
-        public string AsYesNo { get; set; }
-        public string AsIntMatrix { get; set; }
-        public string AsGps { get; set; }
-        public string AsAudio { get; set; }
-        public string AsArea { get; set; }
+        public InterviewTextListAnswer[] AsList { get; set; }
+        public AnsweredYesNoOption[] AsYesNo { get; set; }
+        public int[][] AsIntMatrix { get; set; }
+        public GeoPosition AsGps { get; set; }
+        public AudioAnswer AsAudio { get; set; }
+        public Area AsArea { get; set; }
     }
 }
