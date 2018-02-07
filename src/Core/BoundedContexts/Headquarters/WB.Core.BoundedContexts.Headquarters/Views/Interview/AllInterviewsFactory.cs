@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -200,9 +199,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 items = items.Where(x => input.Statuses.Contains(x.Status));
             }
 
-            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
+            if (!string.IsNullOrWhiteSpace(input.SupervisorOrInterviewerName))
             {
-                items = items.Where(x => x.TeamLeadName == input.TeamLeadName);
+                items = items.Where(x => x.TeamLeadName == input.SupervisorOrInterviewerName || x.ResponsibleName == input.SupervisorOrInterviewerName);
             }
 
             if (input.ResponsibleId.HasValue)

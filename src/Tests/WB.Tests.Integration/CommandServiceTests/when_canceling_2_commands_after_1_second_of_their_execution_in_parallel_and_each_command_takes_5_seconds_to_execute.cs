@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
+using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -36,8 +35,10 @@ namespace WB.Tests.Integration.CommandServiceTests
             }
         }
 
-        Establish context = () =>
+        [Test]
+        public void should_execute_all_2_commands()
         {
+            // arrange 
             CommandRegistry
                 .Setup<Aggregate>()
                 .Handles<SaveNameFor5Seconds>(command => command.AggregateId, aggregate => aggregate.SaveNameFor5Seconds);
@@ -46,10 +47,8 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetLatest(typeof(Aggregate), Moq.It.IsAny<Guid>()) == new Aggregate());
 
             commandService = Create.Service.CommandService(repository: repository);
-        };
 
-        Because of = () =>
-        {
+            // act
             try
             {
                 var cancellationTokenSource = new CancellationTokenSource();
@@ -65,12 +64,12 @@ namespace WB.Tests.Integration.CommandServiceTests
                 Task.WaitAll(t1, t2);
             }
             catch (AggregateException) { }
-        };
 
-        It should_execute_all_2_commands = () =>
-            executedCommands.ShouldContainOnly("first", "second");
+            // Assert
+            Assert.That(executedCommands, Is.EquivalentTo(new []{"first", "second"}));
+        }
 
-        private static List<string> executedCommands = new List<string>();
+        private static readonly List<string> executedCommands = new List<string>();
         private static CommandService commandService;
     }
 }

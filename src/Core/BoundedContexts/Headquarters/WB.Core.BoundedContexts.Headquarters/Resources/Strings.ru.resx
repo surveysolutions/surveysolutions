@@ -227,10 +227,14 @@
     <comment>Задания</comment>
   </data>
   <data name="AllInterviewers" xml:space="preserve">
-    <value>Все интервьюверы</value>
-    <comment>Все интервьюверы</comment>
+    <value>Все интервьюеры</value>
+    <comment>Все интервьюеры</comment>
   </data>
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>Все опросники</value>
+  </data>
+  <data name="WithErrors" xml:space="preserve">
+    <value>С ошибками</value>
+    <comment>С ошибками</comment>
   </data>
 </root>

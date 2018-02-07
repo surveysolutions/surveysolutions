@@ -25,14 +25,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                     new Option()
                     {
                         Title = "one",
-                        Value = "1",
-                        Id = Guid.NewGuid()
+                        Value = "1"
                     },
                     new Option()
                     {
                         Title = "two",
-                        Value = "2",
-                        Id = Guid.NewGuid()
+                        Value = "2"
                     }
                 }
             );
@@ -41,8 +39,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
                 rootGroupId,
                 actorId,
                 options: new Option[] {
-                    new Option{Title = "one",Value = "1",Id = Guid.NewGuid()},
-                    new Option{Title = "two",Value = "2",Id = Guid.NewGuid()}
+                    new Option{Title = "one",Value = "1"},
+                    new Option{Title = "two",Value = "2"}
                 });
             BecauseOf();
         }
@@ -60,9 +58,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
             actorId,
             new[]
             {
-                new Option(Guid.NewGuid(), String.Empty, String.Empty, (decimal?)null), 
-                new Option(Guid.NewGuid(), String.Empty, String.Empty, (decimal?)null), 
-                new Option(Guid.NewGuid(), String.Empty, String.Empty, (decimal?)null) 
+                new Option(String.Empty, String.Empty, (decimal?)null), 
+                new Option(String.Empty, String.Empty, (decimal?)null), 
+                new Option(String.Empty, String.Empty, (decimal?)null) 
             }, 
             null,
             false,

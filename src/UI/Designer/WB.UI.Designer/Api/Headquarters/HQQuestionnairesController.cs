@@ -79,7 +79,7 @@ namespace WB.UI.Designer.Api.Headquarters
                 PageSize = pageSize,
                 Order = sortOrder,
                 SearchFor = filter,
-                Type = QuestionnairesType.My
+                Type = QuestionnairesType.My | QuestionnairesType.Shared
             });
 
             var questionnaires = new PagedQuestionnaireCommunicationPackage
@@ -129,7 +129,6 @@ namespace WB.UI.Designer.Api.Headquarters
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, versionToCompileAssembly);
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();

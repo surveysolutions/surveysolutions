@@ -199,14 +199,17 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                     deviceSyncInfos.GetOrNull(interviewer.Id)));
         }
 
-        private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile, HqUser interviewer, HqUser supervisor, DeviceSyncInfo lastSuccessDeviceInfo)
+        private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile,
+            HqUser interviewer, 
+            HqUser supervisor, 
+            DeviceSyncInfo lastSuccessDeviceInfo)
         {
             var interviewerId = interviewer.Id;
 
             string supervisorName = String.Empty;
             Guid supervisorId = Guid.Empty;
 
-            if (supervisor!=null)
+            if (supervisor != null)
             {
                 supervisorId = supervisor.Id;
                 supervisorName = supervisor.UserName;
@@ -276,8 +279,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             if (lastSuccessDeviceInfo == null)
                 return profile;
 
-            profile.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
-            profile.DeviceId = lastSuccessDeviceInfo.DeviceId;
+            profile.InterviewerAppVersion = interviewer.Profile?.DeviceAppVersion ?? lastSuccessDeviceInfo.AppVersion;
+            profile.DeviceId = interviewer.Profile?.DeviceId ?? lastSuccessDeviceInfo.DeviceId;
             profile.DeviceSerialNumber = lastSuccessDeviceInfo.DeviceSerialNumber;
             profile.DeviceType = lastSuccessDeviceInfo.DeviceType;
             profile.DeviceManufacturer = lastSuccessDeviceInfo.DeviceManufacturer;

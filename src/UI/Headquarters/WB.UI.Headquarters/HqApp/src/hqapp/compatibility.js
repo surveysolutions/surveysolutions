@@ -85,10 +85,7 @@ $(function () {
 
         setInterval(updateQueueLength, 3000);
     }
-
-    window.ajustNoticeHeight();
-    window.ajustDetailsPanelHeight();
-
+        
     $('.view-mode .alerts .alert').on('closed.bs.alert', function () {
         window.ajustNoticeHeight();
         window.ajustDetailsPanelHeight();

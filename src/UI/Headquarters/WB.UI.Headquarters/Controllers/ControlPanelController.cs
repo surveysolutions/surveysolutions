@@ -153,7 +153,6 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(settings);
         }
 
-        [NoTransaction]
         public ActionResult RepeatLastInterviewStatus(Guid? interviewId)
         {
             if (!interviewId.HasValue)
@@ -169,6 +168,7 @@ namespace WB.UI.Headquarters.Controllers
                 catch (Exception exception)
                 {
                     Logger.Error(string.Format("Exception while repating last interview status: {0}", interviewId), exception);
+                    return this.View(model: string.Format("Error occurred on status repeating for interview {0}", interviewId.Value.FormatGuid()));
                 }
 
                 return this.View(model: string.Format("Successfully repeated status for interview {0}", interviewId.Value.FormatGuid()));

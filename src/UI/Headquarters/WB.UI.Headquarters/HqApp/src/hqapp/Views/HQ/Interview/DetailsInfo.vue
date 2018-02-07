@@ -5,14 +5,21 @@
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details">
                     <ul class="main-info-column list-unstyled pull-left">
-                        <li>Interview #{{$config.model.key}} ({{this.$t('Common.Assignment')}} {{this.$config.model.assignmentId}})</li>
+                        <li>{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
                         <li class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
                     </ul>
                     <ul class="list-unstyled pull-left">
-                        <li><span class="data-label">{{this.$t('Details.Responsible')}}: </span> <span class="data">
-                                <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl"> {{this.$config.model.responsible}}</a>
-                            </span></li>
-                        <li><span class="data-label">{{this.$t('Users.Supervisor')}} : </span> <span class="data"><a href="javascript:void(0);" target="_blank" class="supervisor">{{this.$config.model.supervisor}}</a></span></li>
+                        <li>
+                            <span class="data-label">{{this.$t('Details.Responsible')}}: </span>
+                            <span v-if="isInterviewerResponsible" class="data">
+                                <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">{{this.$config.model.responsible}}</a>
+                            </span>
+                            <span v-if="!isInterviewerResponsible" class="data supervisor">{{this.$config.model.responsible}}</span>
+                        </li>
+                        <li>
+                            <span class="data-label">{{this.$t('Users.Supervisor')}} : </span>
+                            <span class="data supervisor">{{this.$config.model.supervisor}}</span>
+                        </li>
                     </ul>
                     <ul class="list-unstyled pull-left">
                         <li><span class="data-label">{{this.$t('Details.Status')}}</span> 
@@ -147,6 +154,9 @@ export default {
     },
     changeStatusDisabled() {
       return this.$store.state.webinterview.isCurrentUserObserving;
+    },
+    isInterviewerResponsible() {
+      return this.$config.model.responsibleRole == "Interviewer";
     }
   },
 

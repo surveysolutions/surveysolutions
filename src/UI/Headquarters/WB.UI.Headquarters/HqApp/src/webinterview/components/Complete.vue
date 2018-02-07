@@ -130,8 +130,8 @@
             completeInterview() {
                 if(this.shouldCloseWindow) {
                      modal.dialog({
-                        title: this.$t("WebInterviewUI.WebTesterSessionOver"),
-                        message: `<p>${this.$t("WebInterviewUI.WebTesterSessionOverMessage")}</p>`,
+                        title: '<p style="text-align: center">' + this.$t("WebInterviewUI.WebTesterSessionOver") + "</p>",
+                        message: `<p style="text-align: center">${this.$t("WebInterviewUI.WebTesterSessionOverMessage")}</p>`,
                         callback: () => {},
                         onEscape: false,
                         closeButton: false,

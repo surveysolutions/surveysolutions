@@ -15,16 +15,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
 
         public string Order
         {
-            get
-            {
-                return this.Orders.GetOrderRequestString();
-            }
-
-            set
-            {
-                this.Orders = value.ParseOrderRequestString();
-            }
+            get => this.Orders.GetOrderRequestString();
+            set => this.Orders = value.ParseOrderRequestString();
         }
+
         public IEnumerable<OrderRequestItem> Orders { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
@@ -35,10 +29,11 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         public Guid? FolderId { get; set; }
     }
 
+    [Flags]
     public enum QuestionnairesType
     {
-        My = 1,
-        Shared,
-        Public
+        My     = 1 << 0,
+        Shared = 1 << 1,
+        Public = 1 << 2
     }
 }

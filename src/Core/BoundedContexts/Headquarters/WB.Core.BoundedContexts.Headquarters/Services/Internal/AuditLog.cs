@@ -45,9 +45,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append("Export encription","changed", $"{(enabled ? "enabled" : "disabled")}'");
         }
 
-        public void UserMovedToAnotherTeam(Guid interviewerId, Guid newSupervisorId, Guid previousSupervisorId)
+        public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName)
         {
-            this.Append($"User {interviewerId}", "moved", $"From team {previousSupervisorId}' to {newSupervisorId}");
+            this.Append($"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
         private void Append(string target, string action, string args = null)
