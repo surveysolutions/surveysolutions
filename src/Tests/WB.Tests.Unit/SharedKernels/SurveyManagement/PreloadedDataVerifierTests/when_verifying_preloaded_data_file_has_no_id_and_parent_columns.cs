@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -33,22 +28,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName)), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(new string[0], null, QuestionnaireCsvFileName)), preloadedDataServiceMock.Object).ToList();
 
         It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            VerificationErrors.Count().ShouldEqual(1);
 
         It should_return_first_PL0007_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0007");
+            VerificationErrors.First().Code.ShouldEqual("PL0007");
 
         It should_return_second_PL0007_error = () =>
-            status.VerificationState.Errors.Last().Code.ShouldEqual("PL0007");
+            VerificationErrors.Last().Code.ShouldEqual("PL0007");
 
         It should_return_reference_of_first_error_with_Column_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         It should_return_reference_of_second_error_with_Column_type = () =>
-            status.VerificationState.Errors.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
+            VerificationErrors.Last().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Column);
 
         
         private static ImportDataVerifier importDataVerifier;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -18,7 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var QuestionnaireCsvFileName = "questionnaire.csv";
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
             var preloadedDataByFile = CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId, "q1"}, null,
                 QuestionnaireCsvFileName);
 
@@ -28,11 +26,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
 
             //act
-            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
 
-            Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
-            Assert.AreEqual(status.VerificationState.Errors.First().Code, "PL0003");
-            Assert.AreEqual(status.VerificationState.Errors.First().References.First().Type,
+            Assert.AreEqual(VerificationErrors.Count(), 1);
+            Assert.AreEqual(VerificationErrors.First().Code, "PL0003");
+            Assert.AreEqual(VerificationErrors.First().References.First().Type,
                 PreloadedDataVerificationReferenceType.Column);
         }
     }

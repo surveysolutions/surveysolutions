@@ -52,25 +52,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(files, preloadedDataServiceMock.Object).ToList();
 
         It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            VerificationErrors.Count().ShouldEqual(1);
 
         It should_return_single_PL0009_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0009");
+            VerificationErrors.First().Code.ShouldEqual("PL0009");
 
         It should_return_reference_with_Cell_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_PositionX_be_equal_to_0 = () =>
-            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(0);
+            VerificationErrors.First().References.First().PositionX.ShouldEqual(0);
 
         It should_error_PositionY_be_equal_to_0 = () =>
-            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
+            VerificationErrors.First().References.First().PositionY.ShouldEqual(0);
 
         It should_error_has_content_id_of_inconsistent_record = () =>
-            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("5");
+            VerificationErrors.First().References.First().Content.ShouldEqual("5");
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

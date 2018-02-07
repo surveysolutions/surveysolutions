@@ -24,48 +24,47 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "gps__Latitude", "gps__Longitude" },
                 new string[][] { new string[] { "1", "90.00001", "3" }, new string[] { "1", "-90.00001", "3" } },
                 "questionnaire.csv");
-
-            var preloadedDataService =
-                Create.Service.PreloadedDataService(questionnaire);
+            
+            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataService).ToList();
 
         It should_result_has_2_errors = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(2);
+            VerificationErrors.Count().ShouldEqual(2);
 
         It should_return_first_PL0030_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0032");
+            VerificationErrors.First().Code.ShouldEqual("PL0032");
 
         It should_return_first_error_with_single_reference = () =>
-            status.VerificationState.Errors.First().References.Count().ShouldEqual(1);
+            VerificationErrors.First().References.Count().ShouldEqual(1);
 
         It should_return_first_error_with_single_reference_of_type_Cell = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_first_error_with_single_reference_pointing_on_first_column = () =>
-            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(1);
+            VerificationErrors.First().References.First().PositionX.ShouldEqual(1);
 
         It should_return_first_error_with_single_reference_pointing_on_second_row = () =>
-            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
+            VerificationErrors.First().References.First().PositionY.ShouldEqual(0);
 
         It should_return_second_PL0030_error = () =>
-            status.VerificationState.Errors.Second().Code.ShouldEqual("PL0032");
+            VerificationErrors.Second().Code.ShouldEqual("PL0032");
 
         It should_return_second_error_with_single_reference = () =>
-            status.VerificationState.Errors.Second().References.Count().ShouldEqual(1);
+            VerificationErrors.Second().References.Count().ShouldEqual(1);
 
         It should_return_second_error_with_single_reference_of_type_Cell = () =>
-            status.VerificationState.Errors.Second().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            VerificationErrors.Second().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_second_error_with_single_reference_pointing_on_first_column = () =>
-            status.VerificationState.Errors.Second().References.First().PositionX.ShouldEqual(1);
+            VerificationErrors.Second().References.First().PositionX.ShouldEqual(1);
 
         It should_return_second_error_with_single_reference_pointing_on_second_row = () =>
-            status.VerificationState.Errors.Second().References.First().PositionY.ShouldEqual(1);
+            VerificationErrors.Second().References.First().PositionY.ShouldEqual(1);
 
 
         private static ImportDataVerifier importDataVerifier;
@@ -73,5 +72,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private static Guid questionnaireId;
         private static Guid gpsQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
+        private static ImportDataParsingService preloadedDataService;
     }
 }
