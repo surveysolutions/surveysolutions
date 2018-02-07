@@ -91,7 +91,7 @@
 		@if (authorizedUser.IsObserving)
 		{
 		<div class="panel-heading panel-warning">
-			@Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action(" ReturnToObserver", "Account" , new {area=string.Empty})">@Users.ClickToReturn</a>
+			@Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account" , new {area=string.Empty})">@Users.ClickToReturn</a>
 		</div>
 		}
 		@if (ViewBag.GlobalNotice != null)
@@ -126,7 +126,7 @@
 					<span id="compile-config" style="color: red">Web Debug</span>
 					}
 					<span>|</span>
-					<a href="@Url.Action(" Index","Download")">@Common.GetInterviewerApp</a>
+					<a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
 					@if (ServiceLocator.Current.GetInstance<IVersionCheckService>
 						().DoesNewVersionExist())
 						{

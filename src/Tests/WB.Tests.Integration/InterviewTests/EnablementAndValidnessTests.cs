@@ -644,5 +644,70 @@ namespace WB.Tests.Integration.InterviewTests
             appDomainContext.Dispose();
             appDomainContext = null;
         }
+
+
+        [Test]
+        public void when_enable_section_with_roster_but_roster_triget_is_disabled()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var numeric1Id = Guid.Parse("11111111111111111111111111111111");
+            var numeric2Id = Guid.Parse("22222222222222222222222222222222");
+            var rosterSourceId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var groupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            var textQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.NumericIntegerQuestion(numeric1Id, variable: "i"),
+                    Create.Entity.NumericIntegerQuestion(numeric2Id, variable: "i2"),
+                    Create.Entity.NumericIntegerQuestion(rosterSourceId, enablementCondition: "i2 == 1"),
+                    Create.Entity.Group(groupId, enablementCondition: "i == 1", children: new []{
+                        Create.Entity.Roster(rosterId, variable: "r", rosterSizeQuestionId: rosterSourceId,
+                            children: new[]
+                            {
+                                Abc.Create.Entity.TextQuestion(textQuestionId)
+                            })
+                        }
+                    )
+                );
+
+                var interview = SetupStatefullInterview(questionnaireDocument);
+
+                interview.AnswerNumericIntegerQuestion(userId, numeric1Id, RosterVector.Empty, DateTime.UtcNow, 1);
+                interview.AnswerNumericIntegerQuestion(userId, numeric2Id, RosterVector.Empty, DateTime.UtcNow, 1);
+                interview.AnswerNumericIntegerQuestion(userId, rosterSourceId, RosterVector.Empty, DateTime.UtcNow, 1);
+                interview.AnswerTextQuestion(userId, textQuestionId, new RosterVector(new[] { 0 }), DateTime.UtcNow, "1");
+                interview.AnswerNumericIntegerQuestion(userId, numeric1Id, RosterVector.Empty, DateTime.UtcNow, 2);
+                interview.AnswerNumericIntegerQuestion(userId, numeric2Id, RosterVector.Empty, DateTime.UtcNow, 2);
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerNumericIntegerQuestion(userId, numeric1Id, RosterVector.Empty, DateTime.UtcNow, 1);
+
+                    return new
+                    {
+                        GroupsEnabledEvent = GetFirstEventByType<GroupsEnabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.GroupsEnabledEvent, Is.Not.Null);
+            Assert.That(results.GroupsEnabledEvent.Groups.Length, Is.EqualTo(1));
+            Assert.That(results.GroupsEnabledEvent.Groups.Select(e => e.Id).Contains(groupId), Is.True);
+            Assert.That(results.GroupsEnabledEvent.Groups.Select(e => e.Id).Contains(rosterId), Is.False);
+
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
     }
 }
