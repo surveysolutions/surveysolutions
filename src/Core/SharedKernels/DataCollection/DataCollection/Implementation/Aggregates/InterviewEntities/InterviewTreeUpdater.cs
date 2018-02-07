@@ -76,11 +76,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsParentDiabled(group))
             {
-                var isRoster = @group is InterviewTreeRoster;
-                var isRosterEnabledInDisabledParent = isRoster && !group.IsDisabledByOwnCondition();
-                if (isRosterEnabledInDisabledParent)
-                    DisableGroup();
-
                 return;
             }
 
@@ -90,12 +85,44 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (result)
                 group.Enable();
             else
-                DisableGroup();
-
-            void DisableGroup()
             {
                 group.Disable();
                 List<Identity> disabledChildNodes = group.DisableChildNodes();
+                disabledNodes.UnionWith(disabledChildNodes);
+            }
+        }
+
+        public void UpdateEnablement(InterviewTreeRoster roster)
+        {
+            if (this.IsParentDiabled(roster))
+            {
+                var isRosterEnabledInDisabledParent = !roster.IsDisabledByOwnCondition();
+                if (isRosterEnabledInDisabledParent)
+                    DisableRoster();
+
+                return;
+            }
+
+            var level = this.GetLevel(roster);
+
+            var result = RunConditionExpression(level.GetConditionExpression(roster.Identity));
+            if (result)
+            {
+                var rosterSizeQuestion = roster.GetQuestionFromThisOrUpperLevel(roster.RosterSizeId); 
+                if (rosterSizeQuestion != null && rosterSizeQuestion.IsDisabledByOwnCondition())
+                    DisableRoster();
+                else
+                    roster.Enable();
+            }
+            else
+            {
+                DisableRoster();
+            }
+
+            void DisableRoster()
+            {
+                roster.Disable();
+                List<Identity> disabledChildNodes = roster.DisableChildNodes();
                 disabledNodes.UnionWith(disabledChildNodes);
             }
         }
