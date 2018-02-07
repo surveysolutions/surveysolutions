@@ -574,6 +574,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading questionnaire. Please wait....
+        /// </summary>
+        internal static string LoadingQuestionnaire {
+            get {
+                return ResourceManager.GetString("LoadingQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading, please wait.
         /// </summary>
         internal static string LoadingWait {
@@ -853,7 +862,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You should close this browser window or tab manually.
+        ///   Looks up a localized string similar to Please close this page. You may open new one by returning to Designer site.
         /// </summary>
         internal static string WebTesterSessionOverMessage {
             get {

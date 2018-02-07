@@ -394,6 +394,9 @@
     <value>Tester session is over</value>
   </data>
   <data name="WebTesterSessionOverMessage" xml:space="preserve">
-    <value>You should close this browser window or tab manually</value>
+    <value>Please close this page. You may open new one by returning to Designer site</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Loading questionnaire. Please wait...</value>
   </data>
 </root>
