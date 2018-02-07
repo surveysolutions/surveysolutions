@@ -126,7 +126,7 @@
 					<span id="compile-config" style="color: red">Web Debug</span>
 					}
 					<span>|</span>
-					<a href="@Url.Action(" Index","Download")">@Common.GetInterviewerApp</a>
+					<a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
 					@if (ServiceLocator.Current.GetInstance<IVersionCheckService>
 						().DoesNewVersionExist())
 						{
