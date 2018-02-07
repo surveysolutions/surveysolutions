@@ -91,7 +91,7 @@
 		@if (authorizedUser.IsObserving)
 		{
 		<div class="panel-heading panel-warning">
-			@Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action(" ReturnToObserver", "Account" , new {area=string.Empty})">@Users.ClickToReturn</a>
+			@Html.Raw(string.Format(Users.ObserverDisclaimerFormat, User.Identity.Name)) <a href="@Url.Action("ReturnToObserver", "Account" , new {area=string.Empty})">@Users.ClickToReturn</a>
 		</div>
 		}
 		@if (ViewBag.GlobalNotice != null)
