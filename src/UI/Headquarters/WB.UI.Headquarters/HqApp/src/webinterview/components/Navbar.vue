@@ -21,8 +21,11 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
+                    <li v-if="this.$config.inWebTesterMode">
+                        <a :href="this.$config.reloadQuestionnaireUrl"><span class="glyphicon glyphicon-sort"></span></a>
+                    </li>
                     <li class="dropdown language">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                             :title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
                         <ul class="dropdown-menu" v-if="canChangeLanguage">
                             <li v-if="currentLanguage != $store.state.webinterview.originalLanguageName">
