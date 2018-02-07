@@ -361,22 +361,8 @@
                 <tbody data-bind="foreach: Interviewers">
                     <tr>
                         <td><span class="interviewer"><a target="_blank" data-bind="attr: { href: '@Url.Action("Profile", "Interviewer")/' + userId }, text: userName, css: { 'text-danger' : inProgress }"></a></span></td>
-                        <td>
-                            <!-- ko if: interviewsProcessed() > 0 -->
-                            <a target="_blank" data-bind="attr: { href: '@Url.Action("Interviews", "HQ")?responsible=' + userName }, text: interviewsProcessed"></a>
-                            <!-- /ko -->
-                            <!-- ko if: interviewsProcessed() == 0 -->
-                            <span data-bind="text: interviewsProcessed"></span>
-                            <!-- /ko -->
-                        </td>
-                        <td>
-                            <!-- ko if: assignmentsProcessed() > 0 -->
-                            <a target="_blank" data-bind="attr: { href: '@Url.Action("Index", "Assignments")?responsible=' + userName }, text: assignmentsProcessed"></a>
-                            <!-- /ko -->
-                            <!-- ko if: assignmentsProcessed() == 0 -->
-                            <span data-bind="text: assignmentsProcessed"></span>
-                            <!-- /ko -->
-                        </td>
+                        <td data-bind="text: interviewsProcessed"></td>
+                        <td data-bind="text: assignmentsProcessed"></td>
                     </tr>
                     <tr data-bind="if: errors().length > 0">
                         <td colspan="5">
