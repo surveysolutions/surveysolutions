@@ -58,17 +58,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
 
-        Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+        Because of = () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
 
         It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            VerificationErrors.Count().ShouldEqual(1);
 
         It should_return_single_PL0013_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0013");
+            VerificationErrors.First().Code.ShouldEqual("PL0013");
 
         It should_return_reference_with_Cell_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

@@ -2,7 +2,6 @@
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -24,36 +23,35 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "num"},
                 new string[][] { new string[] { "1", "3,22" } },
                 "questionnaire.csv");
-
-            var preloadedDataService =
-                Create.Service.PreloadedDataService(questionnaire);
+            
+            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataService).ToList();
 
         It should_result_has_1_errors = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            VerificationErrors.Count().ShouldEqual(1);
 
         It should_return_single_PL0030_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0034");
+            VerificationErrors.First().Code.ShouldEqual("PL0034");
 
         It should_return_single_error_with_explanation_in_message = () =>
-            status.VerificationState.Errors.First().Message.ToLower().ToSeparateWords().ShouldContain("symbol", "not", "allowed", "numeric", "answers", "please", "use", "decimal", "separator");
+            VerificationErrors.First().Message.ToLower().ToSeparateWords().ShouldContain("symbol", "not", "allowed", "numeric", "answers", "please", "use", "decimal", "separator");
 
         It should_return_error_with_single_reference = () =>
-            status.VerificationState.Errors.First().References.Count().ShouldEqual(1);
+            VerificationErrors.First().References.Count().ShouldEqual(1);
 
         It should_return_error_with_single_reference_of_type_Cell = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_return_error_with_single_reference_pointing_on_second_column = () =>
-            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(1);
+            VerificationErrors.First().References.First().PositionX.ShouldEqual(1);
 
         It should_return_error_with_single_reference_pointing_on_first_row = () =>
-            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
+            VerificationErrors.First().References.First().PositionY.ShouldEqual(0);
 
 
         private static ImportDataVerifier importDataVerifier;
@@ -61,5 +59,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private static Guid questionnaireId;
         private static Guid numericQuestionId;
         private static PreloadedDataByFile preloadedDataByFile;
+        private static ImportDataParsingService preloadedDataService;
     }
 }

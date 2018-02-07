@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
@@ -24,9 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             var preloadedDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
 
-            preloadedDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            VerificationErrors = preloadedDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataService).ToList();
 
-            Assert.That(status.VerificationState.Errors, Is.Empty);
+            Assert.That(VerificationErrors, Is.Empty);
         }
     }
 }

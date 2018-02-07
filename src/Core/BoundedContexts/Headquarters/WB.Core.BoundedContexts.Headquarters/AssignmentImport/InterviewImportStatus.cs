@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
@@ -33,5 +34,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public InterviewImportState State { get; set; }
         public ImportDataVerificationState VerificationState { get; set; }
         public AssignmentImportType AssignmentImportType { get; set; }
+    }
+
+    public class ImportDataVerificationState
+    {
+        public ImportDataVerificationState()
+        {
+            this.WasResponsibleProvided = false;
+            this.Errors = new List<PanelImportVerificationError>();
+        }
+
+        public List<PanelImportVerificationError> Errors { set; get; }
+
+        public bool WasResponsibleProvided { set; get; }
+
+        public int EntitiesCount { get; set; }
+
+        public int EnumeratorsCount { get; set; }
+
+        public int SupervisorsCount { get; set; }
+
+        public string FileName { get; set; }
     }
 }

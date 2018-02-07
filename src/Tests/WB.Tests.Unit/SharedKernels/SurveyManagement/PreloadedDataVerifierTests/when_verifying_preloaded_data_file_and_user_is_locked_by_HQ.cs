@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
-using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -24,7 +17,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         public void Should_return_1_error()
         {
             var QuestionnaireCsvFileName = "questionnaire.csv";
-            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
             var preloadedDataByFile = CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId, "_responsible"},
@@ -35,39 +27,38 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName))
                 .Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId });
-            preloadedDataServiceMock
-                .Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(1);
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, ServiceColumns.AssignmentsCountColumnName)).Returns(-1);
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, ServiceColumns.ResponsibleColumnName)).Returns(1);
             var userViewFactory = new Mock<IUserViewFactory>();
 
-            var user = new UserView()
+            var user = new UserToVerify
             {
-                PublicKey = Guid.NewGuid(),
                 UserName = "fd",
-                IsLockedByHQ = true
+                IsLocked = true
             };
 
-            userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
+            userViewFactory.Setup(x => x.GetUsersByUserNames(Moq.It.IsAny<string[]>())).Returns(new[] {user});
 
             var importDataVerifier =
                 CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object, userViewFactory.Object);
 
 
             //act
-            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
 
-            Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
+            Assert.AreEqual(VerificationErrors.Count(), 1);
 
-            Assert.AreEqual(status.VerificationState.Errors.First().Code,"PL0027");
+            Assert.AreEqual(VerificationErrors.First().Code,"PL0027");
 
             Assert.AreEqual(
-                status.VerificationState.Errors.First().References.First().Type,
+                VerificationErrors.First().References.First().Type,
                     PreloadedDataVerificationReferenceType.Cell);
 
             Assert.AreEqual(
-                status.VerificationState.Errors.First().References.First().PositionX,1);
+                VerificationErrors.First().References.First().PositionX,1);
 
             Assert.AreEqual(
-                status.VerificationState.Errors.First().References.First().PositionY, 0);
+                VerificationErrors.First().References.First().PositionY, 0);
         
     }
 }

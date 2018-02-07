@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -35,16 +32,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
         };
 
-        Because of =
-            () =>
-                result =
-                    importDataVerifier.VerifyAssignmentsSample(questionnaireId, 1, preloadedDataByFile);
+        Because of = () => result = importDataVerifier.VerifyAssignmentsSample(preloadedDataByFile, preloadedDataServiceMock.Object).ToList();
 
         It should_result_has_no_errors = () =>
-           result.Errors.ShouldBeEmpty();
+           result.ShouldBeEmpty();
 
         private static ImportDataVerifier importDataVerifier;
-        private static ImportDataVerificationState result;
+        private static List<PanelImportVerificationError> result;
         private static QuestionnaireDocument questionnaire;
         private static Guid questionnaireId;
         private const string QuestionnaireCsvFileName = "questionnaire.csv";

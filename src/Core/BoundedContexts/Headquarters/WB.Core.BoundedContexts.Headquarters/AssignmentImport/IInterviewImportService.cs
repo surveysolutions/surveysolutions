@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? supervisorId, Guid headquartersId, AssignmentImportType mode, bool shouldSkipInterviewCreation);
 
-        void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, string fileName);
+        void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId);
 
         AssignmentVerificationResult VerifyAssignment(List<InterviewAnswer>[] answersGroupedByLevels, IQuestionnaire questionnaire);
     }

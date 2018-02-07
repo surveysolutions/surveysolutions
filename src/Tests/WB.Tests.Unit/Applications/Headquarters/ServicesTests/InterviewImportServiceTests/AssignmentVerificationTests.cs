@@ -66,8 +66,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 assignmentPlainStorageAccessorMock.Object,
                 userViewFactoryMock.Object,
                 Create.Service.InterviewTreeBuilder(),
-                preloadedDataRepositoryMock.Object,
-                preloadedDataVerifierMock.Object,
                 questionnaireBrowseItemStorageMock.Object);
             return importServiceLoc;
         }
@@ -102,49 +100,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 .Setup(x => x.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Panel))
                 .Returns(assignments);
 
-            importService.VerifyAssignments(questionnaireIdentity, importProcessId, "hello.tab");
+            importService.VerifyAssignments(questionnaireIdentity, importProcessId);
 
             Assert.That(importService.Status.TotalCount, Is.EqualTo(1));
             Assert.That(importService.Status.ProcessedCount, Is.EqualTo(1));
             Assert.That(importService.Status.VerificationState.Errors.Count, Is.EqualTo(0));
-        }
-
-
-        [Test]
-        public void when_verifying_assignments_for_deleted_questionnaire()
-        {
-            var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"), 1);
-            var importProcessId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").FormatGuid();
-            var responsibleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            var supervisorId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-
-            var numericId = Guid.Parse("44444444444444444444444444444444");
-
-            var importServiceLocal = GetInterviewImportService(new QuestionnaireBrowseItem(){IsDeleted = true});
-
-            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.NumericIntegerQuestion(numericId)
-            ));
-
-            questionnaireStorageMock.Setup(x => x.GetQuestionnaire(questionnaireIdentity, null)).Returns(questionnaire);
-
-            InterviewAnswer[] answers =
-            {
-                Create.Entity.InterviewAnswer(Create.Identity(numericId, RosterVector.Empty), Create.Entity.NumericIntegerAnswer(1)),
-            };
-
-            var assignments = new[]
-            {
-                Create.Entity.AssignmentImportData(responsibleId, supervisorId, answers)
-            };
-
-            interviewImportDataParsingServiceMock
-                .Setup(x => x.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Panel))
-                .Returns(assignments);
-
-            importServiceLocal.VerifyAssignments(questionnaireIdentity, importProcessId, "hello.tab");
-
-            Assert.That(importServiceLocal.Status.State.Errors.Count, Is.EqualTo(1));
         }
 
         [Test]

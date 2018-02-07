@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -26,10 +27,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
 
             // Act
-            var result = importDataVerifier.VerifyAssignmentsSample(Id.g1, 1, preloadedDataByFile);
+            var result = importDataVerifier.VerifyAssignmentsSample(preloadedDataByFile, preloadedDataServiceMock.Object).ToList();
 
             // Assert
-            result.Errors.Should().Contain(x => x.Code == "PL0036");
+            result.Should().Contain(x => x.Code == "PL0036");
         }
     }
 }

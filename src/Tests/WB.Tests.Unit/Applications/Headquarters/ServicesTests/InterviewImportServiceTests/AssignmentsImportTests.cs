@@ -60,8 +60,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                 assignmentPlainStorageAccessorMock.Object,
                 userViewFactoryMock.Object,
                 Create.Service.InterviewTreeBuilder(),
-                preloadedDataRepositoryMock.Object,
-                preloadedDataVerifierMock.Object,
                 questionnaireBrowseItemStorageMock.Object);
         }
 

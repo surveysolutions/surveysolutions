@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -36,25 +32,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         };
 
         Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
 
         It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            VerificationErrors.Count().ShouldEqual(1);
 
         It should_return_single_PL0006_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0006");
+            VerificationErrors.First().Code.ShouldEqual("PL0006");
 
         It should_return_reference_with_Cell_type = () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
 
         It should_error_PositionX_be_equal_to_0 = () =>
-            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(0);
+            VerificationErrors.First().References.First().PositionX.ShouldEqual(0);
 
         It should_error_PositionY_be_equal_to_1 = () =>
-            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(1);
+            VerificationErrors.First().References.First().PositionY.ShouldEqual(1);
 
         It should_error_has_content_with_id_and_parent_id = () =>
-            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("id:1, parentId: ");
+            VerificationErrors.First().References.First().Content.ShouldEqual("id:1, parentId: ");
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;
