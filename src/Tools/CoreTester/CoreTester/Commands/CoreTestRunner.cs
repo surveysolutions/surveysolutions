@@ -224,11 +224,9 @@ namespace CoreTester.Commands
                 {
                     Console.WriteLine("Dumping debug information");
 
-                    if (Directory.Exists(serverName))
-                        Directory.Delete(serverName);
-                    Directory.CreateDirectory(serverName);
-
-                    var fileName = Path.Combine(serverName, $"{serverName}.results.txt");
+                    var fileName = $"{serverName}.results.txt";
+                    if (File.Exists(fileName))
+                        File.Delete(fileName);
                     
                     File.AppendAllLines(fileName, new string[]
                     {
