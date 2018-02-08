@@ -26,24 +26,18 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly IExpressionProcessor expressionProcessor;
-        private readonly ITopologicalSorter<Guid> topologicalSorter;
         private readonly IDynamicCompilerSettingsProvider compilerSettings;
-        private readonly IExpressionsPlayOrderProvider graphProvider;
 
         
         private static string WrapToClass(string expression) => $"using System; class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
 
         public ExpressionVerifications(IMacrosSubstitutionService macrosSubstitutionService,
             IExpressionProcessor expressionProcessor,
-            ITopologicalSorter<Guid> topologicalSorter,
-            IDynamicCompilerSettingsProvider compilerSettings,
-            IExpressionsPlayOrderProvider graphProvider)
+            IDynamicCompilerSettingsProvider compilerSettings)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.expressionProcessor = expressionProcessor;
-            this.topologicalSorter = topologicalSorter;
             this.compilerSettings = compilerSettings;
-            this.graphProvider = graphProvider;
         }
 
         private IEnumerable<Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>>> ErrorsVerifiers => new []
@@ -65,7 +59,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IComposite>(this.ConditionExpressionHasLengthMoreThan10000Characters, "WB0094", string.Format(VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Critical<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", string.Format(VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Critical<IGroup>(GroupEnablementConditionReferenceChildItems,  "WB0130", VerificationMessages.WB0130_SubsectionOrRosterReferenceChildrendInCondition),
-            ErrorsByCircularReferences,
             WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
             WarningForCollection(FewQuestionsWithSameLongValidation, "WB0236", VerificationMessages.WB0236_FewQuestionsWithSameLongValidation),
             Warning<IQuestionnaireEntity>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAnd),
@@ -489,37 +482,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return expressionWithInlinedMacroses.Length > MaxExpressionLength;
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(
-            MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var dependencyGraph = graphProvider.GetDependencyGraph(questionnaire.Questionnaire);
-            var cycles = topologicalSorter.DetectCycles(dependencyGraph);
-            var cyclesWithoutSelfReferanceOnly = cycles.Where(c => c.Count > 1);
-
-            foreach (var cycle in cyclesWithoutSelfReferanceOnly)
-            {
-                var references =
-                    cycle.Select(guid => questionnaire.Find<IComposite>(guid))
-                        .Select(x => CreateReference(x))
-                        .ToArray();
-
-                yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
-            }
-        }
-
-
-
         private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable,
             MultiLanguageQuestionnaireDocument questionnaire)
             => this.DoesExpressionExceed1000CharsLimit(questionnaire, variable.Expression);
 
-
-        private static IEnumerable<string> ReplaceOwnVariableWithSelf(IQuestion question,
-            IEnumerable<string> identifiers)
-        {
-            var questionVariable = question.VariableName;
-            return identifiers.Select(id => id == questionVariable ? "self" : id);
-        }
 
         private bool EnablementUsesForbiddenDateTimeProperties(IConditional conditional,
             MultiLanguageQuestionnaireDocument questionnaire)
