@@ -66,8 +66,9 @@ namespace WB.UI.WebTester
             });
 
             registry.Bind<WebTesterStatefulInterview>();
+            registry.Bind<IInterviewFactory, InterviewFactory>();
 
-            registry.BindAsSingleton<IEvictionObservable, IEvictionObserver, TokenEviction>();
+            registry.BindAsSingleton<IEvictionObservable, IEvictionNotifier, TokenEviction>();
 
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
@@ -80,7 +81,7 @@ namespace WB.UI.WebTester
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
-            registry.BindAsSingleton<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
+            registry.BindAsSingleton<IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
 
             #if DEBUG
 
@@ -173,7 +174,6 @@ namespace WB.UI.WebTester
         {
             typeof(SignalrErrorHandler),
             typeof(WebInterviewStateManager),
-            typeof(DesignerTokenRenewalPipeline),
             typeof(WebInterviewConnectionsCounter)
         };
     }

@@ -20,14 +20,14 @@ namespace WB.UI.WebTester.Controllers
     public class WebTesterController : Controller
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IEvictionObserver evictionService;
+        private readonly IEvictionNotifier evictionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireImportService questionnaireImportService;
         private readonly IInterviewFactory interviewFactory;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
-            IEvictionObserver evictionService,
+            IEvictionNotifier evictionService,
             ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
             IQuestionnaireImportService questionnaireImportService,
@@ -48,35 +48,31 @@ namespace WB.UI.WebTester.Controllers
 
         public async Task<ActionResult> Redirect(Guid id, string originalInterviewId)
         {
-            QuestionnaireIdentity questionnaireIdentity;
+
+            if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
+            {
+                evictionService.Evict(id);
+            }
 
             try
             {
-                if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
+                if (!string.IsNullOrEmpty(originalInterviewId))
                 {
-                    evictionService.Evict(id);
+                    var result = await this.interviewFactory.CreateInterview(id, Guid.Parse(originalInterviewId));
+                    if (result != CreationResult.DataRestored)
+                    {
+                        TempData["Message"] = Common.ReloadInterviewErrorMessage;
+                    }
                 }
-
-                questionnaireIdentity = await this.questionnaireImportService.ImportQuestionnaire(id);
+                else
+                {
+                    await this.interviewFactory.CreateInterview(id);
+                }
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
-
-            if (!string.IsNullOrEmpty(originalInterviewId))
-            {
-                var result = this.interviewFactory.CreateInterview(questionnaireIdentity, id, Guid.Parse(originalInterviewId));
-                if (result != CreationResult.DataRestored)
-                {
-                    TempData["Message"] = Common.ReloadInterviewErrorMessage;
-                }
-            }
-            else
-            {
-                this.interviewFactory.CreateInterview(questionnaireIdentity, id);
-            }
-
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
@@ -85,7 +81,7 @@ namespace WB.UI.WebTester.Controllers
             try
             {
                 var interviewPageModel = GetInterviewPageModel(id);
-                if (interviewPageModel == null) 
+                if (interviewPageModel == null)
                     throw new HttpException(404, string.Empty);
 
                 return View(interviewPageModel);

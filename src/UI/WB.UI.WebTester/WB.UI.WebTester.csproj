@@ -275,7 +275,7 @@
     <Compile Include="Services\IAppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\ICacheStorage.cs" />
     <Compile Include="Services\IEvictionObservable.cs" />
-    <Compile Include="Services\IEvictionObserver.cs" />
+    <Compile Include="Services\IEvictionNotifier.cs" />
     <Compile Include="Services\Implementation\EvictionService.cs" />
     <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\RemoteInterviewContainer.cs" />

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -9,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.WebTester.Resources;
+using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester.Services
 {
@@ -20,9 +23,9 @@ namespace WB.UI.WebTester.Services
 
     public interface IInterviewFactory
     {
-        void CreateInterview(QuestionnaireIdentity questionnaireIdentity, Guid id);
+        Task CreateInterview(Guid designerToken);
 
-        CreationResult CreateInterview(QuestionnaireIdentity questionnaireIdentity, Guid id, Guid originalInterviewId);
+        Task<CreationResult> CreateInterview(Guid designerToken, Guid originalInterviewId);
     }
 
     public class InterviewFactory : IInterviewFactory
@@ -30,25 +33,30 @@ namespace WB.UI.WebTester.Services
         private readonly ICacheStorage<List<ICommand>, Guid> executedCommandsStorage;
         private readonly ICommandService commandService;
         private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
-        private readonly IAggregateRootCacheCleaner mainDomainShadowCleaner;
+        private readonly IEvictionNotifier evictionService;
+        private readonly IQuestionnaireImportService questionnaireImportService;
 
         public InterviewFactory(ICacheStorage<List<ICommand>, Guid> executedCommandsStorage,
             ICommandService commandService, 
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager, 
-            IAggregateRootCacheCleaner mainDomainShadowCleaner)
+            IEvictionNotifier evictionService,
+            IQuestionnaireImportService questionnaireImportService)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
-            this.mainDomainShadowCleaner = mainDomainShadowCleaner;
+            this.evictionService = evictionService ?? throw new ArgumentNullException(nameof(evictionService));
+            this.questionnaireImportService = questionnaireImportService;
         }
 
-        public void CreateInterview(QuestionnaireIdentity questionnaireIdentity, Guid id)
+        public async Task CreateInterview(Guid designerToken)
         {
+            var questionnaire = await questionnaireImportService.ImportQuestionnaire(designerToken);
+
             var createInterview = new CreateInterview(
-                interviewId: id,
+                interviewId: designerToken,
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                questionnaireId: questionnaireIdentity,
+                questionnaireId: questionnaire,
                 answers: new List<InterviewAnswer>(),
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
@@ -59,10 +67,12 @@ namespace WB.UI.WebTester.Services
             this.commandService.Execute(createInterview);
         }
 
-        public CreationResult CreateInterview(QuestionnaireIdentity questionnaireIdentity, Guid id, Guid originalInterviewId)
+        public async Task<CreationResult> CreateInterview(Guid designerToken, Guid originalInterviewId)
         {
             try
             {
+                var questionnaireIdentity = await questionnaireImportService.ImportQuestionnaire(designerToken);
+
                 var existingInterviewCommands = this.executedCommandsStorage.Get(originalInterviewId, originalInterviewId);
                 foreach (var existingInterviewCommand in existingInterviewCommands.Cast<InterviewCommand>())
                 {
@@ -70,7 +80,7 @@ namespace WB.UI.WebTester.Services
                     {
                         createCommand.QuestionnaireId = questionnaireIdentity;
                     }
-                    existingInterviewCommand.InterviewId = id;
+                    existingInterviewCommand.InterviewId = designerToken;
                     this.commandService.Execute(existingInterviewCommand);
                 }
 
@@ -78,9 +88,8 @@ namespace WB.UI.WebTester.Services
             }
             catch (Exception)
             {
-                appdomainsPerInterviewManager.Flush(id);
-                mainDomainShadowCleaner.Evict(id);
-                this.CreateInterview(questionnaireIdentity, id);
+                evictionService.Evict(designerToken);
+                await this.CreateInterview(designerToken);
                 return CreationResult.EmptyCreated;
             }
         }
