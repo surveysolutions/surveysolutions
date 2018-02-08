@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
@@ -70,9 +71,10 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Storage;
+
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
 using CompanyLogo = WB.UI.Headquarters.Models.CompanyLogo.CompanyLogo;
-using TranslationInstance = WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations.TranslationInstance;
+
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -103,10 +105,10 @@ namespace WB.Tests.Abc.TestFactories
         public Translation Translation(Guid translationId, string translationName)
             => new Translation { Id = translationId, Name = translationName};
 
-        public Core.SharedKernels.Enumerator.Views.AttachmentContent AttachmentContent_Enumerator(string id)
-            => new Core.SharedKernels.Enumerator.Views.AttachmentContent
+        public WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent AttachmentContent_Enumerator(string id)
+            => new WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent
             {
-                Id = id,
+                Id = id
             };
 
         public AttachmentContent AttachmentContent_SurveyManagement(string contentHash = null, string contentType = null, byte[] content = null)
@@ -141,6 +143,11 @@ namespace WB.Tests.Abc.TestFactories
             => new ChangedLinkedOptions(
                 new Identity(questionId, questionRosterVector ?? new decimal[0]),
                 options ?? new RosterVector[0]);
+
+        public List<HeaderColumn> ColumnHeaders(string[] columnNames)
+        {
+            return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
+        }
 
         public CommentedStatusHistroyView CommentedStatusHistroyView(
             InterviewStatus status = InterviewStatus.InterviewerAssigned, string comment = null, DateTime? timestamp = null)
@@ -223,7 +230,7 @@ namespace WB.Tests.Abc.TestFactories
             => new ExportedQuestionHeaderItem
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
-                ColumnNames = new[] { variableName },
+                ColumnHeaders = new List<HeaderColumn>() { new HeaderColumn(){Name = variableName, Title = variableName}}
             };
 
         public FailedValidationCondition FailedValidationCondition(int? failedConditionIndex = null)
@@ -392,7 +399,7 @@ namespace WB.Tests.Abc.TestFactories
             string[] referenceValues = null,
             string[] parentLevelIds = null,
             string[] systemVariableValues = null,
-            string[] answers = null,
+            string[][] answers = null,
             string id = null)
             => new InterviewDataExportRecord(
                id ?? interviewId.FormatGuid(), 
@@ -400,7 +407,7 @@ namespace WB.Tests.Abc.TestFactories
                parentLevelIds ?? new string[0],
                systemVariableValues ?? new string[0])
                { 
-                   Answers = answers ?? new string[0],
+                   Answers = answers ?? new string[][]{},
                    LevelName = levelName,
                    InterviewId = interviewId,
                    Id = id
@@ -536,7 +543,9 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewId = null, 
             string questionnaireId = null, 
             InterviewStatus? status = null,
-            string questionaireTitle = null
+            string questionaireTitle = null,
+            int? assignmentId = null,
+            bool? canBeDeleted = null
             )
         {
             interviewId = interviewId ?? Guid.NewGuid();
@@ -547,12 +556,14 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionnaireId = questionnaireId,
                 LocationQuestionId = prefilledQuestionId,
                 QuestionnaireTitle = questionaireTitle,
-                Status = status ?? default(InterviewStatus)
+                Status = status ?? default(InterviewStatus),
+                Assignment = assignmentId,
+                CanBeDeleted = canBeDeleted ?? true
             };
         }
 
-        public LabeledVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
-            => new LabeledVariable(variableName, label, questionId, variableValueLabels);
+        public DataExportVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
+            => new DataExportVariable(variableName, label, questionId, variableValueLabels, ExportValueType.Unknown);
 
         public LastInterviewStatus LastInterviewStatus(InterviewStatus status = InterviewStatus.ApprovedBySupervisor)
             => new LastInterviewStatus("entry-id", status);
@@ -714,11 +725,12 @@ namespace WB.Tests.Abc.TestFactories
                 ParentValue = parentValue
             };
 
-        public Answer Option(int value, string text = null)
+        public Answer Option(int value, string text = null, string parentValue = null)
             => new Answer
             {
                 AnswerText = text ?? $"Option {value}",
                 AnswerCode = value,
+                ParentValue = parentValue
             };
 
         public IEnumerable<Answer> Options(params int[] values)
@@ -881,7 +893,7 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireIdentity QuestionnaireIdentity(Guid? questionnaireId = null, long? questionnaireVersion = null)
             => new QuestionnaireIdentity(questionnaireId ?? Guid.NewGuid(), questionnaireVersion ?? 7);
 
-        public QuestionnaireLevelLabels QuestionnaireLevelLabels(string levelName = "level", params LabeledVariable[] variableLabels)
+        public QuestionnaireLevelLabels QuestionnaireLevelLabels(string levelName = "level", params DataExportVariable[] variableLabels)
             => new QuestionnaireLevelLabels(levelName, variableLabels);
 
         public ReadSideCacheSettings ReadSideCacheSettings(int cacheSizeInEntities = 128, int storeOperationBulkSize = 8)
@@ -1226,10 +1238,10 @@ namespace WB.Tests.Abc.TestFactories
         public UserLight UserLight(Guid? userId = null)
             => new UserLight(userId ?? Guid.NewGuid(), "test");
 
-        public UserPreloadingDataRecord UserPreloadingDataRecord(
-            string login = "test", string supervisor = "", string password = "test", string email = "", string phoneNumber = "",
+        public UserToImport UserToImport(
+            string login = "test", string supervisor = "", string password = "P@$$w0rd", string email = "", string phoneNumber = "",
             string role = null, string fullName = null)
-            => new UserPreloadingDataRecord
+            => new UserToImport
             {
                 Login = login,
                 Supervisor = supervisor,
@@ -1240,33 +1252,16 @@ namespace WB.Tests.Abc.TestFactories
                 FullName = fullName 
             };
 
-        public UserPreloadingProcess UserPreloadingProcess(string userPreloadingProcessId = null,
-            UserPrelodingState state = UserPrelodingState.Uploaded, int recordsCount = 0, params UserPreloadingDataRecord[] dataRecords)
-        {
-            var result = new UserPreloadingProcess
-            {
-                UserPreloadingProcessId = userPreloadingProcessId ?? Guid.NewGuid().FormatGuid(),
-                State = state,
-                RecordsCount = recordsCount,
-                LastUpdateDate = DateTime.Now
-            };
-            foreach (var userPreloadingDataRecord in dataRecords)
-            {
-                result.UserPrelodingData.Add(userPreloadingDataRecord);
-            }
-            return result;
-        }
-
         public UserPreloadingSettings UserPreloadingSettings()
             => new UserPreloadingSettings(
-                5, 5, 12, 1, 10000, 100, 100, "^[a-zA-Z0-9_]{3,15}$",
+                10000, "^[a-zA-Z0-9_]{3,15}$",
                 @"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$",
                 "^(?=.*[a-z])(?=.*[0-9])(?=.*[A-Z]).*$",
                 @"^(\+\s?)?((?<!\+.*)\(\+?\d+([\s\-\.]?\d+)?\)|\d+)([\s\-\.]?(\(\d+([\s\-\.]?\d+)?\)|\d+))*(\s?(x|ext\.?)\s?\d+)?$", 100, 15,
                 UserModel.PersonNameRegex);
 
-        public UserPreloadingVerificationError UserPreloadingVerificationError()
-            => new UserPreloadingVerificationError();
+        public UserImportVerificationError UserPreloadingVerificationError()
+            => new UserImportVerificationError();
 
         public ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
             => new ValidationCondition(expression, message);
@@ -1297,14 +1292,14 @@ namespace WB.Tests.Abc.TestFactories
             return yesNo;
         }
 
-        public TranslationInstance TranslationInstance(string value = null,
+        public Enumerator.Native.Questionnaire.TranslationInstance TranslationInstance(string value = null,
             Guid? translationId = null, 
             QuestionnaireIdentity questionnaireId = null,
             Guid? entityId = null, 
             string translationIndex = null, 
             TranslationType? type = null)
         {
-            return new TranslationInstance
+            return new Enumerator.Native.Questionnaire.TranslationInstance
             {
                 Value = value,
                 TranslationId = translationId ?? Guid.NewGuid(),
@@ -1579,13 +1574,14 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public InterviewPackage InterviewPackage(Guid? interviewId = null, AggregateRootEvent[] events = null)
+        public InterviewPackage InterviewPackage(Guid? interviewId = null, params IEvent[] events)
         {
             var serializer = new JsonAllTypesSerializer();
+            var aggregateRootEvents = events?.Select(x =>  Create.Event.AggregateRootEvent(x)).ToArray() ?? new AggregateRootEvent[0];
             return new InterviewPackage
             {
                 InterviewId = interviewId ?? Guid.NewGuid(),
-                Events = events != null ? serializer.Serialize(events) : serializer.Serialize(new AggregateRootEvent[0])
+                Events = serializer.Serialize(aggregateRootEvents)
             };
         }
 
@@ -1888,6 +1884,26 @@ namespace WB.Tests.Abc.TestFactories
                 StorageFreeInBytes = 5 * 1024 * 1024,
                 StorageTotalInBytes = 2000 * 1024 * 1024
             };
+        }
+
+        public InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, 
+            int[] invalidValidations = null, bool isEnabled = true)
+        {
+            return new InterviewEntity
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                EntityType = entityType,
+                Identity = identity ?? Create.Identity(),
+                InvalidValidations = invalidValidations ?? Array.Empty<int>(),
+                IsEnabled = isEnabled
+            };
+        }
+
+        public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
+
+        public PreloadedDataByFile[] PreloadedDataByFile(params PreloadedDataByFile[] preloadedDataByFiles)
+        {
+            return preloadedDataByFiles.ToArray();
         }
     }
 }

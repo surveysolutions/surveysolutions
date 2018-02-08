@@ -127,7 +127,7 @@
     <value>请选择文件</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>问卷标题必填</value>
+    <value>问卷名称必填</value>
   </data>
   <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
     <value>标题</value>
@@ -166,7 +166,7 @@
     <value>密码</value>
   </data>
   <data name="PasswordLengthMessage" xml:space="preserve">
-    <value>密码的长度至少为{2}</value>
+    <value>密码的长度至少为{2}字符</value>
   </data>
   <data name="PersonNameFieldName" xml:space="preserve">
     <value>全名</value>
@@ -211,7 +211,7 @@
     <value>用户名</value>
   </data>
   <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>输入的名称太长 &gt; {1}</value>
+    <value>输入的名称太长 &gt;{1}</value>
   </data>
   <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
     <value>不能更新用户信息，因为当前用户不存在</value>
@@ -242,5 +242,8 @@
   </data>
   <data name="UserName_Taken" xml:space="preserve">
     <value>请选择其他用户名</value>
+  </data>
+  <data name="UserIsLockedByHq" xml:space="preserve">
+    <value>用户已被总部锁定</value>
   </data>
 </root>

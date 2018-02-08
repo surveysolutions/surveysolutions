@@ -44,7 +44,7 @@
 			position: relative;
 
 			&.active>a{
-				@include transition();
+				@extend .add-transition;
 				font-family: "RobotoBold";
 				span{
 					font-family: "RobotoLight";
@@ -57,7 +57,7 @@
 				@extend %font-header;
 				padding: 24px 5px;
 				text-align: center;
-				@include transition();
+				@extend .add-transition;
 				&.notifications{
 					padding-left: 45px;
 				}
@@ -109,7 +109,7 @@
 						padding: 10px;
 						text-align: left;
 						color: $gray_text;
-						@include transition(all, 0.2s);
+						@extend .add-transition;
 						&:hover, &:focus{
 							background-color: $gray-super-light;
 							font-family: "RobotoLight";
@@ -325,7 +325,7 @@
 			}
 		}
 		.icon-bar{
-			@include transition;
+			@include transition();
 		}
 		.navbar-inverse .navbar-toggle{
 			background-color: transparent;
@@ -513,7 +513,7 @@
 		}
 	}
 	.icon-bar{
-		@include transition;
+		@include transition();
 	}
 	.navbar-inverse .navbar-toggle{
 		background-color: transparent;

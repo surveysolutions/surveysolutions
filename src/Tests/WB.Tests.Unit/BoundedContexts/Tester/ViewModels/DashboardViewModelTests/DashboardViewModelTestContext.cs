@@ -56,15 +56,12 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             return new DashboardViewModel(
                 principal: mockOfPrincipal.Object,
                 designerApiService: designerApiService,
-                commandService: commandService,
-                questionnaireImportService: questionnaireImportService,
                 viewModelNavigationService: viewModelNavigationService,
                 friendlyErrorMessageService: friendlyErrorMessageService,
                 userInteractionService: userInteractionService,
                 questionnaireListStorage: questionnaireListStorage,
                 dashboardLastUpdateStorage: dashboardLastUpdateStorage ?? localDashboardLastUpdateStorageMock.Object,
                 logger: logger ?? Mock.Of<ILogger>(),
-                attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
                 asyncRunner: asyncRunner ?? Create.Service.AsyncRunner(),
                 questionnaireDownloader: new QuestionnaireDownloadViewModel(
                     principal: mockOfPrincipal.Object,

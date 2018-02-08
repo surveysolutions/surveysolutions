@@ -34,7 +34,8 @@ export default {
 
     methods: {
         hideSearchResults() {
-            this.$store.dispatch("hideSearchResults");
+            this.$store.dispatch("resetAllFilters");
+            this.$store.dispatch("hideSearchResults");                        
         },
 
         infiniteHandler($state) {

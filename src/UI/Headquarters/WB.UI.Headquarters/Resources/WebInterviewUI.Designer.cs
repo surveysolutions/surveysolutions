@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class WebInterviewUI {
@@ -574,6 +574,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading questionnaire. Please wait....
+        /// </summary>
+        internal static string LoadingQuestionnaire {
+            get {
+                return ResourceManager.GetString("LoadingQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading, please wait.
         /// </summary>
         internal static string LoadingWait {
@@ -840,6 +849,24 @@ namespace WB.UI.Headquarters.Resources {
         internal static string WebInterview {
             get {
                 return ResourceManager.GetString("WebInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tester session is over.
+        /// </summary>
+        internal static string WebTesterSessionOver {
+            get {
+                return ResourceManager.GetString("WebTesterSessionOver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please close this page. You may open new one by returning to Designer site.
+        /// </summary>
+        internal static string WebTesterSessionOverMessage {
+            get {
+                return ResourceManager.GetString("WebTesterSessionOverMessage", resourceCulture);
             }
         }
         

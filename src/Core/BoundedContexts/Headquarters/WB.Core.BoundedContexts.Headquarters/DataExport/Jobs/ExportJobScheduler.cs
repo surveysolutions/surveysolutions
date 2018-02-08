@@ -1,6 +1,5 @@
 ﻿using System;
 using Quartz;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 {
@@ -12,10 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 
         public ExportJobScheduler(IScheduler scheduler, ExportSettings settings)
         {
-            if (scheduler == null) throw new ArgumentNullException(nameof(scheduler));
-
-            this.scheduler = scheduler;
-            this.settings = settings;
+            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         public void Configure()

@@ -65,7 +65,7 @@ namespace WB.UI.Headquarters.Controllers
                     {
                         Id = x.Id,
                         Title = x.Title,
-                        LastModified = HumanizeLastUpdateDate(x.LastModifiedDate),
+                        LastModified = x.LastModifiedDate,
                         CreatedBy = x.OwnerName ?? ""
                     })
                 };
@@ -89,21 +89,6 @@ namespace WB.UI.Headquarters.Controllers
                 throw;
             }
 
-        }
-
-        private string HumanizeLastUpdateDate(DateTime? date)
-        {
-            if (!date.HasValue) return string.Empty;
-
-            var localDate = date.Value.ToLocalTime();
-
-            var twoDaysAgoAtNoon = DateTime.Now.ToLocalTime().AddDays(-1).AtNoon();
-
-            if (localDate < twoDaysAgoAtNoon)
-                // from Designer
-                return localDate.ToString(@"d MMM yyyy, HH:mm");
-            
-            return localDate.Humanize(false);
         }
     }
 }

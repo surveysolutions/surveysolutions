@@ -1,6 +1,7 @@
 ﻿@using System.Collections.Generic
 @using System.Linq
 @using Main.Core.Entities.SubEntities
+@using WB.Core.BoundedContexts.Designer.Implementation.Services
 @using WB.Core.BoundedContexts.Designer.Resources
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 @using WB.UI.Designer.Utils
@@ -83,6 +84,11 @@
         </section>
         <section class="table_of_contents">
             <dl>
+                <dt>&nbsp;</dt>
+                <dd>
+                    <a href="#questionnaire_description" class="section_name appendix">@PdfStrings.MetadataSectionTitle<br /> @PdfStrings.MetadataSectionSubTitle</a>
+                </dd>
+
                 @foreach (var sectionId in questionnaire.SectionIds)
                 {
                     var statistics = questionnaire.GetGroupStatistics(sectionId);
@@ -174,6 +180,144 @@
                 </dd>
             </dl>
         </section>
+    </article>
+
+    <article class="appendix_section identification_information">
+        <h2 id="questionnaire_description">@PdfStrings.MetadataSectionTitle<br /> @PdfStrings.MetadataSectionSubTitle</h2>
+        <section>
+            <h3>@PdfStrings.SideBarMetadataBasicInfo</h3>
+            <dl class="questionnaire_description">
+                <dt>@PdfStrings.MetadataTitle</dt>
+                <dd>@questionnaire.Title</dd>
+
+                @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.SubTitle))
+                {
+                    <dt>@PdfStrings.MetadataSubtitle</dt>
+                    <dd>@questionnaire.Metadata.SubTitle</dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Version))
+                {
+                    <dt>@PdfStrings.MetadataVersionIdentificator</dt>
+                    <dd>@questionnaire.Metadata.Version</dd>
+                }
+                @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.VersionNotes))
+                {
+                    <dt>@PdfStrings.MetadataVersionNotes</dt>
+                    <dd>@questionnaire.Metadata.VersionNotes</dd>
+                }
+            </dl>
+        </section>
+        
+        @if (questionnaire.Metadata.StudyType.HasValue || !string.IsNullOrWhiteSpace(questionnaire.Metadata.KindOfData) || questionnaire.Metadata.ModeOfDataCollection.HasValue)
+        {
+            <section>
+                <h3>@PdfStrings.SideBarMetadataSurveyDataInfo</h3>
+                <dl class="questionnaire_description">
+                    @if (questionnaire.Metadata.StudyType.HasValue)
+                    {
+                        <dt>@PdfStrings.MetadataStudyType</dt>
+                        <dd>@StudyTypeProvider.GetStudyTypeTitleByCode(questionnaire.Metadata.StudyType.Value)</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.KindOfData))
+                    {
+                        <dt>@PdfStrings.MetadataKindOfData</dt>
+                        <dd>@KindOfDataProvider.GetKindOfDataTitleByCode(questionnaire.Metadata.KindOfData)</dd>
+                    }
+                    @if (questionnaire.Metadata.ModeOfDataCollection.HasValue)
+                    {
+                        <dt>@PdfStrings.MetadataModeOfDataCollection</dt>
+                        <dd>@ModeOfDataCollectionProvider.GetModeOfDataCollectionTitleByCode(questionnaire.Metadata.ModeOfDataCollection.Value)</dd>
+                    }
+                </dl>
+            </section>
+        }
+        
+        @if (
+                !string.IsNullOrWhiteSpace(questionnaire.Metadata.Country) 
+                || questionnaire.Metadata.Year.HasValue
+                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Language)
+                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.UnitOfAnalysis)
+                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Coverage)
+                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Universe)
+                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.PrimaryInvestigator)
+                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Consultant)
+                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Funding)
+            )
+        {
+            <section>
+                <h3>@PdfStrings.SideBarMetadataSurveyInfo</h3>
+                <dl class="questionnaire_description">
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Country))
+                    {
+                        <dt>@PdfStrings.MetadataCountry</dt>
+                        <dd>@CountryListProvider.GetCountryTitleByCode(questionnaire.Metadata.Country)</dd>
+                    }
+                    @if (questionnaire.Metadata.Year.HasValue)
+                    {
+                        <dt>@PdfStrings.MetadataYear</dt>
+                        <dd>@questionnaire.Metadata.Year</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Language))
+                    {
+                        <dt>@PdfStrings.MetadataLanguages</dt>
+                        <dd>@questionnaire.Metadata.Language</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.UnitOfAnalysis))
+                    {
+                        <dt>@PdfStrings.MetadataUnitOfAlalysis</dt>
+                        <dd>@questionnaire.Metadata.UnitOfAnalysis</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Coverage))
+                    {
+                        <dt>@PdfStrings.MetadataCoverage</dt>
+                        <dd>@questionnaire.Metadata.Coverage</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Universe))
+                    {
+                        <dt>@PdfStrings.MetadataUniverse</dt>
+                        <dd>@questionnaire.Metadata.Universe</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.PrimaryInvestigator))
+                    {
+                        <dt>@PdfStrings.MetadataPrimaryInvestigator</dt>
+                        <dd>@questionnaire.Metadata.PrimaryInvestigator</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Consultant))
+                    {
+                        <dt>@PdfStrings.MetadataConsultants</dt>
+                        <dd>                    
+                            <div>
+                                @questionnaire.Metadata.Consultant
+                            </div>
+                        </dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Funding))
+                    {
+                        <dt>@PdfStrings.MetadataFunding</dt>
+                        <dd>@questionnaire.Metadata.Funding</dd>
+                    }
+                </dl>
+            </section>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Notes) || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Keywords))
+        {
+            <section>
+                <h3>@PdfStrings.SideBarMetadataAdditionalInfo</h3>
+                <dl class="questionnaire_description">
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Notes))
+                    {
+                        <dt>@PdfStrings.MetadataNotes</dt>
+                        <dd>@questionnaire.Metadata.Notes</dd>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Keywords))
+                    {
+                        <dt>@PdfStrings.MetadataKeywords</dt>
+                        <dd>@questionnaire.Metadata.Keywords</dd>
+                    }
+                </dl>
+            </section>
+        }
     </article>
     <article>
         @foreach (var sectionId in questionnaire.SectionIds)

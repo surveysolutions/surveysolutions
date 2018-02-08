@@ -192,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 if (sectionOrSubSection.Parent == null) continue;
 
                 var isInCurrentSection = sectionOrSubSection.Parent.Identity == currentGroup?.Identity;
-                var isParentOfCurrentSection = parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity);
+                var isParentOfCurrentSection = currentGroup != null && parentsOfCurrentGroup.Contains(sectionOrSubSection.Parent.Identity);
                 var isExpandedSection = itemsToBeExpandedAndTheirImmidiateChildren.Contains(sectionOrSubSection.Identity);
 
                 if (clearExpanded && (isParentOfCurrentSection || isInCurrentSection))

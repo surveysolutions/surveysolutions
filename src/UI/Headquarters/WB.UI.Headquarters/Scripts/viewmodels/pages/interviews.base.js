@@ -116,7 +116,9 @@
         $('.selectpicker').selectpicker('refresh');
     };
 
-    self.sendCommandAfterFilterAndConfirm = function (commandName,
+    self.sendCommandAfterFilterAndConfirm = function (
+        selectedRowAsArray,
+        commandName,
         parametersFunc,
         filterFunc,
         messageTemplateId,
@@ -124,26 +126,27 @@
         onSuccessCommandExecuting,
         onCancelConfirmation)
     {
-            var filteredItems = self.GetSelectedItemsAfterFilter(filterFunc);
+        var allItems  = _.isArray(selectedRowAsArray) ? selectedRowAsArray : self.SelectedItems();
+        var filteredItems = ko.utils.arrayFilter(allItems, filterFunc);
 
-            var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
+        var messageHtml = self.getBindedHtmlTemplate(messageTemplateId, filteredItems);
 
-            if (filteredItems.length === 0) {
-                notifier.alert('', messageHtml);
-                return;
-            }
+        if (filteredItems.length === 0) {
+            notifier.alert('', messageHtml);
+            return;
+        }
 
-            messageHtml += $(continueMessageTemplateId).html();
+        messageHtml += $(continueMessageTemplateId).html();
 
-            notifier.confirm('', messageHtml, function (result) {
-                if (result) {
-                    self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
-                } else {
-                    if (!_.isUndefined(onCancelConfirmation)) {
-                        onCancelConfirmation();
-                    }
+        notifier.confirm('', messageHtml, function (result) {
+            if (result) {
+                self.sendCommand(commandName, parametersFunc, filteredItems, onSuccessCommandExecuting);
+            } else {
+                if (!_.isUndefined(onCancelConfirmation)) {
+                    onCancelConfirmation();
                 }
-            });
+            }
+        });
     };
 
     self.sendCommand = function (commandName, parametersFunc, items, onSuccessCommandExecuting) {
@@ -195,7 +198,6 @@
             build: function ($trigger, e) {
                 var selectedRow = ko.dataFor($trigger[0]);
                 self.unselectAll();
-                selectedRow.IsSelected(true);
                 var items = self.BuildMenuItem(selectedRow);
                 return { items: items };
             },

@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             }
         };
 
-        public int LatestSupportedVersion => this.questionnaireContentVersions.Last().Version;
+        public int LatestSupportedVersion => this.questionnaireContentVersions.OrderBy(x => x.Version).Last().Version;
 
         public bool IsClientVersionSupported(int clientVersion)
             => (clientVersion >= OldestQuestionnaireContentVersion && this.LatestSupportedVersion >= clientVersion);

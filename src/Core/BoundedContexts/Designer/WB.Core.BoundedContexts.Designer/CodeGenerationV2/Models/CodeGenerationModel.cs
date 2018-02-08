@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
     public class ExpressionStorageModel
     {
         public Guid Id { set; get; }
+
         public string ClassName { get; set; }
 
         public List<LevelModel> Levels { get; } = new List<LevelModel>();
@@ -33,6 +34,7 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2.Models
             .Select(x => x.First())
             .ToList();
 
+        public int TargetVersion { get; set; }
 
         public IEnumerable<ConditionMethodModel> GetEnablementConditions(string className)
         {

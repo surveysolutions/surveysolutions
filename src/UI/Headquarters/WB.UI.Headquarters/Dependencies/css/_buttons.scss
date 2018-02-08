@@ -6,7 +6,6 @@
     word-break: break-word;
 	&:disabled, &.disabled{
 		border-color: #d7d7d7 !important;	
-		//color: #fff !important;
 		color: $gray_light !important;
 		cursor: not-allowed;
 		@include stripe-gradient(#d7d7d7, #fff);
@@ -18,7 +17,6 @@
 			border-color: #d7d7d7;
 			outline: none;
 			box-shadow: none !important;
-			//background-color: green;
 		}
 	}
 }
@@ -44,7 +42,7 @@ a.disabled{
 	@include absolute(5px, 0, null, null);
 	border-radius: 4px;
 	z-index: 3;
-	@include transition(all, 0.2s);
+	@extend .add-transition;
 	&:hover, &:focus{
 	    span.arrow{
 	    	background-color: rgba(0, 0, 0, 1);
@@ -81,7 +79,7 @@ a.disabled{
 	z-index: 3;
 	top: calc(50% - 18px);
 	display: block;
-	@include transition(all, 0.2s);
+	@extend .add-transition;
 	&:before, &:after{
 		content: "";
 		display: block;
@@ -137,7 +135,7 @@ a.disabled{
 		}
 	}
 	&.btn-post-comment{
-		@include transition(all, 0.2s);
+		@extend .add-transition;
 		padding: 12px;
 		background-color: #fff;
 		color: $gray_light;
@@ -159,7 +157,7 @@ a.disabled{
 }
 .input-group .input-group-btn {
 	.btn.btn-post-comment{
-		@include transition(all, 0.2s);
+		@extend .add-transition;
 		padding: 12px;
 		color: $gray_light;
 		background-color: #fff;
@@ -206,12 +204,6 @@ a.disabled{
 	&:hover, &:focus{
 		background-position: -57px 0;
 	}
-	// &.flagged, &:active{
-    // 	background-position: 0 0;
-    // 	&:hover, &:focus{
-    // 		background-position: -19px 0;
-    // 	}
-	// }
 }
 .reject{
 	border-width: 3px;
@@ -254,7 +246,7 @@ a.disabled{
 	@include cancel(14px);
 	@include opacity(1);
 		&:before, &:after{
-			@include transition(all, 0.2s);
+			@extend .add-transition;
 	        @include rotate(0deg);
 	        top: 0;
 	    }
@@ -363,7 +355,7 @@ a.disabled{
 	}
 	span, &:before, &:after{
 		@include opacity(0.5);
-		@include transition(all, 0.2s);
+		@extend .add-transition;
 	}
 	&:hover, &:focus, &:active{
 		span, &:before, &:after{
@@ -401,7 +393,7 @@ a.disabled{
 	}
 }
 .get-interviewer-app{
-	@include transition(all, 0.2s);
+	@extend .add-transition;
     width: 248px;
     background:  url("#{$assetsPath}/img/HQ-login-mobile-get-button-logo.png") no-repeat;
     background-size: 55px;

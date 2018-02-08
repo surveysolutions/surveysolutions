@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            string repositoryId = GetRepositoryId(id, version);
+            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
             this.repository.Store(questionnaireDocument, repositoryId);
             this.questionnaireDocumentsCache[repositoryId] = questionnaireDocument.Clone();
             this.plainQuestionnairesCache.Clear();
@@ -71,12 +71,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
-            string repositoryId = GetRepositoryId(id, version);
+            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
 
             if (!this.questionnaireDocumentsCache.ContainsKey(repositoryId))
             {
                 var questionnaire = this.repository.GetById(repositoryId);
-                this.questionnaireDocumentsCache[repositoryId] = questionnaire;
+
+                this.questionnaireDocumentsCache[repositoryId] = questionnaire ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
             }
 
             return this.questionnaireDocumentsCache[repositoryId];
@@ -89,7 +90,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         public void DeleteQuestionnaireDocument(Guid id, long version)
         {
-            string repositoryId = GetRepositoryId(id, version);
+            string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
             var document = this.repository.GetById(repositoryId);
 
             if (document == null)
@@ -98,10 +99,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
 
-            this.questionnaireDocumentsCache[repositoryId] = null;
+            this.questionnaireDocumentsCache.TryRemove(repositoryId);
             this.plainQuestionnairesCache.Clear();
         }
 
-        private static string GetRepositoryId(Guid id, long version) => $"{id.FormatGuid()}${version}";
+        private static string GetRepositoryId(QuestionnaireIdentity questionnaireIdentity)
+            => questionnaireIdentity.ToString(); //$"{id.FormatGuid()}${version}";
     }
 }

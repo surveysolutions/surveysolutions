@@ -45,9 +45,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetMap)]
-        public HttpResponseMessage GetMapContent([FromUri]string mapName)
+        public HttpResponseMessage GetMapContent([FromUri]string id)
         {
-            var mapContent = this.mapRepository.GetMapContent(mapName);
+            var mapContent = this.mapRepository.GetMapContent(id);
 
             if (mapContent == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound);

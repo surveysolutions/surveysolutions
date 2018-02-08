@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
+using System.Web;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 
@@ -80,7 +81,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         string answerString = question.GetAnswerAsString(CultureInfo.CurrentCulture);
                         shouldEncode = false;
 
-                        substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString) : answerString;
+                        substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
 
                         if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
                         {
@@ -98,7 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 }
 
                 substitutionResult = shouldAddBrowserTags && shouldEncode 
-                    ? WebUtility.HtmlEncode(substitutionResult) 
+                    ? WebUtility.HtmlEncode(substitutionResult)
                     : substitutionResult;
 
                 substitutionResult = string.IsNullOrEmpty(substitutionResult)

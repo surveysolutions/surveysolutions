@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -15,21 +16,21 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public EmitResult TryGenerateAssemblyAsStringAndEmitResult(
             Guid templateId,
             Dictionary<string, string> generatedClasses,
-            PortableExecutableReference[] referencedPortableAssemblies,
+            IEnumerable<MetadataReference> referencedPortableAssemblies,
             out string generatedAssembly)
         {
+            generatedAssembly = string.Empty;
+
             IEnumerable<SyntaxTree> syntaxTrees = generatedClasses.Select(
                     generatedClass => SyntaxFactory.ParseSyntaxTree(generatedClass.Value, path: generatedClass.Key))
                     .ToArray();
 
-            var metadataReferences = new List<PortableExecutableReference>();
+            var metadataReferences = new List<MetadataReference>();
             metadataReferences.AddRange(referencedPortableAssemblies);
             
             CSharpCompilation compilation = CreateCompilation(templateId, syntaxTrees, metadataReferences);
-
             EmitResult compileResult;
-            generatedAssembly = string.Empty;
-           
+            
             using (var stream = new MemoryStream())
             {
                 compileResult = compilation.Emit(stream);
@@ -44,7 +45,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             return compileResult;
         }
 
-        static CSharpCompilation CreateCompilation(Guid templateId, IEnumerable<SyntaxTree> syntaxTrees, List<PortableExecutableReference> metadataReferences)
+        static CSharpCompilation CreateCompilation(Guid templateId, IEnumerable<SyntaxTree> syntaxTrees, List<MetadataReference> metadataReferences)
         {
             return CSharpCompilation.Create(
                 String.Format("rules-{0}-{1}.dll", templateId.FormatGuid(), Guid.NewGuid().FormatGuid()),

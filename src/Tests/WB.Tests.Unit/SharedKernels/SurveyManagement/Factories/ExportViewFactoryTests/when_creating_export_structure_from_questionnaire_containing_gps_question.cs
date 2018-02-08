@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -36,10 +37,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             gpsExportedQuestionHeaderItem = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1).HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[gpsQuestionId] as ExportedQuestionHeaderItem;
 
         It should_create_header_with_5_columns_wich_corresponds_to_gps_properties = () =>
-            gpsExportedQuestionHeaderItem.ColumnNames.ShouldEqual(new[] { "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude" , "gps__Timestamp"});
+            gpsExportedQuestionHeaderItem.ColumnHeaders.Select(x=> x.Name).ShouldEqual(new[] { "gps__Latitude", "gps__Longitude", "gps__Accuracy", "gps__Altitude" , "gps__Timestamp"});
 
         It should_create_header_with_5_columns_with_valid_labels = () =>
-            gpsExportedQuestionHeaderItem.Titles.ShouldEqual(new[] { "gps label: Latitude", "gps label: Longitude", "gps label: Accuracy", "gps label: Altitude", "gps label: Timestamp" });
+            gpsExportedQuestionHeaderItem.ColumnHeaders.Select(x=> x.Title).ShouldEqual(new[] { "gps label: Latitude", "gps label: Longitude", "gps label: Accuracy", "gps label: Altitude", "gps label: Timestamp" });
 
         private static ExportViewFactory exportViewFactory;
         private static QuestionnaireDocument questionnaireDocument;

@@ -228,4 +228,7 @@
   <data name="ZipArchiveDescription" xml:space="preserve">
     <value>访谈主数据的zip压缩包</value>
   </data>
+  <data name="Compressing" xml:space="preserve">
+    <value>正在压缩</value>
+  </data>
 </root>

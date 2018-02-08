@@ -604,7 +604,7 @@
     <value>Имя супервизора</value>
   </data>
   <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
-    <value>Версия интервьювера полученная по время последней синхронизации планшета</value>
+    <value>Версия интервьюера полученная по время последней синхронизации планшета</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (вер. {1})</value>
@@ -867,15 +867,14 @@
   </data>
   <data name="Interviews_Selected" xml:space="preserve">
     <value>интервью выбрано</value>
-    <comment>интервьювер(ов) выбрано</comment>
   </data>
   <data name="Supervisors_Selected" xml:space="preserve">
     <value>супервизор(ов) выбрано</value>
     <comment>супервизор(ов) выбрано</comment>
   </data>
   <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
-    <value>Если интервьювер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</value>
-    <comment>Если интервьювер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
+    <value>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</value>
+    <comment>Если интервьюер имеет законченные интервью в режиме переписи на это планшете, то они будут потерянны.</comment>
   </data>
   <data name="Supervisors_Archive" xml:space="preserve">
     <value>Архивировать</value>
@@ -931,7 +930,7 @@
     <value>Заблокированный хедквотер (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
   </data>
   <data name="Interviewer_LockWarning" xml:space="preserve">
-    <value>Заблокированный интервьювер (галочка отмечена) не сможет соединиться с сервером со своего планшета и отправить собранные данные </value>
+    <value>Заблокированный интервьюер (галочка отмечена) не сможет соединиться с сервером со своего планшета и отправить собранные данные </value>
   </data>
   <data name="Supervisor_LockWarning" xml:space="preserve">
     <value>Заблокированный супервизор (галочка отмечена) не сможет войти на сайт и совершить какие-либо действия</value>
@@ -1001,8 +1000,8 @@
     <comment>Разархивировать</comment>
   </data>
   <data name="InterviewerIsArchived" xml:space="preserve">
-    <value>Интервьювер заархерирован</value>
-    <comment>Интервьювер заархерирован</comment>
+    <value>Интервьюер заархерирован</value>
+    <comment>Интервьюер заархерирован</comment>
   </data>
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
     <value>Вы уверены в том,что хотите удалить интервью?</value>
@@ -1037,22 +1036,6 @@
   </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Длительность статусов</value>
-  </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Эксель (.xlsx)</value>
-    <comment>Эксель (.xlsx)</comment>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>Значения, разделенные запятой (.csv)</value>
-    <comment>Значения, разделенные запятой (.csv)</comment>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Значения, разделенные табуляцией (.tab)</value>
-    <comment>Значения, разделенные табуляцией (.tab)</comment>
-  </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>Экспорт</value>
-    <comment>Экспорт</comment>
   </data>
   <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
     <value>Назначено на</value>
@@ -1182,5 +1165,50 @@
   </data>
   <data name="Map_UploadingError" xml:space="preserve">
     <value>Произошла ошибка во время загрузки</value>
+  </data>
+  <data name="Map_UploadingSuccess" xml:space="preserve">
+    <value>Карты успешно загружены</value>
+  </data>
+  <data name="Interviewers_InterviewersToMove" xml:space="preserve">
+    <value>Интервьюер(ы) {0} будут переведены в другую команду супервизора {1}</value>
+  </data>
+  <data name="Interviewers_InterviewersToStay" xml:space="preserve">
+    <value>Интервьюер(ы) {0} уже в команде супервизора {1} и никакие действия предприняты не будут.</value>
+  </data>
+  <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
+    <value>Перенести интервьюера(ов) с их заданиями и интервью в новую команду супервизора {0}</value>
+  </data>
+  <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
+    <value>Выберите команду для переноса {0}</value>
+  </data>
+  <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
+    <value>Перенести в другую команду</value>
+  </data>
+  <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
+    <value>{0} и {1}</value>
+  </data>
+  <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
+    <value>{0} и еще {1}</value>
+  </data>
+  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+    <value>Сделать первичного супервизора ответственным за задания и интервью перемещаемых интервьюеров. </value>
+  </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>Возникла ошибка во время исполнения, попробуйте позже</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>Операция не выполнена</value>
+  </data>
+  <data name="Interviewers_MovingCompleted" xml:space="preserve">
+    <value>Перемещение пользователей завершено</value>
+  </data>
+  <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+    <value>Перемещение пользователей в прогрессе</value>
+  </data>
+  <data name="MapList_UserMapsLink" xml:space="preserve">
+    <value>Карты пользователей</value>
+  </data>
+  <data name="MapList_UserMapsTitle" xml:space="preserve">
+    <value>Карты пользователей</value>
   </data>
 </root>

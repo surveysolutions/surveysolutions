@@ -42,7 +42,7 @@ export default {
         },
 
         modal(){
-            $(this.$refs.modal).modal();
+            $(this.$refs.modal).appendTo("body").modal();
         }
     }
     

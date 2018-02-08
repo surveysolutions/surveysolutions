@@ -126,25 +126,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        protected Expression<Func<InterviewSummary, bool>> CreateFilterExpression(SurveysAndStatusesReportInputModel input)
-        {
-            Expression<Func<InterviewSummary, bool>> result = null;
-
-            if (!string.IsNullOrWhiteSpace(input.ResponsibleName))
-            {
-                result = x => x.ResponsibleName.ToLower() == input.ResponsibleName.ToLower();
-            }
-
-            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
-            {
-                result = result == null
-                    ? z => z.TeamLeadName.ToLower() == input.TeamLeadName.ToLower()
-                    : result.AndCondition(x => x.TeamLeadName.ToLower() == input.TeamLeadName.ToLower());
-            }
-
-            return result ?? (x => x.SummaryId != null);
-        }
-
         private static IQueryable<InterviewSummary> FilterByResponsibleOrTeamLead(IQueryable<InterviewSummary> _, string responsible, string teamLead)
         {
             if (!string.IsNullOrWhiteSpace(responsible))
@@ -160,6 +141,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         {
             var view = this.Load(model);
 
+            var reportItems = view.Items.Select(x => new object[]
+            {
+                x.QuestionnaireTitle, x.QuestionnaireVersion, x.SupervisorAssignedCount, x.InterviewerAssignedCount,
+                x.CompletedCount, x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount,
+                x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
+                x.TotalCount
+            });
+
+            if (view.TotalRow != null)
+            {
+                reportItems = new[]
+                {
+                    new object[]
+                    {
+                        Strings.AllQuestionnaires, "", view.TotalRow.SupervisorAssignedCount,
+                        view.TotalRow.InterviewerAssignedCount,
+                        view.TotalRow.CompletedCount, view.TotalRow.RejectedBySupervisorCount,
+                        view.TotalRow.ApprovedBySupervisorCount,
+                        view.TotalRow.RejectedByHeadquartersCount, view.TotalRow.ApprovedByHeadquartersCount,
+                        view.TotalRow.TotalCount
+                    }
+                }.Concat(reportItems);
+            }
+
             return new ReportView
             {
                 Headers = new[]
@@ -170,23 +175,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Report.COLUMN_REJECTED_BY_HQ, Report.COLUMN_APPROVED_BY_HQ,
                     Report.COLUMN_TOTAL
                 },
-                Data = new[]
-                {
-                    new object[]
-                    {
-                        Strings.AllQuestionnaires, "", view.TotalRow.SupervisorAssignedCount, view.TotalRow.InterviewerAssignedCount,
-                        view.TotalRow.CompletedCount, view.TotalRow.RejectedBySupervisorCount,
-                        view.TotalRow.ApprovedBySupervisorCount,
-                        view.TotalRow.RejectedByHeadquartersCount, view.TotalRow.ApprovedByHeadquartersCount,
-                        view.TotalRow.TotalCount
-                    }
-                }.Concat(view.Items.Select(x => new object[]
-                {
-                    x.QuestionnaireTitle, x.QuestionnaireVersion, x.SupervisorAssignedCount, x.InterviewerAssignedCount,
-                    x.CompletedCount, x.RejectedBySupervisorCount, x.ApprovedBySupervisorCount,
-                    x.RejectedByHeadquartersCount, x.ApprovedByHeadquartersCount,
-                    x.TotalCount
-                })).ToArray()
+                Data = reportItems.ToArray()
             };
         }
     }

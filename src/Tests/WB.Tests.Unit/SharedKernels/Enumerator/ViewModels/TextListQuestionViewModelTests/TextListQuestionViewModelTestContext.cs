@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
         protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithListQuestion(bool isRosterSizeQuestion = false, int? maxAnswerCount = 5)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
-                => _.ShouldQuestionSpecifyRosterSize(questionIdentity.Id) == isRosterSizeQuestion
+                => _.IsRosterSizeQuestion(questionIdentity.Id) == isRosterSizeQuestion
                 && _.GetMaxSelectedAnswerOptions(questionIdentity.Id) == maxAnswerCount
             );
             return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);

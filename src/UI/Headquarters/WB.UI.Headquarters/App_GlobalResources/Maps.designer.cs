@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid file {0}.
+        /// </summary>
+        internal static string MapLoadingInvalidFile {
+            get {
+                return ResourceManager.GetString("MapLoadingInvalidFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred. Following files were ignored:.
         /// </summary>
         internal static string MapLoadingInvalidFilesError {
@@ -97,11 +106,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error occurred. Archive doesn&apos;t contain map files.
+        /// </summary>
+        internal static string MapLoadingNoMapsInArchive {
+            get {
+                return ResourceManager.GetString("MapLoadingNoMapsInArchive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error occurred. File is not a .zip archive.
         /// </summary>
         internal static string MapLoadingNotZipError {
             get {
                 return ResourceManager.GetString("MapLoadingNotZipError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error occurred. Archive contains not map files .
+        /// </summary>
+        internal static string MapLoadingUnsupportedFilesInArchive {
+            get {
+                return ResourceManager.GetString("MapLoadingUnsupportedFilesInArchive", resourceCulture);
             }
         }
         

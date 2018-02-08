@@ -5,6 +5,7 @@ using ddidotnet;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
@@ -68,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                 {
                     var hhDataFile = metadataWriter.CreateDdiDataFile(questionnaireLevelLabels.LevelName);
 
-                    foreach (LabeledVariable variableLabel in questionnaireLevelLabels.LabeledVariable)
+                    foreach (DataExportVariable variableLabel in questionnaireLevelLabels.LabeledVariable)
                     {
                         if (variableLabel.EntityId.HasValue)
                         {

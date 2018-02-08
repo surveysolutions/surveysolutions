@@ -20,11 +20,15 @@ using WB.Core.SharedKernels.DataCollection.V4.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
 
+/*
+	Generated using questionnaire target version <#= Model.TargetVersion #>
+*/
+
 namespace WB.Core.SharedKernels.DataCollection.Generated
 {
 	public class <#=Model.ClassName#> : <#=typeof(IInterviewExpressionStorage).Name#> 
 	{
-		private Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>> levelFactory = new Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>>();
+		private readonly Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>> levelFactory = new Dictionary<Guid, Func<RosterVector, <#=Model.ClassName#>, <#=typeof(IInterviewLevel).Name#>>>();
 		public <#=Model.ClassName#>()
 		{
 			levelFactory.Add(IdOf.<#= CodeGeneratorV2.QuestionnaireIdName#>, (v, s) => new <#= CodeGeneratorV2.QuestionnaireLevel#>(v, s));
@@ -53,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		public RostersCollection<T> GetLevels<T>(Guid levelId, Identity forRosterIdentity) where T : class, IInterviewLevel, IIndexedInterviewLevel
         {
 			var rosterIdentities = this.state.FindEntitiesFromSameOrDeeperLevel(levelId, forRosterIdentity);
-			var rosters = rosterIdentities.Select(CreateLevel).Cast<T>().ToList();
+			var rosters = rosterIdentities.Select(CreateLevel).Cast<T>();
             return new RostersCollection<T>(rosters);
         }
 
@@ -72,7 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
             return null;
         }
 
-        private Dictionary<Identity, <#=typeof(IInterviewLevel).Name#>> levelsCache = new Dictionary<Identity, <#=typeof(IInterviewLevel).Name#>>();
+        private readonly Dictionary<Identity, <#=typeof(IInterviewLevel).Name#>> levelsCache = new Dictionary<Identity, <#=typeof(IInterviewLevel).Name#>>();
 	}
 
 <#
@@ -101,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 		{
 			this.Properties = properties;
 		}
-		private <#=typeof(IInterviewPropertiesForExpressions).Name#> Properties;
+		private readonly <#=typeof(IInterviewPropertiesForExpressions).Name#> Properties;
 			
 		public double IRnd() => Properties.Random;
 	}

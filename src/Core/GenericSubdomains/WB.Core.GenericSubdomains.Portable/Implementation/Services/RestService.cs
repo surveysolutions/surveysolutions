@@ -241,75 +241,41 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 statusCode: restResponse.StatusCode);
         }
 
-        public async Task DownloadFileAndSaveAsync(string url, Stream streamToSave, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
-            RestCredentials credentials = null, CancellationToken? ctoken = null, Dictionary<string, string> customHeaders = null)
+        public async Task<RestStreamResult> GetResponseStreamAsync(string url, RestCredentials credentials = null, 
+            CancellationToken? ctoken = null, object queryString = null, Dictionary<string, string> customHeaders = null)
         {
             var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
-                userCancellationToken: ctoken, request: null, customHeaders: customHeaders);
-
-            
-            var token = ctoken ?? default(CancellationToken);
+                userCancellationToken: ctoken, request: null, queryString: queryString, customHeaders: customHeaders);
             
             var responseMessage = await response.ConfigureAwait(false);
             var contentLength = responseMessage.Content.Headers.ContentLength;
 
             var contentCompressionType = this.GetContentCompressionType(responseMessage.Content.Headers);
 
-            long downloded = 0;
-            using (var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false))
-            {
-                using (var transformedStream = GetStreamToTransform(responseStream, contentCompressionType))
-                {
-                    if (token.IsCancellationRequested)
-                    {
-                        token.ThrowIfCancellationRequested();
-                    }
+            var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-                    var buffer = new byte[this.restServiceSettings.BufferSize];
-                    var downloadProgressChangedEventArgs = new DownloadProgressChangedEventArgs()
-                    {
-                        TotalBytesToReceive = contentLength
-                    };
-
-                    int read;
-                    while ((read = await transformedStream.ReadAsync(buffer, 0, buffer.Length, token)
-                               .ConfigureAwait(false)) > 0)
-                    {
-                        if (token.IsCancellationRequested)
-                        {
-                            token.ThrowIfCancellationRequested();
-                        }
-
-                        downloded += read;
-
-                        streamToSave.Write(buffer, 0, read);
-
-                        if (onDownloadProgressChanged == null) continue;
-
-                        if (contentLength != null)
-                            downloadProgressChangedEventArgs.ProgressPercentage =
-                                Math.Min(Math.Round((decimal) (100 * downloded) / contentLength.Value), 100);
-
-                        downloadProgressChangedEventArgs.BytesReceived = downloded;
-                        onDownloadProgressChanged(downloadProgressChangedEventArgs);
-                    }
-                }
-            }          
-        }
-        
-        private Stream GetStreamToTransform(Stream streamToRead, RestContentCompressionType contentCompressionType)
-        {
             switch (contentCompressionType)
             {
                 case RestContentCompressionType.GZip:
-                    return this.stringCompressor.GetDecompressingGZipStream(streamToRead);
-                    
-                case RestContentCompressionType.Deflate:
-                    return this.stringCompressor.GetDecompressingDeflateStream(streamToRead);
-                    
-            }
+                    return new RestStreamResult
+                    {
+                        Stream = this.stringCompressor.GetDecompressingGZipStream(responseStream),
+                        ContentLength = contentLength
+                    };
 
-            return streamToRead;
+                case RestContentCompressionType.Deflate:
+                    return new RestStreamResult
+                    {
+                        Stream = this.stringCompressor.GetDecompressingDeflateStream(responseStream),
+                        ContentLength = contentLength
+                    };
+                default:
+                    return new RestStreamResult
+                    {
+                        Stream = responseStream,
+                        ContentLength = contentLength
+                    };
+            }
         }
 
         public async Task SendStreamAsync(Stream streamData, string url, RestCredentials credentials,

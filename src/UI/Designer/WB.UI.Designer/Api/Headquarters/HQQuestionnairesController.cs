@@ -78,7 +78,8 @@ namespace WB.UI.Designer.Api.Headquarters
                 Page = pageIndex,
                 PageSize = pageSize,
                 Order = sortOrder,
-                SearchFor = filter
+                SearchFor = filter,
+                Type = QuestionnairesType.My | QuestionnairesType.Shared
             });
 
             var questionnaires = new PagedQuestionnaireCommunicationPackage
@@ -128,10 +129,12 @@ namespace WB.UI.Designer.Api.Headquarters
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, versionToCompileAssembly);
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.Macros = null;
             questionnaire.LookupTables = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
-            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(questionnaireView.Source.AsReadOnly());
+            var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
+            questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaire.DependencyGraph = this.expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaire.ValidationDependencyGraph = this.expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument).ToDictionary(x => x.Key, x => x.Value.ToArray());
 
             return new QuestionnaireCommunicationPackage
             {

@@ -18,6 +18,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         internal const string VibrateOnErrorParameterName = "VibrateOnError";
         internal const string ShowVariablesParamterName = "ShowVariables";
         internal const string ShowLocationOnMapParamName = "ShowLocationOnMap";
+        internal const string ShowAnsweringTimeName = "ShowAnsweringTime";
 
         private static ISharedPreferences SharedPreferences => PreferenceManager.GetDefaultSharedPreferences(Application.Context);
 
@@ -98,6 +99,9 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
+        public bool TestingConditions
+ { get; }
+
         public double GpsDesiredAccuracy
         {
             get
@@ -118,5 +122,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         public bool ShowVariables => SharedPreferences.GetBoolean(ShowVariablesParamterName, false);
 
         public bool ShowLocationOnMap => SharedPreferences.GetBoolean(ShowLocationOnMapParamName, true);
+
+        public bool ShowAnswerTime => SharedPreferences.GetBoolean(ShowAnsweringTimeName, false);
     }
 }

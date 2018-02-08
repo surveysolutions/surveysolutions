@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Tests.Abc;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
-using AttachmentContentEnumerable = WB.Core.SharedKernels.Enumerator.Views.AttachmentContent;
+using AttachmentContentEnumerable = WB.Core.SharedKernels.Questionnaire.Api.AttachmentContent;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {

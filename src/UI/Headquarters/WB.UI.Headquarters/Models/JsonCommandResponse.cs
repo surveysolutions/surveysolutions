@@ -1,4 +1,6 @@
-﻿namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
+﻿using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+
+namespace WB.UI.Headquarters.Models
 {
     public class JsonCommandResponse: JsonBaseResponse
     {

@@ -4,9 +4,10 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Enumerator.Native.WebInterview.Models;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
-using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGroupDetailsTests
 {

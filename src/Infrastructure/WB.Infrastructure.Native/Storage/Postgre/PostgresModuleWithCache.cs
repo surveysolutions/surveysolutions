@@ -1,14 +1,13 @@
 using System;
 using System.Reflection;
-using Ninject.Activation;
-using Ninject.Modules;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Infrastructure.Native.Storage.Memory.Implementation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
-    public abstract class PostgresModuleWithCache : NinjectModule
+    public abstract class PostgresModuleWithCache : IModule
     {
         private readonly ReadSideCacheSettings cacheSettings;
 
@@ -17,12 +16,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             this.cacheSettings = cacheSettings;
         }
 
-        protected abstract IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IContext context)
+        protected abstract IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IModuleContext context)
             where TEntity : class, IReadSideRepositoryEntity;
 
-        protected object GetReadSideStorageWrappedWithCache(IContext context)
+        protected object GetReadSideStorageWrappedWithCache(IModuleContext context)
         {
-            Type storageEntityType = context.GenericArguments[0];
+            Type storageEntityType = context.GetGenericArgument();
 
             MethodInfo createCachingStorageMethod = typeof(PostgresModuleWithCache)
                 .GetMethod(nameof(this.CreateMemoryCachedReadSideStorage),
@@ -32,7 +31,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             return createCachingStorageMethod.Invoke(this, new object[] { context });
         }
 
-        private MemoryCachedReadSideStorage<TEntity> CreateMemoryCachedReadSideStorage<TEntity>(IContext context)
+        private MemoryCachedReadSideStorage<TEntity> CreateMemoryCachedReadSideStorage<TEntity>(IModuleContext context)
             where TEntity : class, IReadSideRepositoryEntity
         {
             IReadSideStorage<TEntity> postgresStorage = this.GetPostgresReadSideStorage<TEntity>(context);
@@ -40,11 +39,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             return new MemoryCachedReadSideStorage<TEntity>(postgresStorage, this.cacheSettings);
         }
 
-        public override void Load()
+        public virtual void Load(IIocRegistry registry)
         {
-            if (!this.Kernel.HasBinding<ReadSideCacheSettings>())
+            if (!registry.HasBinding<ReadSideCacheSettings>())
             {
-                this.Bind<ReadSideCacheSettings>().ToConstant(this.cacheSettings);
+                registry.BindToConstant(() => this.cacheSettings);
             }
         }
     }

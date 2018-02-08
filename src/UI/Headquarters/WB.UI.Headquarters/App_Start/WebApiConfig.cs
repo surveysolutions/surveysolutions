@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
-using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -13,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Headquarters.API.Interviewer.v2;
+using WB.UI.Shared.Web.Compression;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters
@@ -93,6 +93,7 @@ namespace WB.UI.Headquarters
                 c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/users/login", c => c.Action<UsersApiV2Controller>(x => x.Login(Param.Any<LogonInfo>())));
             config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
+            config.TypedRoute("api/interviewer/v2/users/supervisor", c => c.Action<UsersApiV2Controller>(x => x.Supervisor()));
             config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
             config.TypedRoute("api/interviewer/v2/translations/{id}",
                 c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));

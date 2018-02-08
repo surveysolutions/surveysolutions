@@ -40,8 +40,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
             ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[questionId] as ExportedQuestionHeaderItem;
 
-            exportedQuestionHeaderItem.ColumnNames.Length.ShouldEqual(2);
-            exportedQuestionHeaderItem.ColumnNames.SequenceEqual(new[] { "mult__28", "mult__42" }).ShouldBeTrue();
+            exportedQuestionHeaderItem.ColumnHeaders.Count.ShouldEqual(2);
+            exportedQuestionHeaderItem.ColumnHeaders.Select(x=> x.Name).SequenceEqual(new[] { "mult__28", "mult__42" }).ShouldBeTrue();
             exportedQuestionHeaderItem.ColumnValues.Length.ShouldEqual(2);
             exportedQuestionHeaderItem.ColumnValues.SequenceEqual(new[] {28, 42}).ShouldBeTrue();
         };

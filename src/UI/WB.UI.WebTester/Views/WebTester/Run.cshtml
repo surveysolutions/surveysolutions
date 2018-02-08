@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "InterviewLayout.cshtml";
+}
+@section scripts {
+    <script>
+        window.CONFIG.hqLink = "null";
+        window.CONFIG.splashScreen = true;
+    </script>
+}
+@section footer{
+    <script>
+        window.location = '@Url.Content("~/WebTester/Redirect/" + Model.Id)'
+    </script>
+}

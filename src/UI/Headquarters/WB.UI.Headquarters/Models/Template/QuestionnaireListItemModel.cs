@@ -16,10 +16,10 @@ namespace WB.UI.Headquarters.Models.Template
 
         public virtual bool IsDisabled { get; set; }
 
-        public virtual string CreationDate { get; set; }
+        public virtual DateTime CreationDate { get; set; }
 
-        public virtual string LastEntryDate { get; set; }
+        public virtual DateTime LastEntryDate { get; set; }
 
-        public virtual string ImportDate { get; set; }
+        public virtual DateTime? ImportDate { get; set; }
     }
 }

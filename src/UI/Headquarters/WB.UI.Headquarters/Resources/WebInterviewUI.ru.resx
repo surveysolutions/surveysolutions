@@ -382,4 +382,13 @@
     <value>Показать на карте</value>
     <comment>Показать на карте</comment>
   </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>Сессия окончена</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Пожалуйста закройте окно тестера.</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Загружаем опросник. Пожалуйста подождите...</value>
+  </data>
 </root>

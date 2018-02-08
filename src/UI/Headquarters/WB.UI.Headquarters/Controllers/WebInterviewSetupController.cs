@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Services.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -11,15 +10,16 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.UI.Headquarters.Controllers
 {
     [LimitsFilter]
     [AuthorizeOr403(Roles = "Administrator, Headquarter")]
-    [ObserverNotAllowed]
+    [Filters.ObserverNotAllowed]
     [WebInterviewFeatureEnabled]
     public class WebInterviewSetupController : BaseController
     {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
@@ -7,7 +6,6 @@ using System.Web.Mvc.Html;
 using Resources;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Resources;
-using System.IO;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -41,21 +39,6 @@ namespace ASP
         public static string QuestionnaireNameVerstionFirst(this HtmlHelper html, string name, long version)
         {
             return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
-        }
-
-        [Localizable(false)]
-        public static IHtmlString StaticScript(this HtmlHelper html, string uri)
-        {
-            var tag = new TagBuilder(@"script");
-
-            tag.Attributes.Add("type", "text/javascript");
-
-            var file = System.Web.HttpContext.Current.Server.MapPath(uri);
-            var Url = new UrlHelper(html.ViewContext.RequestContext);
-
-            tag.Attributes.Add("src", Url.Content(uri) + "?v=" + new FileInfo(file).LastWriteTimeUtc.ToBinary());
-
-            return html.Raw(tag.ToString(TagRenderMode.Normal));
         }
 
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(

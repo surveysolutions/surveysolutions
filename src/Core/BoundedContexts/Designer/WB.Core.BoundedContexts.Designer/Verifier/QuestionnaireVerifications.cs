@@ -14,7 +14,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
-using Group = Main.Core.Entities.SubEntities.Group;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
 {
@@ -22,7 +21,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly ISubstitutionService substitutionService;
         private readonly IKeywordsProvider keywordsProvider;
-        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w \-\(\)\\/]*$");
+        private static readonly Regex QuestionnaireNameRegex = new Regex(@"^[\w, \-\(\)\\/]*$");
 
         public QuestionnaireVerifications(ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider)
         {
@@ -37,7 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
             Error("WB0261", QuestionnaireHasRostersPropagationsExededLimit, VerificationMessages.WB0261_RosterStructureTooExplosive),
-            Error<IComposite>("WB0121", VariableNameTooLong, string.Format(VerificationMessages.WB0121_VariableNameTooLong, DefaultVariableLengthLimit)),
+            Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
             Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
             Critical<IComposite>("WB0067", VariableNameIsEmpty, string.Format(VerificationMessages.WB0067_VariableNameIsEmpty)),
@@ -73,10 +72,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return string.IsNullOrWhiteSpace(entity.VariableName);
         }
 
-        private static bool VariableNameTooLong(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
+        private static Tuple<bool, int> VariableNameTooLong(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(entity.VariableName))
-                return false;
+                return Tuple.Create(false, 0);
 
             int variableLengthLimit = DefaultVariableLengthLimit;
             if (entity is IQuestion)
@@ -86,7 +85,13 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     : DefaultVariableLengthLimit;
             }
 
-            return (entity.VariableName?.Length ?? 0) > variableLengthLimit;
+            if (entity is IGroup group && group.IsRoster)
+            {
+                variableLengthLimit = RosterVariableNameLimit;
+            }
+
+            var result = (entity.VariableName?.Length ?? 0) > variableLengthLimit;
+            return Tuple.Create(result, variableLengthLimit);
         }
 
         private static bool VariableNameHasSpecialCharacters(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
@@ -389,6 +394,24 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             };
         }
 
+        private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error<TEntity, TArg>(string code, Func<TEntity, MultiLanguageQuestionnaireDocument, Tuple<bool, TArg>> hasError, Func<TArg, string> messageBuilder)
+            where TEntity : class, IComposite
+        {
+            IEnumerable<QuestionnaireVerificationMessage> LocalFunction(MultiLanguageQuestionnaireDocument questionnaire)
+            {
+                foreach (TEntity entity in questionnaire.Find<TEntity>())
+                {
+                    var hasErrorResult = hasError(entity, questionnaire);
+                    if (hasErrorResult.Item1)
+                    {
+                        yield return QuestionnaireVerificationMessage.Error(code, messageBuilder.Invoke(hasErrorResult.Item2), CreateReference(entity));
+                    }
+                }
+            }
+
+            return LocalFunction;
+        }
+        
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Error(string code, Func<MultiLanguageQuestionnaireDocument, bool> hasError, string message)
         {
             return questionnaire =>

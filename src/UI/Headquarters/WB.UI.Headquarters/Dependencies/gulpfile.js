@@ -15,7 +15,9 @@ const gulp = require('gulp'),
     glob = require('glob'),
     es = require('event-stream'),
     cleanCSS = require('gulp-clean-css'),
+    path = require("path")
     _ = require('lodash');
+var merge = require('merge-stream');
 
 // error handling https://medium.com/@boriscoder/catching-errors-on-gulp-js-4682eee2669f#.rh86s4ad2
 /**
@@ -43,7 +45,7 @@ function wrapPipe(taskFn) {
 
 const config = {
     production: !!util.env.production,
-    bootstrapFontFiles: './vendor/bootstrap-sass/assets/fonts/bootstrap/*.*',
+    bootstrapFontFiles: './node_modules/bootstrap-sass/assets/fonts/bootstrap/*.*',
     fontsDir: './fonts',
     buildDir: './build',
     buildDistDir: './dist',
@@ -79,6 +81,12 @@ const config = {
         {
             file: "_WebInterviewLayout.cshtml",
             folder: '../Views/WebInterview/'
+        },
+        {
+            file: "InterviewLayout.cshtml",
+            folder: "../../../WB.UI.WebTester/Views/WebTester/",
+            contentPrefix: "~/Content/Styles/",
+            plain: true
         }
     ],
     cssFilesToWatch: './css/*.scss"',
@@ -90,6 +98,14 @@ const config = {
         markup: "./css/markup.scss",
         ["markup-web-interview"]: "./css/markup-web-interview.scss",
         ["markup-specific"]: "./css/markup-specific.scss"
+    },
+    webTester: {
+        targetFolder: '../../../WB.UI.WebTester/Content/',
+        stylesFolder: 'Styles',
+        scriptsFolder: 'Scripts',
+        fontsFolder: 'Fonts',
+        distFolder: 'Dist',
+        buildFolder: 'Build'
     }
 };
 
@@ -216,29 +232,32 @@ gulp.task('libsCss', ["checkSources"], wrapPipe(function (success, error) {
 gulp.task('inject', ['styles', 'libsJs'],
     wrapPipe((success, error) => {
         if (!config.production) return util.noop();
-
-        function transform(filepath) {
-            const url = '@Url.Content("~/Dependencies' + filepath + '")';
-
-            if (filepath.endsWith(".css")) {
-                return "<link rel='stylesheet' async href='" + url + "' >";
-            }
-            else if (filepath.endsWith(".js")) {
-                return " <script type='text/javascript' src='" + url + "'></script>";
-            }
-
-            return inject.transform.apply(inject.transform, arguments);
-        }
-
+        
         var cssLibs = gulp.src(config.buildDistDir + '/libs-*.min.css', { read: false });
         var jsLibs = gulp.src(config.buildDistDir + '/libs-*.min.js', { read: false });
 
-        function inject(files, name) {
-            const options = { relative: false, name, transform };
-            return plugins.inject(files, options).on('error', error);
-        }
-
         var tasks = config.filesToInject.map(function (fileToInject) {
+
+            function transform(filepath) {
+                const contentPrefix = fileToInject.contentPrefix || "~/Dependencies"
+                filepath = fileToInject.plain ? path.basename(filepath) : filepath
+                const url = '@Url.Content("' + contentPrefix + filepath + '")';
+    
+                if (filepath.endsWith(".css")) {
+                    return "<link rel='stylesheet' async href='" + url + "' >";
+                }
+                else if (filepath.endsWith(".js")) {
+                    return " <script type='text/javascript' src='" + url + "'></script>";
+                }
+    
+                return inject.transform.apply(inject.transform, arguments);
+            }
+    
+            function inject(files, name) {
+                const options = { relative: false, name, transform };
+                return plugins.inject(files, options).on('error', error);
+            }
+
             var target = gulp.src(fileToInject.folder + fileToInject.file);
 
             var pipe = target
@@ -260,12 +279,44 @@ gulp.task('inject', ['styles', 'libsJs'],
         });
 
         return tasks;
-    }));
+}));
+
+gulp.task('webtester:fonts', function() {
+    return gulp.src(config.bootstrapFontFiles)
+               .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.fontsFolder));
+});
+
+gulp.task('webtester:styles', ['styles'], function() {
+    var webInterview = gulp.src(config.buildDistDir + "/markup-web-interview-[a-f0-9]*.css");
+    var markup = gulp.src(config.buildDistDir + "/markup-[a-f0-9]*.css");
+
+    return merge(webInterview, markup)
+        .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.stylesFolder));
+});
+
+gulp.task('webtester:build_styles', ['styles'], function() {
+    var webInterview = gulp.src(config.buildDir + "/markup-web-interview.css");
+    var markup = gulp.src(config.buildDistDir + "/markup.css");
+
+    return merge(webInterview, markup)
+        .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.buildFolder));
+});
+
+gulp.task('webtester:js', ['libsJs'], function() {
+    return gulp.src("../HqApp/dist/webtester.bundle.js")
+        .pipe(gulp.dest(config.webTester.targetFolder + config.webTester.scriptsFolder));
+});
+
+gulp.task('webtester', ['webtester:fonts', 'webtester:styles', 'webtester:js', 'webtester:build_styles'])
 
 gulp.task('clean', function () {
-    return gulp.src(config.buildDistDir + '/*').pipe(plugins.clean());
+    var buildDir = gulp.src(config.buildDistDir + '/*');
+    var tester2 = gulp.src(config.webTester.targetFolder + config.webTester.scriptsFolder);
+    
+
+    return merge(buildDir, tester2).pipe(plugins.clean({read: false, force: true}));
 });
 
 gulp.task('default', ['clean'], function () {
-    gulp.start('move-bootstrap-fonts', 'styles', 'libsJs', 'inject');
+    gulp.start('move-bootstrap-fonts', 'styles', 'libsJs', 'webtester', 'inject');
 });

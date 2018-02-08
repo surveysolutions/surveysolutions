@@ -12,15 +12,17 @@ using MvvmCross.Core.Views;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
 using MvvmCross.Platform.IoC;
+using NLog;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.Activities;
@@ -28,7 +30,6 @@ using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Infrastructure;
-using WB.UI.Interviewer.Infrastructure.Logging;
 using WB.UI.Interviewer.ServiceLocation;
 using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
@@ -37,7 +38,8 @@ using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Autofac;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
-using Xamarin;
+using WB.UI.Shared.Enumerator.Services.Logging;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Interviewer
 {
@@ -45,35 +47,6 @@ namespace WB.UI.Interviewer
     {
         public Setup(Context applicationContext) : base(applicationContext)
         {
-            InitializeLogger(applicationContext);
-        }
-
-        private void InitializeLogger(Context applicationContext)
-        {
-            Insights.HasPendingCrashReport += (sender, isStartupCrash) =>
-            {
-                if (isStartupCrash)
-                {
-                    Insights.PurgePendingCrashReports().WaitAndUnwrapException();
-                }
-            };
-
-#if DEBUG
-            Insights.Initialize(Insights.DebugModeKey, applicationContext);
-#else
-            Insights.Initialize("20fe6ac44d54f5fed5370bc877d7ba7524f15363", applicationContext);
-#endif
-        }
-
-        protected override void ProcessException(Exception exception)
-        {
-            base.ProcessException(exception);
-
-            var serviceSettings = Mvx.Resolve<IRestServiceSettings>();
-            exception.Data["Endpoint"] = serviceSettings.Endpoint;
-
-            var principal = Mvx.Resolve<IPrincipal>();
-            exception.Data["User"] = principal.CurrentUserIdentity?.Name;
         }
 
         protected override void InitializeViewLookup()
@@ -157,6 +130,9 @@ namespace WB.UI.Interviewer
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+
+            // need remove in release this line and setting option
+            Interview.TestingConditions = false;
 
             return container;
         }

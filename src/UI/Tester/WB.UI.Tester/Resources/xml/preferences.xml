@@ -9,6 +9,8 @@
   <CheckBoxPreference android:key="ShowLocationOnMap" />
   
   <CheckBoxPreference android:key="ShowVariables" />
+  
+  <CheckBoxPreference android:key="ShowAnsweringTime" />
   <Preference android:key="version" />
   
   <PreferenceCategory android:key="dev_settings_category">

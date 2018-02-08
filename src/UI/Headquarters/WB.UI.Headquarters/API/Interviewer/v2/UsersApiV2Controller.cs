@@ -28,6 +28,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpGet]
         [ApiBasicAuth(UserRoles.Interviewer)]
+        public Guid Supervisor()
+        {
+            var user = userViewFactory.GetUser(new UserViewInputModel(this.authorizedUser.Id));
+            return user.Supervisor.Id;
+        }
+
+        [HttpGet]
+        [ApiBasicAuth(UserRoles.Interviewer)]
         public override InterviewerApiView Current() => base.Current();
 
         [HttpGet]

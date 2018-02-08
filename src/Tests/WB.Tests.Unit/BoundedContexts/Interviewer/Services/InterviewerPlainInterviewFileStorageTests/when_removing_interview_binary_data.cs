@@ -1,17 +1,18 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInterviewFileStorageTests
 {
     internal class when_removing_interview_binary_data : InterviewerPlainInterviewFileStorageTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void context()
         {
             fileViewStorage = new SqliteInmemoryStorage<InterviewFileView>();
 
@@ -35,16 +36,20 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
             interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage,
                 imageViewStorage: imageViewStorage);
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        public void BecauseOf() =>
             interviewerImageFileStorage.RemoveInterviewBinaryData(interviewId, imageFileName);
 
-        It should_be_removed_multimedia_views_by_interview_id_and_file_name = () =>
-            imageViewStorage.Where(x => x.InterviewId == interviewId && x.FileName == imageFileName).ShouldBeEmpty();
+        [Test]
+        public void should_be_removed_multimedia_views_by_interview_id_and_file_name() =>
+            imageViewStorage.Where(x => x.InterviewId == interviewId && x.FileName == imageFileName).Should().BeEmpty();
 
-        It should_be_removed_file_views_by_interview_id_and_file_name = () =>
-            fileViewStorage.Where(x => x.Id == imageFileId).ShouldBeEmpty();
+        [Test]
+        public void should_be_removed_file_views_by_interview_id_and_file_name() =>
+            fileViewStorage.Where(x => x.Id == imageFileId).Should().BeEmpty();
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static string imageFileName = "image.png";

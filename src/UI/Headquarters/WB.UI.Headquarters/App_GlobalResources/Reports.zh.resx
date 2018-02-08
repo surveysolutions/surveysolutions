@@ -157,7 +157,7 @@
     <value>督导员和调查</value>
   </data>
   <data name="SurveyName" xml:space="preserve">
-    <value>调查名称</value>
+    <value>问卷标题</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">
     <value>调查和状态</value>
@@ -173,5 +173,80 @@
   </data>
   <data name="TemplateVersion" xml:space="preserve">
     <value>模板版本</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>调查员</value>
+  </data>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>平均的个案任务间期</value>
+  </data>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>平均的总部处理时间</value>
+  </data>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>平均的访谈间期</value>
+  </data>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>平均的个案处理时间</value>
+  </data>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>平均的督导员处理时间</value>
+  </data>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>访谈的状态天数</value>
+  </data>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>设备和调查员</value>
+  </data>
+  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+    <value>完成访谈的数量</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>由总部完成部署的访谈数量</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>由督导员部署的访谈数量</value>
+  </data>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>由总部批准的访谈数量</value>
+  </data>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>调查员完成的数量</value>
+  </data>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>督导员完成的数量</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>调查员的访谈完成速度</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>督导员的完成速度</value>
+  </data>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>调查员的完成速度</value>
+  </data>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>督导员完成的速度</value>
+  </data>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>状态间期</value>
+  </data>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>督导员极其状态</value>
+  </data>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>调研极其状态</value>
+  </data>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>团队成员和状态</value>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>团队和状态</value>
+  </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>重启</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>在状态中计算访谈的天数</value>
   </data>
 </root>

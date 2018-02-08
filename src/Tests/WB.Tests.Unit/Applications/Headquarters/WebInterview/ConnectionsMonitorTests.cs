@@ -4,6 +4,7 @@ using Microsoft.AspNet.SignalR.Transports;
 using Moq;
 using Ncqrs;
 using NUnit.Framework;
+using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.API.WebInterview.Services;
 

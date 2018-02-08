@@ -21,18 +21,13 @@
         var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
 
         var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
-        var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportedDataReferencesForQuestionnaire"})';
+        var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "GetExportStatus"})';
         var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
         $(function() {
             var templates = [
-                @foreach (var item in Model.Questionnaires) {
-                    <text>
-                        {
-                            id: '@item.TemplateId',
-                            version: '@item.TemplateVersion',
-                            title: @Html.Raw(Encoder.JavaScriptEncode(Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)))
-                        },
-                    </text>
+                @foreach (var item in Model.Questionnaires)
+                {
+                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
                 }
             ];
             var exportFromats = [];
@@ -42,10 +37,10 @@
             }
 
             var statuses = [
-                { status: null, title: @Html.Raw(Encoder.JavaScriptEncode(Common.AllStatuses)) },
+                { status: null, title: '@Common.AllStatuses' },
                 @foreach (var item in Model.ExportStatuses)
                 {
-                    <text>{ status: @((int)item), title: @Html.Raw(Encoder.JavaScriptEncode(item.ToUiString())) },</text>
+                    <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
                 }
             ];
 
@@ -82,7 +77,7 @@
                         <select id="ddlStatus" data-bind="options: Statuses, value: selectedStatus, optionsText: 'title', selectPicker: {}"></select>
                     </div>
                 </div>
-                
+
                 <div class="preset-filters-container" data-bind="visible: RunningDataExportProcesses().length > 0">
                     <span class="export-queue" data-bind="text:'@HttpUtility.JavaScriptStringEncode(DataExport.ItemsInQueue) ' + RunningDataExportProcesses().length"></span>
                 </div>
@@ -94,7 +89,7 @@
                     <h1 data-bind="text: selectedTemplate()? selectedTemplate().title : ''"></h1>
                     <p>@DataExport.ExportExplanation</p>
                 </div>
-                <div class="main  data">
+                <div class="main  data" id="a">
                     <h3>@DataExport.MainSurveyDataTitle</h3>
                     <p>@DataExport.ZipArchiveDescription</p>
                     <div class="container-data">
@@ -103,11 +98,11 @@
                             <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                         </div>
 
-                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, styleName: "stata", dataUrl: "$AllDataUrl", addFromat: true)
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.STATA, styleName: "stata", dataUrl: "$AllDataUrl")
 
-                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, styleName: "spss", dataUrl: "$AllDataUrl", addFromat: true)
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.SPSS, styleName: "spss", dataUrl: "$AllDataUrl")
 
-                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, styleName: "separated-data", dataUrl: "$AllDataUrl", addFromat: true)
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Tabular, styleName: "separated-data", dataUrl: "$AllDataUrl")
 
                     </div>
                 </div>
@@ -119,7 +114,7 @@
                             <div class="cell-data size">@DataExport.FileSizeTitle</div>
                             <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                         </div>
-                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", styleName: "zip", addFromat: true)
+                        @ExportTemplate(type: DataExportType.Data, format: DataExportFormat.Binary, dataUrl: "$AllDataUrl", styleName: "zip")
                     </div>
                 </div>
                 <div class="metadata data">
@@ -149,11 +144,11 @@
                                 <div class="cell-data size">@DataExport.FileSizeTitle</div>
                                 <div class="cell-data last-generated">@DataExport.LastGeneratedTitle</div>
                             </div>
-                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Paradata, dataUrl: "$AllDataUrl", styleName: "separated-data", addFromat: true)
+                            @ExportTemplate(type: DataExportType.ParaData, format: DataExportFormat.Paradata, dataUrl: "$AllDataUrl", styleName: "separated-data")
                         </div>
                     </div>
                 }
-                <!-- /ko  -->        
+                <!-- /ko  -->
                 <!-- ko if:selectedTemplateTitle() == null -->
                 <div class="page-header clearfix">@DataExport.NoDataAvailable</div>
                 <!-- /ko  -->
@@ -162,74 +157,74 @@
     </div>
 </main>
 
-@helper ExportTemplate(DataExportType type, DataExportFormat format, string styleName, string dataUrl, bool addFromat = false)
-{
-var exportParameters = "'" + (int)type + "','" + (int)format + "'";
+@helper ExportTemplate(DataExportType type, DataExportFormat format, string styleName, string dataUrl)
+    {
+        var exportParameters = "'" + (int)type + "','" + (int)format + "'";
 
-    <div data-bind="css: {'table-data': true, 'generated-data': (showRefreshButton(@exportParameters) && showDownloadButton(@exportParameters)), 'generation-in-progress' : (!showRefreshButton(@exportParameters)), 'not-generated-data': (showRefreshButton(@exportParameters) && !showDownloadButton(@exportParameters))}">
-        <div class="cell-data format-data @styleName">
-            @{
-                string formatTitle;
-                switch (format)
-                {
-                    case DataExportFormat.Tabular:
-                        formatTitle = DataExport.TabularFormat;
-                        break;
-                    default:
-                        formatTitle = format + " " + DataExport.FormatTitle;
-                        break;
+        <div data-bind="css: {'table-data': true, 'generated-data': (showRefreshButton(@exportParameters) && showDownloadButton(@exportParameters)), 'generation-in-progress' : (!showRefreshButton(@exportParameters)), 'not-generated-data': (showRefreshButton(@exportParameters) && !showDownloadButton(@exportParameters))}">
+            <div class="cell-data format-data @styleName">
+                @{
+                    string formatTitle;
+                    switch (format)
+                    {
+                        case DataExportFormat.Tabular:
+                            formatTitle = DataExport.TabularFormat;
+                            break;
+                        default:
+                            formatTitle = format + " " + DataExport.FormatTitle;
+                            break;
+                    }
                 }
-            } 
-            @formatTitle
-        </div>
-        <div class="cell-data  download-block">
-            <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
-            <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '/' + selectedTemplateId() + '?version=' + selectedTemplateVersion() @(addFromat ? "+ '&format=" + format + "'" : "") + '&status=' + selectedStatus().status }">@DataExport.Download</a>
-            <div class="not-generated ">@DataExport.DataWasNotGenerated</div>
-        </div>
-        <div class="cell-data last-generated " data-bind="visible: showDownloadButton(@exportParameters)">
-            <i data-bind="text:lastUpdateDate(@exportParameters)"></i>
-        </div>
-        <div class="cell-data size " data-bind="visible: showDownloadButton(@exportParameters)"><i data-bind="text:fileSize(@exportParameters) + ' @DataExport.Bytes'"></i></div>
-        <div class="cell-data min-view " data-bind="visible: showDownloadButton(@exportParameters)">
-            <div>@DataExport.LastGeneratedTitle: <span data-bind="text:lastUpdateDate(@exportParameters)"></span></div>
-            <div>@DataExport.FileSizeTitle: <span><i data-bind="text:fileSize(@exportParameters) + ' @DataExport.Bytes'"></i></span></div>
-        </div>
-
-        <div class="cell-data progress-block">
-            <div class="cancelable-progress queued" data-bind="visible: isInQueue(@exportParameters)">
-                <div class="wrapper-progress">
-                    <span>@DataExport.QueuedTitle</span>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
-                            <span class="sr-only">@DataExport.QueuedTitle</span>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-link" data-bind="click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
+                @formatTitle
+            </div>
+            <div class="cell-data  download-block">
+                <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
+                <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '?' + getRequestQuery('@format') }">@DataExport.Download</a>
+                <div class="not-generated ">@DataExport.DataWasNotGenerated</div>
+            </div>
+            <div class="cell-data last-generated " data-bind="visible: showDownloadButton(@exportParameters)">
+                <i data-bind="text:lastUpdateDate(@exportParameters)"></i>
+            </div>
+            <div class="cell-data size " data-bind="visible: showDownloadButton(@exportParameters)"><i data-bind="text:fileSize(@exportParameters) + ' @DataExport.Bytes'"></i></div>
+            <div class="cell-data min-view " data-bind="visible: showDownloadButton(@exportParameters)">
+                <div>@DataExport.LastGeneratedTitle: <span data-bind="text:lastUpdateDate(@exportParameters)"></span></div>
+                <div>@DataExport.FileSizeTitle: <span><i data-bind="text:fileSize(@exportParameters) + ' @DataExport.Bytes'"></i></span></div>
             </div>
 
-            <div class="cancelable-progress" data-bind="visible: isRunning(@exportParameters) || isCompessing(@exportParameters)">
-                <div class="wrapper-progress">
-                    <!-- ko if: isCompessing(@Html.Raw(exportParameters)) -->
-                    <span data-bind="text: '@DataExport.Compressing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
-                    <!-- /ko -->
-                    <!-- ko if: isRunning(@Html.Raw(exportParameters)) -->
-                    <span data-bind="text: '@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
-                    <!-- /ko -->
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">
-                            <span class="sr-only" data-bind="text: getProgressInPercents(@exportParameters) + '% @DataExport.Completed'"></span>
+            <div class="cell-data progress-block">
+                <div class="cancelable-progress queued" data-bind="visible: isInQueue(@exportParameters)">
+                    <div class="wrapper-progress">
+                        <span>@DataExport.QueuedTitle</span>
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="10" style="width: 100%">
+                                <span class="sr-only">@DataExport.QueuedTitle</span>
+                            </div>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-link" data-bind="click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
                 </div>
-                <button type="button" class="btn btn-link" data-bind="visible: isRunning(@exportParameters), click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
+
+                <div class="cancelable-progress" data-bind="visible: isRunning(@exportParameters) || isCompessing(@exportParameters)">
+                    <div class="wrapper-progress">
+                        <!-- ko if: isCompessing(@Html.Raw(exportParameters)) -->
+                        <span data-bind="text: '@DataExport.Compressing - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                        <!-- /ko -->
+                        <!-- ko if: isRunning(@Html.Raw(exportParameters)) -->
+                        <span data-bind="text: '@DataExport.Generating - ' + getProgressInPercents(@exportParameters) + '%'"></span>
+                        <!-- /ko -->
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" data-bind="style:{ width: getProgressInPercents(@exportParameters) + '%' } ">
+                                <span class="sr-only" data-bind="text: getProgressInPercents(@exportParameters) + '% @DataExport.Completed'"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-link" data-bind="visible: isRunning(@exportParameters), click : requestStopExportProcess(@exportParameters)"><span class="cancel"></span></button>
+                </div>
             </div>
+
+            <div class="not-generated cell-data" data-bind="visible: !hasAnyDataToBePrepared(@exportParameters)">@DataExport.NoDataAvailable</div>
+
         </div>
-
-        <div class="not-generated cell-data" data-bind="visible: !hasAnyDataToBePrepared(@exportParameters)">@DataExport.NoDataAvailable</div>
-
-    </div>
 }
 
 <script type="text/html" id="confirm-stop-export">

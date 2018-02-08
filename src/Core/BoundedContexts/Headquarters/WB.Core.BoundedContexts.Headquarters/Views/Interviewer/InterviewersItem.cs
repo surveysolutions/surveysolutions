@@ -22,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
         public string DeviceId { get; set; }
         public string EnumeratorVersion { get; set; }
         public int? EnumeratorBuild { get; set; }
+        public Guid? SupervisorId { get; set; }
     }
 }

@@ -132,18 +132,18 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Questionnaire command handlers
 
-        public void CreateQuestionnaire(Guid publicKey, string title, Guid? createdBy, bool isPublic)
+        public void CreateQuestionnaire(CreateQuestionnaire createQuestionnaire)
         {
-            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(title);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(createQuestionnaire.Title);
 
             this.innerDocument = new QuestionnaireDocument
             {
-                IsPublic = isPublic,
-                Title = System.Web.HttpUtility.HtmlDecode(title),
-                PublicKey = publicKey,
+                IsPublic = createQuestionnaire.IsPublic,
+                Title = System.Web.HttpUtility.HtmlDecode(createQuestionnaire.Title),
+                PublicKey = createQuestionnaire.QuestionnaireId,
                 CreationDate = this.clock.UtcNow(),
                 LastEntryDate = this.clock.UtcNow(),
-                CreatedBy = createdBy
+                CreatedBy = createQuestionnaire.ResponsibleId,
             };
 
             this.AddGroup(CreateGroup(Guid.NewGuid(), QuestionnaireEditor.NewSection, null, null, null,false), null);
@@ -575,8 +575,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             };
             innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
 
-            if(command.OldTranslationId.HasValue)
+            if (command.OldTranslationId.HasValue)
+            {
                 innerDocument.Translations.RemoveAll(x => x.Id == command.OldTranslationId.Value);
+
+                if (innerDocument.DefaultTranslation.HasValue &&
+                    innerDocument.DefaultTranslation == command.OldTranslationId)
+                    innerDocument.DefaultTranslation = command.TranslationId;
+            }
 
             innerDocument.Translations.Add(translation);
         }
@@ -585,6 +591,9 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
             this.innerDocument.Translations.RemoveAll(x => x.Id == command.TranslationId);
+
+            if (innerDocument.DefaultTranslation.HasValue && innerDocument.DefaultTranslation == command.TranslationId)
+                innerDocument.DefaultTranslation = null;
         }
 
         public void SetDefaultTranslation(SetDefaultTranslation command)
@@ -2372,6 +2381,15 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireRevisionCantBeFound, Id, historyReferanceId));
 
             this.innerDocument = questionnire;
+        }
+
+        public void UpdateMetaInfo(UpdateMetadata command)
+        {
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(command.Title);
+
+            this.innerDocument.Title = command.Title;
+            this.innerDocument.Metadata = command.Metadata;
         }
     }
 }

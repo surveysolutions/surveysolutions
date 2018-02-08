@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Enumerator.Native.WebInterview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.WebInterview;

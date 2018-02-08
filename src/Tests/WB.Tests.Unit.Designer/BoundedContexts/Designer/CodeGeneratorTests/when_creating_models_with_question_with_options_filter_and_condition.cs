@@ -4,16 +4,18 @@ using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 {
     internal class when_creating_models_with_question_with_options_filter_and_condition : CodeGeneratorTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test]
+        public void should_not_throw_agrument_exception() {
             AssemblyContext.SetupServiceLocator();
 
-            questionnaire = Create.QuestionnaireDocument(children: new[]
+            var questionnaire = Create.QuestionnaireDocument(children: new[]
             {
                 Create.Chapter(children: new IComposite[]
                 {
@@ -26,18 +28,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
                 })
             });
 
-            templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory(expressionProcessor: new RoslynExpressionProcessor());
-            BecauseOf();
+            var templateModelFactory = Create.QuestionnaireExecutorTemplateModelFactory(expressionProcessor: new RoslynExpressionProcessor());
+
+            Assert.DoesNotThrow(() => templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings()));
         }
-
-        private void BecauseOf() => exception = Catch.Exception(
-            () => templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings()));
-
-        [NUnit.Framework.Test] public void should_not_throw_agrument_exception () =>
-            exception.ShouldBeNull();
-
-        private static QuestionnaireExpressionStateModelFactory templateModelFactory;
-        private static QuestionnaireDocument questionnaire;
-        private static Exception exception;
     }
 }

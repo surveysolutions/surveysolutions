@@ -1,10 +1,20 @@
 using Android.App;
+using Android.Support.Design.Widget;
 using Android.Views;
+using Humanizer;
+using Humanizer.Localisation;
+using Java.Interop;
+using MvvmCross.Platform;
+using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Tester.Infrastructure.Internals.Settings;
 
 namespace WB.UI.Tester.Activities
 {
@@ -57,8 +67,14 @@ namespace WB.UI.Tester.Activities
             if (!this.ViewModel.IsSuccessfullyLoaded) return;
 
             var shouldShowVariables = ServiceLocator.Current.GetInstance<IEnumeratorSettings>()?.ShowVariables ?? false;
-            if (this.ViewModel.IsVariablesShowed  != shouldShowVariables)
-                this.ViewModel?.ReloadCommand?.Execute();
+            if (this.ViewModel.IsVariablesShowed != shouldShowVariables)
+                this.ViewModel?.ReloadCommand?.Execute();  
+        }
+
+        [Export("NavigateToApi")]
+        public void NavigateToApi(string navigateTo)
+        {
+            base.Navigate(navigateTo);
         }
     }
 }

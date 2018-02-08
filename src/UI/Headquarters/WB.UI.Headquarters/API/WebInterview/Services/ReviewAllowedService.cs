@@ -3,6 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
@@ -29,11 +30,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     () => interviewSummaryStorage.GetById(interviewId));
 
             if (interview == null)
-                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Headquarters.Resources.WebInterview.Error_NotFound);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
 
             if (!CurrentUserCanAccessInterview(interview))
             {
-                throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Headquarters.Resources.WebInterview.Error_UserNotAuthorised);
+                throw new InterviewAccessException(InterviewAccessExceptionReason.UserNotAuthorised, Enumerator.Native.Resources.WebInterview.Error_UserNotAuthorised);
             }
         }
 

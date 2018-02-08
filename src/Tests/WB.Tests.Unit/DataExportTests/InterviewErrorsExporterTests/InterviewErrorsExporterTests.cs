@@ -55,38 +55,83 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
 
             var questionnaire = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocumentWithOneChapter);
 
-            var questionError = new ExportedError
-            {
-                InterviewId = interviewId,
-                EntityId = questionId,
-                RosterVector = Create.RosterVector(),
-                EntityType = EntityType.Question,
-                FailedValidationConditions = new[] {0}
-            };
-            var staticTextError = new ExportedError
-            {
-                InterviewId = interviewId,
-                EntityId = staticTextId,
-                RosterVector = Create.RosterVector(),
-                EntityType = EntityType.StaticText,
-                FailedValidationConditions = new[] { 1 }
-            };
+            List<InterviewEntity> exportedEntities = new List<InterviewEntity>();
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.Question, Create.Identity(questionId), invalidValidations: new []{0}));
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.StaticText, Create.Identity(staticTextId), invalidValidations: new []{1}));
 
-            var interviewFactory = Mock.Of<IInterviewFactory>(x =>
-                x.GetErrors(It.IsAny<IEnumerable<Guid>>()) == new List<ExportedError> {questionError, staticTextError});
-            var exporter = CreateExporter(interviewFactory, questionnaireStorage: questionnaire);
+            var exporter = CreateExporter(questionnaireStorage: questionnaire);
 
             // Act
-            exporter.Export(Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter), 
-                new List<Guid>{interviewId}, 
-                "blah", 
-                new Progress<int>(), 
-                CancellationToken.None);
+            var export = exporter.Export(
+                Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter), 
+                exportedEntities,
+                "");
 
             // Assert
-            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "variable", "type", "interview__id", "message_number", "message" }));
-            Assert.That(dataInCsvFile[1].Data[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
-            Assert.That(dataInCsvFile[1].Data[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
+            Assert.That(export, Has.Count.EqualTo(2));
+            Assert.That(export[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
+            Assert.That(export[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
+        }
+
+        [Test]
+        public void should_export_errors_and_entities_are_disabled()
+        {
+            var questionId = Id.g1;
+            var staticTextId = Id.g2;
+
+            var disabledQestionId = Id.g9;
+            var disabledStaticTextId = Id.g10;
+
+            var messageForQuestion = "message for question";
+            var message1ForStaticText = "message1 for static text";
+            var questionnaireDocumentWithOneChapter = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(questionId, variable: "numeric1",
+                    validationConditions: new[]
+                    {
+                        new ValidationCondition("1 == 1", messageForQuestion),
+                    }),
+                Create.Entity.NumericIntegerQuestion(disabledQestionId, variable: "numeric11",
+                    validationConditions: new[]
+                    {
+                        new ValidationCondition("1 == 1", messageForQuestion),
+                    }),
+                Create.Entity.StaticText(
+                    publicKey: staticTextId,
+                    validationConditions: new List<ValidationCondition>
+                    {
+                        new ValidationCondition("1 == 1", "message for static text"),
+                        new ValidationCondition("1 == 1", message1ForStaticText),
+                    }),
+                Create.Entity.StaticText(
+                    publicKey: disabledStaticTextId,
+                    validationConditions: new List<ValidationCondition>
+                    {
+                        new ValidationCondition("1 == 1", "message for static text"),
+                        new ValidationCondition("1 == 1", message1ForStaticText),
+                    })
+            );
+
+            var questionnaire = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocumentWithOneChapter);
+
+            List<InterviewEntity> exportedEntities = new List<InterviewEntity>();
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.Question, Create.Identity(questionId), invalidValidations: new[] { 0 }));
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.StaticText, Create.Identity(staticTextId), invalidValidations: new[] { 1 }));
+
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.Question, Create.Identity(disabledQestionId), isEnabled: false, invalidValidations: new[] { 0 }));
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.StaticText, Create.Identity(disabledStaticTextId), isEnabled:false, invalidValidations: new[] { 1 }));
+
+            var exporter = CreateExporter(questionnaireStorage: questionnaire);
+
+            // Act
+            var export = exporter.Export(
+                Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter),
+                exportedEntities,
+                "");
+
+            // Assert
+            Assert.That(export, Has.Count.EqualTo(2));
+            Assert.That(export[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
+            Assert.That(export[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
         }
 
         [Test]
@@ -117,39 +162,22 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
                 })
             );
 
-            var staticTextError = new ExportedError
-            {
-                InterviewId = interviewId,
-                EntityId = staticTextId,
-                RosterVector = Create.RosterVector(0),
-                EntityType = EntityType.StaticText,
-                FailedValidationConditions = new[] { 0 }
-            };
-            var questionError = new ExportedError
-            {
-                InterviewId = interviewId,
-                EntityId = questionId,
-                RosterVector = Create.RosterVector(0, 1),
-                EntityType = EntityType.Question,
-                FailedValidationConditions = new[] { 1 }
-            };
+            List<InterviewEntity> exportedEntities = new List<InterviewEntity>();
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.StaticText, Create.Identity(staticTextId, 0), invalidValidations: new[] { 0 }));
+            exportedEntities.Add(Create.Entity.InterviewEntity(interviewId, EntityType.Question, Create.Identity(questionId, 0, 1), invalidValidations: new[] { 1 }));
 
-            var interviewFactory = Mock.Of<IInterviewFactory>(x =>
-                x.GetErrors(It.IsAny<IEnumerable<Guid>>()) == new List<ExportedError> {questionError, staticTextError});
             var questionnaire = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireDocumentWithOneChapter);
-            var exporter = CreateExporter(interviewFactory, questionnaireStorage: questionnaire);
+            var exporter = CreateExporter(questionnaireStorage: questionnaire);
 
             // Act
-            exporter.Export(Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter),
-                new List<Guid> { interviewId },
-                "blah",
-                new Progress<int>(),
-                CancellationToken.None);
+            var export = exporter.Export(Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter),
+                exportedEntities,
+                "");
 
             // Assert
-            Assert.That(dataInCsvFile[0].Data[0], Is.EqualTo(new[] { "variable", "type", "roster", "interview__id", "id1", "id2", "message_number", "message" }));
-            Assert.That(dataInCsvFile[1].Data[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(), "0", "1", "2", questionMsg }));
-            Assert.That(dataInCsvFile[1].Data[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "0", "", "1", staticTextInvalid }));
+            Assert.That(export, Has.Count.EqualTo(2));
+            Assert.That(export[0], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "0", "", "1", staticTextInvalid }));
+            Assert.That(export[1], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(), "0", "1", "2", questionMsg }));
         }
 
         private InterviewErrorsExporter CreateExporter(IInterviewFactory interviewFactory = null, 
@@ -157,12 +185,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
             IQuestionnaireStorage questionnaireStorage = null)
         {
             return new InterviewErrorsExporter(
-                interviewFactory ?? Mock.Of<IInterviewFactory>(), 
-                Mock.Of<ILogger>(), 
                 csvWriter ??  Create.Service.CsvWriter(dataInCsvFile), 
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                Create.Service.TransactionManagerProvider(),
-                new InterviewDataExportSettings());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
     }
 }

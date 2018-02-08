@@ -34,16 +34,21 @@ export default {
         Vue.set(state, "breadcrumbs", crumps)
     },
     SET_LANGUAGE_INFO(state, languageInfo) {
+        if(languageInfo == null) return
+
         Vue.set(state, "originalLanguageName", languageInfo.originalLanguageName)
         Vue.set(state, "currentLanguage", languageInfo.currentLanguage)
         Vue.set(state, "languages", languageInfo.languages)
     },
     SET_INTERVIEW_INFO(state, interviewInfo) {
+        if(interviewInfo == null) return
+        
         state.questionnaireTitle = interviewInfo.questionnaireTitle
         state.firstSectionId = interviewInfo.firstSectionId
         state.interviewKey = interviewInfo.interviewKey
         state.receivedByInterviewer = interviewInfo.receivedByInterviewer
         state.interviewCannotBeChanged = interviewInfo.interviewCannotBeChanged
+        state.isCurrentUserObserving = interviewInfo.isCurrentUserObserving
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo
@@ -53,6 +58,9 @@ export default {
     },
     SET_INTERVIEW_STATUS(state, interviewState) {
         Vue.set(state, "interviewState", interviewState)
+    },
+    SET_INTERVIEW_SHUTDOWN(state){
+        state.interviewShutdown = true
     },
     SET_HAS_COVER_PAGE(state, hasCoverPage) {
         state.hasCoverPage = hasCoverPage

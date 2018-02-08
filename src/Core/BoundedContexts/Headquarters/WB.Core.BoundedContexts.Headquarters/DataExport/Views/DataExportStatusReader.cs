@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         }
 
         public DataExportStatusView GetDataExportStatusForQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
-            InterviewStatus? status = null)
+            InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null)
         {
             var questionnaire =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
@@ -57,10 +57,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             var runningProcesses = this.dataExportProcessesService.GetRunningExportProcesses().Select(CreateRunningDataExportProcessView).ToArray();
             var allProcesses = this.dataExportProcessesService.GetAllProcesses().Select(CreateRunningDataExportProcessView).ToArray();
 
-            var dataExports =
-                this.supportedDataExports.Select(
-                    supportedDataExport =>
-                        this.CreateDataExportView(supportedDataExport.Item1, supportedDataExport.Item2, status, questionnaireIdentity, questionnaire, runningProcesses, allProcesses)).ToArray();
+            var dataExports = this.supportedDataExports.Select(supportedDataExport =>
+                    this.CreateDataExportView(supportedDataExport.Item1, supportedDataExport.Item2, status,
+                        fromDate, toDate, questionnaireIdentity, questionnaire, runningProcesses, allProcesses))
+                .ToArray();
 
             return new DataExportStatusView(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
@@ -84,13 +84,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 ProcessStatus = dataExportProcessDetails.Status,
                 Type = exportProcessDetails.Format == DataExportFormat.Paradata ? DataExportType.ParaData : DataExportType.Data,
                 QuestionnaireIdentity = exportProcessDetails.Questionnaire,
-                InterviewStatus = exportProcessDetails.InterviewStatus
+                InterviewStatus = exportProcessDetails.InterviewStatus,
+                FromDate = exportProcessDetails.FromDate,
+                ToDate = exportProcessDetails.ToDate
             };
         }
 
         private DataExportView CreateDataExportView(DataExportType dataType,
             DataExportFormat dataFormat,
             InterviewStatus? interviewStatus, 
+            DateTime? fromDate,
+            DateTime? toDate,
             QuestionnaireIdentity questionnaireIdentity,
             QuestionnaireExportStructure questionnaire,
             RunningDataExportProcessView[] runningProcess,
@@ -117,16 +121,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                     p.Format == dataFormat &&
                     p.Type == dataType &&
                     p.InterviewStatus == interviewStatus &&
+                    p.FromDate == fromDate &&
+                    p.ToDate == toDate &&
                     (p.QuestionnaireIdentity == null || p.QuestionnaireIdentity.Equals(questionnaireIdentity)));
 
-                dataExportView.CanRefreshBeRequested = (process == null);
+                dataExportView.CanRefreshBeRequested = process == null;
                 dataExportView.DataExportProcessId = process?.DataExportProcessId;
                 dataExportView.ProgressInPercents = process?.Progress ?? 0;
             }
 
-            string path = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus);
+            string filePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus, fromDate, toDate);
 
-            SetDataExportLastUpdateTimeAndSizeIfFilePresent(dataExportView, path);
+            if (this.fileSystemAccessor.IsFileExists(filePath))
+            {
+                dataExportView.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
+                dataExportView.FileSize = FileSizeUtils.SizeInMegabytes(this.fileSystemAccessor.GetFileSize(filePath));
+                dataExportView.HasDataToExport = true;
+            }
+
             return dataExportView;
         }
 
@@ -136,15 +148,5 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 x.QuestionnaireIdentity == null ||
                 x.QuestionnaireIdentity.Equals(questionnaireIdentity) && x.Format == dataFormat &&
                 x.Type == dataType)?.ProcessStatus ?? DataExportStatus.NotStarted;
-
-        private void SetDataExportLastUpdateTimeAndSizeIfFilePresent(DataExportView dataExportView, string filePath)
-        {
-            if (this.fileSystemAccessor.IsFileExists(filePath))
-            {
-                dataExportView.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
-                dataExportView.FileSize = FileSizeUtils.SizeInMegabytes(this.fileSystemAccessor.GetFileSize(filePath));
-                dataExportView.HasDataToExport = true;
-            }
-        }
     }
 }

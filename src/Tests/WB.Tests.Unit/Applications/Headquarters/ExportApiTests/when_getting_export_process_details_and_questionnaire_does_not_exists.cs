@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -16,20 +16,20 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
     public class when_getting_export_process_details_and_questionnaire_does_not_exists : ExportControllerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var mockOfQuestionnaireBrowseViewFactory = new Mock<IQuestionnaireBrowseViewFactory>();
             mockOfQuestionnaireBrowseViewFactory.Setup(x => x.GetById(questionnaireIdentity)).Returns((QuestionnaireBrowseItem)null);
 
             controller = CreateExportController(questionnaireBrowseViewFactory: mockOfQuestionnaireBrowseViewFactory.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
+        private void BecauseOf() => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
-        It should_return_http_not_found_response = () =>
+        [NUnit.Framework.Test] public void should_return_http_not_found_response () =>
             ((NegotiatedContentResult<string>)result).StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
-        It should_response_has_specified_message = () =>
+        [NUnit.Framework.Test] public void should_response_has_specified_message () =>
             ((NegotiatedContentResult<string>)result).Content.ShouldEqual("Questionnaire not found");
 
         private static ExportController controller;

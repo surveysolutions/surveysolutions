@@ -192,4 +192,37 @@
   <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
     <value>成功更新了&lt;b&gt;{0}&lt;/b&gt;的信息</value>
   </data>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>所有调查员</value>
+  </data>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>全部时期</value>
+  </data>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>所有问卷</value>
+  </data>
+  <data name="AllTeams" xml:space="preserve">
+    <value>所有团队</value>
+  </data>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>任意总部用户</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>任务</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>平均</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>天</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>访谈</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>合计</value>
+  </data>
 </root>

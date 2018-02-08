@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc.TestFactories;
 
