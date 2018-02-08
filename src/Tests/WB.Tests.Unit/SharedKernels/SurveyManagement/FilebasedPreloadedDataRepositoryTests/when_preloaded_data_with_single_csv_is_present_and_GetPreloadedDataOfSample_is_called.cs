@@ -31,10 +31,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             recordsAccessorFactory = new Mock<IRecordsAccessorFactory>();
             recordsAccessorFactory.Setup(x => x.CreateRecordsAccessor(Moq.It.IsAny<Stream>(), Moq.It.IsAny<string>()))
                 .Returns(Mock.Of<IRecordsAccessor>(_ => _.Records == new string[][] { new string[] { "q1" }, new string[] { "1" }, }));
-            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
+            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(archiveUtils.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfSample(csvFileId);
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfSample();
 
 
         It should_first_pre_loaded_data_name_should_be_test_tab = () =>

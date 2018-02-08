@@ -16,10 +16,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(true);
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns(path);
 
-            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object);
+            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository();
         };
 
-        Because of = () => filebasedPreloadedDataRepository.DeletePreloadedData(csvFileId);
+        Because of = () => filebasedPreloadedDataRepository.DeletePreloadedData();
 
         It should_call_delete_directory = () =>
             fileSystemAccessor.Verify(x => x.DeleteDirectory(path), Times.Once);

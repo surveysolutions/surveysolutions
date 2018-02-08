@@ -52,8 +52,7 @@ namespace WB.UI.Headquarters.Controllers
                 EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
                 ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
                 HasErrors = status.State.Errors.Any() || status.VerificationState.Errors.Any(),
-                InterviewsWithError = status.State.Errors.Count + status.VerificationState.Errors.Count,
-                InterviewImportProcessId = status.InterviewImportProcessId
+                InterviewsWithError = status.State.Errors.Count + status.VerificationState.Errors.Count
             };
         }
         
@@ -88,7 +87,6 @@ namespace WB.UI.Headquarters.Controllers
 
         public class InterviewImportStatusApiView
         {
-            public string InterviewImportProcessId { get; set; }
             public Guid QuestionnaireId { get; set; }
             public long QuestionnaireVersion { get; set; }
             public string QuestionnaireTitle { get; set; }

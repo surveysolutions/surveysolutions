@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         public AssignmentImportStage Stage { get; set; }
-        public string InterviewImportProcessId { get; set; }
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public string QuestionnaireTitle { get; set; }
         public bool IsInProgress { get; set; } = false;
