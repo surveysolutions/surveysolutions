@@ -48,7 +48,6 @@ namespace WB.UI.WebTester.Controllers
 
         public async Task<ActionResult> Redirect(Guid id, string originalInterviewId)
         {
-
             if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
             {
                 evictionService.Evict(id);
@@ -73,6 +72,7 @@ namespace WB.UI.WebTester.Controllers
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
+
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
 
